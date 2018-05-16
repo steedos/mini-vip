@@ -1,0 +1,54 @@
+<style lang="less">
+  .container {
+    background: #DEDEDE;
+
+    .header {
+      width: 100%;
+      background: #fff;
+    
+      .card {
+        background: #ff9966;
+        height: 400rpx;
+        margin: 40rpx;
+        border-radius:20rpx;
+      }
+
+      .user-avatar {
+        width: 110rpx;
+        height: 110rpx;
+        border-radius: 50%;
+        overflow: hidden;
+        position: relative;
+        left: 30rpx;
+        top: 30rpx;
+      }
+    }
+  }
+</style>
+<template>
+  <view class="container">
+    <view class="header">
+      <view class="card">
+        <view class="user-avatar">
+          <open-data type="userAvatarUrl"></open-data>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+
+  import wepy from 'wepy'
+
+  export default class Card extends wepy.page {
+    config = {
+      navigationBarTitleText: '会员卡',
+      navigationBarTextStyle: 'black'
+    }
+
+    onLoad() {
+      console.log("onload")
+    }
+  }
+</script>

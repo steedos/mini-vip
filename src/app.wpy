@@ -22,8 +22,22 @@ setStore(store)
 export default class extends wepy.app {
   config = {
     pages: [
-      'pages/index'
+      'pages/index',
+      'pages/card'
     ],
+    tabBar: {
+      color: '#929292',
+      selectedColor: '#ff9630',
+      backgroundColor: '#f7f7f8',
+      borderStyle: 'white',
+      list: [{
+        pagePath: 'pages/index',
+        text: 'Home',
+      }, {
+        pagePath: 'pages/card',
+        text: 'Contacts',
+      }]
+    },
     window: {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#fff',
