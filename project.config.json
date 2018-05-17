@@ -10,5 +10,6 @@
 	"compileType": "miniprogram",
 	"appid": "wxf7d7403acb34334b",
 	"projectname": "mini-vip",
-	"condition": {}
+	"condition": {},
+	"miniprogramRoot": "./dist"
 }
