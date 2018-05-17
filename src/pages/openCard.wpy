@@ -1,73 +1,109 @@
 <style lang="less">
 .container {
-  align-items:auto;
-  justify-content:auto;
+  align-items: left;
+  justify-content: left;
 
   .header {
-		width: 100%;
-		background: #fff;
-		display: flex;
-		flex-direction: column;
+    width: 100%;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
 
-		.card {
-			background: #ff9966;
-			height: 360rpx;
-			margin: 40rpx;
-			border-radius: 20rpx;
-			display: flex;
-			flex: 1;
-			box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
+    .card {
+      background: #ff9966;
+      height: 360rpx;
+      margin: 40rpx;
+      border-radius: 20rpx;
+      display: flex;
+      flex: 1;
+      box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
 
-			.user-avatar {
-				width: 50px;
-				height: 50px;
-				border-radius: 50%;
-				overflow: hidden;
-				position: relative;
-				margin: 27px 10px 0 20px;
-			}
+      .user-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        overflow: hidden;
+        position: relative;
+        margin: 27px 10px 0 20px;
+      }
 
-			.card-info {
-				display: flex;
-				margin-top: 27px;
-				flex-direction: column;
-				color: #000;
+      .card-info {
+        display: flex;
+        margin-top: 27px;
+        flex-direction: column;
+        color: #000;
 
-				.card-name {
-					margin-top: 2px;
-					font-size: 16px;
-					font-weight: bold;
-				}
+        .card-name {
+          margin-top: 2px;
+          font-size: 16px;
+          font-weight: bold;
+        }
 
-				.vip-card {
-					font-size: 16px;
-					margin-top: 1px;
-				}
-			}
-		}
+        .vip-card {
+          font-size: 16px;
+          margin-top: 1px;
+        }
+      }
+    }
 
-		.active-card {
-			width: 380rpx;
-			margin-bottom: 20px;
-			color: #ff9966;
-			border-color: #ff9966;
-		}
+    .active-card {
+      width: 380rpx;
+      margin-bottom: 20px;
+      color: #ff9966;
+      border-color: #ff9966;
+    }
   }
 
   .extra-info {
-		width:200px;
-		float:right;
-		text-align:right;
-		color: #a8a8a8;
+    width: 200px;
+    float: right;
+    text-align: right;
+    color: #a8a8a8;
   }
 
   .info {
-    padding-left:15px;
-    padding-top:10px;
-    font-size:14px;
-    color:#a8a8a8;
-    display:flex;
-    align-self:left;
+    padding-left: 15px;
+    padding-top: 10px;
+    font-size: 14px;
+    color: #a8a8a8;
+    display: flex;
+    align-self: left;
+  }
+
+  checkbox .wx-checkbox-input {
+    height: 12px;
+    width: 12px;
+  }
+
+  checkbox .wx-checkbox-input.wx-checkbox-input-checked::before {
+    padding: 3px;
+    border-radius: 50%;
+    background-color: rgb(121, 121, 219);
+  }
+
+  .checkbox-container {
+    position: relative;
+    margin-left: 18px;
+    margin-top:15px;
+    display: flex;
+
+    .guide {
+      margin-left: 10px;
+      line-height: 30px;
+      color: #a8a8a8;
+    }
+  }
+
+  .btn-container {
+    width: 100%;
+  }
+
+  .submit-btn {
+    background:rgb(121, 121, 219);
+    color:#fff;
+    margin-left:15px;
+    margin-right:15px;
+    margin-top:30px;
   }
 }
 </style>
@@ -101,6 +137,15 @@
         </view>
       </view>
     </view>
+    <checkbox-group bindchange='checkboxChange'>
+      <label class="checkbox-container">
+        <checkbox value="agree" color='#fff'/>
+        <view class="guide">我已阅读并同意《会员卡信息指南》</view>
+      </label>
+    </checkbox-group>
+    <view class="btn-container">
+      <button class="submit-btn" form-type="submit">提交</button>
+    </view>
 	</view>
 </template>
 
@@ -118,21 +163,29 @@ export default class OpenCard extends wepy.page {
   data = {
     isAuthorize: 11111,
     listData: [
-			{
-				title: '姓名'
-			},
-			{
-				title: '性别'
-			},
-			{
-				title: '生日'
-			},
-			{
-				title: '手机'
-			}
-		]
+      {
+        title: '姓名'
+      },
+      {
+        title: '性别'
+      },
+      {
+        title: '生日'
+      },
+      {
+        title: '手机'
+      }
+    ]
   };
 
-  methods = {};
+  methods = {
+    formSubmit(e) {
+      console.log(e);
+    },
+    checkboxChange(e) {
+      console.log('checkboxChange')
+      console.log(e)
+    }
+  };
 }
 </script>
