@@ -1,16 +1,106 @@
 <style lang="less">
-.card-container {
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
-  bottom: 0;
-  background: #dedede;
+.container {
+  align-items:auto;
+  justify-content:auto;
+
+  .header {
+		width: 100%;
+		background: #fff;
+		display: flex;
+		flex-direction: column;
+
+		.card {
+			background: #ff9966;
+			height: 360rpx;
+			margin: 40rpx;
+			border-radius: 20rpx;
+			display: flex;
+			flex: 1;
+			box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
+
+			.user-avatar {
+				width: 50px;
+				height: 50px;
+				border-radius: 50%;
+				overflow: hidden;
+				position: relative;
+				margin: 27px 10px 0 20px;
+			}
+
+			.card-info {
+				display: flex;
+				margin-top: 27px;
+				flex-direction: column;
+				color: #000;
+
+				.card-name {
+					margin-top: 2px;
+					font-size: 16px;
+					font-weight: bold;
+				}
+
+				.vip-card {
+					font-size: 16px;
+					margin-top: 1px;
+				}
+			}
+		}
+
+		.active-card {
+			width: 380rpx;
+			margin-bottom: 20px;
+			color: #ff9966;
+			border-color: #ff9966;
+		}
+  }
+
+  .extra-info {
+		width:200px;
+		float:right;
+		text-align:right;
+		color: #a8a8a8;
+  }
+
+  .info {
+    padding-left:15px;
+    padding-top:10px;
+    font-size:14px;
+    color:#a8a8a8;
+    display:flex;
+    align-self:left;
+  }
 }
 </style>
 <template>
-	<view class="card-container">
-		openCard
+	<view class="container">
+		<view class="header">
+			<view class="card">
+				<view class="user-avatar">
+					<open-data type="userAvatarUrl"></open-data>
+				</view>
+				<view class="card-info">
+					<text class="card-name">贝菲特</text>
+					<text class="vip-card">会员卡</text>
+				</view>
+			</view>
+		</view>
+    <view class="info">必填信息</view>
+    <view class="weui-panel" style="width: 100%;">
+      <view class="weui-panel__bd"> 
+        <view class="weui-media-box weui-media-box_small-appmsg">
+          <view class="weui-cells weui-cells_in-small-appmsg">
+            <repeat for="{{listData}}" key="index" index="index" item="item">
+              <navigator url="" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+                <view class="weui-cell__bd weui-cell_primary">
+                  <view>{{item.title}}<view class="extra-info" wx:if="{{item.extraInfo}}">{{item.extraInfo}}</view></view>
+                </view>
+                <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+              </navigator>
+            </repeat>
+          </view>
+        </view>
+      </view>
+    </view>
 	</view>
 </template>
 
@@ -26,7 +116,21 @@ export default class OpenCard extends wepy.page {
   onLoad() {}
 
   data = {
-    isAuthorize: 11111
+    isAuthorize: 11111,
+    listData: [
+			{
+				title: '姓名'
+			},
+			{
+				title: '性别'
+			},
+			{
+				title: '生日'
+			},
+			{
+				title: '手机'
+			}
+		]
   };
 
   methods = {};
