@@ -1,0 +1,34 @@
+<style lang="less">
+.card-container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background: #dedede;
+}
+</style>
+<template>
+	<view class="card-container">
+		openCard
+	</view>
+</template>
+
+<script>
+import wepy from 'wepy';
+
+export default class OpenCard extends wepy.page {
+  config = {
+    navigationBarTitleText: '激活会员卡',
+    navigationBarTextStyle: 'black'
+  };
+
+  onLoad() {}
+
+  data = {
+    isAuthorize: 11111
+  };
+
+  methods = {};
+}
+</script>

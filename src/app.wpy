@@ -23,7 +23,8 @@ export default class extends wepy.app {
   config = {
     pages: [
       'pages/index',
-      'pages/card'
+      'pages/card',
+      'pages/openCard'
     ],
     tabBar: {
       color: '#929292',
