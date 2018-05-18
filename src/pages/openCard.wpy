@@ -5,13 +5,10 @@
     background: #fff;
     display: flex;
     flex-direction: column;
-  }
 
-  .extra-info {
-    width: auto;
-    float: right;
-    text-align: right;
-    color: #a8a8a8;
+    &:before {
+			display: none;
+		}
   }
 
   checkbox .wx-checkbox-input {
@@ -51,26 +48,24 @@
 </style>
 <template>
 	<view class="">
-		<view class="header">
+		<view class="weui-panel weui-panel_access header">
 			<vipcard :cardName.sync="cardName" :cardType.sync="cardType" />
 		</view>
+
     <view class="weui-cells__title">必填信息</view>
-    <view class="weui-panel" style="width: 100%;">
-      <view class="weui-panel__bd"> 
-        <view class="weui-media-box weui-media-box_small-appmsg">
-          <view class="weui-cells weui-cells_in-small-appmsg">
-            <repeat for="{{listData}}" key="index" index="index" item="item">
-              <navigator url="" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
-                <view class="weui-cell__bd weui-cell_primary">
-                  <view>{{item.title}}<view class="extra-info" wx:if="{{item.extraInfo}}">{{item.extraInfo}}</view></view>
-                </view>
-                <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-              </navigator>
-            </repeat>
-          </view>
-        </view>
-      </view>
-    </view>
+    <view class="page__bd" style="">
+			<view class="weui-cells weui-cells_after-title">
+				<repeat for="{{listData}}" key="index" index="index" item="item">
+					<view class="weui-cell weui-cell_access">
+						<view class="weui-cell__bd">
+							<view style="display: inline-block; vertical-align: middle">{{item.title}}</view>
+						</view>
+						<view class="weui-cell__ft weui-cell__ft_in-access">{{item.extraInfo}}</view>
+					</view>
+				</repeat>
+			</view>
+		</view>
+    
     <checkbox-group bindchange='checkboxChange'>
       <label class="checkbox-container">
         <checkbox value="agree" color='#fff'/>
@@ -104,16 +99,20 @@ export default class OpenCard extends wepy.page {
 		cardType: '会员卡',
     listData: [
       {
-        title: '姓名'
+        title: '姓名',
+        extraInfo: '张三'
       },
       {
-        title: '性别'
+        title: '性别',
+        extraInfo: '男'
       },
       {
-        title: '生日'
+        title: '生日',
+        extraInfo: '1998-01-01'
       },
       {
-        title: '手机'
+        title: '手机',
+        extraInfo: '18601110111'
       }
     ]
   };

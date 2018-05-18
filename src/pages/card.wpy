@@ -3,7 +3,11 @@
     width: 100%;
     background: #fff;
     display: flex;
-    flex-direction: column;
+		flex-direction: column;
+		
+		&:before {
+			display: none;
+		}
 
 		.active-card {
 			width: 380rpx;
@@ -12,35 +16,36 @@
 			border-color: #F5A44D;
 		}
 	}
-
-  .extra-info {
-    width: auto;
-    float: right;
-    text-align: right;
-    color: #a8a8a8;
-  }
 </style>
 <template>
 	<view class="">
-		<view class="header">
+		<view class="weui-panel weui-panel_access header">
 			<vipcrad :cardName.sync="cardName" :cardType.sync="cardType" :cardNumber.sync="cardNumber"/>
 			<button wx:if="{{isAuthorize}}" class="active-card" plain="true" @tap="toOpenCard">激活会员卡</button>
 			<button wx:else class="active-card" plain="true" open-type="getUserInfo" bindgetuserinfo="userInfo">激活会员卡</button>
 		</view>
-		<view class="weui-panel" style="width: 100%;">
-			<view class="weui-panel__bd">
-				<view class="weui-media-box weui-media-box_small-appmsg">
-					<view class="weui-cells weui-cells_in-small-appmsg">
-						<repeat for="{{listData}}" key="index" index="index" item="item">
-							<navigator url="" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
-								<view class="weui-cell__bd weui-cell_primary">
-									<view>{{item.title}}<view class="extra-info" wx:if="{{item.extraInfo}}">{{item.extraInfo}}</view></view>
-								</view>
-								<view class="weui-cell__ft weui-cell__ft_in-access"></view>
-							</navigator>
-						</repeat>
+
+		<view class="page__bd" style="margin-top: 36rpx">
+			<view class="weui-cells weui-cells_after-title">
+				<view class="weui-cell weui-cell_access">
+					<view class="weui-cell__bd">
+						<view style="display: inline-block; vertical-align: middle">优惠活动</view>
 					</view>
+					<view class="weui-cell__ft weui-cell__ft_in-access">8</view>
 				</view>
+			</view>
+		</view>
+
+		<view class="page__bd" style="margin-top: 36rpx">
+			<view class="weui-cells weui-cells_after-title">
+				<repeat for="{{listData}}" key="index" index="index" item="item">
+					<view class="weui-cell weui-cell_access">
+						<view class="weui-cell__bd">
+							<view style="display: inline-block; vertical-align: middle">{{item.title}}</view>
+						</view>
+						<view class="weui-cell__ft weui-cell__ft_in-access">{{item.extraInfo}}</view>
+					</view>
+				</repeat>
 			</view>
 		</view>
 	</view>
