@@ -5,50 +5,13 @@
     background: #fff;
     display: flex;
     flex-direction: column;
+  }
 
-    .card {
-      background: #ff9966;
-      height: 360rpx;
-      margin: 40rpx;
-      border-radius: 20rpx;
-      display: flex;
-      flex: 1;
-      box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
-
-      .user-avatar {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        overflow: hidden;
-        position: relative;
-        margin: 27px 10px 0 20px;
-      }
-
-      .card-info {
-        display: flex;
-        margin-top: 27px;
-        flex-direction: column;
-        color: #000;
-
-        .card-name {
-          margin-top: 2px;
-          font-size: 16px;
-          font-weight: bold;
-        }
-
-        .vip-card {
-          font-size: 16px;
-          margin-top: 1px;
-        }
-      }
-    }
-
-    .active-card {
-      width: 380rpx;
-      margin-bottom: 20px;
-      color: #ff9966;
-      border-color: #ff9966;
-    }
+  .active-card {
+    width: 380rpx;
+    margin-bottom: 20px;
+    color: #F5A44D;
+    border-color: #F5A44D;
   }
 
   .extra-info {
@@ -62,15 +25,7 @@
 <template>
 	<view class="container">
 		<view class="header">
-			<view class="card">
-				<view class="user-avatar">
-					<open-data type="userAvatarUrl"></open-data>
-				</view>
-				<view class="card-info">
-					<text class="card-name">贝菲特</text>
-					<text class="vip-card">会员卡</text>
-				</view>
-			</view>
+			<vipcrad :cardName.sync="cardName" :cardType.sync="cardType" :cardNumber.sync="cardNumber"/>
 			<button wx:if="{{isAuthorize}}" class="active-card" plain="true" @tap="toOpenCard">激活会员卡</button>
 			<button wx:else class="active-card" plain="true" open-type="getUserInfo" bindgetuserinfo="userInfo">激活会员卡</button>
 		</view>
@@ -95,6 +50,7 @@
 
 <script>
 import wepy from 'wepy';
+import vipCard from '../components/vipCard';
 
 export default class Card extends wepy.page {
   config = {
@@ -123,8 +79,14 @@ export default class Card extends wepy.page {
     });
   }
 
+  components = {
+    vipcrad: vipCard
+  };
+
   data = {
-    isAuthorize: 11111,
+		isAuthorize: false,
+		cardName: '贝菲特',
+		cardType: '会员卡',
     listData: [
       {
         title: '预定'

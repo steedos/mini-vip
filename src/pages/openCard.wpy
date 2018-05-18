@@ -8,50 +8,6 @@
     background: #fff;
     display: flex;
     flex-direction: column;
-
-    .card {
-      background: #ff9966;
-      height: 360rpx;
-      margin: 40rpx;
-      border-radius: 20rpx;
-      display: flex;
-      flex: 1;
-      box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
-
-      .user-avatar {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        overflow: hidden;
-        position: relative;
-        margin: 27px 10px 0 20px;
-      }
-
-      .card-info {
-        display: flex;
-        margin-top: 27px;
-        flex-direction: column;
-        color: #000;
-
-        .card-name {
-          margin-top: 2px;
-          font-size: 16px;
-          font-weight: bold;
-        }
-
-        .vip-card {
-          font-size: 16px;
-          margin-top: 1px;
-        }
-      }
-    }
-
-    .active-card {
-      width: 380rpx;
-      margin-bottom: 20px;
-      color: #ff9966;
-      border-color: #ff9966;
-    }
   }
 
   .extra-info {
@@ -61,7 +17,7 @@
     color: #a8a8a8;
   }
 
-  .info {
+  .title-info {
     padding-left: 15px;
     padding-top: 10px;
     font-size: 14px;
@@ -84,7 +40,7 @@
   .checkbox-container {
     position: relative;
     margin-left: 18px;
-    margin-top:15px;
+    margin-top: 15px;
     display: flex;
 
     .guide {
@@ -99,28 +55,18 @@
   }
 
   .submit-btn {
-    background:rgb(121, 121, 219);
-    color:#fff;
-    margin-left:15px;
-    margin-right:15px;
-    margin-top:30px;
+    background: rgb(121, 121, 219);
+    color: #fff;
+    margin: 15px 15px 20px;
   }
 }
 </style>
 <template>
 	<view class="container">
 		<view class="header">
-			<view class="card">
-				<view class="user-avatar">
-					<open-data type="userAvatarUrl"></open-data>
-				</view>
-				<view class="card-info">
-					<text class="card-name">贝菲特</text>
-					<text class="vip-card">会员卡</text>
-				</view>
-			</view>
+			<vipcard :cardName.sync="cardName" :cardType.sync="cardType" />
 		</view>
-    <view class="info">必填信息</view>
+    <view class="title-info">必填信息</view>
     <view class="weui-panel" style="width: 100%;">
       <view class="weui-panel__bd"> 
         <view class="weui-media-box weui-media-box_small-appmsg">
@@ -151,6 +97,7 @@
 
 <script>
 import wepy from 'wepy';
+import vipCard from '../components/vipCard';
 
 export default class OpenCard extends wepy.page {
   config = {
@@ -160,8 +107,13 @@ export default class OpenCard extends wepy.page {
 
   onLoad() {}
 
+  components = {
+    vipcard: vipCard
+  }
+
   data = {
-    isAuthorize: 11111,
+    cardName: '贝菲特',
+		cardType: '会员卡',
     listData: [
       {
         title: '姓名'
@@ -183,8 +135,8 @@ export default class OpenCard extends wepy.page {
       console.log(e);
     },
     checkboxChange(e) {
-      console.log('checkboxChange')
-      console.log(e)
+      console.log('checkboxChange');
+      console.log(e);
     }
   };
 }

@@ -1,0 +1,100 @@
+<style lang="less">
+.card {
+  background: #F5A44D;
+  height: 360rpx;
+  margin: 40rpx;
+  border-radius: 20rpx;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.3), 1px 1px 1px 1px rgba(0, 0, 0, 0.24);
+
+  .info {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+  }
+
+  .user-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    position: relative;
+    margin: 27px 10px 0 20px;
+  }
+
+  .card-info {
+    display: flex;
+    margin-top: 27px;
+    flex-direction: column;
+    color: #fff;
+
+    .card-name {
+      margin-top: 2px;
+      font-weight: bold;
+    }
+  }
+
+  .card-number {
+    margin-left: 20px;
+    margin-bottom: 15px;
+    font-weight: bold;
+    color: #fff;
+  }
+}
+</style>
+<template>
+	<view class="card">
+    <view class="info">
+      <view class="user-avatar">
+        <open-data type="userAvatarUrl"></open-data>
+      </view>
+		  <view class="card-info">
+        <text class="card-name">{{cardName}}</text>
+			  <text class="vip-card">{{cardType}}</text>
+      </view>
+    </view>
+    <view class="card-number">
+      <text>{{formatNumber}}</text>
+    </view>
+	</view>
+</template>
+
+<script>
+import wepy from 'wepy';
+
+export default class vipCard extends wepy.component {
+  onLoad() {}
+
+  props = {
+    cardName: {
+      type: String,
+      default: ''
+    },
+    cardType: {
+      type: String,
+      default: ''
+    },
+    cardNumber: {
+      type: String,
+      default: ''
+    }
+  }
+
+  computed = {
+    formatNumber() {
+      let num_arr = this.cardNumber.split("");
+      num_arr.forEach((item, index) => {
+        (index+1) % 4 == 0 ? num_arr[index] = num_arr[index] + " " : num_arr[index]
+      });
+      console.log(num_arr)
+      num_arr = num_arr.join("")
+      return num_arr
+    }
+  }
+
+  data = {};
+
+  methods = {};
+}
+</script>
