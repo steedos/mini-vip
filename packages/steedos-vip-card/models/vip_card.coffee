@@ -48,8 +48,16 @@ Creator.Objects.vip_card =
         actived_time:
             label:'激活时间'
             type:'datetime'
-        shared_users:
-            label: "共享用户"
-            type:'lookup'
-            mutiple: true
-            reference_to:'users'
+        # shared_users:
+        #     label: "共享用户"
+        #     type:'lookup'
+        #     mutiple: true
+        #     reference_to:'users'
+        enable_forward:
+            label:'允许转发'
+            type:'Boolean'
+            defaultValue:false
+        forward_count:
+            label:'转发次数'
+            type:'number'
+        

@@ -18,7 +18,10 @@ Creator.Objects.vip_store =
         phone:
             type:'text'
             label:'联系电话'
-        merchant:
-            label:'商户'
-            type:'master_detail'
-            reference_to:'vip_merchant'
+        business_hours:
+            type:'text'
+            label:'营业时间'
+        address:
+            type:'text'
+            label:'地址'
+
