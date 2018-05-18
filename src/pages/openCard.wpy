@@ -55,7 +55,7 @@
   }
 
   .extra-info {
-    width: 200px;
+    width: auto;
     float: right;
     text-align: right;
     color: #a8a8a8;

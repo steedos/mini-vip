@@ -1,62 +1,62 @@
 <style lang="less">
 .container {
-	.header {
-		width: 100%;
-		background: #fff;
-		display: flex;
-		flex-direction: column;
+  .header {
+    width: 100%;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
 
-		.card {
-			background: #ff9966;
-			height: 360rpx;
-			margin: 40rpx;
-			border-radius: 20rpx;
-			display: flex;
-			flex: 1;
-			box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
+    .card {
+      background: #ff9966;
+      height: 360rpx;
+      margin: 40rpx;
+      border-radius: 20rpx;
+      display: flex;
+      flex: 1;
+      box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
 
-			.user-avatar {
-				width: 50px;
-				height: 50px;
-				border-radius: 50%;
-				overflow: hidden;
-				position: relative;
-				margin: 27px 10px 0 20px;
-			}
+      .user-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        overflow: hidden;
+        position: relative;
+        margin: 27px 10px 0 20px;
+      }
 
-			.card-info {
-				display: flex;
-				margin-top: 27px;
-				flex-direction: column;
-				color: #000;
+      .card-info {
+        display: flex;
+        margin-top: 27px;
+        flex-direction: column;
+        color: #000;
 
-				.card-name {
-					margin-top: 2px;
-					font-size: 16px;
-					font-weight: bold;
-				}
+        .card-name {
+          margin-top: 2px;
+          font-size: 16px;
+          font-weight: bold;
+        }
 
-				.vip-card {
-					font-size: 16px;
-					margin-top: 1px;
-				}
-			}
-		}
+        .vip-card {
+          font-size: 16px;
+          margin-top: 1px;
+        }
+      }
+    }
 
-		.active-card {
-			width: 380rpx;
-			margin-bottom: 20px;
-			color: #ff9966;
-			border-color: #ff9966;
-		}
-	}
+    .active-card {
+      width: 380rpx;
+      margin-bottom: 20px;
+      color: #ff9966;
+      border-color: #ff9966;
+    }
+  }
 
-	.extra-info {
-		width:200px;
-		float:right;
-		text-align:right;
-		color: #a8a8a8;
-	}
+  .extra-info {
+    width: auto;
+    float: right;
+    text-align: right;
+    color: #a8a8a8;
+  }
 }
 </style>
 <template>
@@ -97,71 +97,71 @@
 import wepy from 'wepy';
 
 export default class Card extends wepy.page {
-	config = {
-		navigationBarTitleText: '会员卡',
-		navigationBarTextStyle: 'black'
-	};
+  config = {
+    navigationBarTitleText: '会员卡',
+    navigationBarTextStyle: 'black'
+  };
 
-	onLoad() {
-		const _self = this;
-		wx.getSetting({
-			success(res) {
-				console.log(res.authSetting);
-				if (!res.authSetting['scope.userInfo']) {
-					_self.isAuthorize = false;
-					_self.$apply();
-					console.log('false', _self.isAuthorize);
-				} else {
-					_self.isAuthorize = true;
-					_self.$apply();
-					console.log('true', _self.isAuthorize);
-				}
-			},
-			fail(res) {
-				console.log('fail');
-			}
-		});
-	}
+  onLoad() {
+    const _self = this;
+    wx.getSetting({
+      success(res) {
+        console.log(res.authSetting);
+        if (!res.authSetting['scope.userInfo']) {
+          _self.isAuthorize = false;
+          _self.$apply();
+          console.log('false', _self.isAuthorize);
+        } else {
+          _self.isAuthorize = true;
+          _self.$apply();
+          console.log('true', _self.isAuthorize);
+        }
+      },
+      fail(res) {
+        console.log('fail');
+      }
+    });
+  }
 
-	data = {
-		isAuthorize: 11111,
-		listData: [
-			{
-				title: '预定'
-			},
-			{
-				title: '推荐给朋友',
-				extraInfo: '好友注册成功返10元券'
-			},
-			{
-				title: '会员卡详情'
-			},
-			{
-				title: '适用门店'
-			}
-		]
-	};
+  data = {
+    isAuthorize: 11111,
+    listData: [
+      {
+        title: '预定'
+      },
+      {
+        title: '推荐给朋友',
+        extraInfo: '好友注册成功返10元券'
+      },
+      {
+        title: '会员卡详情'
+      },
+      {
+        title: '适用门店'
+      }
+    ]
+  };
 
-	methods = {
-		userInfo(detail) {
-			console.log(detail);
-		},
-		toOpenCard() {
-			wx.navigateTo({
-				url: 'openCard'
-			});
-		},
-		userInfo(e) {
-			if (e.detail.rawData) {
-				this.isAuthorize = true;
-				this.$apply();
-				wx.navigateTo({
-					url: 'openCard'
-				});
-			} else {
-				return;
-			}
-		}
-	};
+  methods = {
+    userInfo(detail) {
+      console.log(detail);
+    },
+    toOpenCard() {
+      wx.navigateTo({
+        url: 'openCard'
+      });
+    },
+    userInfo(e) {
+      if (e.detail.rawData) {
+        this.isAuthorize = true;
+        this.$apply();
+        wx.navigateTo({
+          url: 'openCard'
+        });
+      } else {
+        return;
+      }
+    }
+  };
 }
 </script>
