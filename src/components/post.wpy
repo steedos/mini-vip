@@ -6,10 +6,10 @@
   border:solid 1px #ededed;
   border-radius:6px;
   .post-header{
+    font-size: 17px;
     .post-name{
       color: #000;
       font-weight: bold;
-      font-family: "黑体";
     }
     .btn-focus{
       float: right;
@@ -17,6 +17,7 @@
     }
   }
   .post-body{
+    margin:10rpx 0 40rpx 0;
     .post-summary text{
       color: #999999;
     }
