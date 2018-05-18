@@ -7,14 +7,25 @@ page {
 </style>
 <template>
   <scroll-view class="scroll-view_H" scroll-y="true">
-	发现
+	
+    <post :name="postName" :summary="postSummary" :commentCount="postCommentCount" :storeName="storeName"/>
 	
   </scroll-view>
 </template>
 <script>
   import wepy from 'wepy'
+  import post from '../components/post';
 
   export default class PostList extends wepy.page {
+    components = {
+      post: post
+    };
 
+    data = {
+      storeName: '贝菲特（九亭店）',
+      postName: '限时优惠，买三年送一年',
+      postSummary: '好友开卡成功即送一个月会籍',
+      postCommentCount: '228'
+    };
   }
 </script>

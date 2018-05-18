@@ -1,0 +1,104 @@
+<style lang="less">
+.post {
+  background: #fff;
+  margin:40rpx;
+  padding:20rpx;
+  border:solid 1px #ededed;
+  border-radius:6px;
+  .post-header{
+    .post-name{
+      color: #000;
+      font-weight: bold;
+      font-family: "黑体";
+    }
+    .btn-focus{
+      float: right;
+      font-weight: bold;
+    }
+  }
+  .post-body{
+    .post-summary text{
+      color: #999999;
+    }
+  }
+  .post-footer{
+    color:#999999;
+    .post-footer-left{
+      font-weight:bold;
+      .post-comment-count{
+        margin-right: 4px;
+      }
+    }
+    .post-footer-right{
+      float: right;
+      text{
+        margin-left: 10px;
+        &.btn-star{
+          color: #ff667a;
+        }
+      }
+    }
+  }
+  .btn-link{
+    color: #1b9af7;
+  }
+}
+</style>
+<template>
+	<view class="post">
+    <view class="post-header">
+      <text class="post-name">{{storeName}}</text>
+      <text class="btn-focus btn-link">关注</text>
+    </view>
+    <view class="post-body">
+      <view>
+        <text>{{name}}</text>
+      </view>
+      <view class="post-summary">
+        <text>{{summary}}</text>
+      </view>
+    </view>
+    <view class="post-footer">
+      <text class="post-footer-left">
+        <text class="post-comment-count">{{commentCount}}</text>
+        <text>评论</text>
+      </text>
+      <text class="post-footer-right">
+        <text class="btn-comment slds-icon-share_post"></text>
+        <text class="btn-forward slds-icon-internal_share"></text>
+        <text class="btn-star slds-icon-custom1"></text>
+      </text>
+    </view>
+	</view>
+</template>
+
+<script>
+import wepy from 'wepy';
+
+export default class post extends wepy.component {
+  onLoad() {}
+
+  props = {
+    storeName: {
+      type: String,
+      default: ''
+    },
+    name: {
+      type: String,
+      default: ''
+    },
+    summary: {
+      type: String,
+      default: ''
+    },
+    commentCount: {
+      type: String,
+      default: ''
+    }
+  }
+
+  data = {};
+
+  methods = {};
+}
+</script>
