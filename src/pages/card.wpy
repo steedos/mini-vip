@@ -1,18 +1,17 @@
 <style lang="less">
-.container {
   .header {
     width: 100%;
     background: #fff;
     display: flex;
     flex-direction: column;
-  }
 
-  .active-card {
-    width: 380rpx;
-    margin-bottom: 20px;
-    color: #F5A44D;
-    border-color: #F5A44D;
-  }
+		.active-card {
+			width: 380rpx;
+			margin-bottom: 20px;
+			color: #F5A44D;
+			border-color: #F5A44D;
+		}
+	}
 
   .extra-info {
     width: auto;
@@ -20,10 +19,9 @@
     text-align: right;
     color: #a8a8a8;
   }
-}
 </style>
 <template>
-	<view class="container">
+	<view class="">
 		<view class="header">
 			<vipcrad :cardName.sync="cardName" :cardType.sync="cardType" :cardNumber.sync="cardNumber"/>
 			<button wx:if="{{isAuthorize}}" class="active-card" plain="true" @tap="toOpenCard">激活会员卡</button>

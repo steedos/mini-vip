@@ -1,7 +1,4 @@
 <style lang="less">
-.container {
-  align-items: left;
-  justify-content: left;
 
   .header {
     width: 100%;
@@ -17,15 +14,6 @@
     color: #a8a8a8;
   }
 
-  .title-info {
-    padding-left: 15px;
-    padding-top: 10px;
-    font-size: 14px;
-    color: #a8a8a8;
-    display: flex;
-    align-self: left;
-  }
-
   checkbox .wx-checkbox-input {
     height: 12px;
     width: 12px;
@@ -34,7 +22,7 @@
   checkbox .wx-checkbox-input.wx-checkbox-input-checked::before {
     padding: 3px;
     border-radius: 50%;
-    background-color: rgb(121, 121, 219);
+    background-color: #1B9AF7;
   }
 
   .checkbox-container {
@@ -55,18 +43,18 @@
   }
 
   .submit-btn {
-    background: rgb(121, 121, 219);
+    background: #1B9AF7;
     color: #fff;
     margin: 15px 15px 20px;
   }
-}
+
 </style>
 <template>
-	<view class="container">
+	<view class="">
 		<view class="header">
 			<vipcard :cardName.sync="cardName" :cardType.sync="cardType" />
 		</view>
-    <view class="title-info">必填信息</view>
+    <view class="weui-cells__title">必填信息</view>
     <view class="weui-panel" style="width: 100%;">
       <view class="weui-panel__bd"> 
         <view class="weui-media-box weui-media-box_small-appmsg">
