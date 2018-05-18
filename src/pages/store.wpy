@@ -56,7 +56,7 @@ page {
   <scroll-view class="scroll-view_H" scroll-y="true">
     <view class="header">
       <view class="background">
-      	<image src="../images/bg.png" class="bg-img">
+      	<image src="../images/bg.png" class="bg-img"/>
         <view class="operate">
           <block>
             <text class="icon slds-icon-search"></text>
@@ -70,7 +70,7 @@ page {
         </view>
       </view>
       <view class="avatar">
-        <image class="image" mode="scaleToFill" src="../images/best-fit.jpg">
+        <image class="image" mode="scaleToFill" src="../images/best-fit.jpg"/>
       </view>
       <view class="info">
         <text class="store-name">贝菲特(九亭店)</text>
@@ -80,6 +80,10 @@ page {
   </scroll-view>
 </template>
 <script>
+  import wepy from 'wepy'
 
+  export default class Store extends wepy.page {
+
+  }
 
 </script>
