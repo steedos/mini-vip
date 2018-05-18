@@ -38,7 +38,7 @@
 
 		<view class="page__bd" style="margin-top: 36rpx">
 			<view class="weui-cells weui-cells_after-title">
-				<repeat for="{{listData}}" key="index" index="index" item="item">
+				<repeat for="{{listItem}}" key="index" index="index" item="item">
 					<view class="weui-cell weui-cell_access">
 						<view class="weui-cell__bd">
 							<view style="display: inline-block; vertical-align: middle">{{item.title}}</view>
@@ -106,6 +106,50 @@ export default class Card extends wepy.page {
       }
     ]
   };
+
+  computed = {
+    listItem() {
+      let listData;
+      if (this.isLogin) {
+        listData = [
+          {
+            title: '预定'
+          },
+          {
+            title: '推荐给朋友',
+            extraInfo: '好友注册成功返10元券'
+          },
+          {
+            title: '会员卡详情'
+          },
+          {
+            title: '适用门店'
+          }
+        ]
+      } else {
+        listData = [
+          {
+            title: '余额',
+            extraInfo: '3287元'
+          },
+          {
+            title: '消费记录'
+          },
+          {
+            title: '推荐给朋友',
+            extraInfo: '3287元'
+          },
+          {
+            title: '会员卡详情'
+          },
+          {
+            title: '适用门店'
+          }
+        ]
+      }
+      return listData
+    }
+  }
 
   methods = {
     userInfo(detail) {
