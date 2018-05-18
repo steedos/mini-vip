@@ -1,0 +1,85 @@
+<!-- 商户首页 -->
+<style lang="less">
+page {
+  height: 100%;
+  .scroll-view_H {
+    height: 100%;
+    .header{
+    	height: 200px;
+    	.background{
+    		height: auto;
+    		.bg-img{
+    			z-index: -1;
+    			width:100%;
+    		}
+    		.operate{
+    			width: 80px;
+    			z-index: 2;
+    			position: relative;
+    			margin: -240px 10px auto auto;
+    			.icon{
+    				color: white;
+    				margin-left: 10px;
+    			}
+    		}
+    	}
+    	.avatar{
+    		width: 100px;
+	        height: 100px;
+	        border-radius: 50%;
+	        overflow: hidden;
+	        position: relative;
+	        margin: 150px auto 0 auto;
+	        border:5px solid white;
+	        .image{
+	        	width: 100%; height: 100%;
+	        }
+    	}
+    	.info{
+    		width: 100%;
+    		display: flex;
+    		flex-direction: column;
+    		text-align:center;
+    		.store-name{
+    			font-weight:bold;
+    		}
+    		.store-summary{
+    			color: rgb(149, 149, 149);
+    		}
+    	}
+    }
+  }
+}
+
+</style>
+<template>
+  <scroll-view class="scroll-view_H" scroll-y="true">
+    <view class="header">
+      <view class="background">
+      	<image src="../images/bg.png" class="bg-img">
+        <view class="operate">
+          <block>
+            <text class="icon slds-icon-search"></text>
+          </block>
+          <block>
+            <text class="icon slds-icon-internal_share"></text>
+          </block>
+          <block>
+            <text class="icon slds-icon-favorite"></text>
+          </block>
+        </view>
+      </view>
+      <view class="avatar">
+        <image class="image" mode="scaleToFill" src="../images/best-fit.jpg">
+      </view>
+      <view class="info">
+        <text class="store-name">贝菲特(九亭店)</text>
+        <text class="store-summary">一起来健身</text>
+      </view>
+    </view>
+  </scroll-view>
+</template>
+<script>
+
+
+</script>

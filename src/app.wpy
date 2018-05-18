@@ -30,6 +30,7 @@ export default class extends wepy.app {
   config = {
     pages: [
       'pages/index',
+      'pages/store',
       'pages/card',
       'pages/openCard'
     ],
