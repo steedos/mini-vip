@@ -25,6 +25,7 @@
 		<panel>
 			<view class="title" slot="title">测试数据绑定</view>
 
+			<text class="slds-icon-adduser"></text>
 			<text class="info">{{normalTitle}}</text>
 			<text class="info">{{setTimeoutTitle}}</text>
 			<text class="info">{{mixin}}</text>
