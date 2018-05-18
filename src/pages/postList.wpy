@@ -8,7 +8,7 @@ page {
 <template>
   <scroll-view class="scroll-view_H" scroll-y="true">
 	
-    <post :name="postName" :summary="postSummary" :commentCount="postCommentCount" :storeName="storeName"/>
+    <post :name="postName" :summary="postSummary" :commentCount="postCommentCount" :storeName="storeName" :cover="cover" :logo="logo"/>
 	
   </scroll-view>
 </template>
@@ -25,7 +25,9 @@ page {
       storeName: '贝菲特（九亭店）',
       postName: '限时优惠，买三年送一年',
       postSummary: '好友开卡成功即送一个月会籍',
-      postCommentCount: '228'
+      postCommentCount: '228',
+      cover: '../images/post-cover.png',
+      logo: '../images/best-fit.jpg'
     };
   }
 </script>

@@ -11,6 +11,10 @@ Creator.Objects.post =
         summary:
             label:'简介'
             type:'text'
+        store:
+            label:'门店'
+            type:'master_detail'
+            reference_to:'vip_store'
         description:
             label:'详细'
             type:'textarea'

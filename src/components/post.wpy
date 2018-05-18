@@ -7,6 +7,14 @@
   border-radius:6px;
   .post-header{
     font-size: 17px;
+    image{
+      display:inline-block;
+      width:80rpx;
+      height:80rpx;
+      vertical-align:middle;
+      border-radius:50%;
+      margin-right:20rpx;
+    }
     .post-name{
       color: #000;
       font-weight: bold;
@@ -17,7 +25,11 @@
     }
   }
   .post-body{
-    margin:10rpx 0 40rpx 0;
+    margin:20rpx 0 40rpx 0;
+    image{
+      width: 100%;
+      border-radius:6px;
+    }
     .post-summary text{
       color: #999999;
     }
@@ -48,10 +60,12 @@
 <template>
 	<view class="post">
     <view class="post-header">
+      <image class="image" mode="widthFix" src="{{logo}}"/>
       <text class="post-name">{{storeName}}</text>
       <text class="btn-focus btn-link">关注</text>
     </view>
     <view class="post-body">
+      <image class="image" mode="widthFix" src="{{cover}}"/>
       <view>
         <text>{{name}}</text>
       </view>
@@ -81,6 +95,14 @@ export default class post extends wepy.component {
 
   props = {
     storeName: {
+      type: String,
+      default: ''
+    },
+    logo: {
+      type: String,
+      default: ''
+    },
+    cover: {
       type: String,
       default: ''
     },
