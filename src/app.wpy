@@ -36,17 +36,21 @@ export default class extends wepy.app {
       'pages/openCard'
     ],
     tabBar: {
-      color: '#929292',
-      selectedColor: '#ff9630',
+      color: '#8d8d8d',
+      selectedColor: '#1b9af7',
       backgroundColor: '#f7f7f8',
       borderStyle: 'white',
       list: [
       {
         pagePath: 'pages/index',
+        selectedIconPath: './images/tabbars/user-active.png',
+        iconPath: './images/tabbars/user.png',
         text: '我的',
       },
       {
         pagePath: 'pages/postList',
+        selectedIconPath: './images/tabbars/search-active.png',
+        iconPath: './images/tabbars/search.png',
         text: '发现',
       }]
     },
