@@ -48,12 +48,12 @@
       <view class="weui-cells__title">我的会员卡</view>
       <view class="weui-cells weui-cells_after-title">
         <repeat for="{{cards}}" key="index" index="index" item="card">
-          <view class="weui-cell weui-cell_access">
+          <navigator url="card?_id={{card._id}}" class="weui-cell weui-cell_access">
             <view class="weui-cell__bd">
               <view style="display: inline-block; vertical-align: middle">{{card.name}}</view>
             </view>
             <view class="weui-cell__ft weui-cell__ft_in-access">{{card.type}}</view>
-          </view>
+          </navigator>
         </repeat>
       </view>
 
@@ -97,11 +97,18 @@
       navigationBarTextStyle: 'black'
     };
 
+    getCardUrl(){
+      console.log("getCardUrl", this._id)
+      return "card"
+    }
+
     data = {
       cards: [{
+        _id: "001",
         name: "兰州拉面",
         type: "金卡"
       },{
+        _id: "002",
         name: "隔壁沙县",
         type: "白金卡"
       }],

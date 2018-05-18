@@ -43,7 +43,7 @@ export default class extends wepy.app {
         pagePath: 'pages/index',
         text: 'Home',
       }, {
-        pagePath: 'pages/card',
+        pagePath: 'pages/openCard',
         text: 'Contacts',
       }]
     },
