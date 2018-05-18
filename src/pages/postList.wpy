@@ -1,0 +1,20 @@
+<!-- 商户首页 -->
+<style lang="less">
+page {
+  height: 100%;
+}
+
+</style>
+<template>
+  <scroll-view class="scroll-view_H" scroll-y="true">
+	发现
+	
+  </scroll-view>
+</template>
+<script>
+  import wepy from 'wepy'
+
+  export default class PostList extends wepy.page {
+
+  }
+</script>

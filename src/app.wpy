@@ -30,6 +30,7 @@ export default class extends wepy.app {
   config = {
     pages: [
       'pages/index',
+      'pages/postList',
       'pages/store',
       'pages/card',
       'pages/openCard'
@@ -39,12 +40,14 @@ export default class extends wepy.app {
       selectedColor: '#ff9630',
       backgroundColor: '#f7f7f8',
       borderStyle: 'white',
-      list: [{
+      list: [
+      {
         pagePath: 'pages/index',
-        text: 'Home',
-      }, {
-        pagePath: 'pages/openCard',
-        text: 'Contacts',
+        text: '我的',
+      },
+      {
+        pagePath: 'pages/postList',
+        text: '发现',
       }]
     },
     window: {
