@@ -6,4 +6,4 @@ Creator.Objects.post_star =
         post_id:
             label:'收藏对象'
             type:'lookup'
-            reference_to:'vip_post'
+            reference_to:'post'

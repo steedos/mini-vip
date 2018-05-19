@@ -11,4 +11,4 @@ Creator.Objects.post_comments =
 		post_id:
 			label:'评论对象'
 			type:'lookup'
-			reference_to:'vip_post'
+			reference_to:'post'
