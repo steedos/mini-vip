@@ -19,6 +19,10 @@
   .page__bd .weui-panel{
     margin-top: 50rpx;
   }
+
+  .userinfo-btn-view {
+    margin-top: 50rpx;
+  }
 </style>
 
 <template>
@@ -44,7 +48,8 @@
       </view>
     </view>
 
-    <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" @getuserinfo="getUserInfo"> 用户授权 </button>
+    <view class="page__bd userinfo-btn-view" wx:if="{{!hasUserInfo && canIUse}}" >
+      <button open-type="getUserInfo" @getuserinfo="getUserInfo"> 用户授权 </button></view>
     <block wx:else>
       <view class="page__bd">
         <view class="weui-cells__title">我的会员卡</view>
@@ -132,7 +137,6 @@
     }
 
     getSpace(){
-      console.log('getSpace.................')
       const url = '/api/odata/v4/' + wx.getStorageSync('X-Space-Id') + '/spaces'
       const data = {
         '$filter': '_id ne -1',
