@@ -1,12 +1,16 @@
 Creator.Objects.vip_category =
 	name: "vip_category"
-	label: "卡卷"
+	label: "卡项"
 	icon: "apps"
 	fields:
         name:
             label:'名称'
             type:'text'
             required:true
+        merchant:
+            label:'商户'
+            type:'lookup'
+            reference_to:'vip_merchant'
         category:
             label:'类别'
             type:'select'

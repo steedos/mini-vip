@@ -15,4 +15,6 @@ Package.onUse(function(api) {
     api.addFiles('models/vip_points.coffee');
 	api.addFiles('models/vip_store.coffee');
 	api.addFiles('models/vip_merchant.coffee');
+	api.addFiles('models/vip_category.coffee');
+	api.addFiles('vip_app.coffee');
 })
