@@ -12,5 +12,6 @@ Package.onUse(function(api) {
 	api.use('steedos:creator@0.0.4');
     api.addFiles('models/post.coffee');
     api.addFiles('models/post_comments.coffee');
-    api.addFiles('models/post_star.coffee');
+	api.addFiles('models/post_star.coffee');
+	api.addFiles('post_app.coffee');
 })

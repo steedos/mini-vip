@@ -86,7 +86,8 @@ Creator.Objects.vip_card =
 			label: "所有会员卡"
 			columns: ["user","card_number", "points", "grade","balance","store","apply_stores"]
 			filter_scope: "space"
-		mine:
+		my:
 			label: "我的会员卡"
-			filters: [["user", "=", "{Meteor.userId}"]]
+			filters: [["user", "=", "{userId}"]]
+			filter_scope: "space"
 			columns: ["card_number", "points", "grade","balance","store","apply_stores"]
