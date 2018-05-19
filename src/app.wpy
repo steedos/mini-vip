@@ -22,6 +22,9 @@ import 'wepy-async-function'
 
 import { setStore } from 'wepy-redux'
 import configStore from './store'
+import req from '@/network'
+import * as interceptor from '@/network/interceptor'
+import { baseUrl, appId } from '@/config'
 
 const store = configStore()
 setStore(store)
@@ -70,23 +73,19 @@ export default class extends wepy.app {
   constructor () {
     super()
     this.use('requestfix')
+    this.use('promisify')
   }
 
   onLaunch() {
-    this.testAsync()
-  }
-
-  sleep (s) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve('promise resolved')
-      }, s * 1000)
+    req.appId(appId)
+    req.baseUrl(baseUrl).interceptor(interceptor.request, interceptor.response)
+    const self = this
+    wx.login({
+      success: function (res) {
+        console.log('wx.login success...')
+        self.globalData.code = res.code
+      }
     })
-  }
-
-  async testAsync () {
-    const data = await this.sleep(3)
-    console.log(data)
   }
 
   getUserInfo(cb) {

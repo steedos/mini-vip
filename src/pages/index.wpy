@@ -44,51 +44,56 @@
       </view>
     </view>
 
-    <view class="page__bd">
-      <view class="weui-cells__title">我的会员卡</view>
-      <view class="weui-cells weui-cells_after-title">
-        <repeat for="{{cards}}" key="index" index="index" item="card">
-          <navigator url="card?_id={{card._id}}" class="weui-cell weui-cell_access">
-            <view class="weui-cell__bd">
-              <view style="display: inline-block; vertical-align: middle">{{card.name}}</view>
-            </view>
-            <view class="weui-cell__ft weui-cell__ft_in-access">{{card.type}}</view>
-          </navigator>
-        </repeat>
-      </view>
-
-      <view class="weui-panel">
+    <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" @getuserinfo="getUserInfo"> 用户授权 </button>
+    <block wx:else>
+      <view class="page__bd">
+        <view class="weui-cells__title">我的会员卡</view>
         <view class="weui-cells weui-cells_after-title">
-          <view class="weui-cell weui-cell_access">
-            <view class="weui-cell__bd">
-              <view style="display: inline-block; vertical-align: middle">我的收藏</view>
-            </view>
-            <view class="weui-cell__ft weui-cell__ft_in-access">{{star.count}}</view>
-          </view>
-          <view class="weui-cell weui-cell_access">
-            <view class="weui-cell__bd">
-              <view style="display: inline-block; vertical-align: middle">我的订单</view>
-            </view>
-            <view class="weui-cell__ft weui-cell__ft_in-access">{{order.count}}</view>
-          </view>
+          <repeat for="{{cards}}" key="index" index="index" item="card">
+            <navigator url="card?_id={{card._id}}" class="weui-cell weui-cell_access">
+              <view class="weui-cell__bd">
+                <view style="display: inline-block; vertical-align: middle">{{card.name}}</view>
+              </view>
+              <view class="weui-cell__ft weui-cell__ft_in-access">{{card.type}}</view>
+            </navigator>
+          </repeat>
         </view>
-      </view>
 
-      <view class="weui-panel">
-        <view class="weui-cells weui-cells_after-title">
-          <view class="weui-cell weui-cell_access">
-            <view class="weui-cell__bd">商户加盟</view>
-            <view class="weui-cell__ft weui-cell__ft_in-access" style="font-size: 0">
+        <view class="weui-panel">
+          <view class="weui-cells weui-cells_after-title">
+            <view class="weui-cell weui-cell_access">
+              <view class="weui-cell__bd">
+                <view style="display: inline-block; vertical-align: middle">我的收藏</view>
+              </view>
+              <view class="weui-cell__ft weui-cell__ft_in-access">{{star.count}}</view>
+            </view>
+            <view class="weui-cell weui-cell_access">
+              <view class="weui-cell__bd">
+                <view style="display: inline-block; vertical-align: middle">我的订单</view>
+              </view>
+              <view class="weui-cell__ft weui-cell__ft_in-access">{{order.count}}</view>
             </view>
           </view>
         </view>
+
+        <view class="weui-panel">
+          <view class="weui-cells weui-cells_after-title">
+            <view class="weui-cell weui-cell_access">
+              <view class="weui-cell__bd">商户加盟</view>
+              <view class="weui-cell__ft weui-cell__ft_in-access" style="font-size: 0">
+              </view>
+            </view>
+          </view>
+        </view>
       </view>
-    </view>
+    </block>
   </view>
 </template>
 
 <script>
   import wepy from 'wepy'
+  import req from '@/network'
+  import { serverAPI } from '@/server'
 
   export default class User extends wepy.page {
 
@@ -103,6 +108,8 @@
     }
 
     data = {
+      hasUserInfo: false,
+      canIUse: wx.canIUse('button.open-type.getUserInfo'),
       cards: [{
         _id: "001",
         name: "兰州拉面",
@@ -110,6 +117,10 @@
       },{
         _id: "002",
         name: "隔壁沙县",
+        type: "白金卡"
+      },{
+        _id: "003",
+        name: "贝菲特(九亭店)",
         type: "白金卡"
       }],
       star:{
@@ -119,5 +130,73 @@
         count: 76
       }
     }
+
+    getSpace(){
+      console.log('getSpace.................')
+      const url = '/api/odata/v4/' + wx.getStorageSync('X-Space-Id') + '/spaces'
+      const data = {
+        '$filter': '_id ne -1',
+        '$expand': 'owner($select=name)',
+        '$count': true,
+        '$select': 'name,owner'
+      }
+      req.get(url, data).then(res => {
+        const spaces = res.value
+        this.cards = this.cards.concat(spaces)
+        this.$apply()
+      })
+    }
+
+    loginServer(code, userInfoData) {
+      console.log("userInfoData", userInfoData)
+      userInfoData.code = code
+      req.post(serverAPI.LOGIN, userInfoData).then(res => {
+        const header = {
+          'X-User-Id': res.userId,
+          'X-Auth-Token': res.authToken,
+          'X-Space-Id': res.spaceId
+        }
+        wx.setStorageSync('X-User-Id', res.userId)
+        wx.setStorageSync('X-Auth-Token', res.authToken)
+        wx.setStorageSync('X-Space-Id', res.spaceId)
+        req.header(header)
+        this.getSpace()
+      })
+    }
+
+    onLoad() {
+      const self = this
+      wx.getSetting({
+        success: function (res) {
+          if (res.authSetting['scope.userInfo']) {
+            wx.getUserInfo({
+              lang: 'zh_CN',
+              success: res => {
+                console.log('getUserInfo success,', res)
+                self.$parent.globalData.userInfo = res.userInfo
+                self.userInfo = res.userInfo
+                self.hasUserInfo = true
+                self.$apply()
+                self.loginServer(self.$parent.globalData.code, res)
+              }
+            })
+          }
+        }
+      })
+    }
+
+    methods = {
+      getUserInfo(e) {
+        const self = this
+        console.log('methods getUserInfo e.detail', e.detail)
+        const app = self.$parent
+        console.log('app.globalData', app.globalData)
+        self.$parent.globalData.userInfo = e.detail.userInfo
+        self.userInfo = e.detail.userInfo
+        self.hasUserInfo = true
+        self.loginServer(self.$parent.globalData.code, e.detail)
+      }
+    }
+
   }
 </script>
