@@ -1,4 +1,4 @@
-<!-- 商户首页 -->
+<!-- 发现优惠 -->
 <style lang="less">
 page {
   height: 100%;
@@ -6,28 +6,86 @@ page {
 
 </style>
 <template>
-  <scroll-view class="scroll-view_H" scroll-y="true">
-	
-    <post :name="postName" :summary="postSummary" :commentCount="postCommentCount" :storeName="storeName" :cover="cover" :logo="logo"/>
-	
-  </scroll-view>
+  <view class="page">
+    <view class="page__hd">
+      <view class="weui-search-bar">
+          <view class="weui-search-bar__form">
+              <view class="weui-search-bar__box">
+                  <icon class="weui-icon-search_in-box" type="search" size="14"></icon>
+                  <input type="text" class="weui-search-bar__input" confirm-type="search" placeholder="搜一索优惠" value="{{inputVal}}" focus="{{inputShowed}}" @input="inputTyping" />
+                  <view class="weui-icon-clear" wx:if="{{inputVal.length > 0}}" @tap="clearInput">
+                      <icon type="clear" size="14"></icon>
+                  </view>
+              </view>
+              <label class="weui-search-bar__label" hidden="{{inputShowed}}" @tap="showInput">
+                  <icon class="weui-icon-search" type="search" size="14"></icon>
+                  <view class="weui-search-bar__text">搜索</view>
+              </label>
+          </view>
+          <view class="weui-search-bar__cancel-btn" hidden="{{!inputShowed}}" @tap="hideInput">取消</view>
+      </view>
+    </view>
+    <view class="page__bd">
+      <scroll-view class="scroll-view_H" scroll-y="true">
+        <repeat for="{{posts}}" key="index" index="index" item="post">
+          <post :name="post.postName" :summary="post.postSummary" :commentCount="post.postCommentCount" :storeName="post.storeName" :cover="post.cover" :logo="post.logo"/>
+        </repeat>
+      </scroll-view>
+    </view>
+  </view>
 </template>
 <script>
   import wepy from 'wepy'
   import post from '../components/post';
 
   export default class PostList extends wepy.page {
+    config = {
+      navigationBarTitleText: '发现优惠',
+      navigationBarTextStyle: 'black'
+    };
+
     components = {
       post: post
     };
 
     data = {
-      storeName: '贝菲特（九亭店）',
-      postName: '限时优惠，买三年送一年',
-      postSummary: '好友开卡成功即送一个月会籍',
-      postCommentCount: '228',
-      cover: '../images/post-cover.png',
-      logo: '../images/best-fit.jpg'
+      inputShowed: false,
+      inputVal: "",
+      posts:[{
+        storeName: '贝菲特（九亭店）',
+        postName: '限时优惠，买三年送一年',
+        postSummary: '好友开卡成功即送一个月会籍',
+        postCommentCount: '228',
+        cover: '../images/post-cover.png',
+        logo: '../images/best-fit.jpg'
+      },{
+        storeName: '麦当劳（九亭店）',
+        postName: '免费黑芝麻口味圆筒',
+        postSummary: '可换其他口味圆筒冰淇淋',
+        postCommentCount: '136',
+        cover: '../images/mc-cover.jpg',
+        logo: '../images/mcdonalds.jpg'
+      }]
+    };
+
+    methods = {
+      showInput: function () {
+          this.inputShowed = true;
+          this.$apply();
+      },
+      hideInput: function () {
+          this.inputShowed = false;
+          this.inputVal = "";
+          this.$apply();
+      },
+      clearInput: function () {
+          this.inputVal = "";
+          this.$apply();
+      },
+      inputTyping: function (e) {
+          this.inputVal = e.detail.value;
+          this.$apply();
+      }
     };
   }
 </script>

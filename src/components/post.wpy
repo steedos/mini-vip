@@ -7,6 +7,8 @@
   border-radius:6px;
   .post-header{
     font-size: 17px;
+    height:80rpx;
+    line-height:80rpx;
     image{
       display:inline-block;
       width:80rpx;
@@ -14,6 +16,9 @@
       vertical-align:middle;
       border-radius:50%;
       margin-right:20rpx;
+    }
+    text{
+      vertical-align:middle;
     }
     .post-name{
       color: #000;
@@ -60,7 +65,7 @@
 <template>
 	<view class="post">
     <view class="post-header">
-      <image class="image" mode="widthFix" src="{{logo}}"/>
+      <image class="image" mode="scaleToFill" src="{{logo}}"/>
       <text class="post-name">{{storeName}}</text>
       <text class="btn-focus btn-link">关注</text>
     </view>
