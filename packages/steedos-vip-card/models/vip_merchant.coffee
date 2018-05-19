@@ -22,7 +22,7 @@ Creator.Objects.vip_merchant =
             ]
         stores:
             label:'门店'
-            type:'master_detail'
+            type:'lookup'
             reference_to:'vip_store'
             multiple:true
         headquarters:

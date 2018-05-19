@@ -21,13 +21,22 @@ Creator.Objects.vip_store =
 			label:'联系电话'
 		business_hours:
 			type:'text'
-			label:'营业时间'
+			label:'营业时间'	
 		address:
 			type:'text'
 			label:'地址'
+		merchant:
+			type:'text'
+			label:'所属商户'
+			hidden:true
 	list_views:
 		all:
 			label: "所有门店"
-			columns: ["name", "location", "phone","address","business_hours"]
+			columns: ["name", "location", "phone","address","business_hours","merchant"]
 			filter_scope: "space"
-
+	triggers:
+		"before.insert.server.store": 
+			on: "server"
+			when: "before.insert"
+			todo: (userId, doc)->
+				doc.merchant = Session.get("spaceId")

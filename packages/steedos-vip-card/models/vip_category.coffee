@@ -82,4 +82,5 @@ Creator.Objects.vip_category =
 		all:
 			label: "全部"
 			filter_scope: "space"
+			columns: ["name", "content", "purchase_count","state"]
 			
