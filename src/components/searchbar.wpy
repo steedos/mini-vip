@@ -1,0 +1,68 @@
+<style lang="less">
+</style>
+<template>
+  <view class="weui-search-bar">
+    <view class="weui-search-bar__form">
+      <view class="weui-search-bar__box">
+        <icon class="weui-icon-search_in-box" type="search" size="14"></icon>
+        <input type="text" class="weui-search-bar__input" confirm-type="search" placeholder="{{placeholder}}" value="{{inputVal}}" 
+          focus="{{inputShowed}}" @input="inputTyping" @confirm="confirm" />
+        <view class="weui-icon-clear" wx:if="{{inputVal.length > 0}}" @tap="clearInput">
+          <icon type="clear" size="14"></icon>
+        </view>
+      </view>
+      <label class="weui-search-bar__label" hidden="{{inputShowed}}" @tap="showInput">
+        <icon class="weui-icon-search" type="search" size="14"></icon>
+        <view class="weui-search-bar__text">{{placeholder}}</view>
+      </label>
+    </view>
+    <view class="weui-search-bar__cancel-btn" hidden="{{!inputShowed}}" @tap="hideInput">取消</view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+
+export default class post extends wepy.component {
+  onLoad() {}
+
+  props = {
+    placeholder: {
+      type: String,
+      default: '搜索'
+    },
+    inputVal: {
+      type: String,
+      default: '',
+      twoWay: true
+    }
+  }
+
+  data = {
+    inputShowed: false
+  };
+
+  methods = {
+    showInput: function () {
+      this.inputShowed = true;
+      this.$apply();
+    },
+    hideInput: function () {
+      this.inputShowed = false;
+      this.inputVal = "";
+      this.$apply();
+    },
+    clearInput: function () {
+      this.inputVal = "";
+      this.$apply();
+    },
+    inputTyping: function (e) {
+      this.inputVal = e.detail.value;
+      this.$apply();
+    },
+    confirm: function (e) {
+      this.$emit('confirm', this.inputVal);
+    }
+  };
+}
+</script>
