@@ -28,5 +28,9 @@ Creator.Objects.vip_merchant =
         headquarters:
             label:'总部'
             type:'location'
+        space:
+            label:'工作区'
+            type:'text'
+            hidden:true
         
         
