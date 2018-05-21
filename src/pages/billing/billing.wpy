@@ -11,10 +11,10 @@ page {
   <scroll-view class="scroll-view_H" scroll-y="true">
     <view class="weui-cells weui-cells_after-title">
       <repeat for="{{bills}}" key="index" index="index" item="item">
-        <navigator url="./billing_detail?_id={{item._id}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+        <view class="weui-cell">
           <view class="weui-cell__bd">{{item.created}}</view>
-          <view class="weui-cell__ft weui-cell__ft_in-access">￥ {{item.amount}}</view>
-        </navigator>
+          <view class="weui-cell__ft">￥ {{item.amount}}</view>
+        </view>
       </repeat>
     </view>
   </scroll-view>
