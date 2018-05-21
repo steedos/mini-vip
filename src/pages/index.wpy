@@ -60,6 +60,15 @@
 .userinfo-btn-view {
   margin-top: 50rpx;
 }
+
+.weui-panel {
+  .get-user-info {
+    padding: 10px 15px;
+    text-align: left;
+    border: none;
+    line-height: 1.41176471;
+  }
+}
 </style>
 
 <template>
@@ -76,10 +85,18 @@
         <view class="location"><open-data type="userCity" lang="zh_CN"></open-data></view>
       </view>
     </view>
-
-    <view class="page__bd userinfo-btn-view" wx:if="{{!hasUserInfo && canIUse}}" >
-      <button open-type="getUserInfo" @getuserinfo="getUserInfo"> 用户授权 </button>
-    </view>
+    
+    <block wx:if="{{!hasUserInfo && canIUse}}">
+      <view class="weui-panel">
+        <view class="weui-cells weui-cells_after-title">
+          <button class="weui-cell weui-cell_access get-user-info" plain="true" open-type="getUserInfo" @getuserinfo="getUserInfo">
+            <view class="weui-cell__bd">使用微信账号登录</view>
+            <view class="weui-cell__ft weui-cell__ft_in-access" style="font-size: 0">
+            </view>
+          </button>
+        </view>
+      </view>
+    </block>
     <block wx:else>
       <view class="page__bd">
         <view class="weui-cells__title">我的会员卡</view>
@@ -104,18 +121,18 @@
             </view>
           </view>
         </view>
+      </view>
+    </block>
 
-        <view class="weui-panel">
-          <view class="weui-cells weui-cells_after-title">
-            <view class="weui-cell weui-cell_access">
-              <view class="weui-cell__bd">关于我们</view>
-              <view class="weui-cell__ft weui-cell__ft_in-access" style="font-size: 0">
-              </view>
-            </view>
+    <view class="weui-panel" style="margin-top:50rpx">
+      <view class="weui-cells weui-cells_after-title">
+        <view class="weui-cell weui-cell_access">
+          <view class="weui-cell__bd">关于我们</view>
+          <view class="weui-cell__ft weui-cell__ft_in-access" style="font-size: 0">
           </view>
         </view>
       </view>
-    </block>
+    </view>
   </view>
 </template>
 
@@ -222,10 +239,14 @@ export default class User extends wepy.page {
       console.log('methods getUserInfo e.detail', e.detail);
       const app = self.$parent;
       console.log('app.globalData', app.globalData);
-      self.$parent.globalData.userInfo = e.detail.userInfo;
-      self.userInfo = e.detail.userInfo;
-      self.hasUserInfo = true;
-      self.loginServer(self.$parent.globalData.code, e.detail);
+
+      if (e.detail.userInfo) {
+        self.$parent.globalData.userInfo = e.detail.userInfo;
+        self.userInfo = e.detail.userInfo;
+        self.hasUserInfo = true;
+        self.loginServer(self.$parent.globalData.code, e.detail);
+      }
+      return;
     }
   };
 }
