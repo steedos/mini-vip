@@ -132,7 +132,7 @@ export default class Card extends wepy.page {
           },
           {
             title: '消费记录',
-            url: 'billing'
+            url: '/pages/billing/billing'
           },
           {
             title: '推荐给朋友',

@@ -1,0 +1,27 @@
+<!-- 消费详情 -->
+<style lang="less">
+page {
+  height: 100%;
+  .scroll-view_H {
+    height: 100%;
+  }
+}
+</style>
+<template>
+  <scroll-view class="scroll-view_H" scroll-y="true">
+    消费详情
+  </scroll-view>
+</template>
+<script>
+import wepy from 'wepy';
+
+export default class Store extends wepy.page {
+  config = {
+    navigationBarTitleText: '消费详情',
+    navigationBarTextStyle: 'black'
+  };
+  components = {};
+
+  data = {};
+}
+</script>
