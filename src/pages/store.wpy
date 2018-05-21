@@ -73,7 +73,7 @@ page {
         </view>
       </view>
       <view class="avatar">
-        <image class="image" mode="scaleToFill" src="../images/best-fit.jpg" />
+        <open-data type="userAvatarUrl"></open-data>
       </view>
       <view class="info">
         <text class="store-name">{{merchant.name}}</text>

@@ -27,10 +27,10 @@
     display: flex;
     flex-direction: column;
     text-align: center;
-    .store-name {
+    .name {
       font-weight: bold;
     }
-    .store-summary {
+    .location {
       color: rgb(149, 149, 149);
     }
   }
@@ -69,11 +69,11 @@
         <image src="../images/bg.png" class="bg-img" />
       </view>
       <view class="avatar">
-        <image class="image" mode="scaleToFill" src="../images/best-fit.jpg" />
+        <open-data type="userAvatarUrl"></open-data>
       </view>
       <view class="info">
-        <view class="store-name"><open-data type="userNickName"></open-data></view>
-        <view class="store-summary"><open-data type="userCity" lang="zh_CN"></open-data></view>
+        <view class="name"><open-data type="userNickName"></open-data></view>
+        <view class="location"><open-data type="userCity" lang="zh_CN"></open-data></view>
       </view>
     </view>
 
