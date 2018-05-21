@@ -32,7 +32,7 @@ page {
 import wepy from 'wepy';
 const util = require('../../utils/util.js');
 
-export default class Store extends wepy.page {
+export default class Billing extends wepy.page {
   config = {
     navigationBarTitleText: '消费记录',
     navigationBarTextStyle: 'black'
