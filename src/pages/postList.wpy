@@ -21,6 +21,7 @@ page {
 </template>
 <script>
   import wepy from 'wepy'
+  import _ from 'underscore'
   import searchbar from '../components/searchbar';
   import post from '../components/post';
 
@@ -58,7 +59,8 @@ page {
     methods = {
       searchPosts (searchKey, evt) {
         // you can get searchKey value by the param "searchKey" or this.searchKey
-        this.posts = [];
+        // 其实不一定要用underscore，可以直接用es6的语法
+        this.posts = this.posts.filter(function(n){return n && n.storeName && n.storeName.indexOf(searchKey) > -1});
         this.$apply();
       }
     };

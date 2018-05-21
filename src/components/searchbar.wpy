@@ -1,4 +1,10 @@
 <style lang="less">
+  .weui-icon-search{
+    font-size:18px;
+  }
+  .weui-search-bar__text {
+    vertical-align: top;
+  }
 </style>
 <template>
   <view class="weui-search-bar">
