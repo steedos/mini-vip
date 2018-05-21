@@ -17,4 +17,5 @@ Package.onUse(function(api) {
 	api.addFiles('models/vip_merchant.coffee');
 	api.addFiles('models/vip_category.coffee');
 	api.addFiles('vip_app.coffee');
+	api.addFiles('models/vip_coupon.coffee');
 })

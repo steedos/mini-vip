@@ -33,24 +33,15 @@ Creator.Objects.vip_card =
 			reference_to:'vip_store'
 		apply_stores:
 			label:'适用门店'
-			type:'lookup'
+			type:'master_detail'
 			reference_to:'vip_store'
-			mutiple:true
+			multiple:true
 		start_time:
 			label:'办卡时间'
 			type:'datetime'
-		validity_period:
-			label:'有效期'
-			type:'select'
-			options:[
-				{label: "永久", value: "永久"},
-				{label: "20年", value: "20年"},
-				{label: "10年", value: "10年"},
-				{label: "5年", value: "5年"},
-				{label: "3年", value: "3年"},
-				{label: "2年", value: "2年"},
-				{label: "1年", value: "1年"}
-			]
+		end_time:
+			label:"截止时间"
+			type:'datetime'
 		user:
 			label:'持卡人'
 			type:'master_detail'
