@@ -5,21 +5,27 @@ page {
   .scroll-view_H {
     height: 100%;
   }
+  .line-height_item {
+    line-height:2.5em;
+  }
+  .font-size_label {
+    font-size:17px;
+  }
+  .color_value {
+    color:#000;
+  }
 }
 </style>
 <template>
   <scroll-view class="scroll-view_H" scroll-y="true">
     <view class="weui-form-preview">
       <repeat for="{{bills}}" key="index" index="index" item="item">
-        <view class="weui-form-preview__hd">
-            <view class="weui-form-preview__item">
-                <view class="weui-form-preview__label">{{item.created}}</view>
-                <view class="weui-form-preview__value_in-hd">￥ {{item.amount}}</view>
-            </view>
-        </view>
         <view class="weui-form-preview__bd">
+            <view class="weui-form-preview__item line-height_item">
+                <view class="weui-form-preview__label font-size_label">{{item.created}}</view>
+                <view class="weui-form-preview__value_in-hd color_value">￥ {{item.amount}}</view>
+            </view>
             <view class="weui-form-preview__item">
-                <view class="weui-form-preview__label">备注</view>
                 <view class="weui-form-preview__value">{{item.description}}</view>
             </view>
         </view>
