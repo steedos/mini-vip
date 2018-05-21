@@ -9,12 +9,21 @@ page {
 </style>
 <template>
   <scroll-view class="scroll-view_H" scroll-y="true">
-    <view class="weui-cells weui-cells_after-title">
+    <view class="weui-form-preview">
       <repeat for="{{bills}}" key="index" index="index" item="item">
-        <view class="weui-cell">
-          <view class="weui-cell__bd">{{item.created}}</view>
-          <view class="weui-cell__ft">￥ {{item.amount}}</view>
+        <view class="weui-form-preview__hd">
+            <view class="weui-form-preview__item">
+                <view class="weui-form-preview__label">{{item.created}}</view>
+                <view class="weui-form-preview__value_in-hd">￥ {{item.amount}}</view>
+            </view>
         </view>
+        <view class="weui-form-preview__bd">
+            <view class="weui-form-preview__item">
+                <view class="weui-form-preview__label">备注</view>
+                <view class="weui-form-preview__value">{{item.description}}</view>
+            </view>
+        </view>
+        <view class="weui-form-preview__ft"></view>
       </repeat>
     </view>
   </scroll-view>
@@ -35,12 +44,14 @@ export default class Store extends wepy.page {
       {
         _id: 'xxx',
         created: util.formatTime(new Date()),
-        amount: -200
+        amount: -200,
+        description: "电动打蛋机"
       },
       {
         _id: 'aaa',
         created: util.formatTime(new Date()),
-        amount: -2000
+        amount: -2000,
+        description: "电动打蛋机"
       }
     ]
   };
