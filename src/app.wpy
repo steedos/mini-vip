@@ -34,6 +34,7 @@ export default class extends wepy.app {
     pages: [
       'pages/index',
       'pages/postList',
+      'pages/coupons',
       'pages/store',
       'pages/card',
       'pages/card_activate',
@@ -53,7 +54,7 @@ export default class extends wepy.app {
         text: '我的',
       },
       {
-        pagePath: 'pages/postList',
+        pagePath: 'pages/coupons',
         selectedIconPath: './images/tabbars/search-active.png',
         iconPath: './images/tabbars/search.png',
         text: '发现',

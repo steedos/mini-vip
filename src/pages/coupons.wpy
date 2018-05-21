@@ -1,0 +1,72 @@
+<!-- 优惠券 -->
+<style lang="less">
+page {
+  height: 100%;
+}
+
+</style>
+<template>
+  <view class="page">
+    <view class="page__hd">
+    </view>
+    <view class="page__bd">
+      <scroll-view class="scroll-view_H" scroll-y="true">
+        <repeat for="{{coupons}}" key="index" index="index" item="coupon">
+          <coupon :name="coupon.name" :quota="coupon.quota" :min_consumption="coupon.min_consumption" :start_time="coupon.start_time" :end_time="coupon.end_time" />
+        </repeat>
+      </scroll-view>
+    </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  import _ from 'underscore'
+  import searchbar from '../components/searchbar';
+  import post from '../components/post';
+  import coupon from '../components/coupon';
+
+  export default class PostList extends wepy.page {
+    config = {
+      navigationBarTitleText: '优惠券',
+      navigationBarTextStyle: 'black'
+    };
+
+    components = {
+      searchbar: searchbar,
+      coupon: coupon
+    };
+
+    data = {
+      searchPlaceholder: '搜一搜优惠',
+      searchKey: '',
+      coupons:[{
+        name: '5元新会员礼券',
+        quota: '5',
+        min_consumption: '满0元可用',
+        start_time: '2018-10-01 12:00',
+        end_time: '2018-10-07 12:00'
+      },{
+        name: '10元新会员礼券',
+        quota: '10',
+        min_consumption: '满58元可用',
+        start_time: '2018-10-01 12:00',
+        end_time: '2018-10-07 12:00'
+      },{
+        name: '15元新会员礼券',
+        quota: '15',
+        min_consumption: '满88元可用',
+        start_time: '2018-10-01 12:00',
+        end_time: '2018-10-07 12:00'
+      },{
+        name: '115元新会员礼券',
+        quota: '115',
+        min_consumption: '满788元可用',
+        start_time: '2018-10-01 12:00',
+        end_time: '2018-10-07 12:00'
+      }]
+    };
+
+    methods = {
+    };
+  }
+</script>
