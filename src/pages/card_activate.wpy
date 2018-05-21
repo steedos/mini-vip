@@ -79,21 +79,26 @@
 						<view class="weui-label">生日</view>
 					</view>
 					<view class="weui-cell__bd">
-						<picker mode="date" bindchange="bindDateChange" value="{{date}}">
-							<view class="weui-input">{{date}}</view>
+						<picker mode="date" bindchange="bindDateChange" value="{{birthdate}}">
+							<view class="weui-input">{{birthdate}}</view>
 						</picker>
 					</view>
 					<view class="weui-cell__ft weui-cell__ft_in-access"></view>
 				</view>
 				<view class="weui-cell weui-cell_access">
-					<view class="weui-cell__bd">
-						<view style="display: inline-block; vertical-align: middle">手机</view>
-					</view>
-					<view class="weui-cell__ft weui-cell__ft_in-access"></view>
+          <view class="weui-cell__hd">
+            <view class="weui-label">手机号</view>
+          </view>
+          <view class="weui-cell__bd">
+            <input class="weui-input" placeholder="请输入手机号" value="{{phoneNumber}}"/>
+          </view>
+          <view class="weui-cell__ft">
+            <view class="weui-vcode-btn"><button open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber">获取手机号</button></view>
+          </view>
 				</view>
 			</view>
 		</view>
-		
+
 		<checkbox-group bindchange='checkboxChange'>
 			<label class="checkbox-container">
 				<checkbox value="agree" color='#fff'/>
@@ -101,7 +106,7 @@
 			</label>
 		</checkbox-group>
 		<view class="btn-container">
-			<button class="submit-btn" form-type="submit">提交</button>
+			<button class="submit-btn" form-type="submit" @tap="activate" disabled="{{submitDisabled}}">提交</button>
 		</view>
 	</view>
 </template>
@@ -109,6 +114,7 @@
 <script>
 import wepy from 'wepy';
 import vipCard from '../components/vipCard';
+import req from '@/network';
 
 export default class cardActivate extends wepy.page {
 	config = {
@@ -118,6 +124,11 @@ export default class cardActivate extends wepy.page {
 
 	onLoad() {}
 
+  activate(){
+	  this.submitDisabled = true
+    req.post('/api/steedos/weixin/card/activate?spaceId=' + spaceId + "&store=" + store, {name: this.name, sex: this.sexValue, birthdate: this.birthdate, phoneNumber: this.phoneNumber})
+  }
+
 	components = {
 		vipcard: vipCard
 	}
@@ -126,26 +137,11 @@ export default class cardActivate extends wepy.page {
 		cardName: '贝菲特',
 		cardType: '会员卡',
 		array: ['男', '女'],
-		sexValue: '',
-		date: '',
-		listData: [
-			{
-				title: '姓名',
-				extraInfo: '张三'
-			},
-			{
-				title: '性别',
-				extraInfo: '男'
-			},
-			{
-				title: '生日',
-				extraInfo: '1998-01-01'
-			},
-			{
-				title: '手机',
-				extraInfo: '18601110111'
-			}
-		]
+		sexValue: '女',
+    birthdate: '2017-01-10',
+    name: '赵丽颖',
+    phoneNumber: '',
+    submitDisabled: true
 	};
 
 	methods = {
@@ -153,8 +149,11 @@ export default class cardActivate extends wepy.page {
 			console.log(e);
 		},
 		checkboxChange(e) {
-			console.log('checkboxChange');
-			console.log(e);
+			if(e.detail.value.length > 0){
+			  this.submitDisabled = false
+      }else{
+			  this.submitDisabled = true
+      }
 		},
 		bindSexChange(e) {
 			const index = e.detail.value;
@@ -164,7 +163,18 @@ export default class cardActivate extends wepy.page {
 		bindDateChange(e) {
 			console.log(e)
 			this.date = e.detail.value;
-		}
-	};
+		},
+    getPhoneNumber: function(e) {
+      if(e.detail.iv || e.detail.encryptedData){
+        req.post('/api/steedos/weixin/get_phone_number', {iv: e.detail.iv, encryptedData: e.detail.encryptedData}).then(res => {
+          console.log("res", res)
+          this.phoneNumber = res.purePhoneNumber
+          this.$apply();
+        });
+		  }else{
+        console.error(e.detail.errMsg)
+      }
+    }
+  };
 }
 </script>

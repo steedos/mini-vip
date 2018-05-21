@@ -23,6 +23,6 @@ Creator.Objects.vip_points =
 			reference_to:'vip_billing'
 	list_views:
 		all:
-			label: "所有门店"
+			label: "我的积分记录"
 			columns: ["card", "points", "billing","store"]
 			filter_scope: "space"

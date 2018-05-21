@@ -7,10 +7,10 @@ Creator.Objects.vip_store =
 			label:'店名'
 			type:'text'
 		description:
-			label:'描述'
+			label:'简介'
 			type:'text'
 		location:
-			label:'位置'
+			label:'地址'
 			type:'location'
 		contact:
 			type:'lookup'

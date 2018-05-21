@@ -1,0 +1,115 @@
+<style lang="less">
+.header {
+  width: 100%;
+  height: 230px;
+
+  .swiper {
+    height: 100%;
+
+    .slide-image {
+      width: 100%;
+    }
+  }
+}
+
+.header-des {
+	padding: 10px 15px;
+	font-weight: bold;
+	margin-top: 28rpx;
+
+	.slds-icon-call {
+		color: #FD6631;
+	}
+}
+</style>
+<template>
+	<view class="">
+		<view class="header">
+			<swiper class="swiper" indicator-dots="true" autoplay="true" interval="5000" duration="500">
+				<repeat for="{{imgUrls}}" key="index" index="index" item="item">
+					<swiper-item>
+						<image src="{{item}}" class="slide-image"/>
+					</swiper-item>
+				</repeat>
+			</swiper>
+		</view>
+
+		<view class="kind-list__item">
+			<view class="weui-flex kind-list__item-hd header-des">
+				<view class="weui-flex__item">贝菲特（九亭店）</view>
+				<text class="kind-list__img slds-icon-call" @tap="phoneCall"></text>
+			</view>
+		</view>
+
+		<view class="page__bd" style="margin-top: 28rpx">
+			<view class="weui-cells weui-cells_after-title">
+				<navigator url="store" class="weui-cell weui-cell_access">
+					<view class="weui-cell__bd">
+						<view style="display: inline-block; vertical-align: middle">门店地址</view>
+					</view>
+					<view class="weui-cell__ft weui-cell__ft_in-access">九新公路76号</view>
+				</navigator>
+				<navigator url="store" class="weui-cell weui-cell_access">
+					<view class="weui-cell__bd">
+						<view style="display: inline-block; vertical-align: middle">营业时间</view>
+					</view>
+					<view class="weui-cell__ft weui-cell__ft_in-access">24小时</view>
+				</navigator>
+			</view>
+		</view>
+
+      <view class="weui-cells weui-cells_after-title">
+        <view class="weui-cell" style="margin:20px 5px 10px 5px;">
+        <view class="weui-cell__bd">
+        <textarea class="weui-textarea" style="height: auto">贝菲特是九亭地区最受欢迎的健身房，大家快来一起健身吧~~</textarea>
+        </view>
+        </view>
+      </view>
+
+			<view class="page__bd" style="margin-top: 36rpx">
+				<view class="weui-cells weui-cells_after-title">
+					<navigator url="store" class="weui-cell weui-cell_access">
+						<view class="weui-cell__bd">
+							<view style="display: inline-block; vertical-align: middle">二维码</view>
+						</view>
+						<view class="weui-cell__ft weui-cell__ft_in-access"></view>
+					</navigator>
+				</view>
+			</view>
+  </view>
+	</view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import vipCard from '../components/vipCard';
+
+export default class cardActivate extends wepy.page {
+  config = {
+    navigationBarTitleText: '关于贝菲特',
+    navigationBarTextStyle: 'black'
+  };
+
+  onLoad() {}
+
+  components = {
+    vipcard: vipCard
+  };
+
+  data = {
+    imgUrls: [
+      '../images/mc-cover.jpg',
+      '../images/mcdonalds.jpg',
+      '../images/post-cover.png'
+    ]
+  };
+
+  methods = {
+		phoneCall() {
+			wx.makePhoneCall({
+				phoneNumber: ''
+			})
+		}
+	};
+}
+</script>

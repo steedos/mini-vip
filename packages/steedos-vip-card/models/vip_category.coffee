@@ -7,10 +7,6 @@ Creator.Objects.vip_category =
 			label:'名称'
 			type:'text'
 			required:true
-		merchant:
-			label:'商户'
-			type:'lookup'
-			reference_to:'vip_merchant'
 		category:
 			label:'类别'
 			type:'select'
