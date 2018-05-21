@@ -151,9 +151,6 @@ export default class Card extends wepy.page {
   };
 
   methods = {
-    userInfo(detail) {
-      console.log(detail);
-    },
     toOpenCard() {
       wx.navigateTo({
         url: 'card_activate'
