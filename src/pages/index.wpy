@@ -1,55 +1,85 @@
-<style>
-  .user-avatar {
-    width: 50px;
-    height: 50px;
+<style lang="less">
+.header {
+  margin-bottom: 20px;
+  .background {
+    height: 210px;
+    overflow: hidden;
+    .bg-img {
+      z-index: -1;
+      width: 100%;
+    }
   }
+  .avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    position: relative;
+    margin: -50px auto 0 auto;
+    border: 5px solid white;
+    .image {
+      width: 100%;
+      height: 100%;
+    }
+  }
+  .info {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    .store-name {
+      font-weight: bold;
+    }
+    .store-summary {
+      color: rgb(149, 149, 149);
+    }
+  }
+}
 
-  .user-city{
-    margin-right: 50rpx;
-  }
+.user-avatar {
+  width: 50px;
+  height: 50px;
+}
 
-  .user-info:before{
-    display: none;
-  }
+.user-city {
+  margin-right: 50rpx;
+}
 
-  .user-info:after{
-    border-bottom: 1rpx solid #d9d9d9;
-  }
+.user-info:before {
+  display: none;
+}
 
-  .page__bd .weui-panel{
-    margin-top: 50rpx;
-  }
+.user-info:after {
+  border-bottom: 1rpx solid #d9d9d9;
+}
 
-  .userinfo-btn-view {
-    margin-top: 50rpx;
-  }
+.page__bd .weui-panel {
+  margin-top: 50rpx;
+}
+
+.userinfo-btn-view {
+  margin-top: 50rpx;
+}
 </style>
 
 <template>
   <view class="page">
-    <view class="page__hd">
-      <view class="weui-panel weui-panel_access user-info">
-        <view class="weui-media-box weui-media-box_appmsg">
-          <view class="weui-media-box__hd_in-appmsg user-avatar">
-            <open-data type="userAvatarUrl"></open-data>
-          </view>
-          <view class="weui-media-box__bd_in-appmsg">
-            <view class="weui-media-box__title">
-              <open-data type="userNickName"></open-data>
-            </view>
-            <view class="weui-media-box__desc">
-              <view class="weui-flex">
-                <view class="user-city">地区: <open-data type="userCity" lang="zh_CN"></open-data></view>
-                <view>性别: <open-data type="userGender" lang="zh_CN"></open-data></view>
-              </view>
-            </view>
-          </view>
-        </view>
+		<view class="header">
+      <view class="background">
+        <image src="../images/bg.png" class="bg-img" />
+      </view>
+      <view class="avatar">
+        <image class="image" mode="scaleToFill" src="../images/best-fit.jpg" />
+      </view>
+      <view class="info">
+        <view class="store-name"><open-data type="userNickName"></open-data></view>
+        <view class="store-summary"><open-data type="userCity" lang="zh_CN"></open-data></view>
       </view>
     </view>
 
     <view class="page__bd userinfo-btn-view" wx:if="{{!hasUserInfo && canIUse}}" >
-      <button open-type="getUserInfo" @getuserinfo="getUserInfo"> 用户授权 </button></view>
+      <button open-type="getUserInfo" @getuserinfo="getUserInfo"> 用户授权 </button>
+    </view>
     <block wx:else>
       <view class="page__bd">
         <view class="weui-cells__title">我的会员卡</view>
@@ -68,15 +98,9 @@
           <view class="weui-cells weui-cells_after-title">
             <view class="weui-cell weui-cell_access">
               <view class="weui-cell__bd">
-                <view style="display: inline-block; vertical-align: middle">我的收藏</view>
+                <view style="display: inline-block; vertical-align: middle">我的优惠券</view>
               </view>
-              <view class="weui-cell__ft weui-cell__ft_in-access">{{star.count}}</view>
-            </view>
-            <view class="weui-cell weui-cell_access">
-              <view class="weui-cell__bd">
-                <view style="display: inline-block; vertical-align: middle">我的订单</view>
-              </view>
-              <view class="weui-cell__ft weui-cell__ft_in-access">{{order.count}}</view>
+              <view class="weui-cell__ft weui-cell__ft_in-access">{{coupon.count}}</view>
             </view>
           </view>
         </view>
@@ -84,7 +108,7 @@
         <view class="weui-panel">
           <view class="weui-cells weui-cells_after-title">
             <view class="weui-cell weui-cell_access">
-              <view class="weui-cell__bd">商户加盟</view>
+              <view class="weui-cell__bd">关于我们</view>
               <view class="weui-cell__ft weui-cell__ft_in-access" style="font-size: 0">
               </view>
             </view>
@@ -96,111 +120,113 @@
 </template>
 
 <script>
-  import wepy from 'wepy'
-  import req from '@/network'
-  import { serverAPI } from '@/server'
+import wepy from 'wepy';
+import req from '@/network';
+import { serverAPI } from '@/server';
 
-  export default class User extends wepy.page {
+export default class User extends wepy.page {
+  config = {
+    navigationBarTitleText: '会员秘书',
+    navigationBarTextStyle: 'black'
+  };
 
-    config = {
-      navigationBarTitleText: '会员秘书',
-      navigationBarTextStyle: 'black'
-    };
-
-    getCardUrl(){
-      console.log("getCardUrl", this._id)
-      return "card"
-    }
-
-    data = {
-      hasUserInfo: false,
-      canIUse: wx.canIUse('button.open-type.getUserInfo'),
-      cards: [{
-        _id: "001",
-        name: "兰州拉面",
-        type: "金卡"
-      },{
-        _id: "002",
-        name: "隔壁沙县",
-        type: "白金卡"
-      },{
-        _id: "003",
-        name: "贝菲特(九亭店)",
-        type: "白金卡"
-      }],
-      star:{
-        count: 8
-      },
-      order:{
-        count: 76
-      }
-    }
-
-    getSpace(){
-      const url = '/api/odata/v4/' + wx.getStorageSync('X-Space-Id') + '/spaces'
-      const data = {
-        '$filter': '_id ne -1',
-        '$expand': 'owner($select=name)',
-        '$count': true,
-        '$select': 'name,owner'
-      }
-      req.get(url, data).then(res => {
-        const spaces = res.value
-        this.cards = this.cards.concat(spaces)
-        this.$apply()
-      })
-    }
-
-    loginServer(code, userInfoData) {
-      console.log("userInfoData", userInfoData)
-      userInfoData.code = code
-      req.post(serverAPI.LOGIN, userInfoData).then(res => {
-        const header = {
-          'X-User-Id': res.userId,
-          'X-Auth-Token': res.authToken,
-          'X-Space-Id': res.spaceId
-        }
-        wx.setStorageSync('X-User-Id', res.userId)
-        wx.setStorageSync('X-Auth-Token', res.authToken)
-        wx.setStorageSync('X-Space-Id', res.spaceId)
-        req.header(header)
-        this.getSpace()
-      })
-    }
-
-    onLoad() {
-      const self = this
-      wx.getSetting({
-        success: function (res) {
-          if (res.authSetting['scope.userInfo']) {
-            wx.getUserInfo({
-              lang: 'zh_CN',
-              success: res => {
-                console.log('getUserInfo success,', res)
-                self.$parent.globalData.userInfo = res.userInfo
-                self.userInfo = res.userInfo
-                self.hasUserInfo = true
-                self.$apply()
-                self.loginServer(self.$parent.globalData.code, res)
-              }
-            })
-          }
-        }
-      })
-    }
-
-    methods = {
-      getUserInfo(e) {
-        const self = this
-        console.log('methods getUserInfo e.detail', e.detail)
-        const app = self.$parent
-        console.log('app.globalData', app.globalData)
-        self.$parent.globalData.userInfo = e.detail.userInfo
-        self.userInfo = e.detail.userInfo
-        self.hasUserInfo = true
-        self.loginServer(self.$parent.globalData.code, e.detail)
-      }
-    }
-
+  getCardUrl() {
+    console.log('getCardUrl', this._id);
+    return 'card';
   }
+
+  data = {
+    hasUserInfo: false,
+    canIUse: wx.canIUse('button.open-type.getUserInfo'),
+    cards: [
+      {
+        _id: '001',
+        name: '兰州拉面',
+        type: '金卡'
+      },
+      {
+        _id: '002',
+        name: '隔壁沙县',
+        type: '白金卡'
+      },
+      {
+        _id: '003',
+        name: '贝菲特(九亭店)',
+        type: '白金卡'
+      }
+    ],
+    coupon: {
+      count: 8
+    },
+    order: {
+      count: 76
+    }
+  };
+
+  getSpace() {
+    const url = '/api/odata/v4/' + wx.getStorageSync('X-Space-Id') + '/spaces';
+    const data = {
+      $filter: '_id ne -1',
+      $expand: 'owner($select=name)',
+      $count: true,
+      $select: 'name,owner'
+    };
+    req.get(url, data).then(res => {
+      const spaces = res.value;
+      this.cards = this.cards.concat(spaces);
+      this.$apply();
+    });
+  }
+
+  loginServer(code, userInfoData) {
+    console.log('userInfoData', userInfoData);
+    userInfoData.code = code;
+    req.post(serverAPI.LOGIN, userInfoData).then(res => {
+      const header = {
+        'X-User-Id': res.userId,
+        'X-Auth-Token': res.authToken,
+        'X-Space-Id': res.spaceId
+      };
+      wx.setStorageSync('X-User-Id', res.userId);
+      wx.setStorageSync('X-Auth-Token', res.authToken);
+      wx.setStorageSync('X-Space-Id', res.spaceId);
+      req.header(header);
+      this.getSpace();
+    });
+  }
+
+  onLoad() {
+    const self = this;
+    wx.getSetting({
+      success: function(res) {
+        if (res.authSetting['scope.userInfo']) {
+          wx.getUserInfo({
+            lang: 'zh_CN',
+            success: res => {
+              console.log('getUserInfo success,', res);
+              self.$parent.globalData.userInfo = res.userInfo;
+              self.userInfo = res.userInfo;
+              self.hasUserInfo = true;
+              self.$apply();
+              self.loginServer(self.$parent.globalData.code, res);
+            }
+          });
+        }
+      }
+    });
+  }
+
+  methods = {
+    getUserInfo(e) {
+      const self = this;
+      console.log('methods getUserInfo e.detail', e.detail);
+      const app = self.$parent;
+      console.log('app.globalData', app.globalData);
+      self.$parent.globalData.userInfo = e.detail.userInfo;
+      self.userInfo = e.detail.userInfo;
+      self.hasUserInfo = true;
+      self.loginServer(self.$parent.globalData.code, e.detail);
+    }
+  };
+}
 </script>

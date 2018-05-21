@@ -1,0 +1,170 @@
+<style lang="less">
+
+	.header {
+		width: 100%;
+		background: #fff;
+		display: flex;
+		flex-direction: column;
+
+		&:before {
+			display: none;
+		}
+	}
+
+	checkbox .wx-checkbox-input {
+		height: 12px;
+		width: 12px;
+	}
+
+	checkbox .wx-checkbox-input.wx-checkbox-input-checked::before {
+		padding: 3px;
+		border-radius: 50%;
+		background-color: #1B9AF7;
+	}
+
+	.checkbox-container {
+		position: relative;
+		margin-left: 18px;
+		margin-top: 15px;
+		display: flex;
+
+		.guide {
+			margin-left: 10px;
+			line-height: 30px;
+			color: #a8a8a8;
+		}
+	}
+
+	.btn-container {
+		width: 100%;
+	}
+
+	.submit-btn {
+		background: #1B9AF7;
+		color: #fff;
+		margin: 15px 15px 20px;
+	}
+
+</style>
+<template>
+	<view class="">
+		<view class="weui-panel weui-panel_access header">
+			<vipcard :cardName.sync="cardName" :cardType.sync="cardType" />
+		</view>
+
+		<view class="weui-cells__title">必填信息</view>
+		<view class="page__bd" style="">
+			<view class="weui-cells weui-cells_after-title">
+				<view class="weui-cell weui-cell_input">
+					<view class="weui-cell__hd">
+						<view class="weui-label">姓名</view>
+					</view>
+					<view class="weui-cell__bd">
+						<input class="weui-input" placeholder="请输入姓名"/>
+					</view>
+				</view>
+				<view class="weui-cell weui-cell_input">
+					<view class="weui-cell__hd">
+						<view class="weui-label">性别</view>
+					</view>
+					<view class="weui-cell__bd">
+						<picker mode="selector" bindchange="bindSexChange" value="{{sexValue}}" range="{{array}}">
+							<view class="weui-input">{{sexValue}}</view>
+						</picker>
+					</view>
+					<view class="weui-cell__ft weui-cell__ft_in-access"></view>
+				</view>
+				<view class="weui-cell weui-cell_input">
+					<view class="weui-cell__hd">
+						<view class="weui-label">生日</view>
+					</view>
+					<view class="weui-cell__bd">
+						<picker mode="date" bindchange="bindDateChange" value="{{date}}">
+							<view class="weui-input">{{date}}</view>
+						</picker>
+					</view>
+					<view class="weui-cell__ft weui-cell__ft_in-access"></view>
+				</view>
+				<view class="weui-cell weui-cell_access">
+					<view class="weui-cell__bd">
+						<view style="display: inline-block; vertical-align: middle">手机</view>
+					</view>
+					<view class="weui-cell__ft weui-cell__ft_in-access"></view>
+				</view>
+			</view>
+		</view>
+		
+		<checkbox-group bindchange='checkboxChange'>
+			<label class="checkbox-container">
+				<checkbox value="agree" color='#fff'/>
+				<view class="guide">我已阅读并同意《会员卡信息指南》</view>
+			</label>
+		</checkbox-group>
+		<view class="btn-container">
+			<button class="submit-btn" form-type="submit">提交</button>
+		</view>
+	</view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import vipCard from '../components/vipCard';
+
+export default class cardActivate extends wepy.page {
+	config = {
+		navigationBarTitleText: '激活会员卡',
+		navigationBarTextStyle: 'black'
+	};
+
+	onLoad() {}
+
+	components = {
+		vipcard: vipCard
+	}
+
+	data = {
+		cardName: '贝菲特',
+		cardType: '会员卡',
+		array: ['男', '女'],
+		sexValue: '',
+		date: '',
+		listData: [
+			{
+				title: '姓名',
+				extraInfo: '张三'
+			},
+			{
+				title: '性别',
+				extraInfo: '男'
+			},
+			{
+				title: '生日',
+				extraInfo: '1998-01-01'
+			},
+			{
+				title: '手机',
+				extraInfo: '18601110111'
+			}
+		]
+	};
+
+	methods = {
+		formSubmit(e) {
+			console.log(e);
+		},
+		checkboxChange(e) {
+			console.log('checkboxChange');
+			console.log(e);
+		},
+		bindSexChange(e) {
+			const index = e.detail.value;
+			this.sexValue = this.array[index];
+			this.$apply();
+		},
+		bindDateChange(e) {
+			console.log(e)
+			this.date = e.detail.value;
+		}
+	};
+}
+</script>

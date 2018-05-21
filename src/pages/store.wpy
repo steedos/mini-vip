@@ -5,9 +5,9 @@ page {
   .scroll-view_H {
     height: 100%;
     .header {
-      height: 200px;
       .background {
-        height: auto;
+        height: 210px;
+        overflow: hidden;
         .bg-img {
           z-index: -1;
           width: 100%;
@@ -29,7 +29,7 @@ page {
         border-radius: 50%;
         overflow: hidden;
         position: relative;
-        margin: 150px auto 0 auto;
+        margin: -50px auto 0 auto;
         border: 5px solid white;
         .image {
           width: 100%;
@@ -50,7 +50,7 @@ page {
       }
     }
     .post-list {
-      margin-top: 160px;
+      margin-top: 20px;
     }
   }
 }

@@ -158,7 +158,7 @@ export default class Card extends wepy.page {
     },
     toOpenCard() {
       wx.navigateTo({
-        url: 'openCard'
+        url: 'card_activate'
       });
     },
     userInfo(e) {
@@ -166,7 +166,7 @@ export default class Card extends wepy.page {
         this.isAuthorize = true;
         this.$apply();
         wx.navigateTo({
-          url: 'openCard'
+          url: 'card_activate'
         });
       } else {
         return;

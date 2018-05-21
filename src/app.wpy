@@ -36,7 +36,7 @@ export default class extends wepy.app {
       'pages/postList',
       'pages/store',
       'pages/card',
-      'pages/openCard',
+      'pages/card_activate',
       'pages/billing'
     ],
     tabBar: {
