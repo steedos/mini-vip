@@ -1,21 +1,21 @@
 <style lang="less">
-  .header {
-    width: 100%;
-    background: #fff;
-    display: flex;
-		flex-direction: column;
-		
-		&:before {
-			display: none;
-		}
+.header {
+  width: 100%;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
 
-		.active-card {
-			width: 380rpx;
-			margin-bottom: 20px;
-			color: #F5A44D;
-			border-color: #F5A44D;
-		}
-	}
+  &:before {
+    display: none;
+  }
+
+  .active-card {
+    width: 380rpx;
+    margin-bottom: 20px;
+    color: #f5a44d;
+    border-color: #f5a44d;
+  }
+}
 </style>
 <template>
 	<view class="">
@@ -39,7 +39,7 @@
 		<view class="page__bd" style="margin-top: 36rpx">
 			<view class="weui-cells weui-cells_after-title">
 				<repeat for="{{listItem}}" key="index" index="index" item="item">
-					<view class="weui-cell weui-cell_access">
+					<view class="weui-cell weui-cell_access" @tap="openUrl({{item.url}})">
 						<view class="weui-cell__bd">
 							<view style="display: inline-block; vertical-align: middle">{{item.title}}</view>
 						</view>
@@ -87,9 +87,9 @@ export default class Card extends wepy.page {
   };
 
   data = {
-		isAuthorize: false,
-		cardName: '贝菲特',
-		cardType: '会员卡',
+    isAuthorize: false,
+    cardName: '贝菲特',
+    cardType: '会员卡',
     listData: [
       {
         title: '预定'
@@ -125,7 +125,7 @@ export default class Card extends wepy.page {
           {
             title: '适用门店'
           }
-        ]
+        ];
       } else {
         listData = [
           {
@@ -133,7 +133,8 @@ export default class Card extends wepy.page {
             extraInfo: '3287元'
           },
           {
-            title: '消费记录'
+            title: '消费记录',
+            url: 'billing'
           },
           {
             title: '推荐给朋友',
@@ -145,11 +146,11 @@ export default class Card extends wepy.page {
           {
             title: '适用门店'
           }
-        ]
+        ];
       }
-      return listData
+      return listData;
     }
-  }
+  };
 
   methods = {
     userInfo(detail) {
@@ -170,6 +171,11 @@ export default class Card extends wepy.page {
       } else {
         return;
       }
+    },
+    openUrl(url) {
+      wx.navigateTo({
+        url: url
+      });
     }
   };
 }

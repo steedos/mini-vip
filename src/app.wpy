@@ -36,7 +36,8 @@ export default class extends wepy.app {
       'pages/postList',
       'pages/store',
       'pages/card',
-      'pages/openCard'
+      'pages/openCard',
+      'pages/billing'
     ],
     tabBar: {
       color: '#8d8d8d',
