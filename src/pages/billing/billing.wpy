@@ -21,6 +21,7 @@ page {
 </template>
 <script>
 import wepy from 'wepy';
+const util = require('../../utils/util.js');
 
 export default class Store extends wepy.page {
   config = {
@@ -33,12 +34,12 @@ export default class Store extends wepy.page {
     bills: [
       {
         _id: 'xxx',
-        created: new Date(),
+        created: util.formatTime(new Date()),
         amount: -200
       },
       {
         _id: 'aaa',
-        created: new Date(),
+        created: util.formatTime(new Date()),
         amount: -2000
       }
     ]
