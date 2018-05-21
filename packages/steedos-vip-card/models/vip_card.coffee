@@ -72,6 +72,11 @@ Creator.Objects.vip_card =
 		description:
 			label:'备注'
 			type:'textarea'
+		is_favorited:
+			label:'放入微信卡包'
+			type:'boolean'
+			defaultValue:false
+
 	list_views:
 		all:
 			label: "所有会员卡"
