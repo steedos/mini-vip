@@ -27,23 +27,23 @@
 
 		<view class="page__bd" style="margin-top: 36rpx">
 			<view class="weui-cells weui-cells_after-title">
-				<navigator url="store" class="weui-cell weui-cell_access">
-					<view class="weui-cell__bd">
-						<view style="display: inline-block; vertical-align: middle">优惠活动</view>
-					</view>
-					<view class="weui-cell__ft weui-cell__ft_in-access">8</view>
-				</navigator>
-			</view>
-		</view>
-
-		<view class="page__bd" style="margin-top: 36rpx">
-			<view class="weui-cells weui-cells_after-title">
 				<repeat for="{{listItem}}" key="index" index="index" item="item">
 					<navigator url="{{item.url}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
 						<view class="weui-cell__bd">{{item.title}}</view>
 						<view class="weui-cell__ft weui-cell__ft_in-access">{{item.extraInfo}}</view>
 					</navigator>
 				</repeat>
+			</view>
+		</view>
+
+    <view class="page__bd" style="margin-top: 36rpx">
+			<view class="weui-cells weui-cells_after-title">
+				<navigator url="store" class="weui-cell weui-cell_access">
+					<view class="weui-cell__bd">
+						<view style="display: inline-block; vertical-align: middle">推荐给朋友</view>
+					</view>
+					<view class="weui-cell__ft weui-cell__ft_in-access">好友注册成功返10元券</view>
+				</navigator>
 			</view>
 		</view>
 	</view>
@@ -87,22 +87,7 @@ export default class Card extends wepy.page {
   data = {
     isAuthorize: false,
     cardName: '贝菲特',
-    cardType: '会员卡',
-    listData: [
-      {
-        title: '预定'
-      },
-      {
-        title: '推荐给朋友',
-        extraInfo: '好友注册成功返10元券'
-      },
-      {
-        title: '会员卡详情'
-      },
-      {
-        title: '适用门店'
-      }
-    ]
+    cardType: '会员卡'
   };
 
   computed = {
@@ -111,38 +96,28 @@ export default class Card extends wepy.page {
       if (this.isLogin) {
         listData = [
           {
-            title: '预定'
+            title: '关于贝菲特'
           },
           {
-            title: '推荐给朋友',
-            extraInfo: '好友注册成功返10元券'
+            title: '门店地址'
           },
           {
-            title: '会员卡详情'
-          },
-          {
-            title: '适用门店'
+            title: '消费记录'
           }
         ];
       } else {
         listData = [
           {
-            title: '余额',
-            extraInfo: '3287元'
+            title: '关于贝菲特'
           },
           {
-            title: '消费记录',
-            url: '/pages/billing/billing'
+            title: '联系电话'
           },
           {
-            title: '推荐给朋友',
-            extraInfo: '3287元'
+            title: '门店地址'
           },
           {
-            title: '会员卡详情'
-          },
-          {
-            title: '适用门店'
+            title: '消费记录'
           }
         ];
       }

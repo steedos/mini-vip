@@ -1,0 +1,30 @@
+<style lang="less">
+
+</style>
+<template>
+	<view class="">
+		关于贝菲特
+	</view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import vipCard from '../components/vipCard';
+
+export default class cardActivate extends wepy.page {
+	config = {
+		navigationBarTitleText: '关于贝菲特',
+		navigationBarTextStyle: 'black'
+	};
+
+	onLoad() {}
+
+	components = {
+		vipcard: vipCard
+	}
+
+	data = {};
+
+	methods = {}
+}
+</script>
