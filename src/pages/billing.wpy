@@ -4,13 +4,19 @@ page {
   height: 100%;
   .scroll-view_H {
     height: 100%;
-
   }
 }
 </style>
 <template>
   <scroll-view class="scroll-view_H" scroll-y="true">
-消费记录
+    <view class="weui-cells weui-cells_after-title">
+      <repeat for="{{bills}}" key="index" index="index" item="item">
+        <navigator url="" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+          <view class="weui-cell__bd">{{item.created}}</view>
+          <view class="weui-cell__ft weui-cell__ft_in-access">￥ {{item.amount}}</view>
+        </navigator>
+      </repeat>
+    </view>
   </scroll-view>
 </template>
 <script>
@@ -21,11 +27,19 @@ export default class Store extends wepy.page {
     navigationBarTitleText: '消费记录',
     navigationBarTextStyle: 'black'
   };
-  components = {
-  };
+  components = {};
 
   data = {
-
+    bills: [
+      {
+        created: new Date(),
+        amount: -200
+      },
+      {
+        created: new Date(),
+        amount: -2000
+      }
+    ]
   };
 }
 </script>
