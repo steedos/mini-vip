@@ -109,7 +109,8 @@ export default class Card extends wepy.page {
       } else {
         listData = [
           {
-            title: '关于贝菲特'
+            title: '关于贝菲特',
+            url: 'card_about'
           },
           {
             title: '联系电话'

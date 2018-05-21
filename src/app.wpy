@@ -36,6 +36,7 @@ export default class extends wepy.app {
       'pages/postList',
       'pages/store',
       'pages/card',
+      'pages/card_about',
       'pages/card_activate',
       'pages/billing/billing'
     ],
