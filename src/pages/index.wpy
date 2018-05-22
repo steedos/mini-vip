@@ -2,13 +2,23 @@
 .header {
   margin-bottom: 20px;
   .background {
-    height: 210px;
+    height: 104px;
     overflow: hidden;
-    .bg-img {
-      z-index: -1;
-      width: 100%;
-    }
+    background-color:#fc880f;
   }
+    .page__bd_spacing{
+      text-align: center; 
+      color:white; 
+      margin-top: 50rpx;
+    }
+      .weui-flex-title{
+        font-weight: 200; 
+        font-size: 12px;
+      }
+      .weui-flex-content{
+        font-weight: 200; 
+        font-size: 28px;
+      }
   .avatar {
     width: 100px;
     height: 100px;
@@ -35,6 +45,19 @@
     }
   }
 }
+.weui-cells__title__mine{
+  font-weight: 200; 
+  color: #999999; 
+  font-size: 13.5px;
+}
+
+.weui-cell_access_card{
+  font-size: 17px; 
+}
+.card-name{
+  display: inline-block; 
+  vertical-align: middle; 
+} 
 
 .user-avatar {
   width: 50px;
@@ -69,32 +92,43 @@
     line-height: 1.41176471;
   }
 }
+.btn-my-account, .btn-my-coupons{
+  display: inline-block; 
+  vertical-align: middle; 
+  font-size: 17px;
+}
+
+.btn-coupons{
+  margin-top: 50rpx;
+}
+
+.btn-account{
+  margin-top: 50rpx; 
+  margin-bottom: 50px;
+}
+.btn-view-all{
+  vertical-align: middle; 
+  font-size: 14px;
+}
 </style>
 
 <template>
   <view class="page">
 		<view class="header">
-      <view class="background" style="background-color:#fc880f;height: 104px;">
-          <view class="page__bd page__bd_spacing" style="text-align: center; color:white; margin-top: 50rpx;">
-              <view class="weui-flex" style="font-weight: 200; font-size: 12px;">
+      <view class="background">
+          <view class="page__bd page__bd_spacing">
+              <view class="weui-flex weui-flex-title">
                   <view class="weui-flex__item"><view class="placeholder">会员卡</view></view>
                   <view class="weui-flex__item"><view class="placeholder">余额</view></view>
                   <view class="weui-flex__item"><view class="placeholder">优惠券</view></view>
               </view>
-              <view class="weui-flex" style="font-weight: 200; font-size: 28px;">
+              <view class="weui-flex weui-flex-content">
                   <view class="weui-flex__item"><view class="placeholder">20</view></view>
                   <view class="weui-flex__item"><view class="placeholder">￥31000</view></view>
                   <view class="weui-flex__item"><view class="placeholder">18</view></view>
               </view>
             </view>
       </view>
-      <!-- <view class="avatar">
-        <open-data type="userAvatarUrl"></open-data>
-      </view>
-      <view class="info">
-        <view class="name"><open-data type="userNickName"></open-data></view>
-        <view class="location"><open-data type="userCity" lang="zh_CN"></open-data></view>
-      </view> -->
     </view>
    
     <block wx:if="{{!hasUserInfo && canIUse}}">
@@ -110,12 +144,12 @@
     </block>
     <block wx:else>
       <view class="page__bd">
-        <view class="weui-cells__title" style="font-weight: 200; color: #999999; font-size: 13.5px;">我的会员卡</view>
+        <view class="weui-cells__title weui-cells__title__mine">我的会员卡</view>
         <view class="weui-cells weui-cells_after-title">
           <repeat for="{{cards}}" key="index" index="index" item="card">
-            <navigator url="card?_id={{card._id}}" class="weui-cell weui-cell_access" style="font-size: 17px; color: #333333; solid #CCCCCC;">
+            <navigator url="card?_id={{card._id}}" class="weui-cell weui-cell_access weui-cell_access_card">
               <view class="weui-cell__bd">
-                <view style="display: inline-block; vertical-align: middle">{{card.name}}</view>
+                <view class="card-name">{{card.name}}</view>
               </view>
               <view class="weui-cell__ft weui-cell__ft_in-access">{{card.type}}</view>
             </navigator>
@@ -124,31 +158,31 @@
           <view class="weui-cells weui-cells_after-title">
           <navigator url="card?_id={{card._id}}" class="weui-cell weui-cell_access">
             <view class="weui-cell__bd">
-              <view style="display: inline-block; vertical-align: middle;font-size: 14px; solid: #CCCCCC;">查看全部</view>
+              <text  class="btn-view-all">查看全部</text>
             </view>
             <view class="weui-cell__ft weui-cell__ft_in-access">20</view>
           </navigator>
-          </view>
-
-          <view class="weui-panel">
-            <view class="weui-cells weui-cells_after-title">
-              <navigator url="card?_id={{card._id}}" class="weui-cell weui-cell_access">
-              <view class="weui-cell__bd">
-                <view style="display: inline-block; vertical-align: middle; font-size: 17px; color: #333333; solid #CCCCCC;">我的优惠券</view>
-              </view>
-              <view class="weui-cell__ft weui-cell__ft_in-access">18</view>
-            </navigator>
-            </view>
           </view>
         </view>
       </view>
     </block>
 
-    <view class="weui-panel" style="margin-top:50rpx; margin-bottom: 50px;">
+    <view class="weui-panel btn-coupons">
+      <view class="weui-cells weui-cells_after-title">
+        <navigator url="coupons" class="weui-cell weui-cell_access">
+            <view class="weui-cell__bd">
+              <view class="btn-my-coupons">我的优惠券</view>
+            </view>
+            <view class="weui-cell__ft weui-cell__ft_in-access">18</view>
+        </navigator>
+      </view>
+    </view>
+
+    <view class="weui-panel btn-account">
       <view class="weui-cells weui-cells_after-title">
         <navigator url="card?_id={{card._id}}" class="weui-cell weui-cell_access">
             <view class="weui-cell__bd">
-              <view style="display: inline-block; vertical-align: middle; font-size: 17px; color: #333333; solid #CCCCCC;">我的账户</view>
+              <view class="btn-my-account">我的账户</view>
             </view>
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
           </navigator>
