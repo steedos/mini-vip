@@ -10,27 +10,21 @@ page {
     <view class="page__hd">
     </view>
     <view class="page__bd">
-      <view class="weui-tab">
-        <view class="weui-navbar">
-          <block wx:for="{{tabs}}" wx:key="*this">
-            <view id="{{index}}" class="weui-navbar__item {{activeIndex == index ? 'weui-bar__item_on' : ''}}" @tap="changeTab">
-              <view class="weui-navbar__title">{{item}}</view>
-            </view>
-          </block>
-          <view class="weui-navbar__slider" style="left: {{sliderLeft}}px; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);"></view>
+      <navbar :activeIndex="activeIndex" :tabs="tabs">
+        <view class="weui-tab__content" hidden="{{activeIndex != 0}}">
+          <scroll-view class="scroll-view_H" scroll-y="true">
+            <repeat for="{{coupons}}" key="index" index="index" item="coupon">
+              <coupon :name="coupon.name" :quota="coupon.quota" :min_consumption="coupon.min_consumption" :start_time="coupon.start_time" :end_time="coupon.end_time" />
+            </repeat>
+          </scroll-view>
         </view>
-        <view class="weui-tab__panel">
-          <view class="weui-tab__content" hidden="{{activeIndex != 0}}">
-            <scroll-view class="scroll-view_H" scroll-y="true">
-              <repeat for="{{coupons}}" key="index" index="index" item="coupon">
-                <coupon :name="coupon.name" :quota="coupon.quota" :min_consumption="coupon.min_consumption" :start_time="coupon.start_time" :end_time="coupon.end_time" />
-              </repeat>
-            </scroll-view>
-          </view>
-          <view class="weui-tab__content" hidden="{{activeIndex != 1}}">选项二的内容</view>
-          <view class="weui-tab__content" hidden="{{activeIndex != 2}}">选项三的内容</view>
+        <view class="weui-tab__content" hidden="{{activeIndex != 1}}">
+          选项二的内容
         </view>
-      </view>
+        <view class="weui-tab__content" hidden="{{activeIndex != 2}}">
+          选项三的内容
+        </view>
+      </navbar>
     </view>
   </view>
 </template>
@@ -40,6 +34,7 @@ page {
   import searchbar from '../components/searchbar';
   import post from '../components/post';
   import coupon from '../components/coupon';
+  import navbar from '../components/navbar';
 
   export default class PostList extends wepy.page {
     config = {
@@ -47,24 +42,15 @@ page {
       navigationBarTextStyle: 'black'
     };
 
-    onLoad() {
-      var si = wx.getSystemInfoSync();
-      this.sliderLeft = (si.windowWidth / this.tabs.length - this.sliderWidth) / 2;
-      this.sliderOffset = si.windowWidth / this.tabs.length * this.activeIndex;
-      this.$apply();
-    }
-
     components = {
       searchbar: searchbar,
-      coupon: coupon
+      coupon: coupon,
+      navbar: navbar
     };
 
     data = {
-      sliderWidth: 96,
-      tabs: ["未使用", "已使用", "已过期"],
       activeIndex: 0,
-      sliderOffset: 0,
-      sliderLeft: 0,
+      tabs: ["未使用", "已使用", "已过期"],
       searchPlaceholder: '搜一搜优惠',
       searchKey: '',
       coupons:[{
@@ -95,11 +81,6 @@ page {
     };
 
     methods = {
-      changeTab: function (e) {
-        this.sliderOffset = e.currentTarget.offsetLeft;
-        this.activeIndex = e.currentTarget.id;
-        this.$apply();
-      }
     };
   }
 </script>

@@ -1,0 +1,59 @@
+<style lang="less">
+</style>
+<template>
+  <view class="weui-tab">
+    <view class="weui-navbar">
+      <block wx:for="{{tabs}}" wx:key="*this">
+        <view class="weui-navbar__item {{activeIndex == index ? 'weui-bar__item_on' : ''}}" @tap="changeTabIndex({{index}})">
+          <view class="weui-navbar__title">{{item}}</view>
+        </view>
+      </block>
+      <view class="weui-navbar__slider" style="left: {{sliderLeft}}px; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);"></view>
+    </view>
+    <view class="weui-tab__panel">
+      <slot>选项内容</slot>
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+
+export default class coupon extends wepy.component {
+  onLoad() {
+    var si = wx.getSystemInfoSync();
+    this.sliderLeft = (si.windowWidth / this.tabs.length - this.sliderWidth) / 2;
+    this.sliderOffset = si.windowWidth / this.tabs.length * this.activeIndex;
+    this.$apply();
+  }
+
+  props = {
+    activeIndex:{
+      type: Number,
+      default: 0,
+      twoWay: true
+    },
+    tabs:{
+      type: Array,
+      default: ['选项卡1', '选项卡2']
+    },
+    sliderWidth:{
+      type: Number,
+      default: 96
+    }
+  }
+
+  data = {
+    sliderOffset: 0,
+    sliderLeft: 0
+  };
+
+  methods = {
+    changeTabIndex: function (index, e) {
+      this.sliderOffset = e.currentTarget.offsetLeft;
+      this.activeIndex = index;
+      this.$apply();
+    }
+  };
+}
+</script>
