@@ -92,7 +92,7 @@ import vipCard from '../components/vipCard';
 
 export default class cardActivate extends wepy.page {
   config = {
-    navigationBarTitleText: '关于贝菲特',
+    navigationBarTitleText: '贝菲特',
     navigationBarTextStyle: 'black'
   };
 

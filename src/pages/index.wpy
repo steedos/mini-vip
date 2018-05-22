@@ -113,7 +113,7 @@
         <view class="weui-cells__title" style="font-weight: 200; color: #999999; font-size: 13.5px;">我的会员卡</view>
         <view class="weui-cells weui-cells_after-title">
           <repeat for="{{cards}}" key="index" index="index" item="card">
-            <navigator url="card?_id={{card._id}}" class="weui-cell weui-cell_access" style="font-size: 17px; color: #333333; solid #CCCCCC;">
+            <navigator url="card?_id={{card._id}}" open-type="reLaunch" class="weui-cell weui-cell_access" style="font-size: 17px; color: #333333; solid #CCCCCC;">
               <view class="weui-cell__bd">
                 <view style="display: inline-block; vertical-align: middle">{{card.name}}</view>
               </view>
