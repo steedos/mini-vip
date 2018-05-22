@@ -139,7 +139,7 @@ export default class Card extends wepy.page {
 	};
 
 	data = {
-		isActivated:true,
+		isActivated:false,
 		isAuthorize: false,
 		cardName: '贝菲特',
 		cardType: '会员卡'
