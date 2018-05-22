@@ -18,7 +18,10 @@
 	margin-top: 28rpx;
 
 	.slds-icon-call {
-		color: #FD6631;
+		color: #1B9AF7;
+		line-height:25px;
+		font-size:18px;
+		padding:0 4px;
 	}
 }
 </style>
@@ -89,7 +92,7 @@ import vipCard from '../components/vipCard';
 
 export default class cardActivate extends wepy.page {
   config = {
-    navigationBarTitleText: '关于贝菲特',
+    navigationBarTitleText: '贝菲特',
     navigationBarTextStyle: 'black'
   };
 

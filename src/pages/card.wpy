@@ -100,6 +100,16 @@
 				</navigator>
 			</view>
 		</view>
+
+		<view class="page__bd" style="margin-top: 36rpx">
+			<view class="weui-cells weui-cells_after-title">
+	            <navigator url="index" open-type="reLaunch" class="weui-cell weui-cell_access" style="font-size: 17px; color: #333333; solid #CCCCCC;">
+	              <view class="weui-cell__bd">
+	                <view style="display: inline-block; vertical-align: middle">卡券助手</view>
+	              </view>
+	            </navigator>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -162,28 +172,12 @@ export default class Card extends wepy.page {
 			if (this.isLogin) {
 				listData = [
 					{
-						title: '关于贝菲特'
-					},
-					{
-						title: '门店地址'
-					},
-					{
 						title: '消费记录',
 						url: '/pages/billing/billing'
 					}
 				];
 			} else {
 				listData = [
-					{
-						title: '关于贝菲特',
-						url: 'card_about'
-					},
-					{
-						title: '联系电话'
-					},
-					{
-						title: '门店地址'
-					},
 					{
 						title: '消费记录',
 						url: '/pages/billing/billing'
