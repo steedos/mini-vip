@@ -58,25 +58,28 @@
 			</view>
 		</view>
 
-      <view class="weui-cells weui-cells_after-title">
-        <view class="weui-cell" style="margin:20px 5px 10px 5px;">
-        <view class="weui-cell__bd">
-        <textarea class="weui-textarea" style="height: auto">贝菲特是九亭地区最受欢迎的健身房，大家快来一起健身吧~~</textarea>
-        </view>
-        </view>
-      </view>
-
-			<view class="page__bd" style="margin-top: 36rpx">
-				<view class="weui-cells weui-cells_after-title">
-					<navigator url="store" class="weui-cell weui-cell_access">
-						<view class="weui-cell__bd">
-							<view style="display: inline-block; vertical-align: middle">二维码</view>
+		<view class="page__bd" style="margin-top: 28rpx">
+			<view class="weui-cells weui-cells_after-title">
+				<navigator url="" class="weui-cell weui-cell_access">
+					<view class="weui-cell__bd">
+						<view style="display: inline-block; vertical-align: middle">
+							贝菲特是九亭地区最受欢迎的健身房，大家快来一起健身吧~~
 						</view>
-						<view class="weui-cell__ft weui-cell__ft_in-access"></view>
-					</navigator>
-				</view>
+					</view>
+				</navigator>
 			</view>
-  </view>
+		</view>
+
+		<view class="page__bd" style="margin-top: 36rpx">
+			<view class="weui-cells weui-cells_after-title">
+				<navigator url="store" class="weui-cell weui-cell_access">
+					<view class="weui-cell__bd">
+						<view style="display: inline-block; vertical-align: middle">二维码</view>
+					</view>
+					<view class="weui-cell__ft weui-cell__ft_in-access"></view>
+				</navigator>
+			</view>
+		</view>
 	</view>
 </template>
 
