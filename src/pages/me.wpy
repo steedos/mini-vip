@@ -1,24 +1,6 @@
 <style lang="less">
 .header {
-  margin-bottom: 20px;
-  .background {
-    height: 104px;
-    overflow: hidden;
-    background-color:#fc880f;
-  }
-    .page__bd_spacing{
-      text-align: center; 
-      color:white; 
-      margin-top: 50rpx;
-    }
-      .weui-flex-title{
-        font-weight: 200; 
-        font-size: 12px;
-      }
-      .weui-flex-content{
-        font-weight: 200; 
-        font-size: 28px;
-      }
+  margin-bottom: 20px; 
   .avatar {
     width: 100px;
     height: 100px;
@@ -45,19 +27,6 @@
     }
   }
 }
-.weui-cells__title__mine{
-  font-weight: 200; 
-  color: #999999; 
-  font-size: 13.5px;
-}
-
-.weui-cell_access_card{
-  font-size: 17px; 
-}
-.card-name{
-  display: inline-block; 
-  vertical-align: middle; 
-} 
 
 .user-avatar {
   width: 50px;
@@ -80,10 +49,6 @@
   margin-top: 50rpx;
 }
 
-.userinfo-btn-view {
-  margin-top: 50rpx;
-}
-
 .weui-panel {
   .get-user-info {
     padding: 10px 15px;
@@ -92,97 +57,55 @@
     line-height: 1.41176471;
   }
 }
-.btn-my-account, .btn-my-coupons{
-  display: inline-block; 
-  vertical-align: middle; 
-  font-size: 17px;
-}
-
-.btn-coupons{
-  margin-top: 50rpx;
-}
-
-.btn-account{
-  margin-top: 50rpx; 
-  margin-bottom: 50px;
-}
-.btn-view-all{
-  vertical-align: middle; 
-  font-size: 14px;
-}
 </style>
 
 <template>
   <view class="page">
-		<view class="header">
-      <view class="background">
-          <view class="page__bd page__bd_spacing">
-              <view class="weui-flex weui-flex-title">
-                  <view class="weui-flex__item"><view class="placeholder">会员卡</view></view>
-                  <view class="weui-flex__item"><view class="placeholder">余额</view></view>
-                  <view class="weui-flex__item"><view class="placeholder">优惠券</view></view>
-              </view>
-              <view class="weui-flex weui-flex-content">
-                  <view class="weui-flex__item"><view class="placeholder">20</view></view>
-                  <view class="weui-flex__item"><view class="placeholder">￥31000</view></view>
-                  <view class="weui-flex__item"><view class="placeholder">18</view></view>
+    <view class="header weui-panel">
+      <navigator url="coupons">
+        <view class="weui-media-box weui-media-box_appmsg">
+          <view class="weui-media-box__hd_in-appmsg user-avatar">
+            <open-data type="userAvatarUrl"></open-data>
+          </view>
+          <view class="weui-media-box__bd_in-appmsg">
+            <view class="weui-media-box__title">
+              <open-data type="userNickName"></open-data>
+            </view>
+            <view class="weui-media-box__desc">
+              <view class="weui-flex">
+                <view class="user-city">地区: <open-data type="getPhoneNumber" bindgetphonenumber="getPhoneNumber" lang="zh_CN"></open-data></view>
+                <view>性别: <open-data type="userGender" lang="zh_CN"></open-data></view>
               </view>
             </view>
-      </view>
-    </view>
-   
-    <block wx:if="{{!hasUserInfo && canIUse}}">
-      <view class="weui-panel">
-        <view class="weui-cells weui-cells_after-title">
-          <button class="weui-cell weui-cell_access get-user-info" plain="true" open-type="getUserInfo" @getuserinfo="getUserInfo">
-            <view class="weui-cell__bd">使用微信账号登录</view>
-            <view class="weui-cell__ft weui-cell__ft_in-access" style="font-size: 0">
-            </view>
-          </button>
-        </view>
-      </view>
-    </block>
-    <block wx:else>
-      <view class="page__bd">
-        <view class="weui-cells__title weui-cells__title__mine">我的会员卡</view>
-        <view class="weui-cells weui-cells_after-title">
-          <repeat for="{{cards}}" key="index" index="index" item="card">
-            <navigator url="card?_id={{card._id}}" open-type="reLaunch" class="weui-cell weui-cell_access weui-cell_access_card">
-              <view class="weui-cell__bd">
-                <view class="card-name">{{card.name}}</view>
-              </view>
-              <view class="weui-cell__ft weui-cell__ft_in-access">{{card.type}}</view>
-            </navigator>
-          </repeat>
-          
-          <view class="weui-cells weui-cells_after-title">
-          <navigator url="card?_id={{card._id}}" class="weui-cell weui-cell_access">
-            <view class="weui-cell__bd">
-              <text  class="btn-view-all">查看全部</text>
-            </view>
-            <view class="weui-cell__ft weui-cell__ft_in-access">20</view>
-          </navigator>
           </view>
         </view>
-      </view>
-    </block>
+      </navigator>
+    </view>
 
-    <view class="weui-panel btn-coupons">
+    <view class="weui-panel">
       <view class="weui-cells weui-cells_after-title">
-        <navigator url="coupons" class="weui-cell weui-cell_access">
+        <navigator url="" class="weui-cell weui-cell_access">
             <view class="weui-cell__bd">
-              <view class="btn-my-coupons">我的优惠券</view>
+              <view>更改密码</view>
             </view>
-            <view class="weui-cell__ft weui-cell__ft_in-access">18</view>
+            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+        </navigator>
+      </view>
+      <view class="weui-cells weui-cells_after-title">
+        <navigator url="" class="weui-cell weui-cell_access">
+            <view class="weui-cell__bd">
+              <view>在线客服</view>
+            </view>
+            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
         </navigator>
       </view>
     </view>
 
-    <view class="weui-panel btn-account">
+    <view class="weui-panel">
       <view class="weui-cells weui-cells_after-title">
         <navigator url="card?_id={{card._id}}" class="weui-cell weui-cell_access">
             <view class="weui-cell__bd">
-              <view class="btn-my-account">我的账户</view>
+              <view>我要开店</view>
             </view>
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
           </navigator>
@@ -198,7 +121,7 @@ import { serverAPI } from '@/server';
 
 export default class User extends wepy.page {
   config = {
-    navigationBarTitleText: '卡券助手',
+    navigationBarTitleText: '我的账户',
     navigationBarTextStyle: 'light',
     navigationBarBackgroundColor: '#fc880f'
   };
@@ -208,43 +131,6 @@ export default class User extends wepy.page {
     return 'card';
   }
 
-  data = {
-    hasUserInfo: false,
-    canIUse: wx.canIUse('button.open-type.getUserInfo'),
-    cards: [
-      {
-        _id: '001',
-        name: '贝菲特',
-        type: '金卡'
-      },
-      {
-        _id: '002',
-        name: '理发店',
-        type: '白金卡'
-      },
-      {
-        _id: '003',
-        name: '水果店',
-        type: '白金卡'
-      },
-      {
-        _id: '004',
-        name: '足浴店',
-        type: '银卡'
-      },
-      {
-        _id: '005',
-        name: '洗车店',
-        type: '金卡'
-      }
-    ],
-    coupon: {
-      count: 8
-    },
-    order: {
-      count: 76
-    }
-  };
 
   getSpace() {
     const url = '/api/odata/v4/' + wx.getStorageSync('X-Space-Id') + '/spaces';
