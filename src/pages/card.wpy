@@ -54,7 +54,7 @@
 						<view class="title">优惠券</view>
 						<view class="count">7 张</view>
 					</view>
-					<view class="balance s-card">
+					<view class="balance s-card" @tap="toRecharge">
 						<view class="title">余额</view>
 						<view class="count">0 元</view>
 					</view>
@@ -160,7 +160,7 @@ export default class Card extends wepy.page {
 	};
 
 	data = {
-		isActivated:false,
+		isActivated: false,
 		isAuthorize: false,
 		cardName: '贝菲特',
 		cardType: '会员卡'
@@ -204,6 +204,11 @@ export default class Card extends wepy.page {
 			} else {
 				return;
 			}
+		},
+		toRecharge() {
+			wx.navigateTo({
+				url: 'billing/recharge'
+			});
 		}
 	};
 }

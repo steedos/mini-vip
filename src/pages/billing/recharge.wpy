@@ -1,0 +1,53 @@
+<style lang="less">
+</style>
+<template>
+    <view class="page">
+        <view class="weui-cells weui-cells_after-title">
+            <view class="weui-cell weui-cell_input">
+                <view class="weui-cell__bd">
+                    <input class="weui-input" type="number" placeholder="请输入充值金额，最低1元" bindinput="bindKeyInput" value="{{rechargeValue}}"/>
+                </view>
+            </view>
+        </view>
+        <view class="weui-btn-area">
+            <button class="weui-btn" type="primary" @tap="doRecharge" >确定</button>
+        </view>
+    </view>
+</template>
+<script>
+import wepy from 'wepy';
+
+export default class Recharge extends wepy.page {
+  data = {
+    rechargeValue: ''
+  };
+
+  methods = {
+    bindKeyInput(e) {
+      var val = Number(e.detail.value);
+      if (val && val > 1) {
+        this.rechargeValue = val;
+        this.$apply();
+        console.log(e.detail.value);
+      } else {
+        this.rechargeValue = '';
+        this.$apply();
+      }
+    },
+    doRecharge() {
+      this.rechargeValue = '1111';
+      this.$apply();
+      wx.showModal({
+        content:
+          '弹窗内容，告知当前状态、信息和解决方法，描述文字尽量控制在三行内',
+        showCancel: false,
+        success: function(res) {
+          if (res.confirm) {
+            console.log('用户点击确定');
+          }
+        }
+      });
+    }
+  };
+}
+</script>
