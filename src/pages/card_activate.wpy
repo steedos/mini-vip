@@ -135,7 +135,11 @@ export default class cardActivate extends wepy.page {
 		navigationBarTextStyle: 'black'
 	};
 
-	onLoad() {}
+	onLoad() {
+		const userInfo = this.$parent.globalData.userInfo
+		this.sexValue = this.array[userInfo.gender]
+		this.$apply()
+	}
 
 	components = {
 		vipcard: vipCard
@@ -144,8 +148,8 @@ export default class cardActivate extends wepy.page {
 	data = {
 		cardName: '贝菲特',
 		cardType: '会员卡',
-		array: ['男', '女'],
-		sexValue: '女',
+		array: ['女', '男'],
+		sexValue: '',
     birthdate: '2017-01-10',
     name: '赵丽颖',
     phoneNumber: '',
