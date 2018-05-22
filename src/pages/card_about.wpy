@@ -50,13 +50,13 @@
 					<view class="weui-cell__bd">
 						<view style="display: inline-block; vertical-align: middle">门店地址</view>
 					</view>
-					<view class="weui-cell__ft weui-cell__ft_in-access">九新公路76号</view>
+					<view class="weui-cell__ft weui-cell__ft_in-access">{{store.address}}</view>
 				</navigator>
 				<navigator url="store" class="weui-cell weui-cell_access">
 					<view class="weui-cell__bd">
 						<view style="display: inline-block; vertical-align: middle">营业时间</view>
 					</view>
-					<view class="weui-cell__ft weui-cell__ft_in-access">24小时</view>
+					<view class="weui-cell__ft weui-cell__ft_in-access">{{store.business_hours}}</view>
 				</navigator>
 			</view>
 		</view>
@@ -66,7 +66,7 @@
 				<navigator url="" class="weui-cell weui-cell_access">
 					<view class="weui-cell__bd">
 						<view style="display: inline-block; vertical-align: middle">
-							贝菲特是九亭地区最受欢迎的健身房，大家快来一起健身吧~~
+							{{store.description}}
 						</view>
 					</view>
 				</navigator>
@@ -88,6 +88,7 @@
 
 <script>
 import wepy from 'wepy';
+import req from '@/network';
 import vipCard from '../components/vipCard';
 
 export default class cardActivate extends wepy.page {
@@ -96,7 +97,10 @@ export default class cardActivate extends wepy.page {
     navigationBarTextStyle: 'black'
   };
 
-  onLoad() {}
+  onLoad() {
+		const self = this;
+		this.getStoreInfo();
+	}
 
   components = {
     vipcard: vipCard
@@ -107,9 +111,25 @@ export default class cardActivate extends wepy.page {
       '../images/mc-cover.jpg',
       '../images/mcdonalds.jpg',
       '../images/post-cover.png'
-    ]
+		],
+		store:[]
   };
-
+	getStoreInfo(){
+    const url = '/api/odata/v4/' + wx.getStorageSync('X-Space-Id') + '/vip_store' + '/NpP5mJBgsnzkHsi37';
+    console.log("======",url)
+    const data = {
+      // $filter: 'user eq ' + wx.getStorageSync('X-Space-Id'),
+      $expand: 'owner($select=name)',
+      $count: true,
+      $select: 'address,name,description,business_hours'
+    };
+    req.get(url, data).then(res => {
+      const store = res;
+			this.store = store;
+			console.log(this.store);
+			console.log(this.store.address);
+    });
+  }
   methods = {
 		phoneCall() {
 			wx.makePhoneCall({
