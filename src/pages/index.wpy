@@ -164,7 +164,7 @@ import { serverAPI } from '@/server';
 
 export default class User extends wepy.page {
   config = {
-    navigationBarTitleText: '会员秘书',
+    navigationBarTitleText: '卡券助手',
     navigationBarTextStyle: 'light',
     navigationBarBackgroundColor: '#fc880f'
   };
@@ -263,6 +263,16 @@ export default class User extends wepy.page {
         }
       }
     });
+    wx.showShareMenu({
+      withShareTicket: true
+    })
+  }
+
+  onShareAppMessage(res){
+    return {
+      title: '我的会员卡、积分、优惠券、消费记录',
+      path: '/pages/index'
+    }
   }
 
   methods = {

@@ -132,7 +132,18 @@ export default class Card extends wepy.page {
 				console.log('fail');
 			}
 		});
+		wx.showShareMenu({
+			withShareTicket: true
+		})
 	}
+
+	onShareAppMessage(res){
+		return {
+			title: '贝菲特会员卡',
+			path: '/pages/card?id=123'
+		}
+	}
+
 
 	components = {
 		vipcrad: vipCard
