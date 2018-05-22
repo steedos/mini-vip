@@ -1,28 +1,69 @@
 <style lang="less">
 .header {
-  width: 100%;
-  background: #fff;
-  display: flex;
-  flex-direction: column;
+	width: 100%;
+	background: #fff;
+	display: flex;
+	flex-direction: column;
 
-  &:before {
-    display: none;
-  }
+	&:before {
+		display: none;
+	}
 
-  .active-card {
-    width: 380rpx;
-    margin-bottom: 20px;
-    color: #f5a44d;
-    border-color: #f5a44d;
-  }
+	.active-card {
+		width: 380rpx;
+		margin-bottom: 20px;
+		color: #f5a44d;
+		border-color: #f5a44d;
+	}
+
+	.card-info {
+		display: flex;
+		text-align:center;
+		margin-bottom:16px;
+
+		.s-card {
+			flex: 1;
+
+			.title {
+				font-size: 14px;
+			}
+			.count {
+				color: #f5a44d;
+				font-weight: bold;
+			}
+		}
+
+		.coupon {
+			border-right: 1px solid #C6C6C6;
+			border-left: 1px solid #C6C6C6;
+		}
+	}
 }
 </style>
 <template>
 	<view class="">
 		<view class="weui-panel weui-panel_access header">
-			<vipcrad :cardName.sync="cardName" :cardType.sync="cardType" :cardNumber.sync="cardNumber"/>
-			<button wx:if="{{isAuthorize}}" class="active-card" plain="true" @tap="toOpenCard">激活会员卡</button>
-			<button wx:else class="active-card" plain="true" open-type="getUserInfo" bindgetuserinfo="userInfo">激活会员卡</button>
+			<vipcrad :isActivated.sync="isActivated" :cardName.sync="cardName" :cardType.sync="cardType" :cardNumber.sync="cardNumber"/>
+			<block wx:if="{{isActivated}}">
+				<view class="card-info">
+					<view class="points s-card">
+						<view class="title">积分</view>
+						<view class="count">0 分</view>
+					</view>
+					<view class="coupon s-card">
+						<view class="title">优惠券</view>
+						<view class="count">7 张</view>
+					</view>
+					<view class="balance s-card">
+						<view class="title">余额</view>
+						<view class="count">0 元</view>
+					</view>
+				</view>
+			</block>
+			<block wx:else>
+				<button wx:if="{{isAuthorize}}" class="active-card" plain="true" @tap="toOpenCard">激活会员卡</button>
+				<button wx:else class="active-card" plain="true" open-type="getUserInfo" bindgetuserinfo="userInfo">激活会员卡</button>
+			</block>
 		</view>
 
 		<view class="page__bd" style="margin-top: 36rpx">
@@ -36,7 +77,20 @@
 			</view>
 		</view>
 
-    <view class="page__bd" style="margin-top: 36rpx">
+		<block wx:if="{{isActivated}}">
+			<view class="page__bd" style="margin-top: 36rpx">
+				<view class="weui-cells weui-cells_after-title">
+					<view class="weui-cell weui-cell_switch">
+						<view class="weui-cell__bd">放入微信卡包</view>
+						<view class="weui-cell__ft">
+							<switch/>
+						</view>
+					</view>
+				</view>
+			</view>
+		</block>
+
+		<view class="page__bd" style="margin-top: 36rpx">
 			<view class="weui-cells weui-cells_after-title">
 				<navigator url="store" class="weui-cell weui-cell_access">
 					<view class="weui-cell__bd">
@@ -54,97 +108,98 @@ import wepy from 'wepy';
 import vipCard from '../components/vipCard';
 
 export default class Card extends wepy.page {
-  config = {
-    navigationBarTitleText: '会员卡',
-    navigationBarTextStyle: 'black'
-  };
+	config = {
+		navigationBarTitleText: '会员卡',
+		navigationBarTextStyle: 'black'
+	};
 
-  onLoad() {
-    const _self = this;
-    wx.getSetting({
-      success(res) {
-        console.log(res.authSetting);
-        if (!res.authSetting['scope.userInfo']) {
-          _self.isAuthorize = false;
-          _self.$apply();
-          console.log('false', _self.isAuthorize);
-        } else {
-          _self.isAuthorize = true;
-          _self.$apply();
-          console.log('true', _self.isAuthorize);
-        }
-      },
-      fail(res) {
-        console.log('fail');
-      }
-    });
-  }
+	onLoad() {
+		const _self = this;
+		wx.getSetting({
+			success(res) {
+				console.log(res.authSetting);
+				if (!res.authSetting['scope.userInfo']) {
+					_self.isAuthorize = false;
+					_self.$apply();
+					console.log('false', _self.isAuthorize);
+				} else {
+					_self.isAuthorize = true;
+					_self.$apply();
+					console.log('true', _self.isAuthorize);
+				}
+			},
+			fail(res) {
+				console.log('fail');
+			}
+		});
+	}
 
-  components = {
-    vipcrad: vipCard
-  };
+	components = {
+		vipcrad: vipCard
+	};
 
-  data = {
-    isAuthorize: false,
-    cardName: '贝菲特',
-    cardType: '会员卡'
-  };
+	data = {
+		isActivated:true,
+		isAuthorize: false,
+		cardName: '贝菲特',
+		cardType: '会员卡'
+	};
 
-  computed = {
-    listItem() {
-      let listData;
-      if (this.isLogin) {
-        listData = [
-          {
-            title: '关于贝菲特'
-          },
-          {
-            title: '门店地址'
-          },
-          {
-            title: '消费记录',
-            url: '/pages/billing/billing'
-          }
-        ];
-      } else {
-        listData = [
-          {
-            title: '关于贝菲特',
-            url: 'card_about'
-          },
-          {
-            title: '联系电话'
-          },
-          {
-            title: '门店地址'
-          },
-          {
-            title: '消费记录',
-            url: '/pages/billing/billing'
-          }
-        ];
-      }
-      return listData;
-    }
-  };
+	computed = {
+		listItem() {
+			let listData;
+			if (this.isLogin) {
+				listData = [
+					{
+						title: '关于贝菲特'
+					},
+					{
+						title: '门店地址'
+					},
+					{
+						title: '消费记录',
+						url: '/pages/billing/billing'
+					}
+				];
+			} else {
+				listData = [
+					{
+						title: '关于贝菲特',
+						url: 'card_about'
+					},
+					{
+						title: '联系电话'
+					},
+					{
+						title: '门店地址'
+					},
+					{
+						title: '消费记录',
+						url: '/pages/billing/billing'
+					}
+				];
+			}
+			return listData;
+		}
+	};
 
-  methods = {
-    toOpenCard() {
-      wx.navigateTo({
-        url: 'card_activate'
-      });
-    },
-    userInfo(e) {
-      if (e.detail.rawData) {
-        this.isAuthorize = true;
-        this.$apply();
-        wx.navigateTo({
-          url: 'card_activate'
-        });
-      } else {
-        return;
-      }
-    }
-  };
+	methods = {
+		toOpenCard() {
+			wx.navigateTo({
+				url: 'card_activate'
+			});
+		},
+		userInfo(e) {
+			if (e.detail.rawData) {
+				this.isAuthorize = true;
+				this.$apply();
+				wx.navigateTo({
+					url: 'card_activate'
+				});
+			} else {
+				return;
+			}
+		}
+	};
 }
 </script>

@@ -54,7 +54,7 @@
 	<view class="card">
     <view class="info">
       <view class="user-avatar">
-        <open-data wx:if="isActivated" type="userAvatarUrl"></open-data>
+        <open-data wx:if="{{isActivated}}" type="userAvatarUrl"></open-data>
         <image wx:else class="image" mode="aspectFit" src="../images/avatar.png"/>>
       </view>
 		  <view class="card-info">
