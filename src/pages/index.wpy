@@ -123,7 +123,7 @@
                   <view class="weui-flex__item"><view class="placeholder">优惠券</view></view>
               </view>
               <view class="weui-flex weui-flex-content">
-                  <view class="weui-flex__item"><view class="placeholder">20</view></view>
+                  <view class="weui-flex__item"><view class="placeholder">{{card_count}}</view></view>
                   <view class="weui-flex__item"><view class="placeholder">￥31000</view></view>
                   <view class="weui-flex__item"><view class="placeholder">18</view></view>
               </view>
@@ -155,12 +155,12 @@
             </navigator>
           </repeat>
           
-          <view class="weui-cells weui-cells_after-title">
+          <view wx:if="{{card_count > 10}}" class="weui-cells weui-cells_after-title">
           <navigator url="card?_id={{card._id}}" class="weui-cell weui-cell_access">
             <view class="weui-cell__bd">
               <text  class="btn-view-all">查看全部</text>
             </view>
-            <view class="weui-cell__ft weui-cell__ft_in-access">20</view>
+            <view class="weui-cell__ft weui-cell__ft_in-access">{{card_count}}</view>
           </navigator>
           </view>
         </view>
@@ -211,33 +211,6 @@ export default class User extends wepy.page {
   data = {
     hasUserInfo: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
-    cards: [
-      {
-        _id: '001',
-        name: '贝菲特',
-        type: '金卡'
-      },
-      {
-        _id: '002',
-        name: '理发店',
-        type: '白金卡'
-      },
-      {
-        _id: '003',
-        name: '水果店',
-        type: '白金卡'
-      },
-      {
-        _id: '004',
-        name: '足浴店',
-        type: '银卡'
-      },
-      {
-        _id: '005',
-        name: '洗车店',
-        type: '金卡'
-      }
-    ],
     coupon: {
       count: 8
     },
@@ -260,6 +233,31 @@ export default class User extends wepy.page {
       this.$apply();
     });
   }
+  getUserCard(){
+    const url = '/api/odata/v4/' + wx.getStorageSync('X-Space-Id') + '/vip_card';
+    const data = {
+      '$filter': 'user eq \'' + wx.getStorageSync('X-User-Id') + '\'',
+      '$expand': 'store($select=name),owner($select=name)',
+      '$count': true,
+      '$select': 'store,grade,owner'
+    };
+    req.get(url, data).then(res => {
+      const result = res.value;
+      const card_count = result.length;
+      var cards = [];
+      result.forEach(function(card){
+        const cardObj = {};
+        cardObj.type = card.grade;
+        cardObj._id = card.store._id;
+        cardObj.name = card.store.name;
+        cards = cards.concat(cardObj);
+      });
+      this.setData({
+        'cards': cards,
+        'card_count': card_count
+      });
+    });
+  }
 
   loginServer(code, userInfoData) {
     console.log('userInfoData', userInfoData);
@@ -274,7 +272,8 @@ export default class User extends wepy.page {
       wx.setStorageSync('X-Auth-Token', res.authToken);
       wx.setStorageSync('X-Space-Id', res.spaceId);
       req.header(header);
-      this.getSpace();
+      // this.getSpace();
+      this.getUserCard();
     });
   }
 
