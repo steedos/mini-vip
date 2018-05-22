@@ -137,11 +137,6 @@ export default class cardActivate extends wepy.page {
 
 	onLoad() {}
 
-  activate(){
-	  this.submitDisabled = true
-    req.post('/api/steedos/weixin/card/activate?spaceId=' + spaceId + "&store=" + store, {name: this.name, sex: this.sexValue, birthdate: this.birthdate, phoneNumber: this.phoneNumber})
-  }
-
 	components = {
 		vipcard: vipCard
 	}
@@ -187,7 +182,11 @@ export default class cardActivate extends wepy.page {
 		  }else{
         console.error(e.detail.errMsg)
       }
-    }
+		},
+		activate(){
+			this.submitDisabled = true
+			req.post('/api/steedos/weixin/card/activate?spaceId=' + spaceId + "&store=" + store, {name: this.name, sex: this.sexValue, birthdate: this.birthdate, phoneNumber: this.phoneNumber})
+		}
   };
 }
 </script>

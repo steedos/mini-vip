@@ -18,7 +18,10 @@
 	margin-top: 28rpx;
 
 	.slds-icon-call {
-		color: #FD6631;
+		color: #1B9AF7;
+		line-height:25px;
+		font-size:18px;
+		padding:0 4px;
 	}
 }
 </style>
