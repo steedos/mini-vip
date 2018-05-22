@@ -41,25 +41,7 @@ export default class extends wepy.app {
       'pages/card_activate',
       'pages/billing/billing'
     ],
-    tabBar: {
-      color: '#8d8d8d',
-      selectedColor: '#1b9af7',
-      backgroundColor: '#fff',
-      borderStyle: 'black',
-      list: [
-      {
-        pagePath: 'pages/index',
-        selectedIconPath: './images/tabbars/user-active.png',
-        iconPath: './images/tabbars/user.png',
-        text: '我的',
-      },
-      {
-        pagePath: 'pages/coupons',
-        selectedIconPath: './images/tabbars/search-active.png',
-        iconPath: './images/tabbars/search.png',
-        text: '发现',
-      }]
-    },
+    
     window: {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#fff',
