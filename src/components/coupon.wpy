@@ -40,6 +40,7 @@
   }
   .coupon-name{
     font-weight:bold;
+    font-size:18px;
   }
   .coupon-consumption{
     color:#999999;
@@ -47,7 +48,8 @@
   }
   .coupon-validity{
     color:#999;
-    font-size:10px;
+    font-size:12px;
+    margin-top:12px;
   }
 }
 </style>
@@ -70,12 +72,7 @@
           <text>{{min_consumption}}</text>
         </view>
         <view class="coupon-validity">
-          <view class="coupon-validity-title">
-            <text>有效期</text>
-          </view>
-          <view class="coupon-validity-value">
-            <text>2018-10-01 12:00</text> 至 <text>2018-10-07 12:00</text>
-          </view>
+          <text>2018-10-01</text> 至 <text>2018-10-07</text>
         </view>
       </view>
     </view>
