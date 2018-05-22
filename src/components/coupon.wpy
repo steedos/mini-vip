@@ -20,6 +20,17 @@
       font-weight:bold;
     }
   }
+  .coupon-name{
+    font-weight:bold;
+  }
+  .coupon-consumption{
+    color:#999999;
+    font-size:15px;
+  }
+  .coupon-validity{
+    color:#999;
+    font-size:9px;
+  }
 }
 </style>
 <template>
