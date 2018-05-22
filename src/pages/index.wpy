@@ -74,18 +74,34 @@
 <template>
   <view class="page">
 		<view class="header">
-      <view class="background">
-        <image src="../images/bg.png" class="bg-img" />
+      <view class="background" style="background-color:#FC8717;height: 80px;">
+          <view class="page__bd page__bd_spacing" style="text-align: center; color:white; margin-top: 50rpx;">
+              <view class="weui-flex">
+                  <view class="weui-flex__item"><view class="placeholder">会员卡</view></view>
+                  <view class="weui-flex__item"><view class="placeholder">余额</view></view>
+                  <view class="weui-flex__item"><view class="placeholder">优惠券</view></view>
+              </view>
+              <view class="weui-flex" style="font-weight:bold;">
+                  <view class="weui-flex__item"><view class="placeholder">20</view></view>
+                  <view class="weui-flex__item"><view class="placeholder">￥3100</view></view>
+                  <view class="weui-flex__item"><view class="placeholder">18</view></view>
+              </view>
+            </view>
+
+
+
+
+
       </view>
-      <view class="avatar">
+      <!-- <view class="avatar">
         <open-data type="userAvatarUrl"></open-data>
       </view>
       <view class="info">
         <view class="name"><open-data type="userNickName"></open-data></view>
         <view class="location"><open-data type="userCity" lang="zh_CN"></open-data></view>
-      </view>
+      </view> -->
     </view>
-    
+   
     <block wx:if="{{!hasUserInfo && canIUse}}">
       <view class="weui-panel">
         <view class="weui-cells weui-cells_after-title">
@@ -109,16 +125,22 @@
               <view class="weui-cell__ft weui-cell__ft_in-access">{{card.type}}</view>
             </navigator>
           </repeat>
+          <navigator url="card?_id={{card._id}}" class="weui-cell weui-cell_access">
+            <view class="weui-cell__bd">
+              <view style="display: inline-block; vertical-align: middle;">查看全部</view>
+            </view>
+            <view class="weui-cell__ft weui-cell__ft_in-access">20</view>
+          </navigator>
         </view>
 
         <view class="weui-panel">
           <view class="weui-cells weui-cells_after-title">
-            <view class="weui-cell weui-cell_access">
-              <view class="weui-cell__bd">
-                <view style="display: inline-block; vertical-align: middle">我的优惠券</view>
-              </view>
-              <view class="weui-cell__ft weui-cell__ft_in-access">{{coupon.count}}</view>
+            <navigator url="card?_id={{card._id}}" class="weui-cell weui-cell_access">
+            <view class="weui-cell__bd">
+              <view style="display: inline-block; vertical-align: middle;">我的优惠券</view>
             </view>
+            <view class="weui-cell__ft weui-cell__ft_in-access">18</view>
+          </navigator>
           </view>
         </view>
       </view>
@@ -126,11 +148,12 @@
 
     <view class="weui-panel" style="margin-top:50rpx">
       <view class="weui-cells weui-cells_after-title">
-        <view class="weui-cell weui-cell_access">
-          <view class="weui-cell__bd">关于我们</view>
-          <view class="weui-cell__ft weui-cell__ft_in-access" style="font-size: 0">
-          </view>
-        </view>
+        <navigator url="card?_id={{card._id}}" class="weui-cell weui-cell_access">
+            <view class="weui-cell__bd">
+              <view style="display: inline-block; vertical-align: middle;">我的账户</view>
+            </view>
+            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+          </navigator>
       </view>
     </view>
   </view>
@@ -144,7 +167,8 @@ import { serverAPI } from '@/server';
 export default class User extends wepy.page {
   config = {
     navigationBarTitleText: '会员秘书',
-    navigationBarTextStyle: 'black'
+    navigationBarTextStyle: 'light',
+    navigationBarBackgroundColor: '#FC8717'
   };
 
   getCardUrl() {
