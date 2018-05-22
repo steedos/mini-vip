@@ -2,7 +2,7 @@
 @import "./assets/style/weui.wxss";
 @import "./assets/style/slds_icons_font.wxss";
 page {
-  background-color: #F8F8F8;
+  background-color: #F2F2F2;
   font-size: 16px;
   font-family: -apple-system-font,Helvetica Neue,Helvetica,sans-serif;
 }

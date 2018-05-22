@@ -1,19 +1,37 @@
 <style lang="less">
 .coupon {
-  background: #fff;
   margin:40rpx;
-  padding:20rpx;
-  border:solid 1px #ededed;
-  border-radius:6px;
   display:flex;
   align-items: center;
   .coupon-left{
     width:40%;
+    background:radial-gradient(rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0) 4px, #50ADD3 4px);
+    background-size:24rpx 16rpx;
+    background-position:-5px 10px;
+    .coupon-border{
+      background:#50ADD3;
+      padding:20rpx 20rpx;
+      margin-left:12rpx;
+      margin-right:4rpx;
+      height:88px;
+    }
   }
   .coupon-right{
     width:60%;
+    background:radial-gradient(transparent 0, transparent 5px, #fff 5px);
+    background-size:34rpx 30rpx;
+    background-position:9px 3px;
+    .coupon-border{
+      background:#fff;
+      padding:20rpx;
+      margin-left:4rpx;
+      margin-right:20rpx;
+      height:88px;
+    }
   }
   .coupon-quota{
+    margin-top:6px;
+    color: #fff;
     text-align:center;
     .coupon-quota-value{
       font-size:45px;
@@ -29,31 +47,35 @@
   }
   .coupon-validity{
     color:#999;
-    font-size:9px;
+    font-size:10px;
   }
 }
 </style>
 <template>
 	<view class="coupon">
     <view class="coupon-left">
-      <view class="coupon-quota">
-        <text class="coupon-quota-tag">￥</text>
-        <text class="coupon-quota-value">{{quota}}</text>
+      <view class="coupon-border">
+        <view class="coupon-quota">
+          <text class="coupon-quota-tag">￥</text>
+          <text class="coupon-quota-value">{{quota}}</text>
+        </view>
       </view>
     </view>
     <view class="coupon-right">
-      <view class="coupon-name">
-        <text>{{name}}</text>
-      </view>
-      <view class="coupon-consumption">
-        <text>{{min_consumption}}</text>
-      </view>
-      <view class="coupon-validity">
-        <view class="coupon-validity-title">
-          <text>有效期</text>
+      <view class="coupon-border">
+        <view class="coupon-name">
+          <text>{{name}}</text>
         </view>
-        <view class="coupon-validity-value">
-          <text>2018-10-01 12:00</text> - <text>2018-10-07 12:00</text>
+        <view class="coupon-consumption">
+          <text>{{min_consumption}}</text>
+        </view>
+        <view class="coupon-validity">
+          <view class="coupon-validity-title">
+            <text>有效期</text>
+          </view>
+          <view class="coupon-validity-value">
+            <text>2018-10-01 12:00</text> 至 <text>2018-10-07 12:00</text>
+          </view>
         </view>
       </view>
     </view>
