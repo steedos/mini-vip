@@ -34,6 +34,7 @@ export default class extends wepy.app {
     pages: [
       'pages/index',
       'pages/me',
+      'pages/me_profile',
       'pages/postList',
       'pages/coupons',
       'pages/store',
