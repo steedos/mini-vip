@@ -46,7 +46,8 @@ export default class extends wepy.app {
       'pages/card_about',
       'pages/card_activate',
       'pages/card_billing',
-      'pages/card_recharge'
+      'pages/card_recharge',
+      'pages/stores'
     ],
     tabBar: {
       color: '#666',

@@ -39,7 +39,7 @@
 
 		<view class="kind-list__item">
 			<view class="weui-flex kind-list__item-hd header-des">
-				<view class="weui-flex__item">贝菲特（九亭店）</view>
+				<view class="weui-flex__item">{{store.name}}</view>
 				<text class="kind-list__img slds-icon-call" @tap="phoneCall"></text>
 			</view>
 		</view>
@@ -97,9 +97,10 @@ export default class store extends wepy.page {
     navigationBarTextStyle: 'black'
   };
 
-  onLoad() {
-		const self = this;
-		this.getStoreInfo();
+  onLoad(e) {
+    const self = this;
+    console.log(e);
+		this.getStoreInfo(e.store);
 	}
 
   components = {
@@ -114,8 +115,8 @@ export default class store extends wepy.page {
 		],
 		store:[]
   };
-	getStoreInfo(){
-    const url = '/api/odata/v4/' + wx.getStorageSync('X-Space-Id') + '/vip_store';
+	getStoreInfo(store_id){
+    const url = '/api/odata/v4/' + wx.getStorageSync('X-Space-Id') + '/vip_store/'+ store_id;
     console.log("----",url)
     const data = {
       // $filter: 'user eq ' + wx.getStorageSync('X-Space-Id'),
@@ -125,8 +126,9 @@ export default class store extends wepy.page {
     };
     req.get(url, data).then(res => {
 			this.store = store;
-			const store = res.value;
-      this.store = store[0];
+			const store = res;
+      this.store = store;
+      console.log(this.store);
 		  wx.setNavigationBarTitle({title:this.store.name})
     });
   }
