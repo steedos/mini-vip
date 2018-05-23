@@ -49,7 +49,7 @@ export default class Billing extends wepy.page {
   onLoad(e) {
     console.log("Card onLoad, e", e);
 		const self = this;
-		this.getBilling(e.card_id);
+		this.getBilling(e.card);
 	}
   data = {
     bills: []
