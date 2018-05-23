@@ -1,117 +1,55 @@
 <style lang="less">
 .header {
-  margin-bottom: 20px; 
-  .avatar {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    overflow: hidden;
-    position: relative;
-    margin: -50px auto 0 auto;
-    border: 5px solid white;
-    .image {
-      width: 100%;
-      height: 100%;
-    }
-  }
-  .info {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    .name {
-      font-weight: bold;
-    }
-    .location {
-      color: rgb(149, 149, 149);
-    }
-  }
-}
-
-.user-avatar {
-  width: 50px;
-  height: 50px;
-}
-
-.user-city {
-  margin-right: 50rpx;
-}
-
-.user-info:before {
-  display: none;
-}
-
-.user-info:after {
-  border-bottom: 1rpx solid #d9d9d9;
-}
-
-.page__bd .weui-panel {
-  margin-top: 50rpx;
-}
-
-.weui-panel {
-  .get-user-info {
-    padding: 10px 15px;
-    text-align: left;
-    border: none;
-    line-height: 1.41176471;
-  }
+	margin-bottom: 20px; 
+	
 }
 </style>
 
 <template>
-  <view class="page">
-    <view class="header weui-panel">
-      <navigator url="me_profile">
-        <view class="weui-media-box weui-media-box_appmsg">
-          <view class="weui-media-box__hd_in-appmsg user-avatar">
-            <open-data type="userAvatarUrl"></open-data>
-          </view>
-          <view class="weui-media-box__bd_in-appmsg">
-            <view class="weui-media-box__title">
-              <open-data type="userNickName"></open-data>
-            </view>
-            <view class="weui-media-box__desc">
-              <view class="weui-flex">
-                <view class="user-city">地区: <open-data type="getPhoneNumber" bindgetphonenumber="getPhoneNumber" lang="zh_CN"></open-data></view>
-                <view>性别: <open-data type="userGender" lang="zh_CN"></open-data></view>
-              </view>
-            </view>
-          </view>
-        </view>
-      </navigator>
-    </view>
+	<view class="page">
+		<view class="weui-cells weui-cells_after-title" style="margin-top: 36rpx">
+			<view class="weui-panel__bd">
+				<navigator url="me_profile" class="weui-media-box weui-media-box_appmsg" hover-class="weui-cell_active">
+					<view class="weui-media-box__hd weui-media-box__hd_in-appmsg" style="width: 50px; height: 50px; line-height: 50px;">
+						<open-data class="weui-media-box__thumb" type="userAvatarUrl"></open-data>
+					</view>
+					<view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
+						<view class="weui-media-box__title">{{nickName}}</view>
+						<view class="weui-media-box__desc">18721463698</view>
+					</view>
+					<view class="weui-cell__ft weui-cell__ft_in-access"></view>
+				</navigator>
+			</view>
+		</view>
 
-    <view class="weui-panel">
-      <view class="weui-cells weui-cells_after-title">
-        <navigator url="" class="weui-cell weui-cell_access">
-            <view class="weui-cell__bd">
-              <view>更改密码</view>
-            </view>
-            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-        </navigator>
-      </view>
-      <view class="weui-cells weui-cells_after-title">
-        <navigator url="" class="weui-cell weui-cell_access">
-            <view class="weui-cell__bd">
-              <view>在线客服</view>
-            </view>
-            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-        </navigator>
-      </view>
-    </view>
+		<view class="page__bd" style="margin-top: 36rpx">
+			<view class="weui-cells weui-cells_after-title">
+				<navigator url="" class="weui-cell weui-cell_access">
+						<view class="weui-cell__bd">
+							<view>更改密码</view>
+						</view>
+						<view class="weui-cell__ft weui-cell__ft_in-access"></view>
+				</navigator>
+				<navigator url="" class="weui-cell weui-cell_access">
+						<view class="weui-cell__bd">
+							<view>在线客服</view>
+						</view>
+						<view class="weui-cell__ft weui-cell__ft_in-access"></view>
+				</navigator>
+			</view>
+		</view>
 
-    <view class="weui-panel">
-      <view class="weui-cells weui-cells_after-title">
-        <navigator url="card?_id={{card._id}}" class="weui-cell weui-cell_access">
-            <view class="weui-cell__bd">
-              <view>我要开店</view>
-            </view>
-            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-          </navigator>
-      </view>
-    </view>
-  </view>
+		<view class="page__bd" style="margin-top: 36rpx">
+			<view class="weui-cells weui-cells_after-title">
+				<navigator url="card?_id={{card._id}}" class="weui-cell weui-cell_access">
+						<view class="weui-cell__bd">
+							<view>我要开店</view>
+						</view>
+						<view class="weui-cell__ft weui-cell__ft_in-access"></view>
+					</navigator>
+			</view>
+		</view>
+	</view>
 </template>
 
 <script>
@@ -120,96 +58,24 @@ import req from '@/network';
 import { serverAPI } from '@/server';
 
 export default class Me extends wepy.page {
-  config = {
-    navigationBarTitleText: '我的账户',
-    navigationBarTextStyle: 'light',
-    navigationBarBackgroundColor: '#fc880f'
-  };
+	config = {
+		navigationBarTitleText: '我的账户',
+		navigationBarTextStyle: 'light',
+		navigationBarBackgroundColor: '#fc880f'
+	};
 
-  getCardUrl() {
-    console.log('getCardUrl', this._id);
-    return 'card';
-  }
+	data = {
+		nickName: ''
+	}
 
+	onLoad() {
+		const nickName = this.$parent.globalData.userInfo.nickName
+		this.nickName = nickName
+		this.$apply()
+	}
 
-  getSpace() {
-    const url = '/api/odata/v4/' + wx.getStorageSync('X-Space-Id') + '/spaces';
-    const data = {
-      $filter: '_id ne -1',
-      $expand: 'owner($select=name)',
-      $count: true,
-      $select: 'name,owner'
-    };
-    req.get(url, data).then(res => {
-      const spaces = res.value;
-      this.cards = this.cards.concat(spaces);
-      this.$apply();
-    });
-  }
+	methods = {
 
-  loginServer(code, userInfoData) {
-    console.log('userInfoData', userInfoData);
-    userInfoData.code = code;
-    req.post(serverAPI.LOGIN, userInfoData).then(res => {
-      const header = {
-        'X-User-Id': res.userId,
-        'X-Auth-Token': res.authToken,
-        'X-Space-Id': res.spaceId
-      };
-      wx.setStorageSync('X-User-Id', res.userId);
-      wx.setStorageSync('X-Auth-Token', res.authToken);
-      wx.setStorageSync('X-Space-Id', res.spaceId);
-      req.header(header);
-      this.getSpace();
-    });
-  }
-
-  onLoad() {
-    const self = this;
-    wx.getSetting({
-      success: function(res) {
-        if (res.authSetting['scope.userInfo']) {
-          wx.getUserInfo({
-            lang: 'zh_CN',
-            success: res => {
-              console.log('getUserInfo success,', res);
-              self.$parent.globalData.userInfo = res.userInfo;
-              self.userInfo = res.userInfo;
-              self.hasUserInfo = true;
-              self.$apply();
-              self.loginServer(self.$parent.globalData.code, res);
-            }
-          });
-        }
-      }
-    });
-    wx.showShareMenu({
-      withShareTicket: true
-    })
-  }
-
-  onShareAppMessage(res){
-    return {
-      title: '我的会员卡、积分、优惠券、消费记录',
-      path: '/pages/index'
-    }
-  }
-
-  methods = {
-    getUserInfo(e) {
-      const self = this;
-      console.log('methods getUserInfo e.detail', e.detail);
-      const app = self.$parent;
-      console.log('app.globalData', app.globalData);
-
-      if (e.detail.userInfo) {
-        self.$parent.globalData.userInfo = e.detail.userInfo;
-        self.userInfo = e.detail.userInfo;
-        self.hasUserInfo = true;
-        self.loginServer(self.$parent.globalData.code, e.detail);
-      }
-      return;
-    }
-  };
+	};
 }
 </script>

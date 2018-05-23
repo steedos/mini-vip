@@ -1,6 +1,6 @@
 <style lang="less">
 .header {
-  margin-bottom: 20px; 
+  margin-bottom: 20px;
   .avatar {
     width: 100px;
     height: 100px;
@@ -61,35 +61,18 @@
 
 <template>
   <view class="page">
-    <view class="weui-panel">
-      <view class="weui-cells weui-cells_after-title">
-        <navigator url="" class="weui-cell weui-cell_access">
+    <view class="page__bd" style="margin-top: 36rpx">
+			<view class="weui-cells weui-cells_after-title">
+        <repeat for="{{info}}" key="index" index="index" item="item">
+          <navigator url="" class="weui-cell weui-cell_access">
             <view class="weui-cell__bd">
-              <view>更改密码</view>
+              <view>{{item.key}}</view>
             </view>
-            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-        </navigator>
-      </view>
-      <view class="weui-cells weui-cells_after-title">
-        <navigator url="" class="weui-cell weui-cell_access">
-            <view class="weui-cell__bd">
-              <view>在线客服</view>
-            </view>
-            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-        </navigator>
-      </view>
-    </view>
-
-    <view class="weui-panel">
-      <view class="weui-cells weui-cells_after-title">
-        <navigator url="card?_id={{card._id}}" class="weui-cell weui-cell_access">
-            <view class="weui-cell__bd">
-              <view>我要开店</view>
-            </view>
-            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+            <view class="weui-cell__ft weui-cell__ft_in-access">{{item.value}}</view>
           </navigator>
-      </view>
-    </view>
+        </repeat>
+			</view>
+		</view>
   </view>
 </template>
 
@@ -105,90 +88,24 @@ export default class meProfile extends wepy.page {
     navigationBarBackgroundColor: '#fc880f'
   };
 
-  getCardUrl() {
-    console.log('getCardUrl', this._id);
-    return 'card';
+  onLoad() {}
+
+  data = {
+    info: [{
+      key: '姓名',
+      value: '张三'
+    }, {
+      key: '性别',
+      value: '男'
+    }, {
+      key: '生日',
+      value: '1998-01-01'
+    }, {
+      key: '手机',
+      value: '18601110111'
+    }]
   }
 
-
-  getSpace() {
-    const url = '/api/odata/v4/' + wx.getStorageSync('X-Space-Id') + '/spaces';
-    const data = {
-      $filter: '_id ne -1',
-      $expand: 'owner($select=name)',
-      $count: true,
-      $select: 'name,owner'
-    };
-    req.get(url, data).then(res => {
-      const spaces = res.value;
-      this.cards = this.cards.concat(spaces);
-      this.$apply();
-    });
-  }
-
-  loginServer(code, userInfoData) {
-    console.log('userInfoData', userInfoData);
-    userInfoData.code = code;
-    req.post(serverAPI.LOGIN, userInfoData).then(res => {
-      const header = {
-        'X-User-Id': res.userId,
-        'X-Auth-Token': res.authToken,
-        'X-Space-Id': res.spaceId
-      };
-      wx.setStorageSync('X-User-Id', res.userId);
-      wx.setStorageSync('X-Auth-Token', res.authToken);
-      wx.setStorageSync('X-Space-Id', res.spaceId);
-      req.header(header);
-      this.getSpace();
-    });
-  }
-
-  onLoad() {
-    const self = this;
-    wx.getSetting({
-      success: function(res) {
-        if (res.authSetting['scope.userInfo']) {
-          wx.getUserInfo({
-            lang: 'zh_CN',
-            success: res => {
-              console.log('getUserInfo success,', res);
-              self.$parent.globalData.userInfo = res.userInfo;
-              self.userInfo = res.userInfo;
-              self.hasUserInfo = true;
-              self.$apply();
-              self.loginServer(self.$parent.globalData.code, res);
-            }
-          });
-        }
-      }
-    });
-    wx.showShareMenu({
-      withShareTicket: true
-    })
-  }
-
-  onShareAppMessage(res){
-    return {
-      title: '我的会员卡、积分、优惠券、消费记录',
-      path: '/pages/index'
-    }
-  }
-
-  methods = {
-    getUserInfo(e) {
-      const self = this;
-      console.log('methods getUserInfo e.detail', e.detail);
-      const app = self.$parent;
-      console.log('app.globalData', app.globalData);
-
-      if (e.detail.userInfo) {
-        self.$parent.globalData.userInfo = e.detail.userInfo;
-        self.userInfo = e.detail.userInfo;
-        self.hasUserInfo = true;
-        self.loginServer(self.$parent.globalData.code, e.detail);
-      }
-      return;
-    }
-  };
+  methods = {};
 }
 </script>
