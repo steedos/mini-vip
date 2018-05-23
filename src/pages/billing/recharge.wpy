@@ -10,7 +10,8 @@
             </view>
         </view>
         <view class="weui-btn-area">
-            <button class="weui-btn" type="primary" @tap="doRecharge" >确定</button>
+            <button wx:if="{{canDoRecharge}}" class="weui-btn" type="primary" @tap="doRecharge">确定</button>
+            <button wx:else class="weui-btn" type="primary" disabled="true">确定</button>
         </view>
     </view>
 </template>
@@ -19,27 +20,27 @@ import wepy from 'wepy';
 
 export default class Recharge extends wepy.page {
   data = {
-    rechargeValue: ''
+    rechargeValue: '',
+    canDoRecharge: false
   };
 
   methods = {
     bindKeyInput(e) {
+      this.rechargeValue = e.detail.value;
+      this.$apply();
       var val = Number(e.detail.value);
-      if (val && val > 1) {
-        this.rechargeValue = val;
+      if (val && val >= 1) {
+        this.canDoRecharge = true;
         this.$apply();
-        console.log(e.detail.value);
       } else {
         this.rechargeValue = '';
+        this.canDoRecharge = false;
         this.$apply();
       }
     },
     doRecharge() {
-      this.rechargeValue = '1111';
-      this.$apply();
       wx.showModal({
-        content:
-          '弹窗内容，告知当前状态、信息和解决方法，描述文字尽量控制在三行内',
+        content: this.rechargeValue,
         showCancel: false,
         success: function(res) {
           if (res.confirm) {
