@@ -121,6 +121,7 @@
 
 <script>
 import wepy from 'wepy';
+import req from '@/network';
 import vipCard from '../components/vipCard';
 
 export default class Card extends wepy.page {
@@ -129,7 +130,29 @@ export default class Card extends wepy.page {
 		navigationBarTextStyle: 'black'
 	};
 
-	onLoad() {
+	getSpace(card_id) {
+	    const url = '/api/odata/v4/' + wx.getStorageSync('X-Space-Id') + '/vip_card';
+	    const data = {
+	      $filter: '_id eq \'' + card_id + '\'',
+	      '$expand': 'space($select=name)',
+	      '$count': true,
+	      '$select': 'space,grade,is_actived,balance,points,card_number'
+	    };
+	    req.get(url, data).then(res => {
+	      const cardObj = res.value[0];
+	      console.log(cardObj)
+	      this.cardName = cardObj.space.name
+	      this.cardType = cardObj.grade
+	      this.isActivated = cardObj.is_actived
+	      this.cardPoints = cardObj.points
+	      this.cardBalance = cardObj.balance
+	      this.cardNumber = cardObj.card_number
+	      this.$apply();
+	    });
+    }
+
+	onLoad(e) {
+    	console.log("Card onLoad, e", e)
 		const _self = this;
 		wx.getSetting({
 			success(res) {
@@ -143,6 +166,7 @@ export default class Card extends wepy.page {
 					_self.$apply();
 					console.log('true', _self.isAuthorize);
 				}
+				_self.getSpace(e._id);
 			},
 			fail(res) {
 				console.log('fail');
