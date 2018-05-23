@@ -191,9 +191,13 @@ export default class Card extends wepy.page {
 
 	data = {
 		isActivated: false,
-		isAuthorize: false,
-		cardName: '贝菲特',
-		cardType: '会员卡'
+		cardName: '',
+		cardType: '',
+		cardNumber: '',
+		cardPoints: 0,
+	    cardBalance: 0,
+	    cardNumber: '',
+		isAuthorize: false
 	};
 
 	computed = {
