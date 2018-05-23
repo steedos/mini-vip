@@ -7,8 +7,9 @@
   .coupon-left{
     width:40%;
     background:radial-gradient(rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0) 4px, #5F9CEC 4px);
-    background-size:24rpx 16rpx;
-    background-position:-16px 16px;
+    background-size:30rpx 17rpx;
+    background-position:6% 10%;
+    border-right: 1px dashed #fff;
     .coupon-border{
       background:#5F9CEC;
       padding:20rpx 20rpx;
@@ -21,7 +22,7 @@
     width:60%;
     background:radial-gradient(transparent 0, transparent 5px, #fff 5px);
     background-size:34rpx 30rpx;
-    background-position:9px 3px;
+    background-position:78% 30%;
     .coupon-border{
       background:#fff;
       padding:20rpx;
@@ -51,6 +52,9 @@
     color:#999999;
     font-size:12px;
     margin-top:12px;
+    text{
+      margin-right: 6px;
+    }
   }
 }
 </style>
@@ -73,7 +77,7 @@
           <text>{{min_consumption}}</text>
         </view>
         <view class="coupon-validity">
-          <text>2018-10-01</text> 至 <text>2018-10-07</text>
+          <text>2018-10-01</text> <text>2018-10-07</text>
         </view>
       </view>
     </view>
