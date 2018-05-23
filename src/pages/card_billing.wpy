@@ -38,7 +38,7 @@ page {
 <script>
 import wepy from 'wepy';
 import req from '@/network';
-const util = require('../../utils/util.js');
+const util = require('../utils/util.js');
 
 export default class Billing extends wepy.page {
   config = {

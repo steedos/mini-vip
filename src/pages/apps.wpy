@@ -50,7 +50,7 @@
 
       <view class="weui-panel">
         <view class="weui-cells weui-cells_after-title">
-          <navigator url="" class="weui-cell weui-cell_access">
+          <navigator url="store" class="weui-cell weui-cell_access">
             <view class="weui-cell__bd">
               <view>门店查询</view>
             </view>
