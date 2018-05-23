@@ -176,7 +176,9 @@ export default class Card extends wepy.page {
           _self.$apply();
           console.log('true', _self.isAuthorize);
         }
-        _self.getCardInfo(e.card);
+        if(e.card){
+          _self.getCardInfo(e.card);
+        }
       },
       fail(res) {
         console.log('fail');
