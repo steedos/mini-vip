@@ -31,3 +31,24 @@
 - ticket 投诉建议显示
 - knowledges 会员指南
 - knowledge 会员指南显示
+
+### 本地储存的数据
+- X-Space-Id 当前（或最近一次）访问的商户ID
+- X-User-Id
+- X-Auth-Token
+- {spaceId} 记录工作区信息
+  - name 工作区名称
+- {spaceId}-user 记录用户信息
+   - name 用户在当前工作区的名称
+   - modified 记录修改信息
+- {spaceId}-card 记录卡信息
+   - name 商户名称
+   - cards 在商户中办理的卡ID数组，目前只允许有一个
+   
+   
+### 标准函数
+- vip.getSpaceId()
+- vip.getUserId()
+- vip.getAuthToken()
+- vip.getSpaceName()
+- vip.getCard()
