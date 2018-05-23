@@ -58,10 +58,10 @@ export default class extends wepy.app {
         text: '首页',
       },
       {
-        pagePath: 'pages/postList',
+        pagePath: 'pages/apps',
         selectedIconPath: './images/tabbars/apps_pressed.png',
         iconPath: './images/tabbars/apps.png',
-        text: '优惠',
+        text: '服务台',
       },
       {
         pagePath: 'pages/card',
