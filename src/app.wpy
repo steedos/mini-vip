@@ -33,6 +33,7 @@ export default class extends wepy.app {
   config = {
     pages: [
       'pages/index',
+      'pages/apps',
       'pages/me',
       'pages/me_profile',
       'pages/postList',
