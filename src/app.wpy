@@ -26,6 +26,8 @@ import req from '@/network'
 import * as interceptor from '@/network/interceptor'
 import { baseUrl, appId } from '@/config'
 
+import { serverAPI } from '@/server';
+
 const store = configStore()
 setStore(store)
 
@@ -91,15 +93,24 @@ export default class extends wepy.app {
   }
 
   onLaunch() {
+    const self = this
+    console.log("onLaunch..............")
     req.appId(appId)
     req.baseUrl(baseUrl).interceptor(interceptor.request, interceptor.response)
-    const self = this
-    wx.login({
-      success: function (res) {
-        console.log('wx.login success...')
-        self.globalData.code = res.code
+    // app启动，判断用户是否已经授权，授权则调用一次loginServer，调用loginServer时会判断session_key是否过期，如过期则重新login，没有的话判断用户是否清理缓存，清理则调用login重新获取header，没有则重新设置一次缓存中的header，不再调用login。
+    wx.getSetting({
+      success: function(res) {
+        if (res.authSetting['scope.userInfo']) {
+          wx.getUserInfo({
+            lang: 'zh_CN',
+            success: res => {
+              self.globalData.userInfo = res.userInfo;
+              req.loginServer(serverAPI.LOGIN, res);
+            }
+          });
+        }
       }
-    })
+    });
   }
 
   getUserInfo(cb) {
