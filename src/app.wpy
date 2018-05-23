@@ -34,6 +34,7 @@ export default class extends wepy.app {
     pages: [
       'pages/index',
       'pages/apps',
+      'pages/home',
       'pages/me',
       'pages/me_profile',
       'pages/postList',
@@ -52,7 +53,7 @@ export default class extends wepy.app {
       borderStyle: 'black',
       list: [
       {
-        pagePath: 'pages/card_about',
+        pagePath: 'pages/home',
         selectedIconPath: './images/tabbars/home_pressed.png',
         iconPath: './images/tabbars/home.png',
         text: '首页',

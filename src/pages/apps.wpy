@@ -10,7 +10,7 @@
     <view class="body">
       <view class="weui-panel">
         <view class="weui-cells weui-cells_after-title">
-          <navigator url="index" class="weui-cell weui-cell_access">
+          <navigator url="" class="weui-cell weui-cell_access">
             <view class="weui-cell__bd">
               <view>连接WIFI</view>
             </view>
@@ -21,25 +21,25 @@
 
       <view class="weui-panel">
         <view class="weui-cells weui-cells_after-title">
-          <navigator url="index" class="weui-cell weui-cell_access">
+          <navigator url="" class="weui-cell weui-cell_access">
             <view class="weui-cell__bd">
               <view>服务预约</view>
             </view>
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
           </navigator>
-          <navigator url="index" class="weui-cell weui-cell_access">
+          <navigator url="" class="weui-cell weui-cell_access">
             <view class="weui-cell__bd">
               <view>课程安排</view>
             </view>
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
           </navigator>
-          <navigator url="index" class="weui-cell weui-cell_access">
+          <navigator url="" class="weui-cell weui-cell_access">
             <view class="weui-cell__bd">
               <view>私人教练</view>
             </view>
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
           </navigator>
-          <navigator url="index" class="weui-cell weui-cell_access">
+          <navigator url="" class="weui-cell weui-cell_access">
             <view class="weui-cell__bd">
               <view>最新动态</view>
             </view>
@@ -50,25 +50,25 @@
 
       <view class="weui-panel">
         <view class="weui-cells weui-cells_after-title">
-          <navigator url="index" class="weui-cell weui-cell_access">
+          <navigator url="" class="weui-cell weui-cell_access">
             <view class="weui-cell__bd">
               <view>门店查询</view>
             </view>
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
           </navigator>
-          <navigator url="index" class="weui-cell weui-cell_access">
+          <navigator url="" class="weui-cell weui-cell_access">
             <view class="weui-cell__bd">
               <view>会员指南</view>
             </view>
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
           </navigator>
-          <navigator url="index" class="weui-cell weui-cell_access">
+          <navigator url="" class="weui-cell weui-cell_access">
             <view class="weui-cell__bd">
               <view>投诉建议</view>
             </view>
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
           </navigator>
-          <navigator url="index" class="weui-cell weui-cell_access">
+          <navigator url="" class="weui-cell weui-cell_access">
             <view class="weui-cell__bd">
               <view>在线客服</view>
             </view>
@@ -92,132 +92,7 @@ export default class User extends wepy.page {
     navigationBarTextStyle: 'black'
   };
 
-  components = {
-    searchbar: searchbar
-  };
-
-  getCardUrl() {
-    console.log('getCardUrl', this._id);
-    return 'card';
-  }
-
-  data = {
-    hasUserInfo: false,
-    canIUse: wx.canIUse('button.open-type.getUserInfo'),
-    coupon: {
-      count: 8
-    },
-    order: {
-      count: 76
-    }
-  };
-
-  getSpace() {
-    const url = '/api/odata/v4/' + wx.getStorageSync('X-Space-Id') + '/spaces';
-    const data = {
-      $filter: '_id ne -1',
-      $expand: 'owner($select=name)',
-      $count: true,
-      $select: 'name,owner'
-    };
-    req.get(url, data).then(res => {
-      const spaces = res.value;
-      this.cards = this.cards.concat(spaces);
-      this.$apply();
-    });
-  }
-  getUserCard(){
-    const url = '/api/odata/v4/' + wx.getStorageSync('X-Space-Id') + '/vip_card';
-    const data = {
-      '$filter': 'user eq \'' + wx.getStorageSync('X-User-Id') + '\'',
-      '$expand': 'store($select=name),owner($select=name)',
-      '$count': true,
-      '$select': 'store,grade,owner'
-    };
-    req.get(url, data).then(res => {
-      const result = res.value;
-      const card_count = result.length;
-      var cards = [];
-      result.forEach(function(card){
-        const cardObj = {};
-        cardObj.type = card.grade;
-        cardObj._id = card.store._id;
-        cardObj.name = card.store.name;
-        cards = cards.concat(cardObj);
-      });
-      this.setData({
-        'cards': cards,
-        'card_count': card_count
-      });
-    });
-  }
-
-  loginServer(code, userInfoData) {
-    console.log('userInfoData', userInfoData);
-    userInfoData.code = code;
-    req.post(serverAPI.LOGIN, userInfoData).then(res => {
-      const header = {
-        'X-User-Id': res.userId,
-        'X-Auth-Token': res.authToken,
-        'X-Space-Id': res.spaceId
-      };
-      wx.setStorageSync('X-User-Id', res.userId);
-      wx.setStorageSync('X-Auth-Token', res.authToken);
-      wx.setStorageSync('X-Space-Id', res.spaceId);
-      req.header(header);
-      // this.getSpace();
-      this.getUserCard();
-    });
-  }
-
-  onLoad() {
-    const self = this;
-    wx.getSetting({
-      success: function(res) {
-        if (res.authSetting['scope.userInfo']) {
-          wx.getUserInfo({
-            lang: 'zh_CN',
-            success: res => {
-              console.log('getUserInfo success,', res);
-              self.$parent.globalData.userInfo = res.userInfo;
-              self.userInfo = res.userInfo;
-              self.hasUserInfo = true;
-              self.$apply();
-              self.loginServer(self.$parent.globalData.code, res);
-            }
-          });
-        }
-      }
-    });
-    wx.showShareMenu({
-      withShareTicket: true
-    })
-  }
-
-  onShareAppMessage(res){
-    return {
-      title: '我的会员卡、积分、优惠券、消费记录',
-      path: '/pages/index'
-    }
-  }
-
-  
-
   methods = {
-    getUserInfo(e) {
-      const self = this;
-      console.log('methods getUserInfo e.detail', e.detail);
-      const app = self.$parent;
-      console.log('app.globalData', app.globalData);
-
-      if (e.detail.userInfo) {
-        self.$parent.globalData.userInfo = e.detail.userInfo;
-        self.userInfo = e.detail.userInfo;
-        self.hasUserInfo = true;
-        self.loginServer(self.$parent.globalData.code, e.detail);
-      }
-      return;
-    }
   };
 }
 </script>

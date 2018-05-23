@@ -1,160 +1,141 @@
-<!-- 商户首页 -->
 <style lang="less">
-page {
-  height: 100%;
-  .scroll-view_H {
+.header {
+  width: 100%;
+  height: 230px;
+
+  .swiper {
     height: 100%;
-    .header {
-      .background {
-        height: 210px;
-        overflow: hidden;
-        .bg-img {
-          z-index: -1;
-          width: 100%;
-        }
-        .operate {
-          width: 80px;
-          z-index: 2;
-          position: relative;
-          margin: -240px 10px auto auto;
-          .icon {
-            color: white;
-            margin-left: 10px;
-          }
-        }
-      }
-      .avatar {
-        width: 100px;
-        height: 100px;
-        border-radius: 50%;
-        overflow: hidden;
-        position: relative;
-        margin: -50px auto 0 auto;
-        border: 5px solid white;
-        .image {
-          width: 100%;
-          height: 100%;
-        }
-      }
-      .info {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        text-align: center;
-        .store-name {
-          font-weight: bold;
-        }
-        .store-summary {
-          color: rgb(149, 149, 149);
-        }
-      }
-    }
-    .post-list {
-      margin-top: 20px;
+
+    .slide-image {
+      width: 100%;
     }
   }
 }
+
+.header-des {
+	padding: 10px 15px;
+	font-weight: bold;
+	margin-top: 28rpx;
+
+	.slds-icon-call {
+		color: #1B9AF7;
+		line-height:25px;
+		font-size:18px;
+		padding:0 4px;
+	}
+}
 </style>
 <template>
-  <scroll-view class="scroll-view_H" scroll-y="true">
-    <view class="header">
-      <view class="background">
-        <image src="../images/bg.png" class="bg-img" />
-        <view class="operate">
-          <block>
-            <text class="icon slds-icon-search"></text>
-          </block>
-          <block>
-            <text class="icon slds-icon-internal_share"></text>
-          </block>
-          <block>
-            <text class="icon slds-icon-favorite"></text>
-          </block>
-        </view>
-      </view>
-      <view class="avatar">
-        <open-data type="userAvatarUrl"></open-data>
-      </view>
-      <view class="info">
-        <text class="store-name">{{merchant.name}}</text>
-        <text class="store-summary">{{merchant.summary}}</text>
-      </view>
-    </view>
-    <view class="post-list">
-      <repeat for="{{posts}}" key="index" index="index" item="post">
-        <post :name="post.postName" :summary="post.postSummary" :commentCount="post.postCommentCount" :storeName="post.storeName" :cover="post.cover"/>
-      </repeat>
-    </view>
-  </scroll-view>
+	<view class="">
+		<view class="header">
+			<swiper class="swiper" indicator-dots="true" autoplay="true" interval="5000" duration="500">
+				<repeat for="{{imgUrls}}" key="index" index="index" item="item">
+					<swiper-item>
+						<image src="{{item}}" class="slide-image"/>
+					</swiper-item>
+				</repeat>
+			</swiper>
+		</view>
+
+		<view class="kind-list__item">
+			<view class="weui-flex kind-list__item-hd header-des">
+				<view class="weui-flex__item">贝菲特（九亭店）</view>
+				<text class="kind-list__img slds-icon-call" @tap="phoneCall"></text>
+			</view>
+		</view>
+
+		<view class="page__bd">
+			<view class="weui-cells weui-cells_after-title">
+				<navigator url="store" class="weui-cell weui-cell_access">
+					<view class="weui-cell__bd">
+						<view style="display: inline-block; vertical-align: middle">门店地址</view>
+					</view>
+					<view class="weui-cell__ft weui-cell__ft_in-access">{{store.address}}</view>
+				</navigator>
+				<navigator url="store" class="weui-cell weui-cell_access">
+					<view class="weui-cell__bd">
+						<view style="display: inline-block; vertical-align: middle">营业时间</view>
+					</view>
+					<view class="weui-cell__ft weui-cell__ft_in-access">{{store.business_hours}}</view>
+				</navigator>
+			</view>
+		</view>
+
+		<view class="page__bd" style="margin-top: 36rpx">
+			<view class="weui-cells weui-cells_after-title">
+				<navigator url="" class="weui-cell weui-cell_access">
+					<view class="weui-cell__bd">
+						<view style="display: inline-block; vertical-align: middle">
+							{{store.description}}
+						</view>
+					</view>
+				</navigator>
+			</view>
+		</view>
+
+		<view class="page__bd" style="margin-top: 36rpx">
+			<view class="weui-cells weui-cells_after-title">
+				<navigator url="store" class="weui-cell weui-cell_access">
+					<view class="weui-cell__bd">
+						<view style="display: inline-block; vertical-align: middle">二维码</view>
+					</view>
+					<view class="weui-cell__ft weui-cell__ft_in-access"></view>
+				</navigator>
+			</view>
+		</view>
+	</view>
 </template>
+
 <script>
 import wepy from 'wepy';
-import post from '../components/post';
+import req from '@/network';
+import vipCard from '../components/vipCard';
 
 export default class Store extends wepy.page {
   config = {
-    navigationBarTitleText: '优惠活动',
+    navigationBarTitleText: '贝菲特',
     navigationBarTextStyle: 'black'
   };
+
+  onLoad() {
+		const self = this;
+		this.getStoreInfo();
+	}
+
   components = {
-    post: post
+    vipcard: vipCard
   };
 
   data = {
-    merchant: {
-      name: '贝菲特(九亭店)',
-      summary: '一起来健身'
-    },
-    posts: [
-      {
-        storeName: '贝菲特（九亭店）',
-        postName: '限时优惠，买三年送1年',
-        postSummary: '好友开卡成功即送一个月会籍',
-        postCommentCount: '228',
-        cover:
-          'https://cn.bing.com/az/hprichbg/rb/SpringtimeinGiverny_ZH-CN8223989854_1920x1080.jpg'
-      },
-      {
-        storeName: '贝菲特（九亭店）',
-        postName: '限时优惠，买三年送2年',
-        postSummary: '好友开卡成功即送一个月会籍',
-        postCommentCount: '228',
-        cover:
-          'https://cn.bing.com/az/hprichbg/rb/FalcoPeregrinus_ZH-CN12522703608_1920x1080.jpg'
-      },
-      {
-        storeName: '贝菲特（九亭店）',
-        postName: '限时优惠，买三年送3年',
-        postSummary: '好友开卡成功即送一个月会籍',
-        postCommentCount: '228',
-        cover:
-          'https://cn.bing.com/az/hprichbg/rb/FishingWarehouses_ZH-CN12358243818_1920x1080.jpg'
-      },
-      {
-        storeName: '贝菲特（九亭店）',
-        postName: '限时优惠，买三年送4年',
-        postSummary: '好友开卡成功即送一个月会籍',
-        postCommentCount: '228',
-        cover:
-          'https://cn.bing.com/az/hprichbg/rb/OakTreeMaize_ZH-CN10523296117_1920x1080.jpg'
-      },
-      {
-        storeName: '贝菲特（九亭店）',
-        postName: '限时优惠，买三年送5年',
-        postSummary: '好友开卡成功即送一个月会籍',
-        postCommentCount: '228',
-        cover:
-          'https://cn.bing.com/az/hprichbg/rb/BushHyrax_ZH-CN9145408965_1920x1080.jpg'
-      },
-      {
-        storeName: '贝菲特（九亭店）',
-        postName: '限时优惠，买三年送6年',
-        postSummary: '好友开卡成功即送一个月会籍',
-        postCommentCount: '228',
-        cover:
-          'https://cn.bing.com/az/hprichbg/rb/DolomitesBikeRace_ZH-CN10922620742_1920x1080.jpg'
-      }
-    ]
+    imgUrls: [
+      '../images/mc-cover.jpg',
+      '../images/mcdonalds.jpg',
+      '../images/post-cover.png'
+		],
+		store:[]
   };
+	getStoreInfo(){
+    const url = '/api/odata/v4/' + wx.getStorageSync('X-Space-Id') + '/vip_store' + '/NpP5mJBgsnzkHsi37';
+    console.log("======",url)
+    const data = {
+      // $filter: 'user eq ' + wx.getStorageSync('X-Space-Id'),
+      $expand: 'owner($select=name)',
+      $count: true,
+      $select: 'address,name,description,business_hours'
+    };
+    req.get(url, data).then(res => {
+      const store = res;
+			this.store = store;
+			console.log(this.store);
+			console.log(this.store.address);
+    });
+  }
+  methods = {
+		phoneCall() {
+			wx.makePhoneCall({
+				phoneNumber: ''
+			})
+		}
+	};
 }
 </script>
