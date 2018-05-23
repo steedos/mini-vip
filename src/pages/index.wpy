@@ -169,11 +169,11 @@
 
     <view class="weui-panel btn-coupons">
       <view class="weui-cells weui-cells_after-title">
-        <navigator url="coupons" class="weui-cell weui-cell_access">
-            <view class="weui-cell__bd">
-              <view class="btn-my-coupons">我的优惠券</view>
-            </view>
-            <view class="weui-cell__ft weui-cell__ft_in-access">18</view>
+        <navigator url="card?_id={{demoSpaceId}}" open-type="reLaunch" class="weui-cell weui-cell_access weui-cell_access_card">
+          <view class="weui-cell__bd">
+            <view class="card-name">华炎</view>
+          </view>
+          <view class="weui-cell__ft weui-cell__ft_in-access">演示工作区</view>
         </navigator>
       </view>
     </view>
@@ -185,7 +185,7 @@
               <view class="btn-my-account">我的账户</view>
             </view>
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-          </navigator>
+        </navigator>
       </view>
     </view>
   </view>
