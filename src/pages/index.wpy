@@ -195,6 +195,7 @@
   import wepy from 'wepy';
   import req from '@/network';
   import { serverAPI } from '@/server';
+  import { demoSpaceId } from '@/config'
 
   export default class User extends wepy.page {
     config = {
@@ -216,7 +217,8 @@
       },
       order: {
         count: 76
-      }
+      },
+      demoSpaceId: demoSpaceId
     };
 
     getUserCard(){
