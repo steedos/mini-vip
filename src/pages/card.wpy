@@ -129,7 +129,8 @@ export default class Card extends wepy.page {
 		navigationBarTextStyle: 'black'
 	};
 
-	onLoad() {
+	onLoad(e) {
+    console.log("Card onLoad, e", e)
 		const _self = this;
 		wx.getSetting({
 			success(res) {

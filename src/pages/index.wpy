@@ -7,16 +7,16 @@
     background-color:#fc880f;
   }
     .page__bd_spacing{
-      text-align: center; 
-      color:white; 
+      text-align: center;
+      color:white;
       margin-top: 50rpx;
     }
       .weui-flex-title{
-        font-weight: 200; 
+        font-weight: 200;
         font-size: 12px;
       }
       .weui-flex-content{
-        font-weight: 200; 
+        font-weight: 200;
         font-size: 28px;
       }
   .avatar {
@@ -46,18 +46,18 @@
   }
 }
 .weui-cells__title__mine{
-  font-weight: 200; 
-  color: #999999; 
+  font-weight: 200;
+  color: #999999;
   font-size: 13.5px;
 }
 
 .weui-cell_access_card{
-  font-size: 17px; 
+  font-size: 17px;
 }
 .card-name{
-  display: inline-block; 
-  vertical-align: middle; 
-} 
+  display: inline-block;
+  vertical-align: middle;
+}
 
 .user-avatar {
   width: 50px;
@@ -93,8 +93,8 @@
   }
 }
 .btn-my-account, .btn-my-coupons{
-  display: inline-block; 
-  vertical-align: middle; 
+  display: inline-block;
+  vertical-align: middle;
   font-size: 17px;
 }
 
@@ -103,11 +103,11 @@
 }
 
 .btn-account{
-  margin-top: 50rpx; 
+  margin-top: 50rpx;
   margin-bottom: 50px;
 }
 .btn-view-all{
-  vertical-align: middle; 
+  vertical-align: middle;
   font-size: 14px;
 }
 </style>
@@ -124,13 +124,13 @@
               </view>
               <view class="weui-flex weui-flex-content">
                   <view class="weui-flex__item"><view class="placeholder">{{card_count}}</view></view>
-                  <view class="weui-flex__item"><view class="placeholder">￥31000</view></view>
+                  <view class="weui-flex__item"><view class="placeholder">￥{{allBalance}}</view></view>
                   <view class="weui-flex__item"><view class="placeholder">18</view></view>
               </view>
             </view>
       </view>
     </view>
-   
+
     <block wx:if="{{!hasUserInfo && canIUse}}">
       <view class="weui-panel">
         <view class="weui-cells weui-cells_after-title">
@@ -151,10 +151,10 @@
               <view class="weui-cell__bd">
                 <view class="card-name">{{card.name}}</view>
               </view>
-              <view class="weui-cell__ft weui-cell__ft_in-access">{{card.type}}</view>
+              <view class="weui-cell__ft weui-cell__ft_in-access">{{card.grade}}</view>
             </navigator>
           </repeat>
-          
+
           <view wx:if="{{card_count > 10}}" class="weui-cells weui-cells_after-title">
           <navigator url="card?_id={{card._id}}" class="weui-cell weui-cell_access">
             <view class="weui-cell__bd">
@@ -192,137 +192,112 @@
 </template>
 
 <script>
-import wepy from 'wepy';
-import req from '@/network';
-import { serverAPI } from '@/server';
+  import wepy from 'wepy';
+  import req from '@/network';
+  import { serverAPI } from '@/server';
 
-export default class User extends wepy.page {
-  config = {
-    navigationBarTitleText: '卡券助手',
-    navigationBarTextStyle: 'light',
-    navigationBarBackgroundColor: '#fc880f'
-  };
+  export default class User extends wepy.page {
+    config = {
+      navigationBarTitleText: '卡券助手',
+      navigationBarTextStyle: 'light',
+      navigationBarBackgroundColor: '#fc880f'
+    };
 
-  getCardUrl() {
-    console.log('getCardUrl', this._id);
-    return 'card';
-  }
-
-  data = {
-    hasUserInfo: false,
-    canIUse: wx.canIUse('button.open-type.getUserInfo'),
-    coupon: {
-      count: 8
-    },
-    order: {
-      count: 76
+    getCardUrl() {
+      console.log('getCardUrl', this._id);
+      return 'card';
     }
-  };
 
-  getSpace() {
-    const url = '/api/odata/v4/' + wx.getStorageSync('X-Space-Id') + '/spaces';
-    const data = {
-      $filter: '_id ne -1',
-      $expand: 'owner($select=name)',
-      $count: true,
-      $select: 'name,owner'
-    };
-    req.get(url, data).then(res => {
-      const spaces = res.value;
-      this.cards = this.cards.concat(spaces);
-      this.$apply();
-    });
-  }
-  getUserCard(){
-    const url = '/api/odata/v4/' + wx.getStorageSync('X-Space-Id') + '/vip_card';
-    const data = {
-      '$filter': 'user eq \'' + wx.getStorageSync('X-User-Id') + '\'',
-      '$expand': 'store($select=name),owner($select=name)',
-      '$count': true,
-      '$select': 'store,grade,owner'
-    };
-    req.get(url, data).then(res => {
-      const result = res.value;
-      const card_count = result.length;
-      var cards = [];
-      result.forEach(function(card){
-        const cardObj = {};
-        cardObj.type = card.grade;
-        cardObj._id = card.store._id;
-        cardObj.name = card.store.name;
-        cards = cards.concat(cardObj);
-      });
-      this.setData({
-        'cards': cards,
-        'card_count': card_count
-      });
-    });
-  }
-
-  loginServer(code, userInfoData) {
-    console.log('userInfoData', userInfoData);
-    userInfoData.code = code;
-    req.post(serverAPI.LOGIN, userInfoData).then(res => {
-      const header = {
-        'X-User-Id': res.userId,
-        'X-Auth-Token': res.authToken,
-        'X-Space-Id': res.spaceId
-      };
-      wx.setStorageSync('X-User-Id', res.userId);
-      wx.setStorageSync('X-Auth-Token', res.authToken);
-      wx.setStorageSync('X-Space-Id', res.spaceId);
-      req.header(header);
-      // this.getSpace();
-      this.getUserCard();
-    });
-  }
-
-  onLoad() {
-    const self = this;
-    wx.getSetting({
-      success: function(res) {
-        if (res.authSetting['scope.userInfo']) {
-          wx.getUserInfo({
-            lang: 'zh_CN',
-            success: res => {
-              console.log('getUserInfo success,', res);
-              self.$parent.globalData.userInfo = res.userInfo;
-              self.userInfo = res.userInfo;
-              self.hasUserInfo = true;
-              self.$apply();
-              self.loginServer(self.$parent.globalData.code, res);
-            }
-          });
-        }
+    data = {
+      hasUserInfo: false,
+      canIUse: wx.canIUse('button.open-type.getUserInfo'),
+      coupon: {
+        count: 8
+      },
+      order: {
+        count: 76
       }
-    });
-    wx.showShareMenu({
-      withShareTicket: true
-    })
-  }
+    };
 
-  onShareAppMessage(res){
-    return {
-      title: '我的会员卡、积分、优惠券、消费记录',
-      path: '/pages/index'
+    getUserCard(){
+      req.get("/api/steedos/weixin/cards").then(res => {
+        const card_count = res.cards.length;
+        this.setData({
+          'cards': res.cards,
+          'allBalance': res.allBalance,
+          'card_count': card_count
+        });
+      });
     }
-  }
 
-  methods = {
-    getUserInfo(e) {
+    loginServer(code, userInfoData) {
+      console.log('userInfoData', userInfoData);
+      userInfoData.code = code;
+      req.post(serverAPI.LOGIN, userInfoData).then(res => {
+        const header = {
+          'X-User-Id': res.userId,
+          'X-Auth-Token': res.authToken,
+          'X-Space-Id': res.spaceId
+        };
+        wx.setStorageSync('X-User-Id', res.userId);
+        wx.setStorageSync('X-Auth-Token', res.authToken);
+        wx.setStorageSync('X-Space-Id', res.spaceId);
+        req.header(header);
+        this.getUserCard();
+      });
+    }
+
+    onLoad() {
       const self = this;
-      console.log('methods getUserInfo e.detail', e.detail);
-      const app = self.$parent;
-      console.log('app.globalData', app.globalData);
-
-      if (e.detail.userInfo) {
-        self.$parent.globalData.userInfo = e.detail.userInfo;
-        self.userInfo = e.detail.userInfo;
+      if(!self.$parent.globalData.userInfo){
+        wx.getSetting({
+          success: function(res) {
+            if (res.authSetting['scope.userInfo']) {
+              wx.getUserInfo({
+                lang: 'zh_CN',
+                success: res => {
+                  console.log('getUserInfo success,', res);
+                  self.$parent.globalData.userInfo = res.userInfo;
+                  self.userInfo = res.userInfo;
+                  self.hasUserInfo = true;
+                  self.$apply();
+                  self.loginServer(self.$parent.globalData.code, res);
+                }
+              });
+            }
+          }
+        });
+      }else{
         self.hasUserInfo = true;
-        self.loginServer(self.$parent.globalData.code, e.detail);
+        this.getUserCard();
       }
-      return;
+      wx.showShareMenu({
+        withShareTicket: true
+      })
     }
-  };
-}
+
+    onShareAppMessage(res){
+      return {
+        title: '我的会员卡、积分、优惠券、消费记录',
+        path: '/pages/index'
+      }
+    }
+
+    methods = {
+      getUserInfo(e) {
+        const self = this;
+        console.log('methods getUserInfo e.detail', e.detail);
+        const app = self.$parent;
+        console.log('app.globalData', app.globalData);
+
+        if (e.detail.userInfo) {
+          self.$parent.globalData.userInfo = e.detail.userInfo;
+          self.userInfo = e.detail.userInfo;
+          self.hasUserInfo = true;
+          self.loginServer(self.$parent.globalData.code, e.detail);
+        }
+        return;
+      }
+    };
+  }
 </script>
