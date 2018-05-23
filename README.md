@@ -20,6 +20,8 @@
 - apps 商户服务台
 - card 商户会员卡，显示我在此商户的会员卡信息
 - card_activate 激活会员卡（如果没有卡）
+- card_recharge 会员卡充值
+- card_billing 会员卡消费记录
 - posts 最新动态
 - post 查看动态
 - wifi 连接WIFI
