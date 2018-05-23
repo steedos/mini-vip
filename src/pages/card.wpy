@@ -1,47 +1,53 @@
 <style lang="less">
-.header {
-	width: 100%;
-	background: #fff;
-	display: flex;
-	flex-direction: column;
-
-	&:before {
-		display: none;
-	}
-
-	.active-card {
-		width: 380rpx;
-		margin-bottom: 20px;
-		color: #f5a44d;
-		border-color: #f5a44d;
-	}
-
-	.card-info {
+.page-card {
+	.header {
+		width: 100%;
+		background: #fff;
 		display: flex;
-		text-align:center;
-		margin-bottom:16px;
+		flex-direction: column;
 
-		.s-card {
-			flex: 1;
-
-			.title {
-				font-size: 14px;
-			}
-			.count {
-				color: #f5a44d;
-				font-weight: bold;
-			}
+		&:before {
+			display: none;
 		}
 
-		.coupon {
-			border-right: 1px solid #C6C6C6;
-			border-left: 1px solid #C6C6C6;
+		.active-card {
+			width: 380rpx;
+			margin-bottom: 20px;
+			color: #f5a44d;
+			border-color: #f5a44d;
 		}
+
+		.card-info {
+			display: flex;
+			text-align:center;
+			margin-bottom:16px;
+
+			.s-card {
+				flex: 1;
+
+				.title {
+					font-size: 14px;
+				}
+				.count {
+					color: #f5a44d;
+					font-weight: bold;
+				}
+			}
+
+			.coupon {
+				border-right: 1px solid #C6C6C6;
+				border-left: 1px solid #C6C6C6;
+			}
+		}
+	}
+
+	.page__bd {
+		margin-top: 36rpx;
 	}
 }
 </style>
 <template>
-	<view class="">
+	<view class="page-card">
 		<view class="weui-panel weui-panel_access header">
 			<vipcrad :isActivated.sync="isActivated" :cardName.sync="cardName" :cardType.sync="cardType" :cardNumber.sync="cardNumber"/>
 			<block wx:if="{{isActivated}}">
@@ -66,7 +72,7 @@
 			</block>
 		</view>
 
-		<view class="page__bd" style="margin-top: 36rpx">
+		<view class="page__bd">
 			<view class="weui-cells weui-cells_after-title">
 				<repeat for="{{listItem}}" key="index" index="index" item="item">
 					<navigator url="{{item.url}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
@@ -78,7 +84,7 @@
 		</view>
 
 		<block wx:if="{{isActivated}}">
-			<view class="page__bd" style="margin-top: 36rpx">
+			<view class="page__bd">
 				<view class="weui-cells weui-cells_after-title">
 					<view class="weui-cell weui-cell_switch">
 						<view class="weui-cell__bd">放入微信卡包</view>
@@ -90,7 +96,7 @@
 			</view>
 		</block>
 
-		<view class="page__bd" style="margin-top: 36rpx">
+		<view class="page__bd">
 			<view class="weui-cells weui-cells_after-title">
 				<navigator url="store" class="weui-cell weui-cell_access">
 					<view class="weui-cell__bd">
@@ -101,7 +107,7 @@
 			</view>
 		</view>
 
-		<view class="page__bd" style="margin-top: 36rpx">
+		<view class="page__bd">
 			<view class="weui-cells weui-cells_after-title">
 				<navigator url="index" open-type="reLaunch" class="weui-cell weui-cell_access" style="font-size: 17px; color: #333333; solid #CCCCCC;">
 					<view class="weui-cell__bd">
