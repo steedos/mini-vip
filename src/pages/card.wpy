@@ -140,7 +140,8 @@ export default class Card extends wepy.page {
 	    };
 	    req.get(url, data).then(res => {
 	      const cardObj = res.value[0];
-	      console.log(cardObj)
+	      console.log(cardObj);
+	      this.cardId = card_id
 	      this.cardName = cardObj.space.name
 	      this.cardType = cardObj.grade
 	      this.isActivated = cardObj.is_actived
@@ -190,6 +191,7 @@ export default class Card extends wepy.page {
 	};
 
 	data = {
+		cardId: '',
 		isActivated: false,
 		cardName: '',
 		cardType: '',
@@ -203,20 +205,15 @@ export default class Card extends wepy.page {
 	computed = {
 		listItem() {
 			let listData;
-			if (this.isLogin) {
+			if (this.isAuthorize) {
 				listData = [
 					{
 						title: '消费记录',
-						url: '/pages/billing/billing'
+						url: '/pages/billing/billing?card_id=' + this.cardId
 					}
 				];
 			} else {
-				listData = [
-					{
-						title: '消费记录',
-						url: '/pages/billing/billing'
-					}
-				];
+				listData = [];
 			}
 			return listData;
 		}

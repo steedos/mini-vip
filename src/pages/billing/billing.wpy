@@ -46,25 +46,13 @@ export default class Billing extends wepy.page {
     navigationBarTextStyle: 'black'
   };
   components = {};
-  onLoad() {
+  onLoad(e) {
+    console.log("Card onLoad, e", e);
 		const self = this;
 		this.getBilling();
 	}
   data = {
     bills: []
-      // {
-      //   _id: 'xxx',
-      //   created: util.formatTime(new Date()),
-      //   amount: -200,
-      //   description: "电动打蛋机"
-      // },
-      // {
-      //   _id: 'aaa',
-      //   created: util.formatTime(new Date()),
-      //   amount: -2000,
-      //   description: "电动打蛋机"
-      // }
-    
   };
   getBilling(){
     const url = '/api/odata/v4/' + wx.getStorageSync('X-Space-Id') + '/vip_billing';
