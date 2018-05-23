@@ -99,7 +99,7 @@ export default class Home extends wepy.page {
   };
 
   onLoad() {
-		this.getStoreInfo();
+		this.getPostList();
   };
   
   components = {
@@ -163,7 +163,7 @@ export default class Home extends wepy.page {
     ]
   };
   
-	getStoreInfo(){
+	getPostList(){
     const url = '/api/odata/v4/' + wx.getStorageSync('X-Space-Id') + '/post';
     console.log("----",url)
     const data = {
