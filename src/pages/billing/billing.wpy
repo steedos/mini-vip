@@ -49,16 +49,17 @@ export default class Billing extends wepy.page {
   onLoad(e) {
     console.log("Card onLoad, e", e);
 		const self = this;
-		this.getBilling();
+		this.getBilling(e.card_id);
 	}
   data = {
     bills: []
   };
-  getBilling(){
+  getBilling(card_id){
     const url = '/api/odata/v4/' + wx.getStorageSync('X-Space-Id') + '/vip_billing';
     console.log("------",url)
+    console.log("card_id",card_id)
     const data = {
-      $filter: 'card eq \'' + 'q2WjcuHrJxibEZtJC' + '\'',
+      $filter: 'card eq \'' + card_id + '\'',
       $expand: 'owner($select=name)',
       $count: true,
       $select: 'created,amount,description'
