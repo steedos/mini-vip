@@ -10,8 +10,7 @@
             </view>
         </view>
         <view class="weui-btn-area">
-            <button wx:if="{{canDoRecharge}}" class="weui-btn" type="primary" @tap="doRecharge">确定</button>
-            <button wx:else class="weui-btn" type="primary" disabled="true">确定</button>
+            <button class="weui-btn" type="primary" @tap="doRecharge" disabled="{{!canDoRecharge}}">确定</button>
         </view>
     </view>
 </template>
