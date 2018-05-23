@@ -46,7 +46,7 @@
 
 		<view class="page__bd">
 			<view class="weui-cells weui-cells_after-title">
-				<view @tap=openMap class="weui-cell weui-cell_access">
+				<view @tap="openMap" class="weui-cell weui-cell_access">
 					<view class="weui-cell__bd">
 						<view style="display: inline-block; vertical-align: middle">门店地址</view>
 					</view>
