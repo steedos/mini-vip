@@ -98,7 +98,7 @@ import wepy from 'wepy';
 import req from '@/network';
 import { serverAPI } from '@/server';
 
-export default class User extends wepy.page {
+export default class meProfile extends wepy.page {
   config = {
     navigationBarTitleText: '我的账户',
     navigationBarTextStyle: 'light',
