@@ -93,7 +93,7 @@ import vipCard from '../components/vipCard';
 
 export default class store extends wepy.page {
   config = {
-    navigationBarTitleText: '贝菲特',
+    navigationBarTitleText: 'WeChat',
     navigationBarTextStyle: 'black'
   };
 
@@ -115,8 +115,8 @@ export default class store extends wepy.page {
 		store:[]
   };
 	getStoreInfo(){
-    const url = '/api/odata/v4/' + wx.getStorageSync('X-Space-Id') + '/vip_store' + '/NpP5mJBgsnzkHsi37';
-    console.log("======",url)
+    const url = '/api/odata/v4/' + wx.getStorageSync('X-Space-Id') + '/vip_store';
+    console.log("----",url)
     const data = {
       // $filter: 'user eq ' + wx.getStorageSync('X-Space-Id'),
       $expand: 'owner($select=name)',
@@ -124,10 +124,10 @@ export default class store extends wepy.page {
       $select: 'address,name,description,business_hours'
     };
     req.get(url, data).then(res => {
-      const store = res;
 			this.store = store;
-			console.log(this.store);
-			console.log(this.store.address);
+			const store = res.value;
+      this.store = store[0];
+		  wx.setNavigationBarTitle({title:this.store.name})
     });
   }
   methods = {
