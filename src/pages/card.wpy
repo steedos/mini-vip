@@ -130,7 +130,7 @@ export default class Card extends wepy.page {
 		navigationBarTextStyle: 'black'
 	};
 
-	getSpace(card_id) {
+	getCardInfo(card_id) {
 	    const url = '/api/odata/v4/' + wx.getStorageSync('X-Space-Id') + '/vip_card';
 	    const data = {
 	      $filter: '_id eq \'' + card_id + '\'',
@@ -167,7 +167,7 @@ export default class Card extends wepy.page {
 					_self.$apply();
 					console.log('true', _self.isAuthorize);
 				}
-				_self.getSpace(e._id);
+				_self.getCardInfo(e._id);
 			},
 			fail(res) {
 				console.log('fail');
