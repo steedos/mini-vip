@@ -3,17 +3,18 @@
   margin:40rpx;
   display:flex;
   align-items: center;
+  box-shadow:-6px 8px 12px #dfdfdf;
   .coupon-left{
     width:40%;
-    background:radial-gradient(rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0) 4px, #50ADD3 4px);
+    background:radial-gradient(rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0) 4px, #5F9CEC 4px);
     background-size:24rpx 16rpx;
-    background-position:-5px 10px;
+    background-position:-16px 16px;
     .coupon-border{
-      background:#50ADD3;
+      background:#5F9CEC;
       padding:20rpx 20rpx;
       margin-left:12rpx;
       margin-right:4rpx;
-      height:88px;
+      height:86px;
     }
   }
   .coupon-right{
@@ -26,7 +27,7 @@
       padding:20rpx;
       margin-left:4rpx;
       margin-right:20rpx;
-      height:88px;
+      height:86px;
     }
   }
   .coupon-quota{
@@ -47,7 +48,7 @@
     font-size:15px;
   }
   .coupon-validity{
-    color:#999;
+    color:#999999;
     font-size:12px;
     margin-top:12px;
   }
