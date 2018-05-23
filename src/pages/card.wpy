@@ -131,7 +131,7 @@ export default class Card extends wepy.page {
 	};
 
 	getCardInfo(card_id) {
-	    const url = '/api/odata/v4/' + wx.getStorageSync('X-Space-Id') + '/vip_card';
+	    const url = '/api/odata/v4/' +  (this.space || wx.getStorageSync('X-Space-Id')) + '/vip_card';
 	    const data = {
 	      $filter: '_id eq \'' + card_id + '\'',
 	      '$expand': 'space($select=name)',
@@ -153,7 +153,13 @@ export default class Card extends wepy.page {
     }
 
 	onLoad(e) {
-    	console.log("Card onLoad, e", e)
+    if(e.space){
+      this.space = e.space
+    }
+    if(e.store){
+      this.store = e.store
+    }
+    console.log("Card onLoad, e", e)
 		const _self = this;
 		wx.getSetting({
 			success(res) {
@@ -167,7 +173,7 @@ export default class Card extends wepy.page {
 					_self.$apply();
 					console.log('true', _self.isAuthorize);
 				}
-				_self.getCardInfo(e._id);
+				_self.getCardInfo(e.card);
 			},
 			fail(res) {
 				console.log('fail');
@@ -197,9 +203,11 @@ export default class Card extends wepy.page {
 		cardType: '',
 		cardNumber: '',
 		cardPoints: 0,
-	    cardBalance: 0,
-	    cardNumber: '',
-		isAuthorize: false
+    cardBalance: 0,
+    cardNumber: '',
+		isAuthorize: false,
+    space: '',
+    store: ''
 	};
 
 	computed = {
@@ -222,7 +230,7 @@ export default class Card extends wepy.page {
 	methods = {
 		toOpenCard() {
 			wx.navigateTo({
-				url: 'card_activate'
+        url: 'card_activate?space=' + this.space + '&store=' + this.store
 			});
 		},
 		userInfo(e) {

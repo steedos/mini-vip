@@ -1,196 +1,220 @@
 <style lang="less">
-.card-activate {
-	.header {
-		width: 100%;
-		background: #fff;
-		display: flex;
-		flex-direction: column;
+  .card-activate {
+    .header {
+      width: 100%;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
 
-		&:before {
-			display: none;
-		}
-	}
+      &:before {
+        display: none;
+      }
+    }
 
-	checkbox .wx-checkbox-input {
-		height: 12px;
-		width: 12px;
-	}
+    checkbox .wx-checkbox-input {
+      height: 12px;
+      width: 12px;
+    }
 
-	checkbox .wx-checkbox-input.wx-checkbox-input-checked::before {
-		padding: 3px;
-		border-radius: 50%;
-		background-color: #1B9AF7;
-	}
+    checkbox .wx-checkbox-input.wx-checkbox-input-checked::before {
+      padding: 3px;
+      border-radius: 50%;
+      background-color: #1B9AF7;
+    }
 
-	.checkbox-container {
-		position: relative;
-		margin-left: 18px;
-		margin-top: 15px;
-		display: flex;
+    .checkbox-container {
+      position: relative;
+      margin-left: 18px;
+      margin-top: 15px;
+      display: flex;
 
-		.guide {
-			margin-left: 10px;
-			line-height: 30px;
-			color: #a8a8a8;
-		}
-	}
+      .guide {
+        margin-left: 10px;
+        line-height: 30px;
+        color: #a8a8a8;
+      }
+    }
 
-	.btn-container {
-		width: 100%;
-	}
+    .btn-container {
+      width: 100%;
+    }
 
-	.submit-btn {
-		background: #1B9AF7;
-		color: #fff;
-		margin: 15px 15px 20px;
-	}
+    .submit-btn {
+      background: #1B9AF7;
+      color: #fff;
+      margin: 15px 15px 20px;
+    }
 
-	.get-number {
-		border: none;
-		text-align: left;
-		height:2.58823529em;
-		min-height:2.58823529em;
-		line-height:2.58823529em;
-		padding: 0;
-		font-size: 17px;
-		color: #808080;
-	}
-}
+    .get-number {
+      border: none;
+      text-align: left;
+      height: 2.58823529em;
+      min-height: 2.58823529em;
+      line-height: 2.58823529em;
+      padding: 0;
+      font-size: 17px;
+      color: #808080;
+    }
+  }
 </style>
 <template>
-	<view class="card-activate">
-		<view class="weui-panel weui-panel_access header">
-			<vipcard :cardName.sync="cardName" :cardType.sync="cardType" />
-		</view>
+  <view class="card-activate">
+    <view class="weui-panel weui-panel_access header">
+      <vipcard :cardName.sync="cardName" :cardType.sync="cardType"/>
+    </view>
 
-		<view class="weui-cells__title">必填信息</view>
-		<view class="page__bd" style="">
-			<view class="weui-cells weui-cells_after-title">
-				<view class="weui-cell weui-cell_input">
-					<view class="weui-cell__hd">
-						<view class="weui-label">姓名</view>
-					</view>
-					<view class="weui-cell__bd">
-						<input class="weui-input" placeholder="请输入姓名"/>
-					</view>
-				</view>
-				<view class="weui-cell weui-cell_input">
-					<view class="weui-cell__hd">
-						<view class="weui-label">性别</view>
-					</view>
-					<view class="weui-cell__bd">
-						<picker mode="selector" bindchange="bindSexChange" value="{{sexValue}}" range="{{array}}">
-							<view class="weui-input">{{sexValue}}</view>
-						</picker>
-					</view>
-					<view class="weui-cell__ft weui-cell__ft_in-access"></view>
-				</view>
-				<view class="weui-cell weui-cell_input">
-					<view class="weui-cell__hd">
-						<view class="weui-label">生日</view>
-					</view>
-					<view class="weui-cell__bd">
-						<picker mode="date" bindchange="bindDateChange" value="{{birthdate}}">
-							<view class="weui-input">{{birthdate}}</view>
-						</picker>
-					</view>
-					<view class="weui-cell__ft weui-cell__ft_in-access"></view>
-				</view>
-				<view class="weui-cell weui-cell_input">
+    <view class="weui-cells__title">必填信息</view>
+    <view class="page__bd" style="">
+      <view class="weui-cells weui-cells_after-title">
+        <view class="weui-cell weui-cell_input">
+          <view class="weui-cell__hd">
+            <view class="weui-label">姓名</view>
+          </view>
+          <view class="weui-cell__bd">
+            <input class="weui-input" placeholder="请输入姓名" value="{{name}}" bindchange="bindNameChange"/>
+          </view>
+        </view>
+        <view class="weui-cell weui-cell_input">
+          <view class="weui-cell__hd">
+            <view class="weui-label">性别</view>
+          </view>
+          <view class="weui-cell__bd">
+            <picker mode="selector" bindchange="bindSexChange" value="{{sexValue}}" range="{{array}}">
+              <view class="weui-input">{{sexValue}}</view>
+            </picker>
+          </view>
+          <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+        </view>
+        <view class="weui-cell weui-cell_input">
+          <view class="weui-cell__hd">
+            <view class="weui-label">生日</view>
+          </view>
+          <view class="weui-cell__bd">
+            <picker mode="date" bindchange="bindDateChange" value="{{birthdate}}">
+              <view class="weui-input">{{birthdate}}</view>
+            </picker>
+          </view>
+          <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+        </view>
+        <view class="weui-cell weui-cell_input">
           <view class="weui-cell__hd">
             <view class="weui-label">手机号</view>
           </view>
           <view class="weui-cell__bd">
-						<view class="weui-input">
-							<view wx:if="{{phoneNumber}}">{{phoneNumber}}</view>
-							<button wx:else="{{phoneNumber}}" class="get-number" plain="true" open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber">获取手机号</button>
-						</view>
+            <view class="weui-input">
+              <view wx:if="{{phoneNumber}}">{{phoneNumber}}</view>
+              <button wx:else="{{phoneNumber}}" class="get-number" plain="true" open-type="getPhoneNumber"
+                      bindgetphonenumber="getPhoneNumber">获取手机号
+              </button>
+            </view>
           </view>
           <view class="weui-cell__ft">
           </view>
-				</view>
-			</view>
-		</view>
+        </view>
+      </view>
+    </view>
 
-		<checkbox-group bindchange='checkboxChange'>
-			<label class="checkbox-container">
-				<checkbox value="agree" color='#fff'/>
-				<view class="guide">我已阅读并同意《会员卡信息指南》</view>
-			</label>
-		</checkbox-group>
-		<view class="btn-container">
-			<button class="submit-btn" form-type="submit" @tap="activate" disabled="{{submitDisabled}}">提交</button>
-		</view>
-	</view>
+    <checkbox-group bindchange='checkboxChange'>
+      <label class="checkbox-container">
+        <checkbox value="agree" color='#fff'/>
+        <view class="guide">我已阅读并同意《会员卡信息指南》</view>
+      </label>
+    </checkbox-group>
+    <view class="btn-container">
+      <button class="submit-btn" form-type="submit" @tap="activate" disabled="{{submitDisabled}}">提交</button>
+    </view>
+  </view>
 </template>
 
 <script>
-import wepy from 'wepy';
-import vipCard from '../components/vipCard';
-import req from '@/network';
+  import wepy from 'wepy';
+  import vipCard from '../components/vipCard';
+  import req from '@/network';
 
-export default class cardActivate extends wepy.page {
-	config = {
-		navigationBarTitleText: '激活会员卡',
-		navigationBarTextStyle: 'black'
-	};
+  export default class cardActivate extends wepy.page {
+    config = {
+      navigationBarTitleText: '激活会员卡',
+      navigationBarTextStyle: 'black'
+    };
 
-	onLoad() {
-		const userInfo = this.$parent.globalData.userInfo
-		this.sexValue = this.array[userInfo.gender]
-		this.$apply()
-	}
-
-	components = {
-		vipcard: vipCard
-	}
-
-	data = {
-		cardName: '贝菲特',
-		cardType: '会员卡',
-		array: ['女', '男'],
-		sexValue: '',
-    birthdate: '2017-01-10',
-    name: '赵丽颖',
-    phoneNumber: '',
-    submitDisabled: true
-	};
-
-	methods = {
-		formSubmit(e) {
-			console.log(e);
-		},
-		checkboxChange(e) {
-			if(e.detail.value.length > 0){
-			  this.submitDisabled = false
-      }else{
-			  this.submitDisabled = true
+    onLoad(e) {
+      if(e.space){
+        this.space = e.space
       }
-		},
-		bindSexChange(e) {
-			const index = e.detail.value;
-			this.sexValue = this.array[index];
-			this.$apply();
-		},
-		bindDateChange(e) {
-			console.log(e)
-			this.date = e.detail.value;
-		},
-    getPhoneNumber(e) {
-      if(e.detail.iv || e.detail.encryptedData){
-        req.post('/api/steedos/weixin/get_phone_number', {iv: e.detail.iv, encryptedData: e.detail.encryptedData}).then(res => {
-          console.log("res", res)
-          this.phoneNumber = res.purePhoneNumber
-          this.$apply();
-        });
-		  }else{
-        console.error(e.detail.errMsg)
+      if(e.store){
+        this.store = e.store
       }
-		},
-		activate(){
-			this.submitDisabled = true
-			req.post('/api/steedos/weixin/card/activate?spaceId=' + spaceId + "&store=" + store, {name: this.name, sex: this.sexValue, birthdate: this.birthdate, phoneNumber: this.phoneNumber})
-		}
-  };
-}
+      console.log('card_activate onLoad e,', e)
+      const userInfo = this.$parent.globalData.userInfo
+      this.sexValue = this.array[userInfo.gender]
+      this.$apply()
+    }
+
+    components = {
+      vipcard: vipCard
+    }
+
+    data = {
+      cardName: '贝菲特',
+      cardType: '会员卡',
+      array: ['女', '男'],
+      sexValue: '',
+      birthdate: '',
+      name: '',
+      phoneNumber: '',
+      submitDisabled: true,
+      space: '',
+      store: ''
+    };
+
+    methods = {
+      formSubmit(e) {
+        console.log(e);
+      },
+      checkboxChange(e) {
+        if (e.detail.value.length > 0) {
+          this.submitDisabled = false
+        } else {
+          this.submitDisabled = true
+        }
+      },
+      bindNameChange(e) {
+        this.name = e.detail.value;
+      },
+      bindSexChange(e) {
+        const index = e.detail.value;
+        this.sexValue = this.array[index];
+        this.$apply();
+      },
+      bindDateChange(e) {
+        console.log(e)
+        this.birthdate = e.detail.value;
+      },
+      getPhoneNumber(e) {
+        if (e.detail.iv || e.detail.encryptedData) {
+          req.post('/api/steedos/weixin/get_phone_number', {
+            iv: e.detail.iv,
+            encryptedData: e.detail.encryptedData
+          }).then(res => {
+            console.log("res", res)
+            this.phoneNumber = res.purePhoneNumber
+            this.$apply();
+          });
+        } else {
+          console.error(e.detail.errMsg)
+        }
+      },
+      activate() {
+        this.submitDisabled = true
+        req.post('/api/steedos/weixin/card/activate?spaceId=' + this.space + "&storeId=" + this.store, {
+          name: this.name,
+          sex: this.sexValue,
+          birthdate: this.birthdate,
+          phoneNumber: this.phoneNumber
+        }).then(res => {
+          wx.navigateTo({url: "./index"})
+        })
+      }
+    };
+  }
 </script>

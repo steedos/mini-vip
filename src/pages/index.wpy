@@ -147,7 +147,7 @@
         <view class="weui-cells__title weui-cells__title__mine">我的会员卡</view>
         <view class="weui-cells weui-cells_after-title">
           <repeat for="{{cards}}" key="index" index="index" item="card">
-            <navigator url="apps" open-type="reLaunch" class="weui-cell weui-cell_access weui-cell_access_card">
+            <navigator url="card?card={{card._id}}&space={{card.space}}" open-type="reLaunch" class="weui-cell weui-cell_access weui-cell_access_card">
               <view class="weui-cell__bd">
                 <view class="card-name">{{card.name}}</view>
               </view>
@@ -169,7 +169,7 @@
 
     <view class="weui-panel btn-coupons">
       <view class="weui-cells weui-cells_after-title">
-        <navigator url="apps" open-type="reLaunch" class="weui-cell weui-cell_access weui-cell_access_card">
+        <navigator url="card?space={{demoSpaceId}}&store={{demoStoreId}}" open-type="reLaunch" class="weui-cell weui-cell_access weui-cell_access_card">
           <view class="weui-cell__bd">
             <view class="card-name">华炎</view>
           </view>
@@ -195,7 +195,7 @@
   import wepy from 'wepy';
   import req from '@/network';
   import { serverAPI } from '@/server';
-  import { demoSpaceId } from '@/config'
+  import { demoSpaceId,demoStoreId } from '@/config'
 
   export default class User extends wepy.page {
     config = {
@@ -218,7 +218,8 @@
       order: {
         count: 76
       },
-      demoSpaceId: demoSpaceId
+      demoSpaceId: demoSpaceId,
+      demoStoreId: demoStoreId
     };
 
     getUserCard(){
