@@ -46,12 +46,12 @@
 
 		<view class="page__bd">
 			<view class="weui-cells weui-cells_after-title">
-				<navigator url="store" class="weui-cell weui-cell_access">
+				<view @tap=openMap class="weui-cell weui-cell_access">
 					<view class="weui-cell__bd">
 						<view style="display: inline-block; vertical-align: middle">门店地址</view>
 					</view>
 					<view class="weui-cell__ft weui-cell__ft_in-access">{{store.address}}</view>
-				</navigator>
+				</view>
 				<navigator url="store" class="weui-cell weui-cell_access">
 					<view class="weui-cell__bd">
 						<view style="display: inline-block; vertical-align: middle">营业时间</view>
@@ -135,6 +135,17 @@ export default class cardActivate extends wepy.page {
 			wx.makePhoneCall({
 				phoneNumber: ''
 			})
+		},
+		openMap() {
+			var latitude = 31.03241
+			var longitude = 121.22654
+			wx.openLocation({
+				latitude: latitude,
+				longitude: longitude,
+				scale: 28,
+				name:'上海九亭大街1店',
+				address:'松江区九亭大街512号'
+			});
 		}
 	};
 }
