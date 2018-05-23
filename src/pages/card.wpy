@@ -123,6 +123,7 @@
 import wepy from 'wepy';
 import req from '@/network';
 import vipCard from '../components/vipCard';
+import { serverAPI } from '@/server';
 
 export default class Card extends wepy.page {
   config = {
@@ -239,6 +240,7 @@ export default class Card extends wepy.page {
     },
     userInfo(e) {
       if (e.detail.rawData) {
+        req.loginServer(serverAPI.LOGIN, e.detail);
         this.isAuthorize = true;
         this.$apply();
         wx.navigateTo({

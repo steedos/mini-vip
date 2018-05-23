@@ -224,29 +224,20 @@
 
     getUserCard(){
       req.get("/api/steedos/weixin/cards").then(res => {
-        const card_count = res.cards.length;
+        let card_count
+        if (res.cards) {
+          card_count = res.cards.length;
+        } else {
+          card_count = 0;
+        }
+        
+        const allBalance = res.allBalance || 0;
+
         this.setData({
           'cards': res.cards,
-          'allBalance': res.allBalance,
+          'allBalance': allBalance,
           'card_count': card_count
         });
-      });
-    }
-
-    loginServer(code, userInfoData) {
-      console.log('userInfoData', userInfoData);
-      userInfoData.code = code;
-      req.post(serverAPI.LOGIN, userInfoData).then(res => {
-        const header = {
-          'X-User-Id': res.userId,
-          'X-Auth-Token': res.authToken,
-          'X-Space-Id': res.spaceId
-        };
-        wx.setStorageSync('X-User-Id', res.userId);
-        wx.setStorageSync('X-Auth-Token', res.authToken);
-        wx.setStorageSync('X-Space-Id', res.spaceId);
-        req.header(header);
-        this.getUserCard();
       });
     }
 
@@ -264,7 +255,10 @@
                   self.userInfo = res.userInfo;
                   self.hasUserInfo = true;
                   self.$apply();
-                  self.loginServer(self.$parent.globalData.code, res);
+
+                  res.code = self.$parent.globalData.code
+
+                  req.loginServer(serverAPI.LOGIN, res);
                 }
               });
             }
@@ -297,7 +291,8 @@
           self.$parent.globalData.userInfo = e.detail.userInfo;
           self.userInfo = e.detail.userInfo;
           self.hasUserInfo = true;
-          self.loginServer(self.$parent.globalData.code, e.detail);
+
+          req.loginServer(serverAPI.LOGIN, e.detail);
         }
         return;
       }
