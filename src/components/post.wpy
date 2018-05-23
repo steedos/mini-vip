@@ -64,7 +64,7 @@
 </style>
 <template>
 	<view class="post">
-    <view class="post-header">
+    <view class="post-header" wx:if="{{isHeaderShow}}">
       <image class="image" mode="scaleToFill" src="{{logo}}"/>
       <text class="post-name">{{storeName}}</text>
       <text class="btn-focus btn-link">关注</text>
@@ -99,6 +99,10 @@ export default class post extends wepy.component {
   onLoad() {}
 
   props = {
+    isHeaderShow: {
+      type: Boolean,
+      default: false
+    },
     storeName: {
       type: String,
       default: ''

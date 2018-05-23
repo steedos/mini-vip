@@ -82,7 +82,7 @@ page {
     </view>
     <view class="post-list">
       <repeat for="{{posts}}" key="index" index="index" item="post">
-        <post :name="post.postName" :summary="post.postSummary" :commentCount="post.postCommentCount" :storeName="post.storeName" :cover="post.cover"/>
+        <post :name="post.name" :summary="post.summary" :commentCount="post.comment_count" :cover="post.images"/>
       </repeat>
     </view>
   </scroll-view>
@@ -90,12 +90,18 @@ page {
 <script>
 import wepy from 'wepy';
 import post from '../components/post';
+import req from '@/network';
 
 export default class Home extends wepy.page {
   config = {
     navigationBarTitleText: '贝菲特',
     navigationBarTextStyle: 'black'
   };
+
+  onLoad() {
+		this.getStoreInfo();
+  };
+  
   components = {
     post: post
   };
@@ -155,6 +161,23 @@ export default class Home extends wepy.page {
           'https://cn.bing.com/az/hprichbg/rb/DolomitesBikeRace_ZH-CN10922620742_1920x1080.jpg'
       }
     ]
+  };
+  
+	getStoreInfo(){
+    const url = '/api/odata/v4/' + wx.getStorageSync('X-Space-Id') + '/post';
+    console.log("----",url)
+    const data = {
+      // $filter: 'user eq ' + wx.getStorageSync('X-Space-Id'),
+      $expand: 'owner($select=name)',
+      $count: true,
+      $select: 'name,summary,description,comment_count,enable_comment,images'
+    };
+    var that = this;
+    req.get(url, data).then(res => {
+      debugger;
+      that.posts = res.value;
+      that.$apply();
+    });
   };
 }
 </script>
