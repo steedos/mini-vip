@@ -93,7 +93,7 @@ import vipCard from '../components/vipCard';
 
 export default class cardActivate extends wepy.page {
   config = {
-    navigationBarTitleText: '贝菲特',
+    navigationBarTitleText: "WeChat",
     navigationBarTextStyle: 'black'
   };
 
@@ -126,7 +126,7 @@ export default class cardActivate extends wepy.page {
     req.get(url, data).then(res => {
       const store = res;
 			this.store = store;
-			console.log(this.store);
+			wx.setNavigationBarTitle({title:this.store.name})
 			console.log(this.store.address);
     });
   }
