@@ -47,11 +47,12 @@
 
 ### 读取记录并缓存
 在页面中可以调用方法 $.parent.cache(object_name, _id) 获取对象缓存数据。
-- 先判断 globalData[object_name] 是否存在，如果存在表示有缓存
+- 先判断 globalData[object_name] 存在且不为空对象，表示有缓存
+- 如果不传入 id，直接返回本地数据
 - 判断缓存的对象 id 是否相同，如果相同直接返回
 - 如果不同，调用get接口获取数据并保存到 globalData[object_name] 
 - 如果接口调用失败，也保存一个空对象到 globalData[object_name], 避免页面调用时报错
-
+对于不需要缓存的数据，请使用标准的 $.parent.get 函数
 
 ### globalData
 - user 当前用户信息
@@ -63,22 +64,18 @@
   - name
   - mobile
   - sex
-- space 当前访问的商户
+- {object_name} 每个对象会缓存最近一条记录
   - _id
   - name
-- store 当前访问的门店
-  - _id
-  - name
-- card 当前访问的会员卡
-  - _id
-  - name
-  - card_no
+  - ...
+  - modified
 
 
-
-### 数据缓存
-app.onLaunch 事件中，localStorage.globalData 写入 app.globalData
-app.onHide 事件中，app.globalData 写入 localStorage.globalData
+### 本地存储
+- globalData 缓存
+  - app.onLaunch 事件中，localStorage.globalData 写入 app.globalData
+  - app.onHide 事件中，app.globalData 写入 localStorage.globalData
+- 列表缓存，直接写入 localStorage[object_name]
 
 
 ### API 接口
