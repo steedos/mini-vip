@@ -90,3 +90,8 @@ $.parent 中提供以下接口，如果接口失败，统一显示错误提示�
 - 数据新增 odataInsert(object_name, data)
 - 数据修改 odataUpdate(object_name, _id, data)
 - 数据修改 odataDelete(object_name, _id)
+- 上传照片 uploadImages(file_name, file_path)，返回 cfs_images 对象
+
+界面反馈
+- 调用接口时，显示导航条加载动画：wx.showNavigationBarLoading()
+- 接口调用完成时，隐藏导航条加载动画：wx.hideNavigationBarLoading()
