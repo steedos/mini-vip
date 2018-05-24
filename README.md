@@ -33,13 +33,8 @@
 - knowledge 会员指南显示
 
 
-### 页面登录
-
-用户有可能扫码打开系统的任何一个页面，因此需要做统一的登录。
-- 在页面的onLoad函数中调用 $.parent.login(options) 进行登录。
-
-login(options) 执行以下操作
-- 用户验证
+### App登录
+在App的onLaunch函数中调用 login(options) 进行登录。
   - wx.login() 获取 code
   - 调用接口 /mini/vip/sso?code=xxx&old_user_id=yyy&old_auth_token=yyy
   - 在服务端使用 code 去服务器获取 open_id，session_key
