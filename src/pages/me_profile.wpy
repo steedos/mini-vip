@@ -1,7 +1,7 @@
 <style lang="less">
 .page-me-profile {
   .page__bd {
-    margin-top: 36rpx;
+    margin-top: 20px;
   }
 }
 </style>
