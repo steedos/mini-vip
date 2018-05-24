@@ -94,8 +94,7 @@ import req from '@/network';
 
 export default class Home extends wepy.page {
   config = {
-    navigationBarTitleText: '贝菲特',
-    navigationBarTextStyle: 'black'
+    navigationBarTitleText: '贝菲特'
   };
 
   onLoad() {

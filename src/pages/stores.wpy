@@ -58,9 +58,7 @@
 
   export default class User extends wepy.page {
     config = {
-      navigationBarTitleText: '所有门店',
-      navigationBarTextStyle: 'light',
-      navigationBarBackgroundColor: '#fc880f'
+      navigationBarTitleText: '所有门店'
     };
     data = {
       hasUserInfo: false,

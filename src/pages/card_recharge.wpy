@@ -19,8 +19,7 @@ import wepy from 'wepy';
 
 export default class Recharge extends wepy.page {
   config = {
-    navigationBarTitleText: '充值',
-    navigationBarTextStyle: 'black'
+    navigationBarTitleText: '充值'
   };
 
   data = {

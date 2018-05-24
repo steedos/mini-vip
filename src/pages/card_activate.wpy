@@ -133,8 +133,7 @@
 
   export default class cardActivate extends wepy.page {
     config = {
-      navigationBarTitleText: '激活会员卡',
-      navigationBarTextStyle: 'black'
+      navigationBarTitleText: '激活会员卡'
     };
 
     onLoad(e) {

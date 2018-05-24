@@ -42,8 +42,7 @@ const util = require('../utils/util.js');
 
 export default class Billing extends wepy.page {
   config = {
-    navigationBarTitleText: '消费记录',
-    navigationBarTextStyle: 'black'
+    navigationBarTitleText: '消费记录'
   };
   components = {};
   onLoad(e) {

@@ -27,8 +27,7 @@ page {
 
   export default class PostList extends wepy.page {
     config = {
-      navigationBarTitleText: '发现优惠',
-      navigationBarTextStyle: 'black'
+      navigationBarTitleText: '发现优惠'
     };
 
     components = {

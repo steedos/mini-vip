@@ -93,8 +93,7 @@ import vipCard from '../components/vipCard';
 
 export default class store extends wepy.page {
   config = {
-    navigationBarTitleText: 'WeChat',
-    navigationBarTextStyle: 'black'
+    navigationBarTitleText: 'WeChat'
   };
 
   onLoad(e) {

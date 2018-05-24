@@ -127,8 +127,7 @@ import { serverAPI } from '@/server';
 
 export default class Card extends wepy.page {
   config = {
-    navigationBarTitleText: '会员卡',
-    navigationBarTextStyle: 'black'
+    navigationBarTitleText: '会员卡'
   };
 
   getCardInfo(card_id) {

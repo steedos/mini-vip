@@ -82,8 +82,7 @@ import { serverAPI } from '@/server';
 
 export default class User extends wepy.page {
   config = {
-    navigationBarTitleText: '服务台',
-    navigationBarTextStyle: 'black'
+    navigationBarTitleText: '服务台'
   };
 
   methods = {
