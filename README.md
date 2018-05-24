@@ -86,7 +86,8 @@ app.onHide 事件中，app.globalData 写入 localStorage.globalData
 
 ### ODATA接口
 $.parent 中提供以下接口，如果接口失败，统一显示错误提示，并返回-1。 如果接口成功，返回结果。
-- 数据查询 query(object_name, query_options)
+- 查询列表 query(object_name, query_options)
+- 数据获取 get(object_name, _id)
 - 数据新增 insert(object_name, data)
 - 数据修改 update(object_name, _id, data)
 - 数据修改 delete(object_name, _id)
