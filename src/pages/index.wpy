@@ -23,12 +23,12 @@
 .weui-cells__title__mine{
   font-weight: 200;
   color: #888;
-  font-size: 14pt;
+  font-size: 14px;
   margin-bottom:8px!important;
 }
 
 .weui-cell_access_card{
-  font-size: 17pt;
+  font-size: 17px;
   color: #000;
 }
 .card-name{
@@ -51,7 +51,7 @@
 .btn-my-account, .btn-my-coupons{
   display: inline-block;
   vertical-align: middle;
-  font-size: 17pt;
+  font-size: 17px;
 }
 
 .btn-coupons{
