@@ -5,7 +5,6 @@
   }
 }
 </style>
-
 <template>
   <view class="page-me-profile">
     <view class="page__bd">

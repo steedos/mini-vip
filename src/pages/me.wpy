@@ -1,14 +1,16 @@
 <style lang="less">
 .page-me {
-	.page__bd {
+	.page__hd {
 		margin-top: 20px;
 	}
 }
+.page__bd {
+		margin-top: 20px;
+	}
 </style>
-
 <template>
 	<view class="page-me">
-		<view class="weui-cells weui-cells_after-title page__bd">
+		<view class="weui-cells weui-cells_after-title page__hd">
 			<view class="weui-panel__bd">
 				<navigator url="me_profile" class="weui-media-box weui-media-box_appmsg" hover-class="weui-cell_active">
 					<view class="weui-media-box__hd weui-media-box__hd_in-appmsg" style="width: 50px; height: 50px; line-height: 50px;">
@@ -22,7 +24,6 @@
 				</navigator>
 			</view>
 		</view>
-
 		<view class="page__bd">
 			<view class="weui-cells weui-cells_after-title">
 				<navigator url="" class="weui-cell weui-cell_access">
@@ -39,10 +40,9 @@
 				</navigator>
 			</view>
 		</view>
-
 		<view class="page__bd">
 			<view class="weui-cells weui-cells_after-title">
-				<navigator url="card?_id={{card._id}}" class="weui-cell weui-cell_access">
+				<navigator url="" class="weui-cell weui-cell_access">
 						<view class="weui-cell__bd">
 							<view>我要开店</view>
 						</view>

@@ -240,6 +240,7 @@ export default class Card extends wepy.page {
     userInfo(e) {
       if (e.detail.rawData) {
         req.loginServer(serverAPI.LOGIN, e.detail);
+        this.$parent.globalData.userInfo = e.detail.userInfo;
         this.isAuthorize = true;
         this.$apply();
         wx.navigateTo({

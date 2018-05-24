@@ -43,7 +43,6 @@ export default class VIP extends wepy.app {
       'pages/coupons',
       'pages/store',
       'pages/card',
-      'pages/card_about',
       'pages/card_activate',
       'pages/card_billing',
       'pages/card_recharge',
