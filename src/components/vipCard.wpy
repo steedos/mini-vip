@@ -1,12 +1,13 @@
 <style lang="less">
 .card {
-  background: #F5A44D;
+  background-color: #7f7f7f;
+  background-repeat: repeat-x;
+  background-image: linear-gradient(135deg, #555555, #898989 50%, #555555);
   height: 360rpx;
   margin: 40rpx;
   border-radius: 20rpx;
   display: flex;
   flex-direction: column;
-  box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.3), 1px 1px 1px 1px rgba(0, 0, 0, 0.24);
 
   .info {
     display: flex;
@@ -39,6 +40,7 @@
     .card-name {
       margin-top: 2px;
       font-weight: bold;
+      text-shadow: 0 2px 1px rgba(0, 0, 0, 0.2);
     }
   }
 
@@ -47,6 +49,7 @@
     margin-bottom: 15px;
     font-weight: bold;
     color: #fff;
+    text-shadow: 0 2px 1px rgba(0, 0, 0, 0.2);
   }
 }
 </style>
