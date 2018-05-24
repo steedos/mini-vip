@@ -39,7 +39,7 @@
 - 在页面的onLoad函数中调用 $.parent.vipInitialize(options) 进行初始化。
 - 通过 $.parent.globalData 获取相关信息。
 
-vipInitialize(options) 执行以下操作
+login(options) 执行以下操作
 - 用户验证
   - wx.login() 获取 code
   - 调用接口 /mini/vip/sso?code=xxx&old_user_id=yyy&old_auth_token=yyy
@@ -50,12 +50,14 @@ vipInitialize(options) 执行以下操作
      - 如果auth_token失效，生成新的auth_token并返回 open_id, user_id, auth_token
   - 如果不是同一个人，则以open_id找到的用户为准，生成新的auth_token并返回 open_id, user_id, auth_token
   - 前台获取返回结果并写入 globalData.user 对象
-- space 初始化
-  - 如果options传入space_id参数，并且与本地space._id不同，调用odata接口获取space信息并写入globalData.space
-- store 初始化
-  - 如果options传入store_id参数，并且与本地store._id不同，调用odata接口获取space信息并写入globalData.store
-- card 初始化
-  - 如果options传入card_id参数，并且与本地不同，调用odata接口获取space信息并写入globalData.card
+
+### 读取记录并缓存
+在页面中可以调用方法 $.parent.cache(object_name, _id) 获取对象缓存数据。
+- 先判断 globalData[object_name] 是否存在，如果存在表示有缓存
+- 判断缓存的对象 id 是否相同，如果相同直接返回
+- 如果不同，调用get接口获取数据并保存到 globalData[object_name] 
+- 如果接口调用失败，也保存一个空对象到 globalData[object_name], 避免页面调用时报错
+
 
 ### globalData
 - user 当前用户信息
@@ -79,15 +81,16 @@ vipInitialize(options) 执行以下操作
   - card_no
 
 
+
 ### 数据缓存
 app.onLaunch 事件中，localStorage.globalData 写入 app.globalData
 app.onHide 事件中，app.globalData 写入 localStorage.globalData
 
 
-### ODATA接口
+### API 接口
 $.parent 中提供以下接口，如果接口失败，统一显示错误提示，并返回-1。 如果接口成功，返回结果。
 - 查询列表 query(object_name, query_options)
-- 数据获取 get(object_name, _id)
+- 记录读取 get(object_name, _id)
 - 数据新增 insert(object_name, data)
 - 数据修改 update(object_name, _id, data)
 - 数据修改 delete(object_name, _id)
