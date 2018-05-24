@@ -41,7 +41,7 @@
 vipInitialize(options) 执行以下操作
 - 用户验证
   - wx.login() 获取 code
-  - 调用接口 /vip/auth?code=xxx&old_user_id=yyy&old_auth_token=yyy
+  - 调用接口 /mini/vip/sso?code=xxx&old_user_id=yyy&old_auth_token=yyy
   - 在服务端使用 code 去服务器获取 open_id，session_key
   - 判断 open_id 与 old_user_id 如果是同一个人，并且auth_token有效，直接返回 open_id, user_id, auth_token
   - 如果不是同一个人，自动创建新用户，并返回 open_id, user_id, auth_token
