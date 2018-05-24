@@ -99,25 +99,12 @@ export default class VIP extends wepy.app {
     this.use('promisify')
   }
 
-  onLaunch(options) {
-    const self = this
-
+  async onLaunch(options) {
     req.appId(appId)
     req.baseUrl(baseUrl).interceptor(interceptor.request, interceptor.response)
-    // app启动，判断用户是否已经授权，授权则调用一次loginServer，调用loginServer时会判断session_key是否过期，如过期则重新login，没有的话判断用户是否清理缓存，清理则调用login重新获取header，没有则重新设置一次缓存中的header，不再调用login。
-    wx.getSetting({
-      success: function(res) {
-        if (res.authSetting['scope.userInfo']) {
-          wx.getUserInfo({
-            lang: 'zh_CN',
-            success: res => {
-              self.globalData.userInfo = res.userInfo;
-              req.loginServer(serverAPI.LOGIN, res);
-            }
-          });
-        }
-      }
-    });
+    const globalData = wx.getStorageSync('globalData') || {}
+    this.globalData = globalData
+    await this.login.call(this)
   }
 
   getUserInfo(cb) {
@@ -131,6 +118,45 @@ export default class VIP extends wepy.app {
         cb && cb(res.userInfo)
       }
     })
+  }
+
+  async login(space_id) {
+    const self = this
+    const data = await wepy.login()
+
+    let globalData = wx.getStorageSync('globalData') || {}
+    let old_user_id = ''
+    let old_auth_token = ''
+    let url = `${serverAPI.LOGIN}?code=${data.code}&old_user_id=${old_user_id}&old_auth_token=${old_auth_token}`
+    
+    if (space_id) {
+      url = `${url}&space_id=${space_id}`
+    }
+    
+    if (globalData.user) {
+      old_user_id = globalData.user._id
+      old_auth_token = globalData.user.auth_token
+    }else{
+      globalData.user = {}
+    }
+
+    const res = await req.post(url).catch((err) => {
+      console.log("cache error...");
+      return {}
+    })
+
+    const header = {
+      'X-User-Id': res.user_id,
+      'X-Auth-Token': res.auth_token,
+    }
+
+    globalData.user._id = res.user_id
+    globalData.user.auth_token = res.auth_token
+    globalData.user.open_id = res.open_id
+
+    self.globalData = globalData
+    wx.setStorageSync('globalData', globalData)
+    req.header(header)
   }
 
   async cache(object_name, _id) {
