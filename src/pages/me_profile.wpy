@@ -9,14 +9,30 @@
   <view class="page-me-profile">
     <view class="page__bd">
 			<view class="weui-cells weui-cells_after-title">
-        <repeat for="{{info}}" key="index" index="index" item="item">
+          <navigator url="./edit/text?text=姓名&name=张三" class="weui-cell weui-cell_access">
+            <view class="weui-cell__bd">
+              <view>姓名</view>
+            </view>
+            <view class="weui-cell__ft weui-cell__ft_in-access">张三</view>
+          </navigator>
           <navigator url="" class="weui-cell weui-cell_access">
             <view class="weui-cell__bd">
-              <view>{{item.key}}</view>
+              <view>性别</view>
             </view>
-            <view class="weui-cell__ft weui-cell__ft_in-access">{{item.value}}</view>
+            <view class="weui-cell__ft weui-cell__ft_in-access">男</view>
           </navigator>
-        </repeat>
+          <navigator url="" class="weui-cell weui-cell_access">
+            <view class="weui-cell__bd">
+              <view>生日</view>
+            </view>
+            <view class="weui-cell__ft weui-cell__ft_in-access">1998-01-01</view>
+          </navigator>
+          <navigator url="" class="weui-cell weui-cell_access">
+            <view class="weui-cell__bd">
+              <view>手机</view>
+            </view>
+            <view class="weui-cell__ft weui-cell__ft_in-access">18601110111</view>
+          </navigator>
 			</view>
 		</view>
   </view>
@@ -36,21 +52,21 @@ export default class meProfile extends wepy.page {
 
   onLoad() {}
 
-  data = {
-    info: [{
-      key: '姓名',
-      value: '张三'
-    }, {
-      key: '性别',
-      value: '男'
-    }, {
-      key: '生日',
-      value: '1998-01-01'
-    }, {
-      key: '手机',
-      value: '18601110111'
-    }]
-  }
+  // data = {
+  //   info: [{
+  //     key: '姓名',
+  //     value: '张三'
+  //   }, {
+  //     key: '性别',
+  //     value: '男'
+  //   }, {
+  //     key: '生日',
+  //     value: '1998-01-01'
+  //   }, {
+  //     key: '手机',
+  //     value: '18601110111'
+  //   }]
+  // }
 
   methods = {};
 }

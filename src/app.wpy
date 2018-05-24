@@ -47,7 +47,8 @@ export default class VIP extends wepy.app {
       'pages/card_billing',
       'pages/card_recharge',
       'pages/stores',
-      'pages/wifi'
+      'pages/wifi',
+      'pages/edit/text'
     ],
     tabBar: {
       color: '#666',
