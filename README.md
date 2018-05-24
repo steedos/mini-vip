@@ -52,13 +52,13 @@
 
 
 ### 读取记录并缓存
-在页面中可以调用方法 $.parent.cache(object_name, _id) 获取对象缓存数据。
+在页面中可以调用方法 this.$parent.cache(object_name, _id) 获取对象缓存数据。
 - 先判断 globalData[object_name] 存在且不为空对象，表示有缓存
 - 如果不传入 id，直接返回本地数据
 - 判断缓存的对象 id 是否相同，如果相同直接返回
 - 如果不同，调用get接口获取数据并保存到 globalData[object_name] 
 - 如果接口调用失败，也保存一个空对象到 globalData[object_name], 避免页面调用时报错
-对于不需要缓存的数据，请使用标准的 $.parent.get 函数
+对于不需要缓存的数据，请使用标准的 this.$parent.get 函数
 
 ### globalData
 - user 当前用户信息
@@ -85,7 +85,7 @@
 
 
 ### API 接口
-$.parent 中提供以下接口，如果接口失败，统一显示错误提示，并返回-1。 如果接口成功，返回结果。
+this.$parent 中提供以下接口，如果接口失败，统一显示错误提示，并返回-1。 如果接口成功，返回结果。
 - 查询列表 query(object_name, query_options)
 - 记录读取 get(object_name, _id)
 - 数据新增 insert(object_name, data)
