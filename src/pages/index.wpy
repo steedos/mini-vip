@@ -1,12 +1,12 @@
 <style lang="less">
-.header {
+.page__hd {
   margin-bottom: 20px;
-  .background {
+  .page__hd_bg {
     height: 104px;
     overflow: hidden;
     background-color:#fc880f;
   }
-    .page__bd_spacing{
+    .page__hd_spacing{
       text-align: center;
       color:white;
       margin-top: 20px;
@@ -20,7 +20,7 @@
         font-size: 28px;
       }
 }
-.weui-cells__title__mine{
+.page__bd_mycard{
   font-weight: 200;
   color: #888;
   font-size: 14px;
@@ -74,20 +74,20 @@
 
 <template>
   <view class="page">
-		<view class="header">
-      <view class="background">
-          <view class="page__bd page__bd_spacing">
-              <view class="weui-flex weui-flex-title">
-                  <view class="weui-flex__item"><view class="placeholder">会员卡</view></view>
-                  <view class="weui-flex__item"><view class="placeholder">余额</view></view>
-                  <view class="weui-flex__item"><view class="placeholder">优惠券</view></view>
-              </view>
-              <view class="weui-flex weui-flex-content">
-                  <view class="weui-flex__item"><view class="placeholder">{{card_count}}</view></view>
-                  <view class="weui-flex__item"><view class="placeholder">￥{{allBalance}}</view></view>
-                  <view class="weui-flex__item"><view class="placeholder">18</view></view>
-              </view>
-            </view>
+		<view class="page__hd">
+      <view class="page__hd_bg">
+        <view class="page__hd_spacing">
+          <view class="weui-flex weui-flex-title">
+            <view class="weui-flex__item"><view class="placeholder">会员卡</view></view>
+            <view class="weui-flex__item"><view class="placeholder">余额</view></view>
+            <view class="weui-flex__item"><view class="placeholder">优惠券</view></view>
+          </view>
+          <view class="weui-flex weui-flex-content">
+            <view class="weui-flex__item"><view class="placeholder">{{card_count}}</view></view>
+            <view class="weui-flex__item"><view class="placeholder">￥{{allBalance}}</view></view>
+            <view class="weui-flex__item"><view class="placeholder">18</view></view>
+          </view>
+        </view>
       </view>
     </view>
 
@@ -96,15 +96,14 @@
         <view class="weui-cells weui-cells_after-title">
           <button class="weui-cell weui-cell_access get-user-info" plain="true" open-type="getUserInfo" @getuserinfo="getUserInfo">
             <view class="weui-cell__bd">使用微信账号登录</view>
-            <view class="weui-cell__ft weui-cell__ft_in-access" style="font-size: 0">
-            </view>
+            <view class="weui-cell__ft weui-cell__ft_in-access" style="font-size: 0"></view>
           </button>
         </view>
       </view>
     </block>
     <block wx:else>
       <view class="page__bd">
-        <view class="weui-cells__title weui-cells__title__mine">我的会员卡</view>
+        <view class="weui-cells__title page__bd_mycard">我的会员卡</view>
         <view class="weui-cells weui-cells_after-title">
           <repeat for="{{cards}}" key="index" index="index" item="card">
             <navigator url="card?card={{card._id}}&space={{card.space}}" open-type="reLaunch" class="weui-cell weui-cell_access weui-cell_access_card">
@@ -116,12 +115,12 @@
           </repeat>
 
           <view wx:if="{{card_count > 10}}" class="weui-cells weui-cells_after-title">
-          <navigator url="card?_id={{card._id}}" class="weui-cell weui-cell_access">
-            <view class="weui-cell__bd">
-              <text  class="btn-view-all">查看全部</text>
-            </view>
-            <view class="weui-cell__ft weui-cell__ft_in-access">{{card_count}}</view>
-          </navigator>
+            <navigator url="card?_id={{card._id}}" class="weui-cell weui-cell_access">
+              <view class="weui-cell__bd">
+                <text  class="btn-view-all">查看全部</text>
+              </view>
+              <view class="weui-cell__ft weui-cell__ft_in-access">{{card_count}}</view>
+            </navigator>
           </view>
         </view>
       </view>
@@ -141,10 +140,10 @@
     <view class="weui-panel btn-account">
       <view class="weui-cells weui-cells_after-title">
         <navigator url="me" class="weui-cell weui-cell_access">
-            <view class="weui-cell__bd">
-              <view class="btn-my-account">我的账户</view>
-            </view>
-            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+          <view class="weui-cell__bd">
+            <view class="btn-my-account">我的账户</view>
+          </view>
+          <view class="weui-cell__ft weui-cell__ft_in-access"></view>
         </navigator>
       </view>
     </view>
