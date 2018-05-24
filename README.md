@@ -33,11 +33,10 @@
 - knowledge 会员指南显示
 
 
-### 页面初始化
+### 页面登录
 
-用户有可能扫码打开系统的任何一个页面，因此需要做统一的初始化。
-- 在页面的onLoad函数中调用 $.parent.vipInitialize(options) 进行初始化。
-- 通过 $.parent.globalData 获取相关信息。
+用户有可能扫码打开系统的任何一个页面，因此需要做统一的登录。
+- 在页面的onLoad函数中调用 $.parent.login(options) 进行登录。
 
 login(options) 执行以下操作
 - 用户验证
