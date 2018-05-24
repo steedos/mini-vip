@@ -129,7 +129,7 @@
 
     <view class="weui-panel btn-coupons">
       <view class="weui-cells weui-cells_after-title">
-        <navigator url="card?card={{card._id}}&space={{card.space}}" open-type="reLaunch" class="weui-cell weui-cell_access weui-cell_access_card">
+        <navigator url="card?space={{demoSpaceId}}&store={{demoStoreId}}" open-type="reLaunch" class="weui-cell weui-cell_access weui-cell_access_card">
           <view class="weui-cell__bd">
             <view class="card-name">华炎</view>
           </view>
@@ -190,7 +190,7 @@
         } else {
           card_count = 0;
         }
-        
+
         const allBalance = res.allBalance || 0;
 
         this.setData({
