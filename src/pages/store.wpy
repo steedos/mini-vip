@@ -1,17 +1,4 @@
 <style lang="less">
-.header {
-  width: 100%;
-  height: 230px;
-
-  .swiper {
-    height: 100%;
-
-    .slide-image {
-      width: 100%;
-    }
-  }
-}
-
 .header-des {
 	padding: 10px 15px;
 	font-weight: bold;
@@ -27,16 +14,6 @@
 </style>
 <template>
 	<view class="">
-		<view class="header">
-			<swiper class="swiper" indicator-dots="true" autoplay="true" interval="5000" duration="500">
-				<repeat for="{{imgUrls}}" key="index" index="index" item="item">
-					<swiper-item>
-						<image src="{{item}}" class="slide-image"/>
-					</swiper-item>
-				</repeat>
-			</swiper>
-		</view>
-
 		<view class="kind-list__item">
 			<view class="weui-flex kind-list__item-hd header-des">
 				<view class="weui-flex__item">{{store.name}}</view>
@@ -52,15 +29,19 @@
 					</view>
 					<view class="weui-cell__ft weui-cell__ft_in-access">{{store.address}}</view>
 				</view>
-				<navigator url="store" class="weui-cell weui-cell_access">
+			</view>
+		</view>
+    <view class="page__bd">
+			<view class="weui-cells weui-cells_after-title">
+				<view class="weui-cell weui-cell_access">
 					<view class="weui-cell__bd">
 						<view style="display: inline-block; vertical-align: middle">营业时间</view>
 					</view>
-					<view class="weui-cell__ft weui-cell__ft_in-access">{{store.business_hours}}</view>
-				</navigator>
+					<view class="weui-cell__ft">{{store.business_hours}}</view>
+				</view>
 			</view>
 		</view>
-
+    
 		<view class="page__bd" style="margin-top: 36rpx">
 			<view class="weui-cells weui-cells_after-title">
 				<navigator url="" class="weui-cell weui-cell_access">
@@ -98,7 +79,6 @@ export default class store extends wepy.page {
 
   onLoad(e) {
     const self = this;
-    console.log(e);
 		this.getStoreInfo(e.store);
 	}
 
@@ -107,16 +87,10 @@ export default class store extends wepy.page {
   };
 
   data = {
-    imgUrls: [
-      '../images/mc-cover.jpg',
-      '../images/mcdonalds.jpg',
-      '../images/post-cover.png'
-		],
 		store:[]
   };
 	getStoreInfo(store_id){
     const url = '/api/odata/v4/' + wx.getStorageSync('X-Space-Id') + '/vip_store/'+ store_id;
-    console.log("----",url)
     const data = {
       // $filter: 'user eq ' + wx.getStorageSync('X-Space-Id'),
       $expand: 'owner($select=name)',
@@ -124,10 +98,9 @@ export default class store extends wepy.page {
       $select: 'address,name,description,business_hours'
     };
     req.get(url, data).then(res => {
-			this.store = store;
 			const store = res;
       this.store = store;
-      console.log(this.store);
+      this.$apply();
 		  wx.setNavigationBarTitle({title:this.store.name})
     });
   }
