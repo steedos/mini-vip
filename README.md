@@ -48,11 +48,12 @@
 
 
 ### 页面初始化 onLoad
+  - 定义为异步： async onLoad()
   - 如果 query 传入 space_id, store_id，则调用cache函数初始化相关对象。
 
 
 ### 读取记录并缓存
-在页面中可以调用方法 this.$parent.cache(object_name, _id) 获取对象缓存数据。
+在页面中可以调用方法 await this.$parent.cache(object_name, _id) 获取对象缓存数据。
 - 先判断 globalData[object_name] 存在且不为空对象，表示有缓存
 - 如果不传入 id，直接返回本地数据
 - 判断缓存的对象 id 是否相同，如果相同直接返回
@@ -86,12 +87,12 @@
 
 ### API 接口
 this.$parent 中提供以下接口，如果接口失败，统一显示错误提示，并返回-1。 如果接口成功，返回结果。
-- 查询列表 query(object_name, query_options)
-- 记录读取 get(object_name, _id)
-- 数据新增 insert(object_name, data)
-- 数据修改 update(object_name, _id, data)
-- 数据修改 delete(object_name, _id)
-- 上传照片 uploadImages(file_name, file_path)，返回 cfs_images 对象
+- 查询列表 await query(object_name, query_options)
+- 记录读取 await get(object_name, _id)
+- 数据新增 await insert(object_name, data)
+- 数据修改 await update(object_name, _id, data)
+- 数据修改 await delete(object_name, _id)
+- 上传照片 await uploadImages(file_name, file_path)，返回 cfs_images 对象
 
 界面反馈
 - 调用接口时，显示导航条加载动画：wx.showNavigationBarLoading()
