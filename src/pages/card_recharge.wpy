@@ -16,6 +16,7 @@
 </template>
 <script>
 import wepy from 'wepy';
+import req from '@/network';
 
 export default class Recharge extends wepy.page {
   config = {
@@ -42,14 +43,27 @@ export default class Recharge extends wepy.page {
       }
     },
     doRecharge() {
-      wx.showModal({
-        content: this.rechargeValue,
-        showCancel: false,
-        success: function(res) {
-          if (res.confirm) {
-            console.log('用户点击确定');
+      var data = {
+        // totalFee: parseInt(this.rechargeValue * 100)
+        totalFee: 1
+      };
+
+      req.post('/api/steedos/weixin/card/recharge', data).then(res => {
+        console.log('res: ', res);
+
+        wx.requestPayment({
+          timeStamp: res.timeStamp,
+          nonceStr: res.nonceStr,
+          package: res.package,
+          signType: 'MD5',
+          paySign: res.paySign,
+          success: function(res) {
+            console.log('success: ', res);
+          },
+          fail: function(res) {
+            console.log('fail: ', res);
           }
-        }
+        });
       });
     }
   };
