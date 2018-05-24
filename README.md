@@ -32,26 +32,45 @@
 - knowledges 会员指南
 - knowledge 会员指南显示
 
-### 本地储存的数据
-- X-User-Id
-- X-Auth-Token
-- X-Space-Id 当前（或最近一次）访问的商户ID
-- X-Store-Id 当前（或最近一次）访问的门店ID
-- {spaceId} 记录工作区信息
-    - name 工作区名称
-- user-{spaceId} 缓存用户信息
-  - name 用户在当前工作区的名称
-  - modified 记录修改信息
-- card-{spaceId} 缓存卡信息
-  - no 卡号
-- store-{storeId} 缓存门店信息
-  - name 门店名称
-   
-### 标准函数
-- vip.getUserId()
-- vip.getAuthToken()
-- vip.getSpaceId()
-- vip.getSpace()
-- vip.getStoreId()
-- vip.getStore()
-- vip.getCard()
+### 页面初始化
+
+用户有可能扫码打开系统的任何一个页面，因此需要做统一的初始化。
+- 在页面的onLoad函数中调用 $.parent.vipInitialize(options) 进行初始化。
+- 通过 $.parent.globalData 获取相关信息。
+
+vipInitialize(options) 执行以下操作
+- 用户验证
+  - wx.login() 获取 code
+  - 调用接口 /vip/auth?code=xxx&old_user_id=yyy&old_auth_token=yyy
+  - 在服务端使用 code 去服务器获取 open_id，session_key
+  - 判断 open_id 与 old_user_id 如果是同一个人，并且auth_token有效，直接返回 open_id, user_id, auth_token
+  - 如果不是同一个人，自动创建新用户，并返回 open_id, user_id, auth_token
+  - 前台获取返回结果并写入 globalData.user 对象
+- space 初始化
+  - 如果options传入space_id参数，调用odata接口获取space信息并写入globalData.space
+- store 初始化
+  - 如果options传入store_id参数，调用odata接口获取space信息并写入globalData.store
+- card 初始化
+  - 如果options传入card_id参数，调用odata接口获取space信息并写入globalData.card
+
+### globalData
+- auth 当前认证信息
+- user 当前用户信息
+  - _id
+  - auth_token
+  - open_id
+  - union_id
+  - session_key
+  - name
+  - mobile
+  - sex
+- space 当前访问的商户
+  - _id
+  - name
+- store 当前访问的门店
+  - _id
+  - name
+- card 当前访问的会员卡
+  - _id
+  - name
+  - card_no
