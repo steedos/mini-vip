@@ -32,6 +32,7 @@
 - knowledges 会员指南
 - knowledge 会员指南显示
 
+
 ### 页面初始化
 
 用户有可能扫码打开系统的任何一个页面，因此需要做统一的初始化。
@@ -49,11 +50,11 @@ vipInitialize(options) 执行以下操作
   - 如果不是同一个人，自动创建新用户，并返回 open_id, user_id, auth_token
   - 前台获取返回结果并写入 globalData.user 对象
 - space 初始化
-  - 如果options传入space_id参数，调用odata接口获取space信息并写入globalData.space
+  - 如果options传入space_id参数，并且与本地space._id不同，调用odata接口获取space信息并写入globalData.space
 - store 初始化
-  - 如果options传入store_id参数，调用odata接口获取space信息并写入globalData.store
+  - 如果options传入store_id参数，并且与本地store._id不同，调用odata接口获取space信息并写入globalData.store
 - card 初始化
-  - 如果options传入card_id参数，调用odata接口获取space信息并写入globalData.card
+  - 如果options传入card_id参数，并且与本地不同，调用odata接口获取space信息并写入globalData.card
 
 ### globalData
 - auth 当前认证信息
@@ -76,3 +77,16 @@ vipInitialize(options) 执行以下操作
   - _id
   - name
   - card_no
+
+
+### 数据缓存
+app.onShow 事件中，localStorage.globalData 写入 app.globalData
+app.onHide 事件中，app.globalData 写入 localStorage.globalData
+
+
+### ODATA接口
+app中提供以下接口，如果接口失败，统一显示错误提示。如果接口成功，返回结果。
+- 数据查询 odataQuery(object_name, data)
+- 数据新增 odataInsert(object_name, data)
+- 数据修改 odataUpdate(object_name, _id, data)
+- 数据修改 odataDelete(object_name, _id)
