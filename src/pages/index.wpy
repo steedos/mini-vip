@@ -9,79 +9,35 @@
     .page__bd_spacing{
       text-align: center;
       color:white;
-      margin-top: 50rpx;
+      margin-top: 20px;
     }
       .weui-flex-title{
         font-weight: 200;
-        font-size: 12px;
+        font-size: 14px;
       }
       .weui-flex-content{
         font-weight: 200;
         font-size: 28px;
       }
-  .avatar {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    overflow: hidden;
-    position: relative;
-    margin: -50px auto 0 auto;
-    border: 5px solid white;
-    .image {
-      width: 100%;
-      height: 100%;
-    }
-  }
-  .info {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    .name {
-      font-weight: bold;
-    }
-    .location {
-      color: rgb(149, 149, 149);
-    }
-  }
 }
 .weui-cells__title__mine{
   font-weight: 200;
-  color: #999999;
-  font-size: 13.5px;
+  color: #888;
+  font-size: 14pt;
+  margin-bottom:8px!important;
 }
 
 .weui-cell_access_card{
-  font-size: 17px;
+  font-size: 17pt;
+  color: #000;
 }
 .card-name{
   display: inline-block;
   vertical-align: middle;
 }
 
-.user-avatar {
-  width: 50px;
-  height: 50px;
-}
-
-.user-city {
-  margin-right: 50rpx;
-}
-
-.user-info:before {
-  display: none;
-}
-
-.user-info:after {
-  border-bottom: 1rpx solid #d9d9d9;
-}
-
 .page__bd .weui-panel {
-  margin-top: 50rpx;
-}
-
-.userinfo-btn-view {
-  margin-top: 50rpx;
+  margin-top: 20px;
 }
 
 .weui-panel {
@@ -95,16 +51,20 @@
 .btn-my-account, .btn-my-coupons{
   display: inline-block;
   vertical-align: middle;
-  font-size: 17px;
+  font-size: 17pt;
 }
 
 .btn-coupons{
-  margin-top: 50rpx;
+  margin-top: 20px;
+}
+
+.btn-coupons-space{
+  color:#888!important;
 }
 
 .btn-account{
-  margin-top: 50rpx;
-  margin-bottom: 50px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 .btn-view-all{
   vertical-align: middle;
@@ -173,7 +133,7 @@
           <view class="weui-cell__bd">
             <view class="card-name">华炎</view>
           </view>
-          <view class="weui-cell__ft weui-cell__ft_in-access">演示工作区</view>
+          <view class="weui-cell__ft weui-cell__ft_in-access btn-coupons-space">演示工作区</view>
         </navigator>
       </view>
     </view>
