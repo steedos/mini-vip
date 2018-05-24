@@ -44,10 +44,11 @@ vipInitialize(options) 执行以下操作
   - wx.login() 获取 code
   - 调用接口 /mini/vip/sso?code=xxx&old_user_id=yyy&old_auth_token=yyy
   - 在服务端使用 code 去服务器获取 open_id，session_key
+  - 根据open_id + appId 获取用户，如果获取不到，则新增用户，并生成新auth_token并返回 open_id, user_id, auth_token
   - 判断 open_id 与 old_user_id 如果是同一个人
-    - 如果auth_token有效，直接返回 open_id, user_id, auth_token
-    - 如果auth_token失效，生成新的auth_token并返回 open_id, user_id, auth_token
-  - 如果不是同一个人，自动创建新用户，并返回 open_id, user_id, auth_token
+     - 如果auth_token有效，直接返回 open_id, user_id, auth_token
+     - 如果auth_token失效，生成新的auth_token并返回 open_id, user_id, auth_token
+  - 如果不是同一个人，则以open_id找到的用户为准，生成新的auth_token并返回 open_id, user_id, auth_token  @庄建国 @殷亮辉 @朱思嘉
   - 前台获取返回结果并写入 globalData.user 对象
 - space 初始化
   - 如果options传入space_id参数，并且与本地space._id不同，调用odata接口获取space信息并写入globalData.space
