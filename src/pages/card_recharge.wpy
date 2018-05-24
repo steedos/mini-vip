@@ -10,7 +10,7 @@
             </view>
         </view>
         <view class="weui-btn-area">
-            <button class="weui-btn" type="primary" @tap="doRecharge" disabled="{{!canDoRecharge}}">确定</button>
+            <button class="weui-btn" type="primary" @tap="doRecharge" disabled="{{!canDoRecharge}}"><view wx:if={{loading}} class="weui-loading"></view>确定</button>
         </view>
     </view>
 </template>
@@ -18,14 +18,15 @@
 import wepy from 'wepy';
 import req from '@/network';
 
-export default class Recharge extends wepy.page {
+export default class cardRecharge extends wepy.page {
   config = {
     navigationBarTitleText: '充值'
   };
 
   data = {
     rechargeValue: '',
-    canDoRecharge: false
+    canDoRecharge: false,
+    loading: false
   };
 
   methods = {
@@ -47,23 +48,48 @@ export default class Recharge extends wepy.page {
         // totalFee: parseInt(this.rechargeValue * 100)
         totalFee: 1
       };
-
+      this.loading = true;
+      this.canDoRecharge = false;
+      this.$apply();
+      var that = this;
       req.post('/api/steedos/weixin/card/recharge', data).then(res => {
         console.log('res: ', res);
 
-        wx.requestPayment({
-          timeStamp: res.timeStamp,
-          nonceStr: res.nonceStr,
-          package: res.package,
-          signType: 'MD5',
-          paySign: res.paySign,
-          success: function(res) {
-            console.log('success: ', res);
-          },
-          fail: function(res) {
-            console.log('fail: ', res);
-          }
+        if (res.paySign) {
+          wx.requestPayment({
+            timeStamp: res.timeStamp,
+            nonceStr: res.nonceStr,
+            package: res.package,
+            signType: 'MD5',
+            paySign: res.paySign,
+            success: function(res) {
+              console.log('success: ', res);
+            },
+            fail: function(res) {
+              console.log('fail: ', res);
+            },
+            complete: function(res) {
+              console.log('complete: ', res);
+              that.loading = false;
+              that.canDoRecharge = true;
+              that.$apply();
+            }
+          });
+        } else {
+          console.error(res);
+          that.loading = false;
+          that.canDoRecharge = true;
+          that.$apply();
+          wx.showModal({
+            content: '请求超时，请检查网络状况',
+            showCancel: false,
+            success: function (res) {
+                if (res.confirm) {
+                    console.log('用户点击确定')
+                }
+            }
         });
+        }
       });
     }
   };
