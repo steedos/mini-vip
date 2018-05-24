@@ -141,9 +141,10 @@ export default class VIP extends wepy.app {
     if(!spaceId){
       return null;
     }
-    const url = `/api/odata/v4/${spaceId}/${object_name}/${_id}/`;
+    const url = `/api/odata/v4/${spaceId}2/${object_name}/${_id}/`;
     const result = await req.get(url).catch((err)=>{
       console.log("cache error...");
+      throw new Error(err); 
       return {}
     });
     gd[object_name] = result;
