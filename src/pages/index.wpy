@@ -85,7 +85,7 @@
           <view class="weui-flex weui-flex-content">
             <view class="weui-flex__item"><view class="placeholder">{{card_count}}</view></view>
             <view class="weui-flex__item"><view class="placeholder">￥{{allBalance}}</view></view>
-            <view class="weui-flex__item"><view class="placeholder">18</view></view>
+            <view class="weui-flex__item"><view class="placeholder">0</view></view>
           </view>
         </view>
       </view>
@@ -158,7 +158,7 @@
 
   export default class User extends wepy.page {
     config = {
-      navigationBarTitleText: '卡券助手',
+      navigationBarTitleText: '我的会员卡',
       navigationBarTextStyle: 'light',
       navigationBarBackgroundColor: '#fc880f'
     };
@@ -177,6 +177,8 @@
       order: {
         count: 76
       },
+      card_count: 0,
+      allBalance: 0,
       demoSpaceId: demoSpaceId,
       demoStoreId: demoStoreId
     };
