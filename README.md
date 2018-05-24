@@ -48,7 +48,7 @@ vipInitialize(options) 执行以下操作
   - 判断 open_id 与 old_user_id 如果是同一个人
      - 如果auth_token有效，直接返回 open_id, user_id, auth_token
      - 如果auth_token失效，生成新的auth_token并返回 open_id, user_id, auth_token
-  - 如果不是同一个人，则以open_id找到的用户为准，生成新的auth_token并返回 open_id, user_id, auth_token  @庄建国 @殷亮辉 @朱思嘉
+  - 如果不是同一个人，则以open_id找到的用户为准，生成新的auth_token并返回 open_id, user_id, auth_token
   - 前台获取返回结果并写入 globalData.user 对象
 - space 初始化
   - 如果options传入space_id参数，并且与本地space._id不同，调用odata接口获取space信息并写入globalData.space
@@ -58,7 +58,6 @@ vipInitialize(options) 执行以下操作
   - 如果options传入card_id参数，并且与本地不同，调用odata接口获取space信息并写入globalData.card
 
 ### globalData
-- auth 当前认证信息
 - user 当前用户信息
   - _id
   - auth_token
@@ -81,16 +80,16 @@ vipInitialize(options) 执行以下操作
 
 
 ### 数据缓存
-app.onShow 事件中，localStorage.globalData 写入 app.globalData
+app.onLaunch 事件中，localStorage.globalData 写入 app.globalData
 app.onHide 事件中，app.globalData 写入 localStorage.globalData
 
 
 ### ODATA接口
 $.parent 中提供以下接口，如果接口失败，统一显示错误提示，并返回-1。 如果接口成功，返回结果。
-- 数据查询 odataQuery(object_name, data)
-- 数据新增 odataInsert(object_name, data)
-- 数据修改 odataUpdate(object_name, _id, data)
-- 数据修改 odataDelete(object_name, _id)
+- 数据查询 query(object_name, query_options)
+- 数据新增 insert(object_name, data)
+- 数据修改 update(object_name, _id, data)
+- 数据修改 delete(object_name, _id)
 - 上传照片 uploadImages(file_name, file_path)，返回 cfs_images 对象
 
 界面反馈
