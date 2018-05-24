@@ -131,17 +131,24 @@ export default class VIP extends wepy.app {
     })
   }
 
-  getSpaceInfo(space) {
-    if (this.globalData.space == space && this.globalData.spaceInfo)
-      return this.globalData.spaceInfo
-    else {
-      // 此时应该从odata接口获取space信息并写入spaceInfo
-      return {
-        name: "App中的工作区"
+  async vipInitialize(options) {
+    var spaceId = options.space_id;
+    if(spaceId){
+      if (this.globalData.space == space && this.globalData.spaceInfo){
+        return;
       }
+      const url = '/api/odata/v4/' + spaceId + '/spaces/' + spaceId;
+      const data = {
+        $select: 'name,owner'
+      };
+      var space = await req.get(url, data).catch((err)=>{
+        console.log("get spaceInfo error");
+      });
+      this.space = spaceId;
+      this.spaceInfo = {
+        name: space.name
+      };
     }
   }
-
-
 }
 </script>
