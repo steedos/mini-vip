@@ -132,24 +132,22 @@ export default class VIP extends wepy.app {
     })
   }
 
-  async vipInitialize(options) {
-    var spaceId = options.space_id;
-    if(spaceId){
-      if (this.globalData.space == space && this.globalData.spaceInfo){
-        return;
-      }
-      const url = '/api/odata/v4/' + spaceId + '/spaces/' + spaceId;
-      const data = {
-        $select: 'name,owner'
-      };
-      var space = await req.get(url, data).catch((err)=>{
-        console.log("get spaceInfo error");
-      });
-      this.space = spaceId;
-      this.spaceInfo = {
-        name: space.name
-      };
+  async cache(object_name, _id) {
+    var gd = this.globalData;
+    if(gd[object_name] && gd[object_name]._id == _id){
+      return gd[object_name];
     }
+    const spaceId = wx.getStorageSync('X-Space-Id');
+    if(!spaceId){
+      return null;
+    }
+    const url = `/api/odata/v4/${spaceId}/${object_name}/${_id}/`;
+    const result = await req.get(url).catch((err)=>{
+      console.log("cache error...");
+      return {}
+    });
+    gd[object_name] = result;
+    return result;
   }
 }
 </script>
