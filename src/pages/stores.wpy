@@ -43,7 +43,6 @@
             <navigator url="store?store={{store._id}}" class="weui-cell weui-cell_access weui-cell_access_card">
               <view class="weui-cell__bd">
                 <view class="store-name">{{store.name}}</view>
-                <view class="weui-cell__ft weui-cell__ft_in-access">{{store.address}}</view>
               </view>              
             </navigator>
           </repeat>
@@ -55,8 +54,7 @@
   import req from '@/network';
   import { serverAPI } from '@/server';
   import { demoSpaceId,demoStoreId } from '@/config'
-
-  export default class User extends wepy.page {
+  export default class Store extends wepy.page {
     config = {
       navigationBarTitleText: '所有门店'
     };
@@ -65,28 +63,29 @@
       canIUse: wx.canIUse('button.open-type.getUserInfo'),
       stores:[]
     };
-    onLoad() {
+    async onLoad() {
       const self = this;
-      this.getStoreInfo();
+
+      stores = await this.getStoreInfo();
+      if(stores.values){
+        this.stores = stores.values
+        this.$apply(); 
+      }
+      
 	  }
     getCardUrl() {
       console.log('getCardUrl', this._id);
       return 'card';
     }
+    
     getStoreInfo(){
-      const url = '/api/odata/v4/' + wx.getStorageSync('X-Space-Id') + '/vip_store';
-      console.log("----",url)
       const data = {
         // $filter: 'user eq ' + wx.getStorageSync('X-Space-Id'),
         $expand: 'owner($select=name)',
         $count: true,
         $select: 'address,name'
       };
-    req.get(url, data).then(res => {
-      const stores = res.value;
-      this.stores = stores;
-      this.$apply();
-    });
+      return await this.$parent.query("vip_store",data)     
   }
   }
 </script>

@@ -149,5 +149,29 @@ export default class VIP extends wepy.app {
     gd[object_name] = result;
     return result;
   }
+
+  get(object_name,_id,data) {
+    const url = '/api/odata/v4/' + wx.getStorageSync('X-Space-Id') + '/' + object_name + '/' + _id;
+    req.get(url, data).then(res => {
+      return res
+    })
+  }
+  query(object_name,data) {
+    const url = '/api/odata/v4/' + wx.getStorageSync('X-Space-Id') + '/' + object_name;
+    return req.get(url, data)
+    // req.get(url, data).then(res => {
+    //   console.log(res.value);
+    //   return res.value
+    // })
+  }
+  insert(object_name,data) {
+
+  }
+  update(object_name,_id,data) {
+
+  }
+  delete(object_name,_id,data) {
+    
+  }
 }
 </script>

@@ -41,19 +41,19 @@
 				</view>
 			</view>
 		</view>
-    
-		<view class="page__bd" style="margin-top: 36rpx">
-			<view class="weui-cells weui-cells_after-title">
-				<navigator url="" class="weui-cell weui-cell_access">
-					<view class="weui-cell__bd">
-						<view style="display: inline-block; vertical-align: middle">
-							{{store.description}}
-						</view>
-					</view>
-				</navigator>
-			</view>
-		</view>
-
+    <block wx:if="{{store.description}}">
+      <view class="page__bd" style="margin-top: 36rpx">
+        <view class="weui-cells weui-cells_after-title">
+          <navigator url="" class="weui-cell weui-cell_access">
+            <view class="weui-cell__bd">
+              <view style="display: inline-block; vertical-align: middle">
+                {{store.description}}
+              </view>
+            </view>
+          </navigator>
+        </view>
+      </view>
+    </block>
 		<view class="page__bd" style="margin-top: 36rpx">
 			<view class="weui-cells weui-cells_after-title">
 				<navigator url="store" class="weui-cell weui-cell_access">
@@ -77,9 +77,12 @@ export default class store extends wepy.page {
     navigationBarTitleText: 'WeChat'
   };
 
-  onLoad(e) {
-    const self = this;
-		this.getStoreInfo(e.store);
+  onLoad(options) {
+    var scene = decodeURIComponent(options.scene)
+    this.getCode(scene);
+    // const self = this;
+    // this.getStoreInfo(e.store);
+    // 
 	}
 
   components = {
@@ -104,6 +107,39 @@ export default class store extends wepy.page {
 		  wx.setNavigationBarTitle({title:this.store.name})
     });
   }
+  getCode(scene) {
+    wx.request({
+      url: 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wxf7d7403acb34334b&secret=c10af093299c079ac7a88cf8a9b64ceb', 
+      success: function(res) {
+        console.log(res.data);
+        const url = "https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=" + res.data.access_token;
+        const data = {
+          scene:scene,
+          // path:'pages/store',
+          width:430
+        };
+        wx.request({
+          url: url,
+          data:data,
+          method:"POST",
+          success: function(res) {
+            console.log(decodeURIComponent(res.data.scene))
+          }
+        })
+      }
+      });
+  }
+    
+  //   const url = "https://api.weixin.qq.com/wxa/getwxacode?access_token=" + wx.getStorageSync('X-Auth-Token');
+  //   const data = {
+  //     path:'pages/store',
+  //     width:430
+  //   };
+  //   wx.request({
+  //     url: url,
+  //     data:data
+  // });
+  
   methods = {
 		phoneCall() {
 			wx.makePhoneCall({
@@ -120,7 +156,7 @@ export default class store extends wepy.page {
 				name:'上海九亭大街1店',
 				address:'松江区九亭大街512号'
 			});
-		}
-	};
+    }
+  }
 }
 </script>

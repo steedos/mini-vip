@@ -105,7 +105,7 @@ import req from '@/network';
 import searchbar from '../components/searchbar';
 import { serverAPI } from '@/server';
 
-export default class User extends wepy.page {
+export default class Apps extends wepy.page {
   config = {
     navigationBarTitleText: '服务台'
   };
