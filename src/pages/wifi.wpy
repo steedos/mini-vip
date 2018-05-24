@@ -1,0 +1,137 @@
+<style lang="less">
+  .control-wifi{
+    text-align:center;
+    .wifi-status{
+      margin-top:20px;
+    }
+    .wifi-progress{
+      margin:20px 25%;
+    }
+    .wifi-current{
+      margin-top:20px;
+    }
+    .wifi-list{
+      margin-top:20px;
+    }
+  }
+</style>
+<template>
+  <!-- <button type="default" @tap="toTestWifi"> 附近Wifi </button> -->
+  <view class="page__bd" style="margin-top: 36rpx">
+    <view class="group control-wifi">
+      <view>
+        <icon type="warn" size="100" @tap="toConnectWifi"/>
+      </view>
+      <view class="wifi-status">
+        <text>WIFI 未连接</text>
+      </view>
+      <view class="wifi-progress">
+        <progress percent="100" />
+      </view>
+      <view class="wifi-current">
+        <text>选中Wifi</text>
+        <text>{{current.SSID}}</text>
+      </view>
+      <view class="wifi-list">
+        <text>门店Wifi</text>
+        <repeat for="{{wifiList}}" key="index" index="index" item="wifi">
+          <view class="weui-cell__bd">
+            <view class="card-name">{{wifi.SSID}}</view>
+          </view>
+        </repeat>
+      </view>
+    </view>
+    </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import req from '@/network';
+export default class Wifi extends wepy.page {
+  config = {
+    navigationBarTitleText: 'WIFI',
+    navigationBarTextStyle: 'black'
+  };
+
+  data = {
+    current:{
+      SSID: "HotLongTC",
+      BSSID: 'D0-57-7B-E5-CB-EE',
+      password: 'adminhotoa'
+    },
+    wifiList:[{
+      SSID: "HotLongTC",
+      BSSID: 'D0-57-7B-E5-CB-EE',
+      password: 'adminhotoa'
+    },
+    {
+      SSID: "HotLongTC2",
+      BSSID: 'D0-57-7B-E5-CB-EE',
+      password: 'adminhotoa'
+    },{
+      SSID: "HotLongTC",
+      BSSID: 'D0-57-7B-E5-CB-EE',
+      password: 'adminhotoa'
+    }]
+  };
+
+  onLoad() {
+    wx.startWifi({
+      success: function(res) {
+        console.log(res.errMsg)
+      }
+    })
+    // 获取wifi
+    // this.getWifiInfo();
+  };
+
+  methods = {
+    toTestWifi(){
+      wx.onGetWifiList(function(res) {
+        console.log(res);
+        if (res.wifiList.length) {
+          wx.setWifiList({
+            wifiList: [{
+              SSID: res.wifiList[0].SSID,
+              BSSID: res.wifiList[0].BSSID,
+              password: '123456'
+            }]
+          })
+        } else {
+          wx.setWifiList({
+            wifiList: []
+          })
+        }
+      });
+      wx.getWifiList();
+    },
+    toConnectWifi() {
+
+      console.log("连接wifi")
+      wx.connectWifi({
+        SSID: 'HotLongTC',
+        BSSID: 'D0-57-7B-E5-CB-EE',
+        password: 'adminhotoa',
+        success: function(res) {
+          console.log(res.errMsg)
+          console.log("成功")
+        }
+      })
+    }
+  };
+
+  // getWifiInfo(){
+  //   const url = '/api/odata/v4/uSm6t2rzpvnfks4ee/vip_wifi';
+  //   const data = {
+  //     $filter: 'store eq AJ652WDC5Zh4gLCrT',
+  //     $select: 'SSID,BSSID,password'
+  //   };
+  //   req.get(url, data).then(res => {
+  //     const wifi = res.value;
+  //     console.log(wifi);
+  //     this.wifi = wifi[0];
+  //     this.$apply();
+  //   });
+  // }
+}
+</script>
