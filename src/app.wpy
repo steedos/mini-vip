@@ -31,7 +31,7 @@ import { serverAPI } from '@/server';
 const store = configStore()
 setStore(store)
 
-export default class extends wepy.app {
+export default class VIP extends wepy.app {
   config = {
     pages: [
       'pages/index',
@@ -84,7 +84,12 @@ export default class extends wepy.app {
   }
 
   globalData = {
-    userInfo: null
+    title: "会员服务台",
+    userInfo: null,
+    space: null,
+    spaceInfo: null,
+    storeInfo: null,
+    launchOptions: null
   }
 
   constructor () {
@@ -93,9 +98,9 @@ export default class extends wepy.app {
     this.use('promisify')
   }
 
-  onLaunch() {
+  onLaunch(options) {
     const self = this
-    console.log("onLaunch..............")
+
     req.appId(appId)
     req.baseUrl(baseUrl).interceptor(interceptor.request, interceptor.response)
     // app启动，判断用户是否已经授权，授权则调用一次loginServer，调用loginServer时会判断session_key是否过期，如过期则重新login，没有的话判断用户是否清理缓存，清理则调用login重新获取header，没有则重新设置一次缓存中的header，不再调用login。
@@ -126,5 +131,18 @@ export default class extends wepy.app {
       }
     })
   }
+
+  getSpaceInfo(space) {
+    if (this.globalData.space == space && this.globalData.spaceInfo)
+      return this.globalData.spaceInfo
+    else {
+      // 此时应该从odata接口获取space信息并写入spaceInfo
+      return {
+        name: "App中的工作区"
+      }
+    }
+  }
+
+
 }
 </script>
