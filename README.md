@@ -33,8 +33,8 @@
 - knowledge 会员指南显示
 
 
-### App登录
-在App的onLaunch函数中调用 login(options) 进行登录。
+### 应用初始化 onLaunch
+- 在App的onLaunch函数中调用 login(options) 进行登录。
   - wx.login() 获取 code
   - 调用接口 /mini/vip/sso?code=xxx&old_user_id=yyy&old_auth_token=yyy
   - 在服务端使用 code 去服务器获取 open_id，session_key
@@ -44,6 +44,11 @@
      - 如果auth_token失效，生成新的auth_token并返回 open_id, user_id, auth_token
   - 如果不是同一个人，则以open_id找到的用户为准，生成新的auth_token并返回 open_id, user_id, auth_token
   - 前台获取返回结果并写入 globalData.user 对象
+
+
+### 页面初始化 onLoad
+  - 如果 query 传入 space_id, store_id，则调用cache函数初始化相关对象。
+
 
 ### 读取记录并缓存
 在页面中可以调用方法 $.parent.cache(object_name, _id) 获取对象缓存数据。
