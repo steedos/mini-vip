@@ -99,7 +99,7 @@
             <view class="weui-cell__bd">
               <view class="card-name">{{card.name}}</view>
             </view>
-            <view class="weui-cell__ft weui-cell__ft_in-access">{{card.grade}}</view>
+            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
           </navigator>
         </repeat>
 
@@ -111,17 +111,6 @@
             <view class="weui-cell__ft weui-cell__ft_in-access">{{card_count}}</view>
           </navigator>
         </view>
-      </view>
-    </view>
-
-    <view class="weui-panel btn-coupons">
-      <view class="weui-cells weui-cells_after-title">
-        <navigator url="card?space={{demoSpaceId}}&store={{demoStoreId}}" open-type="reLaunch" class="weui-cell weui-cell_access weui-cell_access_card">
-          <view class="weui-cell__bd">
-            <view class="card-name">华炎</view>
-          </view>
-          <view class="weui-cell__ft weui-cell__ft_in-access btn-coupons-space">演示工作区</view>
-        </navigator>
       </view>
     </view>
 
