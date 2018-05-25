@@ -26,8 +26,15 @@ export default class cardRecharge extends wepy.page {
   data = {
     rechargeValue: '',
     canDoRecharge: false,
-    loading: false
+    loading: false,
+    cardId: ''
   };
+
+  onLoad(e) {
+    console.log('onLoad');
+    console.log(e);
+    this.cardId = e.card;
+  }
 
   methods = {
     bindKeyInput(e) {
@@ -46,7 +53,8 @@ export default class cardRecharge extends wepy.page {
     doRecharge() {
       var data = {
         // totalFee: parseInt(this.rechargeValue * 100)
-        totalFee: 1
+        totalFee: 1,
+        cardId: this.cardId
       };
       this.loading = true;
       this.canDoRecharge = false;
@@ -83,12 +91,12 @@ export default class cardRecharge extends wepy.page {
           wx.showModal({
             content: '请求超时，请检查网络状况',
             showCancel: false,
-            success: function (res) {
-                if (res.confirm) {
-                    console.log('用户点击确定')
-                }
+            success: function(res) {
+              if (res.confirm) {
+                console.log('用户点击确定');
+              }
             }
-        });
+          });
         }
       });
     }
