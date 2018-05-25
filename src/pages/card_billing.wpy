@@ -42,7 +42,7 @@ const util = require('../utils/util.js');
 
 export default class cardBilling extends wepy.page {
   config = {
-    navigationBarTitleText: '消费记录'
+    navigationBarTitleText: '余额明细'
   };
   components = {};
   onLoad(e) {

@@ -45,7 +45,7 @@ import req from '@/network';
 
 export default class cardRecharge extends wepy.page {
   config = {
-    navigationBarTitleText: '余额·充值'
+    navigationBarTitleText: '我的账户'
   };
 
   data = {
