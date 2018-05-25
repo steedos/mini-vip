@@ -79,12 +79,10 @@
         <view class="page__hd_spacing">
           <view class="weui-flex weui-flex-title">
             <view class="weui-flex__item"><view class="placeholder">会员卡</view></view>
-            <view class="weui-flex__item"><view class="placeholder">余额</view></view>
             <view class="weui-flex__item"><view class="placeholder">优惠券</view></view>
           </view>
           <view class="weui-flex weui-flex-content">
             <view class="weui-flex__item"><view class="placeholder">{{card_count}}</view></view>
-            <view class="weui-flex__item"><view class="placeholder">￥{{allBalance}}</view></view>
             <view class="weui-flex__item"><view class="placeholder">0</view></view>
           </view>
         </view>
