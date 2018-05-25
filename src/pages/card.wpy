@@ -41,13 +41,10 @@
     }
   }
 
-  .page__bd {
-    margin-top: 36rpx;
-  }
 }
 </style>
 <template>
-  <view class="page-card">
+  <view class="page page-card">
     <view class="weui-panel weui-panel_access header">
       <vipcrad :isActivated.sync="isActivated" :cardName.sync="cardName" :cardType.sync="cardType" :cardNumber.sync="cardNumber"/>
       <block wx:if="{{isActivated}}">
@@ -61,7 +58,7 @@
             <view class="count">0 张</view>
           </view>
           <view class="balance s-card" @tap="toRecharge">
-            <view class="title">余额</view>
+            <view class="title">余额 充值</view>
             <view class="count">{{cardBalance}} 元</view>
           </view>
         </view>
@@ -72,11 +69,9 @@
       </block>
     </view>
 
-
     <view class="page__bd">
       <block wx:if="{{store}}">
-        <view class="weui-panel">
-          <view class="weui-cells weui-cells_after-title">
+          <view class="weui-cells">
             <navigator url="wifi" class="weui-cell weui-cell_access">
               <view class="weui-cell__bd">
                 <view>连接WIFI</view>
@@ -90,10 +85,9 @@
               <view class="weui-cell__ft weui-cell__ft_in-access"></view>
             </navigator>
           </view>
-        </view>
       </block>
-      <view class="weui-panel  btn-list">
-        <view class="weui-cells weui-cells_after-title">
+
+        <view class="weui-cells">
           <navigator url="stores" class="weui-cell weui-cell_access">
             <view class="weui-cell__bd">
               <view>门店查询</view>
@@ -113,9 +107,8 @@
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
           </navigator>
         </view>
-      </view>
-      <view class="weui-panel  btn-list">
-        <view class="weui-cells weui-cells_after-title">
+
+        <view class="weui-cells">
           <navigator url="" class="weui-cell weui-cell_access">
             <view class="weui-cell__bd">
               <view>会员指南</view>
@@ -135,7 +128,6 @@
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
           </navigator>
         </view>
-      </view>
     </view>
 
     <!--
