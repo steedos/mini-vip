@@ -34,68 +34,6 @@
 				</repeat>
 			</swiper>
 		</view>
-    <view class="page__bd">
-      <view class="weui-panel">
-        <view class="weui-cells weui-cells_after-title">
-          <navigator url="wifi" class="weui-cell weui-cell_access">
-            <view class="weui-cell__bd">
-              <view>连接WIFI</view>
-            </view>
-            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-          </navigator>
-        </view>
-      </view>
-      <view class="weui-panel  btn-list">
-        <view class="weui-cells weui-cells_after-title">
-          <navigator url="" class="weui-cell weui-cell_access">
-            <view class="weui-cell__bd">
-              <view>服务预约</view>
-            </view>
-            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-          </navigator>
-          <navigator url="" class="weui-cell weui-cell_access">
-            <view class="weui-cell__bd">
-              <view>课程安排</view>
-            </view>
-            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-          </navigator>
-          <navigator url="" class="weui-cell weui-cell_access">
-            <view class="weui-cell__bd">
-              <view>私人教练</view>
-            </view>
-            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-          </navigator>
-          <navigator url="" class="weui-cell weui-cell_access">
-            <view class="weui-cell__bd">
-              <view>最新动态</view>
-            </view>
-            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-          </navigator>
-        </view>
-      </view>
-      <view class="weui-panel  btn-list">
-        <view class="weui-cells weui-cells_after-title">
-          <navigator url="stores" class="weui-cell weui-cell_access">
-            <view class="weui-cell__bd">
-              <view>门店查询</view>
-            </view>
-            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-          </navigator>
-          <navigator url="" class="weui-cell weui-cell_access">
-            <view class="weui-cell__bd">
-              <view>会员指南</view>
-            </view>
-            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-          </navigator>
-          <navigator url="" class="weui-cell weui-cell_access">
-            <view class="weui-cell__bd">
-              <view>投诉建议</view>
-            </view>
-            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-          </navigator>
-        </view>
-      </view>  
-    </view>
   </view>
 </template>
 
