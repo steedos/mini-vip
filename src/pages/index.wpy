@@ -91,40 +91,28 @@
       </view>
     </view>
 
-    <block wx:if="{{!hasUserInfo && canIUse}}">
-      <view class="weui-panel">
-        <view class="weui-cells weui-cells_after-title">
-          <button class="weui-cell weui-cell_access get-user-info" plain="true" open-type="getUserInfo" @getuserinfo="getUserInfo">
-            <view class="weui-cell__bd">使用微信账号登录</view>
-            <view class="weui-cell__ft weui-cell__ft_in-access" style="font-size: 0"></view>
-          </button>
-        </view>
-      </view>
-    </block>
-    <block wx:else>
-      <view class="page__bd">
-        <view class="weui-cells__title page__bd_mycard">我的会员卡</view>
-        <view class="weui-cells weui-cells_after-title">
-          <repeat for="{{cards}}" key="index" index="index" item="card">
-            <navigator url="card?card={{card._id}}&space={{card.space}}" open-type="reLaunch" class="weui-cell weui-cell_access weui-cell_access_card">
-              <view class="weui-cell__bd">
-                <view class="card-name">{{card.name}}</view>
-              </view>
-              <view class="weui-cell__ft weui-cell__ft_in-access">{{card.grade}}</view>
-            </navigator>
-          </repeat>
+    <view class="page__bd">
+      <view class="weui-cells__title page__bd_mycard">我的会员卡</view>
+      <view class="weui-cells weui-cells_after-title">
+        <repeat for="{{cards}}" key="index" index="index" item="card">
+          <navigator url="card?card={{card._id}}&space={{card.space}}" open-type="reLaunch" class="weui-cell weui-cell_access weui-cell_access_card">
+            <view class="weui-cell__bd">
+              <view class="card-name">{{card.name}}</view>
+            </view>
+            <view class="weui-cell__ft weui-cell__ft_in-access">{{card.grade}}</view>
+          </navigator>
+        </repeat>
 
-          <view wx:if="{{card_count > 10}}" class="weui-cells weui-cells_after-title">
-            <navigator url="card?_id={{card._id}}" class="weui-cell weui-cell_access">
-              <view class="weui-cell__bd">
-                <text  class="btn-view-all">查看全部</text>
-              </view>
-              <view class="weui-cell__ft weui-cell__ft_in-access">{{card_count}}</view>
-            </navigator>
-          </view>
+        <view wx:if="{{card_count > 10}}" class="weui-cells weui-cells_after-title">
+          <navigator url="card?_id={{card._id}}" class="weui-cell weui-cell_access">
+            <view class="weui-cell__bd">
+              <text  class="btn-view-all">查看全部</text>
+            </view>
+            <view class="weui-cell__ft weui-cell__ft_in-access">{{card_count}}</view>
+          </navigator>
         </view>
       </view>
-    </block>
+    </view>
 
     <view class="weui-panel btn-coupons">
       <view class="weui-cells weui-cells_after-title">
@@ -147,7 +135,7 @@
         </navigator>
       </view>
     </view>
-    
+
   </view>
 </template>
 
@@ -185,6 +173,7 @@
     };
 
     getUserCard(){
+      console.log("get Card...")
       req.get("/api/steedos/weixin/cards").then(res => {
         let card_count
         if (res.cards) {
@@ -203,36 +192,9 @@
       });
     }
 
-    onLoad() {
+    async onLoad() {
       const self = this;
-      if(!self.$parent.globalData.userInfo){
-        wx.getSetting({
-          success: function(res) {
-            if (res.authSetting['scope.userInfo']) {
-              wx.getUserInfo({
-                lang: 'zh_CN',
-                success: res => {
-                  console.log('getUserInfo success,', res);
-                  self.$parent.globalData.userInfo = res.userInfo;
-                  self.userInfo = res.userInfo;
-                  self.hasUserInfo = true;
-                  self.$apply();
-
-                  res.code = self.$parent.globalData.code
-
-                  req.loginServer(serverAPI.LOGIN, res);
-                }
-              });
-            }
-          }
-        });
-      }else{
-        self.hasUserInfo = true;
-        this.getUserCard();
-      }
-      wx.showShareMenu({
-        withShareTicket: true
-      })
+      await this.getUserCard();
     }
 
     onShareAppMessage(res){
@@ -241,23 +203,5 @@
         path: '/pages/index'
       }
     }
-
-    methods = {
-      getUserInfo(e) {
-        const self = this;
-        console.log('methods getUserInfo e.detail', e.detail);
-        const app = self.$parent;
-        console.log('app.globalData', app.globalData);
-
-        if (e.detail.userInfo) {
-          self.$parent.globalData.userInfo = e.detail.userInfo;
-          self.userInfo = e.detail.userInfo;
-          self.hasUserInfo = true;
-
-          req.loginServer(serverAPI.LOGIN, e.detail);
-        }
-        return;
-      }
-    };
   }
 </script>
