@@ -144,7 +144,8 @@
         this.store = e.store
       }
       console.log('card_activate onLoad e,', e)
-      const userInfo = this.$parent.globalData.userInfo
+      const user = this.$parent.globalData.user
+      this.$parent.get("users",user._id)
       this.sexValue = this.array[userInfo.gender]
       this.$apply()
     }
@@ -205,7 +206,7 @@
       },
       activate() {
         this.submitDisabled = true
-        req.post('/api/steedos/weixin/card/activate?spaceId=' + this.space + "&storeId=" + this.store, {
+        req.post('/api/mini/vip/card_activate?space_id=' + this.space + "&store_id=" + this.store, {
           name: this.name,
           sex: this.sexValue,
           birthdate: this.birthdate,
