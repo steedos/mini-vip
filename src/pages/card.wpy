@@ -62,7 +62,7 @@
           </view>
           <view class="balance s-card" @tap="toRecharge">
             <view class="title">余额</view>
-            <view class="count">0 元</view>
+            <view class="count">{{cardBalance}} 元</view>
           </view>
         </view>
       </block>
@@ -133,7 +133,7 @@
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
           </navigator>
         </view>
-      </view>  
+      </view>
     </view>
 
     <block wx:if="{{isActivated}}">
