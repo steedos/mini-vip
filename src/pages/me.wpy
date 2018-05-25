@@ -17,7 +17,7 @@
             <open-data class="weui-media-box__thumb" type="userAvatarUrl"></open-data>
           </view>
           <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
-            <view class="weui-media-box__title">{{nickName}}</view>
+            <view class="weui-media-box__title">{{this.nickName}}</view>
             <view class="weui-media-box__desc">18721463698</view>
           </view>
           <view class="weui-cell__ft weui-cell__ft_in-access"></view>
@@ -70,9 +70,9 @@ export default class Me extends wepy.page {
   }
 
   onLoad() {
-    const nickName = this.$parent.globalData.userInfo.nickName
-    this.nickName = nickName
-    this.$apply()
+    // const nickName = this.$parent.globalData.userInfo.nickName
+    // this.nickName = nickName
+    // this.$apply()
   }
 
   methods = {

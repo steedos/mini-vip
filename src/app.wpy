@@ -50,7 +50,8 @@ export default class VIP extends wepy.app {
       'pages/wifi',
       'pages/edit/text',
       'pages/posts',
-      'pages/edit/select'
+      'pages/edit/select',
+      'pages/edit/date'
     ],
     tabBar: {
       color: '#666',

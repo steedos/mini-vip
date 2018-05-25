@@ -1,0 +1,68 @@
+<style lang="less">
+.page-edit-text {
+  .page__bd {
+    margin-top: 20px;
+  }
+}
+</style>
+<template>
+  <view class="page-edit-text">
+    <view class="page__bd">
+      <view class="weui-cells weui-cells_after-title">
+        <view class="weui-cell_input">
+            <picker class="weui-btn" mode="date" value="{{date}}" bindchange="bindDateChange"> 
+                <view class="weui-cells weui-cells_after-title">
+                  <view class="weui-cell weui-cell_input">
+                    <view class="weui-cell__bd">
+                      <input class="weui-input" value="{{date}}" bindchange="bindDateChange"/>
+                    </view>
+                  </view>
+                </view>
+            </picker>
+        </view>
+      </view>
+    </view>
+    <view class="page__bd">   
+      <view class="page__bd page__bd_spacing">
+        <button class="weui-btn" type="primary" style="width:90%;">确定</button>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import req from '@/network';
+import { serverAPI } from '@/server';
+
+export default class Date extends wepy.page {
+  config = {
+    navigationBarTitleText: 'WeChat'
+  };
+
+  onLoad(e) {
+    console.log(e)
+    this.text = "设置"+e.text
+    this.date = e.date
+    wx.setNavigationBarTitle({title:this.text})
+  };
+
+  data = {
+    date : ''
+  };
+
+  methods = {
+    bindPickerChange: function(e) {
+        console.log('picker发送选择改变，携带值为', e.detail.value)
+        this.setData({
+            index: e.detail.value
+        })
+    },
+    bindDateChange: function(e) {
+        this.date= e.detail.value
+        console.log(this.date)
+        this.$apply(); 
+    },
+  };
+}
+</script>
