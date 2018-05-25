@@ -11,7 +11,7 @@ page {
     <view class="page__bd">
       <scroll-view class="scroll-view_H" scroll-y="true">
         <repeat for="{{posts}}" key="index" index="index" item="post">
-          <post :name="post.name" :summary="post.summary" :commentCount="post.comment_count" :cover="post.images"/>
+          <post :name="post.name" :summary="post.summary" :commentCount="post.comment_count" :cover="post.images[0]"/>
         </repeat>
       </scroll-view>
     </view>
@@ -41,12 +41,7 @@ export default class Posts extends wepy.page {
   };
 
   data = {
-    merchant: {
-      name: '贝菲特(九亭店)',
-      summary: '一起来健身'
-    },
-    posts: [
-    ]
+    posts: []
   };
   
 	async loadPostList(){
@@ -57,6 +52,7 @@ export default class Posts extends wepy.page {
     };
     var posts = await this.$parent.query("post", options)
     this.posts = posts.value;
+    console.log("loadPostList", this.posts);
     this.$apply();
   };
 }
