@@ -62,6 +62,12 @@
 对于不需要缓存的数据，请使用标准的 this.$parent.get 函数
 
 ### globalData
+- userinfo wx.getUserInfo返回的userInfo
+  - avatarUrl
+  - city
+  - ...
+  - province
+- space_id 当前用户进入的space
 - user 当前用户信息
   - _id
   - auth_token

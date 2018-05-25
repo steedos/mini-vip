@@ -101,7 +101,11 @@ export default class VIP extends wepy.app {
     req.baseUrl(baseUrl).interceptor(interceptor.request, interceptor.response)
     const globalData = wx.getStorageSync('globalData') || {}
     this.globalData = globalData
-    await this.login.call(this)
+  }
+
+  onHide() {
+    const globalData = this.globalData
+    wx.setStorageSync('globalData', globalData)
   }
 
   getUserInfo(cb) {
@@ -119,45 +123,67 @@ export default class VIP extends wepy.app {
 
   async login(space_id) {
     const self = this
-    const data = await wepy.login()
+    let globalData = self.$parent.globalData
+    let needs_login = false
 
-    let globalData = wx.getStorageSync('globalData') || {}
-    let old_user_id = ''
-    let old_auth_token = ''
-    let url = `${serverAPI.LOGIN}?code=${data.code}&old_user_id=${old_user_id}&old_auth_token=${old_auth_token}`
-
-    if (space_id) {
-      url = `${url}&space_id=${space_id}`
+    if (!globalData.userInfo) {
+      const setting = await wepy.getSetting()
+      if (setting.authSetting['scope.userInfo']) {
+        const userInfo = await wepy.getUserInfo()
+        self.$parent.globalData.userInfo = userInfo
+      }
     }
 
-    if (globalData.user) {
-      old_user_id = globalData.user._id
-      old_auth_token = globalData.user.auth_token
-    }else{
+    if (!globalData.user) {
       globalData.user = {}
     }
 
-    const res = await req.post(url).catch((err) => {
-      console.log("cache error...");
-      return {}
-    })
-
-    const header = {
-      'X-User-Id': res.user_id,
-      'X-Auth-Token': res.auth_token,
+    if (space_id && space_id != globalData.space_id) {
+      needs_login = true
     }
 
-    globalData.user._id = res.user_id
-    globalData.user.auth_token = res.auth_token
-    globalData.user.open_id = res.open_id
-    globalData.user.name = res.name
-    globalData.user.mobile = res.mobile
-    globalData.user.sex = res.sex
-    globalData.user.birthdate = res.birthdate
+    if (!globalData.user._id || !globalData.user.auth_token) {
+      needs_login = true
+    }
 
-    self.globalData = globalData
-    wx.setStorageSync('globalData', globalData)
-    req.header(header)
+    if (needs_login) {
+
+      const data = await wepy.login()
+      const old_user_id = globalData.user._id || ''
+      const old_auth_token = globalData.user.auth_token || ''
+      let url = `${serverAPI.LOGIN}?code=${data.code}&old_user_id=${old_user_id}&old_auth_token=${old_auth_token}`
+
+      if (space_id) {
+        url = `${url}&space_id=${space_id}`
+      }
+
+      const res = await req.post(url).catch((err) => {
+        console.log("cache error...");
+        return {}
+      })
+
+      const header = {
+        'X-User-Id': res.user_id,
+        'X-Auth-Token': res.auth_token,
+      }
+
+      globalData.user._id = res.user_id
+      globalData.user.auth_token = res.auth_token
+      globalData.user.open_id = res.open_id
+      globalData.user.name = res.name
+      globalData.user.mobile = res.mobile
+      globalData.user.sex = res.sex
+      globalData.user.birthdate = res.birthdate
+
+      self.$parent.globalData = globalData
+      req.header(header)
+    } else {
+      const header = {
+        'X-User-Id': globalData.user._id,
+        'X-Auth-Token': globalData.user.auth_token,
+      }
+      req.header(header)
+    }
   }
 
   async cache(object_name, _id) {

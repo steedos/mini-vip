@@ -166,6 +166,7 @@
       order: {
         count: 76
       },
+      cards: [],
       card_count: 0,
       allBalance: 0,
       demoSpaceId: demoSpaceId,
@@ -184,19 +185,19 @@
 
         const allBalance = res.allBalance || 0;
 
-        this.setData({
-          'cards': res.cards,
-          'allBalance': allBalance,
-          'card_count': card_count
-        });
+        this.cards = res.cards
+        this.allBalance = allBalance
+        this.card_count = card_count
+        this.$apply()
       });
     }
 
     async onLoad() {
       const self = this;
+      await this.$parent.login.call(this);
       await this.getUserCard();
     }
-
+    
     onShareAppMessage(res){
       return {
         title: '我的会员卡、积分、优惠券、消费记录',

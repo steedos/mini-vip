@@ -16,7 +16,7 @@
         </view>
       </view>
       <view class="page__bd page__bd_spacing">
-        <button class="weui-btn" type="primary" style="width:90%;">确定</button>
+        <button class="weui-btn" type="primary" style="width:90%;">保存</button>
       </view>
     </view>  
   </view>
@@ -35,8 +35,8 @@ export default class Text extends wepy.page {
   onLoad(e) {
     console.log(e)
     this.text = "设置"+e.text
-    this.name = e.name
     wx.setNavigationBarTitle({title:this.text})
+    this.name = e.name
   };
 
   data = {
@@ -46,6 +46,7 @@ export default class Text extends wepy.page {
   methods = {
     bindNameChange(e) {
         this.name = e.detail.value;
+        console.log(this.name)
       },
   };
 }

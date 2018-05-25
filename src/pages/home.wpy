@@ -173,7 +173,6 @@ export default class Home extends wepy.page {
     };
     var that = this;
     req.get(url, data).then(res => {
-      debugger;
       that.posts = res.value;
       that.$apply();
     });
