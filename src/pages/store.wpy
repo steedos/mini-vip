@@ -80,7 +80,8 @@ export default class store extends wepy.page {
   async onLoad(e) {
     // var scene = decodeURIComponent(options.scene)
     var store = await this.getStoreInfo(e.store);
-    this.store = store
+		this.store = store
+		wx.setNavigationBarTitle({title:this.store.name})
     this.$apply(); 
 	}
 

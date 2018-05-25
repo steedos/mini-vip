@@ -173,27 +173,47 @@ export default class VIP extends wepy.app {
     return result;
   }
 
-  get(object_name,_id) {
+  async get(object_name,_id) {
     const url = '/api/odata/v4/' + wx.getStorageSync('X-Space-Id') + '/' + object_name + '/' + _id;
-    return req.get(url)
+    const result = await req.get(url).catch((err)=>{
+      console.log("error...",err.data.error)
+      return {}
+    })
+    return result
   }
-  query(object_name,query_options) {
+  async query(object_name,query_options) {
     const url = '/api/odata/v4/' + wx.getStorageSync('X-Space-Id') + '/' + object_name;
-    return req.get(url, query_options)
+    const result = await req.get(url, query_options).catch((err)=>{
+      console.log("error...",err.data.error)
+      return {}
+    })
+    return result
   }
-  insert(object_name,data) {
+  async insert(object_name,data) {
     const url = '/api/odata/v4/' + wx.getStorageSync('X-Space-Id') + '/' + object_name;
-    return req.post(url, data)
+    const result = await req.post(url, data).catch((err)=>{
+      console.log("error...",err.data.error)
+      return {}
+    })
+    return result
   }
-  update(object_name,_id,data) {
+  async update(object_name,_id,data) {
     const url = '/api/odata/v4/' + wx.getStorageSync('X-Space-Id') + '/' + object_name + '/'+_id;
     doc = {}
     doc['$set'] = data
-    return req.update(url, doc)
+    const result = await req.update(url,doc).catch((err)=>{
+      console.log("error...",err.data.error)
+      return {}
+    })
+    return result
   }
-  delete(object_name,_id) {
+  async delete(object_name,_id) {
     const url = '/api/odata/v4/' + wx.getStorageSync('X-Space-Id') + '/' + object_name + '/'+_id;
-    return req.delete(url)
+    const result = await req.delete(url).catch((err)=>{
+      console.log("error...",err.data.error)
+      return {}
+    })
+    return result
   }
 }
 </script>
