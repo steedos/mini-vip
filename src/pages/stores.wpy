@@ -37,12 +37,12 @@
 
 <template>
       <view class="page__bd">
-        <view class="weui-cells__title weui-cells__title__mine">所有门店</view>
         <view class="weui-cells weui-cells_after-title">
           <repeat for="{{stores}}" key="stores" index="index" item="store">
-            <navigator url="store?store={{store._id}}" class="weui-cell weui-cell_access weui-cell_access_card">
-              <view class="weui-cell__bd">
+            <navigator url="store?store={{store._id}}" class="weui-cell weui-cell_access weui-cell_access_store">
+              <view class="weui-cell__bd weui-cell__ft_in-access">
                 <view class="store-name">{{store.name}}</view>
+
               </view>              
             </navigator>
           </repeat>

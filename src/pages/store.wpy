@@ -9,30 +9,22 @@
 		line-height:25px;
 		font-size:18px;
 		padding:0 4px;
+		margin: auto auto;
 	}
+	.page__bd {
+    margin-top: 20px;
+  }
 }
 </style>
 <template>
 	<view class="">
-		<view class="kind-list__item">
-			<view class="weui-flex kind-list__item-hd header-des">
-				<view class="weui-flex__item">{{store.name}}</view>
-				<text class="kind-list__img slds-icon-call" @tap="phoneCall"></text>
-			</view>
-		</view>
-
 		<view class="page__bd">
 			<view class="weui-cells weui-cells_after-title">
 				<view @tap="openMap" class="weui-cell weui-cell_access">
 					<view class="weui-cell__bd">
 						<view style="display: inline-block; vertical-align: middle">门店地址</view>
 					</view>
-					<view class="weui-cell__ft weui-cell__ft_in-access">{{store.address}}</view>
 				</view>
-			</view>
-		</view>
-    <view class="page__bd">
-			<view class="weui-cells weui-cells_after-title">
 				<view class="weui-cell weui-cell_access">
 					<view class="weui-cell__bd">
 						<view style="display: inline-block; vertical-align: middle">营业时间</view>
@@ -42,7 +34,7 @@
 			</view>
 		</view>
     <block wx:if="{{store.description}}">
-      <view class="page__bd" style="margin-top: 36rpx">
+      <view class="page__bd" >
         <view class="weui-cells weui-cells_after-title">
           <navigator url="" class="weui-cell weui-cell_access">
             <view class="weui-cell__bd">
@@ -54,7 +46,16 @@
         </view>
       </view>
     </block>
-		<view class="page__bd" style="margin-top: 36rpx">
+		<view class="page__bd">
+			<view class="weui-cells weui-cells_after-title">
+				<view class="kind-list__item">
+					<view class="weui-flex kind-list__item-hd header-des">
+						<text class="kind-list__img slds-icon-call" @tap="phoneCall"></text>
+					</view>
+				</view>
+			</view>
+		</view>
+		<!-- <view class="page__bd" style="margin-top: 36rpx">
 			<view class="weui-cells weui-cells_after-title">
 				<navigator url="store" class="weui-cell weui-cell_access">
 					<view class="weui-cell__bd">
@@ -63,7 +64,7 @@
 					<view class="weui-cell__ft weui-cell__ft_in-access"></view>
 				</navigator>
 			</view>
-		</view>
+		</view> -->
 	</view>
 </template>
 
@@ -134,18 +135,20 @@ export default class store extends wepy.page {
   methods = {
 		phoneCall() {
 			wx.makePhoneCall({
-				phoneNumber: ''
+				phoneNumber: this.store.phone
 			})
 		},
 		openMap() {
+			var name = this.store.name
 			var latitude = 31.03241
 			var longitude = 121.22654
+			var address = this.store.address
 			wx.openLocation({
 				latitude: latitude,
 				longitude: longitude,
 				scale: 28,
-				name:'上海九亭大街1店',
-				address:'松江区九亭大街512号'
+				name:name,
+				address:address
 			});
     }
   }
