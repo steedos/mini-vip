@@ -139,6 +139,7 @@ export default class VIP extends wepy.app {
     }
 
     if (space_id && space_id != globalData.space_id) {
+      globalData.spaceId = space_id
       needs_login = true
     }
 

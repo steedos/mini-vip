@@ -67,7 +67,7 @@
   - city
   - ...
   - province
-- space_id 当前用户进入的space
+- spaceId 当前用户进入的space
 - user 当前用户信息
   - _id
   - auth_token
