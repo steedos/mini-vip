@@ -123,14 +123,14 @@ export default class VIP extends wepy.app {
 
   async login(space_id) {
     const self = this
-    let globalData = self.$parent.globalData
+    let globalData = self.globalData
     let needs_login = false
 
     if (!globalData.userInfo) {
       const setting = await wepy.getSetting()
       if (setting.authSetting['scope.userInfo']) {
         const userInfo = await wepy.getUserInfo()
-        self.$parent.globalData.userInfo = userInfo
+        self.globalData.userInfo = userInfo
       }
     }
 
@@ -176,7 +176,7 @@ export default class VIP extends wepy.app {
       globalData.user.sex = res.sex
       globalData.user.birthdate = res.birthdate
 
-      self.$parent.globalData = globalData
+      self.globalData = globalData
       req.header(header)
     } else {
       const header = {

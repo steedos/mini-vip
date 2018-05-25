@@ -181,7 +181,7 @@
 
     async onLoad() {
       const self = this;
-      await this.$parent.login.call(this);
+      await this.$parent.login();
       await this.getUserCard();
     }
     

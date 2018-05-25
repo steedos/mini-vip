@@ -213,7 +213,7 @@ export default class Card extends wepy.page {
       this.store = e.store;
     }
 
-    await this.$parent.login.call(this);
+    await this.$parent.login(e.space);
 
     if (this.$parent.globalData.userInfo) {
       this.isAuthorize = true
