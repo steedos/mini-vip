@@ -15,11 +15,11 @@
             </view>
             <view class="weui-cell__ft weui-cell__ft_in-access">张三</view>
           </navigator>
-          <navigator url="" class="weui-cell weui-cell_access">
+          <navigator url="./edit/select?text=性别&sex=女" class="weui-cell weui-cell_access">
             <view class="weui-cell__bd">
               <view>性别</view>
             </view>
-            <view class="weui-cell__ft weui-cell__ft_in-access">男</view>
+            <view class="weui-cell__ft weui-cell__ft_in-access">女</view>
           </navigator>
           <navigator url="" class="weui-cell weui-cell_access">
             <view class="weui-cell__bd">
