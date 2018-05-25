@@ -135,7 +135,7 @@
         </view>
       </view>  
     </view>
-    
+
     <block wx:if="{{isActivated}}">
       <view class="page__bd">
         <view class="weui-cells weui-cells_after-title">
@@ -171,7 +171,7 @@ import { serverAPI } from '@/server';
 
 export default class Card extends wepy.page {
   config = {
-    navigationBarTitleText: '会员卡'
+    navigationBarTitleText: '会员服务台'
   };
 
   getCardInfo(card_id) {
