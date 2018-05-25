@@ -143,11 +143,11 @@
       if(e.store){
         this.store = e.store
       }
-      console.log('card_activate onLoad e,', e)
       const user = this.$parent.globalData.user
-      this.$parent.get("users",user._id)
-      this.sexValue = this.array[userInfo.gender]
-      this.$apply()
+      this.sexValue = user.sex
+      this.name = user.name
+      this.birthdate = user.birthdate
+      this.phoneNumber = user.mobile
     }
 
     components = {

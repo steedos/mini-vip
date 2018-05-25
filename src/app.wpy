@@ -125,11 +125,11 @@ export default class VIP extends wepy.app {
     let old_user_id = ''
     let old_auth_token = ''
     let url = `${serverAPI.LOGIN}?code=${data.code}&old_user_id=${old_user_id}&old_auth_token=${old_auth_token}`
-    
+
     if (space_id) {
       url = `${url}&space_id=${space_id}`
     }
-    
+
     if (globalData.user) {
       old_user_id = globalData.user._id
       old_auth_token = globalData.user.auth_token
@@ -150,6 +150,10 @@ export default class VIP extends wepy.app {
     globalData.user._id = res.user_id
     globalData.user.auth_token = res.auth_token
     globalData.user.open_id = res.open_id
+    globalData.user.name = res.name
+    globalData.user.mobile = res.mobile
+    globalData.user.sex = res.sex
+    globalData.user.birthdate = res.birthdate
 
     self.globalData = globalData
     wx.setStorageSync('globalData', globalData)
