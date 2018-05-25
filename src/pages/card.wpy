@@ -199,35 +199,30 @@ export default class Card extends wepy.page {
     });
   }
 
-  onLoad(e) {
+  async onLoad(e) {
+    const self = this
     if (e.space) {
       this.space = e.space;
+      this.$parent.globalData.space_id = e.space
     }
     if (e.store) {
       this.store = e.store;
     }
+
+    await this.$parent.login.call(this);
+
+    if (this.$parent.globalData.userInfo) {
+      this.isAuthorize = true
+    } else {
+      this.isAuthorize = false
+    }
+    this.$apply()
+
     console.log('Card onLoad, e', e);
-    const _self = this;
-    wx.getSetting({
-      success(res) {
-        console.log(res.authSetting);
-        if (!res.authSetting['scope.userInfo']) {
-          _self.isAuthorize = false;
-          _self.$apply();
-          console.log('false', _self.isAuthorize);
-        } else {
-          _self.isAuthorize = true;
-          _self.$apply();
-          console.log('true', _self.isAuthorize);
-        }
-        if(e.card){
-          _self.getCardInfo(e.card);
-        }
-      },
-      fail(res) {
-        console.log('fail');
-      }
-    });
+    if (e.card) {
+      this.getCardInfo(e.card)
+    }
+    
     wx.showShareMenu({
       withShareTicket: true
     });
@@ -267,7 +262,6 @@ export default class Card extends wepy.page {
     },
     userInfo(e) {
       if (e.detail.rawData) {
-        req.loginServer(serverAPI.LOGIN, e.detail);
         this.$parent.globalData.userInfo = e.detail.userInfo;
         this.isAuthorize = true;
         this.$apply();

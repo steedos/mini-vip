@@ -145,6 +145,7 @@
       }
       console.log('card_activate onLoad e,', e)
       const user = this.$parent.globalData.user
+      const userInfo = this.$parent.globalData.userInfo
       this.$parent.get("users",user._id)
       this.sexValue = this.array[userInfo.gender]
       this.$apply()
