@@ -9,17 +9,17 @@
   <view class="page-me-profile">
     <view class="page__bd">
 			<view class="weui-cells weui-cells_after-title">
-          <navigator url="./edit/text?text=姓名&name=张三" class="weui-cell weui-cell_access">
+          <navigator url="./edit/text?text=姓名&name={{nickName}}" class="weui-cell weui-cell_access">
             <view class="weui-cell__bd">
               <view>姓名</view>
             </view>
-            <view class="weui-cell__ft weui-cell__ft_in-access">张三</view>
+            <view class="weui-cell__ft weui-cell__ft_in-access">{{nickName}}</view>
           </navigator>
-          <navigator url="./edit/select?text=性别&sex=女" class="weui-cell weui-cell_access">
+          <navigator url="./edit/select?text=性别&gender={{gender}}" class="weui-cell weui-cell_access">
             <view class="weui-cell__bd">
               <view>性别</view>
             </view>
-            <view class="weui-cell__ft weui-cell__ft_in-access">女</view>
+            <view class="weui-cell__ft weui-cell__ft_in-access">{{gender}}</view>
           </navigator>
           <navigator url="./edit/date?text=生日&date=1998-01-01" class="weui-cell weui-cell_access">
             <view class="weui-cell__bd">
@@ -48,24 +48,22 @@ export default class meProfile extends wepy.page {
     navigationBarTitleText: '我的账户',
   };
 
-  onLoad() {}
-
-  // data = {
-  //   info: [{
-  //     key: '姓名',
-  //     value: '张三'
-  //   }, {
-  //     key: '性别',
-  //     value: '男'
-  //   }, {
-  //     key: '生日',
-  //     value: '1998-01-01'
-  //   }, {
-  //     key: '手机',
-  //     value: '18601110111'
-  //   }]
-  // }
-
+  onLoad() {
+    const nickName = this.$parent.globalData.userInfo.userInfo.nickName
+    this.nickName = nickName
+    const gender = this.$parent.globalData.userInfo.userInfo.gender
+    if (gender == 1){
+      this.gender = '男'
+    }else{
+      this.gender = '女'
+    }
+    this.$apply()
+    console.log(this.$parent.globalData) 
+  }
+    data = {
+    nickName: '',
+    gender: ''
+  }
   methods = {};
 }
 </script>
