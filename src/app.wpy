@@ -170,6 +170,10 @@ export default class VIP extends wepy.app {
       globalData.user._id = res.user_id
       globalData.user.auth_token = res.auth_token
       globalData.user.open_id = res.open_id
+      globalData.user.name = res.name
+      globalData.user.mobile = res.mobile
+      globalData.user.sex = res.sex
+      globalData.user.birthdate = res.birthdate
 
       self.$parent.globalData = globalData
       req.header(header)

@@ -2,90 +2,20 @@
 <style lang="less">
 page {
   height: 100%;
-  .scroll-view_H {
-    height: 100%;
-    .header {
-      .background {
-        height: 210px;
-        overflow: hidden;
-        .bg-img {
-          z-index: -1;
-          width: 100%;
-        }
-        .operate {
-          width: 80px;
-          z-index: 2;
-          position: relative;
-          margin: -240px 10px auto auto;
-          .icon {
-            color: white;
-            margin-left: 10px;
-          }
-        }
-      }
-      .avatar {
-        width: 100px;
-        height: 100px;
-        border-radius: 50%;
-        overflow: hidden;
-        position: relative;
-        margin: -50px auto 0 auto;
-        border: 5px solid white;
-        .image {
-          width: 100%;
-          height: 100%;
-        }
-      }
-      .info {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        text-align: center;
-        .store-name {
-          font-weight: bold;
-        }
-        .store-summary {
-          color: rgb(149, 149, 149);
-        }
-      }
-    }
-    .post-list {
-      margin-top: 20px;
-    }
-  }
 }
 </style>
 <template>
-  <scroll-view class="scroll-view_H" scroll-y="true">
-    <view class="header">
-      <view class="background">
-        <image src="../images/bg.png" class="bg-img" />
-        <view class="operate">
-          <block>
-            <text class="icon slds-icon-search"></text>
-          </block>
-          <block>
-            <text class="icon slds-icon-internal_share"></text>
-          </block>
-          <block>
-            <text class="icon slds-icon-favorite"></text>
-          </block>
-        </view>
-      </view>
-      <view class="avatar">
-        <open-data type="userAvatarUrl"></open-data>
-      </view>
-      <view class="info">
-        <text class="store-name">{{merchant.name}}</text>
-        <text class="store-summary">{{merchant.summary}}</text>
-      </view>
+  <view class="page">
+    <view class="page__hd">
     </view>
-    <view class="post-list">
-      <repeat for="{{posts}}" key="index" index="index" item="post">
-        <post :name="post.name" :summary="post.summary" :commentCount="post.comment_count" :cover="post.images"/>
-      </repeat>
+    <view class="page__bd">
+      <scroll-view class="scroll-view_H" scroll-y="true">
+        <repeat for="{{posts}}" key="index" index="index" item="post">
+          <post :name="post.name" :summary="post.summary" :commentCount="post.comment_count" :cover="post.images"/>
+        </repeat>
+      </scroll-view>
     </view>
-  </scroll-view>
+  </view>
 </template>
 <script>
 import wepy from 'wepy';
@@ -94,11 +24,11 @@ import req from '@/network';
 
 export default class Posts extends wepy.page {
   config = {
-    navigationBarTitleText: '贝菲特'
+    navigationBarTitleText: '最新动态'
   };
 
-  onLoad() {
-		this.getPostList();
+  async onLoad() {
+		this.loadPostList();
   }
 
   onShow() {
@@ -119,30 +49,15 @@ export default class Posts extends wepy.page {
     ]
   };
   
-	getPostList(){
-    debugger;
-    const url = '/api/odata/v4/' + wx.getStorageSync('X-Space-Id') + '/post';
-    console.log("----",url)
-    const data = {
-      // $filter: 'user eq ' + wx.getStorageSync('X-Space-Id'),
+	async loadPostList(){
+    const options = {
       $expand: 'owner($select=name)',
       $count: true,
       $select: 'name,summary,description,comment_count,enable_comment,images'
     };
-    var that = this;
-    req.get(url, data).then(res => {
-      debugger;
-      that.posts = res.value;
-      that.$apply();
-    });
-
-    debugger;
-    (async () => {
-      var re = await this.$parent.cache("spaces", "EJLbMsyeoDoYJiDii");
-      console.log("===================re=====", re);
-      return re;
-    })();
-    debugger;
+    var posts = await this.$parent.query("post", options)
+    this.posts = posts.value;
+    this.$apply();
   };
 }
 </script>
