@@ -55,7 +55,7 @@ export default class VIP extends wepy.app {
     ],
     tabBar: {
       color: '#666',
-      selectedColor: '#b4282d',
+      selectedColor: '#1cac19',
       backgroundColor: '#fff',
       borderStyle: 'black',
       list: [
