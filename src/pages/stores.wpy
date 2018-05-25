@@ -66,9 +66,9 @@
     async onLoad() {
       const self = this;
 
-      stores = await this.getStoreInfo();
-      if(stores.values){
-        this.stores = stores.values
+      var stores = await this.getStoreInfo();
+      if(stores.value){
+        this.stores = stores.value
         this.$apply(); 
       }
       
@@ -85,7 +85,7 @@
         $count: true,
         $select: 'address,name'
       };
-      return await this.$parent.query("vip_store",data)     
+      return this.$parent.query("vip_store",data)     
   }
   }
 </script>
