@@ -74,7 +74,7 @@
 
 
     <view class="page__bd">
-      <block wx:if="{{store}}">
+      <!-- <block wx:if="{{true}}"> -->
         <view class="weui-panel">
           <view class="weui-cells weui-cells_after-title">
             <navigator url="wifi" class="weui-cell weui-cell_access">
@@ -91,7 +91,7 @@
             </navigator>
           </view>
         </view>
-      </block>
+      <!-- </block> -->
       <view class="weui-panel  btn-list">
         <view class="weui-cells weui-cells_after-title">
           <navigator url="stores" class="weui-cell weui-cell_access">
