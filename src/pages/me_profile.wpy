@@ -45,7 +45,7 @@ import { serverAPI } from '@/server';
 
 export default class meProfile extends wepy.page {
   config = {
-    navigationBarTitleText: '我的账户',
+    navigationBarTitleText: '个人信息',
   };
 
   onLoad() {

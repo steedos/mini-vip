@@ -62,7 +62,7 @@ import { serverAPI } from '@/server';
 
 export default class Me extends wepy.page {
   config = {
-    navigationBarTitleText: '我的账户',
+    navigationBarTitleText: '我的',
   };
 
   data = {
