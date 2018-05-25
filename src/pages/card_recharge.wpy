@@ -1,7 +1,6 @@
 <style lang="less">
 .page__hd_bg {
   overflow: hidden;
-  background-color: #fc880f;
   text-align: center;
   padding: 40px;
 }
