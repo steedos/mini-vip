@@ -53,10 +53,10 @@
             <view class="title">积分</view>
             <view class="count">0 分</view>
           </view>
-          <view class="coupon s-card">
+          <navigator url="coupons" class="coupon s-card">
             <view class="title">优惠券</view>
             <view class="count">0 张</view>
-          </view>
+          </navigator>
           <view class="balance s-card" @tap="toRecharge">
             <view class="title">余额 充值</view>
             <view class="count">{{cardBalance}} 元</view>
