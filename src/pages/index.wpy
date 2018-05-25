@@ -137,16 +137,17 @@
       </view>
     </view>
 
-    <view class="weui-panel btn-account">
+    <view class="page__bd btn-account">
       <view class="weui-cells weui-cells_after-title">
-        <navigator url="me" class="weui-cell weui-cell_access">
+        <navigator url="" class="weui-cell weui-cell_access">
           <view class="weui-cell__bd">
-            <view class="btn-my-account">我的账户</view>
+            <view>发行会员卡</view>
           </view>
           <view class="weui-cell__ft weui-cell__ft_in-access"></view>
         </navigator>
       </view>
     </view>
+    
   </view>
 </template>
 

@@ -28,7 +28,7 @@
       <view class="weui-cells weui-cells_after-title">
         <navigator url="" class="weui-cell weui-cell_access">
             <view class="weui-cell__bd">
-              <view>更改密码</view>
+              <view>意见反馈</view>
             </view>
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
         </navigator>
@@ -41,26 +41,17 @@
       </view>
     </view>
 
-      <view class="page__bd">
-        <view class="weui-cells weui-cells_after-title">
-          <navigator url="index" open-type="reLaunch" class="weui-cell weui-cell_access" style="font-size: 17px; color: #333333; solid #CCCCCC;">
-            <view class="weui-cell__bd">
-              <view style="display: inline-block; vertical-align: middle">我的会员卡</view>
-            </view>
-          </navigator>
-        </view>
-      </view>
-      
     <view class="page__bd">
       <view class="weui-cells weui-cells_after-title">
-        <navigator url="" class="weui-cell weui-cell_access">
-            <view class="weui-cell__bd">
-              <view>我要开店</view>
-            </view>
-            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-          </navigator>
+        <navigator url="index" open-type="reLaunch" class="weui-cell weui-cell_access" style="font-size: 17px; color: #333333; solid #CCCCCC;">
+          <view class="weui-cell__bd">
+            <view style="display: inline-block; vertical-align: middle">我的会员卡</view>
+          </view>
+          <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+        </navigator>
       </view>
     </view>
+
   </view>
 </template>
 

@@ -25,7 +25,7 @@ page {
   import searchbar from '../components/searchbar';
   import post from '../components/post';
 
-  export default class PostList extends wepy.page {
+  export default class PostList_ extends wepy.page {
     config = {
       navigationBarTitleText: '发现优惠'
     };
