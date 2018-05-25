@@ -2,7 +2,7 @@
 @import "./assets/style/weui.wxss";
 @import "./assets/style/slds_icons_font.wxss";
 page {
-  background-color: #F2F2F2;
+  background-color: #efeef4;
   font-size: 16px;
   font-family: -apple-system-font,Helvetica Neue,Helvetica,sans-serif;
 }
@@ -73,11 +73,11 @@ export default class VIP extends wepy.app {
       }]
     },
     window: {
-      backgroundTextStyle: 'light',
-      navigationBarBackgroundColor: '#fff',
+      navigationBarBackgroundColor: '#343538',
       navigationBarTitleText: 'WeChat',
-      navigationBarTextStyle: 'black',
-      backgroundColor: "#f8f8f8"
+      navigationBarTextStyle: 'white',
+      backgroundColor: "#efeef4",
+      backgroundTextStyle: 'dark',
     }
   }
 

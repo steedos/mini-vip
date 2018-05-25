@@ -4,7 +4,7 @@
   background-repeat: repeat-x;
   background-image: linear-gradient(135deg, #555555, #898989 50%, #555555);
   height: 400rpx;
-  margin-top: 0rpx;
+  margin-top: 20rpx;
   margin-bottom: 30rpx;
   margin-left: 20rpx;
   margin-right: 20rpx;
