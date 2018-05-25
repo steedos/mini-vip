@@ -62,7 +62,6 @@ setStore(store)
 export default class VIP extends wepy.app {
   config = {
     pages: [
-      'pages/card',
       'pages/index',
       'pages/apps',
       'pages/home',
@@ -71,6 +70,7 @@ export default class VIP extends wepy.app {
       'pages/postList',
       'pages/coupons',
       'pages/store',
+      'pages/card',
       'pages/card_activate',
       'pages/card_billing',
       'pages/card_recharge',
