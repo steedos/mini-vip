@@ -77,12 +77,11 @@ export default class store extends wepy.page {
     navigationBarTitleText: 'WeChat'
   };
 
-  onLoad(options) {
-    var scene = decodeURIComponent(options.scene)
-    this.getCode(scene);
-    // const self = this;
-    // this.getStoreInfo(e.store);
-    // 
+  async onLoad(e) {
+    // var scene = decodeURIComponent(options.scene)
+    var store = await this.getStoreInfo(e.store);
+    this.store = store
+    this.$apply(); 
 	}
 
   components = {
@@ -93,19 +92,20 @@ export default class store extends wepy.page {
 		store:[]
   };
 	getStoreInfo(store_id){
-    const url = '/api/odata/v4/' + wx.getStorageSync('X-Space-Id') + '/vip_store/'+ store_id;
-    const data = {
-      // $filter: 'user eq ' + wx.getStorageSync('X-Space-Id'),
-      $expand: 'owner($select=name)',
-      $count: true,
-      $select: 'address,name,description,business_hours'
-    };
-    req.get(url, data).then(res => {
-			const store = res;
-      this.store = store;
-      this.$apply();
-		  wx.setNavigationBarTitle({title:this.store.name})
-    });
+    // const url = '/api/odata/v4/' + wx.getStorageSync('X-Space-Id') + '/vip_store/'+ store_id;
+    // const data = {
+    //   // $filter: 'user eq ' + wx.getStorageSync('X-Space-Id'),
+    //   $expand: 'owner($select=name)',
+    //   $count: true,
+    //   $select: 'address,name,description,business_hours'
+    // };
+    // req.get(url, data).then(res => {
+		// 	const store = res;
+    //   this.store = store;
+    //   this.$apply();
+		//   wx.setNavigationBarTitle({title:this.store.name})
+    // });
+    return this.$parent.get("vip_store",store_id) 
   }
   getCode(scene) {
     wx.request({
@@ -129,16 +129,6 @@ export default class store extends wepy.page {
       }
       });
   }
-    
-  //   const url = "https://api.weixin.qq.com/wxa/getwxacode?access_token=" + wx.getStorageSync('X-Auth-Token');
-  //   const data = {
-  //     path:'pages/store',
-  //     width:430
-  //   };
-  //   wx.request({
-  //     url: url,
-  //     data:data
-  // });
   
   methods = {
 		phoneCall() {

@@ -48,7 +48,9 @@ export default class VIP extends wepy.app {
       'pages/card_recharge',
       'pages/stores',
       'pages/wifi',
-      'pages/edit/text'
+      'pages/edit/text',
+      'pages/posts',
+      'pages/edit/select'
     ],
     tabBar: {
       color: '#666',
@@ -171,28 +173,27 @@ export default class VIP extends wepy.app {
     return result;
   }
 
-  get(object_name,_id,data) {
+  get(object_name,_id) {
     const url = '/api/odata/v4/' + wx.getStorageSync('X-Space-Id') + '/' + object_name + '/' + _id;
-    req.get(url, data).then(res => {
-      return res
-    })
+    return req.get(url)
   }
-  query(object_name,data) {
+  query(object_name,query_options) {
     const url = '/api/odata/v4/' + wx.getStorageSync('X-Space-Id') + '/' + object_name;
-    return req.get(url, data)
-    // req.get(url, data).then(res => {
-    //   console.log(res.value);
-    //   return res.value
-    // })
+    return req.get(url, query_options)
   }
   insert(object_name,data) {
-
+    const url = '/api/odata/v4/' + wx.getStorageSync('X-Space-Id') + '/' + object_name;
+    return req.post(url, data)
   }
   update(object_name,_id,data) {
-
+    const url = '/api/odata/v4/' + wx.getStorageSync('X-Space-Id') + '/' + object_name + '/'+_id;
+    doc = {}
+    doc['$set'] = data
+    return req.update(url, doc)
   }
-  delete(object_name,_id,data) {
-    
+  delete(object_name,_id) {
+    const url = '/api/odata/v4/' + wx.getStorageSync('X-Space-Id') + '/' + object_name + '/'+_id;
+    return req.delete(url)
   }
 }
 </script>
