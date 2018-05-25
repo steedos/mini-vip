@@ -1,17 +1,8 @@
-<style lang="less">
-.page-me {
-  .page__hd {
-    margin-top: 20px;
-  }
-}
-.page__bd {
-    margin-top: 20px;
-  }
-</style>
+
 <template>
   <view class="page-me">
-    <view class="weui-cells weui-cells_after-title page__hd">
-      <view class="weui-panel__bd">
+    <view class="weui-panel__bd">
+      <view class="weui-cells">
         <navigator url="me_profile" class="weui-media-box weui-media-box_appmsg" hover-class="weui-cell_active">
           <view class="weui-media-box__hd weui-media-box__hd_in-appmsg" style="width: 50px; height: 50px; line-height: 50px;">
             <open-data class="weui-media-box__thumb" type="userAvatarUrl"></open-data>
@@ -23,9 +14,8 @@
           <view class="weui-cell__ft weui-cell__ft_in-access"></view>
         </navigator>
       </view>
-    </view>
-    <view class="page__bd">
-      <view class="weui-cells weui-cells_after-title">
+
+      <view class="weui-cells">
         <navigator url="" class="weui-cell weui-cell_access">
             <view class="weui-cell__bd">
               <view>意见反馈</view>
@@ -39,10 +29,8 @@
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
         </navigator>
       </view>
-    </view>
-
-    <view class="page__bd">
-      <view class="weui-cells weui-cells_after-title">
+      
+      <view class="weui-cells">
         <navigator url="index" class="weui-cell weui-cell_access" style="font-size: 17px; color: #333333; solid #CCCCCC;">
           <view class="weui-cell__bd">
             <view style="display: inline-block; vertical-align: middle">我的会员卡</view>
