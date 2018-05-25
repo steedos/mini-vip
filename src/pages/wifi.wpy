@@ -1,44 +1,67 @@
 <style lang="less">
-  .control-wifi{
+  .wifi-control{
     text-align:center;
     .wifi-status{
-      margin-top:20px;
+      width:150px;
+      height:150px;
+      margin:50px auto;
+      .icon{
+        font-size: 150px;
+      }
     }
-    .wifi-progress{
-      margin:20px 25%;
+    .wifi-info{
+      margin-top:30px;
+      font-weight:bold;
     }
-    .wifi-current{
-      margin-top:20px;
-    }
-    .wifi-list{
-      margin-top:20px;
+    .wifi-choose{
+      .wifi-selected{
+        margin-top:20px;
+      }
+      .wifi-list{
+        margin:20px 20px;
+        width:50px;
+        height:50px;
+        border-radius:50%;
+        border:3px solid #A7A7A7;
+        box-shadow:0px 0px 5px #585858;
+        float:right;
+        .picker{
+          margin-top:13px;
+        }
+      }
     }
   }
 </style>
 <template>
   <!-- <button type="default" @tap="toTestWifi"> 附近Wifi </button> -->
   <view class="page__bd" style="margin-top: 36rpx">
-    <view class="group control-wifi">
-      <view>
-        <icon type="warn" size="100" @tap="toConnectWifi"/>
-      </view>
+    <view class="group wifi-control">
       <view class="wifi-status">
-        <text>WIFI 未连接</text>
+        <block wx:if="{{icon=='power'}}">
+          <text class="icon slds-icon-power" style="color: #A7A7A7" @tap="toConnectWifi">
+          </text>
+        </block>
+        <block wx:elif="{{icon=='wifi'}}">
+          <text class="icon slds-icon-wifi" style="color: #3FAA41">
+          </text>
+        </block>
       </view>
-      <view class="wifi-progress">
-        <progress percent="100" />
+      <view class="wifi-info">
+        <text>{{status}}</text>
       </view>
-      <view class="wifi-current">
-        <text>选中Wifi</text>
-        <text>{{current.SSID}}</text>
-      </view>
-      <view class="wifi-list">
-        <text>门店Wifi</text>
-        <repeat for="{{wifiList}}" key="index" index="index" item="wifi">
-          <view class="weui-cell__bd">
-            <view class="card-name">{{wifi.SSID}}</view>
+      <view class="wifi-choose">
+        <view class="wifi-selected">
+          <text>{{selected.SSID}}</text>
+        </view>
+        <block wx:if="{{wifiList.length > 1}}">
+          <view class="wifi-list">
+            <picker range="{{wifiList}}" range-key="SSID" bindchange="bindWifiChange">
+              <view class="picker">
+                切换
+              </view>
+            </picker>
           </view>
-        </repeat>
+        </block>
       </view>
     </view>
     </view>
@@ -49,89 +72,131 @@ import wepy from 'wepy';
 import req from '@/network';
 export default class Wifi extends wepy.page {
   config = {
-    navigationBarTitleText: 'WIFI',
+    navigationBarTitleText: 'WiFi',
     navigationBarTextStyle: 'black'
   };
 
   data = {
-    current:{
-      SSID: "HotLongTC",
-      BSSID: 'D0-57-7B-E5-CB-EE',
-      password: 'adminhotoa'
+    icon: 'power',
+    status:'WiFi 未连接',
+    selected: {
+      SSID: 'beifeite1',
+      BSSID: '',
+      password: ''
     },
-    wifiList:[{
-      SSID: "HotLongTC",
-      BSSID: 'D0-57-7B-E5-CB-EE',
-      password: 'adminhotoa'
-    },
-    {
-      SSID: "HotLongTC2",
-      BSSID: 'D0-57-7B-E5-CB-EE',
-      password: 'adminhotoa'
-    },{
-      SSID: "HotLongTC",
-      BSSID: 'D0-57-7B-E5-CB-EE',
-      password: 'adminhotoa'
-    }]
+    wifiList:[],
+    store:''
   };
 
-  onLoad() {
+  async onLoad(e) {
+    wx.showNavigationBarLoading();
+    if (e.store) {
+      this.store = e.store;
+    }
+    else{
+      this.store = 'AJ652WDC5Zh4gLCrT';
+    }
+    const _self = this;
     wx.startWifi({
       success: function(res) {
-        console.log(res.errMsg)
       }
     })
-    // 获取wifi
-    // this.getWifiInfo();
+    // 检测获取已连接中的 Wi-Fi 信息
+    wx.getConnectedWifi({
+      success: function(res) {
+        if(res.wifi){
+          _self.icon = "wifi";
+          _self.status = '已连接 ' + res.wifi.SSID;
+          _self.$apply();
+        }
+      }
+    })
+    // 获取门店wifi
+    var wifis = await this.getWifiInfo();
+    console.log(wifis);
+    if(wifis.value){
+      _self.wifiList = wifis.value;
+      _self.selected = wifis.value[0];
+      _self.$apply(); 
+    }
+    wx.hideNavigationBarLoading();
   };
 
   methods = {
-    toTestWifi(){
-      wx.onGetWifiList(function(res) {
-        console.log(res);
-        if (res.wifiList.length) {
-          wx.setWifiList({
-            wifiList: [{
-              SSID: res.wifiList[0].SSID,
-              BSSID: res.wifiList[0].BSSID,
-              password: '123456'
-            }]
-          })
-        } else {
-          wx.setWifiList({
-            wifiList: []
+    bindWifiChange(e){
+      const index = e.detail.value;
+      this.selected = this.wifiList[index];
+      this.icon = "power";
+      this.$apply();
+    },
+    toConnectWifi() {
+      const _self = this;
+      wx.connectWifi({
+        SSID: _self.selected.SSID,
+        BSSID: _self.selected.BSSID,
+        password: _self.selected.password,
+        success: function(res){
+          _self.icon = "wifi";
+          _self.status = '已连接 ' + _self.selected.SSID;
+          _self.$apply();
+        },
+        fail: function(res){
+          console.log('shibai');
+          var errMsg = "";
+          switch(res.errCode) {
+            case 12000:
+              errMsg = "先调用startWifi接口";
+              break;
+            case 12001:
+              errMsg = "当前系统不支持相关能力";
+              break;
+            case 12002:
+              errMsg = "Wi-Fi 密码错误";
+              break;
+            case 12003:
+              errMsg = "连接超时";
+              break;
+            case 12004:
+              errMsg = "重复连接 Wi-Fi";
+              break;
+            case 12005:
+              errMsg = "未打开 Wi-Fi 开关";
+              break;
+            case 12006:
+              errMsg = "未打开 GPS 定位开关";
+              break;
+            case 12007:
+              errMsg = "用户拒绝授权链接 Wi-Fi";
+              break;
+            case 12008:
+              errMsg = "无效SSID";
+              break;
+            case 12009:
+              errMsg = "系统运营商配置拒绝连接 Wi-Fi";
+              break;
+            case 12010:
+              errMsg = "系统其他错误";
+              break;
+            case 12011:
+              errMsg = "应用在后台无法配置 Wi-Fi";
+              break;
+          }
+          wx.showToast({
+            title: errMsg,
+            icon: 'none',
+            duration: 2000
           })
         }
       });
-      wx.getWifiList();
-    },
-    toConnectWifi() {
-
-      console.log("连接wifi")
-      wx.connectWifi({
-        SSID: 'HotLongTC',
-        BSSID: 'D0-57-7B-E5-CB-EE',
-        password: 'adminhotoa',
-        success: function(res) {
-          console.log(res.errMsg)
-          console.log("成功")
-        }
-      })
     }
   };
 
-  // getWifiInfo(){
-  //   const url = '/api/odata/v4/uSm6t2rzpvnfks4ee/vip_wifi';
-  //   const data = {
-  //     $filter: 'store eq AJ652WDC5Zh4gLCrT',
-  //     $select: 'SSID,BSSID,password'
-  //   };
-  //   req.get(url, data).then(res => {
-  //     const wifi = res.value;
-  //     console.log(wifi);
-  //     this.wifi = wifi[0];
-  //     this.$apply();
-  //   });
-  // }
+  getWifiInfo(){
+    const data = {
+      $filter: 'store eq ' + this.store,
+      $select: 'SSID,BSSID,password'
+    };
+    return this.$parent.query("vip_wifi",data);
+  }
 }
 </script>
