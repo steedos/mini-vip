@@ -70,7 +70,7 @@
       <text class="btn-focus btn-link">关注</text>
     </view>
     <view class="post-body">
-      <image class="image" mode="widthFix" src="{{cover}}"/>
+      <image class="image" mode="widthFix" src="{{avatarUrl}}"/>
       <view>
         <text>{{name}}</text>
       </view>
@@ -94,6 +94,7 @@
 
 <script>
 import wepy from 'wepy';
+import { baseUrl } from '@/config'
 
 export default class post extends wepy.component {
   onLoad() {}
@@ -113,7 +114,7 @@ export default class post extends wepy.component {
     },
     cover: {
       type: String,
-      default: ''
+      default: 'sasasas'
     },
     name: {
       type: String,
@@ -129,8 +130,18 @@ export default class post extends wepy.component {
     }
   }
 
-  data = {};
+  data = {
+    baseUrl: baseUrl
+  };
 
   methods = {};
+
+  computed = {
+    avatarUrl() {
+      const cover = this.cover
+      console.log("==============================================avatarUrl========================", this.summary);
+      return `${baseUrl}/api/files/images/${cover}`
+    }
+  }
 }
 </script>

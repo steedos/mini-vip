@@ -41,9 +41,9 @@ export default class Select extends wepy.page {
   onLoad(e) {
     console.log(e)
     this.text = "设置"+e.text
-    this.sex = e.sex
+    this.gender = e.gender
     var radioItems = this.data.radioItems
-    if (radioItems[0].name==e.sex){
+    if (radioItems[0].name==e.gender){
       radioItems[0].checked = true
     }else{
       radioItems[1].checked = true
@@ -63,9 +63,6 @@ export default class Select extends wepy.page {
     bindNameChange(e) {
         this.name = e.detail.value;
       },
-    setSex: function(){
-        
-    },
     radioChange: function (e) {
         console.log('radio发生change事件，携带value值为：', e.detail.value);
 

@@ -205,7 +205,7 @@ export default class Card extends wepy.page {
     const self = this
     if (e.space) {
       this.space = e.space;
-      this.$parent.globalData.space_id = e.space
+      this.$parent.globalData.spaceId = e.space
     }
     if (e.store) {
       this.store = e.store;
