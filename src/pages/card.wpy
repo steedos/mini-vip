@@ -107,15 +107,6 @@
       </view>
     </view>
 
-    <view class="page__bd">
-      <view class="weui-cells weui-cells_after-title">
-        <navigator url="index" open-type="reLaunch" class="weui-cell weui-cell_access" style="font-size: 17px; color: #333333; solid #CCCCCC;">
-          <view class="weui-cell__bd">
-            <view style="display: inline-block; vertical-align: middle">我的会员卡</view>
-          </view>
-        </navigator>
-      </view>
-    </view>
   </view>
 </template>
 
