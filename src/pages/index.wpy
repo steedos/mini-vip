@@ -176,7 +176,6 @@
     getUserCard(){
       console.log("get Card...")
       req.get("/api/steedos/weixin/cards").then(res => {
-        debugger
         let card_count
         if (res.cards) {
           card_count = res.cards.length;
