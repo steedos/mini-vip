@@ -151,14 +151,14 @@ export default class VIP extends wepy.app {
 
   async login(space_id) {
     const self = this
-    let globalData = self.$parent.globalData
+    let globalData = self.globalData
     let needs_login = false
 
     if (!globalData.userInfo) {
       const setting = await wepy.getSetting()
       if (setting.authSetting['scope.userInfo']) {
         const userInfo = await wepy.getUserInfo()
-        self.$parent.globalData.userInfo = userInfo
+        self.globalData.userInfo = userInfo
       }
     }
 
@@ -204,7 +204,7 @@ export default class VIP extends wepy.app {
       globalData.user.sex = res.sex
       globalData.user.birthdate = res.birthdate
 
-      self.$parent.globalData = globalData
+      self.globalData = globalData
       req.header(header)
     } else {
       const header = {
@@ -220,7 +220,7 @@ export default class VIP extends wepy.app {
     if(gd[object_name] && gd[object_name]._id == _id){
       return gd[object_name];
     }
-    const spaceId = this.$parent.globalData.spaceId;
+    const spaceId = this.globalData.spaceId;
     if(!spaceId){
       return null;
     }
@@ -234,7 +234,7 @@ export default class VIP extends wepy.app {
   }
 
   async get(object_name,_id) {
-    const url = '/api/odata/v4/' + this.$parent.globalData.spaceId + '/' + object_name + '/' + _id;
+    const url = '/api/odata/v4/' + this.globalData.spaceId + '/' + object_name + '/' + _id;
     const result = await req.get(url).catch((err)=>{
       console.log("error...",err.data.error)
       return {}
@@ -242,7 +242,7 @@ export default class VIP extends wepy.app {
     return result
   }
   async query(object_name,query_options) {
-    const url = '/api/odata/v4/' + this.$parent.globalData.spaceId + '/' + object_name;
+    const url = '/api/odata/v4/' + this.globalData.spaceId + '/' + object_name;
     const result = await req.get(url, query_options).catch((err)=>{
       console.log("error...",err.data.error)
       return {}
@@ -250,7 +250,7 @@ export default class VIP extends wepy.app {
     return result
   }
   async insert(object_name,data) {
-    const url = '/api/odata/v4/' + this.$parent.globalData.spaceId + '/' + object_name;
+    const url = '/api/odata/v4/' + this.globalData.spaceId + '/' + object_name;
     const result = await req.post(url, data).catch((err)=>{
       console.log("error...",err.data.error)
       return {}
@@ -258,7 +258,7 @@ export default class VIP extends wepy.app {
     return result
   }
   async update(object_name,_id,data) {
-    const url = '/api/odata/v4/' + this.$parent.globalData.spaceId + '/' + object_name + '/'+_id;
+    const url = '/api/odata/v4/' + this.globalData.spaceId + '/' + object_name + '/'+_id;
     doc = {}
     doc['$set'] = data
     const result = await req.update(url,doc).catch((err)=>{
@@ -268,7 +268,7 @@ export default class VIP extends wepy.app {
     return result
   }
   async delete(object_name,_id) {
-    const url = '/api/odata/v4/' + this.$parent.globalData.spaceId + '/' + object_name + '/'+_id;
+    const url = '/api/odata/v4/' + this.globalData.spaceId + '/' + object_name + '/'+_id;
     const result = await req.delete(url).catch((err)=>{
       console.log("error...",err.data.error)
       return {}

@@ -53,7 +53,7 @@
         <view class="wifi-selected">
           <text>{{selected.SSID}}</text>
         </view>
-        <block wx:if="{{wifiList.length > 1}}">
+        <!-- <block wx:if="{{wifiList.length > 1}}"> -->
           <view class="wifi-list">
             <picker range="{{wifiList}}" range-key="SSID" bindchange="bindWifiChange">
               <view class="picker">
@@ -61,7 +61,7 @@
               </view>
             </picker>
           </view>
-        </block>
+        <!-- </block> -->
       </view>
     </view>
     </view>
@@ -72,29 +72,25 @@ import wepy from 'wepy';
 import req from '@/network';
 export default class Wifi extends wepy.page {
   config = {
-    navigationBarTitleText: 'WiFi',
-    navigationBarTextStyle: 'black'
+    navigationBarTitleText: 'WiFi'
   };
 
   data = {
     icon: 'power',
     status:'WiFi 未连接',
     selected: {
-      SSID: 'beifeite1',
+      SSID: '',
       BSSID: '',
       password: ''
     },
     wifiList:[],
-    store:''
+    store:'AJ652WDC5Zh4gLCrT'
   };
 
   async onLoad(e) {
     wx.showNavigationBarLoading();
     if (e.store) {
       this.store = e.store;
-    }
-    else{
-      this.store = 'AJ652WDC5Zh4gLCrT';
     }
     const _self = this;
     wx.startWifi({
@@ -113,7 +109,6 @@ export default class Wifi extends wepy.page {
     })
     // 获取门店wifi
     var wifis = await this.getWifiInfo();
-    console.log(wifis);
     if(wifis.value){
       _self.wifiList = wifis.value;
       _self.selected = wifis.value[0];

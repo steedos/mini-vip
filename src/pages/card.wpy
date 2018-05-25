@@ -44,7 +44,7 @@
 }
 </style>
 <template>
-  <view class="page page-card">
+  <view class="page-card">
     <view class="weui-panel weui-panel_access header">
       <vipcrad :isActivated.sync="isActivated" :cardName.sync="cardName" :cardType.sync="cardType" :cardNumber.sync="cardNumber"/>
       <block wx:if="{{isActivated}}">
@@ -205,7 +205,7 @@ export default class Card extends wepy.page {
       this.store = e.store;
     }
 
-    await this.$parent.login.call(this);
+    await this.$parent.login(e.space);
 
     if (this.$parent.globalData.userInfo) {
       this.isAuthorize = true
