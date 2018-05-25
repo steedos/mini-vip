@@ -74,10 +74,10 @@
           <text>{{name}}</text>
         </view>
         <view class="coupon-consumption">
-          <text>{{min_consumption}}</text>
+          <text>满{{min_consumption}}元可用</text>
         </view>
         <view class="coupon-validity">
-          <text>2018-10-01</text> <text>2018-10-07</text>
+          <text>{{tools.timefmt(start_time)}}</text> <text>{{tools.timefmt(end_time)}}</text>
         </view>
       </view>
     </view>
@@ -86,6 +86,7 @@
 
 <script>
 import wepy from 'wepy';
+import tools from '../wxs/tools.wxs'
 
 export default class coupon extends wepy.component {
   onLoad() {}
@@ -114,6 +115,10 @@ export default class coupon extends wepy.component {
   }
 
   data = {};
+
+  wxs = {
+    tools: tools
+  };
 
   methods = {};
 }
