@@ -74,6 +74,7 @@
 
 <template>
   <view class="page">
+  <!--
 		<view class="page__hd">
       <view class="page__hd_bg">
         <view class="page__hd_spacing">
@@ -88,6 +89,7 @@
         </view>
       </view>
     </view>
+  -->
 
     <view class="page__bd">
       <view class="weui-cells__title page__bd_mycard">我的会员卡</view>
@@ -134,9 +136,7 @@
 
   export default class User extends wepy.page {
     config = {
-      navigationBarTitleText: '我的会员卡',
-      navigationBarTextStyle: 'light',
-      navigationBarBackgroundColor: '#fc880f'
+      navigationBarTitleText: '会员服务台',
     };
 
     getCardUrl() {
