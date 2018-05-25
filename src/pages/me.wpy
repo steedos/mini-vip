@@ -18,7 +18,7 @@
           </view>
           <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
             <view class="weui-media-box__title">{{nickName}}</view>
-            <view class="weui-media-box__desc">18721463698</view>
+            <view class="weui-media-box__desc">{{phoneNumber}}</view>
           </view>
           <view class="weui-cell__ft weui-cell__ft_in-access"></view>
         </navigator>
@@ -66,14 +66,18 @@ export default class Me extends wepy.page {
   };
 
   data = {
-    nickName: ''
+    nickName: '',
+    phoneNumber: ''
   }
 
   onLoad() {
     const nickName = this.$parent.globalData.userInfo.userInfo.nickName
     this.nickName = nickName
     this.$apply()
-    console.log(this.$parent.globalData)  
+
+    const user = this.$parent.globalData.user
+    this.phoneNumber = user.mobile
+    console.log(this.$parent.globalData.user)  
   }
 
   methods = {

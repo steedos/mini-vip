@@ -21,17 +21,17 @@
             </view>
             <view class="weui-cell__ft weui-cell__ft_in-access">{{gender}}</view>
           </navigator>
-          <navigator url="./edit/date?text=生日&date=1998-01-01" class="weui-cell weui-cell_access">
+          <navigator url="./edit/date?text=生日&date={{birthdate}}" class="weui-cell weui-cell_access">
             <view class="weui-cell__bd">
               <view>生日</view>
             </view>
-            <view class="weui-cell__ft weui-cell__ft_in-access">1998-01-01</view>
+            <view class="weui-cell__ft weui-cell__ft_in-access">{{birthdate}}</view>
           </navigator>
-          <navigator url="" class="weui-cell weui-cell_access">
+          <navigator class="weui-cell weui-cell_access">
             <view class="weui-cell__bd">
               <view>手机</view>
             </view>
-            <view class="weui-cell__ft weui-cell__ft_in-access">18601110111</view>
+            <view class="weui-cell__ft weui-cell__ft_in-access">{{phoneNumber}}</view>
           </navigator>
 			</view>
 		</view>
@@ -58,11 +58,17 @@ export default class meProfile extends wepy.page {
       this.gender = '女'
     }
     this.$apply()
+    const user = this.$parent.globalData.user
+    this.phoneNumber = user.mobile
+    this.birthdate = user.birthdate
+    console.log(this.$parent.globalData.user) 
     console.log(this.$parent.globalData) 
   }
     data = {
     nickName: '',
-    gender: ''
+    gender: '',
+    phoneNumber: '',
+    birthdate: ''
   }
   methods = {};
 }
