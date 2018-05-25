@@ -226,7 +226,7 @@ export default class Card extends wepy.page {
     if (e.card) {
       this.getCardInfo(e.card)
     }
-    
+
     wx.showShareMenu({
       withShareTicket: true
     });
@@ -278,7 +278,7 @@ export default class Card extends wepy.page {
     },
     toRecharge() {
       wx.navigateTo({
-        url: 'card_recharge?card=' + this.cardId
+        url: 'card_recharge?card=' + this.cardId + '&balance=' + this.cardBalance
       });
     }
   };
