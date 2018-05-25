@@ -63,8 +63,6 @@ import { serverAPI } from '@/server';
 export default class Me extends wepy.page {
   config = {
     navigationBarTitleText: '我的账户',
-    navigationBarTextStyle: 'light',
-    navigationBarBackgroundColor: '#fc880f'
   };
 
   data = {

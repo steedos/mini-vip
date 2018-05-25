@@ -11,62 +11,55 @@
   border-radius: 20rpx;
   display: flex;
   flex-direction: column;
-
-  .info {
-    display: flex;
-    flex-direction: row;
-    flex: 1;
-  }
+  position:relative;
 
   .user-avatar {
-    width: 50px;
-    height: 50px;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
     overflow: hidden;
     position: relative;
-    margin: 27px 10px 0 20px;
+    margin: 12px 10px 0 14px;
 
     .image {
-      width: 50px;
-      height: 50px;
+      width: 30px;
+      height: 30px;
       border: 1px solid #fff;
       border-radius: 50%;
     }
   }
 
-  .card-info {
+  .card-name {
     display: flex;
-    margin-top: 27px;
     flex-direction: column;
     color: #fff;
-
-    .card-name {
-      margin-top: 2px;
-      font-weight: bold;
-      text-shadow: 0 2px 1px rgba(0, 0, 0, 0.2);
-    }
+    position: absolute;
+    left: 52px;
+    top: 14px;
+    line-height: 30px;
+    font-size: 17px;
+    text-shadow: 0 2px 1px rgba(0, 0, 0, 0.2);
+    font-weight: bold;
   }
 
   .card-number {
-    margin-left: 20px;
-    margin-bottom: 15px;
+    left: 14px;
+    bottom: 12px;
     font-weight: bold;
     color: #fff;
     text-shadow: 0 2px 1px rgba(0, 0, 0, 0.2);
+    position: absolute;
   }
 }
 </style>
 <template>
 	<view class="card">
-    <view class="info">
-      <view class="user-avatar">
-        <open-data wx:if="{{isActivated}}" type="userAvatarUrl"></open-data>
-        <image wx:else class="image" mode="aspectFit" src="../images/avatar.png"/>>
-      </view>
-		  <view class="card-info">
-        <text class="card-name">{{cardName}}</text>
-			  <text class="vip-card">{{cardType}}</text>
-      </view>
+    <view class="user-avatar">
+      <open-data wx:if="{{isActivated}}" type="userAvatarUrl"></open-data>
+      <image wx:else class="image" mode="aspectFit" src="../images/avatar.png"/>>
+    </view>
+	  <view class="card-name">
+      <text>{{cardName}}会员卡</text>
     </view>
     <view class="card-number">
       <text>{{formatNumber}}</text>
@@ -111,7 +104,10 @@ export default class vipCard extends wepy.component {
     }
   }
 
-  data = {};
+  data = {
+    cardNumber: "888888888888"
+
+  };
 
   methods = {};
 }
