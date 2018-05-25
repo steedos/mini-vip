@@ -65,12 +65,12 @@
 <template>
 	<view class="post">
     <view class="post-header" wx:if="{{isHeaderShow}}">
-      <image class="image" mode="scaleToFill" src="{{logo}}"/>
-      <text class="post-name">{{storeName}}</text>
+      <image class="image" mode="scaleToFill" src="{{baseUrl}}/api/files/images/{{logo}}"/>
+      <text class="post-name">{{store.name}}</text>
       <text class="btn-focus btn-link">关注</text>
     </view>
     <view class="post-body">
-      <image class="image" mode="widthFix" src="{{avatarUrl}}"/>
+      <image class="image" mode="widthFix" src="{{baseUrl}}/api/files/images/{{cover}}"/>
       <view>
         <text>{{name}}</text>
       </view>
@@ -136,12 +136,5 @@ export default class post extends wepy.component {
 
   methods = {};
 
-  computed = {
-    avatarUrl() {
-      const cover = this.cover
-      console.log("==============================================avatarUrl========================", this.summary);
-      return `${baseUrl}/api/files/images/${cover}`
-    }
-  }
 }
 </script>
