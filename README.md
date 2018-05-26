@@ -1,5 +1,16 @@
 # 会员服务台
 
+### 系统表结构
+- 会员卡：https://github.com/steedos/creator/blob/vip/packages/steedos-vip-card/models/vip_card.coffee
+- 消费记录：https://github.com/steedos/creator/blob/vip/packages/steedos-vip-card/models/vip_billing.coffee
+- 卡类型：https://github.com/steedos/creator/blob/vip/packages/steedos-vip-card/models/vip_category.coffee
+- 优惠券：https://github.com/steedos/creator/blob/vip/packages/steedos-vip-card/models/vip_coupon.coffee
+- 积分：https://github.com/steedos/creator/blob/vip/packages/steedos-vip-card/models/vip_points.coffee
+- 门店：https://github.com/steedos/creator/blob/vip/packages/steedos-vip-card/models/vip_store.coffee
+- 门店wifi：https://github.com/steedos/creator/blob/vip/packages/steedos-vip-card/models/vip_wifi.coffee
+- 热点信息：https://github.com/steedos/creator/tree/vip/packages/steedos-post/models
+- 评论：指的是对热点信息的评论https://github.com/steedos/creator/blob/vip/packages/steedos-post/models/post_comments.coffee
+- 收藏：指的是对热点信息的收藏https://github.com/steedos/creator/blob/vip/packages/steedos-post/models/post_star.coffee
 ### 业务逻辑规范
 - 任何一个人第一次使用卡券助手，自动创建users记录，并将userId保存在本地存储
 - 微信用户在第一次浏览商户时，自动创建space_user记录
