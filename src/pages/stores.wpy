@@ -23,7 +23,7 @@
   import { demoSpaceId,demoStoreId } from '@/config'
   export default class Store extends wepy.page {
     config = {
-      navigationBarTitleText: '所有门店'
+      navigationBarTitleText: '门店查询'
     };
     data = {
       hasUserInfo: false,
