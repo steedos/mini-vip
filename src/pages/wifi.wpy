@@ -4,31 +4,24 @@
     .wifi-status{
       width:150px;
       height:150px;
-      margin:50px auto;
+      margin:20px auto;
       .icon{
         font-size: 150px;
       }
     }
     .wifi-info{
-      margin-top:30px;
+      margin-top:15px;
       font-weight:bold;
     }
-    .wifi-choose{
-      .wifi-selected{
-        margin-top:20px;
-      }
-      .wifi-list{
-        margin:20px 20px;
-        width:50px;
-        height:50px;
-        border-radius:50%;
-        border:3px solid #A7A7A7;
-        box-shadow:0px 0px 5px #585858;
-        float:right;
-        .picker{
-          margin-top:13px;
-        }
-      }
+  }
+  .wifi-list{
+    width: 100%;
+    position:absolute;
+    bottom:20px;
+    .list-title{
+      color: Grey;
+      font-size:11pt;
+      text-align:center;
     }
   }
 </style>
@@ -49,22 +42,24 @@
       <view class="wifi-info">
         <text>{{status}}</text>
       </view>
-      <view class="wifi-choose">
-        <view class="wifi-selected">
-          <text>{{selected.SSID}}</text>
-        </view>
-        <!-- <block wx:if="{{wifiList.length > 1}}"> -->
-          <view class="wifi-list">
-            <picker range="{{wifiList}}" range-key="SSID" bindchange="bindWifiChange">
-              <view class="picker">
-                切换
-              </view>
-            </picker>
-          </view>
-        <!-- </block> -->
+    </view>
+    <view class="wifi-list">
+      <view class="list-title">
+        <text>{{listTitle}}</text>
       </view>
+      <scroll-view  scroll-y style="max-height: 230px;">
+        <radio-group bindchange="radioChange">
+          <label class="weui-cell weui-check__label" wx:for="{{wifiList}}" wx:key="value">
+            <radio class="weui-check" value="{{item.SSID}}" checked="{{item.checked}}"/>
+            <view class="weui-cell__bd">{{item.SSID}}</view>
+            <view class="weui-cell__ft weui-cell__ft_in-radio" wx:if="{{item.checked}}">
+                <icon class="weui-icon-radio" type="success_no_circle" size="16"></icon>
+            </view>
+          </label>
+        </radio-group>
+      </scroll-view>
     </view>
-    </view>
+  </view>
 </template>
 
 <script>
@@ -78,12 +73,10 @@ export default class Wifi extends wepy.page {
   data = {
     icon: 'power',
     status:'WiFi 未连接',
-    selected: {
-      SSID: '',
-      BSSID: '',
-      password: ''
-    },
+    current:'',
+    selected: {},
     wifiList:[],
+    listTitle: '门店 WiFi 列表',
     store:'AJ652WDC5Zh4gLCrT'
   };
 
@@ -91,38 +84,64 @@ export default class Wifi extends wepy.page {
     wx.showNavigationBarLoading();
     if (e.store) {
       this.store = e.store;
+    }else{
+      this.store = "AJ652WDC5Zh4gLCrT";
     }
     const _self = this;
     wx.startWifi({
       success: function(res) {
       }
     })
+
+    // 获取门店wifi
+    var wifis = await this.getWifiInfo();
+    if(wifis.value && wifis.value.length>0){
+      console.log("wifis.value.length",wifis.value.length);
+      _self.wifiList = wifis.value;
+      // _self.selected = wifis.value[0];
+      _self.$apply(); 
+    }else{
+      _self.listTitle = "该门店未配置 WiFi";
+      _self.$apply(); 
+    }
+    console.log("_self.wifiList",_self.wifiList);
+    console.log("检测获取已连接中的 Wi-Fi 信息");
     // 检测获取已连接中的 Wi-Fi 信息
     wx.getConnectedWifi({
       success: function(res) {
+        var radioItems = _self.wifiList;
+        console.log("radioItems1",radioItems);
+        var index = -1;
         if(res.wifi){
           _self.icon = "wifi";
           _self.status = '已连接 ' + res.wifi.SSID;
+          _self.current = res.wifi.SSID;
+          index = radioItems.findIndex((v) => {
+            return v.SSID == res.wifi.SSID
+          })
+
+          console.log("wifilist-index",index);
+          if(index > -1){
+            radioItems[index].checked = true;
+            _self.selected = radioItems[index];
+          }
           _self.$apply();
         }
       }
     })
-    // 获取门店wifi
-    var wifis = await this.getWifiInfo();
-    if(wifis.value){
-      _self.wifiList = wifis.value;
-      _self.selected = wifis.value[0];
-      _self.$apply(); 
-    }
+    
     wx.hideNavigationBarLoading();
   };
 
   methods = {
     bindWifiChange(e){
       const index = e.detail.value;
-      this.selected = this.wifiList[index];
-      this.icon = "power";
-      this.$apply();
+      const current = this.wifiList[index]
+      if(this.selected.SSID!==current.SSID){
+        this.selected = current;
+        this.icon = "power";
+        this.$apply();
+      }
     },
     toConnectWifi() {
       const _self = this;
@@ -133,6 +152,8 @@ export default class Wifi extends wepy.page {
         success: function(res){
           _self.icon = "wifi";
           _self.status = '已连接 ' + _self.selected.SSID;
+          _self.current = _self.selected.SSID
+          // _self.selected = {};
           _self.$apply();
         },
         fail: function(res){
@@ -185,13 +206,31 @@ export default class Wifi extends wepy.page {
       });
     }
   };
-
   getWifiInfo(){
     const data = {
       $filter: 'store eq ' + this.store,
       $select: 'SSID,BSSID,password'
     };
+    console.log(data);
     return this.$parent.query("vip_wifi",data);
-  }
+  };
+  radioChange(e) {
+        console.log('radio发生change事件，携带value值为：', e.detail.value);
+        const selectedSSID = e.detail.value;
+        const radioItems = this.wifiList;
+        for (var i = 0, len = radioItems.length; i < len; i++) {
+          if(radioItems[i].SSID == selectedSSID){
+            radioItems[i].checked = true;
+            if(this.selected.SSID!=selectedSSID){
+              this.selected = radioItems[i];
+              this.icon = "power";
+            }
+          }else{
+            radioItems[i].checked = false;
+          }
+        }
+        this.wifiList = radioItems;
+        this.$apply();
+    }
 }
 </script>

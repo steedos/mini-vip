@@ -6,13 +6,13 @@ page {
     height: 100%;
   }
   .line-height_item {
-    line-height:2.5em;
+    line-height: 2.5em;
   }
   .font-size_label {
-    font-size:17px;
+    font-size: 17px;
   }
   .color_value {
-    color:#000;
+    color: #000;
   }
 }
 </style>
@@ -22,7 +22,7 @@ page {
       <repeat for="{{bills}}" key="index" index="index" item="item">
         <view class="weui-form-preview__bd">
             <view class="weui-form-preview__item line-height_item">
-                <view class="weui-form-preview__label font-size_label">泳衣</view>
+                <view class="weui-form-preview__label font-size_label">{{item.description}}</view>
                 <view class="weui-form-preview__value_in-hd color_value">￥ {{item.amount}}</view>
             </view>
             <view class="weui-form-preview__item">
@@ -42,33 +42,40 @@ const util = require('../utils/util.js');
 
 export default class cardBilling extends wepy.page {
   config = {
-    navigationBarTitleText: '消费记录'
+    navigationBarTitleText: '余额明细'
   };
   components = {};
   onLoad(e) {
-    console.log("Card onLoad, e", e);
-		const self = this;
-		this.getBilling(e.card);
-	}
+    console.log('Card onLoad, e', e);
+    const self = this;
+    this.getBilling(e.card_id);
+  }
   data = {
     bills: []
   };
-  getBilling(card_id){
-    const url = '/api/odata/v4/' + wx.getStorageSync('X-Space-Id') + '/vip_billing';
-    console.log("------",url)
-    console.log("card_id",card_id)
-    const data = {
-      $filter: 'card eq \'' + card_id + '\'',
+  getBilling(card_id) {
+    let data = {
+      $filter: "card eq '" + card_id + "'",
       $expand: 'owner($select=name)',
       $count: true,
       $select: 'created,amount,description'
     };
-    req.get(url, data).then(res => {
-      const bills = res.value;
-			this.bills = bills;
-      this.$apply();
-			console.log(this.bills);
+
+    var that = this;
+
+    this.$parent.query('vip_billing', data).then((res) => {
+      console.log('res: ', res);
+      if (res.value) {
+        res.value.forEach(function(b){
+          b.created = util.formatTime(new Date(b.created));
+        })
+        that.bills = res.value;
+        that.$apply();
+        console.log(that.bills);
+      }
+
     });
-  }
+
+  };
 }
 </script>

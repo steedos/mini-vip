@@ -269,9 +269,9 @@ export default class VIP extends wepy.app {
   }
   async update(object_name,_id,data) {
     const url = '/api/odata/v4/' + this.globalData.spaceId + '/' + object_name + '/'+_id;
-    doc = {}
+    var doc = {}
     doc['$set'] = data
-    const result = await req.update(url,doc).catch((err)=>{
+    const result = await req.put(url,doc).catch((err)=>{
       console.log("error...",err.data.error)
       return {}
     })

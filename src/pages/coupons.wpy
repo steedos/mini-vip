@@ -3,8 +3,6 @@
 </style>
 <template>
   <view class="page">
-    <view class="page__hd">
-    </view>
     <view class="page__bd">
       <scroll-view class="scroll-view_H" scroll-y="true">
         <repeat for="{{coupons}}" key="index" index="index" item="coupon">
@@ -23,6 +21,10 @@
     config = {
       navigationBarTitleText: '优惠券'
     };
+    
+    async onLoad() {
+      this.loadCouponList();
+    }
 
     components = {
       coupon: coupon
@@ -54,6 +56,18 @@
         start_time: '2018-10-01 12:00',
         end_time: '2018-10-07 12:00'
       }]
+    };
+
+    async loadCouponList(){
+      const options = {
+        $expand: 'owner($select=name)',
+        $count: true,
+        $select: 'name,quota,min_consumption,start_time,end_time,limit_count,enable_fission,fission_count'
+      };
+      var coupons = await this.$parent.query("vip_coupon", options)
+      this.coupons = coupons.value;
+      console.log("loadCouponList", this.coupons);
+      this.$apply();
     };
 
     methods = {

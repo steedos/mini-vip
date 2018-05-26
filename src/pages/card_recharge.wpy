@@ -1,18 +1,42 @@
 <style lang="less">
+.page__hd_bg {
+  overflow: hidden;
+  text-align: center;
+  padding: 40px;
+}
+.margin-top {
+  margin-top: 20px;
+}
+.small-font {
+  font-size: 10px;
+}
+.big-font {
+  font-size: 30px;
+}
+.middle-font {
+  font-size: 15px;
+}
 </style>
 <template>
-    <view class="page">
-        <view class="weui-cells weui-cells_after-title">
-            <view class="weui-cell weui-cell_input">
-                <view class="weui-cell__bd">
-                    <input class="weui-input" type="number" placeholder="请输入充值金额，最低1元" bindinput="bindKeyInput" value="{{rechargeValue}}"/>
-                </view>
-            </view>
-        </view>
-        <view class="weui-btn-area">
-            <button class="weui-btn" type="primary" @tap="doRecharge" disabled="{{!canDoRecharge}}"><view wx:if="{{loading}}" class="weui-loading"></view>确定</button>
-        </view>
+  <view class="page">
+    <view class="page__hd page__hd_bg">
+      <view>
+        <view class="weui-form-preview__value_in-hd"><label class="middle-font">￥</label> <label class="big-font">{{cardBalance}}</label></view>
+        <view class="weui-footer__text small-font" @tap="toBillingRecords">查看余额明细</view>
+        <view class="weui-footer__text small-font">(钱包余额不可提现)</view>
+      </view>
     </view>
+    <view class="weui-cells weui-cells_after-title margin-top">
+      <view class="weui-cell weui-cell_input">
+        <view class="weui-cell__bd">
+          <input class="weui-input" type="number" placeholder="请输入充值金额" bindinput="bindKeyInput" value="{{rechargeValue}}"/>
+        </view>
+      </view>
+    </view>
+    <view class="weui-btn-area">
+      <button class="weui-btn" type="primary" @tap="doRecharge" disabled="{{!canDoRecharge}}">确定</button>
+    </view>
+  </view>
 </template>
 <script>
 import wepy from 'wepy';
@@ -20,20 +44,21 @@ import req from '@/network';
 
 export default class cardRecharge extends wepy.page {
   config = {
-    navigationBarTitleText: '充值'
+    navigationBarTitleText: '我的账户'
   };
 
   data = {
     rechargeValue: '',
     canDoRecharge: false,
-    loading: false,
-    cardId: ''
+    cardId: '',
+    cardBalance: ''
   };
 
   onLoad(e) {
     console.log('onLoad');
     console.log(e);
-    this.cardId = e.card;
+    this.cardId = e.card_id;
+    this.cardBalance = e.balance;
   }
 
   methods = {
@@ -41,7 +66,7 @@ export default class cardRecharge extends wepy.page {
       this.rechargeValue = e.detail.value;
       this.$apply();
       var val = Number(e.detail.value);
-      if (val && val >= 1) {
+      if (val) {
         this.canDoRecharge = true;
         this.$apply();
       } else {
@@ -51,16 +76,18 @@ export default class cardRecharge extends wepy.page {
       }
     },
     doRecharge() {
+      wx.showLoading({
+        title: '正在准备支付',
+        mask: true
+      });
       var data = {
         // totalFee: parseInt(this.rechargeValue * 100)
         totalFee: 1,
         cardId: this.cardId
       };
-      this.loading = true;
-      this.canDoRecharge = false;
-      this.$apply();
       var that = this;
       req.post('/api/steedos/weixin/card/recharge', data).then(res => {
+        wx.hideLoading();
         console.log('res: ', res);
 
         if (res.paySign) {
@@ -72,32 +99,44 @@ export default class cardRecharge extends wepy.page {
             paySign: res.paySign,
             success: function(res) {
               console.log('success: ', res);
+              wx.showToast({
+                title: '支付成功',
+                icon: 'success'
+              });
+              wx.showLoading({
+                title: '更新余额中',
+                mask: true
+              });
+              that.$parent.get("vip_card", that.cardId).then((c)=>{
+                that.cardBalance = c.balance;
+                that.rechargeValue = '';
+                that.canDoRecharge = false;
+                that.$apply();
+                wx.hideLoading();
+              });
+
             },
             fail: function(res) {
               console.log('fail: ', res);
+              wx.showToast({
+                title: '支付失败',
+                icon: 'none'
+              });
             },
-            complete: function(res) {
-              console.log('complete: ', res);
-              that.loading = false;
-              that.canDoRecharge = true;
-              that.$apply();
-            }
+            complete: function(res) {}
           });
         } else {
           console.error(res);
-          that.loading = false;
-          that.canDoRecharge = true;
-          that.$apply();
           wx.showModal({
             content: '请求超时，请检查网络状况',
-            showCancel: false,
-            success: function(res) {
-              if (res.confirm) {
-                console.log('用户点击确定');
-              }
-            }
+            showCancel: false
           });
         }
+      });
+    },
+    toBillingRecords() {
+      wx.navigateTo({
+        url: 'card_billing?card_id=' + this.cardId
       });
     }
   };
