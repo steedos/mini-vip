@@ -29,7 +29,7 @@
     <view class="weui-cells weui-cells_after-title margin-top">
       <view class="weui-cell weui-cell_input">
         <view class="weui-cell__bd">
-          <input class="weui-input" type="number" placeholder="请输入充值金额" bindinput="bindKeyInput" value="{{rechargeValue}}"/>
+          <input class="weui-input" type="digit" placeholder="请输入充值金额" bindinput="bindKeyInput" value="{{rechargeValue}}"/>
         </view>
       </view>
     </view>
@@ -118,10 +118,6 @@ export default class cardRecharge extends wepy.page {
             },
             fail: function(res) {
               console.log('fail: ', res);
-              wx.showToast({
-                title: '支付失败',
-                icon: 'none'
-              });
             },
             complete: function(res) {}
           });
