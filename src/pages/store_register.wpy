@@ -1,5 +1,5 @@
 <style lang="less">
-  .card-activate {
+  .store-register {
     .header {
       width: 100%;
       background: #fff;
@@ -59,7 +59,7 @@
 </style>
 
 <template>
-  <view class="card-activate">
+  <view class="store-register">
     <view class="weui-cells__title">必填信息</view>
     <view class="page__bd" style="">
       <view class="weui-cells weui-cells_after-title">
@@ -118,16 +118,15 @@
           </view>
         </view>
       </view>
-    </view>
-
-    <checkbox-group bindchange='checkboxChange'>
-      <label class="checkbox-container">
-        <checkbox value="agree" color='#fff'/>
-        <view class="guide">我已阅读并同意《华炎会员管理系统商户使用协议》</view>
-      </label>
-    </checkbox-group>
-    <view class="btn-container">
-      <button class="submit-btn" form-type="submit" @tap="activate" disabled="{{submitDisabled}}">提交</button>
+      <checkbox-group bindchange='checkboxChange'>
+        <label class="checkbox-container">
+          <checkbox value="agree" color='#fff'/>
+          <view class="guide">我已阅读并同意《华炎会员管理系统商户使用协议》</view>
+        </label>
+      </checkbox-group>
+      <view class="btn-container">
+        <button class="submit-btn" form-type="submit" @tap="activate" disabled="{{submitDisabled}}">提交</button>
+      </view>
     </view>
   </view>
 </template>
