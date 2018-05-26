@@ -1,0 +1,56 @@
+<style lang="less">
+  page{
+    height: 100%;
+    background-color: #333333;
+  }
+  .header{
+    width: 100%;
+    .header-image{
+      width: 100%;
+    }
+  }
+  .content{
+    
+  }
+  
+</style>
+<template>
+  <view class="header">
+    <image class="header-image" mode="widthFix" src="../../images/card/select-header.png"/>
+  </view>
+  <view calss="content">
+    <repeat for="{{cards}}" key="index" index="index" item="card">
+      <vipcrad :isActivated="card.isActivated" :cardName="card.cardName" :cardType="card.cardType"/>
+    </repeat>
+  </view>
+</template>
+<script>
+import wepy from 'wepy';
+import vipCard from '../../components/vipCard';
+export default class CardSelect extends wepy.page {
+  config = {
+    navigationBarTitleText: '会员卡',
+    navigationBarBackgroundColor: '#D64B4B'
+  };
+  components = {
+    vipcrad: vipCard
+  };
+  data = {
+    cardName: '贝菲特',
+    cardType: '钻石卡',
+    isActivated: false,
+    cards: [
+    {
+      cardName: '贝菲特',
+      cardType: '钻石卡',
+      isActivated: false
+    },
+    {
+      cardName: '贝菲特',
+      cardType: '钻石卡',
+      isActivated: false
+    }
+    ]
+  };
+}
+</script>
