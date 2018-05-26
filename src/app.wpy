@@ -176,6 +176,11 @@ export default class VIP extends wepy.app {
       needs_login = true
     }
 
+    const session_vaild = await wepy.checkSession()
+    if (!session_vaild) {
+      needs_login = true
+    }
+
     if (needs_login) {
 
       const data = await wepy.login()
