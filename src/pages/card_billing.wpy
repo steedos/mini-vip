@@ -27,7 +27,7 @@ page {
             </view>
             <view class="weui-form-preview__item">
                 <view class="weui-form-preview__label font-size_label">{{item.created}}</view>
-                <view class="weui-form-preview__value">{{item.description}}</view>
+                <view class="weui-form-preview__value">钱包余额：{{item.balance}}元</view>
             </view>
         </view>
         <view class="weui-form-preview__ft"></view>
@@ -58,24 +58,25 @@ export default class cardBilling extends wepy.page {
       $filter: "card eq '" + card_id + "'",
       $expand: 'owner($select=name)',
       $count: true,
-      $select: 'created,amount,description'
+      $select: 'created,amount,description,balance'
     };
 
     var that = this;
 
-    this.$parent.query('vip_billing', data).then((res) => {
+    this.$parent.query('vip_billing', data).then(res => {
       console.log('res: ', res);
       if (res.value) {
-        res.value.forEach(function(b){
+        res.value.forEach(function(b) {
           b.created = util.formatTime(new Date(b.created));
-        })
+          if (b.balance) {
+            b.balance = b.balance.toFixed(2);
+          }
+        });
         that.bills = res.value;
         that.$apply();
         console.log(that.bills);
       }
-
     });
-
-  };
+  }
 }
 </script>
