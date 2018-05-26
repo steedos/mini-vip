@@ -197,7 +197,7 @@ export default class Card extends wepy.page {
     const result = await self.$parent.cache('vip_card', card_id, data, true)
 
     console.log('getCardInfo..........', result)
-
+    this.cardId = card_id;
     this.cardName = result.space.name;
     this.cardType = result.grade;
     this.isActivated = result.is_actived;
@@ -215,7 +215,6 @@ export default class Card extends wepy.page {
     const vip_card = this.$parent.globalData.vip_card
 
     if (e.card_id && vip_card && e.card_id == vip_card._id) {
-
       this.cardId = e.card_id;
       this.cardName = vip_card.space.name;
       this.cardType = vip_card.grade;
