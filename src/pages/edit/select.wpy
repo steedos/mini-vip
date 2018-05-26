@@ -20,9 +20,6 @@
           </label>
         </radio-group>
       </view>
-      <view class="page__bd page__bd_spacing">
-        <button class="weui-btn" type="primary" style="width:90%;">保存</button>
-      </view>
     </view>  
   </view>
 
@@ -39,41 +36,38 @@ export default class Select extends wepy.page {
   };
 
   onLoad(e) {
-    console.log(e)
-    this.text = "设置"+e.text
-    this.gender = e.gender
-    var radioItems = this.data.radioItems
-    if (radioItems[0].name==e.gender){
-      radioItems[0].checked = true
-    }else{
-      radioItems[1].checked = true
+    console.log(e);
+    this.text = '设置' + e.text;
+    this.sex = e.sex;
+    var radioItems = this.data.radioItems;
+    if (radioItems[0].name == e.sex) {
+      radioItems[0].checked = true;
+    } else {
+      radioItems[1].checked = true;
     }
-      
-    wx.setNavigationBarTitle({title:this.text})
-  };
+
+    wx.setNavigationBarTitle({ title: this.text });
+  }
 
   data = {
     radioItems: [
-        {name: '男', value: '0' , checked:false },
-        {name: '女', value: '1' , checked:false }
+      { name: '男', value: '男', checked: false },
+      { name: '女', value: '女', checked: false }
     ]
   };
 
   methods = {
-    bindNameChange(e) {
-        this.name = e.detail.value;
-      },
-    radioChange: function (e) {
-        console.log('radio发生change事件，携带value值为：', e.detail.value);
+    radioChange: function(e) {
+      console.log('radio发生change事件，携带value值为：', e.detail.value);
 
-        var radioItems = this.data.radioItems;
-        for (var i = 0, len = radioItems.length; i < len; ++i) {
-            radioItems[i].checked = radioItems[i].value == e.detail.value;
-        }
+      var radioItems = this.data.radioItems;
+      for (var i = 0, len = radioItems.length; i < len; ++i) {
+        radioItems[i].checked = radioItems[i].value == e.detail.value;
+      }
 
-        this.setData({
-            radioItems: radioItems
-        });
+      this.setData({
+        radioItems: radioItems
+      });
     }
   };
 }

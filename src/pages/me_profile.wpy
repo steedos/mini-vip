@@ -9,19 +9,19 @@
   <view class="page-me-profile">
     <view class="page__bd">
 			<view class="weui-cells weui-cells_after-title">
-          <navigator url="./edit/text?text=姓名&name={{nickName}}" class="weui-cell weui-cell_access">
+          <navigator url="./edit/text?text=姓名&name={{name}}" class="weui-cell weui-cell_access">
             <view class="weui-cell__bd">
               <view>姓名</view>
             </view>
-            <view class="weui-cell__ft weui-cell__ft_in-access">{{nickName}}</view>
+            <view class="weui-cell__ft weui-cell__ft_in-access">{{name}}</view>
           </navigator>
-          <navigator url="./edit/select?text=性别&gender={{gender}}" class="weui-cell weui-cell_access">
+          <navigator url="./edit/select?text=性别&sex={{sex}}" class="weui-cell weui-cell_access">
             <view class="weui-cell__bd">
               <view>性别</view>
             </view>
-            <view class="weui-cell__ft weui-cell__ft_in-access">{{gender}}</view>
+            <view class="weui-cell__ft weui-cell__ft_in-access">{{sex}}</view>
           </navigator>
-          <navigator url="./edit/date?text=生日&date={{birthdate}}" class="weui-cell weui-cell_access">
+          <navigator url="./edit/date?text=生日&birthdate={{birthdate}}" class="weui-cell weui-cell_access">
             <view class="weui-cell__bd">
               <view>生日</view>
             </view>
@@ -31,7 +31,7 @@
             <view class="weui-cell__bd">
               <view>手机</view>
             </view>
-            <view class="weui-cell__ft weui-cell__ft_in-access">{{phoneNumber}}</view>
+            <view class="weui-cell__ft weui-cell__ft_in-access">{{mobile}}</view>
           </navigator>
 			</view>
 		</view>
@@ -45,31 +45,33 @@ import { serverAPI } from '@/server';
 
 export default class meProfile extends wepy.page {
   config = {
-    navigationBarTitleText: '个人信息',
+    navigationBarTitleText: '个人信息'
   };
 
   onLoad() {
-    const nickName = this.$parent.globalData.userInfo.userInfo.nickName
-    this.nickName = nickName
-    const gender = this.$parent.globalData.userInfo.userInfo.gender
-    if (gender == 1){
-      this.gender = '男'
-    }else{
-      this.gender = '女'
-    }
-    this.$apply()
     const user = this.$parent.globalData.user
-    this.phoneNumber = user.mobile
+
+    console.log(user)
+
+    this.name = user.name
+    this.sex = user.sex
+    this.mobile = user.mobile
     this.birthdate = user.birthdate
-    console.log(this.$parent.globalData.user) 
-    console.log(this.$parent.globalData) 
+    this.$apply();
   }
-    data = {
-    nickName: '',
-    gender: '',
-    phoneNumber: '',
+
+  data = {
+    name: '',
+    sex: '',
+    mobile: '',
     birthdate: ''
-  }
+  };
+
   methods = {};
+
+  changeData(key, value) {
+    this[key] = value
+    this.$apply()
+  }
 }
 </script>
