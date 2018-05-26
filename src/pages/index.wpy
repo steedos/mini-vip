@@ -114,7 +114,7 @@
       </view>
 
       <view class="weui-cells">
-        <navigator url="" class="weui-cell weui-cell_access">
+        <navigator url="./store_register" class="weui-cell weui-cell_access">
           <view class="weui-cell__bd">
             <view>发行会员卡</view>
           </view>
@@ -182,7 +182,7 @@
       await this.$parent.login();
       await this.getUserCard();
     }
-    
+
     onShareAppMessage(res){
       return {
         title: '我的会员卡、积分、优惠券、消费记录',

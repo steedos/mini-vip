@@ -1,0 +1,212 @@
+<style lang="less">
+  .card-activate {
+    .header {
+      width: 100%;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+
+      &:before {
+        display: none;
+      }
+    }
+
+    checkbox .wx-checkbox-input {
+      height: 12px;
+      width: 12px;
+    }
+
+    checkbox .wx-checkbox-input.wx-checkbox-input-checked::before {
+      padding: 3px;
+      border-radius: 50%;
+      background-color: #1B9AF7;
+    }
+
+    .checkbox-container {
+      position: relative;
+      margin-left: 18px;
+      margin-top: 15px;
+      display: flex;
+
+      .guide {
+        margin-left: 10px;
+        line-height: 30px;
+        color: #a8a8a8;
+      }
+    }
+
+    .btn-container {
+      width: 100%;
+    }
+
+    .submit-btn {
+      background: #1B9AF7;
+      color: #fff;
+      margin: 15px 15px 20px;
+    }
+
+    .get-number {
+      border: none;
+      text-align: left;
+      height: 2.58823529em;
+      min-height: 2.58823529em;
+      line-height: 2.58823529em;
+      padding: 0;
+      font-size: 17px;
+      color: #808080;
+    }
+  }
+</style>
+
+<template>
+  <view class="card-activate">
+    <view class="weui-cells__title">必填信息</view>
+    <view class="page__bd" style="">
+      <view class="weui-cells weui-cells_after-title">
+        <view class="weui-cell weui-cell_input">
+          <view class="weui-cell__hd">
+            <view class="weui-label">店铺名称</view>
+          </view>
+          <view class="weui-cell__bd">
+            <input class="weui-input" placeholder="请输入店铺名称"/>
+          </view>
+        </view>
+        <view class="weui-cell weui-cell_input">
+          <view class="weui-cell__hd">
+            <view class="weui-label">行业</view>
+          </view>
+          <view class="weui-cell__bd">
+            <picker value="{{industry_index}}" range="{{industryOptions}}" range-key="label"
+                    bindchange="industryChange">
+              <view class="weui-input">{{industryOptions[industry_index].label}}</view>
+            </picker>
+          </view>
+        </view>
+        <view class="weui-cell weui-cell_input">
+          <view class="weui-cell__hd">
+            <view class="weui-label">手机号</view>
+          </view>
+          <view class="weui-cell__bd">
+            <view class="weui-input">
+              <view wx:if="{{phoneNumber}}">{{phoneNumber}}</view>
+              <button wx:else="{{phoneNumber}}" class="get-number" plain="true" open-type="getPhoneNumber"
+                      bindgetphonenumber="getPhoneNumber">获取手机号
+              </button>
+            </view>
+          </view>
+          <view class="weui-cell__ft">
+          </view>
+        </view>
+        <view class="weui-cell weui-cell_input weui-cell_vcode">
+          <view class="weui-cell__hd">
+            <view class="weui-label">详细地址</view>
+          </view>
+          <view class="weui-cell__bd">
+            <textarea class="weui-textarea" style="height: 3.3em" value="{{address}}"/>
+          </view>
+          <view class="weui-cell__ft">
+            <view class="weui-vcode-btn" @tap="getAddress">获取地址</view>
+          </view>
+        </view>
+
+        <view class="weui-cell weui-cell_input">
+          <view class="weui-cell__hd">
+            <view class="weui-label">公司名称</view>
+          </view>
+          <view class="weui-cell__bd">
+            <input class="weui-input" placeholder="公司名称，非必填"/>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <checkbox-group bindchange='checkboxChange'>
+      <label class="checkbox-container">
+        <checkbox value="agree" color='#fff'/>
+        <view class="guide">我已阅读并同意《华炎会员管理系统商户使用协议》</view>
+      </label>
+    </checkbox-group>
+    <view class="btn-container">
+      <button class="submit-btn" form-type="submit" @tap="activate" disabled="{{submitDisabled}}">提交</button>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import req from '@/network';
+
+  export default class StoreRegister extends wepy.page {
+    data = {
+      latitude: 0.00,
+      longitude: 0.00,
+      store_name: "",
+      address: "",
+      phoneNumber: "",
+      submitDisabled: true,
+      industryOptions: [
+        {label: '餐饮', value: 'food'},
+        {label: '酒店住宿', value: 'accommodation'},
+        {label: '出行', value: 'travel'},
+        {label: '休闲娱乐', value: 'entertainment'},
+        {label: '丽人', value: 'beauty'},
+        {label: '教育', value: 'education'},
+        {label: '母婴亲子', value: 'parent-child'},
+        {label: '运动健身', value: 'sport'},
+        {label: '家具装修', value: 'decoration'},
+        {label: '生活服务', value: 'life'},
+        {label: '宠物', value: 'pets'},
+        {label: '汽车服务', value: 'car'}
+      ],
+      industry_index: -1
+    };
+
+    onLoad() {
+//      wx.getLocation({
+//        type: "gcj02",
+//        success: function (res) {
+//          console.log("res", res)
+//          this.latitude = res.latitude
+//          this.longitude = res.longitude
+//        }
+//      })
+    }
+
+
+    methods = {
+      getPhoneNumber(e) {
+        if (e.detail.iv || e.detail.encryptedData) {
+          req.post('/api/steedos/weixin/get_phone_number', {
+            iv: e.detail.iv,
+            encryptedData: e.detail.encryptedData
+          }).then(res => {
+            console.log("res", res)
+            this.phoneNumber = res.purePhoneNumber
+            this.$apply();
+          });
+        } else {
+          console.error(e.detail.errMsg)
+        }
+      },
+      getAddress() {
+        wepy.chooseLocation().then(res => {
+            this.address = res.address
+            this.latitude = res.latitude
+            this.longitude = res.longitude
+            this.$apply()
+          }
+        )
+      },
+      checkboxChange(e) {
+        if (e.detail.value.length > 0) {
+          this.submitDisabled = false
+        } else {
+          this.submitDisabled = true
+        }
+      },
+      industryChange(e) {
+        this.industry_index = e.detail.value
+      }
+    }
+  }
+</script>

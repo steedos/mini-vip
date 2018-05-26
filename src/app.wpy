@@ -79,7 +79,8 @@ export default class VIP extends wepy.app {
       'pages/edit/text',
       'pages/post/news',
       'pages/edit/select',
-      'pages/edit/date'
+      'pages/edit/date',
+      'pages/store_register'
     ],
     tabBar: {
       color: '#666',
