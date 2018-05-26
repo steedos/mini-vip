@@ -44,7 +44,7 @@
 }
 </style>
 <template>
-  <view class="page-card">
+  <view class="page-card" wx:if="{{initialized}}">
     <view class="weui-panel weui-panel_access header">
       <vipcrad :isActivated.sync="isActivated" :cardName.sync="cardName" :cardType.sync="cardType" :cardNumber.sync="cardNumber"/>
       <block wx:if="{{isActivated}}">
@@ -170,54 +170,87 @@ export default class Card extends wepy.page {
     navigationBarTitleText: '会员服务台',
   };
 
-  getCardInfo(card_id) {
-    const url =
-      '/api/odata/v4/' +
-      (this.space || wx.getStorageSync('X-Space-Id')) +
-      '/vip_card';
+  data = {
+    initialized: false,
+    cardId: '',
+    isActivated: true,
+    cardName: '',
+    cardType: '',
+    cardNumber: '',
+    cardPoints: 0,
+    cardBalance: 0,
+    isAuthorize: true,
+    space_id: '',
+    store: ''
+  };
+
+  async getCardInfo(card_id) {
+    const self = this
+    const url = `/api/odata/v4/${this.space_id}/vip_card`
     const data = {
-      $filter: "_id eq '" + card_id + "'",
       $expand: 'space($select=name)',
       $count: true,
       $select: 'space,grade,is_actived,balance,points,card_number'
-    };
-    req.get(url, data).then(res => {
-      const cardObj = res.value[0];
-      console.log(cardObj);
-      this.cardId = card_id;
-      this.cardName = cardObj.space.name;
-      this.cardType = cardObj.grade;
-      this.isActivated = cardObj.is_actived;
-      this.cardPoints = cardObj.points;
-      this.cardBalance = cardObj.balance;
-      this.cardNumber = cardObj.card_number;
-      this.$apply();
-    });
+    }
+
+    const result = await self.$parent.cache('vip_card', card_id, data, true)
+
+    console.log('getCardInfo..........', result)
+
+    this.cardName = result.space.name;
+    this.cardType = result.grade;
+    this.isActivated = result.is_actived;
+    this.cardPoints = result.points;
+    this.cardBalance = result.balance;
+    this.cardNumber = result.card_number;
+    this.$apply();
   }
 
   async onLoad(e) {
-    const self = this
-    if (e.space) {
-      this.space = e.space;
-      this.$parent.globalData.spaceId = e.space
+    wx.showLoading({
+      title: "加载中",
+      mask: true
+    })
+    const vip_card = this.$parent.globalData.vip_card
+
+    if (e.card_id && vip_card && e.card_id == vip_card._id) {
+
+      this.cardId = e.card_id;
+      this.cardName = vip_card.space.name;
+      this.cardType = vip_card.grade;
+      this.isActivated = vip_card.is_actived;
+      this.cardPoints = vip_card.points;
+      this.cardBalance = vip_card.balance;
+      this.cardNumber = vip_card.card_number;
+      this.$apply();
+    }
+
+    if (e.space_id) {
+      this.space_id = e.space_id;
+      this.$parent.globalData.space_id = e.space_id
     }
     if (e.store) {
       this.store = e.store;
     }
-
-    await this.$parent.login(e.space);
 
     if (this.$parent.globalData.userInfo) {
       this.isAuthorize = true
     } else {
       this.isAuthorize = false
     }
+    this.initialized = true
     this.$apply()
 
+    await this.$parent.login(e.space_id);
+
     console.log('Card onLoad, e', e);
-    if (e.card) {
-      this.getCardInfo(e.card)
+    if (e.card_id) {
+      this.getCardInfo(e.card_id)
     }
+
+    setTimeout(() => {
+      wx.hideLoading()
+    }, 300);
 
     wx.showShareMenu({
       withShareTicket: true
@@ -234,21 +267,6 @@ export default class Card extends wepy.page {
   components = {
     vipcrad: vipCard
   };
-
-  data = {
-    cardId: '',
-    isActivated: false,
-    cardName: '',
-    cardType: '',
-    cardNumber: '',
-    cardPoints: 0,
-    cardBalance: 0,
-    cardNumber: '',
-    isAuthorize: false,
-    space: '',
-    store: ''
-  };
-
 
   methods = {
     toOpenCard() {

@@ -53,7 +53,7 @@ import configStore from './store'
 import req from '@/network'
 import * as interceptor from '@/network/interceptor'
 import { baseUrl, appId } from '@/config'
-
+import _ from 'underscore'
 import { serverAPI } from '@/server';
 
 const store = configStore()
@@ -215,26 +215,36 @@ export default class VIP extends wepy.app {
     }
   }
 
-  async cache(object_name, _id) {
-    var gd = this.globalData;
-    if(gd[object_name] && gd[object_name]._id == _id){
-      return gd[object_name];
+  async cache(object_name, _id, data, reload) {
+
+    const globalData = this.globalData
+
+    if (!reload) {
+      if (globalData[object_name] && globalData[object_name]._id == _id) {
+        return globalData[object_name]
+      }
+    } else {
+      const space_id = globalData.space_id
+      if (!space_id) {
+        return null;
+      }
+
+      let url = `/api/odata/v4/${space_id}/${object_name}`
+      if (!data || _.isEmpty(data)) {
+        url = `${url}/${_id}`
+      }
+      const result = await req.get(url, data).catch((err) => {
+        console.log('carch error')
+        return {}
+      })
+      console.log('cache result.................', result)
+      globalData[object_name] = result.value[0];
+      return result.value[0];
     }
-    const spaceId = this.globalData.spaceId;
-    if(!spaceId){
-      return null;
-    }
-    const url = `/api/odata/v4/${spaceId}/${object_name}/${_id}/`;
-    const result = await req.get(url).catch((err)=>{
-      console.log("cache error...");
-      return {}
-    });
-    gd[object_name] = result;
-    return result;
   }
 
   async get(object_name,_id) {
-    const url = '/api/odata/v4/' + this.globalData.spaceId + '/' + object_name + '/' + _id;
+    const url = '/api/odata/v4/' + this.globalData.space_id + '/' + object_name + '/' + _id;
     const result = await req.get(url).catch((err)=>{
       console.log("error...",err.data.error)
       return {}
