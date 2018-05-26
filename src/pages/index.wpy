@@ -95,7 +95,7 @@
       <view class="weui-cells__title page__bd_mycard">我的会员卡</view>
       <view class="weui-cells weui-cells_after-title">
         <repeat for="{{cards}}" key="index" index="index" item="card">
-          <navigator url="card?card={{card._id}}&space={{card.space}}" open-type="reLaunch" class="weui-cell weui-cell_access weui-cell_access_card">
+          <navigator url="card?card_id={{card._id}}&space_id={{card.space}}" open-type="reLaunch" class="weui-cell weui-cell_access weui-cell_access_card">
             <view class="weui-cell__bd">
               <view class="card-name">{{card.name}}</view>
             </view>
