@@ -9,7 +9,7 @@ page {
     <view class="page__bd">
       <scroll-view class="scroll-view_H" scroll-y="true">
         <repeat for="{{posts}}" key="index" index="index" item="post">
-          <post :name="post.name" :summary="post.summary" :commentCount="post.comment_count" :cover="post.images[0]"/>
+          <post :name="post.name" :summary="post.summary" :cover="post.images[0]"/>
         </repeat>
       </scroll-view>
     </view>
@@ -17,7 +17,7 @@ page {
 </template>
 <script>
 import wepy from 'wepy';
-import post from '../../components/post';
+import post from '../../components/post_news';
 import req from '@/network';
 
 export default class Posts extends wepy.page {
