@@ -73,11 +73,8 @@ export default class Wifi extends wepy.page {
   data = {
     icon: 'power',
     status:'WiFi 未连接',
-    selected: {
-      SSID: '',
-      BSSID: '',
-      password: ''
-    },
+    current:'',
+    selected: {},
     wifiList:[],
     listTitle: '门店 WiFi 列表',
     store:'AJ652WDC5Zh4gLCrT'
@@ -87,6 +84,8 @@ export default class Wifi extends wepy.page {
     wx.showNavigationBarLoading();
     if (e.store) {
       this.store = e.store;
+    }else{
+      this.store = "AJ652WDC5Zh4gLCrT";
     }
     const _self = this;
     wx.startWifi({
@@ -96,34 +95,35 @@ export default class Wifi extends wepy.page {
 
     // 获取门店wifi
     var wifis = await this.getWifiInfo();
-    if(wifis.value){
-      console.log(wifis.value.length>0);
-      if(wifis.value.length>0){
-        _self.wifiList = wifis.value;
-        _self.selected = wifis.value[0];
-        _self.$apply(); 
-      }else{
-        _self.listTitle = "该门店未配置 WiFi";
-        _self.$apply(); 
-      }
+    if(wifis.value && wifis.value.length>0){
+      console.log("wifis.value.length",wifis.value.length);
+      _self.wifiList = wifis.value;
+      // _self.selected = wifis.value[0];
+      _self.$apply(); 
+    }else{
+      _self.listTitle = "该门店未配置 WiFi";
+      _self.$apply(); 
     }
+    console.log("_self.wifiList",_self.wifiList);
     console.log("检测获取已连接中的 Wi-Fi 信息");
     // 检测获取已连接中的 Wi-Fi 信息
     wx.getConnectedWifi({
       success: function(res) {
         var radioItems = _self.wifiList;
+        console.log("radioItems1",radioItems);
         var index = -1;
         if(res.wifi){
           _self.icon = "wifi";
           _self.status = '已连接 ' + res.wifi.SSID;
-          _self.selected.SSID = res.wifi.SSID;
-          console.log(radioItems);
+          _self.current = res.wifi.SSID;
           index = radioItems.findIndex((v) => {
-            return v.SSID==res.wifi.SSID
+            return v.SSID == res.wifi.SSID
           })
-          console.log(index);
+
+          console.log("wifilist-index",index);
           if(index > -1){
             radioItems[index].checked = true;
+            _self.selected = radioItems[index];
           }
           _self.$apply();
         }
@@ -152,7 +152,8 @@ export default class Wifi extends wepy.page {
         success: function(res){
           _self.icon = "wifi";
           _self.status = '已连接 ' + _self.selected.SSID;
-          _self.selected = {};
+          _self.current = _self.selected.SSID
+          // _self.selected = {};
           _self.$apply();
         },
         fail: function(res){
@@ -210,6 +211,7 @@ export default class Wifi extends wepy.page {
       $filter: 'store eq ' + this.store,
       $select: 'SSID,BSSID,password'
     };
+    console.log(data);
     return this.$parent.query("vip_wifi",data);
   };
   radioChange(e) {
