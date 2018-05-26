@@ -108,7 +108,7 @@ export default class cardRecharge extends wepy.page {
                 mask: true
               });
               that.$parent.get("vip_card", that.cardId).then((c)=>{
-                that.cardBalance = c.balance;
+                that.cardBalance = c.balance.toFixed(2);
                 that.rechargeValue = '';
                 that.canDoRecharge = false;
                 that.$apply();

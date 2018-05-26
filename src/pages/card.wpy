@@ -175,7 +175,7 @@ export default class Card extends wepy.page {
     this.cardType = result.grade;
     this.isActivated = result.is_actived;
     this.cardPoints = result.points;
-    this.cardBalance = result.balance;
+    this.cardBalance = result.balance.toFixed(2);
     this.cardNumber = result.card_number;
     this.$apply();
   }
@@ -193,7 +193,7 @@ export default class Card extends wepy.page {
       this.cardType = vip_card.grade;
       this.isActivated = vip_card.is_actived;
       this.cardPoints = vip_card.points;
-      this.cardBalance = vip_card.balance;
+      this.cardBalance = vip_card.balance.toFixed(2);
       this.cardNumber = vip_card.card_number;
       this.$apply();
     }
