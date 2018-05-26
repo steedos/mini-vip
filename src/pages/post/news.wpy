@@ -17,7 +17,7 @@ page {
 </template>
 <script>
 import wepy from 'wepy';
-import post from '../components/post';
+import post from '../../components/post';
 import req from '@/network';
 
 export default class Posts extends wepy.page {

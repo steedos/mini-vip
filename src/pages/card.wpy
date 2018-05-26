@@ -94,7 +94,7 @@
             </view>
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
           </navigator>
-          <navigator url="posts" class="weui-cell weui-cell_access">
+          <navigator url="./post/news" class="weui-cell weui-cell_access">
             <view class="weui-cell__bd">
               <view>最新动态</view>
             </view>
