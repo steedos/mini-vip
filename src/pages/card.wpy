@@ -40,7 +40,6 @@
       }
     }
   }
-
 }
 </style>
 <template>
@@ -159,17 +158,17 @@ export default class Card extends wepy.page {
   };
 
   async getCardInfo(card_id) {
-    const self = this
+    const self = this;
     const data = {
       $filter: `_id eq '${card_id}'`,
       $expand: 'space($select=name)',
       $count: true,
       $select: 'space,grade,is_actived,balance,points,card_number'
-    }
+    };
 
-    const result = await self.$parent.cache('vip_card', card_id, data, true)
+    const result = await self.$parent.cache('vip_card', card_id, data, true);
 
-    console.log('getCardInfo..........', result)
+    console.log('getCardInfo..........', result);
     this.cardId = card_id;
     this.cardName = result.space.name;
     this.cardType = result.grade;
@@ -182,10 +181,10 @@ export default class Card extends wepy.page {
 
   async onLoad(e) {
     wx.showLoading({
-      title: "加载中",
+      title: '加载中',
       mask: true
-    })
-    const vip_card = this.$parent.globalData.vip_card
+    });
+    const vip_card = this.$parent.globalData.vip_card;
 
     if (e.card_id && vip_card && e.card_id == vip_card._id) {
       this.cardId = e.card_id;
@@ -200,29 +199,29 @@ export default class Card extends wepy.page {
 
     if (e.space_id) {
       this.space_id = e.space_id;
-      this.$parent.globalData.space_id = e.space_id
+      this.$parent.globalData.space_id = e.space_id;
     }
     if (e.store_id) {
       this.store_id = e.store_id;
     }
 
     if (this.$parent.globalData.userInfo) {
-      this.isAuthorize = true
+      this.isAuthorize = true;
     } else {
-      this.isAuthorize = false
+      this.isAuthorize = false;
     }
-    this.initialized = true
-    this.$apply()
+    this.initialized = true;
+    this.$apply();
 
     await this.$parent.login(e.space_id);
 
     console.log('Card onLoad, e', e);
     if (e.card_id) {
-      this.getCardInfo(e.card_id)
+      this.getCardInfo(e.card_id);
     }
 
     setTimeout(() => {
-      wx.hideLoading()
+      wx.hideLoading();
     }, 300);
 
     wx.showShareMenu({
@@ -239,10 +238,10 @@ export default class Card extends wepy.page {
 
   // 上拉刷新
   async onPullDownRefresh() {
-    const card_id = this.cardId
-    await this.getCardInfo(card_id)
+    const card_id = this.cardId;
+    await this.getCardInfo(card_id);
     setTimeout(() => {
-      wx.stopPullDownRefresh()
+      wx.stopPullDownRefresh();
     }, 200);
   }
 
@@ -253,7 +252,11 @@ export default class Card extends wepy.page {
   methods = {
     toOpenCard() {
       wx.navigateTo({
-        url: 'card_activate?space_id=' + this.space_id + '&store_id=' + this.store_id
+        url:
+          'card_activate?space_id=' +
+          this.space_id +
+          '&store_id=' +
+          this.store_id
       });
     },
     userInfo(e) {
@@ -270,9 +273,18 @@ export default class Card extends wepy.page {
     },
     toRecharge() {
       wx.navigateTo({
-        url: 'card_recharge?card_id=' + this.cardId + '&balance=' + this.cardBalance
+        url:
+          'card_recharge?card_id=' +
+          this.cardId +
+          '&balance=' +
+          this.cardBalance
       });
     }
   };
+
+  changeData(k, v) {
+    this[k] = v;
+    this.$apply();
+  }
 }
 </script>
