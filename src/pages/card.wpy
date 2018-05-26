@@ -238,14 +238,12 @@ export default class Card extends wepy.page {
   }
 
   // 上拉刷新
-  onPullDownRefresh() {
+  async onPullDownRefresh() {
     const card_id = this.cardId
-    this.getCardInfo(card_id)
-  }
-
-  // 下拉加载
-  onReachBottom() {
-    console.log('onReachBottom....')
+    await this.getCardInfo(card_id)
+    setTimeout(() => {
+      wx.stopPullDownRefresh()
+    }, 200);
   }
 
   components = {
