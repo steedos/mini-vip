@@ -129,33 +129,6 @@
           </navigator>
         </view>
     </view>
-
-    <!--
-    <block wx:if="{{isActivated}}">
-      <view class="page__bd">
-        <view class="weui-cells weui-cells_after-title">
-          <view class="weui-cell weui-cell_switch">
-            <view class="weui-cell__bd">放入微信卡包</view>
-            <view class="weui-cell__ft">
-              <switch/>
-            </view>
-          </view>
-        </view>
-      </view>
-    </block>
-
-    <view class="page__bd">
-      <view class="weui-cells weui-cells_after-title">
-        <navigator open-type="share" class="weui-cell weui-cell_access">
-          <view class="weui-cell__bd">
-            <view style="display: inline-block; vertical-align: middle">推荐给朋友</view>
-          </view>
-          <view class="weui-cell__ft weui-cell__ft_in-access">好友注册成功返10元券</view>
-        </navigator>
-      </view>
-    </view>
-    -->
-
   </view>
 </template>
 
@@ -187,8 +160,8 @@ export default class Card extends wepy.page {
 
   async getCardInfo(card_id) {
     const self = this
-    const url = `/api/odata/v4/${this.space_id}/vip_card`
     const data = {
+      $filter: `_id eq '${card_id}'`,
       $expand: 'space($select=name)',
       $count: true,
       $select: 'space,grade,is_actived,balance,points,card_number'
