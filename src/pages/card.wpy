@@ -168,6 +168,7 @@ import { serverAPI } from '@/server';
 export default class Card extends wepy.page {
   config = {
     navigationBarTitleText: '会员服务台',
+    enablePullDownRefresh: true
   };
 
   data = {
@@ -262,6 +263,17 @@ export default class Card extends wepy.page {
       title: '贝菲特会员卡',
       path: '/pages/card?id=123'
     };
+  }
+
+  // 上拉刷新
+  onPullDownRefresh() {
+    const card_id = this.cardId
+    this.getCardInfo(card_id)
+  }
+
+  // 下拉加载
+  onReachBottom() {
+    console.log('onReachBottom....')
   }
 
   components = {
