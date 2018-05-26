@@ -56,7 +56,7 @@
 	<view class="card">
     <view class="user-avatar">
       <open-data wx:if="{{isActivated}}" type="userAvatarUrl"></open-data>
-      <image wx:else class="image" mode="aspectFit" src="../images/avatar.png"/>>
+      <image wx:else class="image" mode="aspectFit" src="../images/avatar.png"/>
     </view>
 	  <view class="card-name">
       <text>{{cardName}}会员卡</text>
