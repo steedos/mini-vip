@@ -5,7 +5,7 @@
     }
     .nav-btn{
       border-radius: 0;
-      background-color:transparent;
+      background-color:white;
       text-align:left;
       border: none;
       margin: 0;
@@ -50,16 +50,16 @@
         </navigator>
       </view>
       <view class="weui-cells">
-        <view class="weui-cell__bd">
+        <!-- <view class="weui-cell__bd">
           <button class="nav-btn" open-type="contact">
             <view class="content">
               <view class="text">意见反馈</view>
               <view class="weui-cell__ft weui-cell__ft_in-access"></view>
             </view>
           </button>
-        </view>
+        </view> -->
         <view class="weui-cell__bd">
-          <button class="nav-btn" open-type="contact">
+          <button class="nav-btn" open-type="contact"  @tap="toContact">
             <view class="content">
               <view class="text">在线客服</view>
               <view class="weui-cell__ft weui-cell__ft_in-access"></view>
@@ -100,7 +100,9 @@ export default class Me extends wepy.page {
   }
 
   methods = {
-
+    toContact(e){
+      console.log("进入在线客服");
+    }
   };
 }
 </script>
