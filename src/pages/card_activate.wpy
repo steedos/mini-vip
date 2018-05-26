@@ -137,11 +137,11 @@
     };
 
     onLoad(e) {
-      if(e.space){
-        this.space = e.space
+      if(e.space_id){
+        this.space_id = e.space_id
       }
-      if(e.store){
-        this.store = e.store
+      if(e.store_id){
+        this.store_id = e.store_id
       }
       const user = this.$parent.globalData.user
       this.sexValue = user.sex
@@ -163,8 +163,8 @@
       name: '',
       phoneNumber: '',
       submitDisabled: true,
-      space: '',
-      store: ''
+      space_id: '',
+      store_id: ''
     };
 
     methods = {
@@ -206,7 +206,7 @@
       },
       activate() {
         this.submitDisabled = true
-        req.post('/api/mini/vip/card_activate?space_id=' + this.space + "&store_id=" + this.store, {
+        req.post('/api/mini/vip/card_activate?space_id=' + this.space_id + "&store_id=" + this.store_id, {
           name: this.name,
           sex: this.sexValue,
           birthdate: this.birthdate,

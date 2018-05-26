@@ -70,7 +70,7 @@
     </view>
 
     <view class="page__bd">
-      <block wx:if="{{store}}">
+      <block wx:if="{{store_id}}">
           <view class="weui-cells">
             <navigator url="wifi" class="weui-cell weui-cell_access">
               <view class="weui-cell__bd">
@@ -155,7 +155,7 @@ export default class Card extends wepy.page {
     cardBalance: 0,
     isAuthorize: true,
     space_id: '',
-    store: ''
+    store_id: ''
   };
 
   async getCardInfo(card_id) {
@@ -202,8 +202,8 @@ export default class Card extends wepy.page {
       this.space_id = e.space_id;
       this.$parent.globalData.space_id = e.space_id
     }
-    if (e.store) {
-      this.store = e.store;
+    if (e.store_id) {
+      this.store_id = e.store_id;
     }
 
     if (this.$parent.globalData.userInfo) {
@@ -255,7 +255,7 @@ export default class Card extends wepy.page {
   methods = {
     toOpenCard() {
       wx.navigateTo({
-        url: 'card_activate?space=' + this.space + '&store=' + this.store
+        url: 'card_activate?space_id=' + this.space_id + '&store_id=' + this.store_id
       });
     },
     userInfo(e) {
