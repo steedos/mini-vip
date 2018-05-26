@@ -58,16 +58,17 @@ export default class Select extends wepy.page {
 
   methods = {
     radioChange: function(e) {
-      console.log('radio发生change事件，携带value值为：', e.detail.value);
-
-      var radioItems = this.data.radioItems;
-      for (var i = 0, len = radioItems.length; i < len; ++i) {
+      const pages = getCurrentPages();
+      const prevPage = pages[pages.length - 2]
+      let radioItems = this.data.radioItems;
+      for (let i = 0, len = radioItems.length; i < len; ++i) {
         radioItems[i].checked = radioItems[i].value == e.detail.value;
       }
 
-      this.setData({
-        radioItems: radioItems
-      });
+      prevPage.changeData('sex', e.detail.value)
+
+      this.radioItems = radioItems
+      this.$apply()
     }
   };
 }

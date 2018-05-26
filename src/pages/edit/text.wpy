@@ -42,9 +42,12 @@ export default class Text extends wepy.page {
 
   methods = {
     bindNameChange(e) {
-        this.name = e.detail.value;
-        console.log(this.name)
-      },
+      const pages = getCurrentPages();
+      const prevPage = pages[pages.length - 2]
+      prevPage.changeData('name', e.detail.value)
+      this.name = e.detail.value;
+      this.$apply()
+    },
   };
 }
 </script>
