@@ -60,16 +60,41 @@
 
 <template>
   <view class="store-register">
-    <view class="weui-cells__title">必填信息</view>
     <view class="page__bd">
       <view class="weui-toptips weui-toptips_warn" wx:if="{{showTopTips}}">{{message}}</view>
-      <view class="weui-cells weui-cells_after-title">
+      <view class="weui-cells">
         <view class="weui-cell weui-cell_input">
           <view class="weui-cell__hd">
-            <view class="weui-label">店铺名称</view>
+            <view class="weui-label">手机</view>
           </view>
           <view class="weui-cell__bd">
-            <input class="weui-input" placeholder="请输入店铺名称" value="{{store_name}}" bindchange="bindStoreNameChange"/>
+            <view class="weui-input">
+              <view wx:if="{{phoneNumber}}">{{phoneNumber}}</view>
+              <button wx:else="{{phoneNumber}}" class="get-number" plain="true" open-type="getPhoneNumber"
+                      bindgetphonenumber="getPhoneNumber">点击获取微信绑定手机号
+              </button>
+            </view>
+          </view>
+          <view class="weui-cell__ft">
+          </view>
+        </view>
+        <view class="weui-cell weui-cell_input">
+          <view class="weui-cell__hd">
+            <view class="weui-label">商户名称</view>
+          </view>
+          <view class="weui-cell__bd">
+            <input class="weui-input" placeholder="" value="{{store_name}}" bindchange="bindStoreNameChange"/>
+          </view>
+        </view>
+        <view class="weui-cell weui-cell_input weui-cell_vcode">
+          <view class="weui-cell__hd">
+            <view class="weui-label">地址</view>
+          </view>
+          <view class="weui-cell__bd">
+            <textarea class="weui-textarea" auto-height=true value="{{location.address}}"/>
+          </view>
+          <view class="weui-cell__ft">
+            <view class="weui-vcode-btn" @tap="getAddress">选择</view>
           </view>
         </view>
         <view class="weui-cell weui-cell_input">
@@ -83,41 +108,7 @@
             </picker>
           </view>
         </view>
-        <view class="weui-cell weui-cell_input">
-          <view class="weui-cell__hd">
-            <view class="weui-label">手机号</view>
-          </view>
-          <view class="weui-cell__bd">
-            <view class="weui-input">
-              <view wx:if="{{phoneNumber}}">{{phoneNumber}}</view>
-              <button wx:else="{{phoneNumber}}" class="get-number" plain="true" open-type="getPhoneNumber"
-                      bindgetphonenumber="getPhoneNumber">获取手机号
-              </button>
-            </view>
-          </view>
-          <view class="weui-cell__ft">
-          </view>
-        </view>
-        <view class="weui-cell weui-cell_input weui-cell_vcode">
-          <view class="weui-cell__hd">
-            <view class="weui-label">详细地址</view>
-          </view>
-          <view class="weui-cell__bd">
-            <textarea class="weui-textarea" auto-height=true value="{{location.address}}"/>
-          </view>
-          <view class="weui-cell__ft">
-            <view class="weui-vcode-btn" @tap="getAddress">获取地址</view>
-          </view>
-        </view>
 
-        <view class="weui-cell weui-cell_input">
-          <view class="weui-cell__hd">
-            <view class="weui-label">公司名称</view>
-          </view>
-          <view class="weui-cell__bd">
-            <input class="weui-input" placeholder="公司名称，非必填" value="{{space_name}}" bindchange="bindSpaceNameChange"/>
-          </view>
-        </view>
       </view>
       <checkbox-group bindchange='checkboxChange'>
         <label class="checkbox-container">
@@ -138,7 +129,7 @@
 
   export default class StoreRegister extends wepy.page {
     config = {
-      navigationBarTitleText: '发行会员卡'
+      navigationBarTitleText: '商户入驻'
     };
 
     data = {
