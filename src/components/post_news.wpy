@@ -38,17 +38,20 @@
       <block wx:else>
         <image class="image" mode="aspectFill" src="../images/empty.jpg"/>
       </block>
-    </view>
-    <view class="post-body">
+    </navigator>
+    <navigator class="post-body"  url="../postDetail?_id">
       <view class="post-name">{{name}}</view>
       <view class="post-summary" >{{summary}}</view>
-    </view>
+    </navigator>
 	</view>
 </template>
 
 <script>
 import wepy from 'wepy';
-import { baseUrl } from '@/config'
+import { baseUrl } from '@/config';
+import req from '@/network';
+import { serverAPI } from '@/server';
+import { demoSpaceId,demoStoreId } from '@/config'
 
 export default class post extends wepy.component {
   onLoad() {}
