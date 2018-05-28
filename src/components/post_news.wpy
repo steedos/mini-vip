@@ -1,30 +1,42 @@
 <style lang="less">
 .post {
   background: #fff;
-  margin:20rpx;
+  margin:40rpx 20rpx;
   border:solid 1px #ededed;
   border-radius:6px;
-  height: 270px;
 
-  .post-body{
+  .post-cover{
     image{
       width: 100%;
+      height: 200px;
       border-top-left-radius:6px;
       border-top-right-radius:6px;
+    }
+  }
+  .post-body{
+    padding:30rpx;
+    margin-top:-10px;
+    .post-name{
+      max-height:78px;
+      overflow:hidden;
+    }
+    .post-summary{
+      color:#888;
+      font-size:14px;
+      max-height:68px;
+      overflow:hidden;
     }
   }
 }
 </style>
 <template>
 	<view class="post">
+    <view class="post-cover">
+      <image class="image" mode="aspectFill" src="{{baseUrl}}/api/files/images/{{cover}}"/>
+    </view>
     <view class="post-body">
-      <image class="image" style="height:180px;" mode="aspectFill" src="{{baseUrl}}/api/files/images/{{cover}}"/>
-      <view class="weui-panel__bd">
-          <view class="weui-media-box weui-media-box_text">
-              <view class="weui-media-box__title weui-media-box__title_in-text">{{name}}</view>
-              <view class="weui-media-box__desc" >{{summary}}</view>
-          </view>
-      </view>
+      <view class="post-name">{{name}}</view>
+      <view class="post-summary" >{{summary}}</view>
     </view>
 	</view>
 </template>

@@ -122,7 +122,7 @@
         </navigator>
       </view>
       <view class="weui-cells">
-        <navigator url="card/select" class="weui-cell weui-cell_access">
+        <navigator url="card/select?space_id=uSm6t2rzpvnfks4ee" class="weui-cell weui-cell_access">
           <view class="weui-cell__bd">
             <view>商户会员卡</view>
           </view>

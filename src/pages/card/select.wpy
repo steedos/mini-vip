@@ -3,24 +3,51 @@
     height: 100%;
     background-color: #333333;
   }
-  .header{
+  .ad-header{
     width: 100%;
     .header-image{
       width: 100%;
     }
   }
-  .content{
+  .card-body{
     padding-bottom:1rpx;
+    height: 450rpx;
+    width: 100%;
+    .card-opt{
+      position:absolute;
+      z-index:1;
+      margin-top:-280rpx;
+      margin-left:20rpx;
+      margin-right:20rpx;
+      height:260rpx;
+      background-color:white;
+      padding-left: 15rpx;
+      padding-right: 15rpx;
+      .card-btn{
+        margin-top:20rpx;
+      }
+    }
   }
   
 </style>
 <template>
-  <view class="header">
+  <view class="ad-header">
     <image class="header-image" mode="widthFix" src="../../images/card/select-header.png"/>
   </view>
-  <view calss="content">
+  <view class="card-list">
     <repeat for="{{cards}}" key="index" index="index" item="card">
-      <vipcrad :isActivated="card.isActivated" :cardName="card.cardName" :cardType="card.cardType"/>
+      <view class="card-body">
+        <vipcrad :isActivated="card.isActivated" :cardName="card.cardName" :cardType="card.cardType"/>
+        <view class="card-opt">
+          <view class="weui-panel summary">
+            <view class="weui-media-box__title">会员权益</view>
+            <text class="weui-media-box__desc detail">{{card.summary}}</text>
+          </view>
+          <view class="card-btn">
+            <button class="card-apply" plain="true">申请开卡</button>
+          </view>
+        </view>
+      </view>
     </repeat>
   </view>
 </template>
@@ -28,6 +55,7 @@
 import wepy from 'wepy';
 import vipCard from '../../components/vipCard';
 export default class CardSelect extends wepy.page {
+  
   config = {
     navigationBarTitleText: '会员卡',
     navigationBarBackgroundColor: '#D64B4B'
@@ -36,23 +64,34 @@ export default class CardSelect extends wepy.page {
     vipcrad: vipCard
   };
   data = {
+    space_id: '',
     cards: [
     {
       cardName: '贝菲特',
       cardType: '钻石卡',
-      isActivated: false
+      isActivated: false,
+      summary: "本卡仅限本人使用，不可退卡，可转让，转让收取10%手续费。本卡最终解释权归华炎所有。"
     },
     {
       cardName: '贝菲特',
       cardType: '钻石卡',
-      isActivated: false
+      isActivated: false,
+      summary: "本卡仅限本人使用，不可退卡，可转让，转让收取10%手续费。本卡最终解释权归华炎所有。"
     },
     {
       cardName: '贝菲特',
       cardType: '钻石卡',
-      isActivated: false
+      isActivated: false,
+      summary: "本卡仅限本人使用，不可退卡，可转让，转让收取10%手续费。本卡最终解释权归华炎所有。"
     }
     ]
   };
+ async onLoad(e) {
+    // onload执行的时候调用login接口
+    if(e.space_id){
+      this.space_id = e.space_id;
+      await this.$parent.login(e.space_id);
+    }
+  }
 }
 </script>

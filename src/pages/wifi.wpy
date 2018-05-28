@@ -77,15 +77,13 @@ export default class Wifi extends wepy.page {
     selected: {},
     wifiList:[],
     listTitle: '门店 WiFi 列表',
-    store:'AJ652WDC5Zh4gLCrT'
+    store:''
   };
 
   async onLoad(e) {
     wx.showNavigationBarLoading();
     if (e.store) {
       this.store = e.store;
-    }else{
-      this.store = "AJ652WDC5Zh4gLCrT";
     }
     const _self = this;
     wx.startWifi({
@@ -207,10 +205,17 @@ export default class Wifi extends wepy.page {
     }
   };
   getWifiInfo(){
-    const data = {
-      $filter: 'store eq ' + this.store,
-      $select: 'SSID,BSSID,password'
-    };
+    var data = {}
+    if(this.store){
+      data = {
+        $filter: 'store eq ' + this.store,
+        $select: 'SSID,BSSID,password'
+      };
+    }else{
+      data = {
+        $select: 'SSID,BSSID,password'
+      };
+    }
     console.log(data);
     return this.$parent.query("vip_wifi",data);
   };
