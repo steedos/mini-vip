@@ -77,7 +77,7 @@
           <view class="weui-cell__ft weui-cell__ft_in-access"></view>
         </navigator>
       </view>
-      <block wx:if="{{store_id}}">
+      <!-- <block wx:if="{{store_id}}"> -->
           <view class="weui-cells">
             <navigator url="wifi" class="weui-cell weui-cell_access">
               <view class="weui-cell__bd">
@@ -92,7 +92,7 @@
               <view class="weui-cell__ft weui-cell__ft_in-access"></view>
             </navigator>
           </view>
-      </block>
+      <!-- </block> -->
 
         <view class="weui-cells">
           <navigator url="stores" class="weui-cell weui-cell_access">
