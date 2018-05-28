@@ -61,7 +61,8 @@
 <template>
   <view class="store-register">
     <view class="weui-cells__title">必填信息</view>
-    <view class="page__bd" style="">
+    <view class="page__bd">
+      <view class="weui-toptips weui-toptips_warn" wx:if="{{showTopTips}}">{{message}}</view>
       <view class="weui-cells weui-cells_after-title">
         <view class="weui-cell weui-cell_input">
           <view class="weui-cell__hd">
@@ -141,7 +142,6 @@
     };
 
     data = {
-
       store_name: "",
       space_name: "",
       location: {
@@ -166,18 +166,19 @@
         {label: '宠物', value: 'pets'},
         {label: '汽车服务', value: 'car'}
       ],
-      industry_index: -1
+      industry_index: -1,
+      showTopTips: false,
+      message: ""
     };
 
     onLoad() {
-//      wx.getLocation({
-//        type: "gcj02",
-//        success: function (res) {
-//          console.log("res", res)
-//          this.latitude = res.latitude
-//          this.longitude = res.longitude
-//        }
-//      })
+      wx.getLocation({
+        type: "gcj02",
+        success: function (res) {
+          this.latitude = res.latitude
+          this.longitude = res.longitude
+        }
+      })
     }
 
 
@@ -197,13 +198,24 @@
         }
       },
       getAddress() {
+        self = this
         wepy.chooseLocation().then(res => {
-            this.location.address = res.address
-            this.location.latitude = res.latitude
-            this.location.longitude = res.longitude
-            this.$apply()
+            self.location.address = res.address
+            self.location.latitude = res.latitude
+            self.location.longitude = res.longitude
+            self.$apply()
           }
-        )
+        ).catch((err) => {
+          if (err.errMsg == 'chooseLocation:fail auth deny') {
+            wx.openSetting({
+              success: (res) => {
+                if (res.authSetting["scope.userLocation"]) {
+                  self.methods.getAddress.call(self)
+                }
+              }
+            })
+          }
+        })
       },
       checkboxChange(e) {
         if (e.detail.value.length > 0) {
@@ -222,7 +234,31 @@
       bindSpaceNameChange(e) {
         this.space_name = e.detail.value;
       },
-      storeRegister(){
+      storeRegister() {
+        if (!this.store_name) {
+          this.showTopTips = true
+          this.message = "请填写店铺名称"
+          return;
+        }
+
+        if (!this.industry) {
+          this.showTopTips = true
+          this.message = "请选择行业"
+          return;
+        }
+
+        if (!this.phoneNumber) {
+          this.showTopTips = true
+          this.message = "请填写手机号"
+          return;
+        }
+
+        if (!this.location || !this.location.address) {
+          this.showTopTips = true
+          this.message = "请填写地址"
+          return;
+        }
+
         this.submitDisabled = true
         console.log({
           store_name: this.store_name,
