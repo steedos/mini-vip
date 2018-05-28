@@ -77,7 +77,7 @@
           <text>满{{min_consumption}}元可用</text>
         </view>
         <view class="coupon-validity">
-          <text>{{tools.timefmt(start_time)}}</text> <text>{{tools.timefmt(end_time)}}</text>
+          <text>{{util.datefmt(start_time)}}</text> <text>{{util.datefmt(end_time)}}</text>
         </view>
       </view>
     </view>
@@ -86,7 +86,7 @@
 
 <script>
 import wepy from 'wepy';
-import tools from '../wxs/tools.wxs'
+import util from '../wxs/util.wxs'
 
 export default class coupon extends wepy.component {
   onLoad() {}
@@ -117,7 +117,7 @@ export default class coupon extends wepy.component {
   data = {};
 
   wxs = {
-    tools: tools
+    util: util
   };
 
   methods = {};

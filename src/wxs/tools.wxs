@@ -1,6 +1,0 @@
-module.exports = {
-  timefmt: function (value) {
-    //这时进行时间值格式化
-    return "2018-10-01"
-  }
-};
