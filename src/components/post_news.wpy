@@ -30,7 +30,7 @@
 }
 </style>
 <template>
-	<view class="post">
+	<view class="post" @tap=goDetail({{id}})>
     <view class="post-cover">
       <block wx:if="{{cover}}">
         <image class="image" mode="aspectFill" src="{{baseUrl}}/api/files/images/{{cover}}"/>
@@ -88,7 +88,14 @@ export default class post extends wepy.component {
     baseUrl: baseUrl
   };
 
-  methods = {};
+  methods = {
+    goDetail(id, event){
+      console.log("===========32323=======a===", id);
+      wx.navigateTo({
+        url: "../store"
+      });
+    }
+  };
 
 }
 </script>

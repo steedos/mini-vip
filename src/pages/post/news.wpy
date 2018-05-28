@@ -9,7 +9,7 @@ page {
     <view class="page__bd">
       <scroll-view class="scroll-view_H" scroll-y="true">
         <repeat for="{{posts}}" key="index" index="index" item="post">
-          <post :name="post.name" :summary="post.summary" :cover="post.images[0]"/>
+          <post :id="post._id" :name="post.name" :summary="post.summary" :cover="post.images[0]"/>
         </repeat>
       </scroll-view>
     </view>
