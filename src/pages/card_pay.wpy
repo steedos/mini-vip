@@ -1,23 +1,112 @@
 <style lang="less">
+
 </style>
 <template>
-    <view>
-
+<view class="page">
+    <view class="page__hd">
+        <view class="weui-cells weui-cells_after-title">
+            <view class="weui-cell weui-cell_input">
+                <view class="weui-cell__bd">
+                    <input class="weui-input" placeholder="请输入付款金额" type="digit" focus="true" bindinput="inputChange" value="{{payValue}}"/>
+                </view>
+            </view>
+        </view>
     </view>
+    <view class="page__bd">
+        <view class="weui-cells__title">选择支付方式</view>
+        <view class="weui-cells weui-cells_after-title">
+            <radio-group bindchange="radioChange">
+                <radio class="weui-cell" wx:for-items="{{items}}" wx:key="name" value="{{item.name}}" checked="{{item.checked}}">
+                    <text>{{item.value}}</text>
+                </radio>
+            </radio-group>
+        </view>
+    </view>
+    <view class="weui-btn-area">
+      <button class="weui-btn" type="primary" @tap="doPay" disabled="{{!canDoPay}}">支付</button>
+    </view>
+</view>
 </template>
 <script>
 import wepy from 'wepy';
+import req from '@/network';
+
 export default class cardPay extends wepy.page {
-    config = {
-        navigationBarTitleText: '买单'
+  config = {
+    navigationBarTitleText: '买单'
+  };
+
+  data = {
+    items: [
+      { name: 'balance', value: '余额', checked: 'true' },
+      { name: 'weixin', value: '微信支付' }
+    ],
+    payValue: '',
+    payWay: 'balance',
+    canDoPay: false,
+    cardId: '',
+    cardBalance: ''
+  };
+
+  onLoad(e) {
+    console.log('onLoad');
+    console.log(e);
+    this.cardId = e.card_id;
+    this.cardBalance = e.balance;
+  }
+
+  methods = {
+    inputChange(e) {
+      console.log('input值修改：', e.detail.value);
+      this.payValue = e.detail.value;
+      this.$apply();
+
+      var val = Number(e.detail.value);
+      if (val > 0) {
+        this.canDoPay = true;
+        this.$apply();
+      } else {
+        this.canDoPay = false;
+        this.$apply();
+      }
+    },
+    radioChange(e) {
+      console.log('radio发生change事件，携带value值为：', e.detail.value);
+      this.payWay = e.detail.value;
+    },
+    doPay() {
+      wx.showLoading({
+        title: '正在准备支付',
+        mask: true
+      });
+      var data = {
+        totalFee: parseInt(this.payValue * 100),
+        cardId: this.cardId
+      };
+
+      var that = this;
+
+      if (this.payWay == 'balance') {
+        req.post('/api/steedos/payway/balance', data).then(res => {
+          wx.hideLoading();
+          console.log('res: ', res);
+          if (res.status == 'SUCCESS') {
+            wx.navigateTo({
+              url: 'card_pay_success'
+            });
+          } else {
+            wx.navigateTo({
+              url: 'card_pay_fail'
+            });
+          }
+        });
+      } else if (this.payWay == 'weixin') {
+        req.post('/api/steedos/payway/weixin', data).then(res => {
+          wx.hideLoading();
+          console.log('res: ', res);
+        });
+      }
     }
-
-    data = {
-
-    }
-
-    methods = {
-
-    }
+  };
 }
 </script>
