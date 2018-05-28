@@ -74,6 +74,7 @@ export default class VIP extends wepy.app {
       'pages/card_activate',
       'pages/card_billing',
       'pages/card_recharge',
+      'pages/card_pay',
       'pages/stores',
       'pages/wifi',
       'pages/edit/text',
@@ -176,14 +177,14 @@ export default class VIP extends wepy.app {
     if (!globalData.user._id || !globalData.user.auth_token) {
       needs_login = true
     }
-    
+
     try {
       const session_vaild = await wepy.checkSession()
       if (!session_vaild) {
         needs_login = true
       }
     } catch (error) {
-      console.log(error) 
+      console.log(error)
     }
 
     if (needs_login) {

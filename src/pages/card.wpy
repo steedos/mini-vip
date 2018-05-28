@@ -69,6 +69,14 @@
     </view>
 
     <view class="page__bd">
+      <view wx:if="{{isActivated}}" class="weui-cells">
+        <navigator url="card_pay?card_id={{cardId}}&balance={{cardBalance}}" class="weui-cell weui-cell_access">
+          <view class="weui-cell__bd">
+            <view>买单</view>
+          </view>
+          <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+        </navigator>
+      </view>
       <block wx:if="{{store_id}}">
           <view class="weui-cells">
             <navigator url="wifi" class="weui-cell weui-cell_access">
