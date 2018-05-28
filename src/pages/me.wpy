@@ -1,44 +1,62 @@
 <style lang="less">
-  .weui-cell__bd{
+.page-me {
+  .weui-cell__bd {
     .nav-btn::after {
-      border-radius: 0; 
-    }
-    .nav-btn{
       border-radius: 0;
-      background-color:white;
-      text-align:left;
+    }
+    .nav-btn {
+      border-radius: 0;
+      background-color: white;
+      text-align: left;
       border: none;
       margin: 0;
       padding: 0;
       padding-left: 14px;
       height: 45px;
       font-size: 17px;
-      .content{
-        .text{
-          float:left;
+      .content {
+        .text {
+          float: left;
         }
-        .weui-cell__ft_in-access{
-          padding-bottom:45px;
-          margin-right:15px;
+        .weui-cell__ft_in-access {
+          padding-bottom: 45px;
+          margin-right: 15px;
         }
       }
     }
   }
+
+  .user-active {
+    border: none;
+    text-align: left;
+    font-size: 17px;
+    padding: 0;
+  }
+}
 </style>
 <template>
   <view class="page-me">
     <view class="weui-panel__bd">
       <view class="weui-cells">
-        <navigator url="me_profile" class="weui-media-box weui-media-box_appmsg" hover-class="weui-cell_active">
+        <view @tap="editUser" class="weui-media-box weui-media-box_appmsg" hover-class="weui-cell_active">
           <view class="weui-media-box__hd weui-media-box__hd_in-appmsg" style="width: 50px; height: 50px; line-height: 50px;">
             <open-data class="weui-media-box__thumb" type="userAvatarUrl"></open-data>
           </view>
           <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
-            <view class="weui-media-box__title">{{nickName}}</view>
-            <view class="weui-media-box__desc">{{phoneNumber}}</view>
+            <view class="weui-media-box__title">
+              {{name}}
+              <block wx:if="{{!name}}">
+                <button open-type="getUserInfo" bindgetuserinfo="userLogin" plain="true" class="user-active">
+                  <open-data type="userNickName"></open-data>
+                </button>
+              </block>
+            </view>
+            <view class="weui-media-box__desc">
+              {{user}}
+            </view>
           </view>
           <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-        </navigator>
+        </view>
       </view>
 
       <view class="weui-cells">
@@ -50,14 +68,6 @@
         </navigator>
       </view>
       <view class="weui-cells">
-        <!-- <view class="weui-cell__bd">
-          <button class="nav-btn" open-type="contact">
-            <view class="content">
-              <view class="text">意见反馈</view>
-              <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-            </view>
-          </button>
-        </view> -->
         <view class="weui-cell__bd">
           <button class="nav-btn" open-type="contact"  @tap="toContact">
             <view class="content">
@@ -81,27 +91,44 @@ import { serverAPI } from '@/server';
 
 export default class Me extends wepy.page {
   config = {
-    navigationBarTitleText: '我的',
+    navigationBarTitleText: '我的'
   };
 
   data = {
-    nickName: '',
-    phoneNumber: ''
-  }
+    name: '',
+    mobile: ''
+  };
 
   onLoad() {
-    const nickName = this.$parent.globalData.userInfo.userInfo.nickName
-    this.nickName = nickName
-    this.$apply()
-
-    const user = this.$parent.globalData.user
-    this.phoneNumber = user.mobile
-    console.log(this.$parent.globalData.user)  
+    const user = this.$parent.globalData.user;
+    if (user) {
+      this.name = user.name;
+      this.mobile = user.mobile;
+      this.$apply();
+    }
   }
 
   methods = {
-    toContact(e){
-      console.log("进入在线客服");
+    toContact(e) {
+      console.log('进入在线客服');
+    },
+    // TODO 使用修改用户信息接口，保存用户信息
+    editUser() {
+      // wx.navigateTo({url: "me_profile"})
+      const user = this.$parent.globalData.user
+      if (user && user.name) {
+        wx.navigateTo({url: "me_profile"})
+      }
+    },
+    userLogin(e) {
+      const self = this
+      const userInfo = e.detail.userInfo
+      if (userInfo) {
+        this.$parent.globalData.userInfo = userInfo
+        const name = userInfo.nickName
+        const sex = userInfo.gender ? "男" : "女"
+        wx.navigateTo({url: "me_profile"})
+      }
     }
   };
 }

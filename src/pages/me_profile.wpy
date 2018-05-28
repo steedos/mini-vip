@@ -7,7 +7,6 @@
     width: 100%;
 
     .submit-btn {
-      background: #1B9AF7;
       color: #fff;
       margin: 0 15px;
     }
@@ -45,7 +44,7 @@
 			</view>
 		</view>
     <view class="btn-container">
-      <button class="weui-btn submit-btn" type="primary" @tap="updateUser">提交</button>
+      <button class="weui-btn submit-btn" type="primary" @tap="updateUser">保存</button>
     </view>
   </view>
 </template>
