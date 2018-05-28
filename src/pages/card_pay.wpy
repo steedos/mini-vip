@@ -1,5 +1,4 @@
 <style lang="less">
-
 </style>
 <template>
 <view class="page">
@@ -53,13 +52,13 @@ export default class cardPay extends wepy.page {
     console.log(e);
     this.cardId = e.card_id;
     this.cardBalance = e.balance;
-  };
+  }
 
   onShow() {
     this.payValue = '';
     this.payWay = 'balance';
     this.$apply();
-  };
+  }
 
   methods = {
     inputChange(e) {
@@ -100,9 +99,9 @@ export default class cardPay extends wepy.page {
             wx.navigateTo({
               url: 'card_pay_success?payValue=' + that.payValue
             });
-          } else {
+          } else if (res.errors) {
             wx.navigateTo({
-              url: 'card_pay_fail'
+              url: 'card_pay_fail?msg=' + res.errors[0].errorMessage
             });
           }
         });
