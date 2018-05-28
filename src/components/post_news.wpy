@@ -30,19 +30,19 @@
 }
 </style>
 <template>
-	<view class="post" @tap=goDetail({{id}})>
+	<view class="post" @tap="goDetail({{id}})">
     <view class="post-cover">
       <block wx:if="{{images}}">
-        <image class="image" mode="aspectFill" src="{{baseUrl}}/api/files/images/{{images[0]}}" @tap=previewImage({{images}}) />
+        <image class="image" mode="aspectFill" src="{{baseUrl}}/api/files/images/{{images[0]}}" @tap="previewImage({{images}})" />
       </block>
       <block wx:else>
         <image class="image" mode="aspectFill" src="../images/empty.jpg"/>
       </block>
-    </navigator>
-    <navigator class="post-body"  url="../postDetail?_id">
+    </view>
+    <view class="post-body">
       <view class="post-name">{{name}}</view>
       <view class="post-summary" >{{summary}}</view>
-    </navigator>
+    </view>
 	</view>
 </template>
 
