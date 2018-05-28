@@ -147,7 +147,7 @@ import { serverAPI } from '@/server';
 
 export default class Card extends wepy.page {
   config = {
-    navigationBarTitleText: '会员服务台',
+    navigationBarTitleText: '会员',
     enablePullDownRefresh: true
   };
 
