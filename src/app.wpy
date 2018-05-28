@@ -2,7 +2,7 @@
 @import "./assets/style/weui.wxss";
 @import "./assets/style/slds_icons_font.wxss";
 page {
-  background-color: #efeef4;
+  background-color: #f5f5f7;
   font-size: 16px;
   font-family: -apple-system-font,Helvetica Neue,Helvetica,sans-serif;
 }
@@ -110,10 +110,10 @@ export default class VIP extends wepy.app {
       }]
     },
     window: {
-      navigationBarBackgroundColor: '#efeef4',
+      navigationBarBackgroundColor: '#f5f5f7',
       navigationBarTitleText: '华炎客服',
       navigationBarTextStyle: 'black',
-      backgroundColor: "#efeef4",
+      backgroundColor: "#f5f5f7",
       backgroundTextStyle: 'dark',
     }
   }

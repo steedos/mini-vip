@@ -116,7 +116,7 @@
       <view class="weui-cells">
         <navigator url="./store_register" class="weui-cell weui-cell_access">
           <view class="weui-cell__bd">
-            <view>发行会员卡</view>
+            <view>商户入驻</view>
           </view>
           <view class="weui-cell__ft weui-cell__ft_in-access"></view>
         </navigator>
