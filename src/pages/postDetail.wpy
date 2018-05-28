@@ -1,0 +1,59 @@
+<style lang="less">
+// .weui-article__h3{
+//   color:grey;
+// }
+</style>
+<template>
+<view class="page">
+    <view class="page__bd">
+        <view class="weui-article">
+            <view class="weui-article__h1">公司简介</view>
+            <view class="weui-article__section">
+                <view class="weui-article__section">
+                    <view class="weui-article__h3">贝菲特是沪上具有悠久历史的健身品牌，公司于2002年正式成立至今已发展成为拥有多家直营店及加盟店的健身连锁企业。</view>
+                    <view class="weui-article__p">有很多朋友都问我在家里怎么健身？或者有很多朋友时间很紧张，没有时间去健身房健身，只能在家里健身！在家里健身，需要购买一些必备的健身器材就少不了，现在男人健身器材有很多，那么最适合男人的健身器材有哪些呢?一起来看看吧。我先介绍一下在家里健身的八大必备器材，我介绍也不是绝对，要是有条件好的朋友，可以选择更好的器械健身现在男人健身器材有很多，那么最适合男人的健身器材有哪些呢?一起来看看吧！</view>
+                    <view class="weui-article__p">
+                        <!-- <image class="weui-article__img" src="../images/pic_article.png" mode="aspectFit" style="height: 180px" />
+                        <image class="weui-article__img" src="../images/pic_article.png" mode="aspectFit" style="height: 180px" /> -->
+                    </view>
+                </view>
+            </view>
+        </view>
+    </view>
+</view>
+</template>
+<script>
+  import wepy from 'wepy';
+  import req from '@/network';
+
+  export default class PostDetail extends wepy.page {
+    config = {
+    navigationBarTitleText: '详情'
+  };
+
+  async onLoad() {
+		this.loadPostList();
+  }
+
+  onShow() {
+    console.log("onShow==================");
+    console.log(this.$parent.globalData);
+  }
+
+  data = {
+    posts: []
+  };
+  
+	async loadPostList(){
+    const options = {
+      $expand: 'owner($select=name)',
+      $count: true,
+      $select: 'name,summary,description,comment_count,enable_comment,images'
+    };
+    var posts = await this.$parent.query("post", options)
+    this.posts = posts.value;
+    console.log("loadPostList", this.posts);
+    this.$apply();
+  };
+  }
+</script>
