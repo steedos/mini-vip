@@ -1,61 +1,51 @@
 <style lang="less">
-  .store-register {
-    .header {
-      width: 100%;
-      background: #fff;
-      display: flex;
-      flex-direction: column;
+.store-register {
+  .header {
+    width: 100%;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
 
-      &:before {
-        display: none;
-      }
-    }
-
-    checkbox .wx-checkbox-input {
-      height: 12px;
-      width: 12px;
-    }
-
-    checkbox .wx-checkbox-input.wx-checkbox-input-checked::before {
-      padding: 3px;
-      border-radius: 50%;
-      background-color: #1B9AF7;
-    }
-
-    .checkbox-container {
-      position: relative;
-      margin-left: 18px;
-      margin-top: 15px;
-      display: flex;
-
-      .guide {
-        margin-left: 10px;
-        line-height: 30px;
-        color: #a8a8a8;
-      }
-    }
-
-    .btn-container {
-      width: 100%;
-    }
-
-    .submit-btn {
-      background: #1B9AF7;
-      color: #fff;
-      margin: 15px 15px 20px;
-    }
-
-    .get-number {
-      border: none;
-      text-align: left;
-      height: 2.58823529em;
-      min-height: 2.58823529em;
-      line-height: 2.58823529em;
-      padding: 0;
-      font-size: 17px;
-      color: #808080;
+    &:before {
+      display: none;
     }
   }
+
+  .checkbox-container {
+    position: relative;
+    margin-left: 18px;
+    margin-top: 15px;
+    display: flex;
+
+    .guide {
+      margin-left: 10px;
+      line-height: 30px;
+      color: #a8a8a8;
+    }
+  }
+
+  .btn-container {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .submit-btn {
+    background: #1b9af7;
+    color: #fff;
+    margin: 15px 15px 0;
+  }
+
+  .get-number {
+    border: none;
+    text-align: left;
+    height: 2.58823529em;
+    min-height: 2.58823529em;
+    line-height: 2.58823529em;
+    padding: 0;
+    font-size: 17px;
+    color: #808080;
+  }
+}
 </style>
 
 <template>
@@ -110,10 +100,16 @@
         </view>
 
       </view>
-      <checkbox-group bindchange='checkboxChange'>
-        <label class="checkbox-container">
-          <checkbox value="agree" color='#fff'/>
-          <view class="guide">我已阅读并同意《华炎会员管理系统商户使用协议》</view>
+      <checkbox-group bindchange="checkboxChange">
+        <label class="weui-agree" for="weuiAgree">
+          <view class="weui-agree__text">
+            <checkbox class="weui-agree__checkbox" id="weuiAgree" value="agree" checked="{{isAgree}}" />
+            <view class="weui-agree__checkbox-icon">
+                <icon class="weui-agree__checkbox-icon-check" type="success_no_circle" size="9" wx:if="{{isAgree}}"></icon>
+            </view>
+            我已阅读并同意
+            <navigator url="" class="weui-agree__link">《华炎会员管理系统商户使用协议》</navigator>
+          </view>
         </label>
       </checkbox-group>
       <view class="btn-container">
@@ -124,150 +120,157 @@
 </template>
 
 <script>
-  import wepy from 'wepy';
-  import req from '@/network';
+import wepy from 'wepy';
+import req from '@/network';
 
-  export default class StoreRegister extends wepy.page {
-    config = {
-      navigationBarTitleText: '商户入驻'
-    };
+export default class StoreRegister extends wepy.page {
+  config = {
+    navigationBarTitleText: '商户入驻'
+  };
 
-    data = {
-      store_name: "",
-      space_name: "",
-      location: {
-        latitude: 0.00,
-        longitude: 0.00,
-        address: ""
-      },
-      phoneNumber: "",
-      submitDisabled: true,
-      industry: "",
-      industryOptions: [
-        {label: '餐饮', value: 'food'},
-        {label: '酒店住宿', value: 'accommodation'},
-        {label: '出行', value: 'travel'},
-        {label: '休闲娱乐', value: 'entertainment'},
-        {label: '丽人', value: 'beauty'},
-        {label: '教育', value: 'education'},
-        {label: '母婴亲子', value: 'parent-child'},
-        {label: '运动健身', value: 'sport'},
-        {label: '家具装修', value: 'decoration'},
-        {label: '生活服务', value: 'life'},
-        {label: '宠物', value: 'pets'},
-        {label: '汽车服务', value: 'car'}
-      ],
-      industry_index: -1,
-      showTopTips: false,
-      message: ""
-    };
+  data = {
+    store_name: '',
+    space_name: '',
+    location: {
+      latitude: 0.0,
+      longitude: 0.0,
+      address: ''
+    },
+    phoneNumber: '',
+    isAgree: false,
+    submitDisabled: true,
+    industry: '',
+    industryOptions: [
+      { label: '餐饮', value: 'food' },
+      { label: '酒店住宿', value: 'accommodation' },
+      { label: '出行', value: 'travel' },
+      { label: '休闲娱乐', value: 'entertainment' },
+      { label: '丽人', value: 'beauty' },
+      { label: '教育', value: 'education' },
+      { label: '母婴亲子', value: 'parent-child' },
+      { label: '运动健身', value: 'sport' },
+      { label: '家具装修', value: 'decoration' },
+      { label: '生活服务', value: 'life' },
+      { label: '宠物', value: 'pets' },
+      { label: '汽车服务', value: 'car' }
+    ],
+    industry_index: -1,
+    showTopTips: false,
+    message: ''
+  };
 
-    onLoad() {
-      wx.getLocation({
-        type: "gcj02",
-        success: function (res) {
-          this.latitude = res.latitude
-          this.longitude = res.longitude
-        }
-      })
-    }
+  onLoad() {
+    wx.getLocation({
+      type: 'gcj02',
+      success: function(res) {
+        this.latitude = res.latitude;
+        this.longitude = res.longitude;
+      }
+    });
+  }
 
-
-    methods = {
-      getPhoneNumber(e) {
-        if (e.detail.iv || e.detail.encryptedData) {
-          req.post('/api/steedos/weixin/get_phone_number', {
+  methods = {
+    getPhoneNumber(e) {
+      if (e.detail.iv || e.detail.encryptedData) {
+        req
+          .post('/api/steedos/weixin/get_phone_number', {
             iv: e.detail.iv,
             encryptedData: e.detail.encryptedData
-          }).then(res => {
-            console.log("res", res)
-            this.phoneNumber = res.purePhoneNumber
+          })
+          .then(res => {
+            console.log('res', res);
+            this.phoneNumber = res.purePhoneNumber;
             this.$apply();
           });
-        } else {
-          console.error(e.detail.errMsg)
-        }
-      },
-      getAddress() {
-        self = this
-        wepy.chooseLocation().then(res => {
-            self.location.address = res.address
-            self.location.latitude = res.latitude
-            self.location.longitude = res.longitude
-            self.$apply()
-          }
-        ).catch((err) => {
+      } else {
+        console.error(e.detail.errMsg);
+      }
+    },
+    getAddress() {
+      self = this;
+      wepy
+        .chooseLocation()
+        .then(res => {
+          self.location.address = res.address;
+          self.location.latitude = res.latitude;
+          self.location.longitude = res.longitude;
+          self.$apply();
+        })
+        .catch(err => {
           if (err.errMsg == 'chooseLocation:fail auth deny') {
             wx.openSetting({
-              success: (res) => {
-                if (res.authSetting["scope.userLocation"]) {
-                  self.methods.getAddress.call(self)
+              success: res => {
+                if (res.authSetting['scope.userLocation']) {
+                  self.methods.getAddress.call(self);
                 }
               }
-            })
+            });
           }
-        })
-      },
-      checkboxChange(e) {
-        if (e.detail.value.length > 0) {
-          this.submitDisabled = false
-        } else {
-          this.submitDisabled = true
-        }
-      },
-      industryChange(e) {
-        this.industry_index = e.detail.value
-        this.industry = this.industryOptions[e.detail.value].value
-      },
-      bindStoreNameChange(e) {
-        this.store_name = e.detail.value;
-      },
-      bindSpaceNameChange(e) {
-        this.space_name = e.detail.value;
-      },
-      storeRegister() {
-        if (!this.store_name) {
-          this.showTopTips = true
-          this.message = "请填写店铺名称"
-          return;
-        }
-
-        if (!this.industry) {
-          this.showTopTips = true
-          this.message = "请选择行业"
-          return;
-        }
-
-        if (!this.phoneNumber) {
-          this.showTopTips = true
-          this.message = "请填写手机号"
-          return;
-        }
-
-        if (!this.location || !this.location.address) {
-          this.showTopTips = true
-          this.message = "请填写地址"
-          return;
-        }
-
-        this.submitDisabled = true
-        console.log({
-          store_name: this.store_name,
-          industry: this.industry,
-          phoneNumber: this.phoneNumber,
-          location: this.location,
-          space_name: this.space_name
-        })
-        req.post('/api/mini/vip/store_register', {
-          store_name: this.store_name,
-          industry: this.industry,
-          phoneNumber: this.phoneNumber,
-          location: this.location,
-          space_name: this.space_name
-        }).then(res => {
-          wx.navigateTo({url: "./index"})
-        })
+        });
+    },
+    checkboxChange(e) {
+      this.isAgree = !!e.detail.value.length;
+      if (e.detail.value.length > 0) {
+        this.submitDisabled = false;
+      } else {
+        this.submitDisabled = true;
       }
+    },
+    industryChange(e) {
+      this.industry_index = e.detail.value;
+      this.industry = this.industryOptions[e.detail.value].value;
+    },
+    bindStoreNameChange(e) {
+      this.store_name = e.detail.value;
+    },
+    bindSpaceNameChange(e) {
+      this.space_name = e.detail.value;
+    },
+    storeRegister() {
+      if (!this.store_name) {
+        this.showTopTips = true;
+        this.message = '请填写店铺名称';
+        return;
+      }
+
+      if (!this.industry) {
+        this.showTopTips = true;
+        this.message = '请选择行业';
+        return;
+      }
+
+      if (!this.phoneNumber) {
+        this.showTopTips = true;
+        this.message = '请填写手机号';
+        return;
+      }
+
+      if (!this.location || !this.location.address) {
+        this.showTopTips = true;
+        this.message = '请填写地址';
+        return;
+      }
+
+      this.submitDisabled = true;
+      console.log({
+        store_name: this.store_name,
+        industry: this.industry,
+        phoneNumber: this.phoneNumber,
+        location: this.location,
+        space_name: this.space_name
+      });
+      req
+        .post('/api/mini/vip/store_register', {
+          store_name: this.store_name,
+          industry: this.industry,
+          phoneNumber: this.phoneNumber,
+          location: this.location,
+          space_name: this.space_name
+        })
+        .then(res => {
+          wx.navigateTo({ url: './index' });
+        });
     }
-  }
+  };
+}
 </script>

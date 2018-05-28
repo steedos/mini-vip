@@ -11,17 +11,6 @@
       }
     }
 
-    checkbox .wx-checkbox-input {
-      height: 12px;
-      width: 12px;
-    }
-
-    checkbox .wx-checkbox-input.wx-checkbox-input-checked::before {
-      padding: 3px;
-      border-radius: 50%;
-      background-color: #1B9AF7;
-    }
-
     .checkbox-container {
       position: relative;
       margin-left: 18px;
@@ -37,12 +26,13 @@
 
     .btn-container {
       width: 100%;
+      margin-bottom: 20px;
     }
 
     .submit-btn {
       background: #1B9AF7;
       color: #fff;
-      margin: 15px 15px 20px;
+      margin: 15px 15px 0;
     }
 
     .get-number {
@@ -113,13 +103,20 @@
         </view>
       </view>
     </view>
-
-    <checkbox-group bindchange='checkboxChange'>
-      <label class="checkbox-container">
-        <checkbox value="agree" color='#fff'/>
-        <view class="guide">我已阅读并同意《会员卡信息指南》</view>
-      </label>
+    
+    <checkbox-group bindchange="checkboxChange">
+        <label class="weui-agree" for="weuiAgree">
+            <view class="weui-agree__text">
+                <checkbox class="weui-agree__checkbox" id="weuiAgree" value="agree" checked="{{isAgree}}" />
+                <view class="weui-agree__checkbox-icon">
+                    <icon class="weui-agree__checkbox-icon-check" type="success_no_circle" size="9" wx:if="{{isAgree}}"></icon>
+                </view>
+                我已阅读并同意
+                <navigator url="" class="weui-agree__link">《会员卡信息指南》</navigator>
+            </view>
+        </label>
     </checkbox-group>
+    
     <view class="btn-container">
       <button class="submit-btn" form-type="submit" @tap="activate" disabled="{{submitDisabled}}">提交</button>
     </view>
@@ -148,6 +145,8 @@
       this.name = user.name
       this.birthdate = user.birthdate
       this.phoneNumber = user.mobile
+
+      this.$apply()
     }
 
     components = {
@@ -162,6 +161,7 @@
       birthdate: '',
       name: '',
       phoneNumber: '',
+      isAgree: false,
       submitDisabled: true,
       space_id: '',
       store_id: ''
@@ -172,6 +172,7 @@
         console.log(e);
       },
       checkboxChange(e) {
+        this.isAgree = !!e.detail.value.length
         if (e.detail.value.length > 0) {
           this.submitDisabled = false
         } else {
@@ -206,12 +207,15 @@
       },
       activate() {
         this.submitDisabled = true
-        req.post('/api/mini/vip/card_activate?space_id=' + this.space_id + "&store_id=" + this.store_id, {
+        const url = `/api/mini/vip/card_activate?space_id=${this.space_id}&store_id=${this.store_id}`
+        console.log('card_activate', url)
+        const data = {
           name: this.name,
           sex: this.sexValue,
           birthdate: this.birthdate,
           phoneNumber: this.phoneNumber
-        }).then(res => {
+        }
+        req.post(url, data).then(res => {
           wx.navigateTo({url: "./index"})
         })
       }
