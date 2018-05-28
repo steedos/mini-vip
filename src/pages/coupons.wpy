@@ -31,31 +31,7 @@
     };
 
     data = {
-      coupons:[{
-        name: '5元新会员礼券',
-        quota: '5',
-        min_consumption: '满0元可用',
-        start_time: '2018-10-01 12:00',
-        end_time: '2018-10-07 12:00'
-      },{
-        name: '10元新会员礼券',
-        quota: '10',
-        min_consumption: '满58元可用',
-        start_time: '2018-10-01 12:00',
-        end_time: '2018-10-07 12:00'
-      },{
-        name: '15元新会员礼券',
-        quota: '15',
-        min_consumption: '满88元可用',
-        start_time: '2018-10-01 12:00',
-        end_time: '2018-10-07 12:00'
-      },{
-        name: '115元新会员礼券',
-        quota: '115',
-        min_consumption: '满788元可用',
-        start_time: '2018-10-01 12:00',
-        end_time: '2018-10-07 12:00'
-      }]
+      coupons:[]
     };
 
     async loadCouponList(){
