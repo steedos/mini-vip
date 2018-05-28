@@ -154,7 +154,7 @@ export default class Card extends wepy.page {
   data = {
     initialized: false,
     cardId: '',
-    isActivated: true,
+    isActivated: false,
     cardName: '',
     cardType: '',
     cardNumber: '',
@@ -238,9 +238,11 @@ export default class Card extends wepy.page {
   }
 
   onShareAppMessage(res) {
+    const space_id = this.space_id
+    const store_id = this.store_id
     return {
       title: '贝菲特会员卡',
-      path: '/pages/card?id=123'
+      path: `/pages/card?space_id=${space_id}&store_id=${store_id}`
     };
   }
 

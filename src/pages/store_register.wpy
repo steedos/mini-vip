@@ -91,7 +91,7 @@
             <view class="weui-label">地址</view>
           </view>
           <view class="weui-cell__bd">
-            <textarea class="weui-textarea" auto-height=true value="{{location.address}}"/>
+            <textarea class="weui-textarea" auto-height="true" value="{{location.address}}"/>
           </view>
           <view class="weui-cell__ft">
             <view class="weui-vcode-btn" @tap="getAddress">选择</view>
