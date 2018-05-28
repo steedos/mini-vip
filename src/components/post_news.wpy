@@ -32,8 +32,8 @@
 <template>
 	<view class="post" @tap=goDetail({{id}})>
     <view class="post-cover">
-      <block wx:if="{{cover}}">
-        <image class="image" mode="aspectFill" src="{{baseUrl}}/api/files/images/{{cover}}"/>
+      <block wx:if="{{images}}">
+        <image class="image" mode="aspectFill" src="{{baseUrl}}/api/files/images/{{images[0]}}" @tap=previewImage({{images}}) />
       </block>
       <block wx:else>
         <image class="image" mode="aspectFill" src="../images/empty.jpg"/>
@@ -66,9 +66,9 @@ export default class post extends wepy.component {
       type: String,
       default: ''
     },
-    cover: {
-      type: String,
-      default: 'sasasas'
+    images: {
+      type: Array,
+      default: []
     },
     name: {
       type: String,
@@ -91,8 +91,20 @@ export default class post extends wepy.component {
   methods = {
     goDetail(id, event){
       console.log("===========32323=======a===", id);
-      wx.navigateTo({
-        url: "../store"
+      // wx.navigateTo({
+      //   url: "../store"
+      // });
+    },
+    previewImage(images, event){
+      console.log("===========previewImage=======a===", images);
+      var baseUrl = this.baseUrl;
+      var current = `${baseUrl}/api/files/images/${images[0]}`;
+      var urls = images.map((n)=>{
+        return  `${baseUrl}/api/files/images/${n}`;
+      });
+      wx.previewImage({
+        current: current,
+        urls: urls
       });
     }
   };
