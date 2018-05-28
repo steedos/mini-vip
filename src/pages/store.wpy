@@ -98,16 +98,18 @@ export default class store extends wepy.page {
 		},
 		openMap() {
 			var name = this.store.name
-			var latitude = 31.03241
-			var longitude = 121.22654
-			var address = this.store.address
-			wx.openLocation({
-				latitude: latitude,
-				longitude: longitude,
-				scale: 28,
-				name:name,
-				address:address
-			});
+			if(this.store.location){
+				var latitude = this.store.location.latitude || 31.02241
+				var longitude = this.store.location.longitude || 121.21654
+				var address = this.store.location.address ||this.store.address
+				wx.openLocation({
+					latitude: latitude,
+					longitude: longitude,
+					scale: 28,
+					name:name,
+					address:address
+				});
+			}
     }
   }
 }
