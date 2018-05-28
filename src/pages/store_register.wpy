@@ -68,7 +68,7 @@
             <view class="weui-label">店铺名称</view>
           </view>
           <view class="weui-cell__bd">
-            <input class="weui-input" placeholder="请输入店铺名称"/>
+            <input class="weui-input" placeholder="请输入店铺名称" value="{{store_name}}" bindchange="bindStoreNameChange"/>
           </view>
         </view>
         <view class="weui-cell weui-cell_input">
@@ -102,7 +102,7 @@
             <view class="weui-label">详细地址</view>
           </view>
           <view class="weui-cell__bd">
-            <textarea class="weui-textarea" style="height: 3.3em" value="{{address}}"/>
+            <textarea class="weui-textarea" style="height: 3.3em" value="{{location.address}}"/>
           </view>
           <view class="weui-cell__ft">
             <view class="weui-vcode-btn" @tap="getAddress">获取地址</view>
@@ -114,7 +114,7 @@
             <view class="weui-label">公司名称</view>
           </view>
           <view class="weui-cell__bd">
-            <input class="weui-input" placeholder="公司名称，非必填"/>
+            <input class="weui-input" placeholder="公司名称，非必填" value="{{space_name}}" bindchange="bindSpaceNameChange"/>
           </view>
         </view>
       </view>
@@ -125,7 +125,7 @@
         </label>
       </checkbox-group>
       <view class="btn-container">
-        <button class="submit-btn" form-type="submit" @tap="activate" disabled="{{submitDisabled}}">提交</button>
+        <button class="submit-btn" form-type="submit" @tap="storeRegister" disabled="{{submitDisabled}}">提交</button>
       </view>
     </view>
   </view>
@@ -136,13 +136,22 @@
   import req from '@/network';
 
   export default class StoreRegister extends wepy.page {
+    config = {
+      navigationBarTitleText: '发行会员卡'
+    };
+
     data = {
-      latitude: 0.00,
-      longitude: 0.00,
+
       store_name: "",
-      address: "",
+      space_name: "",
+      location: {
+        latitude: 0.00,
+        longitude: 0.00,
+        address: ""
+      },
       phoneNumber: "",
       submitDisabled: true,
+      industry: "",
       industryOptions: [
         {label: '餐饮', value: 'food'},
         {label: '酒店住宿', value: 'accommodation'},
@@ -189,9 +198,9 @@
       },
       getAddress() {
         wepy.chooseLocation().then(res => {
-            this.address = res.address
-            this.latitude = res.latitude
-            this.longitude = res.longitude
+            this.location.address = res.address
+            this.location.latitude = res.latitude
+            this.location.longitude = res.longitude
             this.$apply()
           }
         )
@@ -205,6 +214,32 @@
       },
       industryChange(e) {
         this.industry_index = e.detail.value
+        this.industry = this.industryOptions[e.detail.value].value
+      },
+      bindStoreNameChange(e) {
+        this.store_name = e.detail.value;
+      },
+      bindSpaceNameChange(e) {
+        this.space_name = e.detail.value;
+      },
+      storeRegister(){
+        this.submitDisabled = true
+        console.log({
+          store_name: this.store_name,
+          industry: this.industry,
+          phoneNumber: this.phoneNumber,
+          location: this.location,
+          space_name: this.space_name
+        })
+        req.post('/api/mini/vip/store_register', {
+          store_name: this.store_name,
+          industry: this.industry,
+          phoneNumber: this.phoneNumber,
+          location: this.location,
+          space_name: this.space_name
+        }).then(res => {
+          wx.navigateTo({url: "./index"})
+        })
       }
     }
   }
