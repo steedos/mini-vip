@@ -110,9 +110,9 @@ export default class VIP extends wepy.app {
       }]
     },
     window: {
-      navigationBarBackgroundColor: '#343538',
-      navigationBarTitleText: 'WeChat',
-      navigationBarTextStyle: 'white',
+      navigationBarBackgroundColor: '#efeef4',
+      navigationBarTitleText: '华炎客服',
+      navigationBarTextStyle: 'black',
       backgroundColor: "#efeef4",
       backgroundTextStyle: 'dark',
     }
