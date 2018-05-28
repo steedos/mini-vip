@@ -23,7 +23,7 @@
     .post-summary{
       color:#888;
       font-size:14px;
-      max-height:68px;
+      max-height:66px;
       overflow:hidden;
     }
   }
@@ -32,7 +32,12 @@
 <template>
 	<view class="post">
     <view class="post-cover">
-      <image class="image" mode="aspectFill" src="{{baseUrl}}/api/files/images/{{cover}}"/>
+      <block wx:if="{{cover}}">
+        <image class="image" mode="aspectFill" src="{{baseUrl}}/api/files/images/{{cover}}"/>
+      </block>
+      <block wx:else>
+        <image class="image" mode="aspectFill" src="../images/empty.jpg"/>
+      </block>
     </view>
     <view class="post-body">
       <view class="post-name">{{name}}</view>
