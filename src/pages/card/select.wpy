@@ -10,7 +10,7 @@
     }
   }
   .content{
-    
+    padding-bottom:1rpx;
   }
   
 </style>
@@ -36,10 +36,12 @@ export default class CardSelect extends wepy.page {
     vipcrad: vipCard
   };
   data = {
-    cardName: '贝菲特',
-    cardType: '钻石卡',
-    isActivated: false,
     cards: [
+    {
+      cardName: '贝菲特',
+      cardType: '钻石卡',
+      isActivated: false
+    },
     {
       cardName: '贝菲特',
       cardType: '钻石卡',
