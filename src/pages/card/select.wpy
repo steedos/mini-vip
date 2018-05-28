@@ -11,7 +11,7 @@
   }
   .card-body{
     padding-bottom:1rpx;
-    height: 450rpx;
+    height: 480rpx;
     width: 100%;
     .card-opt{
       position:absolute;
@@ -19,12 +19,13 @@
       margin-top:-280rpx;
       margin-left:20rpx;
       margin-right:20rpx;
-      height:260rpx;
+      height:290rpx;
       background-color:white;
-      padding-left: 15rpx;
-      padding-right: 15rpx;
-      .card-btn{
-        margin-top:20rpx;
+      .card-apply{
+        width: 380rpx;
+        margin-bottom: 20px;
+        color: #D64B4B;
+        border-color: #D64B4B;
       }
     }
   }
@@ -38,8 +39,8 @@
     <repeat for="{{cards}}" key="index" index="index" item="card">
       <view class="card-body">
         <vipcrad :isActivated="card.isActivated" :cardName="card.cardName" :cardType="card.cardType"/>
-        <view class="card-opt">
-          <view class="weui-panel summary">
+        <view class="card-opt weui-panel__bd">
+          <view class="weui-media-box weui-media-box_text summary">
             <view class="weui-media-box__title">会员权益</view>
             <text class="weui-media-box__desc detail">{{card.summary}}</text>
           </view>
