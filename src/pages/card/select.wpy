@@ -44,7 +44,7 @@
             <text class="weui-media-box__desc detail">{{card.summary}}</text>
           </view>
           <view class="card-btn">
-            <button class="card-apply" plain="true">申请开卡</button>
+            <button class="card-apply" plain="true" @tap="toApplyCard" >申请开卡</button>
           </view>
         </view>
       </view>
@@ -91,6 +91,15 @@ export default class CardSelect extends wepy.page {
     if(e.space_id){
       this.space_id = e.space_id;
       await this.$parent.login(e.space_id);
+    }
+  }
+  methods = {
+    toApplyCard(){
+      console.log("============");
+      wx.navigateTo({
+        url:
+          '../card_activate'
+      });
     }
   }
 }
