@@ -1,3 +1,4 @@
+@@ -0,0 +1,128 @@
 <style lang="less">
   page{
     height: 100%;
@@ -85,7 +86,9 @@ export default class CardSelect extends wepy.page {
       isActivated: false,
       summary: "本卡仅限本人使用，不可退卡，可转让，转让收取10%手续费。本卡最终解释权归华炎所有。"
     }
-    ]
+    ],
+    is_activated:false,
+    card_id:''
   };
  async onLoad(e) {
     // onload执行的时候调用login接口
@@ -93,13 +96,33 @@ export default class CardSelect extends wepy.page {
       this.space_id = e.space_id;
       await this.$parent.login(e.space_id);
     }
+    var card = await this.isactivated(this.$parent.globalData.user._id)
+    this.is_activated = card.value[0].is_actived
+    this.card_id = card.value[0]._id
+    console.log("this_activated",this.is_activated)
   }
+  isactivated(user) {
+      const data = {
+        $filter: `user eq '${user}'`,
+        $expand: 'owner($select=name)',
+        $count: true,
+        $select: 'is_actived,name'
+      };
+      return this.$parent.query("vip_card",data)
+    }
   methods = {
     toApplyCard(){
       console.log("============");
+      var url = ''
+      if(this.is_activated){
+        url= '../card'
+      }
+      else{
+        url = '../card_activate'
+      }
+      console.log(url)
       wx.navigateTo({
-        url:
-          '../card_activate'
+        url:url
       });
     }
   }
