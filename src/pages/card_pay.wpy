@@ -126,9 +126,9 @@ export default class cardPay extends wepy.page {
               fail: function(msg) {
                 console.log('fail: ', msg);
 
-                if (msg != 'requestPayment:fail cancel') {
+                if (msg.errMsg != 'requestPayment:fail cancel') {
                   wx.navigateTo({
-                    url: 'card_pay_fail?msg=' + msg.replace('requestPayment:fail ','')
+                    url: 'card_pay_fail?msg=' + msg.errMsg.replace('requestPayment:fail ','')
                   });
                 }
               },
