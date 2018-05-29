@@ -7,7 +7,8 @@
             <icon type="success" size="93"></icon>
         </view>
         <view class="weui-msg__text-area">
-            <view class="weui-msg__title">成功支付{{payValue}}元</view>
+            <view class="weui-msg__title">支付成功￥{{payValue}}</view>
+            <view class="weui-msg__desc">收款方： {{store_name}}</view>
         </view>
         <view class="weui-msg__opr-area">
             <view class="weui-btn-area">
@@ -26,13 +27,15 @@ export default class cardPaySuccess extends wepy.page {
   };
 
   data = {
-    payValue: ''
+    payValue: '',
+    store_name: ''
   };
 
   onLoad(e) {
     console.log('onLoad');
     console.log(e);
     this.payValue = e.payValue;
+    this.store_name = e.store_name;
   }
 
   methods = {

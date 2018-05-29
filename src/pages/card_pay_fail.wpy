@@ -8,6 +8,7 @@
         </view>
         <view class="weui-msg__text-area">
             <view class="weui-msg__title">{{msg}}</view>
+            <view class="weui-msg__desc">收款方： {{store_name}}</view>
         </view>
         <view class="weui-msg__opr-area">
             <view class="weui-btn-area">
@@ -25,13 +26,15 @@ export default class cardPayFail extends wepy.page {
   };
 
   data = {
-    msg: ''
+    msg: '',
+    store_name: ''
   };
 
   onLoad(e) {
     console.log('onLoad');
     console.log(e);
     this.msg = e.msg;
+    this.store_name = e.store_name;
   }
 
   methods = {
