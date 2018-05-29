@@ -1,0 +1,129 @@
+<style lang="less">
+.post {
+  background: #fff;
+  margin:40rpx 20rpx;
+  border:solid 1px #ededed;
+  border-radius:6px;
+
+  .post-cover{
+    image{
+      width: 100%;
+      height: 460rpx;
+      border-top-left-radius:6px;
+      border-top-right-radius:6px;
+    }
+  }
+  .post-body{
+    padding:30rpx;
+    margin-top:-8px;
+    .post-name{
+      max-height:78px;
+      overflow:hidden;
+    }
+    .post-summary{
+      color:#888;
+      font-size:14px;
+      max-height:66px;
+      overflow:hidden;
+    }
+    &.weui-cells{
+      line-height:22px;
+      font-size:16px;
+      border-bottom-left-radius:6px;
+      border-bottom-right-radius:6px;
+      &:before{
+        display: none;
+      }
+      &:after{
+        display: none;
+      }
+      .weui-cell{
+        padding: 0px;
+      }
+    }
+  }
+}
+</style>
+<template>
+  <repeat for="{{list}}" key="index" index="index" item="post">
+    <view class="post">
+      <view class="post-cover">
+        <block wx:if="{{post.images}}">
+          <image class="image" mode="aspectFill" src="{{util.formatImageUrl(post.images[0], baseUrl)}}" @tap="previewImage({{post.images}})" @error="loadImageError({{index}})" />
+        </block>
+        <block wx:else>
+          <image class="image" mode="aspectFill" src="{{emptyImageUrl}}"/>
+        </block>
+      </view>
+      <view class="post-body weui-cells" @tap="goDetail({{post._id}})">
+        <view class="weui-cell weui-cell_access">
+          <view class="weui-cell__bd">
+            <view class="post-name">{{post.name}}xxxx</view>
+            <view class="post-summary">{{post.summary}}</view>
+          </view>
+          <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+        </view>
+      </view>
+    </view>
+  </repeat>
+</template>
+
+<script>
+import wepy from 'wepy';
+import { baseUrl } from '@/config';
+import req from '@/network';
+import { serverAPI } from '@/server';
+import { demoSpaceId,demoStoreId } from '@/config'
+import util from '../wxs/util.wxs'
+
+export default class PostList extends wepy.component {
+  onLoad() {
+  }
+
+  props = {
+    isHeaderShow: {
+      type: Boolean,
+      default: false
+    },
+    list: {
+      type: Array,
+      default: []
+    }
+  }
+
+  data = {
+    baseUrl: baseUrl,
+    emptyImageUrl: "/images/empty.jpg",
+    faildImageUrl: "/images/faild.png"
+  };
+
+  wxs = {
+    util: util
+  };
+
+  methods = {
+    goDetail(id, event){
+      wx.navigateTo({
+        url: `../postDetail?id=${id}`
+      });
+    },
+    previewImage(images, event){
+      var baseUrl = this.baseUrl;
+      var current = `${baseUrl}/api/files/images/${images[0]}`;
+      var urls = images.map((n)=>{
+        return  `${baseUrl}/api/files/images/${n}`;
+      });
+      wx.previewImage({
+        current: current,
+        urls: urls
+      });
+    },
+    loadImageError(index, event){
+      // 当图片加载失败时，把图片数据的路径清空，formatImageUrl能默认显示加载失败的图片
+      this.list[index].images[0] = "";
+      this.$apply();
+    }
+  };
+
+}
+</script>
