@@ -29,6 +29,14 @@
     &.weui-cells{
       line-height:22px;
       font-size:16px;
+      border-bottom-left-radius:6px;
+      border-bottom-right-radius:6px;
+      &:before{
+        display: none;
+      }
+      &:after{
+        display: none;
+      }
       .weui-cell{
         padding: 0px;
       }
@@ -105,13 +113,11 @@ export default class post extends wepy.component {
 
   methods = {
     goDetail(id, event){
-      console.log("===========32323=======a==3=", id);
       wx.navigateTo({
         url: "../postDetail"
       });
     },
     previewImage(images, event){
-      console.log("===========previewImage=======a===", images);
       var baseUrl = this.baseUrl;
       var current = `${baseUrl}/api/files/images/${images[0]}`;
       var urls = images.map((n)=>{
