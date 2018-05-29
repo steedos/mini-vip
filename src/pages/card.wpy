@@ -221,16 +221,16 @@ export default class Card extends wepy.page {
     this.initialized = true;
     this.$apply();
 
+    setTimeout(() => {
+      wx.hideLoading();
+    }, 300);
+
     await this.$parent.login(e.space_id);
 
     console.log('Card onLoad, e', e);
     if (e.card_id) {
       this.getCardInfo(e.card_id);
     }
-
-    setTimeout(() => {
-      wx.hideLoading();
-    }, 300);
 
     wx.showShareMenu({
       withShareTicket: true

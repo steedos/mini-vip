@@ -268,12 +268,22 @@ export default class VIP extends wepy.app {
   }
 
   async get(object_name,_id, space_id) {
-    const url = '/api/odata/v4/' + (space_id || this.globalData.space_id) + '/' + object_name + '/' + _id;
+    let url 
+    if (object_name == 'spaces') {
+      url = '/api/odata/v4/' + (space_id || this.globalData.space_id) + '/' + object_name
+    } else {
+      url = '/api/odata/v4/' + (space_id || this.globalData.space_id) + '/' + object_name + '/' + _id;
+    }
     const result = await req.get(url).catch((err)=>{
       console.log("error...",err.data.error)
       return {}
     })
-    return result
+
+    if (object_name == 'spaces') {
+      return result.value[0]
+    } else {
+      return result
+    }
   }
   async query(object_name,query_options, space_id) {
     const url = '/api/odata/v4/' + (space_id || this.globalData.space_id) + '/' + object_name;

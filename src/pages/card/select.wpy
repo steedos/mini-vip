@@ -1,35 +1,76 @@
 <style lang="less">
-  page{
-    height: 100%;
-    background-color: #333333;
-  }
-  .ad-header{
+page {
+  height: 100%;
+  background-color: #333333;
+}
+.ad-header {
+  width: 100%;
+  .header-image {
     width: 100%;
-    .header-image{
-      width: 100%;
+  }
+}
+.card {
+  background-color: #7f7f7f;
+  background-repeat: repeat-x;
+  background-image: linear-gradient(135deg, #555555, #898989 50%, #555555);
+  height: 230px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  margin-left: 10px;
+  margin-right: 10px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: ;
+  position:relative;
+
+  .card-header {
+    height: 70px;
+  }
+
+  .user-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    overflow: hidden;
+    position: relative;
+    margin: 12px 10px 0 14px;
+
+    .image {
+      width: 30px;
+      height: 30px;
+      border: 1px solid #fff;
+      border-radius: 50%;
     }
   }
-  .card-body{
-    padding-bottom:1rpx;
-    height: 510rpx;
-    width: 100%;
-    .card-opt{
-      position:absolute;
-      z-index:1;
-      margin-top:-300rpx;
-      margin-left:20rpx;
-      margin-right:20rpx;
-      height:340rpx;
-      background-color:white;
-      .card-btn{
-        .card-apply{
-          width: 380rpx;
-          color: #D64B4B;
-          border-color: #D64B4B;
-        }
-    }
+
+  .card-name {
+    display: flex;
+    flex-direction: column;
+    color: #fff;
+    position: absolute;
+    left: 52px;
+    top: 14px;
+    line-height: 30px;
+    font-size: 17px;
+    text-shadow: 0 2px 1px rgba(0, 0, 0, 0.2);
+    font-weight: bold;
+  }
+
+  .card-btn{
+    .card-apply{
+      width: 380rpx;
+      color: #D64B4B;
+      border-color: #D64B4B;
     }
   }
+
+  .card-opt {
+    flex: 1;
+    background: #fff;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
+}
 </style>
 <template>
   <view class="ad-header">
@@ -37,8 +78,16 @@
   </view>
   <view class="card-list">
     <repeat for="{{categorys}}" key="index" index="index" item="card">
-      <view class="card-body">
-        <vipcrad :cardName="card.name"/>
+      <view class="card">
+        <view class="card-header">
+          <view class="user-avatar">
+            <open-data type="userAvatarUrl"></open-data>
+            <!-- <image wx:else class="image" mode="aspectFit" src="../images/avatar.png"/> -->
+          </view>
+          <view class="card-name">
+            <text>{{card.name}}</text>
+          </view>
+        </view>
         <view class="card-opt weui-panel__bd">
           <view class="weui-media-box weui-media-box_text summary">
             <view class="weui-media-box__title">会员权益</view>
@@ -56,7 +105,6 @@
 import wepy from 'wepy';
 import vipCard from '../../components/vipCard';
 export default class CardSelect extends wepy.page {
-  
   config = {
     navigationBarTitleText: '会员卡',
     navigationBarBackgroundColor: '#D64B4B'
@@ -70,79 +118,84 @@ export default class CardSelect extends wepy.page {
     space_id: '',
     space_name: '',
     categorys: [],
-    is_activated:false,
-    card_id:''
+    is_activated: false,
+    card_id: ''
   };
- async onLoad(e) {
+  async onLoad(e) {
     // onload执行的时候调用login接口
-    if(e.space_id){
-
+    if (e.space_id) {
       // 获取space_id
-      console.log("===space_id===", e.space_id)
+      console.log('===space_id===', e.space_id);
       this.space_id = e.space_id;
       this.$parent.globalData.space_id = e.space_id;
       // 获取工作区，设置标题
-      console.log("====this.$parent.globalData===",this.$parent.globalData)
+      console.log('====this.$parent.globalData===', this.$parent.globalData);
       const cur_space = await this.getSpaceInfo(e.space_id);
       this.space_name = cur_space.name;
       wx.setNavigationBarTitle({
         title: this.space_name
-      })
-      
+      });
+
       // 根据space_id登录
       await this.$parent.login(e.space_id);
 
       // 登录后获取卡项
       const categorys = await this.getCategory();
       this.categorys = categorys.value;
-      console.log("-----------this.categorys------",this.categorys);
+      console.log('-----------this.categorys------', this.categorys);
 
-      
       this.$apply();
     }
-    var card = await this.isactivated(this.$parent.globalData.user._id)
-    if(card.value[0]){
-      this.is_activated = card.value[0].is_actived
-      this.card_id = card.value[0]._id
+    var card = await this.isactivated(this.$parent.globalData.user._id);
+    if (card.value[0]) {
+      this.is_activated = card.value[0].is_actived;
+      this.card_id = card.value[0]._id;
     }
-    console.log("this_activated",this.is_activated)
+    console.log('this_activated', this.is_activated);
   }
-  getSpaceInfo(space_id){
+  getSpaceInfo(space_id) {
     const data = {
       $select: 'name'
     };
-    return this.$parent.get("spaces",space_id) 
+    return this.$parent.get('spaces', space_id);
   }
-  getCategory(){
+  getCategory() {
     const data = {
       $select: 'name,summary,avatar,cover,price'
     };
-    return this.$parent.query("vip_category",data);
+    return this.$parent.query('vip_category', data);
   }
   isactivated(user) {
-      const data = {
-        $filter: `user eq '${user}'`,
-        $expand: 'owner($select=name)',
-        $count: true,
-        $select: 'is_actived,name'
-      };
-      return this.$parent.query("vip_card",data)
-    }
+    const data = {
+      $filter: `user eq '${user}'`,
+      $expand: 'owner($select=name)',
+      $count: true,
+      $select: 'is_actived,name'
+    };
+    return this.$parent.query('vip_card', data);
+  }
   methods = {
-    toApplyCard(category_name,price){
-      console.log("============");
-      var url = ''
-      if(this.is_activated){
-        url= '../card?card_id='+this.card_id +'&space_id='+this.space_id
-      }
-      else{
-      var url = ''
-      url = '../card_activate?card_id='+this.card_id+'&category_name='+category_name+'&space_id='+this.space_id+'&price='+price
+    toApplyCard(category_name, price) {
+      console.log('============');
+      var url = '';
+      if (this.is_activated) {
+        url = '../card?card_id=' + this.card_id + '&space_id=' + this.space_id;
+      } else {
+        var url = '';
+        url =
+          '../card_activate?card_id=' +
+          this.card_id +
+          '&category_name=' +
+          category_name +
+          '&space_id=' +
+          this.space_id +
+          '&price=' +
+          price;
       }
       wx.navigateTo({
-        url:url
+        url: url
       });
     }
-  }
+  };
 }
 </script>

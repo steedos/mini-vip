@@ -8,9 +8,6 @@ page {
   <view class="page">
     <view class="page__bd">
       <scroll-view class="scroll-view_H" scroll-y="true">
-        <!-- <repeat for="{{posts}}" key="index" index="index" item="post">
-          <post :id="post._id" :name="post.name" :summary="post.summary" :images="post.images"/>
-        </repeat> -->
         <postList :list.sync="posts" />
       </scroll-view>
     </view>
