@@ -99,7 +99,7 @@ export default class Me extends wepy.page {
     mobile: ''
   };
 
-  onLoad() {
+  onShow() {
     const user = this.$parent.globalData.user;
     if (user) {
       this.name = user.name;
