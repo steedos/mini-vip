@@ -268,7 +268,7 @@ export default class StoreRegister extends wepy.page {
           space_name: this.space_name
         })
         .then(res => {
-          wx.navigateTo({ url: './index' });
+          wx.reLaunch({ url: './index' });
         });
     }
   };
