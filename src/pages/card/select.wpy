@@ -92,7 +92,7 @@ page {
             <text class="weui-media-box__desc detail">{{card.summary}}</text>
           </view>
           <view class="card-btn">
-            <button class="card-apply" plain="true" @tap="toApplyCard({{card.name}},{{card.price}})">申请开卡</button>
+            <button class="card-apply" plain="true" @tap="toApplyCard({{card._id}},{{card.name}},{{card.price}})">申请开卡</button>
           </view>
         </view>
       </view>
@@ -188,15 +188,15 @@ export default class CardSelect extends wepy.page {
   }
 
   methods = {
-    toApplyCard(category_name, price) {
+    toApplyCard(category_id,category_name, price) {
       console.log('============');
       var url = '';
       if (this.is_activated) {
         url = `../card?card_id=${this.card_id}&space_id=${this.space_id}`
       } else {
-        url = `../card_activate?card_id=${this.card_id}&category_name=${category_name}&space_id=${this.space_id}&price=${price}`
+        url = `../card_activate?card_id=${this.card_id}&category_name=${category_name}&space_id=${this.space_id}&price=${price}&category_id=${category_id}`
       }
-      wx.navigateTo({
+      wx.reLaunch({
         url: url
       });
     }

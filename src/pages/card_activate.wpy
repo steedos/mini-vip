@@ -149,6 +149,9 @@
       if(e.category_name){
         this.cardName = e.category_name
       }
+      if (e.category_id){
+        this.category_id = e.category_id
+      }
       if (e.card_id){
         console.log("ssss",e.card_id)
       }
@@ -172,6 +175,7 @@
     }
 
     data = {
+      category_id:'',
       card_id:'',
       cardName: '贝菲特',
       // cardType: '会员卡',
@@ -189,8 +193,9 @@
     addVipCard() {
         this.submitDisabled = true
         const url = `/api/mini/vip/card_activate?space_id=${this.space_id}&store_id=${this.store_id}`
+        console.log("categoty_id===",this.category_id)
         const data = {
-          name: this.cardName,
+          name: this.category_id
 
           // sex: this.sexValue,
           // birthdate: this.birthdate,
@@ -239,6 +244,7 @@
         }
       },
       nextStep() {
+        
         wx.navigateTo({url: "./card_pay"})
       },
       submitActivate() {
@@ -246,7 +252,7 @@
           is_actived:true
         }
         this.$parent.update("vip_card",this.card_id,data)
-        wx.navigateTo({url: "./index"})
+        wx.reLaunch({url: "./card?space="+this.space_id+"&card_id="+this.card_id})
       }
     };
   }
