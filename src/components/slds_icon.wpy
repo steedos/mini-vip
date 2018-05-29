@@ -1,0 +1,27 @@
+<style lang="css">
+
+</style>
+
+<template>
+    <image class="slds-icon_container slds-icon-{{category}}-{{name}}" src="https://www-steedos-com.oss-cn-beijing.aliyuncs.com/libs/slds/2.6.1/assets/icons/{{category}}/{{name}}_60.png" style="margin-right: 5px;vertical-align: middle;width:{{size}}px; height: {{size}}px;"></image>
+</template>
+<script>
+  import wepy from 'wepy'
+
+  export default class slds_icon extends wepy.component {
+    props = {
+      category: {
+        type: String,
+        default: "standard"
+      },
+      name: {
+        type: String,
+        default: "empty"
+      },
+      size: {
+        type: String,
+        default: "25"
+      },
+    }
+  }
+</script>
