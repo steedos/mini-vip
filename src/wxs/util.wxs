@@ -16,6 +16,12 @@ function formatDate(value, isWeekNeeded) {
   }
 }
 
+// 图片地址转换
+function formatImageUrl(src, baseUrl) {
+  return baseUrl + "/api/files/images/" + src;
+}
+
 module.exports = {
-  datefmt: formatDate
+  datefmt: formatDate,
+  formatImageUrl: formatImageUrl
 }

@@ -48,7 +48,7 @@
 	<view class="post">
     <view class="post-cover">
       <block wx:if="{{images}}">
-        <image class="image" mode="aspectFill" src="{{baseUrl}}/api/files/images/{{images[0]}}" @tap="previewImage({{images}})" />
+        <image class="image" mode="aspectFill" src="{{util.formatImageUrl(images[0], baseUrl)}}" @tap="previewImage({{images}})" />
       </block>
       <block wx:else>
         <image class="image" mode="aspectFill" src="../images/empty.jpg"/>
@@ -72,6 +72,7 @@ import { baseUrl } from '@/config';
 import req from '@/network';
 import { serverAPI } from '@/server';
 import { demoSpaceId,demoStoreId } from '@/config'
+import util from '../wxs/util.wxs'
 
 export default class post extends wepy.component {
   onLoad() {}
@@ -109,6 +110,10 @@ export default class post extends wepy.component {
 
   data = {
     baseUrl: baseUrl
+  };
+
+  wxs = {
+    util: util
   };
 
   methods = {
