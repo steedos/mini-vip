@@ -1,45 +1,43 @@
 <style lang="less">
-.weui-media-box__desc{
-	display: flex;
-	margin-top: 8px;
+.weui-media-box__desc {
+  display: flex;
+  margin-top: 8px;
 }
-.weui-panel{
-	margin-top:20px!important;
+.weui-panel {
+  margin-top: 20px !important;
 }
 </style>
 <template>
-	<view class="page">
-			<view class="page__bd">
-					<view class="weui-panel">
-							<view class="weui-panel__bd">
-									<view class="weui-media-box weui-media-box_text">
-											<view class="weui-media-box__title weui-media-box__title_in-text">{{store.name}}</view>
-											<view class="weui-media-box__desc">营业时间：{{store.business_hours}}</view>
-											<block wx:if="{{store.description}}">
-												<view class="weui-media-box__desc">{{store.description}}</view>	
-											</block>
-									</view>
-							</view>
-					</view>
+  <view class="page">
+      <view class="page__bd">
+          <view class="weui-panel">
+              <view class="weui-panel__bd">
+                  <view class="weui-media-box weui-media-box_text">
+                      <view class="weui-media-box__title weui-media-box__title_in-text">{{store.name}}</view>
+                      <view class="weui-media-box__desc">营业时间：{{store.business_hours}}</view>
+                      <block wx:if="{{store.description}}">
+                        <view class="weui-media-box__desc">{{store.description}}</view>
+                      </block>
+                  </view>
+              </view>
+          </view>
 
-					<view class="weui-cells">
-					<navigator class="weui-cell weui-cell_access" @tap="openMap">
-							<view class="weui-cell__bd">
-								<view>门店地址</view>
-							</view>
-							<view class="weui-cell__ft weui-cell__ft_in-access">查看地图</view>
-					</navigator>
-					<navigator class="weui-cell weui-cell_access" @tap="phoneCall">
-							<view class="weui-cell__bd">
-								<view>联系商家</view>
-							</view>
-							<view class="weui-cell__ft weui-cell__ft_in-access">{{store.phone}}</view>
-					</navigator>
-				</view>
-			</view>
-
-			</view>
-	</view>
+          <view class="weui-cells">
+          <navigator class="weui-cell weui-cell_access" @tap="openMap">
+              <view class="weui-cell__bd">
+                <view>门店地址</view>
+              </view>
+              <view class="weui-cell__ft weui-cell__ft_in-access">查看地图</view>
+          </navigator>
+          <navigator class="weui-cell weui-cell_access" @tap="phoneCall">
+              <view class="weui-cell__bd">
+                <view>联系商家</view>
+              </view>
+              <view class="weui-cell__ft weui-cell__ft_in-access">{{store.phone}}</view>
+          </navigator>
+        </view>
+      </view>
+  </view>
 </template>
 
 <script>
@@ -49,68 +47,71 @@ import vipCard from '../components/vipCard';
 
 export default class store extends wepy.page {
   config = {
-		navigationBarTitleText: '	'
+    navigationBarTitleText: '	'
   };
 
   async onLoad(e) {
     var store = await this.getStoreInfo(e.store);
-		this.store = store
-    this.$apply(); 
-	}
+    this.store = store;
+    this.$apply();
+  }
 
   components = {
     vipcard: vipCard
   };
 
   data = {
-		store:[]
+    store: []
   };
-	getStoreInfo(store_id){
-    return this.$parent.get("vip_store",store_id) 
+  getStoreInfo(store_id) {
+    return this.$parent.get('vip_store', store_id);
   }
   getCode(scene) {
     wx.request({
-      url: 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wxf7d7403acb34334b&secret=c10af093299c079ac7a88cf8a9b64ceb', 
+      url:
+        'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wxf7d7403acb34334b&secret=c10af093299c079ac7a88cf8a9b64ceb',
       success: function(res) {
         console.log(res.data);
-        const url = "https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=" + res.data.access_token;
+        const url =
+          'https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=' +
+          res.data.access_token;
         const data = {
-          scene:scene,
-          width:430
+          scene: scene,
+          width: 430
         };
         wx.request({
           url: url,
-          data:data,
-          method:"POST",
+          data: data,
+          method: 'POST',
           success: function(res) {
-            console.log(decodeURIComponent(res.data.scene))
+            console.log(decodeURIComponent(res.data.scene));
           }
-        })
+        });
       }
-      });
+    });
   }
-  
+
   methods = {
-		phoneCall() {
-			wx.makePhoneCall({
-				phoneNumber: this.store.phone
-			})
-		},
-		openMap() {
-			var name = this.store.name
-			if(this.store.location){
-				var latitude = this.store.location.latitude || 31.02241
-				var longitude = this.store.location.longitude || 121.21654
-				var address = this.store.location.address ||this.store.address
-				wx.openLocation({
-					latitude: latitude,
-					longitude: longitude,
-					scale: 28,
-					name:name,
-					address:address
-				});
-			}
+    phoneCall() {
+      wx.makePhoneCall({
+        phoneNumber: this.store.phone
+      });
+    },
+    openMap() {
+      var name = this.store.name;
+      if (this.store.location) {
+        var latitude = this.store.location.latitude || 31.02241;
+        var longitude = this.store.location.longitude || 121.21654;
+        var address = this.store.location.address || this.store.address;
+        wx.openLocation({
+          latitude: latitude,
+          longitude: longitude,
+          scale: 28,
+          name: name,
+          address: address
+        });
+      }
     }
-  }
+  };
 }
 </script>
