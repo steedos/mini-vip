@@ -69,6 +69,16 @@
     </view>
 
     <view class="page__bd">
+
+        <view class="weui-cells">
+          <navigator url="card/select?space_id={{space_id}}" class="weui-cell weui-cell_access">
+            <view class="weui-cell__bd">
+              <view>会员卡种类</view>
+            </view>
+            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+          </navigator>
+        </view>
+    
       <view wx:if="{{isActivated}}" class="weui-cells">
         <navigator url="card_pay?card_id={{cardId}}&balance={{cardBalance}}&store_id={{store_id}}" class="weui-cell weui-cell_access">
           <view class="weui-cell__bd">
@@ -93,6 +103,7 @@
             </navigator>
           </view>
       <!-- </block> -->
+
 
         <view class="weui-cells">
           <navigator url="stores" class="weui-cell weui-cell_access">

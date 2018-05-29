@@ -116,14 +116,6 @@
         </view>
       </view>
 
-      <view class="weui-cells">
-        <navigator url="card/select?space_id=uSm6t2rzpvnfks4ee" class="weui-cell weui-cell_access">
-          <view class="weui-cell__bd">
-            <view>商户会员卡</view>
-          </view>
-          <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-        </navigator>
-      </view>
 
       <view class="weui-cells">
         <navigator url="./user_spaces" class="weui-cell weui-cell_access">
