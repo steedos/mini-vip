@@ -116,7 +116,7 @@
       <view class="weui-cells">
         <navigator url="card?space_id=hSGPc2fsMAp9NDcHy" open-type="reLaunch" class="weui-cell weui-cell_access weui-cell_access_card">
             <view class="weui-cell__hd">
-              <view class="slds-icon-standard-opportunity slds-icon slds-icon--small slds-m-right--xx-small"/>
+              <view class="slds-icon-standard-opportunity slds-icon slds-icon--small slds-m-right--x-small"/>
             </view>
             <view class="weui-cell__bd">
               <view class="card-name">测试工作区</view>
@@ -134,7 +134,7 @@
       <view class="weui-cells">
         <navigator url="./user_spaces" class="weui-cell weui-cell_access">
           <view class="weui-cell__hd">
-            <view class="slds-icon-standard-account slds-icon slds-icon--small slds-m-right--xx-small"/>
+            <view class="slds-icon-standard-account slds-icon slds-icon--small slds-m-right--x-small"/>
           </view>
           <view class="weui-cell__bd">
             <view>商户管理</view>

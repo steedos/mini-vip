@@ -4,6 +4,9 @@
       <view class="weui-cells">
         <repeat for="{{spaces}}" key="index" index="index" item="space">
           <navigator url="home?space_id={{space._id}}" class="weui-cell weui-cell_access">
+            <view class="weui-cell__hd">
+              <view class="slds-icon-standard-account slds-icon slds-icon--small slds-m-right--x-small"/>
+            </view>
             <view class="weui-cell__bd">
               <view class="card-name">{{space.name}}</view>
             </view>
@@ -11,9 +14,12 @@
           </navigator>
         </repeat>
       </view>
-      
+
       <view class="weui-cells">
         <navigator url="./store_register" class="weui-cell weui-cell_access">
+          <view class="weui-cell__hd">
+            <view class="slds-icon-utility-add slds-icon slds-icon--small slds-m-right--x-small"/>
+          </view>
           <view class="weui-cell__bd">
             <view>商户入驻</view>
           </view>
