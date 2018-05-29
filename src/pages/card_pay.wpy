@@ -36,6 +36,7 @@
             <radio-group bindchange="radioChange">
                 <radio class="weui-cell" wx:for-items="{{items}}" wx:key="name" value="{{item.name}}" checked="{{item.checked}}">
                     <text>{{item.value}}</text>
+                    <text wx:if="{{item.name=='balance'}}" class="weui-msg__desc"> {{cardBalance}}</text>
                 </radio>
             </radio-group>
         </view>
