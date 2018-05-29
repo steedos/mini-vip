@@ -1,4 +1,3 @@
-@@ -0,0 +1,128 @@
 <style lang="less">
   page{
     height: 100%;
@@ -12,34 +11,34 @@
   }
   .card-body{
     padding-bottom:1rpx;
-    height: 480rpx;
+    height: 510rpx;
     width: 100%;
     .card-opt{
       position:absolute;
       z-index:1;
-      margin-top:-280rpx;
+      margin-top:-300rpx;
       margin-left:20rpx;
       margin-right:20rpx;
-      height:290rpx;
+      height:340rpx;
       background-color:white;
-      .card-apply{
-        width: 380rpx;
-        margin-bottom: 20px;
-        color: #D64B4B;
-        border-color: #D64B4B;
-      }
+      .card-btn{
+        .card-apply{
+          width: 380rpx;
+          color: #D64B4B;
+          border-color: #D64B4B;
+        }
+    }
     }
   }
-  
 </style>
 <template>
   <view class="ad-header">
     <image class="header-image" mode="widthFix" src="../../images/card/select-header.png"/>
   </view>
   <view class="card-list">
-    <repeat for="{{cards}}" key="index" index="index" item="card">
+    <repeat for="{{categorys}}" key="index" index="index" item="card">
       <view class="card-body">
-        <vipcrad :isActivated="card.isActivated" :cardName="card.cardName" :cardType="card.cardType"/>
+        <vipcrad :cardName="card.name"/>
         <view class="card-opt weui-panel__bd">
           <view class="weui-media-box weui-media-box_text summary">
             <view class="weui-media-box__title">会员权益</view>
@@ -67,39 +66,33 @@ export default class CardSelect extends wepy.page {
   };
   data = {
     space_id: '',
-    cards: [
-    {
-      cardName: '贝菲特',
-      cardType: '钻石卡',
-      isActivated: false,
-      summary: "本卡仅限本人使用，不可退卡，可转让，转让收取10%手续费。本卡最终解释权归华炎所有。"
-    },
-    {
-      cardName: '贝菲特',
-      cardType: '钻石卡',
-      isActivated: false,
-      summary: "本卡仅限本人使用，不可退卡，可转让，转让收取10%手续费。本卡最终解释权归华炎所有。"
-    },
-    {
-      cardName: '贝菲特',
-      cardType: '钻石卡',
-      isActivated: false,
-      summary: "本卡仅限本人使用，不可退卡，可转让，转让收取10%手续费。本卡最终解释权归华炎所有。"
-    }
-    ],
+    categorys: [],
     is_activated:false,
     card_id:''
   };
  async onLoad(e) {
     // onload执行的时候调用login接口
     if(e.space_id){
+      console.log("space_id", e.space_id)
       this.space_id = e.space_id;
+      this.$parent.globalData.space_id = e.space_id;
       await this.$parent.login(e.space_id);
+      const categorys = await this.getCategory();
+      console.log("=====categorys=========",categorys);
+      this.categorys = categorys.value;
+      console.log("-----------this.categorys------",this.categorys);
+      this.$apply();
     }
     var card = await this.isactivated(this.$parent.globalData.user._id)
     this.is_activated = card.value[0].is_actived
     this.card_id = card.value[0]._id
     console.log("this_activated",this.is_activated)
+  }
+  getCategory(){
+    const data = {
+      $select: 'name,summary,avatar,cover'
+    };
+    return this.$parent.query("vip_category",data);
   }
   isactivated(user) {
       const data = {
