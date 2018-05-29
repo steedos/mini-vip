@@ -1,4 +1,7 @@
 <style lang="less">
+.big-font {
+  font-size: 50px;
+}
 </style>
 <template>
 <view class="page">
@@ -7,7 +10,8 @@
             <icon type="success" size="93"></icon>
         </view>
         <view class="weui-msg__text-area">
-            <view class="weui-msg__title">支付成功￥{{payValue}}</view>
+            <view class="weui-msg__title">支付成功</view>
+            <view class="weui-msg__title"><text>￥</text><text class="big-font">{{payValue}}</text></view>
             <view class="weui-msg__desc">收款方： {{store_name}}</view>
         </view>
         <view class="weui-msg__opr-area">
