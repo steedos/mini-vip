@@ -109,6 +109,38 @@ export default class cardPay extends wepy.page {
         req.post('/api/steedos/payway/weixin', data).then(res => {
           wx.hideLoading();
           console.log('res: ', res);
+
+          if (res.paySign) {
+            wx.requestPayment({
+              timeStamp: res.timeStamp,
+              nonceStr: res.nonceStr,
+              package: res.package,
+              signType: 'MD5',
+              paySign: res.paySign,
+              success: function(msg) {
+                console.log('success: ', msg);
+                wx.navigateTo({
+                  url: 'card_pay_success?payValue=' + that.payValue
+                });
+              },
+              fail: function(msg) {
+                console.log('fail: ', msg);
+
+                if (msg != 'requestPayment:fail cancel') {
+                  wx.navigateTo({
+                    url: 'card_pay_fail?msg=' + msg.replace('requestPayment:fail ','')
+                  });
+                }
+              },
+              complete: function(msg) {}
+            });
+          } else {
+            console.error(res);
+            wx.showModal({
+              content: '请求超时，请检查网络状况',
+              showCancel: false
+            });
+          }
         });
       }
     }

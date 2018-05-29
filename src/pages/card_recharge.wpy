@@ -97,8 +97,8 @@ export default class cardRecharge extends wepy.page {
             package: res.package,
             signType: 'MD5',
             paySign: res.paySign,
-            success: function(res) {
-              console.log('success: ', res);
+            success: function(msg) {
+              console.log('success: ', msg);
               wx.showLoading({
                 title: '更新余额中',
                 mask: true
@@ -115,10 +115,10 @@ export default class cardRecharge extends wepy.page {
                 prePage.changeData('cardBalance', that.cardBalance);
               });
             },
-            fail: function(res) {
-              console.log('fail: ', res);
+            fail: function(msg) {
+              console.log('fail: ', msg);
             },
-            complete: function(res) {}
+            complete: function(msg) {}
           });
         } else {
           console.error(res);
