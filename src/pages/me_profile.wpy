@@ -39,7 +39,7 @@
           <view class="weui-cell__bd">
             <view>手机</view>
           </view>
-          <view class="weui-cell__ft weui-cell__ft_in-access">{{mobile}}</view>
+          <view class="weui-cell__ft weui-cell__ft_in-access">{{phoneNumber}}</view>
         </navigator>
 			</view>
 		</view>
@@ -66,7 +66,7 @@ export default class meProfile extends wepy.page {
 
     this.name = user.name
     this.sex = user.sex
-    this.mobile = user.mobile
+    this.phoneNumber = user.mobile
     this.birthdate = user.birthdate
     this.$apply();
   }
@@ -74,7 +74,7 @@ export default class meProfile extends wepy.page {
   data = {
     name: '',
     sex: '',
-    mobile: '',
+    phoneNumber: '',
     birthdate: ''
   };
 
@@ -83,6 +83,38 @@ export default class meProfile extends wepy.page {
   changeData(key, value) {
     this[key] = value
     this.$apply()
+  }
+
+  updateUser() {
+    wx.showToast({
+      title: "正在保存",
+      icon: "loading",
+      mask: true
+    })
+    const self = this
+    const data = {
+      sex: this.sex,
+      name: this.name,
+      phoneNumber: this.phoneNumber,
+      birthdate: this.birthdate
+    }
+    const url = '/mini/vip/user'
+    req.put(url, data).then(res => {
+      self.$parent.globalData.user.name = self.name
+      self.$parent.globalData.user.sex = self.sex
+      self.$parent.globalData.user.mobile = self.phoneNumber
+      self.$parent.globalData.user.birthdate = self.birthdate
+
+      wx.showToast({
+        title: "修改成功",
+        icon: "success",
+        mask: true
+      })
+
+      setTimeout(() => {
+        wx.hideToast()
+      }, 400);
+    })
   }
 }
 </script>

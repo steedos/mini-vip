@@ -114,20 +114,22 @@ export default class Me extends wepy.page {
     },
     // TODO 使用修改用户信息接口，保存用户信息
     editUser() {
-      // wx.navigateTo({url: "me_profile"})
-      const user = this.$parent.globalData.user
+      const user = this.$parent.globalData.user;
       if (user && user.name) {
-        wx.navigateTo({url: "me_profile"})
+        wx.navigateTo({ url: 'me_profile' });
       }
     },
     userLogin(e) {
-      const self = this
-      const userInfo = e.detail.userInfo
+      console.log('userLogin')
+      const self = this;
+      const userInfo = e.detail.userInfo;
       if (userInfo) {
+        const name = userInfo.nickName;
+        const sex = userInfo.gender ? '男' : '女';
         this.$parent.globalData.userInfo = userInfo
-        const name = userInfo.nickName
-        const sex = userInfo.gender ? "男" : "女"
-        wx.navigateTo({url: "me_profile"})
+        this.$parent.globalData.user.name = name
+        this.$parent.globalData.user.sex = sex
+        wx.navigateTo({ url: 'me_profile' })
       }
     }
   };
