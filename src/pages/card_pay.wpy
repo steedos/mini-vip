@@ -1,18 +1,37 @@
 <style lang="less">
+.page__hd_bg {
+  text-align: center;
+}
+.avatar {
+  width: 60px;
+  height: 60px;
+}
 </style>
 <template>
 <view class="page">
     <view class="page__hd">
-        <view class="weui-cells weui-cells_after-title">
-            <view class="weui-cell weui-cell_input">
-                <view class="weui-cell__bd">
-                    <input class="weui-input" placeholder="请输入付款金额" type="digit" focus="true" bindinput="inputChange" value="{{payValue}}"/>
-                </view>
-            </view>
+        <view class="page__hd_bg">
+          <view>
+            <image class="avatar" src="{{store_avatar}}"/>
+          </view>
+          <view>
+            <text>付款给{{store_name}}</text>
+          </view>
         </view>
     </view>
     <view class="page__bd">
-        <view class="weui-cells__title">选择支付方式</view>
+        <view class="weui-cells__title">付款金额</view>
+        <view class="weui-cells weui-cells_after-title">
+            <view class="weui-cell weui-cell_input">
+                <view class="weui-cell__hd">
+                    <text>￥</text>
+                </view>
+                <view class="weui-cell__bd">
+                    <input class="weui-input" type="digit" focus="true" bindinput="inputChange" value="{{payValue}}"/>
+                </view>
+            </view>
+        </view>
+        <view class="weui-cells__title">付款方式</view>
         <view class="weui-cells weui-cells_after-title">
             <radio-group bindchange="radioChange">
                 <radio class="weui-cell" wx:for-items="{{items}}" wx:key="name" value="{{item.name}}" checked="{{item.checked}}">
@@ -22,17 +41,18 @@
         </view>
     </view>
     <view class="weui-btn-area">
-      <button class="weui-btn" type="primary" @tap="doPay" disabled="{{!canDoPay}}">支付</button>
+      <button class="weui-btn" type="primary" @tap="doPay" disabled="{{!canDoPay}}">确认付款</button>
     </view>
 </view>
 </template>
 <script>
 import wepy from 'wepy';
 import req from '@/network';
+import { baseUrl } from '@/config';
 
 export default class cardPay extends wepy.page {
   config = {
-    navigationBarTitleText: '买单'
+    navigationBarTitleText: '付款'
   };
 
   data = {
@@ -44,7 +64,9 @@ export default class cardPay extends wepy.page {
     payWay: 'balance',
     canDoPay: false,
     cardId: '',
-    cardBalance: ''
+    cardBalance: '',
+    store_name: '',
+    store_avatar: ''
   };
 
   onLoad(e) {
@@ -52,6 +74,30 @@ export default class cardPay extends wepy.page {
     console.log(e);
     this.cardId = e.card_id;
     this.cardBalance = e.balance;
+
+    var storeId = e.store_id;
+    var that = this;
+    if (storeId) {
+      this.$parent.get('vip_store', storeId).then(s => {
+        that.store_name = s.name;
+        if (s.images) {
+          that.store_avatar = `${baseUrl}/api/files/images/${s.images[0]}`;
+        }
+        that.$apply();
+      });
+    } else {
+      this.$parent.get('vip_card', e.card_id).then(c => {
+        if (c.store) {
+          that.$parent.get('vip_store', c.store).then(s => {
+            that.store_name = s.name;
+            if (s.images) {
+              that.store_avatar = `${baseUrl}/api/files/images/${s.images[0]}`;
+            }
+            that.$apply();
+          });
+        }
+      });
+    }
   }
 
   onShow() {
@@ -128,7 +174,9 @@ export default class cardPay extends wepy.page {
 
                 if (msg.errMsg != 'requestPayment:fail cancel') {
                   wx.navigateTo({
-                    url: 'card_pay_fail?msg=' + msg.errMsg.replace('requestPayment:fail ','')
+                    url:
+                      'card_pay_fail?msg=' +
+                      msg.errMsg.replace('requestPayment:fail ', '')
                   });
                 }
               },
