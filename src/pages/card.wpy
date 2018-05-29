@@ -171,14 +171,14 @@ export default class Card extends wepy.page {
       $filter: `_id eq '${card_id}'`,
       $expand: 'space($select=name)',
       $count: true,
-      $select: 'space,grade,is_actived,balance,points,card_number'
+      $select: 'space,grade,is_actived,balance,points,card_number,card_name'
     };
 
     const result = await self.$parent.cache('vip_card', card_id, data, true);
 
     console.log('getCardInfo..........', result);
     this.cardId = card_id;
-    this.cardName = result.space.name;
+    this.cardName = result.card_name;
     this.cardType = result.grade;
     this.isActivated = result.is_actived;
     this.cardPoints = result.points;
