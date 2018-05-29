@@ -50,7 +50,7 @@
 <template>
   <view class="card-activate">
     <view class="weui-panel weui-panel_access header">
-      <vipcard :cardName.sync="cardName" :cardType.sync="cardType"/>
+      <vipcard :cardName.sync="cardName"/>
     </view>
 
     <view class="weui-cells__title">必填信息</view>
@@ -134,11 +134,18 @@
     };
 
     onLoad(e) {
+      console.log("e=====",e)
       if(e.space_id){
         this.space_id = e.space_id
       }
       if(e.store_id){
         this.store_id = e.store_id
+      }
+      if (e.card_id){
+        console.log("ssss",e.card_id)
+      }
+      if(e.category_name){
+        this.cardName = e.category_name
       }
       const user = this.$parent.globalData.user
       this.sexValue = user.sex
@@ -155,7 +162,7 @@
 
     data = {
       cardName: '贝菲特',
-      cardType: '会员卡',
+      // cardType: '会员卡',
       array: ['女', '男'],
       sexValue: '',
       birthdate: '',

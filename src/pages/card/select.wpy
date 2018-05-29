@@ -45,7 +45,7 @@
             <text class="weui-media-box__desc detail">{{card.summary}}</text>
           </view>
           <view class="card-btn">
-            <button class="card-apply" plain="true" @tap="toApplyCard">申请开卡</button>
+            <button class="card-apply" plain="true" @tap="toApplyCard({{card.name}})">申请开卡</button>
           </view>
         </view>
       </view>
@@ -86,8 +86,10 @@ export default class CardSelect extends wepy.page {
       this.$apply();
     }
     var card = await this.isactivated(this.$parent.globalData.user._id)
-    this.is_activated = card.value[0].is_actived
-    this.card_id = card.value[0]._id
+    if(card.value[0]){
+      this.is_activated = card.value[0].is_actived
+      this.card_id = card.value[0]._id
+    }
     console.log("this_activated",this.is_activated)
   }
   getCategory(){
@@ -106,16 +108,16 @@ export default class CardSelect extends wepy.page {
       return this.$parent.query("vip_card",data)
     }
   methods = {
-    toApplyCard(){
+    toApplyCard(category_name){
       console.log("============");
       var url = ''
       if(this.is_activated){
-        url= '../card'
+        url= '../card?card_id='+this.card_id +'&space_id='+this.space_id
       }
       else{
-        url = '../card_activate'
+      var url = ''
+        url = '../card_activate?card_id='+this.card_id+'&category_name='+category_name+'&space_id='+this.space_id
       }
-      console.log(url)
       wx.navigateTo({
         url:url
       });
