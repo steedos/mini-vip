@@ -48,10 +48,10 @@
 	<view class="post">
     <view class="post-cover">
       <block wx:if="{{images}}">
-        <image class="image" mode="aspectFill" src="{{util.formatImageUrl(images[0], baseUrl)}}" @tap="previewImage({{images}})" />
+        <image class="image" mode="aspectFill" src="{{util.formatImageUrl(images[0], baseUrl)}}" @tap="previewImage({{images}})" @error="loadImageError" />
       </block>
       <block wx:else>
-        <image class="image" mode="aspectFill" src="../images/empty.jpg"/>
+        <image class="image" mode="aspectFill" src="{{emptyImageUrl}}"/>
       </block>
     </view>
     <view class="post-body weui-cells" @tap="goDetail({{id}})">
@@ -109,7 +109,9 @@ export default class post extends wepy.component {
   }
 
   data = {
-    baseUrl: baseUrl
+    baseUrl: baseUrl,
+    emptyImageUrl: "/images/empty.jpg",
+    faildImageUrl: "/images/faild.png"
   };
 
   wxs = {
@@ -132,6 +134,9 @@ export default class post extends wepy.component {
         current: current,
         urls: urls
       });
+    },
+    loadImageError(event){
+      //图片加载失败时把图片换成faildImageUrl，没找到方案
     }
   };
 

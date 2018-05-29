@@ -18,7 +18,12 @@ function formatDate(value, isWeekNeeded) {
 
 // 图片地址转换
 function formatImageUrl(src, baseUrl) {
-  return baseUrl + "/api/files/images/" + src;
+  if(src){
+    return baseUrl + "/api/files/images/" + src;
+  }
+  else{
+    return "/images/faild.png";
+  }
 }
 
 module.exports = {
