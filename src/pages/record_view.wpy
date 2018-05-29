@@ -1,0 +1,31 @@
+<template>
+  <view>
+    <form :schema.sync='schema'></form>
+  </view>
+</template>
+
+
+<script>
+  import wepy from 'wepy';
+  import req from '@/network';
+  import form from '../components/form';
+
+  export default class RecordView extends wepy.page {
+    data = {
+      schema: {}
+    }
+
+    components = {
+      form: form
+    };
+
+
+    onLoad(){
+      req.get(`/api/odata/v4/51ae9b1a8e296a29c9000001/objects/mini_apps`).then(res => {
+        console.log("res", res)
+        this.schema = res;
+        this.$apply()
+      })
+    }
+  }
+</script>

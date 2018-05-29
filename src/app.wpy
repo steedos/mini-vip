@@ -85,7 +85,9 @@ export default class VIP extends wepy.app {
       'pages/edit/select',
       'pages/edit/date',
       'pages/store_register',
-      'pages/card/select'
+      'pages/card/select',
+      'pages/record_view',
+      'pages/user_spaces'
     ],
     tabBar: {
       color: '#666',
@@ -264,16 +266,16 @@ export default class VIP extends wepy.app {
     }
   }
 
-  async get(object_name,_id) {
-    const url = '/api/odata/v4/' + this.globalData.space_id + '/' + object_name + '/' + _id;
+  async get(object_name,_id, space_id) {
+    const url = '/api/odata/v4/' + (space_id || this.globalData.space_id) + '/' + object_name + '/' + _id;
     const result = await req.get(url).catch((err)=>{
       console.log("error...",err.data.error)
       return {}
     })
     return result
   }
-  async query(object_name,query_options) {
-    const url = '/api/odata/v4/' + this.globalData.space_id + '/' + object_name;
+  async query(object_name,query_options, space_id) {
+    const url = '/api/odata/v4/' + (space_id || this.globalData.space_id) + '/' + object_name;
     const result = await req.get(url, query_options).catch((err)=>{
       console.log("error...",err.data.error)
       return {}

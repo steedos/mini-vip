@@ -1,0 +1,39 @@
+<template>
+  <view class="page">
+    <view class="page__bd">
+      <view class="weui-cells__title page__bd_mycard">我的商户</view>
+      <view class="weui-cells weui-cells_after-title">
+        <repeat for="{{spaces}}" key="index" index="index" item="space">
+          <navigator url="home?space_id={{space._id}}" class="weui-cell weui-cell_access">
+            <view class="weui-cell__bd">
+              <view class="card-name">{{space.name}}</view>
+            </view>
+            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+          </navigator>
+        </repeat>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import req from '@/network';
+
+  export default class UserStores extends wepy.page {
+    data = {
+      spaces: []
+    }
+
+    async onLoad() {
+      const options = {
+        $count: true,
+        $select: 'name',
+        $filter: `(admins eq '${this.$parent.globalData.user._id}')`
+      };
+      const result = await this.$parent.query('spaces', options, 'common')
+      this.spaces = result.value
+      this.$apply()
+    }
+  }
+</script>

@@ -1,0 +1,54 @@
+<template>
+  <view class="form">
+
+    <view class="weui-cells__title">FORM BODY {{schema.name}}</view>
+    <view class="page__bd" style="">
+      <view class="weui-cells weui-cells_after-title">
+        <repeat for="{{schema.fields}}" key="index" index="index" item="item">
+          <block wx:if="{{item.readonly}}">
+            <view class="weui-cell weui-cell_input">
+              <view class="weui-cell__hd">
+                <view class="weui-label">{{item.label}}</view>
+              </view>
+              <view class="weui-cell__bd">
+                <view>{{values[item.name]}}</view>
+              </view>
+            </view>
+          </block>
+          <block wx:else>
+            <view class="weui-cell weui-cell_input">
+              <view class="weui-cell__hd">
+                <view class="weui-label">{{item.label}}</view>
+              </view>
+              <view class="weui-cell__bd">
+                <input wx:if="{{item.type === 'text'}}" class="weui-input" value="{{values[item.name]}}"/>
+                <textarea wx:elif="{{item.type === 'textarea'}}"  class="weui-textarea" auto-height="true" value="{{values[item.name]}}"/>
+              </view>
+            </view>
+          </block>
+        </repeat>
+      </view>
+    </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  export default class Form extends wepy.component {
+    props = {
+      schema:{
+        type: Object
+      }
+    }
+
+    data = {
+      values: {}
+    }
+
+    async onLoad () {
+      this.values = await this.$parent.$parent.get("mini_apps", "feiScDhqikKPqwQop")
+      this.$apply()
+      console.log("this.values", this.values)
+      console.log("onLoad", this.schema)
+    }
+  }
+</script>
