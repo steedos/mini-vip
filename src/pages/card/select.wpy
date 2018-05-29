@@ -67,8 +67,6 @@ page {
   .card-opt {
     flex: 1;
     background: #fff;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
   }
 }
 </style>
@@ -104,14 +102,19 @@ page {
 <script>
 import wepy from 'wepy';
 import vipCard from '../../components/vipCard';
+import { baseUrl } from '@/config';
+import util from '../../wxs/util.wxs';
+
 export default class CardSelect extends wepy.page {
   config = {
     navigationBarTitleText: '会员卡',
     navigationBarBackgroundColor: '#D64B4B'
   };
+
   components = {
     vipcrad: vipCard
   };
+
   data = {
     hasUserInfo: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
@@ -119,8 +122,14 @@ export default class CardSelect extends wepy.page {
     space_name: '',
     categorys: [],
     is_activated: false,
-    card_id: ''
+    card_id: '',
+    baseUrl: baseUrl
   };
+
+  wxs = {
+    util: util
+  };
+
   async onLoad(e) {
     // onload执行的时候调用login接口
     if (e.space_id) {
@@ -153,18 +162,21 @@ export default class CardSelect extends wepy.page {
     }
     console.log('this_activated', this.is_activated);
   }
+
   getSpaceInfo(space_id) {
     const data = {
       $select: 'name'
     };
     return this.$parent.get('spaces', space_id);
   }
+
   getCategory() {
     const data = {
       $select: 'name,summary,avatar,cover,price'
     };
     return this.$parent.query('vip_category', data);
   }
+
   isactivated(user) {
     const data = {
       $filter: `user eq '${user}'`,
@@ -174,23 +186,15 @@ export default class CardSelect extends wepy.page {
     };
     return this.$parent.query('vip_card', data);
   }
+
   methods = {
     toApplyCard(category_name, price) {
       console.log('============');
       var url = '';
       if (this.is_activated) {
-        url = '../card?card_id=' + this.card_id + '&space_id=' + this.space_id;
+        url = `../card?card_id=${this.card_id}&space_id=${this.space_id}`
       } else {
-        var url = '';
-        url =
-          '../card_activate?card_id=' +
-          this.card_id +
-          '&category_name=' +
-          category_name +
-          '&space_id=' +
-          this.space_id +
-          '&price=' +
-          price;
+        url = `../card_activate?card_id=${this.card_id}&category_name=${category_name}&space_id=${this.space_id}&price=${price}`
       }
       wx.navigateTo({
         url: url

@@ -156,6 +156,7 @@
   export default class User extends wepy.page {
     config = {
       navigationBarTitleText: '会员服务台',
+      enablePullDownRefresh: true
     };
 
     getCardUrl() {
@@ -178,6 +179,13 @@
       demoSpaceId: demoSpaceId,
       demoStoreId: demoStoreId
     };
+
+    async onPullDownRefresh() {
+      await this.getUserCard();
+      setTimeout(() => {
+        wx.stopPullDownRefresh();
+      }, 200);
+    }
 
     getUserCard(){
       console.log("get Card...")
