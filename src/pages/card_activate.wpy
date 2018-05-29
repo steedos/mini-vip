@@ -118,7 +118,12 @@
     </checkbox-group>
     
     <view class="btn-container">
-      <button class="submit-btn" form-type="submit" @tap="activate" disabled="{{submitDisabled}}">提交</button>
+      <block wx:if="{{price>0}}">
+        <button class="submit-btn" form-type="submit" @tap="activate" disabled="{{submitDisabled}}">下一步</button>
+      </block>
+      <block wx:else>
+        <button class="submit-btn" form-type="submit" @tap="activate" disabled="{{submitDisabled}}">提交</button>
+      </block>   
     </view>
   </view>
 </template>
@@ -150,12 +155,15 @@
       if(e.category_name){
         this.cardName = e.category_name
       }
+      if(parseInt(e.price)){
+        this.price = parseInt(e.price)
+      }
       const user = this.$parent.globalData.user
       this.sexValue = user.sex
       this.name = user.name
       this.birthdate = user.birthdate
       this.phoneNumber = user.mobile
-
+      console.log("e.category_name",e.category_name)
       this.$apply()
     }
 
@@ -174,7 +182,8 @@
       isAgree: false,
       submitDisabled: true,
       space_id: '',
-      store_id: ''
+      store_id: '',
+      price:0
     };
 
     methods = {

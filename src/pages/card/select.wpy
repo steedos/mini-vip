@@ -45,7 +45,7 @@
             <text class="weui-media-box__desc detail">{{card.summary}}</text>
           </view>
           <view class="card-btn">
-            <button class="card-apply" plain="true" @tap="toApplyCard({{card.name}})">申请开卡</button>
+            <button class="card-apply" plain="true" @tap="toApplyCard({{card.name}},{{card.price}})">申请开卡</button>
           </view>
         </view>
       </view>
@@ -115,7 +115,7 @@ export default class CardSelect extends wepy.page {
   }
   getCategory(){
     const data = {
-      $select: 'name,summary,avatar,cover'
+      $select: 'name,summary,avatar,cover,price'
     };
     return this.$parent.query("vip_category",data);
   }
@@ -129,7 +129,7 @@ export default class CardSelect extends wepy.page {
       return this.$parent.query("vip_card",data)
     }
   methods = {
-    toApplyCard(category_name){
+    toApplyCard(category_name,price){
       console.log("============");
       var url = ''
       if(this.is_activated){
@@ -137,7 +137,7 @@ export default class CardSelect extends wepy.page {
       }
       else{
       var url = ''
-        url = '../card_activate?card_id='+this.card_id+'&category_name='+category_name+'&space_id='+this.space_id
+      url = '../card_activate?card_id='+this.card_id+'&category_name='+category_name+'&space_id='+this.space_id+'&price='+price
       }
       wx.navigateTo({
         url:url
