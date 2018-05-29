@@ -3,7 +3,7 @@
     <view class="page__bd">
       <view class="weui-cells">
         <repeat for="{{spaces}}" key="index" index="index" item="space">
-          <navigator url="home?space_id={{space._id}}" class="weui-cell weui-cell_access">
+          <navigator url="post/news?space_id={{space._id}}" open-type="reLaunch" class="weui-cell weui-cell_access">
             <view class="weui-cell__hd">
               <view class="slds-icon-standard-account slds-icon slds-icon--small slds-m-right--x-small"/>
             </view>
