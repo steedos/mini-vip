@@ -15,7 +15,7 @@
                     <view class="weui-article__p">{{post.description}}</view>
                     <view class="weui-article__p">
                       <repeat for="{{post.images}}" key="index" index="index" item="image">
-                        <image class="weui-article__img" src="{{baseUrl}}/api/files/images/{{image}}" mode="widthFix"  @tap="previewImage({{images}})" />
+                        <image class="weui-article__img" src="{{baseUrl}}/api/files/images/{{image}}" mode="widthFix"  @tap="previewImage({{image}})" />
                       </repeat>
                         
                     </view>
@@ -30,39 +30,36 @@ import wepy from 'wepy';
 import req from '@/network';
 import { baseUrl } from '@/config';
 
+export default class PostDetail extends wepy.page {
+    config = {
+    navigationBarTitleText: '详情'
+  };
 
-  export default class PostDetail extends wepy.page {
-      config = {
-      navigationBarTitleText: '详情'
-    };
+  async onLoad(e) {
+    this.loadPostDetail(e.id);
+  }
 
-    async onLoad(e) {
-      console.log("id----------------", e.id);
-      this.loadPostDetail(e.id);
-    }
+  async loadPostDetail(id){
+        var post = await this.$parent.get("post", id)
+        this.post = post;
+        this.$apply();
+  };
 
-    async loadPostDetail(id){
-          var post = await this.$parent.get("post", id)
-          this.post = post;
-          console.log("loadPostDetail", this.post);
-          this.$apply();
-    };
+  onShow() {
+    console.log("onShow==================");
+    console.log(this.$parent.globalData);
+  }
 
-    onShow() {
-      console.log("onShow==================");
-      console.log(this.$parent.globalData);
-    }
+  data = {
+    post: null,
+    baseUrl: baseUrl
+  };
 
-    data = {
-      post: [],
-      baseUrl: baseUrl
-    };
-
-    methods = {
-      previewImage(images, event){
+  methods = {
+    previewImage(image, event){
       var baseUrl = this.baseUrl;
-      var current = `${baseUrl}/api/files/images/${images[0]}`;
-      var urls = images.map((n)=>{
+      var current = `${baseUrl}/api/files/images/${image}`;
+      var urls = this.post.images.map((n)=>{
         return  `${baseUrl}/api/files/images/${n}`;
       });
       wx.previewImage({
@@ -70,6 +67,6 @@ import { baseUrl } from '@/config';
         urls: urls
       });
     }
-    };
-  }
+  };
+}
 </script>
