@@ -21,7 +21,7 @@
             <view class="slds-icon-utility-add slds-icon slds-icon--small slds-m-right--x-small"/>
           </view>
           <view class="weui-cell__bd">
-            <view>商户入驻</view>
+            <view>0元入驻</view>
           </view>
           <view class="weui-cell__ft weui-cell__ft_in-access"></view>
         </navigator>
