@@ -21,6 +21,10 @@
   import req from '@/network';
 
   export default class UserStores extends wepy.page {
+    config = {
+      navigationBarTitleText: '商户管理'
+    };
+
     data = {
       spaces: []
     }
