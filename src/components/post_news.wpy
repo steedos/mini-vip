@@ -15,7 +15,7 @@
   }
   .post-body{
     padding:30rpx;
-    margin-top:-10px;
+    margin-top:-8px;
     .post-name{
       max-height:78px;
       overflow:hidden;
@@ -26,11 +26,18 @@
       max-height:66px;
       overflow:hidden;
     }
+    &.weui-cells{
+      line-height:22px;
+      font-size:16px;
+      .weui-cell{
+        padding: 0px;
+      }
+    }
   }
 }
 </style>
 <template>
-	<view class="post" @tap="goDetail({{id}})">
+	<view class="post">
     <view class="post-cover">
       <block wx:if="{{images}}">
         <image class="image" mode="aspectFill" src="{{baseUrl}}/api/files/images/{{images[0]}}" @tap="previewImage({{images}})" />
@@ -39,9 +46,14 @@
         <image class="image" mode="aspectFill" src="../images/empty.jpg"/>
       </block>
     </view>
-    <view class="post-body">
-      <view class="post-name">{{name}}</view>
-      <view class="post-summary" >{{summary}}</view>
+    <view class="post-body weui-cells" @tap="goDetail({{id}})">
+      <view class="weui-cell weui-cell_access">
+        <view class="weui-cell__bd">
+          <view class="post-name">{{name}}</view>
+          <view class="post-summary">{{summary}}</view>
+        </view>
+        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+      </view>
     </view>
 	</view>
 </template>
@@ -93,10 +105,10 @@ export default class post extends wepy.component {
 
   methods = {
     goDetail(id, event){
-      console.log("===========32323=======a===", id);
-      // wx.navigateTo({
-      //   url: "../store"
-      // });
+      console.log("===========32323=======a==3=", id);
+      wx.navigateTo({
+        url: "../postDetail"
+      });
     },
     previewImage(images, event){
       console.log("===========previewImage=======a===", images);
