@@ -119,10 +119,10 @@
     
     <view class="btn-container">
       <block wx:if="{{price>0}}">
-        <button class="submit-btn" form-type="submit" @tap="activate" disabled="{{submitDisabled}}">下一步</button>
+        <button class="submit-btn" form-type="submit" @tap="nextStep" disabled="{{submitDisabled}}">下一步</button>
       </block>
       <block wx:else>
-        <button class="submit-btn" form-type="submit" @tap="activate" disabled="{{submitDisabled}}">提交</button>
+        <button class="submit-btn" form-type="submit" @tap="submitActivate" disabled="{{submitDisabled}}">提交</button>
       </block>   
     </view>
   </view>
@@ -146,14 +146,14 @@
       if(e.store_id){
         this.store_id = e.store_id
       }
+      if(e.category_name){
+        this.cardName = e.category_name
+      }
       if (e.card_id){
         console.log("ssss",e.card_id)
       }
       else{
-        
-      }
-      if(e.category_name){
-        this.cardName = e.category_name
+        await this.addVipCard()
       }
       if(parseInt(e.price)){
         this.price = parseInt(e.price)
@@ -172,6 +172,7 @@
     }
 
     data = {
+      card_id:'',
       cardName: '贝菲特',
       // cardType: '会员卡',
       array: ['女', '男'],
@@ -185,7 +186,21 @@
       store_id: '',
       price:0
     };
+    addVipCard() {
+        this.submitDisabled = true
+        const url = `/api/mini/vip/card_activate?space_id=${this.space_id}&store_id=${this.store_id}`
+        const data = {
+          name: this.cardName,
 
+          // sex: this.sexValue,
+          // birthdate: this.birthdate,
+          // phoneNumber: this.phoneNumber
+        }
+        req.post(url, data).then(res => {
+          this.card_id =res.card_id
+          // wx.navigateTo({url: "./index"})
+        })
+      }
     methods = {
       formSubmit(e) {
         console.log(e);
@@ -216,7 +231,6 @@
             iv: e.detail.iv,
             encryptedData: e.detail.encryptedData
           }).then(res => {
-            console.log("res", res)
             this.phoneNumber = res.purePhoneNumber
             this.$apply();
           });
@@ -224,21 +238,15 @@
           console.error(e.detail.errMsg)
         }
       },
-      activate() {
-        this.submitDisabled = true
-        const url = `/api/mini/vip/card_activate?space_id=${this.space_id}&store_id=${this.store_id}`
-        console.log('card_activate', url)
-        console.log(this.cardName)
+      nextStep() {
+        wx.navigateTo({url: "./card_pay"})
+      },
+      submitActivate() {
         const data = {
-          name: this.cardName,
-
-          // sex: this.sexValue,
-          // birthdate: this.birthdate,
-          // phoneNumber: this.phoneNumber
+          is_actived:true
         }
-        req.post(url, data).then(res => {
-          wx.navigateTo({url: "./index"})
-        })
+        this.$parent.update("vip_card",this.card_id,data)
+        wx.navigateTo({url: "./index"})
       }
     };
   }
