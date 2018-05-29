@@ -45,7 +45,7 @@
             <text class="weui-media-box__desc detail">{{card.summary}}</text>
           </view>
           <view class="card-btn">
-            <button class="card-apply" plain="true" @tap="toApplyCard" >申请开卡</button>
+            <button class="card-apply" plain="true" @tap="toApplyCard">申请开卡</button>
           </view>
         </view>
       </view>
@@ -65,6 +65,8 @@ export default class CardSelect extends wepy.page {
     vipcrad: vipCard
   };
   data = {
+    hasUserInfo: false,
+    canIUse: wx.canIUse('button.open-type.getUserInfo'),
     space_id: '',
     categorys: [],
     is_activated:false,
