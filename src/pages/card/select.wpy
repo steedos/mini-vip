@@ -191,16 +191,11 @@ export default class CardSelect extends wepy.page {
 
   methods = {
     toApplyCard(category_id, category_name, price) {
-      console.log('============');
-      var url = '';
       if (this.is_activated) {
-        url = `../card?card_id=${this.card_id}&space_id=${this.space_id}`
+        wx.reLaunch({url: `../card?card_id=${this.card_id}&space_id=${this.space_id}`})
       } else {
-        url = `../card_activate?card_id=${this.card_id}&category_name=${category_name}&space_id=${this.space_id}&price=${price}&category_id=${category_id}`
+        wx.navigateTo({url: `../card_activate?card_id=${this.card_id}&category_name=${category_name}&space_id=${this.space_id}&price=${price}&category_id=${category_id}`})
       }
-      wx.navigateTo({
-        url: url
-      });
     }
   };
 }
