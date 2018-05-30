@@ -16,7 +16,7 @@
       </view>
 
       <view class="weui-cells">
-        <navigator url="./store_register" class="weui-cell weui-cell_access">
+        <navigator url="./space/register" class="weui-cell weui-cell_access">
           <view class="weui-cell__hd">
             <view class="slds-icon-utility-add slds-icon slds-icon--small slds-m-right--x-small"/>
           </view>
@@ -34,7 +34,7 @@
   import wepy from 'wepy';
   import req from '@/network';
 
-  export default class UserStores extends wepy.page {
+  export default class SpaceList extends wepy.page {
     config = {
       navigationBarTitleText: '商户管理'
     };

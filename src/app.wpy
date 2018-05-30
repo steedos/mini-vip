@@ -86,10 +86,10 @@ export default class VIP extends wepy.app {
       'pages/post/news',
       'pages/edit/select',
       'pages/edit/date',
-      'pages/store_register',
       'pages/card/select',
       'pages/record_view',
-      'pages/user_spaces'
+      'pages/space/register',
+      'pages/space/list'
     ],
     tabBar: {
       color: '#666',
@@ -269,7 +269,7 @@ export default class VIP extends wepy.app {
   }
 
   async get(object_name,_id, space_id) {
-    let url 
+    let url
     if (object_name == 'spaces') {
       url = '/api/odata/v4/' + (space_id || this.globalData.space_id) + '/' + object_name
     } else {

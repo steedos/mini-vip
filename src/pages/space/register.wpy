@@ -123,7 +123,7 @@
 import wepy from 'wepy';
 import req from '@/network';
 
-export default class StoreRegister extends wepy.page {
+export default class SpaceRegister extends wepy.page {
   config = {
     navigationBarTitleText: '商户入驻'
   };
@@ -260,7 +260,7 @@ export default class StoreRegister extends wepy.page {
         space_name: this.space_name
       });
       req
-        .post('/api/mini/vip/store_register', {
+        .post('/api/mini/vip/space_register', {
           store_name: this.store_name,
           industry: this.industry,
           phoneNumber: this.phoneNumber,
