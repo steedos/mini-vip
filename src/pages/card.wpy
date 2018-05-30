@@ -72,6 +72,9 @@
 
         <view wx:if="{{isActivated}}" class="weui-cells">
           <navigator url="card_pay?card_id={{cardId}}&balance={{cardBalance}}&store_id={{store_id}}" class="weui-cell weui-cell_access">
+            <view class="weui-cell__hd">
+              <view class="slds-icon-standard-product slds-icon slds-icon--small slds-m-right--x-small"/>
+            </view>
             <view class="weui-cell__bd">
               <view>买单</view>
             </view>
@@ -81,28 +84,29 @@
 
         <view class="weui-cells">
           <navigator url="wifi" class="weui-cell weui-cell_access">
+            <view class="weui-cell__hd">
+              <view class="slds-icon-utility-wifi slds-icon slds-icon--small slds-m-right--x-small"/>
+            </view>
             <view class="weui-cell__bd">
               <view>连接WIFI</view>
             </view>
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
           </navigator>
+          <!--
           <navigator url="" class="weui-cell weui-cell_access">
+            <view class="weui-cell__hd">
+              <view class="slds-icon-standard-today slds-icon slds-icon--small slds-m-right--x-small"/>
+            </view>
             <view class="weui-cell__bd">
               <view>服务预约</view>
             </view>
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
           </navigator>
-        </view>
-
-
-        <view class="weui-cells">
-          <navigator url="stores" class="weui-cell weui-cell_access">
-            <view class="weui-cell__bd">
-              <view>门店查询</view>
-            </view>
-            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-          </navigator>
+          -->
           <navigator url="./post/news?type=course" class="weui-cell weui-cell_access">
+            <view class="weui-cell__hd">
+              <view class="slds-icon-standard-event slds-icon slds-icon--small slds-m-right--x-small"/>
+            </view>
             <view class="weui-cell__bd">
               <view>课程安排</view>
             </view>
@@ -111,19 +115,39 @@
         </view>
 
         <view class="weui-cells">
+          <navigator url="stores" class="weui-cell weui-cell_access">
+            <view class="weui-cell__hd">
+              <view class="slds-icon-standard-address slds-icon slds-icon--small slds-m-right--x-small"/>
+            </view>
+            <view class="weui-cell__bd">
+              <view>门店查询</view>
+            </view>
+            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+          </navigator>
           <navigator url="./post/news?type=help" class="weui-cell weui-cell_access">
+            <view class="weui-cell__hd">
+              <view class="slds-icon-standard-performance slds-icon slds-icon--small slds-m-right--x-small"/>
+            </view>
             <view class="weui-cell__bd">
               <view>会员指南</view>
             </view>
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
           </navigator>
+          <!--
           <navigator url="./post/news?type=community" class="weui-cell weui-cell_access">
+            <view class="weui-cell__hd">
+              <view class="slds-icon-standard-post slds-icon slds-icon--small slds-m-right--x-small"/>
+            </view>
             <view class="weui-cell__bd">
               <view>投诉建议</view>
             </view>
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
           </navigator>
+          -->
           <navigator url="./post/news?type=jobs" class="weui-cell weui-cell_access">
+            <view class="weui-cell__hd">
+              <view class="slds-icon-standard-groups slds-icon slds-icon--small slds-m-right--x-small"/>
+            </view>
             <view class="weui-cell__bd">
               <view>招兵买马</view>
             </view>
