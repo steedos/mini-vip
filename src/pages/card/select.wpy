@@ -198,7 +198,7 @@ export default class CardSelect extends wepy.page {
       } else {
         url = `../card_activate?card_id=${this.card_id}&category_name=${category_name}&space_id=${this.space_id}&price=${price}&category_id=${category_id}`
       }
-      wx.reLaunch({
+      wx.navigateTo({
         url: url
       });
     }
