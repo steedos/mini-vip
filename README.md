@@ -25,23 +25,23 @@
 
 ### 页面路径规范
 - index 卡券助手，浏览我的所有会员卡
-- me 卡券助手/我的资料
-- me_profile 编辑我的资料
-- home 商户主页，最上面显示3条最新的动态，下面显示联系方式
-- apps 商户服务台
-- card 商户会员卡，显示我在此商户的会员卡信息
-- card_activate 激活会员卡（如果没有卡）
-- card_recharge 会员卡充值
-- card_billing 会员卡消费记录
-- posts 最新动态
-- post 查看动态
-- wifi 连接WIFI
-- stores 门店列表
-- store 门店显示
-- tickets 投诉建议列表
-- ticket 投诉建议显示
-- knowledges 会员指南
-- knowledge 会员指南显示
+- me/index 卡券助手/我的资料
+- me/profile 编辑我的资料
+- space/home 商户主页，最上面显示3条最新的动态，下面显示联系方式
+- space/apps 商户服务台
+- space/list 管理商户
+- space/register 商户入驻
+- card/index 商户会员卡，显示我在此商户的会员卡信息
+- card/activate 激活会员卡（如果没有卡）
+- card/recharge 会员卡充值
+- card/billing 会员卡消费记录
+- post/index 最新动态
+- post/view 查看动态
+- post/add 发布动态
+- post/comment 评论
+- wifi/index 连接WIFI
+- store/index 门店列表
+- store/view 门店显示
 
 
 ### 应用初始化 onLaunch
