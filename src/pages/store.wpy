@@ -66,30 +66,6 @@ export default class store extends wepy.page {
   getStoreInfo(store_id) {
     return this.$parent.get('vip_store', store_id);
   }
-  getCode(scene) {
-    wx.request({
-      url:
-        'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wxf7d7403acb34334b&secret=c10af093299c079ac7a88cf8a9b64ceb',
-      success: function(res) {
-        console.log(res.data);
-        const url =
-          'https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=' +
-          res.data.access_token;
-        const data = {
-          scene: scene,
-          width: 430
-        };
-        wx.request({
-          url: url,
-          data: data,
-          method: 'POST',
-          success: function(res) {
-            console.log(decodeURIComponent(res.data.scene));
-          }
-        });
-      }
-    });
-  }
 
   methods = {
     phoneCall() {
