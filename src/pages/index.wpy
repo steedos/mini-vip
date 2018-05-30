@@ -173,29 +173,28 @@
       }, 200);
     }
 
-    getUserCard(){
-      console.log("get Card...")
-      req.get("/api/steedos/weixin/cards").then(res => {
-        let card_count
-        if (res.cards) {
-          card_count = res.cards.length;
-        } else {
-          card_count = 0;
-        }
-
-        const allBalance = res.allBalance || 0;
-
-        this.cards = res.cards
-        this.allBalance = allBalance
-        this.card_count = card_count
-        this.$apply()
-      });
-    }
-
     async onLoad() {
       const self = this;
       await this.$parent.login();
-      await this.getUserCard();
+      const options = {
+        $expand: 'space($select=name),card_name($select=name)',
+        $count: true,
+        $select: 'name,card_number,grade,balance,space,card_name',
+        $filter: `(user eq '${this.$parent.globalData.user._id}')`
+      };
+      const result = await this.$parent.query('vip_card', options, 'common')
+      let allBalance = 0.00
+      result.value.forEach(function (card) {
+        allBalance = allBalance + card.balance
+        let name = card.space.name
+        if(card.card_name && card.card_name.name){
+          name = card.card_name.name
+        }
+        self.cards.push({_id: card._id, card_number: card.card_number, grade: card.grade, name: name, space: card.space._id})
+      })
+      self.allBalance = allBalance
+      self.card_count = result['@odata.count']
+      self.$apply()
     }
 
     onShareAppMessage(res){
