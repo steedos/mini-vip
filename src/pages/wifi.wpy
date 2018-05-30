@@ -77,13 +77,13 @@ export default class Wifi extends wepy.page {
     selected: {},
     wifiList:[],
     listTitle: '门店 WiFi 列表',
-    store:''
+    store_id: ''
   };
 
   async onLoad(e) {
     wx.showNavigationBarLoading();
-    if (e.store) {
-      this.store = e.store;
+    if (e.store_id) {
+      this.store_id = e.store_id;
     }
     const _self = this;
     wx.startWifi({
@@ -205,18 +205,17 @@ export default class Wifi extends wepy.page {
     }
   };
   getWifiInfo(){
-    var data = {}
-    if(this.store){
-      data = {
-        $filter: 'store eq ' + this.store,
-        $select: 'SSID,BSSID,password'
-      };
+    // 未传入 store_id，则使用space_id查询store
+    var store_id = "";
+    if(this.store_id){
+      store_id = this.store_id
     }else{
-      data = {
-        $select: 'SSID,BSSID,password'
-      };
+      store_id = this.$parent.globalData.space_id
     }
-    console.log(data);
+    const data = {
+              $filter: 'store eq ' + store_id,
+              $select: 'SSID,BSSID,password'
+            };
     return this.$parent.query("vip_wifi",data);
   };
   radioChange(e) {
