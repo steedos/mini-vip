@@ -1,3 +1,11 @@
+<style lang="less">
+  .button-sp-area{
+    margin: 0 auto;
+    padding-top: 15px;
+    width: 60%;
+  }
+</style>
+
 <template>
   <view class="page">
     <view class="page__bd">
@@ -15,15 +23,9 @@
         </repeat>
       </view>
 
-      <view class="weui-cells">
-        <navigator url="register" class="weui-cell weui-cell_access">
-          <view class="weui-cell__hd">
-            <view class="slds-icon-utility-add slds-icon slds-icon--small slds-m-right--x-small"/>
-          </view>
-          <view class="weui-cell__bd">
-            <view>0元入驻</view>
-          </view>
-          <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+      <view class="button-sp-area">
+        <navigator url="register">
+        <button class="weui-btn" type="primary" plain="true">0元入驻</button>
         </navigator>
       </view>
     </view>
