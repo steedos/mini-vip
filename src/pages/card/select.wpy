@@ -18,13 +18,14 @@ page {
   margin-bottom: 15px;
   margin-left: 10px;
   margin-right: 10px;
-  border-radius: 10px;
   display: flex;
-  flex-direction: ;
-  position:relative;
+  flex-direction: column;
+  position: relative;
 
   .card-header {
     height: 70px;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
   }
 
   .user-avatar {
@@ -56,11 +57,11 @@ page {
     font-weight: bold;
   }
 
-  .card-btn{
-    .card-apply{
+  .card-btn {
+    .card-apply {
       width: 380rpx;
-      color: #D64B4B;
-      border-color: #D64B4B;
+      color: #d64b4b;
+      border-color: #d64b4b;
     }
   }
 
@@ -77,15 +78,28 @@ page {
   <view class="card-list">
     <repeat for="{{categorys}}" key="index" index="index" item="card">
       <view class="card">
+        <block wx:if="{{card.cover}}">
+          <view class="card-header" style="background: url({{util.formatImageUrl(card.cover, baseUrl)}});background-repeat: no-repeat;background-size: cover">
+            <view class="user-avatar">
+              <image wx:if="{{card.avatar}}" class="image" mode="aspectFill" src="{{util.formatImageUrl(card.avatar, baseUrl)}}"/>
+              <image wx:else class="image" mode="aspectFill" src="../../images/avatar.png"/>
+            </view>
+            <view class="card-name">
+              <text>{{card.name}}</text>
+            </view>
+          </view>
+        </block>
+        <block wx:else>
         <view class="card-header">
           <view class="user-avatar">
-            <open-data type="userAvatarUrl"></open-data>
-            <!-- <image wx:else class="image" mode="aspectFit" src="../images/avatar.png"/> -->
+              <image wx:if="{{card.avatar}}" class="image" mode="aspectFill" src="{{util.formatImageUrl(card.avatar, baseUrl)}}"/>
+              <image wx:else class="image" mode="aspectFill" src="../../images/avatar.png"/>
           </view>
           <view class="card-name">
             <text>{{card.name}}</text>
           </view>
         </view>
+        </block>
         <view class="card-opt weui-panel__bd">
           <view class="weui-media-box weui-media-box_text summary">
             <view class="weui-media-box__title">会员权益</view>
@@ -138,12 +152,12 @@ export default class CardSelect extends wepy.page {
       this.space_id = e.space_id;
       this.$parent.globalData.space_id = e.space_id;
       // 获取工作区，设置标题
-      console.log('====this.$parent.globalData===', this.$parent.globalData);
-      const cur_space = await this.getSpaceInfo(e.space_id);
-      this.space_name = cur_space.name;
-      wx.setNavigationBarTitle({
-        title: this.space_name
-      });
+      // console.log('====this.$parent.globalData===', this.$parent.globalData);
+      // const cur_space = await this.getSpaceInfo(e.space_id);
+      // this.space_name = cur_space.name;
+      // wx.setNavigationBarTitle({
+      //   title: this.space_name
+      // });
 
       // 根据space_id登录
       await this.$parent.login(e.space_id);
@@ -188,7 +202,7 @@ export default class CardSelect extends wepy.page {
   }
 
   methods = {
-    toApplyCard(category_id,category_name, price) {
+    toApplyCard(category_id, category_name, price) {
       console.log('============');
       var url = '';
       if (this.is_activated) {
