@@ -54,48 +54,6 @@ class Request {
     return this.request({ url, method: METHOD.DELETE, header, data })
   }
 
-  getHeader(url, data) {
-    const self = this
-    return wx.login({
-      success: function (res) {
-        data.code = res.code
-        self.post(url, data).then(res => {
-          const header = {
-            'X-User-Id': res.userId,
-            'X-Auth-Token': res.authToken,
-            'X-Space-Id': res.spaceId
-          };
-          console.log('req.loginServer', res)
-          wx.setStorageSync('X-User-Id', res.userId);
-          wx.setStorageSync('X-Auth-Token', res.authToken);
-          wx.setStorageSync('X-Space-Id', res.spaceId);
-          self.header(header);
-        })
-      }
-    })
-  }
-  
-  loginServer(url, data, header) {
-    const self = this
-    console.log("loginServer..................", self)
-    wx.checkSession({
-      success: function() {
-        if (wx.getStorageSync('X-User-Id') && wx.getStorageSync('X-Auth-Token') && wx.getStorageSync('X-Space-Id')) {
-          self.header({
-            'X-User-Id': wx.getStorageSync('X-User-Id'),
-            'X-Auth-Token': wx.getStorageSync('X-Auth-Token'),
-            'X-Space-Id': wx.getStorageSync('X-Space-Id')
-          })
-        } else {
-          return self.getHeader(url, data)
-        }
-      },
-      fail: function() {
-        return self.getHeader(url, data)
-      }
-    })
-  }
-
   token(token) {
     this._header.token = token
     return this
