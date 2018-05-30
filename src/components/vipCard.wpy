@@ -95,7 +95,7 @@ export default class vipCard extends wepy.component {
   computed = {
     formatCardName() {
       if (this.cardName) {
-        return `${this.cardName}会员卡`
+        return `${this.cardName}`
       }
     },
     formatNumber() {
