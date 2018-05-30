@@ -18,7 +18,7 @@ import wepy from 'wepy';
 import postList from '../../components/post_list';
 import req from '@/network';
 
-const DATA_LENGTH = 3;
+const DATA_LENGTH = 10;
 export default class Posts extends wepy.page {
   config = {
     navigationBarTitleText: '最新动态',
