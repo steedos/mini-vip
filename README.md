@@ -24,25 +24,47 @@
 - 每个商户页面都需要额外传入space=?参数，方便转发
 
 ### 页面路径规范
-- index 卡券助手，浏览我的所有会员卡
+index 卡券助手，浏览我的所有会员卡
+
+me 我的
 - me/index 卡券助手/我的资料
 - me/profile 编辑我的资料
+
+space/ 商户
 - space/home 商户主页，最上面显示3条最新的动态，下面显示联系方式
 - space/apps 商户服务台
 - space/list 管理商户
 - space/register 商户入驻
+
+card/ 会员卡
 - card/index 商户会员卡，显示我在此商户的会员卡信息
 - card/activate 激活会员卡（如果没有卡）
 - card/recharge 会员卡充值
 - card/billing 会员卡消费记录
+
+store/ 门店
+- store/index 门店列表
+- store/view 门店显示
+
+post/ 动态
 - post/index 最新动态
 - post/view 查看动态
 - post/add 发布动态
 - post/comment 评论
-- wifi/index 连接WIFI
-- store/index 门店列表
-- store/view 门店显示
 
+wifi/
+- wifi/index 连接WIFI
+
+record/ Object自动生成表单
+- record/list
+- record/add
+- record/edit
+- record/view
+- record/search
+
+edit/ 编辑控件
+- edit/select
+- edit/lookup
 
 ### 应用初始化 onLaunch
 - 在App的onLaunch函数中调用 login(options) 进行登录。
