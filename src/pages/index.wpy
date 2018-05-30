@@ -180,7 +180,7 @@
         $expand: 'space($select=name),card_name($select=name)',
         $count: true,
         $select: 'name,card_number,grade,balance,space,card_name',
-        $filter: `(user eq '${this.$parent.globalData.user._id}')`
+        $filter: `(owner eq '${this.$parent.globalData.user._id}')`
       };
       const result = await this.$parent.query('vip_card', options, 'common')
       let allBalance = 0.00

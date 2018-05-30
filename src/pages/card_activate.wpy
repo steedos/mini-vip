@@ -192,14 +192,10 @@
     };
     addVipCard() {
         this.submitDisabled = true
-        const url = `/api/mini/vip/card_activate?space_id=${this.space_id}&store_id=${this.store_id}`
+        const url = `/api/mini/vip/card_init?space_id=${this.space_id}&store_id=${this.store_id}`
         console.log("categoty_id===",this.category_id)
         const data = {
           name: this.category_id
-
-          // sex: this.sexValue,
-          // birthdate: this.birthdate,
-          // phoneNumber: this.phoneNumber
         }
         req.post(url, data).then(res => {
           this.card_id =res.card_id
@@ -248,11 +244,20 @@
         wx.navigateTo({url: "./card_pay"})
       },
       submitActivate() {
+        const url = `/api/mini/vip/card_activate?space_id=${this.space_id}&store_id=${this.store_id}&card_id=${this.card_id}`
         const data = {
-          is_actived:true
+          is_actived:true,
+          category_id:this.category_id,
+          price:this.price,
+          name:this.name,
+          sex: this.sexValue,
+          birthdate: this.birthdate,
+          phoneNumber: this.phoneNumber
         }
-        this.$parent.update("vip_card",this.card_id,data)
-        wx.reLaunch({url: "./card?space="+this.space_id+"&card_id="+this.card_id})
+        req.put(url, data).then(res => {
+          wx.reLaunch({url: "./card?space="+this.space_id+"&card_id="+this.card_id})
+        })
+        
       }
     };
   }
