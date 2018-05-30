@@ -1,5 +1,6 @@
 <style lang="less">
 .page {
+  height:100%;
   background-color: #333333;
   .page__hd{
     padding:0px;
@@ -8,20 +9,29 @@
     }
   }
   .page__bd{
-    .card{
-      margin-bottom:0px;
-      background-repeat: no-repeat;
-      background-size: cover;
-    }
-    .card-opt{
-      z-index: 1;
-      position:relative;
-      margin-top:-30rpx;
-      margin-left:20rpx;
-      margin-right:20rpx;
-      background-color: white;
-      .weui-cell__bd{
-        line-height: 22px;
+    padding-bottom:0px;
+    .card-tap{
+      margin-bottom: 25px;
+      .card{
+        margin-bottom:0px;
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+      .card-opt{
+        z-index: 1;
+        position:relative;
+        margin-top:-30rpx;
+        margin-left:20rpx;
+        margin-right:20rpx;
+        background-color: white;
+        border-bottom-left-radius:20rpx;
+        border-bottom-right-radius:20rpx;
+        padding:30rpx;
+        line-height:22px;
+        font-size:16px;
+        .weui-cell__bd{
+          line-height: 22px;
+        }
       }
     }
   }
@@ -35,7 +45,7 @@
   <view class="page__bd">
     <view class="card-list">
       <repeat for="{{categorys}}" key="index" index="index" item="card">
-        <view class="cardTap" @tap="toApplyCard({{card._id}},{{card.name}},{{card.price}})">
+        <view class="card-tap" @tap="toApplyCard({{card._id}},{{card.name}},{{card.price}})">
         <block wx:if="{{card.cover}}">
           <view class="card" style="background: url({{util.formatImageUrl(card.cover, baseUrl)}});">
             <view class="card-header">
@@ -145,6 +155,14 @@ export default class CardSelect extends wepy.page {
       this.card_id = card.value[0]._id;
     }
     console.log('this_activated', this.is_activated);
+  }
+
+  onShareAppMessage(res) {
+    const space_id = this.space_id
+    return {
+      title: this.space_name + '加入会员',
+      path: `/pages/card/select?space_id=${space_id}`
+    };
   }
 
   getSpaceInfo(space_id) {
