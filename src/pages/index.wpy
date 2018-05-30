@@ -173,15 +173,14 @@
       }, 200);
     }
 
-    async onLoad() {
-      const self = this;
-      await this.$parent.login();
+    async getUserCard() {
+      const self = this
       const options = {
         $expand: 'space($select=name),card_name($select=name)',
         $count: true,
         $select: 'name,card_number,grade,balance,space,card_name',
         $filter: `(owner eq '${this.$parent.globalData.user._id}')`
-      };
+      }
       const result = await this.$parent.query('vip_card', options, 'common')
       let allBalance = 0.00
       result.value.forEach(function (card) {
@@ -190,11 +189,18 @@
         if(card.card_name && card.card_name.name){
           name = card.card_name.name
         }
+        self.cards = []
         self.cards.push({_id: card._id, card_number: card.card_number, grade: card.grade, name: name, space: card.space._id})
       })
       self.allBalance = allBalance
       self.card_count = result['@odata.count']
       self.$apply()
+    }
+
+    async onLoad() {
+      const self = this;
+      await this.$parent.login();
+      this.getUserCard()
     }
 
     onShareAppMessage(res){
