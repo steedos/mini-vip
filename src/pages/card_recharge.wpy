@@ -59,6 +59,8 @@ export default class cardRecharge extends wepy.page {
     console.log(e);
     this.cardId = e.card_id;
     this.cardBalance = e.balance;
+    this.storeId = e.store_id || this.$parent.globalData.vip_card.store;
+    console.log(this.$parent.globalData.vip_card);
   }
 
   methods = {
@@ -70,7 +72,6 @@ export default class cardRecharge extends wepy.page {
         this.canDoRecharge = true;
         this.$apply();
       } else {
-        this.rechargeValue = '';
         this.canDoRecharge = false;
         this.$apply();
       }
@@ -80,52 +81,70 @@ export default class cardRecharge extends wepy.page {
         title: '正在准备支付',
         mask: true
       });
-      var data = {
-        // totalFee: parseInt(this.rechargeValue * 100)
-        totalFee: 1,
-        cardId: this.cardId
-      };
       var that = this;
-      req.post('/api/steedos/weixin/card/recharge', data).then(res => {
-        wx.hideLoading();
-        console.log('res: ', res);
+      var amount = parseFloat(parseFloat(this.rechargeValue).toFixed(2));
+      var newOrder = {
+        name: '会员卡充值',
+        amount: amount,
+        status: 'draft',
+        store: this.storeId,
+        card: this.cardId,
+        type: 'recharge',
+        owner: this.$parent.globalData.user._id
+      };
+      this.$parent.insert('vip_order', newOrder).then(o => {
+        console.log(o);
+        if (o.value) {
+          var data = {
+            // totalFee: parseInt(this.rechargeValue * 100)
+            amount: amount,
+            order_id: o.value[0]._id
+          };
 
-        if (res.paySign) {
-          wx.requestPayment({
-            timeStamp: res.timeStamp,
-            nonceStr: res.nonceStr,
-            package: res.package,
-            signType: 'MD5',
-            paySign: res.paySign,
-            success: function(msg) {
-              console.log('success: ', msg);
-              wx.showLoading({
-                title: '更新余额中',
-                mask: true
-              });
-              that.$parent.get('vip_card', that.cardId).then(c => {
-                that.cardBalance = c.balance.toFixed(2);
-                that.rechargeValue = '';
-                that.canDoRecharge = false;
-                that.$apply();
-                wx.hideLoading();
+          req.post('/api/steedos/weixin/card/recharge', data).then(res => {
+            wx.hideLoading();
+            console.log('res: ', res);
 
-                let pages = getCurrentPages();
-                let prePage = pages[pages.length - 2];
-                prePage.changeData('cardBalance', that.cardBalance);
+            if (res.paySign) {
+              wx.requestPayment({
+                timeStamp: res.timeStamp,
+                nonceStr: res.nonceStr,
+                package: res.package,
+                signType: 'MD5',
+                paySign: res.paySign,
+                success: function(msg) {
+                  console.log('success: ', msg);
+                  wx.showLoading({
+                    title: '更新余额中',
+                    mask: true
+                  });
+                  that.$parent.get('vip_card', that.cardId).then(c => {
+                    that.cardBalance = c.balance.toFixed(2);
+                    that.rechargeValue = '';
+                    that.canDoRecharge = false;
+                    that.$apply();
+                    wx.hideLoading();
+
+                    let pages = getCurrentPages();
+                    let prePage = pages[pages.length - 2];
+                    prePage.changeData('cardBalance', that.cardBalance);
+                  });
+                },
+                fail: function(msg) {
+                  console.log('fail: ', msg);
+                },
+                complete: function(msg) {}
               });
-            },
-            fail: function(msg) {
-              console.log('fail: ', msg);
-            },
-            complete: function(msg) {}
+            } else {
+              console.error(res);
+              wx.showModal({
+                content: '请求超时，请检查网络状况',
+                showCancel: false
+              });
+            }
           });
-        } else {
-          console.error(res);
-          wx.showModal({
-            content: '请求超时，请检查网络状况',
-            showCancel: false
-          });
+        } else if (o.error) {
+          console.error(o.error);
         }
       });
     },

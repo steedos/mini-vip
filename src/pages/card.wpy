@@ -191,7 +191,7 @@ export default class Card extends wepy.page {
       $filter: `_id eq '${card_id}'`,
       $expand: 'card_name($select=name)',
       $count: true,
-      $select: 'space,grade,is_actived,balance,points,card_number,card_name'
+      $select: 'space,grade,is_actived,balance,points,card_number,card_name,store'
     };
 
     const result = await self.$parent.cache('vip_card', card_id, data, true);
@@ -246,7 +246,7 @@ export default class Card extends wepy.page {
     }, 300);
 
     await this.$parent.login(e.space_id);
-    
+
     const space = await this.$parent.get('spaces', e.space_id)
     this.space_name = space.name
     this.$apply()
@@ -308,7 +308,9 @@ export default class Card extends wepy.page {
           'card_recharge?card_id=' +
           this.cardId +
           '&balance=' +
-          this.cardBalance
+          this.cardBalance +
+          '&store_id=' +
+          this.store_id
       });
     }
   };
