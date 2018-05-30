@@ -183,13 +183,13 @@
       }
       const result = await this.$parent.query('vip_card', options, 'common')
       let allBalance = 0.00
+      self.cards = []
       result.value.forEach(function (card) {
         allBalance = allBalance + card.balance
         let name = card.space.name
         if(card.card_name && card.card_name.name){
           name = card.card_name.name
         }
-        self.cards = []
         self.cards.push({_id: card._id, card_number: card.card_number, grade: card.grade, name: name, space: card.space._id})
       })
       self.allBalance = allBalance
