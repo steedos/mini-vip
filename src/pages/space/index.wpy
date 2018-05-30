@@ -1,0 +1,87 @@
+<!-- 最新动态 -->
+<style lang="less">
+page {
+  height: 100%;
+}
+</style>
+<template>
+  <view class="page">
+    <view class="page__bd">
+      <scroll-view class="scroll-view_H" scroll-y="true">
+        <postList :list.sync="posts" />
+      </scroll-view>
+    </view>
+  </view>
+</template>
+<script>
+import wepy from 'wepy';
+import postList from '../../components/post_list';
+import req from '@/network';
+
+const DATA_LENGTH = 10;
+export default class Posts extends wepy.page {
+  config = {
+    navigationBarTitleText: '最新动态',
+    enablePullDownRefresh: true
+  };
+
+  async onLoad(e) {
+    this.type = e.type;
+    this.loadPostList();
+  }
+
+  refresh() {
+    this.posts = [];
+    this.currentPageIndex = 0;
+    this.loadPostList();
+  }
+  
+  components = {
+    postList: postList
+  };
+
+  // 上拉刷新
+  onPullDownRefresh() {
+    this.refresh();
+    console.log('onPullDownRefresh....');
+  }
+
+  // 下拉加载
+  onReachBottom() {
+    this.loadPostList();
+    console.log('onReachBottom');
+  }
+
+  data = {
+    type: "",
+    posts: [],
+    currentPageIndex: 0
+  };
+  
+	async loadPostList(){
+    wx.showLoading({
+      mask: true
+    });
+    const skip = DATA_LENGTH * this.currentPageIndex;
+    const options = {
+      $expand: 'owner($select=name)',
+      $count: true,
+      $select: 'name,summary,description,comment_count,enable_comment,images,video,audio,type,mini_type',
+      $skip: skip,
+      $top: DATA_LENGTH
+    };
+    const type = this.type;
+    console.log(`loadPostList of type:`, type);
+    if(type){
+      options.$filter = `type eq '${type}'`;
+    }
+    const result = await this.$parent.query("post", options);
+    wx.hideLoading();
+    wx.stopPullDownRefresh();
+    this.posts = this.posts.concat(result.value);
+    console.log("loadPostList", this.posts);
+    this.currentPageIndex++;
+    this.$apply();
+  };
+}
+</script>
