@@ -2,7 +2,7 @@
 @import "../lib/weui/weui.wxss";
 @import "../lib/slds/slds_icons.less";
 @import "../lib/slds/slds_margin.less";
-@import "../lib/slds/slds_icon_font.wxss";
+@import "../lib/slds/slds_icons_font.less";
 page {
   background-color: #f5f5f7;
   font-size: 16px;
@@ -88,6 +88,7 @@ export default class VIP extends wepy.app {
       'pages/edit/date',
       'pages/card/select',
       'pages/record_view',
+      'pages/space/index',
       'pages/space/register',
       'pages/space/list'
     ],
@@ -98,7 +99,7 @@ export default class VIP extends wepy.app {
       borderStyle: 'black',
       list: [
       {
-        pagePath: 'pages/post/news',
+        pagePath: 'pages/space/index',
         selectedIconPath: './images/tabbars/home_pressed.png',
         iconPath: './images/tabbars/home.png',
         text: '首页',

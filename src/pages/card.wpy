@@ -70,39 +70,29 @@
 
     <view class="page__bd">
 
-        <view class="weui-cells">
-          <navigator url="card/select?space_id={{space_id}}" class="weui-cell weui-cell_access">
+        <view wx:if="{{isActivated}}" class="weui-cells">
+          <navigator url="card_pay?card_id={{cardId}}&balance={{cardBalance}}&store_id={{store_id}}" class="weui-cell weui-cell_access">
             <view class="weui-cell__bd">
-              <view>会员卡种类</view>
+              <view>买单</view>
             </view>
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
           </navigator>
         </view>
-    
-      <view wx:if="{{isActivated}}" class="weui-cells">
-        <navigator url="card_pay?card_id={{cardId}}&balance={{cardBalance}}&store_id={{store_id}}" class="weui-cell weui-cell_access">
-          <view class="weui-cell__bd">
-            <view>买单</view>
-          </view>
-          <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-        </navigator>
-      </view>
-      <!-- <block wx:if="{{store_id}}"> -->
-          <view class="weui-cells">
-            <navigator url="wifi" class="weui-cell weui-cell_access">
-              <view class="weui-cell__bd">
-                <view>连接WIFI</view>
-              </view>
-              <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-            </navigator>
-            <navigator url="" class="weui-cell weui-cell_access">
-              <view class="weui-cell__bd">
-                <view>服务预约</view>
-              </view>
-              <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-            </navigator>
-          </view>
-      <!-- </block> -->
+
+        <view class="weui-cells">
+          <navigator url="wifi" class="weui-cell weui-cell_access">
+            <view class="weui-cell__bd">
+              <view>连接WIFI</view>
+            </view>
+            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+          </navigator>
+          <navigator url="" class="weui-cell weui-cell_access">
+            <view class="weui-cell__bd">
+              <view>服务预约</view>
+            </view>
+            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+          </navigator>
+        </view>
 
 
         <view class="weui-cells">
@@ -112,13 +102,7 @@
             </view>
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
           </navigator>
-          <navigator url="./post/news" class="weui-cell weui-cell_access" open-type="reLaunch">
-            <view class="weui-cell__bd">
-              <view>最新动态</view>
-            </view>
-            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-          </navigator>
-          <navigator url="./post/news?type=course" class="weui-cell weui-cell_access" open-type="reLaunch">
+          <navigator url="./post/news?type=course" class="weui-cell weui-cell_access">
             <view class="weui-cell__bd">
               <view>课程安排</view>
             </view>
@@ -127,19 +111,19 @@
         </view>
 
         <view class="weui-cells">
-          <navigator url="./post/news?type=help" class="weui-cell weui-cell_access" open-type="reLaunch">
+          <navigator url="./post/news?type=help" class="weui-cell weui-cell_access">
             <view class="weui-cell__bd">
               <view>会员指南</view>
             </view>
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
           </navigator>
-          <navigator url="./post/news?type=community" class="weui-cell weui-cell_access" open-type="reLaunch">
+          <navigator url="./post/news?type=community" class="weui-cell weui-cell_access">
             <view class="weui-cell__bd">
               <view>投诉建议</view>
             </view>
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
           </navigator>
-          <navigator url="./post/news?type=jobs" class="weui-cell weui-cell_access" open-type="reLaunch">
+          <navigator url="./post/news?type=jobs" class="weui-cell weui-cell_access">
             <view class="weui-cell__bd">
               <view>招兵买马</view>
             </view>
@@ -158,7 +142,7 @@ import { serverAPI } from '@/server';
 
 export default class Card extends wepy.page {
   config = {
-    navigationBarTitleText: '会员',
+    navigationBarTitleText: '会员小秘书',
     enablePullDownRefresh: true
   };
 
@@ -272,7 +256,7 @@ export default class Card extends wepy.page {
 
   methods = {
     toOpenCard() {
-      const url = `card_activate?space_id=${this.space_id}&store_id=${this.store_id}`
+      const url = `./card/select?space_id=${this.space_id}&store_id=${this.store_id}`
       console.log('toOpenCard', url)
       wx.navigateTo({ url: url });
     },
