@@ -272,7 +272,7 @@ export default class Card extends wepy.page {
 
   methods = {
     toOpenCard() {
-      const url = `card_activate?space_id=${this.space_id}&store_id=${this.store_id}`
+      const url = `./card/select?space_id=${this.space_id}&store_id=${this.store_id}`
       console.log('toOpenCard', url)
       wx.navigateTo({ url: url });
     },
