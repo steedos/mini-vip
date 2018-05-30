@@ -132,7 +132,7 @@
   import wepy from 'wepy';
   import vipCard from '../components/vipCard';
   import req from '@/network';
-
+  import { serverAPI } from '@/server';
   export default class cardActivate extends wepy.page {
     config = {
       navigationBarTitleText: '激活会员卡'
@@ -153,7 +153,12 @@
         this.category_id = e.category_id
       }
       if (e.card_id){
-        console.log("ssss",e.card_id)
+        console.log("e.card_id===",e.card_id)
+        this.card_id = e.card_id
+        const data = {
+          card_name:e.category_id
+        }
+        await this.$parent.update("vip_card",e.card_id,data)
       }
       else{
         await this.addVipCard()
@@ -202,6 +207,22 @@
           // wx.navigateTo({url: "./index"})
         })
       }
+    async addVipOrder() {
+      const data = {
+          name:this.cardName,
+          amount:this.price,
+          status:'draft',
+          store:this.store_id,
+          card:this.card_id,
+          type:'recharge'
+        }
+        var order = await this.$parent.insert("vip_order",data)
+        if(order){
+          var order_id = order.value[0]._id
+          wx.navigateTo({url: `./card_pay?order_id=${order_id}&card_id=${this.card_id}`}) 
+        }       
+        console.log("order======",order)
+    }
     methods = {
       formSubmit(e) {
         console.log(e);
@@ -239,9 +260,8 @@
           console.error(e.detail.errMsg)
         }
       },
-      nextStep() {
-        
-        wx.navigateTo({url: "./card_pay"})
+      nextStep() { 
+        this.addVipOrder()
       },
       submitActivate() {
         const url = `/api/mini/vip/card_activate?space_id=${this.space_id}&store_id=${this.store_id}&card_id=${this.card_id}`
