@@ -141,7 +141,7 @@
 
   export default class User extends wepy.page {
     config = {
-      navigationBarTitleText: '会员服务台',
+      navigationBarTitleText: '会员小秘书',
       enablePullDownRefresh: true
     };
 
