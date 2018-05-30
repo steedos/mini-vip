@@ -16,7 +16,7 @@
       </view>
 
       <view class="weui-cells">
-        <navigator url="./space/register" class="weui-cell weui-cell_access">
+        <navigator url="register" class="weui-cell weui-cell_access">
           <view class="weui-cell__hd">
             <view class="slds-icon-utility-add slds-icon slds-icon--small slds-m-right--x-small"/>
           </view>
