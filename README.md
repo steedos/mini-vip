@@ -31,7 +31,7 @@ me 我的
 - me/profile 编辑我的资料
 
 space/ 商户
-- space/home 商户主页，最上面显示3条最新的动态，下面显示联系方式
+- space/index 商户主页，最上面显示3条最新的动态，下面显示联系方式
 - space/apps 商户服务台
 - space/list 管理商户
 - space/register 商户入驻
