@@ -1,8 +1,8 @@
 <style lang="less">
-@import "./assets/style/weui.wxss";
-@import "./assets/style/slds_icons.less";
-@import "./assets/style/slds_margin.less";
-@import "./assets/style/slds_icons_font.wxss";
+@import "../lib/weui/weui.wxss";
+@import "../lib/slds/slds_icons.less";
+@import "../lib/slds/slds_margin.less";
+@import "../lib/slds/slds_icon_font.wxss";
 page {
   background-color: #f5f5f7;
   font-size: 16px;
