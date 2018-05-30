@@ -31,7 +31,7 @@ export default class Posts extends wepy.page {
   }
 
   refresh() {
-    this.tasks = [];
+    this.posts = [];
     this.currentPageIndex = 0;
     this.loadPostList();
   }
@@ -59,6 +59,9 @@ export default class Posts extends wepy.page {
   };
   
 	async loadPostList(){
+    wx.showLoading({
+      mask: true
+    });
     const skip = DATA_LENGTH * this.currentPageIndex;
     const options = {
       $expand: 'owner($select=name)',
@@ -73,6 +76,8 @@ export default class Posts extends wepy.page {
       options.$filter = `type eq '${type}'`;
     }
     const result = await this.$parent.query("post", options);
+    wx.hideLoading();
+    wx.stopPullDownRefresh();
     this.posts = this.posts.concat(result.value);
     console.log("loadPostList", this.posts);
     this.currentPageIndex++;
