@@ -23,8 +23,8 @@ export default class Posts extends wepy.page {
     navigationBarTitleText: '最新动态'
   };
 
-  async onLoad() {
-		this.loadPostList();
+  async onLoad(e) {
+    this.loadPostList(e.type);
   }
 
   onShow() {
@@ -38,12 +38,16 @@ export default class Posts extends wepy.page {
     posts: []
   };
   
-	async loadPostList(){
+	async loadPostList(type){
     const options = {
       $expand: 'owner($select=name)',
       $count: true,
       $select: 'name,summary,description,comment_count,enable_comment,images,video,audio,type,mini_type'
     };
+    console.log(`loadPostList of type:`, type);
+    if(type){
+      options.$filter = `type eq '${type}'`;
+    }
     var posts = await this.$parent.query("post", options)
     this.posts = posts.value;
     console.log("loadPostList", this.posts);
