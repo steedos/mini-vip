@@ -90,7 +90,8 @@ export default class VIP extends wepy.app {
       'pages/record_view',
       'pages/space/index',
       'pages/space/register',
-      'pages/space/list'
+      'pages/space/list',
+      'pages/space/paid_list'
     ],
     tabBar: {
       color: '#666',
@@ -285,8 +286,8 @@ export default class VIP extends wepy.app {
     })
     return result
   }
-  async insert(object_name,data) {
-    const url = '/api/odata/v4/' + this.globalData.space_id + '/' + object_name;
+  async insert(object_name,data, space_id) {
+    const url = '/api/odata/v4/' + (space_id || this.globalData.space_id) + '/' + object_name;
     const result = await req.post(url, data).catch((err)=>{
       console.log("error...",err.data.error)
       return {}
