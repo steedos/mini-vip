@@ -20,6 +20,12 @@
         font-size: 28px;
       }
 }
+
+.page-index {
+  .image {
+    display: block;
+  }
+}
 .page__bd_mycard{
   font-weight: 200;
   color: #888;
@@ -73,7 +79,7 @@
 </style>
 
 <template>
-  <view class="page">
+  <view class="page-index">
   <!--
 		<view class="page__hd">
       <view class="page__hd_bg">
@@ -97,7 +103,8 @@
         <repeat for="{{cards}}" key="index" index="index" item="card">
           <navigator url="card?card_id={{card._id}}&space_id={{card.space}}" open-type="reLaunch" class="weui-cell weui-cell_access weui-cell_access_card">
             <view class="weui-cell__hd">
-              <view class="slds-icon-standard-opportunity slds-icon slds-icon--small slds-m-right--x-small"/>
+              <image wx:if="{{card.avatar}}" class="image slds-icon slds-icon--small slds-m-right--x-small" mode="aspectFill" src="{{util.formatImageUrl(card.avatar, baseUrl)}}"/>
+              <view wx:else class="slds-icon-standard-opportunity slds-icon slds-icon--small slds-m-right--x-small"/>
             </view>
             <view class="weui-cell__bd">
               <view class="card-name">{{card.name}}</view>
@@ -148,7 +155,9 @@
   import wepy from 'wepy';
   import req from '@/network';
   import { serverAPI } from '@/server';
-  import { demoSpaceId,demoStoreId } from '@/config'
+  import { demoSpaceId,demoStoreId } from '@/config';
+  import { baseUrl } from '@/config';
+  import util from '../wxs/util.wxs'; 
 
   export default class User extends wepy.page {
     config = {
@@ -174,7 +183,12 @@
       card_count: 0,
       allBalance: 0,
       demoSpaceId: demoSpaceId,
-      demoStoreId: demoStoreId
+      demoStoreId: demoStoreId,
+      baseUrl: baseUrl
+    };
+
+    wxs = {
+      util: util
     };
 
     async onPullDownRefresh() {
@@ -200,12 +214,20 @@
         let name = card.space.name
         if(card.card_name && card.card_name.name){
           name = card.card_name.name
+          const category_options = {
+            $count: true,
+            $select: 'avatar'
+          }
+          const url = `/api/odata/v4/${card.space._id}/vip_category/${card.card_name._id}`
+          req.get(url, category_options).then(res => {
+            console.log('vip_category', res)
+            self.cards.push({_id: card._id, card_number: card.card_number, grade: card.grade, name: name, space: card.space._id, avatar: res.avatar})
+            self.allBalance = allBalance
+            self.card_count = result['@odata.count']
+            self.$apply()
+          })
         }
-        self.cards.push({_id: card._id, card_number: card.card_number, grade: card.grade, name: name, space: card.space._id})
       })
-      self.allBalance = allBalance
-      self.card_count = result['@odata.count']
-      self.$apply()
     }
 
     async onLoad() {
