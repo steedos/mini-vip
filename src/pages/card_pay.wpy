@@ -75,7 +75,7 @@ export default class cardPay extends wepy.page {
     console.log(e);
     this.cardId = e.card_id;
     this.cardBalance = e.balance;
-    this.storeId = e.store_id || this.$parent.globalData.vip_card.store;
+    this.storeId = e.store_id || this.$parent.globalData.space_id;
 
     var storeId = this.storeId;
     var that = this;

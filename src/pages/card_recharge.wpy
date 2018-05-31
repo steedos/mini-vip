@@ -51,7 +51,8 @@ export default class cardRecharge extends wepy.page {
     rechargeValue: '',
     canDoRecharge: false,
     cardId: '',
-    cardBalance: ''
+    cardBalance: '',
+    storeId: ''
   };
 
   onLoad(e) {
@@ -59,7 +60,7 @@ export default class cardRecharge extends wepy.page {
     console.log(e);
     this.cardId = e.card_id;
     this.cardBalance = e.balance;
-    this.storeId = e.store_id || this.$parent.globalData.vip_card.store;
+    this.storeId = e.store_id || this.$parent.globalData.space_id;
     console.log(this.$parent.globalData.vip_card);
   }
 
