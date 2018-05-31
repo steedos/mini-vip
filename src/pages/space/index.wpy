@@ -114,7 +114,7 @@ export default class Posts extends wepy.page {
 
   data = {
     baseUrl: baseUrl,
-    emptyImageUrl: "/images/empty.jpg",
+    emptyImageUrl: "/images/empty.png",
     type: "",
     posts: [],
     current_skip: 0,

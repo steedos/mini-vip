@@ -25,7 +25,7 @@ function formatImageUrl(src, baseUrl) {
     return baseUrl + "/api/files/images/" + src;
   }
   else{
-    return "/images/empty.jpg";
+    return "/images/empty.png";
   }
 }
 
@@ -35,7 +35,7 @@ function formatVideoUrl(src, baseUrl) {
     return baseUrl + "/api/files/videos/" + src;
   }
   else{
-    return "/images/empty.jpg";
+    return "/images/empty.png";
   }
 }
 
