@@ -139,32 +139,44 @@ export default class cardActivate extends wepy.page {
   };
 
   async onLoad(e) {
-    console.log('e=====', e);
-    // if(e.space_id){
-    //   this.space_id = e.space_id
-    // }
-    // else{
-    //   this.space_id = this.$parent.globalData.space_id
-    // }
     this.space_id = e.space_id || this.$parent.globalData.space_id;
-    this.store_id = e.store_id || this.$parent.globalData.space_id;
-    if (e.category_id) {
-      this.category_id = e.category_id;
-      this.cardName = e.category_name;
-    } else {
+    this.store_id =  e.store_id || this.$parent.globalData.space_id
+    if (e.category_id){
+      this.category_id = e.category_id
+      this.cardName = e.category_name
+      this.price = parseInt(e.price)  
     }
-    if (e.card_id) {
-      console.log('e.card_id===', e.card_id);
-      this.card_id = e.card_id;
+    else{
       const data = {
-        card_name: e.category_id
+        $select: 'name,price'
       };
-      await this.$parent.update('vip_card', e.card_id, data);
-    } else {
-      await this.addVipCard();
+      var category = await this.$parent.query('vip_category', data);
+      console.log("category=====",category)
+      if(!category.value[0]){
+        await this.addVipCard()
+      }
+      this.category_id = category.value[0]._id
+      this.cardName = category.value[0].name
+      this.price = parseInt(e.price)
     }
-    if (parseInt(e.price)) {
-      this.price = parseInt(e.price);
+    if (e.card_id){
+      this.card_id = e.card_id
+      const data = {
+        card_name:e.category_id
+      }
+      await this.$parent.update("vip_card",e.card_id,data)
+    }
+    else{
+      const data = {
+        $filter: `user eq '${this.$parent.globalData.user._id}'`,
+        $expand: 'owner($select=name)',
+        $count: true,
+        $select: 'is_actived,name'
+      };
+      const card = await this.$parent.query('vip_card', data);
+      if(!card.value[0]){
+        await this.addVipCard()
+      }
     }
     const user = this.$parent.globalData.user;
     this.sexValue = user.sex;

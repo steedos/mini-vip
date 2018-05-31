@@ -185,7 +185,7 @@ export default class CardSelect extends wepy.page {
 
   isactivated(user) {
     const data = {
-      $filter: `user eq '${user}'`,
+      $filter: `owner eq '${user}'`,
       $expand: 'owner($select=name)',
       $count: true,
       $select: 'is_actived,name'
