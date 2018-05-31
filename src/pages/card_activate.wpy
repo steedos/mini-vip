@@ -140,33 +140,31 @@ export default class cardActivate extends wepy.page {
 
   async onLoad(e) {
     this.space_id = e.space_id || this.$parent.globalData.space_id;
-    this.store_id =  e.store_id || this.$parent.globalData.space_id
-    if (e.category_id){
-      this.category_id = e.category_id
-      this.cardName = e.category_name
-      this.price = parseInt(e.price)  
-    }
-    else{
+    this.store_id = e.store_id || this.$parent.globalData.space_id;
+    if (e.category_id) {
+      this.category_id = e.category_id;
+      this.cardName = e.category_name;
+      this.price = parseInt(e.price);
+    } else {
       const data = {
         $select: 'name,price'
       };
       var category = await this.$parent.query('vip_category', data);
-      console.log("category=====",category)
-      if(!category.value[0]){
-        await this.addVipCard()
+      console.log('category=====', category);
+      if (!category.value[0]) {
+        await this.addVipCard();
       }
-      this.category_id = category.value[0]._id
-      this.cardName = category.value[0].name
-      this.price = parseInt(e.price)
+      this.category_id = category.value[0]._id;
+      this.cardName = category.value[0].name;
+      this.price = parseInt(e.price);
     }
-    if (e.card_id){
-      this.card_id = e.card_id
+    if (e.card_id) {
+      this.card_id = e.card_id;
       const data = {
-        card_name:e.category_id
-      }
-      await this.$parent.update("vip_card",e.card_id,data)
-    }
-    else{
+        card_name: e.category_id
+      };
+      await this.$parent.update('vip_card', e.card_id, data);
+    } else {
       const data = {
         $filter: `user eq '${this.$parent.globalData.user._id}'`,
         $expand: 'owner($select=name)',
@@ -174,8 +172,8 @@ export default class cardActivate extends wepy.page {
         $select: 'is_actived,name'
       };
       const card = await this.$parent.query('vip_card', data);
-      if(!card.value[0]){
-        await this.addVipCard()
+      if (!card.value[0]) {
+        await this.addVipCard();
       }
     }
     const user = this.$parent.globalData.user;
@@ -247,37 +245,35 @@ export default class cardActivate extends wepy.page {
 
       var that = this;
 
-      req.post('/api/steedos/weixin/card/recharge', params).then(res => {
-        wx.hideLoading();
-        console.log('res: ', res);
-        if (res.paySign) {
-          wx.requestPayment({
-            timeStamp: res.timeStamp,
-            nonceStr: res.nonceStr,
-            package: res.package,
-            signType: 'MD5',
-            paySign: res.paySign,
-            success: function(msg) {
-              console.log('success: ', msg);
+      var res = await req.post('/api/steedos/weixin/card/recharge', params);
+      wx.hideLoading();
+      console.log('res: ', res);
+      if (res.paySign) {
+        wx.requestPayment({
+          timeStamp: res.timeStamp,
+          nonceStr: res.nonceStr,
+          package: res.package,
+          signType: 'MD5',
+          paySign: res.paySign,
+          success: function(msg) {
+            console.log('success: ', msg);
 
-              wx.reLaunch({
-                url:
-                  './card?space=' + that.space_id + '&card_id=' + that.card_id
-              });
-            },
-            fail: function(msg) {
-              console.log('fail: ', msg);
-            },
-            complete: function(msg) {}
-          });
-        } else {
-          console.error(res);
-          wx.showModal({
-            content: '请求超时，请检查网络状况',
-            showCancel: false
-          });
-        }
-      });
+            wx.reLaunch({
+              url: './card?space=' + that.space_id + '&card_id=' + that.card_id
+            });
+          },
+          fail: function(msg) {
+            console.log('fail: ', msg);
+          },
+          complete: function(msg) {}
+        });
+      } else {
+        console.error(res);
+        wx.showModal({
+          content: '请求超时，请检查网络状况',
+          showCancel: false
+        });
+      }
     }
     console.log('order======', order);
   }
