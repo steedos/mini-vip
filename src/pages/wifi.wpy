@@ -87,28 +87,24 @@ export default class Wifi extends wepy.page {
     }
     const _self = this;
     wx.startWifi({
-      success: function(res) {
-      }
+      success: function(res) {}
     })
 
     // 获取门店wifi
-    var wifis = await this.getWifiInfo();
+    var wifis = await this.getWifiList();
     if(wifis.value && wifis.value.length>0){
-      console.log("wifis.value.length",wifis.value.length);
       _self.wifiList = wifis.value;
-      // _self.selected = wifis.value[0];
-      _self.$apply(); 
     }else{
       _self.listTitle = "该门店未配置 WiFi";
-      _self.$apply(); 
     }
     console.log("_self.wifiList",_self.wifiList);
-    console.log("检测获取已连接中的 Wi-Fi 信息");
+
     // 检测获取已连接中的 Wi-Fi 信息
+    console.log("检测获取已连接中的 Wi-Fi 信息");
     wx.getConnectedWifi({
       success: function(res) {
+        console.log("=====res=======",res)
         var radioItems = _self.wifiList;
-        console.log("radioItems1",radioItems);
         var index = -1;
         if(res.wifi){
           _self.icon = "wifi";
@@ -118,29 +114,18 @@ export default class Wifi extends wepy.page {
             return v.SSID == res.wifi.SSID
           })
 
-          console.log("wifilist-index",index);
           if(index > -1){
             radioItems[index].checked = true;
             _self.selected = radioItems[index];
           }
-          _self.$apply();
         }
       }
     })
-    
+    _self.$apply();
     wx.hideNavigationBarLoading();
   };
 
   methods = {
-    bindWifiChange(e){
-      const index = e.detail.value;
-      const current = this.wifiList[index]
-      if(this.selected.SSID!==current.SSID){
-        this.selected = current;
-        this.icon = "power";
-        this.$apply();
-      }
-    },
     toConnectWifi() {
       const _self = this;
       wx.connectWifi({
@@ -148,15 +133,15 @@ export default class Wifi extends wepy.page {
         BSSID: _self.selected.BSSID,
         password: _self.selected.password,
         success: function(res){
+          console.log("==========res==========",res);
           _self.icon = "wifi";
           _self.status = '已连接 ' + _self.selected.SSID;
-          _self.current = _self.selected.SSID
-          // _self.selected = {};
+          _self.current = _self.selected.SSID;
           _self.$apply();
         },
         fail: function(res){
-          console.log('shibai');
-          var errMsg = "";
+          console.log('======失败res======', res);
+          var errMsg = "调用失败";
           switch(res.errCode) {
             case 12000:
               errMsg = "先调用startWifi接口";
@@ -204,7 +189,7 @@ export default class Wifi extends wepy.page {
       });
     }
   };
-  getWifiInfo(){
+  getWifiList(){
     // 未传入 store_id，则使用space_id查询store
     var store_id = "";
     if(this.store_id){
