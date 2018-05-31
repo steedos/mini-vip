@@ -75,8 +75,9 @@ export default class cardPay extends wepy.page {
     console.log(e);
     this.cardId = e.card_id;
     this.cardBalance = e.balance;
+    this.storeId = e.store_id || this.$parent.globalData.vip_card.store;
 
-    var storeId = e.store_id;
+    var storeId = this.storeId;
     var that = this;
     if (storeId) {
       this.$parent.get('vip_store', storeId).then(s => {
@@ -131,14 +132,14 @@ export default class cardPay extends wepy.page {
         title: '正在准备支付',
         mask: true
       });
-      var data = {
-        totalFee: parseInt(this.payValue * 100),
-        cardId: this.cardId
-      };
 
       var that = this;
 
       if (this.payWay == 'balance') {
+        var data = {
+          totalFee: parseInt(this.payValue * 100),
+          cardId: this.cardId
+        };
         req.post('/api/steedos/payway/balance', data).then(res => {
           wx.hideLoading();
           console.log('res: ', res);
@@ -161,48 +162,71 @@ export default class cardPay extends wepy.page {
           }
         });
       } else if (this.payWay == 'weixin') {
-        req.post('/api/steedos/payway/weixin', data).then(res => {
-          wx.hideLoading();
-          console.log('res: ', res);
+        var amount = parseFloat(parseFloat(this.payValue).toFixed(2));
+        var newOrder = {
+          name: '店内消费',
+          amount: amount,
+          status: 'draft',
+          store: this.storeId,
+          card: this.cardId,
+          type: 'pay',
+          owner: this.$parent.globalData.user._id
+        };
+        this.$parent.insert('vip_order', newOrder).then(o => {
+          console.log(o);
+          if (o.value) {
+            var data = {
+              // totalFee: parseInt(this.rechargeValue * 100)
+              amount: amount,
+              order_id: o.value[0]._id
+            };
 
-          if (res.paySign) {
-            wx.requestPayment({
-              timeStamp: res.timeStamp,
-              nonceStr: res.nonceStr,
-              package: res.package,
-              signType: 'MD5',
-              paySign: res.paySign,
-              success: function(msg) {
-                console.log('success: ', msg);
-                wx.navigateTo({
-                  url:
-                    'card_pay_success?payValue=' +
-                    that.payValue +
-                    '&store_name=' +
-                    that.store_name
+            req.post('/api/steedos/weixin/card/recharge', data).then(res => {
+              wx.hideLoading();
+              console.log('res: ', res);
+
+              if (res.paySign) {
+                wx.requestPayment({
+                  timeStamp: res.timeStamp,
+                  nonceStr: res.nonceStr,
+                  package: res.package,
+                  signType: 'MD5',
+                  paySign: res.paySign,
+                  success: function(msg) {
+                    console.log('success: ', msg);
+                    wx.navigateTo({
+                      url:
+                        'card_pay_success?payValue=' +
+                        amount +
+                        '&store_name=' +
+                        that.store_name
+                    });
+                  },
+                  fail: function(msg) {
+                    console.log('fail: ', msg);
+
+                    if (msg.errMsg != 'requestPayment:fail cancel') {
+                      wx.navigateTo({
+                        url:
+                          'card_pay_fail?msg=' +
+                          msg.errMsg.replace('requestPayment:fail ', '') +
+                          '&store_name=' +
+                          that.store_name
+                      });
+                    }
+                  },
+                  complete: function(msg) {}
                 });
-              },
-              fail: function(msg) {
-                console.log('fail: ', msg);
-
-                if (msg.errMsg != 'requestPayment:fail cancel') {
-                  wx.navigateTo({
-                    url:
-                      'card_pay_fail?msg=' +
-                      msg.errMsg.replace('requestPayment:fail ', '') +
-                      '&store_name=' +
-                      that.store_name
-                  });
-                }
-              },
-              complete: function(msg) {}
+              } else {
+                console.error(res);
+                wx.showModal({
+                  content: '请求超时，请检查网络状况',
+                  showCancel: false
+                });
+              }
             });
-          } else {
-            console.error(res);
-            wx.showModal({
-              content: '请求超时，请检查网络状况',
-              showCancel: false
-            });
+          } else if (o.error) {
+            console.error(o.error);
           }
         });
       }
