@@ -12,6 +12,12 @@
       border-top-left-radius:6px;
       border-top-right-radius:6px;
     }
+    #myVideo{
+      width: 100%;
+      height: 460rpx;
+      border-top-left-radius:6px;
+      border-top-right-radius:6px;
+    }
   }
   .post-body{
     padding:30rpx;
