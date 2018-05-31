@@ -39,9 +39,11 @@ export default class Posts extends wepy.page {
   };
 
   async onLoad(e) {
+    await this.$parent.login(e.space_id)
     this.type = e.type;
     this.loadPostList();
     this.space_id = e.space_id || this.$parent.globalData.space_id
+    this.$apply()
   }
 
   refresh() {
