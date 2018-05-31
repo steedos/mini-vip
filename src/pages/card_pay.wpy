@@ -105,6 +105,7 @@ export default class CardPay extends wepy.page {
   onShow() {
     this.payValue = '';
     this.payWay = 'balance';
+    this.canDoPay = false;
     this.$apply();
   }
 

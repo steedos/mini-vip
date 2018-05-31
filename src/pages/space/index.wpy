@@ -149,10 +149,12 @@ export default class Posts extends wepy.page {
       options.$filter = `type eq '${type}'`;
     }
     const result = await this.$parent.query("post", options);
-    this.posts = this.posts.concat(result.value);
-    console.log("loadPostList", this.posts);
-    this.current_skip = skip + result.value.length;
-    this.$apply();
+    if(result.value){
+      this.posts = this.posts.concat(result.value);
+      console.log("loadPostList", this.posts);
+      this.current_skip = skip + result.value.length;
+      this.$apply();
+    }
     wx.stopPullDownRefresh();
   };
 }
