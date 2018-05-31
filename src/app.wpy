@@ -83,7 +83,7 @@ export default class VIP extends wepy.app {
       'pages/stores',
       'pages/wifi',
       'pages/edit/text',
-      'pages/post/news',
+      'pages/post/index',
       'pages/edit/select',
       'pages/edit/date',
       'pages/card/select',
