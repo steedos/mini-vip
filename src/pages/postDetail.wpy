@@ -3,6 +3,9 @@
   width: 100%;
   border-radius:6px;
 }
+#myVideo{
+  width:100%;
+}
 </style>
 <template>
 <view class="page">
@@ -13,11 +16,13 @@
                 <view class="weui-article__section">
                     <view class="weui-article__h3">{{post.summary}}</view>
                     <view class="weui-article__p">{{post.description}}</view>
-                    <view class="weui-article__p">
+                    <view class="weui-article__c">
                       <repeat for="{{post.images}}" key="index" index="index" item="image">
                         <image class="weui-article__img" src="{{util.formatImageUrl(image, baseUrl)}}" mode="widthFix"  @tap="previewImage({{image}})" />
                       </repeat>
-                        
+                      <block wx:if="{{post.video}}">
+                        <video id="myVideo" src="{{util.formatVideoUrl(post.video, baseUrl)}}" controls objectFit="fill"></video>
+                      </block>   
                     </view>
                 </view>
             </view>
