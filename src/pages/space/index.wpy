@@ -35,14 +35,14 @@ page {
         <image class="cover" mode="aspectFill" src="{{util.formatImageUrl(store_info.cover, baseUrl)}}"/>
       </block>
       <block wx:else>
-        <image class="cover" mode="aspectFill" src="{{emptyImageUrl}}"/>
+        <image class="cover" mode="aspectFill" src="{{emptyImageUrlForCover}}"/>
       </block>
       <view class="cover-bar">
         <block wx:if="{{store_info.avatar}}">
           <image class="avatar" mode="aspectFill" src="{{util.formatImageUrl(store_info.avatar, baseUrl)}}"/>
         </block>
         <block wx:else>
-          <image class="avatar" mode="aspectFill" src="{{emptyImageUrl}}"/>
+          <image class="avatar" mode="aspectFill" src="{{emptyImageUrlForAvatar}}"/>
         </block>
         <view class="name">{{store_info.name}}</view>
       </view>
@@ -114,7 +114,8 @@ export default class Posts extends wepy.page {
 
   data = {
     baseUrl: baseUrl,
-    emptyImageUrl: "/images/empty.png",
+    emptyImageUrlForCover: "/images/empty.png",
+    emptyImageUrlForAvatar: "/images/avatar.png",
     type: "",
     posts: [],
     current_skip: 0,
