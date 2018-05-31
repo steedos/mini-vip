@@ -70,7 +70,7 @@ export default class VIP extends wepy.app {
       'pages/me',
       'pages/me_profile',
       'pages/postList',
-      'pages/postDetail',
+      'pages/post/view',
       'pages/coupons',
       'pages/store',
       'pages/card',

@@ -38,18 +38,18 @@
 import wepy from 'wepy';
 import req from '@/network';
 import { baseUrl } from '@/config';
-import util from '../wxs/util.wxs';
+import util from '../../wxs/util.wxs';
 
-export default class PostDetail extends wepy.page {
+export default class View extends wepy.page {
     config = {
     navigationBarTitleText: '详情'
   };
 
   async onLoad(e) {
-    this.loadPostDetail(e.id);
+    this.loadView(e.id);
   }
 
-  async loadPostDetail(id){
+  async loadView(id){
         var post = await this.$parent.get("post", id)
         this.post = post;
         this.$apply();

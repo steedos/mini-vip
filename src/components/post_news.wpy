@@ -121,7 +121,7 @@ export default class post extends wepy.component {
   methods = {
     goDetail(id, event){
       wx.navigateTo({
-        url: `../postDetail?id=${id}`
+        url: `../post/view?id=${id}`
       });
     },
     previewImage(images, event){
