@@ -174,8 +174,7 @@ export default class cardActivate extends wepy.page {
       const card = await this.$parent.query('vip_card', data);
       if (!card.value[0]) {
         await this.addVipCard();
-      }
-      else{
+      } else {
         this.card_id = card.value[0]._id;
       }
     }
@@ -261,8 +260,8 @@ export default class cardActivate extends wepy.page {
           success: function(msg) {
             console.log('success: ', msg);
 
-            wx.reLaunch({
-              url: './card?space=' + that.space_id + '&card_id=' + that.card_id
+            wx.redirectTo({
+              url: 'index'
             });
           },
           fail: function(msg) {
