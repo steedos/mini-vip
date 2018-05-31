@@ -145,7 +145,7 @@ export default class CardSelect extends wepy.page {
       await this.$parent.login(e.space_id);
 
       // 登录后获取卡项
-      const categorys = await this.getCategory();
+      const categorys = await this.getCategory(e.space_id);
       this.categorys = categorys.value;
       console.log('-----------this.categorys------', this.categorys);
 
@@ -174,8 +174,7 @@ export default class CardSelect extends wepy.page {
     return this.$parent.get('spaces', space_id);
   }
 
-  getCategory() {
-    const space_id = this.space_id;
+  getCategory(space_id) {
     console.log("=====获取 space_id 工作区卡项======",space_id)
     const data = {
       $filter: `space eq '${space_id}'`,
