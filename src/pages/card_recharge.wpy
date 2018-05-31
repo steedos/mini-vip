@@ -42,7 +42,7 @@
 import wepy from 'wepy';
 import req from '@/network';
 
-export default class cardRecharge extends wepy.page {
+export default class CardRecharge extends wepy.page {
   config = {
     navigationBarTitleText: '我的账户'
   };
