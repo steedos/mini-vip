@@ -82,8 +82,8 @@ export default class CardPay extends wepy.page {
     if (storeId) {
       this.$parent.get('vip_store', storeId).then(s => {
         that.store_name = s.name;
-        if (s.images) {
-          that.store_avatar = `${baseUrl}/api/files/images/${s.images[0]}`;
+        if (s.avatar) {
+          that.store_avatar = `${baseUrl}/api/files/images/${s.avatar}`;
         }
         that.$apply();
       });
@@ -92,8 +92,8 @@ export default class CardPay extends wepy.page {
         if (c.store) {
           that.$parent.get('vip_store', c.store).then(s => {
             that.store_name = s.name;
-            if (s.images) {
-              that.store_avatar = `${baseUrl}/api/files/images/${s.images[0]}`;
+            if (s.avatar) {
+              that.store_avatar = `${baseUrl}/api/files/images/${s.avatar}`;
             }
             that.$apply();
           });
