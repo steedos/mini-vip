@@ -12,7 +12,7 @@
       border-top-left-radius:6px;
       border-top-right-radius:6px;
     }
-    #myVideo{
+    video{
       width: 100%;
       height: 460rpx;
       border-top-left-radius:6px;
@@ -55,7 +55,7 @@
     <view class="post">
       <view class="post-cover">
         <block wx:if="{{post.mini_type == 'video'}}">
-          <video id="myVideo" src="{{util.formatVideoUrl(post.video, baseUrl)}}" controls objectFit="fill"></video>
+          <video src="{{util.formatVideoUrl(post.video, baseUrl)}}" controls objectFit="fill"></video>
         </block>
         <block wx:else>
           <block wx:if="{{post.images}}">
