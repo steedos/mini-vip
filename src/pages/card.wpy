@@ -103,7 +103,7 @@
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
           </navigator>
           -->
-          <navigator url="./post/index?type=course" class="weui-cell weui-cell_access">
+          <navigator url="./post/index?type=course&title=课程安排" class="weui-cell weui-cell_access">
             <view class="weui-cell__hd">
               <view class="slds-icon-standard-event slds-icon slds-icon--small slds-m-right--x-small"/>
             </view>
@@ -124,7 +124,7 @@
             </view>
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
           </navigator>
-          <navigator url="./post/index?type=help" class="weui-cell weui-cell_access">
+          <navigator url="./post/index?type=help&title=会员指南" class="weui-cell weui-cell_access">
             <view class="weui-cell__hd">
               <view class="slds-icon-standard-performance slds-icon slds-icon--small slds-m-right--x-small"/>
             </view>
@@ -134,7 +134,7 @@
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
           </navigator>
           <!--
-          <navigator url="./post/index?type=community" class="weui-cell weui-cell_access">
+          <navigator url="./post/index?type=community&title=投诉建议" class="weui-cell weui-cell_access">
             <view class="weui-cell__hd">
               <view class="slds-icon-standard-post slds-icon slds-icon--small slds-m-right--x-small"/>
             </view>
@@ -144,7 +144,7 @@
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
           </navigator>
           -->
-          <navigator url="./post/index?type=jobs" class="weui-cell weui-cell_access">
+          <navigator url="./post/index?type=jobs&title=招兵买马" class="weui-cell weui-cell_access">
             <view class="weui-cell__hd">
               <view class="slds-icon-standard-groups slds-icon slds-icon--small slds-m-right--x-small"/>
             </view>

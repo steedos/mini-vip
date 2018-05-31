@@ -26,6 +26,11 @@ export default class Posts extends wepy.page {
   };
 
   async onLoad(e) {
+    if(e.title){
+      wx.setNavigationBarTitle({
+        title: e.title
+      });
+    }
     this.type = e.type;
     this.loadPostList();
   }
