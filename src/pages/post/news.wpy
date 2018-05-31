@@ -32,7 +32,7 @@ export default class Posts extends wepy.page {
 
   refresh() {
     this.posts = [];
-    this.currentPageIndex = 0;
+    this.current_skip = 0;
     this.loadPostList();
   }
   
@@ -55,11 +55,11 @@ export default class Posts extends wepy.page {
   data = {
     type: "",
     posts: [],
-    currentPageIndex: 0
+    current_skip: 0
   };
   
 	async loadPostList(){
-    const skip = DATA_LENGTH * this.currentPageIndex;
+    const skip = this.current_skip;
     const options = {
       $expand: 'owner($select=name)',
       $count: true,
@@ -73,10 +73,12 @@ export default class Posts extends wepy.page {
       options.$filter = `type eq '${type}'`;
     }
     const result = await this.$parent.query("post", options);
-    this.posts = this.posts.concat(result.value);
-    console.log("loadPostList", this.posts);
-    this.currentPageIndex++;
-    this.$apply();
+    if(result.value){
+      this.posts = this.posts.concat(result.value);
+      console.log("loadPostList", this.posts);
+      this.current_skip = skip + result.value.length;
+      this.$apply();
+    }
     wx.stopPullDownRefresh();
   };
 }
