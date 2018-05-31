@@ -49,7 +49,7 @@
       const options = {
         $count: true,
         $select: 'name',
-        //$filter: `is_paid eq true` TODO：上线前开放此代码
+        $filter: `is_paid eq true` // TODO：上线前开放此代码
       };
 
       const result = await this.$parent.query('spaces', options, 'common')
