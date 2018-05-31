@@ -18,11 +18,14 @@ function formatDate(value, isWeekNeeded) {
 
 // 图片地址转换
 function formatImageUrl(src, baseUrl) {
-  if(src){
+  if(src == "load_faild"){
+    return "/images/faild.png";
+  }
+  else if(src){
     return baseUrl + "/api/files/images/" + src;
   }
   else{
-    return "/images/faild.png";
+    return "/images/empty.jpg";
   }
 }
 
@@ -32,7 +35,7 @@ function formatVideoUrl(src, baseUrl) {
     return baseUrl + "/api/files/videos/" + src;
   }
   else{
-    return "/images/faild.png";
+    return "/images/empty.jpg";
   }
 }
 

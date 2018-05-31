@@ -31,9 +31,19 @@ page {
 <template>
   <view class="page">
     <view class="page__hd">
-      <image class="cover" mode="aspectFill" src="{{util.formatImageUrl(store_info.cover, baseUrl)}}"/>
+      <block wx:if="{{store_info.cover}}">
+        <image class="cover" mode="aspectFill" src="{{util.formatImageUrl(store_info.cover, baseUrl)}}"/>
+      </block>
+      <block wx:else>
+        <image class="cover" mode="aspectFill" src="{{emptyImageUrl}}"/>
+      </block>
       <view class="cover-bar">
-        <image class="avatar" mode="aspectFill" src="{{util.formatImageUrl(store_info.avatar, baseUrl)}}"/>
+        <block wx:if="{{store_info.avatar}}">
+          <image class="avatar" mode="aspectFill" src="{{util.formatImageUrl(store_info.avatar, baseUrl)}}"/>
+        </block>
+        <block wx:else>
+          <image class="avatar" mode="aspectFill" src="{{emptyImageUrl}}"/>
+        </block>
         <view class="name">{{store_info.name}}</view>
       </view>
       <view class="weui-cells">
@@ -104,6 +114,7 @@ export default class Posts extends wepy.page {
 
   data = {
     baseUrl: baseUrl,
+    emptyImageUrl: "/images/empty.jpg",
     type: "",
     posts: [],
     current_skip: 0,
@@ -123,7 +134,6 @@ export default class Posts extends wepy.page {
   };
 
 	async loadPostList(){
-    // const skip = DATA_LENGTH * this.current_skip;
     const skip = this.current_skip;
     const options = {
       $expand: 'owner($select=name)',
