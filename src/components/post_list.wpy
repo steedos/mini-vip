@@ -55,7 +55,7 @@
     <view class="post">
       <view class="post-cover">
         <block wx:if="{{post.mini_type == 'video'}}">
-          <video src="{{util.formatVideoUrl(post.video, baseUrl)}}" controls objectFit="fill"></video>
+          <video src="{{util.formatVideoUrl(post.video, baseUrl)}}" controls objectFit="contain"></video>
         </block>
         <block wx:else>
           <block wx:if="{{post.images}}">

@@ -24,8 +24,8 @@
                       <repeat for="{{post.images}}" key="index" index="index" item="image">
                         <image class="weui-article__img" src="{{util.formatImageUrl(image, baseUrl)}}" mode="widthFix"  @tap="previewImage({{image}})" />
                       </repeat>
-                      <block wx:if="{{post.video}}">
-                        <video id="myVideo" src="{{util.formatVideoUrl(post.video, baseUrl)}}" controls objectFit="fill"></video>
+                      <block wx:if="{{post.mini_type == 'video'}}">
+                        <video id="myVideo" src="{{util.formatVideoUrl(post.video, baseUrl)}}" controls objectFit="contain"></video>
                       </block>   
                     </view>
                 </view>
