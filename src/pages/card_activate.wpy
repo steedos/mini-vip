@@ -177,6 +177,9 @@ export default class cardActivate extends wepy.page {
       if(!card.value[0]){
         await this.addVipCard()
       }
+      else{
+        this.card_id = card.value[0]._id;
+      }
     }
     const user = this.$parent.globalData.user;
     this.sexValue = user.sex;
