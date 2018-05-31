@@ -36,9 +36,9 @@
   import wepy from 'wepy';
   import req from '@/network';
 
-  export default class SpaceList extends wepy.page {
+  export default class PaidSpaceList extends wepy.page {
     config = {
-      navigationBarTitleText: '商户管理'
+      navigationBarTitleText: '逛一逛'
     };
 
     data = {
@@ -49,7 +49,7 @@
       const options = {
         $count: true,
         $select: 'name',
-        $filter: `(admins eq '${this.$parent.globalData.user._id}')`
+        //$filter: `is_paid eq true` TODO：上线前开放此代码
       };
 
       const result = await this.$parent.query('spaces', options, 'common')

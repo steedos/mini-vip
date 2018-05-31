@@ -117,7 +117,7 @@
       </view>
 
       <view class="weui-cells">
-        <navigator url="./space/list?is_paid=true" class="weui-cell weui-cell_access">
+        <navigator url="./space/paid_list" class="weui-cell weui-cell_access">
           <view class="weui-cell__hd">
             <view class="slds-icon-standard-topic slds-icon slds-icon--small slds-m-right--x-small"/>
           </view>
@@ -129,7 +129,7 @@
       </view>
 
       <view class="weui-cells">
-        <navigator url="./space/list?owner" class="weui-cell weui-cell_access">
+        <navigator url="./space/list" class="weui-cell weui-cell_access">
           <view class="weui-cell__hd">
             <view class="slds-icon-standard-account slds-icon slds-icon--small slds-m-right--x-small"/>
           </view>
