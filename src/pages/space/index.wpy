@@ -2,14 +2,40 @@
 <style lang="less">
 page {
   height: 100%;
+  .page{
+    .page__hd{
+      padding: 0px;
+      .cover{
+        width: 100%;
+        height: 500rpx;
+      }
+      .cover-bar{
+        display:flex;
+        height:160rpx;
+        align-items:center;
+        margin-top:-130rpx;
+        .avatar{
+          height:160rpx;
+          width:160rpx;
+          margin-left:20rpx;
+          margin-right:30rpx;
+        }
+      }
+    }
+  }
 }
 </style>
 <template>
-  <view class="page">
-
-    <view class="page__bd">
+  <scroll-view class="scroll-view_H" scroll-y="true">
+    <view class="page">
+      <view class="page__hd">
+        <image class="cover" src="{{util.formatImageUrl(store_info.cover, baseUrl)}}"/>
+        <view class="cover-bar">
+          <image class="avatar" src="{{util.formatImageUrl(store_info.avatar, baseUrl)}}"/>
+          <view class="name">{{store_info.name}}</view>
+        </view>
         <view class="weui-cells">
-          <navigator url="/pages/card/select?space_id={{space_id}}" class="weui-cell weui-cell_access">
+          <navigator url="/pages/home" class="weui-cell weui-cell_access">
             <view class="weui-cell__hd">
               <view class="slds-icon-standard-opportunity slds-icon slds-icon--small slds-m-right--x-small"/>
             </view>
@@ -19,17 +45,21 @@ page {
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
           </navigator>
         </view>
-    
-      <scroll-view class="scroll-view_H" scroll-y="true">
-        <postList :list.sync="posts" />
-      </scroll-view>
+      </view>
+      <view class="page__bd">
+        <scroll-view class="scroll-view_H" scroll-y="true">
+          <postList :list.sync="posts" />
+        </scroll-view>
+      </view>
     </view>
-  </view>
+  </scroll-view>
 </template>
 <script>
 import wepy from 'wepy';
+import { baseUrl } from '@/config';
 import postList from '../../components/post_list';
 import req from '@/network';
+import util from '../../wxs/util.wxs'
 
 const DATA_LENGTH = 10;
 export default class Posts extends wepy.page {
@@ -40,13 +70,15 @@ export default class Posts extends wepy.page {
 
   async onLoad(e) {
     this.type = e.type;
+    this.space_id = e.space_id || this.$parent.globalData.space_id;
+    this.loadSpaceInfo();
     this.loadPostList();
-    this.space_id = e.space_id || this.$parent.globalData.space_id
+    console.log("onLoad=======323332==e===", e);
   }
 
   refresh() {
     this.posts = [];
-    this.currentPageIndex = 0;
+    this.current_page_index = 0;
     this.loadPostList();
   }
   
@@ -67,14 +99,29 @@ export default class Posts extends wepy.page {
   }
 
   data = {
+    baseUrl: baseUrl,
     type: "",
     posts: [],
-    currentPageIndex: 0,
-    space_id: ''
+    current_page_index: 0,
+    space_id: '',
+    store_info: {}
+  };
+
+  wxs = {
+    util: util
+  };
+  
+	async loadSpaceInfo(){
+    const spaceId = this.space_id;
+    const result = await this.$parent.get("vip_store", spaceId, spaceId);
+    console.log("spaceId=======3232=====", spaceId);
+    console.log("store_info============", result);
+    this.store_info = result;
+    this.$apply();
   };
   
 	async loadPostList(){
-    const skip = DATA_LENGTH * this.currentPageIndex;
+    const skip = DATA_LENGTH * this.current_page_index;
     const options = {
       $expand: 'owner($select=name)',
       $count: true,
@@ -90,7 +137,7 @@ export default class Posts extends wepy.page {
     const result = await this.$parent.query("post", options);
     this.posts = this.posts.concat(result.value);
     console.log("loadPostList", this.posts);
-    this.currentPageIndex++;
+    this.current_page_index++;
     this.$apply();
     wx.stopPullDownRefresh();
   };
