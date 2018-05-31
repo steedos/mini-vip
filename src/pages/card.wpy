@@ -282,7 +282,7 @@ export default class Card extends wepy.page {
             return null;
           }
         });
-        if(showPostType.length > 0){
+        if(showPostType && showPostType.length>0){
           showPostTypes.push(showPostType[0]);    
         }
       })
