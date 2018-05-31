@@ -14,8 +14,12 @@
             <view class="weui-article__h1">{{post.name}}</view>
             <view class="weui-article__section">
                 <view class="weui-article__section">
-                    <view class="weui-article__h3">{{post.summary}}</view>
-                    <view class="weui-article__p">{{post.description}}</view>
+                    <view class="weui-article__h3">
+                      <text space="emsp">{{post.summary}}</text> 
+                    </view>
+                    <view class="weui-article__p">
+                      <text space="emsp">{{post.description}}</text>
+                    </view>
                     <view class="weui-article__c">
                       <repeat for="{{post.images}}" key="index" index="index" item="image">
                         <image class="weui-article__img" src="{{util.formatImageUrl(image, baseUrl)}}" mode="widthFix"  @tap="previewImage({{image}})" />

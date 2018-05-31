@@ -265,53 +265,30 @@ export default class Card extends wepy.page {
     };
     const result = await this.$parent.query('vip_store', data);
     var showPostTypes = [];
-    if(result.value[0] && result.value[0].post_types && result.value[0].post_types.length>0){
-      const dbPostTypes = result.value[0].post_types;
-      console.log("===dbPostTypes===",dbPostTypes)
-      dbPostTypes.forEach(function(post){
-        var showPostType = {};
-        console.log("===dbPostTypes===post===",post);
-        showPostType.value = post;
-        switch(post){
-          case "announcements":
-            showPostType.label = "公告通知";
-            showPostType.icon = "announcement";
-            break;
-          case "about":
-            showPostType.label = "关于我们";
-            showPostType.icon = "contact";
-            break;
-          case "news":
-            showPostType.label = "新闻动态";
-            showPostType.icon = "contract";
-            break;
-          case "course":
-            showPostType.label = "线上课程";
-            showPostType.icon = "event";
-            break;
-          case "help":
-            showPostType.label = "会员指南";
-            showPostType.icon = "performance";
-            break;
-          case "jobs":
-            showPostType.label = "招兵买马";
-            showPostType.icon = "groups";
-            break;
-        }
-        console.log("=====showPostType======",showPostType);
-        showPostTypes.push(showPostType);        
-      })
-      console.log("======showPostTypes=======",showPostTypes);
-      this.showPostTypes = showPostTypes;
-    }else{
-      showPostTypes = [
+    const allPostTypes = [
         {value: "announcements", label: "公告通知", icon: "announcement"},
         {value: "about", label: "关于我们", icon: "contact"},
         {value: "news", label: "新闻动态", icon: "contract"},
         {value: "course", label: "线上课程", icon: "event"},
         {value: "help", label: "会员指南", icon: "performance"},
-        {value: "jobs", label: "招兵买马", icon: "groups"}];  
+        {value: "jobs", label: "招兵买马", icon: "groups"}];
+    if(result.value[0] && result.value[0].post_types && result.value[0].post_types.length>0){
+      const dbPostTypes = result.value[0].post_types;
+      dbPostTypes.forEach(function(post){
+        const showPostType = allPostTypes.filter(function(m){
+          if(m.value==post){
+            return m;
+          }else{
+            return null;
+          }
+        });
+        if(showPostType.length > 0){
+          showPostTypes.push(showPostType[0]);    
+        }
+      })
       this.showPostTypes = showPostTypes;
+    }else{
+      this.showPostTypes = allPostTypes;
     }
     this.$apply();
     return;
