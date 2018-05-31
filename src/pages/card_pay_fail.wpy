@@ -20,7 +20,7 @@
 </template>
 <script>
 import wepy from 'wepy';
-export default class cardPayFail extends wepy.page {
+export default class CardPayFail extends wepy.page {
   config = {
     navigationBarTitleText: '支付失败'
   };

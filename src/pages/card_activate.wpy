@@ -1,51 +1,51 @@
 <style lang="less">
-  .card-activate {
-    .header {
-      width: 100%;
-      background: #fff;
-      display: flex;
-      flex-direction: column;
+.card-activate {
+  .header {
+    width: 100%;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
 
-      &:before {
-        display: none;
-      }
-    }
-
-    .checkbox-container {
-      position: relative;
-      margin-left: 18px;
-      margin-top: 15px;
-      display: flex;
-
-      .guide {
-        margin-left: 10px;
-        line-height: 30px;
-        color: #a8a8a8;
-      }
-    }
-
-    .btn-container {
-      width: 100%;
-      margin-bottom: 20px;
-    }
-
-    .submit-btn {
-      background: #1B9AF7;
-      color: #fff;
-      margin: 15px 15px 0;
-    }
-
-    .get-number {
-      border: none;
-      text-align: left;
-      height: 2.58823529em;
-      min-height: 2.58823529em;
-      line-height: 2.58823529em;
-      padding: 0;
-      font-size: 17px;
-      color: #808080;
+    &:before {
+      display: none;
     }
   }
+
+  .checkbox-container {
+    position: relative;
+    margin-left: 18px;
+    margin-top: 15px;
+    display: flex;
+
+    .guide {
+      margin-left: 10px;
+      line-height: 30px;
+      color: #a8a8a8;
+    }
+  }
+
+  .btn-container {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .submit-btn {
+    background: #1b9af7;
+    color: #fff;
+    margin: 15px 15px 0;
+  }
+
+  .get-number {
+    border: none;
+    text-align: left;
+    height: 2.58823529em;
+    min-height: 2.58823529em;
+    line-height: 2.58823529em;
+    padding: 0;
+    font-size: 17px;
+    color: #808080;
+  }
+}
 </style>
 <template>
   <view class="card-activate">
@@ -103,7 +103,7 @@
         </view>
       </view>
     </view>
-    
+
     <checkbox-group bindchange="checkboxChange">
         <label class="weui-agree" for="weuiAgree">
             <view class="weui-agree__text">
@@ -116,169 +116,220 @@
             </view>
         </label>
     </checkbox-group>
-    
+
     <view class="btn-container">
       <block wx:if="{{price>0}}">
         <button class="submit-btn" form-type="submit" @tap="nextStep" disabled="{{submitDisabled}}">下一步</button>
       </block>
       <block wx:else>
         <button class="submit-btn" form-type="submit" @tap="submitActivate" disabled="{{submitDisabled}}">提交</button>
-      </block>   
+      </block>
     </view>
   </view>
 </template>
 
 <script>
-  import wepy from 'wepy';
-  import vipCard from '../components/vipCard';
-  import req from '@/network';
-  import { serverAPI } from '@/server';
-  export default class cardActivate extends wepy.page {
-    config = {
-      navigationBarTitleText: '激活会员卡'
-    };
+import wepy from 'wepy';
+import vipCard from '../components/vipCard';
+import req from '@/network';
+import { serverAPI } from '@/server';
+export default class cardActivate extends wepy.page {
+  config = {
+    navigationBarTitleText: '激活会员卡'
+  };
 
-    async onLoad(e) {
-      console.log("e=====",e)
-      if(e.space_id){
-        this.space_id = e.space_id
-      }
-      if(e.store_id){
-        this.store_id = e.store_id
-      }
-      if(e.category_name){
-        this.cardName = e.category_name
-      }
-      if (e.category_id){
-        this.category_id = e.category_id
-      }
-      if (e.card_id){
-        console.log("e.card_id===",e.card_id)
-        this.card_id = e.card_id
-        const data = {
-          card_name:e.category_id
-        }
-        await this.$parent.update("vip_card",e.card_id,data)
-      }
-      else{
-        await this.addVipCard()
-      }
-      if(parseInt(e.price)){
-        this.price = parseInt(e.price)
-      }
-      const user = this.$parent.globalData.user
-      this.sexValue = user.sex
-      this.name = user.name
-      this.birthdate = user.birthdate
-      this.phoneNumber = user.mobile
-      console.log("e.category_name",e.category_name)
-      this.$apply()
+  async onLoad(e) {
+    console.log('e=====', e);
+    // if(e.space_id){
+    //   this.space_id = e.space_id
+    // }
+    // else{
+    //   this.space_id = this.$parent.globalData.space_id
+    // }
+    this.space_id = e.space_id || this.$parent.globalData.space_id;
+    this.store_id = e.store_id || this.$parent.globalData.space_id;
+    if (e.category_id) {
+      this.category_id = e.category_id;
+      this.cardName = e.category_name;
+    } else {
     }
-
-    components = {
-      vipcard: vipCard
-    }
-
-    data = {
-      category_id:'',
-      card_id:'',
-      cardName: '贝菲特',
-      // cardType: '会员卡',
-      array: ['女', '男'],
-      sexValue: '',
-      birthdate: '',
-      name: '',
-      phoneNumber: '',
-      isAgree: false,
-      submitDisabled: true,
-      space_id: '',
-      store_id: '',
-      price:0
-    };
-    addVipCard() {
-        this.submitDisabled = true
-        const url = `/api/mini/vip/card_init?space_id=${this.space_id}&store_id=${this.store_id}`
-        console.log("categoty_id===",this.category_id)
-        const data = {
-          name: this.category_id
-        }
-        req.post(url, data).then(res => {
-          this.card_id =res.card_id
-          // wx.navigateTo({url: "./index"})
-        })
-      }
-    async addVipOrder() {
+    if (e.card_id) {
+      console.log('e.card_id===', e.card_id);
+      this.card_id = e.card_id;
       const data = {
-          name:this.cardName,
-          amount:this.price,
-          status:'draft',
-          store:this.store_id,
-          card:this.card_id,
-          type:'recharge'
-        }
-        var order = await this.$parent.insert("vip_order",data)
-        if(order){
-          var order_id = order.value[0]._id
-          wx.navigateTo({url: `./card_pay?order_id=${order_id}&card_id=${this.card_id}`}) 
-        }       
-        console.log("order======",order)
+        card_name: e.category_id
+      };
+      await this.$parent.update('vip_card', e.card_id, data);
+    } else {
+      await this.addVipCard();
     }
-    methods = {
-      formSubmit(e) {
-        console.log(e);
-      },
-      checkboxChange(e) {
-        this.isAgree = !!e.detail.value.length
-        if (e.detail.value.length > 0) {
-          this.submitDisabled = false
-        } else {
-          this.submitDisabled = true
-        }
-      },
-      bindNameChange(e) {
-        this.name = e.detail.value;
-      },
-      bindSexChange(e) {
-        const index = e.detail.value;
-        this.sexValue = this.array[index];
-        this.$apply();
-      },
-      bindDateChange(e) {
-        console.log(e)
-        this.birthdate = e.detail.value;
-      },
-      getPhoneNumber(e) {
-        if (e.detail.iv || e.detail.encryptedData) {
-          req.post('/api/steedos/weixin/get_phone_number', {
-            iv: e.detail.iv,
-            encryptedData: e.detail.encryptedData
-          }).then(res => {
-            this.phoneNumber = res.purePhoneNumber
-            this.$apply();
+    if (parseInt(e.price)) {
+      this.price = parseInt(e.price);
+    }
+    const user = this.$parent.globalData.user;
+    this.sexValue = user.sex;
+    this.name = user.name;
+    this.birthdate = user.birthdate;
+    this.phoneNumber = user.mobile;
+    console.log('e.category_name', e.category_name);
+    this.$apply();
+  }
+
+  components = {
+    vipcard: vipCard
+  };
+
+  data = {
+    category_id: '',
+    card_id: '',
+    cardName: '贝菲特',
+    // cardType: '会员卡',
+    array: ['女', '男'],
+    sexValue: '',
+    birthdate: '',
+    name: '',
+    phoneNumber: '',
+    isAgree: false,
+    submitDisabled: true,
+    space_id: '',
+    store_id: '',
+    price: 0
+  };
+  addVipCard() {
+    this.submitDisabled = true;
+    const url = `/api/mini/vip/card_init?space_id=${this.space_id}&store_id=${
+      this.store_id
+    }`;
+    console.log('categoty_id===', this.category_id);
+    const data = {
+      name: this.category_id
+    };
+    req.post(url, data).then(res => {
+      this.card_id = res.card_id;
+      // wx.navigateTo({url: "./index"})
+    });
+  }
+  async addVipOrder() {
+    wx.showLoading({
+      title: '正在准备支付',
+      mask: true
+    });
+    const data = {
+      name: this.cardName,
+      owner: this.$parent.globalData.user._id,
+      // amount: this.price,
+      amount: 0.01,
+      status: 'draft',
+      store: this.store_id,
+      card: this.card_id,
+      type: 'recharge',
+      store: this.space_id
+    };
+    var order = await this.$parent.insert('vip_order', data);
+    if (order) {
+      var params = {
+        // amount: this.price,
+        amount: 0.01,
+        order_id: order.value[0]._id
+      };
+
+      var that = this;
+
+      req.post('/api/steedos/weixin/card/recharge', params).then(res => {
+        wx.hideLoading();
+        console.log('res: ', res);
+        if (res.paySign) {
+          wx.requestPayment({
+            timeStamp: res.timeStamp,
+            nonceStr: res.nonceStr,
+            package: res.package,
+            signType: 'MD5',
+            paySign: res.paySign,
+            success: function(msg) {
+              console.log('success: ', msg);
+
+              wx.reLaunch({
+                url:
+                  './card?space=' + that.space_id + '&card_id=' + that.card_id
+              });
+            },
+            fail: function(msg) {
+              console.log('fail: ', msg);
+            },
+            complete: function(msg) {}
           });
         } else {
-          console.error(e.detail.errMsg)
+          console.error(res);
+          wx.showModal({
+            content: '请求超时，请检查网络状况',
+            showCancel: false
+          });
         }
-      },
-      nextStep() { 
-        this.addVipOrder()
-      },
-      submitActivate() {
-        const url = `/api/mini/vip/card_activate?space_id=${this.space_id}&store_id=${this.store_id}&card_id=${this.card_id}`
-        const data = {
-          is_actived:true,
-          category_id:this.category_id,
-          price:this.price,
-          name:this.name,
-          sex: this.sexValue,
-          birthdate: this.birthdate,
-          phoneNumber: this.phoneNumber
-        }
-        req.put(url, data).then(res => {
-          wx.reLaunch({url: "./card?space_id="+this.space_id+"&card_id="+this.card_id})
-        })
-        
-      }
-    };
+      });
+    }
+    console.log('order======', order);
   }
+  methods = {
+    formSubmit(e) {
+      console.log(e);
+    },
+    checkboxChange(e) {
+      this.isAgree = !!e.detail.value.length;
+      if (e.detail.value.length > 0) {
+        this.submitDisabled = false;
+      } else {
+        this.submitDisabled = true;
+      }
+    },
+    bindNameChange(e) {
+      this.name = e.detail.value;
+    },
+    bindSexChange(e) {
+      const index = e.detail.value;
+      this.sexValue = this.array[index];
+      this.$apply();
+    },
+    bindDateChange(e) {
+      console.log(e);
+      this.birthdate = e.detail.value;
+    },
+    getPhoneNumber(e) {
+      if (e.detail.iv || e.detail.encryptedData) {
+        req
+          .post('/api/steedos/weixin/get_phone_number', {
+            iv: e.detail.iv,
+            encryptedData: e.detail.encryptedData
+          })
+          .then(res => {
+            this.phoneNumber = res.purePhoneNumber;
+            this.$apply();
+          });
+      } else {
+        console.error(e.detail.errMsg);
+      }
+    },
+    nextStep() {
+      this.addVipOrder();
+    },
+    submitActivate() {
+      const url = `/api/mini/vip/card_activate?space_id=${
+        this.space_id
+      }&store_id=${this.store_id}&card_id=${this.card_id}`;
+      const data = {
+        is_actived: true,
+        category_id: this.category_id,
+        price: this.price,
+        name: this.name,
+        sex: this.sexValue,
+        birthdate: this.birthdate,
+        phoneNumber: this.phoneNumber
+      };
+      req.put(url, data).then(res => {
+        wx.reLaunch({
+          url: './card?space=' + this.space_id + '&card_id=' + this.card_id
+        });
+      });
+    }
+  };
+}
 </script>

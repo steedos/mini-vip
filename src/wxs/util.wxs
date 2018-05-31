@@ -26,7 +26,18 @@ function formatImageUrl(src, baseUrl) {
   }
 }
 
+// 视频地址转换
+function formatVideoUrl(src, baseUrl) {
+  if(src){
+    return baseUrl + "/api/files/videos/" + src;
+  }
+  else{
+    return "/images/faild.png";
+  }
+}
+
 module.exports = {
   datefmt: formatDate,
-  formatImageUrl: formatImageUrl
+  formatImageUrl: formatImageUrl,
+  formatVideoUrl: formatVideoUrl
 }

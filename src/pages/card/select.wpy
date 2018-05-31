@@ -175,7 +175,10 @@ export default class CardSelect extends wepy.page {
   }
 
   getCategory() {
+    const space_id = this.space_id;
+    console.log("=====获取 space_id 工作区卡项======",space_id)
     const data = {
+      $filter: `space eq '${space_id}'`,
       $select: 'name,summary,avatar,cover,price'
     };
     return this.$parent.query('vip_category', data);

@@ -40,7 +40,7 @@ import wepy from 'wepy';
 import req from '@/network';
 const util = require('../utils/util.js');
 
-export default class cardBilling extends wepy.page {
+export default class CardBilling extends wepy.page {
   config = {
     navigationBarTitleText: '余额明细'
   };
