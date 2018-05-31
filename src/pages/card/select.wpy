@@ -1,4 +1,7 @@
 <style lang="less">
+page{
+  background-color: #333333;
+}
 .page {
   height:100%;
   background-color: #333333;
@@ -101,8 +104,7 @@ export default class CardSelect extends wepy.page {
   config = {
     navigationBarTitleText: '会员卡',
     navigationBarBackgroundColor: '#D64B4B',
-    navigationBarTextStyle: 'white',
-    backgroundColor: '#D64B4B'
+    navigationBarTextStyle: 'white'
   };
 
   components = {
