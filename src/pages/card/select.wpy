@@ -52,7 +52,7 @@ page{
       <repeat for="{{categorys}}" key="index" index="index" item="card">
         <view class="card-tap" @tap="toApplyCard({{card._id}},{{card.name}},{{card.price}})">
         <block wx:if="{{card.cover}}">
-          <view class="card" style="background: url({{util.formatImageUrl(card.cover, baseUrl)}});">
+          <view class="card" style="background-image: url({{util.formatImageUrl(card.cover, baseUrl)}});">
             <view class="card-header">
               <view class="user-avatar">
                 <image wx:if="{{card.avatar}}" class="image" mode="aspectFill" src="{{util.formatImageUrl(card.avatar, baseUrl)}}"/>
@@ -65,7 +65,7 @@ page{
           </view>
         </block>
         <block wx:else>
-          <view class="card" style="background: url(../../images/empty.png)}});">
+          <view class="card">
             <view class="card-header">
               <view class="user-avatar">
                   <image wx:if="{{card.avatar}}" class="image" mode="aspectFill" src="{{util.formatImageUrl(card.avatar, baseUrl)}}"/>
