@@ -8,18 +8,30 @@ page {
   <view class="page">
 
     <view class="page__bd">
-        <view class="weui-cells">
-          <navigator url="/pages/card/select?space_id={{space_id}}" class="weui-cell weui-cell_access">
-            <view class="weui-cell__hd">
-              <view class="slds-icon-standard-opportunity slds-icon slds-icon--small slds-m-right--x-small"/>
-            </view>
-            <view class="weui-cell__bd">
-              <view>加入会员</view>
-            </view>
-            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-          </navigator>
-        </view>
-    
+      <view class="weui-cells">
+        <navigator url="/pages/card/select?space_id={{space_id}}" class="weui-cell weui-cell_access">
+          <view class="weui-cell__hd">
+            <view class="slds-icon-standard-opportunity slds-icon slds-icon--small slds-m-right--x-small"/>
+          </view>
+          <view class="weui-cell__bd">
+            <view>加入会员</view>
+          </view>
+          <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+        </navigator>
+      </view>
+
+      <view class="weui-cells">
+        <navigator url="/pages/record_view" class="weui-cell weui-cell_access">
+          <view class="weui-cell__hd">
+            <view class="slds-icon-standard-opportunity slds-icon slds-icon--small slds-m-right--x-small"/>
+          </view>
+          <view class="weui-cell__bd">
+            <view>发布最新动态</view>
+          </view>
+          <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+        </navigator>
+      </view>
+
       <scroll-view class="scroll-view_H" scroll-y="true">
         <postList :list.sync="posts" />
       </scroll-view>
@@ -39,9 +51,14 @@ export default class Posts extends wepy.page {
   };
 
   async onLoad(e) {
+    if(e.space_id){
+      this.$parent.globalData.space_id = e.space_id
+    }
+
+    this.space_id = e.space_id || this.$parent.globalData.space_id
+
     this.type = e.type;
     this.loadPostList();
-    this.space_id = e.space_id || this.$parent.globalData.space_id
   }
 
   refresh() {
@@ -49,7 +66,7 @@ export default class Posts extends wepy.page {
     this.currentPageIndex = 0;
     this.loadPostList();
   }
-  
+
   components = {
     postList: postList
   };
@@ -72,7 +89,7 @@ export default class Posts extends wepy.page {
     currentPageIndex: 0,
     space_id: ''
   };
-  
+
 	async loadPostList(){
     const skip = DATA_LENGTH * this.currentPageIndex;
     const options = {
