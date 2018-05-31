@@ -59,6 +59,7 @@ export default class Posts extends wepy.page {
 
     this.type = e.type;
     this.loadPostList();
+    this.$apply()
   }
 
   refresh() {

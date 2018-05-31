@@ -59,7 +59,7 @@
       <image wx:else class="image" mode="aspectFit" src="../images/avatar.png"/>
     </view>
 	  <view class="card-name">
-      <text>{{formatCardName}}</text>
+      <text>{{cardName}}</text>
     </view>
     <view class="card-number">
       <text>{{formatNumber}}</text>
@@ -93,11 +93,6 @@ export default class vipCard extends wepy.component {
   }
 
   computed = {
-    formatCardName() {
-      if (this.cardName) {
-        return `${this.cardName}`
-      }
-    },
     formatNumber() {
       let num_arr = this.cardNumber.split("");
       num_arr.forEach((item, index) => {
