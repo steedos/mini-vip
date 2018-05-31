@@ -175,8 +175,8 @@ export default class VIP extends wepy.app {
     if (!globalData.userInfo) {
       const setting = await wepy.getSetting()
       if (setting.authSetting['scope.userInfo']) {
-        const userInfo = await wepy.getUserInfo()
-        self.globalData.userInfo = userInfo
+        const info = await wepy.getUserInfo()
+        self.globalData.userInfo = info.userInfo
       }
     }
 

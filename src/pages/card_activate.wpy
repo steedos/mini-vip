@@ -275,7 +275,7 @@
           phoneNumber: this.phoneNumber
         }
         req.put(url, data).then(res => {
-          wx.reLaunch({url: "./card?space="+this.space_id+"&card_id="+this.card_id})
+          wx.reLaunch({url: "./card?space_id="+this.space_id+"&card_id="+this.card_id})
         })
         
       }
