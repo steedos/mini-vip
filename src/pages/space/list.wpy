@@ -11,7 +11,7 @@
     <view class="page__bd">
       <view class="weui-cells">
         <repeat for="{{spaces}}" key="index" index="index" item="space">
-          <navigator url="/pages/card?space_id={{space._id}}" open-type="reLaunch" class="weui-cell weui-cell_access">
+          <navigator url="/pages/space/index?space_id={{space._id}}" open-type="reLaunch" class="weui-cell weui-cell_access">
             <view class="weui-cell__hd">
               <view class="slds-icon-standard-account slds-icon slds-icon--small slds-m-right--x-small"/>
             </view>
@@ -45,12 +45,17 @@
       spaces: []
     }
 
-    async onLoad() {
+    async onLoad(e) {
       const options = {
         $count: true,
         $select: 'name',
         $filter: `(admins eq '${this.$parent.globalData.user._id}')`
       };
+
+      if(e.hasOwnProperty('is_paid')){
+        options["$filter"] = `is_paid eq ${e.is_paid}`
+      }
+
       const result = await this.$parent.query('spaces', options, 'common')
       this.spaces = result.value
       this.$apply()
