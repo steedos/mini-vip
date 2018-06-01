@@ -28,11 +28,11 @@
         </repeat>
       </view>
 
-      <view class="button-sp-area">
+      <!-- <view class="button-sp-area">
         <navigator url="register">
         <button class="weui-btn" type="primary" plain="true">0元入驻</button>
         </navigator>
-      </view>
+      </view> -->
     </view>
   </view>
 </template>
