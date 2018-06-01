@@ -92,40 +92,27 @@
             </view>
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
           </navigator>
-          <!--
-          <navigator url="" class="weui-cell weui-cell_access">
+          <navigator url="stores" class="weui-cell weui-cell_access">
             <view class="weui-cell__hd">
-              <view class="slds-icon-standard-today slds-icon slds-icon--small slds-m-right--x-small"/>
+              <view class="slds-icon-standard-address slds-icon slds-icon--small slds-m-right--x-small"/>
             </view>
             <view class="weui-cell__bd">
-              <view>服务预约</view>
+              <view>门店查询</view>
             </view>
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
           </navigator>
-          -->
-          <navigator url="stores" class="weui-cell weui-cell_access">
-              <view class="weui-cell__hd">
-                <view class="slds-icon-standard-address slds-icon slds-icon--small slds-m-right--x-small"/>
-              </view>
-              <view class="weui-cell__bd">
-                <view>门店查询</view>
-              </view>
-              <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-            </navigator>
         </view>
 
         <view class="weui-cells">
-          <repeat for="{{showPostTypes}}" key="index" index="index" item="post">
-              <navigator url="./post/index?type={{post.value}}&title={{post.label}}" class="weui-cell weui-cell_access">
-                <view class="weui-cell__hd">
-                  <view class="slds-icon-standard-{{post.icon}} slds-icon slds-icon--small slds-m-right--x-small"/>
-                </view>
-                <view class="weui-cell__bd">
-                  <view>{{post.label}}</view>
-                </view>
-                <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-              </navigator>
-            </repeat>
+          <navigator url="./space/index?space_id={{space_id}}" class="weui-cell weui-cell_access">
+            <view class="weui-cell__hd">
+              <view class="slds-icon-standard-contact slds-icon slds-icon--small slds-m-right--x-small"/>
+            </view>
+            <view class="weui-cell__bd">
+              <view>关于我们</view>
+            </view>
+            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+          </navigator>
         </view>
     </view>
   </view>
@@ -155,8 +142,7 @@ export default class Card extends wepy.page {
     isAuthorize: true,
     space_id: '',
     space_name: '',
-    store_id: '',
-    showPostTypes: []
+    store_id: ''
   };
 
   async getCardInfo(card_id) {
@@ -224,9 +210,6 @@ export default class Card extends wepy.page {
       title: this.space_name
     })
 
-    // 设置post列表
-    this.setShowPostTypes();
-
     console.log('Card onLoad, e', e);
     if (e.card_id) {
       await this.getCardInfo(e.card_id);
@@ -254,47 +237,6 @@ export default class Card extends wepy.page {
     };
   }
 
-  async setShowPostTypes(){
-    var store_id = "";
-    if(this.store_id){
-      store_id = this.store_id;
-    }else{
-      store_id = this.space_id;
-    }
-    const data = {
-      $filter: `_id eq '${store_id}'`,
-      $select: 'post_types'
-    };
-    const result = await this.$parent.query('vip_store', data);
-    var showPostTypes = [];
-    const allPostTypes = [
-        {value: "announcements", label: "公告通知", icon: "announcement"},
-        {value: "about", label: "关于我们", icon: "contact"},
-        {value: "news", label: "新闻动态", icon: "contract"},
-        {value: "course", label: "线上课程", icon: "event"},
-        {value: "help", label: "会员指南", icon: "performance"},
-        {value: "jobs", label: "招兵买马", icon: "groups"}];
-    if(result.value[0] && result.value[0].post_types && result.value[0].post_types.length>0){
-      const dbPostTypes = result.value[0].post_types;
-      dbPostTypes.forEach(function(post){
-        const showPostType = allPostTypes.filter(function(m){
-          if(m.value==post){
-            return m;
-          }else{
-            return null;
-          }
-        });
-        if(showPostType && showPostType.length>0){
-          showPostTypes.push(showPostType[0]);    
-        }
-      })
-      this.showPostTypes = showPostTypes;
-    }else{
-      this.showPostTypes = allPostTypes;
-    }
-    this.$apply();
-    return;
-  }
   // 上拉刷新
   async onPullDownRefresh() {
     const card_id = this.cardId;

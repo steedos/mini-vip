@@ -61,10 +61,10 @@ page {
         <block wx:if="{{card._id}}">
           <navigator url="{{card.url}}" class="weui-cell weui-cell_access">
             <view class="weui-cell__hd">
-              <image class="image slds-icon slds-icon--small slds-m-right--x-small" mode="aspectFill" src="{{util.formatImageUrl(card.avatar, baseUrl)}}"/>
+              <view class="slds-icon-standard-opportunity slds-icon slds-icon--small slds-m-right--x-small"/>
             </view>
             <view class="weui-cell__bd">
-              <view>{{card.card_name.name}}</view>
+              <view>我的会员卡</view>
             </view>
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
           </navigator>
@@ -110,7 +110,7 @@ import util from '../../wxs/util.wxs'
 const DATA_LENGTH = 10;
 export default class Posts extends wepy.page {
   config = {
-    navigationBarTitleText: '最新动态',
+    navigationBarTitleText: '会员小秘书',
     enablePullDownRefresh: true
   };
 
