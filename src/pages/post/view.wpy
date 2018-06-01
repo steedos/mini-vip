@@ -42,7 +42,7 @@ import util from '../../wxs/util.wxs';
 
 export default class View extends wepy.page {
     config = {
-    navigationBarTitleText: '详情'
+    navigationBarTitleText: ''
   };
 
   async onLoad(e) {
