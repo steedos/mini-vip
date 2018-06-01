@@ -104,7 +104,8 @@ export default class CardSelect extends wepy.page {
   config = {
     navigationBarTitleText: '会员卡',
     navigationBarBackgroundColor: '#D64B4B',
-    navigationBarTextStyle: 'white'
+    navigationBarTextStyle: 'white',
+    enablePullDownRefresh: true
   };
 
   components = {
@@ -127,36 +128,31 @@ export default class CardSelect extends wepy.page {
   };
 
   async onLoad(e) {
-    // onload执行的时候调用login接口
-    if (e.space_id) {
-      // 获取space_id
-      console.log('===space_id===', e.space_id);
-      this.space_id = e.space_id;
-      this.$parent.globalData.space_id = e.space_id;
-      // 获取工作区，设置标题
-      console.log('====this.$parent.globalData===', this.$parent.globalData);
-      const cur_space = await this.getSpaceInfo(e.space_id);
-      this.space_name = cur_space.name;
-      wx.setNavigationBarTitle({
-        title: this.space_name
-      });
 
-      // 根据space_id登录
-      await this.$parent.login(e.space_id);
+    this.space_id = e.space_id || this.$parent.globalData.space_id
+    const cur_space = await this.getSpaceInfo(e.space_id)
+    this.space_name = cur_space.name
+    wx.setNavigationBarTitle({
+      title: this.space_name
+    })
 
-      // 登录后获取卡项
-      const categorys = await this.getCategory(e.space_id);
-      this.categorys = categorys.value;
-      console.log('-----------this.categorys------', this.categorys);
+    await this.initCategory()
+  }
 
-      this.$apply();
-    }
-    var card = await this.isactivated(this.$parent.globalData.user._id);
+  async initCategory() {
+    const categorys = await this.getCategory(this.space_id)
+    this.categorys = categorys.value
+    const card = await this.isactivated(this.$parent.globalData.user._id)
     if (card.value[0]) {
-      this.is_activated = card.value[0].is_actived;
-      this.card_id = card.value[0]._id;
+      this.isactivated = card.value[0].is_actived
+      this.card_id = card.value[0]._id
     }
-    console.log('this_activated', this.is_activated);
+    this.$apply()
+  }
+
+  onPullDownRefresh() {
+    this.initCategory()
+    wx.stopPullDownRefresh()
   }
 
   onShareAppMessage(res) {
