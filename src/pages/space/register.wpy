@@ -78,7 +78,7 @@
         </view>
         <view class="weui-cell weui-cell_input">
           <view class="weui-cell__hd">
-            <view class="weui-label">联系人姓名</view>
+            <view class="weui-label">姓名</view>
           </view>
           <view class="weui-cell__bd">
             <input class="weui-input" placeholder="" value="{{contact_name}}" bindchange="bindContactNameChange"/>
@@ -138,7 +138,7 @@ export default class SpaceRegister extends wepy.page {
 
   data = {
     store_name: '',
-    contact_name:'',
+    contact_name: '',
     space_name: '',
     location: {
       latitude: 0.0,
@@ -167,7 +167,7 @@ export default class SpaceRegister extends wepy.page {
     message: ''
   };
 
-  onLoad() {
+  async onLoad() {
     wx.getLocation({
       type: 'gcj02',
       success: function(res) {
@@ -175,8 +175,8 @@ export default class SpaceRegister extends wepy.page {
         this.longitude = res.longitude;
       }
     });
+    this.contact_name = this.$parent.globalData.user.name
   }
-
   methods = {
     getPhoneNumber(e) {
       if (e.detail.iv || e.detail.encryptedData) {
