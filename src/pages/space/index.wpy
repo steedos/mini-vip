@@ -179,16 +179,29 @@ export default class Posts extends wepy.page {
   };
   
   methods = {
-    uploadImage(isCover){
+    async uploadImage(isCover){
       const title = isCover ? "更换封面" : "更换头像";
-      wx.showActionSheet({
-          itemList: [title],
-          success: function(res) {
-              if (!res.cancel) {
-                  console.log(res.tapIndex)
-              }
-          }
+
+      const result = await wepy.showActionSheet({
+          itemList: [title]
       });
+      if (!result.cancel) {
+        const result2 = await wepy.chooseImage({
+          count: 1,
+          sizeType: ['compressed']
+        });
+        // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
+        const tempFilePaths = result2.tempFilePaths;
+        if(tempFilePaths.length){
+          if(isCover){
+            this.store_info.cover = tempFilePaths[0];
+          }
+          else{
+            this.store_info.avatar = tempFilePaths[0];
+          }
+          this.$apply();
+        }
+      }
     }
   };
 }

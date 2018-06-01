@@ -18,7 +18,10 @@ function formatDate(value, isWeekNeeded) {
 
 // 图片地址转换
 function formatImageUrl(src, baseUrl) {
-  if(src == "load_faild"){
+  if (getRegExp("^http:\/\/").test(src)) {
+    return src;
+  }
+  else if(src == "load_faild"){
     return "/images/faild.png";
   }
   else if(src){
