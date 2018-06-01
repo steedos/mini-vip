@@ -45,7 +45,7 @@
 
   export default class PaidSpaceList extends wepy.page {
     config = {
-      navigationBarTitleText: '逛一逛'
+      navigationBarTitleText: '示范企业'
     };
 
     data = {

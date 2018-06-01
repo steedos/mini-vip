@@ -59,6 +59,7 @@
         </view>
       </view>
 
+      <!--
       <view class="weui-cells">
         <navigator url="index" class="weui-cell weui-cell_access" style="font-size: 17px; color: #333333; solid #CCCCCC;">
           <view class="weui-cell__hd">
@@ -70,6 +71,7 @@
           <view class="weui-cell__ft weui-cell__ft_in-access"></view>
         </navigator>
       </view>
+      -->
 
       <view class="weui-cells">
         <navigator url="./space/list" class="weui-cell weui-cell_access">
