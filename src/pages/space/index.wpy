@@ -16,6 +16,19 @@ page {
           height: 260px;
           position:absolute;
         }
+        view.cover{
+          background-color:#7f7f7f;
+          background-repeat:repeat-x;
+          background-image:linear-gradient(128deg, #565656, #555 50%, #343434);
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          text{
+            color: #262626;
+            text-shadow:1px 1px 0px #686868;
+            font-size:20px;
+          }
+        }
         .avatar{
           height: 72px;
           width: 72px;
@@ -45,7 +58,9 @@ page {
           <image class="cover" mode="aspectFill" src="{{util.formatImageUrl(store_info.cover, baseUrl)}}" @tap="uploadImage(true)"/>
         </block>
         <block wx:else>
-          <image class="cover" mode="aspectFill" src="{{emptyImageUrlForCover}}" @tap="uploadImage(true)"/>
+          <view class="cover" @tap="uploadImage(true)">
+            <text>轻触设置封面</text>
+          </view>
         </block>
         <block wx:if="{{store_info.avatar}}">
           <image class="avatar" mode="aspectFill" src="{{util.formatImageUrl(store_info.avatar, baseUrl)}}" @tap.stop="uploadImage()"/>
