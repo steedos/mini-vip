@@ -100,16 +100,10 @@ export default class VIP extends wepy.app {
       borderStyle: 'black',
       list: [
       {
-        pagePath: 'pages/space/index',
+        pagePath: 'pages/index',
         selectedIconPath: './images/tabbars/home_pressed.png',
         iconPath: './images/tabbars/home.png',
         text: '首页',
-      },
-      {
-        pagePath: 'pages/card',
-        selectedIconPath: './images/tabbars/apps_pressed.png',
-        iconPath: './images/tabbars/apps.png',
-        text: '会员',
       },
       {
         pagePath: 'pages/me',
@@ -273,7 +267,7 @@ export default class VIP extends wepy.app {
   async get(object_name,_id, space_id) {
     const url = '/api/odata/v4/' + (space_id || this.globalData.space_id) + '/' + object_name + '/' + _id;
     const result = await req.get(url).catch((err)=>{
-      console.log("error...",err.data.error)
+      console.log("error...",err.data)
       return {}
     })
     return result
@@ -281,7 +275,7 @@ export default class VIP extends wepy.app {
   async query(object_name,query_options, space_id) {
     const url = '/api/odata/v4/' + (space_id || this.globalData.space_id) + '/' + object_name;
     const result = await req.get(url, query_options).catch((err)=>{
-      console.log("error...",err.data.error)
+      console.log("error...",err.data)
       return {}
     })
     return result
@@ -289,7 +283,7 @@ export default class VIP extends wepy.app {
   async insert(object_name,data, space_id) {
     const url = '/api/odata/v4/' + (space_id || this.globalData.space_id) + '/' + object_name;
     const result = await req.post(url, data).catch((err)=>{
-      console.log("error...",err.data.error)
+      console.log("error...",err.data)
       return {}
     })
     return result
@@ -299,7 +293,7 @@ export default class VIP extends wepy.app {
     var doc = {}
     doc['$set'] = data
     const result = await req.put(url,doc).catch((err)=>{
-      console.log("error...",err.data.error)
+      console.log("error...",err.data)
       return {}
     })
     return result
@@ -307,7 +301,7 @@ export default class VIP extends wepy.app {
   async delete(object_name,_id) {
     const url = '/api/odata/v4/' + this.globalData.space_id + '/' + object_name + '/'+_id;
     const result = await req.delete(url).catch((err)=>{
-      console.log("error...",err.data.error)
+      console.log("error...",err.data)
       return {}
     })
     return result
