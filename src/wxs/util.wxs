@@ -18,7 +18,8 @@ function formatDate(value, isWeekNeeded) {
 
 // 图片地址转换
 function formatImageUrl(src, baseUrl) {
-  if (getRegExp("^http:\/\/").test(src)) {
+  if (getRegExp("^\w+:\/\/").test(src)) {
+    // http:// 或 wxfile:// 等完整路径直接返回
     return src;
   }
   else if(src == "load_faild"){
