@@ -73,6 +73,32 @@ page {
     </view>
     <view class="page__bd">
       <view class="weui-cells">
+        <view class="weui-grids">
+          <block wx:if="{{card._id}}">
+            <navigator url="{{card.url}}" class="weui-grid" hover-class="weui-grid_active">
+              <view class="slds-icon-standard-opportunity weui-grid__icon slds-icon"/>
+              <view class="weui-grid__label">我的会员卡</view>
+            </navigator>
+          </block>
+          <block wx:else>
+            <navigator url="/pages/card/select?space_id={{space_id}}" class="weui-grid" hover-class="weui-grid_active">
+              <view class="slds-icon-standard-opportunity weui-grid__icon slds-icon"/>
+              <view class="weui-grid__label">加入会员</view>
+            </navigator>
+          </block>
+          <repeat for="{{post_types}}" wx:key="*this" key="index" index="index" item="post">
+            <navigator url="../post/index?type={{post.value}}&title={{post.label}}" class="weui-grid" hover-class="weui-grid_active">
+              <view class="slds-icon-standard-{{post.icon}} weui-grid__icon slds-icon"/>
+              <view class="weui-grid__label">{{post.label}}</view>
+            </navigator>
+          </repeat>
+          <navigator url="../store?store={{space_id}}" class="weui-grid" hover-class="weui-grid_active">
+            <view class="slds-icon-standard-call weui-grid__icon slds-icon"/>
+            <view class="weui-grid__label">联系我们</view>
+          </navigator>
+        </view>
+      </view>
+      <!-- <view class="weui-cells">
         <block wx:if="{{card._id}}">
           <navigator url="{{card.url}}" class="weui-cell weui-cell_access">
             <view class="weui-cell__hd">
@@ -108,7 +134,16 @@ page {
               <view class="weui-cell__ft weui-cell__ft_in-access"></view>
             </navigator>
           </repeat>
-      </view>
+          <navigator url="../store?store={{space_id}}" class="weui-cell weui-cell_access">
+            <view class="weui-cell__hd">
+              <view class="slds-icon-standard-call slds-icon slds-icon--small slds-m-right--x-small"/>
+            </view>
+            <view class="weui-cell__bd">
+              <view>联系我们</view>
+            </view>
+            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+          </navigator>
+      </view> -->
       <scroll-view class="scroll-view_H" scroll-y="true">
         <postList :list.sync="posts" />
       </scroll-view>
