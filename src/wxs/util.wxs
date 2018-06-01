@@ -45,28 +45,28 @@ function formatVideoUrl(src, baseUrl) {
 
 // 文章图片模板
 function getEmptyImageUrl(type) {
-  var result;
+  var url = "https://www-steedos-com.oss-cn-beijing.aliyuncs.com/apps/vip/covers/"
   switch (type) {
     case "announcements":
-      result = "/images/announcements.png";
+      return url = url + "announcements.jpg";
       break;
     case "about":
-       result = "/images/about.png";;
+      return url = url + "about.jpg";
       break;
     case "news":
-       result = "/images/news.png";;
+      return url = url + "news.jpg";
       break;
     case "course":
-       result = "/images/course.png";;
+      return url = url + "course.jpg";
       break;
     case "help":
-       result = "/images/help.png";;
+      return url = url + "help.jpg";
       break;
     case "jobs":
-       result = "/images/jobs.png";;
+      return url = url + "jobs.jpg";
       break;
   }
-  return result;
+  return url;
 } 
 
 
