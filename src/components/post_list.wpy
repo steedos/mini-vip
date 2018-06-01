@@ -127,9 +127,9 @@ export default class PostList extends wepy.component {
   };
 
   methods = {
-    goDetail(id, event){
+    goDetail(post_id, event){
       wx.navigateTo({
-        url: `../post/view?id=${id}`
+        url: `../post/view?post_id=${post_id}`
       });
     },
     previewImage(images, event){

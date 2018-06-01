@@ -215,9 +215,9 @@ export default class Card extends wepy.page {
       this.$apply();
     }
 
-    await this.$parent.login(e.space_id);
+    await this.$parent.login(this.space_id);
 
-    const space = await this.$parent.get('spaces', e.space_id)
+    const space = await this.$parent.get('spaces', this.space_id)
     this.space_name = space.name
 
     wx.setNavigationBarTitle({
