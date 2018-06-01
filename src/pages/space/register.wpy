@@ -76,6 +76,14 @@
             <input class="weui-input" placeholder="" value="{{store_name}}" bindchange="bindStoreNameChange"/>
           </view>
         </view>
+        <view class="weui-cell weui-cell_input">
+          <view class="weui-cell__hd">
+            <view class="weui-label">联系人姓名</view>
+          </view>
+          <view class="weui-cell__bd">
+            <input class="weui-input" placeholder="" value="{{contact_name}}" bindchange="bindContactNameChange"/>
+          </view>
+        </view> 
         <view class="weui-cell weui-cell_input weui-cell_vcode">
           <view class="weui-cell__hd">
             <view class="weui-label">地址</view>
@@ -130,6 +138,7 @@ export default class SpaceRegister extends wepy.page {
 
   data = {
     store_name: '',
+    contact_name:'',
     space_name: '',
     location: {
       latitude: 0.0,
@@ -142,17 +151,16 @@ export default class SpaceRegister extends wepy.page {
     industry: '',
     industryOptions: [
       { label: '餐饮', value: 'food' },
-      { label: '酒店住宿', value: 'accommodation' },
-      { label: '出行', value: 'travel' },
-      { label: '休闲娱乐', value: 'entertainment' },
-      { label: '丽人', value: 'beauty' },
       { label: '教育', value: 'education' },
-      { label: '母婴亲子', value: 'parent-child' },
-      { label: '运动健身', value: 'sport' },
-      { label: '家具装修', value: 'decoration' },
-      { label: '生活服务', value: 'life' },
-      { label: '宠物', value: 'pets' },
-      { label: '汽车服务', value: 'car' }
+      { label: '娱乐', value: 'entertainment' },
+      { label: '购物', value: 'shop' },
+      { label: '丽人', value: 'beauty' },
+      { label: '运动', value: 'sport' },
+      { label: '酒店', value: 'hotel' },
+      { label: '汽车', value: 'car' },
+      { label: '医疗', value: 'medical' },
+      { label: '企业', value: 'enterprise' },
+      { label: '其他', value: 'other' }
     ],
     industry_index: -1,
     showTopTips: false,
@@ -223,6 +231,9 @@ export default class SpaceRegister extends wepy.page {
     bindStoreNameChange(e) {
       this.store_name = e.detail.value;
     },
+    bindContactNameChange(e) {
+      this.contact_name = e.detail.value;
+    },
     bindSpaceNameChange(e) {
       this.space_name = e.detail.value;
     },
@@ -232,7 +243,11 @@ export default class SpaceRegister extends wepy.page {
         this.message = '请填写店铺名称';
         return;
       }
-
+      if (!this.contact_name) {
+        this.showTopTips = true;
+        this.message = '请填写联系人姓名';
+        return;
+      } 
       if (!this.industry) {
         this.showTopTips = true;
         this.message = '请选择行业';
@@ -254,6 +269,7 @@ export default class SpaceRegister extends wepy.page {
       this.submitDisabled = true;
       console.log({
         store_name: this.store_name,
+        contact_name:this.contact_name,   
         industry: this.industry,
         phoneNumber: this.phoneNumber,
         location: this.location,
@@ -262,6 +278,7 @@ export default class SpaceRegister extends wepy.page {
       req
         .post('/api/mini/vip/space_register', {
           store_name: this.store_name,
+          contact_name:this.contact_name,
           industry: this.industry,
           phoneNumber: this.phoneNumber,
           location: this.location,
