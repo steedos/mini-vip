@@ -109,7 +109,7 @@
               <view class="slds-icon-standard-contact slds-icon slds-icon--small slds-m-right--x-small"/>
             </view>
             <view class="weui-cell__bd">
-              <view>关于我们</view>
+              <view>企业名片</view>
             </view>
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
           </navigator>
