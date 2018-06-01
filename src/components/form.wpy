@@ -1,54 +1,371 @@
+<style>
+  .btn-container {
+    width: 100%;
+    margin-top: 20px;
+  }
+
+  .submit-btn {
+    background: #1B9AF7;
+    color: #fff;
+    margin: 15px 15px 0;
+  }
+</style>
 <template>
   <view class="form">
-
+    <view class="weui-toptips weui-toptips_warn" wx:if="{{showTopTips}}">{{message}}</view>
     <view class="weui-cells__title">FORM BODY {{schema.name}}</view>
-    <view class="page__bd" style="">
+    <view class="page__bd">
       <view class="weui-cells weui-cells_after-title">
         <repeat for="{{schema.fields}}" key="index" index="index" item="item">
-          <block wx:if="{{item.readonly}}">
-            <view class="weui-cell weui-cell_input">
-              <view class="weui-cell__hd">
-                <view class="weui-label">{{item.label}}</view>
-              </view>
+          <block wx:if="{{item.type === 'image' || item.type === 'video' || item.type === 'audio'}}">
+            <view class="weui-call" wx:if="{{item.readonly || !schema.allowEdit}}">
+              <image class="cover" mode="aspectFill" src="{{util.formatImageUrl(values[item.name], baseUrl)}}" @tap="uploadImage(true)"/>
+            </view>
+            <view class="weui-cell" wx:else>
               <view class="weui-cell__bd">
-                <view>{{values[item.name]}}</view>
+                <view class="weui-uploader">
+                  <view class="weui-uploader__hd">
+                    <view class="weui-uploader__title">{{item.label}}</view>
+                    <!--<view class="weui-uploader__info">{{files.length}}/2</view>-->
+                  </view>
+                  <view class="weui-uploader__bd">
+                    <view class="weui-uploader__files" id="uploaderFiles">
+                      <block wx:if="{{item.multiple}}" >
+                        <repeat for="{{values[item.name]}}" key="*this" item="file">
+                          <view class="weui-uploader__file" wx:if="{{item.type === 'image'}}" bindtap="previewImage" id="{{file}}">
+                            <image class="weui-uploader__img" src="{{util.formatImageUrl(file, baseUrl)}}" mode="aspectFill"/>
+                          </view>
+                          <view class="weui-uploader__file" wx:elif="{{item.type === 'video'}}" bindtap="previewImage" id="{{file}}">
+                            <image class="weui-uploader__img" src="{{util.formatImageUrl(file, baseUrl)}}" mode="aspectFill"/>
+                          </view>
+                          <view class="weui-uploader__file" wx:elif="{{item.type === 'audio'}}" bindtap="previewImage" id="{{file}}">
+                            <image class="weui-uploader__img" src="{{util.formatImageUrl(file, baseUrl)}}" mode="aspectFill"/>
+                          </view>
+                        </repeat>
+                      </block>
+                      <block wx:else>
+                        <view class="weui-uploader__file" bindtap="previewImage" >
+                          <image class="weui-uploader__img" src="{{util.formatImageUrl(values[item.name], baseUrl)}}" mode="aspectFill"/>
+                        </view>
+                      </block>
+                    </view>
+                    <view class="weui-uploader__input-box" wx:if="{{!hiddenButton[item.name]}}">
+                      <view class="weui-uploader__input" bindtap="chooseFile" data-id="{{item.name}}" data-multiple="{{item.multiple}}" data-type="{{item.type}}"></view>
+                    </view>
+                  </view>
+                </view>
               </view>
             </view>
           </block>
           <block wx:else>
-            <view class="weui-cell weui-cell_input">
-              <view class="weui-cell__hd">
-                <view class="weui-label">{{item.label}}</view>
+            <block wx:if="{{item.readonly || !schema.allowEdit}}">
+              <view class="weui-cell weui-cell_input">
+                <view class="weui-cell__hd">
+                  <view class="weui-label">{{item.label}}</view>
+                </view>
+                <view class="weui-cell__bd">
+                  <view class="weui-input">{{values[item.name]}}</view>
+                </view>
               </view>
-              <view class="weui-cell__bd">
-                <input wx:if="{{item.type === 'text'}}" class="weui-input" value="{{values[item.name]}}"/>
-                <textarea wx:elif="{{item.type === 'textarea'}}"  class="weui-textarea" auto-height="true" value="{{values[item.name]}}"/>
+            </block>
+            <block wx:else>
+              <view class="weui-cell weui-cell_input">
+                <view class="weui-cell__hd">
+                  <view class="weui-label">{{item.label}}</view>
+                </view>
+                <view class="weui-cell__bd">
+                  <input wx:if="{{item.type === 'text'}}" data-id="{{item.name}}" class="weui-input"
+                         value="{{values[item.name]}}" bindchange="textChange"/>
+
+                  <textarea wx:elif="{{item.type === 'textarea'}}" data-id="{{item.name}}" class="weui-input"
+                            auto-height="true" value="{{values[item.name]}}" bindchange="textChange"/>
+
+                  <input wx:elif="{{item.type === 'number'}}" data-id="{{item.name}}" class="weui-input" type="number"
+                         bindchange="textChange"/>
+
+                  <view wx:elif="{{item.type === 'boolean'}}" data-id="{{item.name}}" class="weui-cell__ft">
+                    <switch checked class="weui-input" data-id="{{item.name}}" bindchange="textChange"/>
+                  </view>
+
+                  <block wx:elif="{{item.type === 'select'}}" >
+                    <checkbox-group bindchange="checkboxChange" wx:if="{{item.multiple}}" data-id="{{item.name}}">
+                      <label class="weui-cell weui-check__label" wx:for="{{item.options}}" wx:key="value">
+                        <checkbox class="weui-check" value="{{item.value}}" checked="{{item.checked}}"/>
+                        <view class="weui-cell__hd weui-check__hd_in-checkbox">
+                          <icon class="weui-icon-checkbox_circle" type="circle" size="23" wx:if="{{!item.checked}}"></icon>
+                          <icon class="weui-icon-checkbox_success" type="success" size="23" wx:if="{{item.checked}}"></icon>
+                        </view>
+                        <view class="weui-cell__bd">{{item.label}}</view>
+                      </label>
+                    </checkbox-group>
+                    <picker wx:else bindchange="selectChange" data-id="{{item.name}}"
+                            range="{{item.options}}" range-key="label">
+                      <view class="weui-input">{{item.options[pickerIndex[item.name]].label}}</view>
+                    </picker>
+                  </block>
+
+                  <navigator url="./util/datetime?title={{item.label}}&key={{item.name}}" class="weui-input"
+                             wx:elif="{{item.type === 'datetime'}}">
+                    <view class="weui-cell__ft">{{values[item.name]}}</view>
+                  </navigator>
+
+                  <picker wx:elif="{{item.type === 'master_detail' || item.type === 'lookup'}}" bindchange="optionChange" data-id="{{item.name}}"
+                          range="{{fieldOptions[item.name]}}" range-key="label">
+                    <view class="weui-input">{{fieldOptions[item.name][pickerIndex[item.name]].label}}</view>
+                  </picker>
+
+                  <textarea class="weui-input weui-textarea" wx:elif="{{item.type === 'location'}}" auto-height="true" value="{{values[item.name] && values[item.name].address}}"/>
+
+                  <input wx:else class="weui-input" value="{{item.type}}"/>
+                </view>
+
+                <view class="weui-cell__ft weui-cell__ft_in-access"
+                      wx:if="{{item.type === 'select' || item.type === 'datetime'}}"></view>
+                <view class="weui-cell__ft" wx:elif="{{item.type === 'location'}}">
+                  <view class="weui-vcode-btn" @tap="getAddress" data-id="{{item.name}}">选择</view>
+                </view>
               </view>
-            </view>
+            </block>
           </block>
         </repeat>
       </view>
+
+      <view class="btn-container">
+        <button class="submit-btn" form-type="submit" @tap="submitActivate" disabled="{{submitDisabled}}">提交</button>
+      </view>
+
     </view>
   </view>
 </template>
 <script>
   import wepy from 'wepy'
+  import { baseUrl } from '@/config';
+  import util from '../wxs/util.wxs'
   export default class Form extends wepy.component {
+
     props = {
-      schema:{
+      schema: {
         type: Object
+      },
+      action: {
+        type: String
+      },
+      record_id: {
+        type: String
       }
     }
 
+    wxs = {
+      util: util
+    };
+
     data = {
-      values: {}
+      showTopTips: false,
+      baseUrl: baseUrl,
+      message: '',
+      values: {},
+      pickerIndex: {},
+      hiddenButton: {},
+      fieldOptions: {}
     }
 
-    async onLoad () {
-      this.values = await this.$parent.$parent.get("mini_apps", "feiScDhqikKPqwQop")
+    watch = {
+      schema(newValue, oldValue){
+        if(newValue.fields){
+          const fields = newValue.fields
+          for (let field_name in fields) {
+            let field = fields[field_name]
+            if(field.reference_to){
+              this.getReferenceTo(field.name, field.reference_to)
+            }
+          }
+        }
+      },
+      async record_id(newValue, oldValue){
+        if(newValue){
+          console.log("this.schema", this.schema)
+          this.values = await this.$parent.$parent.get(this.schema.name, newValue)
+          this.$apply()
+        }
+      }
+    }
+
+    async onLoad() {
+      if (this.action === 'edit') {
+
+      }
+    }
+
+    changeValue(key, value) {
+      this.values[key] = value;
+      this.$apply();
+    }
+
+    async getReferenceTo(file_name, reference_to){
+      let query = {
+        $select: 'name'
+      }
+
+      if(reference_to === 'users'){
+        reference_to = 'space_users'
+        query.$select = 'name,user'
+      }
+
+      const data = await this.$parent.$parent.query(reference_to, query)
+      let options = []
+      data.value.forEach(function (record) {
+        if(reference_to === 'space_users'){
+          options.push({label: record.name, value: record.user})
+        }else{
+          options.push({label: record.name, value: record._id})
+        }
+      })
+
+      this.fieldOptions[file_name] = options
       this.$apply()
-      console.log("this.values", this.values)
-      console.log("onLoad", this.schema)
+      console.log('this.fieldOptions' ,this.fieldOptions)
+    }
+
+    checkRequired() {
+      const fields = this.schema.fields
+      console.log(fields)
+      for (let field_name in fields) {
+        let field = fields[field_name]
+        console.log(field)
+        if (field.required) {
+          if (!this.values[field.name]) {
+            this.showTopTips = true
+            this.message = `请填写${field.label}`
+            return false
+          }
+        }
+      }
+      return true
+    }
+
+    methods = {
+      getAddress(e) {
+        console.log(e);
+        self = this;
+        const key = e.target.dataset.id
+        wepy
+          .chooseLocation()
+          .then(res => {
+            if(!self.values[key]){
+              self.values[key] = {}
+            }
+            self.values[key].address = res.address;
+            self.values[key].latitude = res.latitude;
+            self.values[key].longitude = res.longitude;
+            self.$apply();
+          })
+          .catch(err => {
+            if (err.errMsg == 'chooseLocation:fail auth deny') {
+              wx.openSetting({
+                success: res => {
+                  if (res.authSetting['scope.userLocation']) {
+                    self.methods.getAddress.call(self, e);
+                  }
+                }
+              });
+            }
+          });
+      },
+      textChange(e) {
+        console.log("textChange", e)
+        const key = e.target.dataset.id
+        this.values[key] = e.detail.value
+      },
+      selectChange(e) {
+        console.log("selectChange", e)
+        const index = e.detail.value;
+        const key = e.target.dataset.id
+        this.pickerIndex[key] = index
+        const value = this.schema.fields[key].options[index].value
+        this.values[key] = value
+        this.$apply()
+      },
+      optionChange(e) {
+        console.log("optionChange", e)
+        console.log("this.fieldOptions", this.fieldOptions)
+
+        const index = e.detail.value;
+        const key = e.target.dataset.id
+        this.pickerIndex[key] = index
+        const value = this.fieldOptions[key][index].value
+        this.values[key] = value
+        console.log("this.values[key]", this.values[key])
+        console.log("this.index", this.pickerIndex[key])
+        this.$apply()
+      },
+      bindDateChange(e) {
+        const key = e.target.dataset.id
+        const date = e.detail.value
+
+      },
+      bindTimeChange(e) {
+        const key = e.target.dataset.id
+        const time = e.detail.value
+      },
+      async chooseFile(e) {
+        const that = this;
+        const key = e.target.dataset.id
+        const multiple = e.target.dataset.multiple || false
+        const type = e.target.dataset.type
+        if(type === 'image'){
+
+          let options = {
+            sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+            sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+          }
+
+          if(!multiple){
+            options.count = 1
+          }
+
+          const res = await wepy.chooseImage(options)
+
+          // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
+          if(!that.values[key]){
+            that.values[key] = []
+          }
+
+          that.values[key] = that.values[key].concat(res.tempFilePaths)
+
+          if(!multiple){
+            that.hiddenButton[key] = true
+          }
+
+          that.$apply()
+
+        }else if(type === 'video'){
+          const res = await wepy.chooseVideo()
+          if(!that.values[key]){
+            that.values[key] = []
+          }
+          that.values[key] = that.values[key].concat(res.tempFilePaths)
+
+          if(!multiple){
+            that.hiddenButton[key] = true
+          }
+          that.$apply()
+        }
+      },
+      previewImage: function(e){
+        wx.previewImage({
+          current: e.currentTarget.id, // 当前显示图片的http链接
+          urls: this.data.files // 需要预览的图片http链接列表
+        })
+      },
+      async submitActivate() {
+        console.log("submitActivate", this.values)
+        if (!this.checkRequired()) {
+          return;
+        }
+        if (this.action === 'create') {
+          await this.$parent.$parent.insert("post", this.values, 'HhkRCP4eTnpXy9mce')
+        }
+      }
     }
   }
 </script>

@@ -1,6 +1,6 @@
 <template>
   <view>
-    <form :schema.sync='schema'></form>
+    <form :schema.sync='schema' :action='action' :record_id.sync='record_id'></form>
   </view>
 </template>
 
@@ -12,20 +12,28 @@
 
   export default class RecordView extends wepy.page {
     data = {
-      schema: {}
+      schema: {},
+      action: "create",
+      record_id: ""
     }
 
     components = {
       form: form
     };
 
-
-    onLoad(){
-      req.get(`/api/odata/v4/51ae9b1a8e296a29c9000001/objects/mini_apps`).then(res => {
-        console.log("res", res)
-        this.schema = res;
-        this.$apply()
-      })
+    async onLoad(e){
+      let object_name = ''
+      if(e && e.object_name){
+        object_name = e.object_name
+      }else{
+        throw new Error("缺少参数：object_name")
+      }
+      const object = await this.$parent.get('objects', object_name)
+      this.schema = object;
+      if(e && e.record_id){
+        this.record_id = e.record_id
+      }
+      this.$apply()
     }
   }
 </script>
