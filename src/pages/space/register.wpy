@@ -285,7 +285,9 @@ export default class SpaceRegister extends wepy.page {
           space_name: this.space_name
         })
         .then(res => {
-          wx.reLaunch({ url: '/pages/index' });
+          wx.navigateTo({
+            url: './list'
+          });
         });
     }
   };
