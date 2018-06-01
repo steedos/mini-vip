@@ -220,7 +220,6 @@
           }
           const url = `/api/odata/v4/${card.space._id}/vip_category/${card.card_name._id}`
           req.get(url, category_options).then(res => {
-            console.log('vip_category', res)
             self.cards.push({_id: card._id, card_number: card.card_number, grade: card.grade, name: name, space: card.space._id, avatar: res.avatar})
             self.allBalance = allBalance
             self.card_count = result['@odata.count']
