@@ -101,7 +101,7 @@
       <view class="weui-cells__title page__bd_mycard">我的会员卡</view>
       <view class="weui-cells weui-cells_after-title">
         <repeat for="{{cards}}" key="index" index="index" item="card">
-          <navigator url="card?card_id={{card._id}}&space_id={{card.space}}" open-type="reLaunch" class="weui-cell weui-cell_access weui-cell_access_card">
+          <navigator url="card?card_id={{card._id}}&space_id={{card.space}}" class="weui-cell weui-cell_access weui-cell_access_card">
             <view class="weui-cell__hd">
               <image wx:if="{{card.avatar}}" class="image slds-icon slds-icon--small slds-m-right--x-small" mode="aspectFill" src="{{util.formatImageUrl(card.avatar, baseUrl)}}"/>
               <view wx:else class="slds-icon-standard-opportunity slds-icon slds-icon--small slds-m-right--x-small"/>
