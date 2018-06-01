@@ -70,6 +70,18 @@
           <view class="weui-cell__ft weui-cell__ft_in-access"></view>
         </navigator>
       </view>
+
+      <view class="weui-cells">
+        <navigator url="./space/list" class="weui-cell weui-cell_access">
+          <view class="weui-cell__hd">
+            <view class="slds-icon-standard-account slds-icon slds-icon--small slds-m-right--x-small"/>
+          </view>
+          <view class="weui-cell__bd">
+            <view>我的企业</view>
+          </view>
+          <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+        </navigator>
+      </view>
       <view class="weui-cells">
         <view class="weui-cell__bd">
           <button class="nav-btn" open-type="contact"  @tap="toContact">

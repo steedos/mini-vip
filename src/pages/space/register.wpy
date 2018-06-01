@@ -78,7 +78,7 @@
         </view>
         <view class="weui-cell weui-cell_input">
           <view class="weui-cell__hd">
-            <view class="weui-label">联系人姓名</view>
+            <view class="weui-label">姓名</view>
           </view>
           <view class="weui-cell__bd">
             <input class="weui-input" placeholder="" value="{{contact_name}}" bindchange="bindContactNameChange"/>
@@ -116,7 +116,7 @@
                 <icon class="weui-agree__checkbox-icon-check" type="success_no_circle" size="9" wx:if="{{isAgree}}"></icon>
             </view>
             我已阅读并同意
-            <navigator url="" class="weui-agree__link">《华炎会员管理系统商户使用协议》</navigator>
+            <navigator url="" class="weui-agree__link">《华炎会员管理系统企业使用协议》</navigator>
           </view>
         </label>
       </checkbox-group>
@@ -133,12 +133,12 @@ import req from '@/network';
 
 export default class SpaceRegister extends wepy.page {
   config = {
-    navigationBarTitleText: '商户入驻'
+    navigationBarTitleText: '企业入驻'
   };
 
   data = {
     store_name: '',
-    contact_name:'',
+    contact_name: '',
     space_name: '',
     location: {
       latitude: 0.0,
@@ -167,7 +167,7 @@ export default class SpaceRegister extends wepy.page {
     message: ''
   };
 
-  onLoad() {
+  async onLoad() {
     wx.getLocation({
       type: 'gcj02',
       success: function(res) {
@@ -175,8 +175,8 @@ export default class SpaceRegister extends wepy.page {
         this.longitude = res.longitude;
       }
     });
+    this.contact_name = this.$parent.globalData.user.name
   }
-
   methods = {
     getPhoneNumber(e) {
       if (e.detail.iv || e.detail.encryptedData) {
@@ -240,7 +240,7 @@ export default class SpaceRegister extends wepy.page {
     storeRegister() {
       if (!this.store_name) {
         this.showTopTips = true;
-        this.message = '请填写店铺名称';
+        this.message = '请填写企业名称';
         return;
       }
       if (!this.contact_name) {

@@ -3,6 +3,9 @@
 page {
   height: 100%;
   .page{
+    .image {
+      display: block;
+    }
     .page__hd{
       padding: 0px;
       .cover-wrapper{
@@ -55,15 +58,41 @@ page {
     </view>
     <view class="page__bd">
       <view class="weui-cells">
-        <navigator url="/pages/card/select?space_id={{space_id}}" class="weui-cell weui-cell_access">
-          <view class="weui-cell__hd">
-            <view class="slds-icon-standard-opportunity slds-icon slds-icon--small slds-m-right--x-small"/>
-          </view>
-          <view class="weui-cell__bd">
-            <view>加入会员</view>
-          </view>
-          <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-        </navigator>
+        <block wx:if="{{card._id}}">
+          <navigator url="{{card.url}}" class="weui-cell weui-cell_access">
+            <view class="weui-cell__hd">
+              <view class="slds-icon-standard-opportunity slds-icon slds-icon--small slds-m-right--x-small"/>
+            </view>
+            <view class="weui-cell__bd">
+              <view>我的会员卡</view>
+            </view>
+            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+          </navigator>
+        </block>
+        <block wx:else>
+          <navigator url="/pages/card/select?space_id={{space_id}}" class="weui-cell weui-cell_access">
+            <view class="weui-cell__hd">
+              <view class="slds-icon-standard-opportunity slds-icon slds-icon--small slds-m-right--x-small"/>
+            </view>
+            <view class="weui-cell__bd">
+              <view>加入会员</view>
+            </view>
+            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+          </navigator>
+        </block>
+      </view>
+      <view class="weui-cells">
+        <repeat for="{{post_types}}" key="index" index="index" item="post">
+            <navigator url="../post/index?type={{post.value}}&title={{post.label}}" class="weui-cell weui-cell_access">
+              <view class="weui-cell__hd">
+                <view class="slds-icon-standard-{{post.icon}} slds-icon slds-icon--small slds-m-right--x-small"/>
+              </view>
+              <view class="weui-cell__bd">
+                <view>{{post.label}}</view>
+              </view>
+              <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+            </navigator>
+          </repeat>
       </view>
       <scroll-view class="scroll-view_H" scroll-y="true">
         <postList :list.sync="posts" />
@@ -81,18 +110,37 @@ import util from '../../wxs/util.wxs'
 const DATA_LENGTH = 10;
 export default class Posts extends wepy.page {
   config = {
-    navigationBarTitleText: '最新动态',
+    navigationBarTitleText: '会员小秘书',
     enablePullDownRefresh: true
   };
 
   async onLoad(e) {
-    if(e.space_id){
-      await this.$parent.login(e.space_id);
-    }
-    this.type = e.type;
     this.space_id = e.space_id || this.$parent.globalData.space_id;
+    await this.$parent.login(this.space_id);
+
+    const user = this.$parent.globalData.user._id
+
+    const options = {
+      $filter: `owner eq '${user}'`,
+      $expand: 'space($select=name),card_name($select=name)',
+      $count: true,
+      $select: 'is_actived,name,card_name,space'
+    }
+
+    const card = await this.$parent.query('vip_card', options);
+    if (card.value[0] && card.value[0].is_actived) {
+      this.card = card.value[0]
+      this.card.url = `../card?card_id=${this.card._id}&space_id=${this.space_id}`
+      const vip_category = await this.$parent.get('vip_category', this.card.card_name._id)
+      this.card.avatar = vip_category.avatar
+    }
+
+    this.post_types = await this.setPostTypes()
+
+    this.type = e.type;
     this.loadStoreInfo();
     this.loadPostList();
+    this.$apply()
   }
 
   refresh() {
@@ -135,7 +183,9 @@ export default class Posts extends wepy.page {
     current_skip: 0,
     space_id: '',
     space_name: '',
-    store_info: {}
+    store_info: {},
+    card: {},
+    post_types: []
   };
 
   wxs = {
@@ -150,9 +200,45 @@ export default class Posts extends wepy.page {
 
     const space = await this.$parent.get('spaces', this.space_id)
     this.space_name = space.name;
-
     this.$apply();
   };
+
+  async setPostTypes(){
+    const store_id = this.space_id
+    const data = {
+      $filter: `_id eq '${store_id}'`,
+      $select: 'post_types'
+    };
+    const result = await this.$parent.query('vip_store', data);
+    const showPostTypes = [];
+    const allPostTypes = [
+        {value: "announcements", label: "公告通知", icon: "announcement"},
+        {value: "about", label: "关于我们", icon: "contact"},
+        {value: "news", label: "新闻动态", icon: "contract"},
+        {value: "course", label: "线上课程", icon: "event"},
+        {value: "help", label: "会员指南", icon: "performance"},
+        {value: "jobs", label: "招兵买马", icon: "groups"}];
+    if(result.value[0] && result.value[0].post_types && result.value[0].post_types.length>0){
+      const dbPostTypes = result.value[0].post_types;
+      dbPostTypes.forEach(function(post){
+        const showPostType = allPostTypes.filter(function(m){
+          if(m.value==post){
+            return m;
+          }else{
+            return null;
+          }
+        });
+        if(showPostType && showPostType.length>0){
+          showPostTypes.push(showPostType[0]);    
+        }
+      })
+      this.post_types = showPostTypes;
+    }else{
+      this.post_types = allPostTypes;
+    }
+    this.$apply();
+    return;
+  }
 
 	async loadPostList(){
     const skip = this.current_skip;

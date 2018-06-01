@@ -38,7 +38,7 @@
 
   export default class SpaceList extends wepy.page {
     config = {
-      navigationBarTitleText: '商户管理'
+      navigationBarTitleText: '我的企业'
     };
 
     data = {
