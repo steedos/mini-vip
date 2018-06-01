@@ -39,8 +39,39 @@ function formatVideoUrl(src, baseUrl) {
   }
 }
 
+// 文章图片模板
+function getEmptyImageUrl(type) {
+  var result;
+  switch (type) {
+    case "announcements":
+      result = "/images/announcements.png";
+      break;
+    case "about":
+       result = "/images/about.png";;
+      break;
+    case "news":
+       result = "/images/news.png";;
+      break;
+    case "course":
+       result = "/images/course.png";;
+      break;
+    case "help":
+       result = "/images/help.png";;
+      break;
+    case "jobs":
+       result = "/images/jobs.png";;
+      break;
+  }
+  return result;
+} 
+
+
+
+
+
 module.exports = {
   datefmt: formatDate,
   formatImageUrl: formatImageUrl,
-  formatVideoUrl: formatVideoUrl
+  formatVideoUrl: formatVideoUrl,
+  getEmptyImageUrl:getEmptyImageUrl
 }

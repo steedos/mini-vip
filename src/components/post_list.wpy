@@ -67,7 +67,7 @@
               <image class="image" mode="aspectFill" src="{{util.formatImageUrl(post.images[0], baseUrl)}}" @tap="previewImage({{post.images}})" @error="loadImageError({{index}})" />
             </block>
             <block wx:else>
-              <image class="image" mode="aspectFill" src="{{emptyImageUrl}}"/>
+              <image class="image" mode="aspectFill" src="{{util.getEmptyImageUrl(post.type)}}"/>
             </block>
           </block>
         </view>
@@ -89,9 +89,6 @@
         </view>
   </block>
 </view>
-  
-
-
 </template>
 
 <script>
@@ -118,8 +115,7 @@ export default class PostList extends wepy.component {
   }
 
   data = {
-    baseUrl: baseUrl,
-    emptyImageUrl: "/images/empty.png"
+    baseUrl: baseUrl
   };
 
   wxs = {
