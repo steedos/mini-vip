@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "wepy build --watch",
     "build": "cross-env NODE_ENV=production wepy build --no-cache",
-    "dev:web": "wepy build --output web",
+    "web": "wepy build --output web",
     "clean": "find ./dist -maxdepth 1 -not -name 'project.config.json' -not -name 'dist' | xargs rm -rf",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -21,10 +21,12 @@
     "redux-actions": "^2.2.1",
     "redux-promise": "^0.5.3",
     "underscore": "^1.9.0",
+    "util": "^0.10.3",
     "wepy": "^1.6.0",
     "wepy-async-function": "^1.4.4",
     "wepy-com-toast": "^1.0.2",
-    "wepy-redux": "^1.5.3"
+    "wepy-redux": "^1.5.3",
+    "wepy-web": "^1.6.0"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.1",
