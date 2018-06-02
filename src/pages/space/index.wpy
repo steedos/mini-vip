@@ -35,6 +35,8 @@ page {
           position:absolute;
           left: 20rpx;
           top: 208px;
+          border:solid 2px #fff;
+          box-shadow:0px 0px 1px #6a6a6a;
         }
         .name{
           color: #fff;
