@@ -305,50 +305,58 @@ export default class Posts extends wepy.page {
         // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
         const tempFilePaths = result2.tempFilePaths;
         if (tempFilePaths.length) {
-          // if(isCover){
-          //   this.store_info.cover = tempFilePaths[0];
-          // }
-          // else{
-          //   this.store_info.avatar = tempFilePaths[0];
-          // }
-          // this.$apply();
-          // wepy.showToast({
-          //   title: '正在上传...',
-          //   icon: 'loading',
-          //   mask: true,
-          //   duration: 10000
-          // });
-          // wepy.uploadFile({
-          //   url: `${baseUrl}/s3/`,
-          //   filePath: tempFilePaths[0],
-          //   name: ''
-          // });
-          var that = this;
-          wx.uploadFile({
+          const authToken = this.$parent.globalData.user.auth_token;
+          const userId = this.$parent.globalData.user._id;
+          if(isCover){
+            this.store_info.cover = tempFilePaths[0];
+          }
+          else{
+            this.store_info.avatar = tempFilePaths[0];
+          }
+          this.$apply();
+          wepy.showLoading({
+            title: '正在上传...',
+            mask: true
+          });
+          const fileResult = await wepy.uploadFile({
             url: `${this.baseUrl}/s3/images`,
             filePath: tempFilePaths[0],
             name: 'file',
             formData: {},
             header: {
-              'X-Auth-Token': this.$parent.globalData.user.auth_token,
-              'X-User-Id': this.$parent.globalData.user._id
-            },
-            success: function(res) {
-              var data = JSON.parse(res.data);
-              if (data.errors || res.statusCode != 200) {
-                console.error(res);
-                return;
-              }
-              var fId = data._id;
-              if (isCover) {
-                that.store_info.cover = fId;
-              } else {
-                that.store_info.avatar = fId;
-              }
-              that.$apply();
-              //  TODO 更新对应表的字段
+              'X-Auth-Token': authToken,
+              'X-User-Id': userId
             }
+          }).catch((err)=>{
+            console.log("error...",err)
           });
+          wepy.hideLoading();
+          // var that = this;
+          // wx.uploadFile({
+          //   url: `${this.baseUrl}/s3/images`,
+          //   filePath: tempFilePaths[0],
+          //   name: 'file',
+          //   formData: {},
+          //   header: {
+          //     'X-Auth-Token': this.$parent.globalData.user.auth_token,
+          //     'X-User-Id': this.$parent.globalData.user._id
+          //   },
+          //   success: function(res) {
+          //     var data = JSON.parse(res.data);
+          //     if (data.errors || res.statusCode != 200) {
+          //       console.error(res);
+          //       return;
+          //     }
+          //     var fId = data._id;
+          //     if (isCover) {
+          //       that.store_info.cover = fId;
+          //     } else {
+          //       that.store_info.avatar = fId;
+          //     }
+          //     that.$apply();
+          //     //  TODO 更新对应表的字段
+          //   }
+          // });
         }
       }
     }
