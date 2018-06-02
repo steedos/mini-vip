@@ -59,7 +59,7 @@ page {
         </block>
         <block wx:else>
           <view class="cover" @tap="uploadImage(true)">
-            <text>轻触设置封面</text>
+            <text wx:if="{{is_space_owner}}">轻触设置封面</text>
           </view>
         </block>
         <block wx:if="{{store_info.avatar}}">
@@ -98,52 +98,6 @@ page {
           </navigator>
         </view>
       </view>
-      <!-- <view class="weui-cells">
-        <block wx:if="{{card._id}}">
-          <navigator url="{{card.url}}" class="weui-cell weui-cell_access">
-            <view class="weui-cell__hd">
-              <view class="slds-icon-standard-opportunity slds-icon slds-icon--small slds-m-right--x-small"/>
-            </view>
-            <view class="weui-cell__bd">
-              <view>我的会员卡</view>
-            </view>
-            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-          </navigator>
-        </block>
-        <block wx:else>
-          <navigator url="/pages/card/select?space_id={{space_id}}" class="weui-cell weui-cell_access">
-            <view class="weui-cell__hd">
-              <view class="slds-icon-standard-opportunity slds-icon slds-icon--small slds-m-right--x-small"/>
-            </view>
-            <view class="weui-cell__bd">
-              <view>加入会员</view>
-            </view>
-            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-          </navigator>
-        </block>
-      </view>
-      <view class="weui-cells">
-        <repeat for="{{post_types}}" key="index" index="index" item="post">
-            <navigator url="../post/index?type={{post.value}}&title={{post.label}}" class="weui-cell weui-cell_access">
-              <view class="weui-cell__hd">
-                <view class="slds-icon-standard-{{post.icon}} slds-icon slds-icon--small slds-m-right--x-small"/>
-              </view>
-              <view class="weui-cell__bd">
-                <view>{{post.label}}</view>
-              </view>
-              <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-            </navigator>
-          </repeat>
-          <navigator url="../store?store={{space_id}}" class="weui-cell weui-cell_access">
-            <view class="weui-cell__hd">
-              <view class="slds-icon-standard-call slds-icon slds-icon--small slds-m-right--x-small"/>
-            </view>
-            <view class="weui-cell__bd">
-              <view>联系我们</view>
-            </view>
-            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-          </navigator>
-      </view> -->
       <scroll-view class="scroll-view_H" scroll-y="true">
         <postList :list.sync="posts" />
       </scroll-view>
@@ -165,6 +119,10 @@ export default class Posts extends wepy.page {
   };
 
   async onLoad(e) {
+    wepy.showLoading({
+      title: '加载中',
+      mask: true
+    });
     this.space_id = e.space_id || this.$parent.globalData.space_id;
     await this.$parent.login(this.space_id);
 
@@ -188,7 +146,8 @@ export default class Posts extends wepy.page {
     this.post_types = await this.setPostTypes()
 
     this.type = e.type;
-    this.loadStoreInfo();
+    await this.loadStoreInfo();
+    wepy.hideLoading();
     this.loadPostList();
     this.$apply()
   }
@@ -202,10 +161,11 @@ export default class Posts extends wepy.page {
   components = {
     postList: postList
   };
+
   // 分享
   onShareAppMessage(res) {
     const space_id = this.space_id
-    const space_name = this.space_name
+    const space_name = this.space_info.name;
     return {
       title: space_name,
       path: `pages/space/index?space_id=${space_id}`
@@ -232,10 +192,11 @@ export default class Posts extends wepy.page {
     posts: [],
     current_skip: 0,
     space_id: '',
-    space_name: '',
+    space_info: {},
     store_info: {},
     card: {},
-    post_types: []
+    post_types: [],
+    is_space_owner: false
   };
 
   wxs = {
@@ -249,7 +210,9 @@ export default class Posts extends wepy.page {
     this.store_info = result;
 
     const space = await this.$parent.get('spaces', this.space_id)
-    this.space_name = space.name;
+    this.space_info = space;
+    let globalData = this.$parent.globalData;
+    this.is_space_owner = space && globalData.user && globalData.user._id == space.owner;
     this.$apply();
   };
 
@@ -316,6 +279,9 @@ export default class Posts extends wepy.page {
   
   methods = {
     async uploadImage(isCover){
+      if(!this.is_space_owner){
+        return;
+      }
       const title = isCover ? "更换封面" : "更换头像";
 
       const result = await wepy.showActionSheet({
@@ -336,6 +302,17 @@ export default class Posts extends wepy.page {
             this.store_info.avatar = tempFilePaths[0];
           }
           this.$apply();
+          // wepy.showToast({  
+          //   title: '正在上传...',  
+          //   icon: 'loading',  
+          //   mask: true,  
+          //   duration: 10000  
+          // });
+          // wx.uploadFile({
+          //   url: `${baseUrl}/s3/`,
+          //   filePath: tempFilePaths[0],
+          //   name: ''
+          // });
         }
       }
     }
