@@ -205,7 +205,7 @@
             $count: true,
             $select: 'avatar'
           };
-          const res = await this.$parent.get("vip_category", card.card_name._id, category_options, card.space._id);
+          const res = await this.$parent.get("vip_category", card.card_name._id, card.space._id, category_options);
           this.cards.push({_id: card._id, card_number: card.card_number, grade: card.grade, name: name, space: card.space._id, avatar: res.avatar});
           this.allBalance = allBalance;
           this.card_count = result['@odata.count'];

@@ -264,14 +264,7 @@ export default class VIP extends wepy.app {
     }
   }
 
-  async get(object_name, _id, query_options, space_id) {
-    // 第三个参数可以直接传入space_id，这样可以在没有query_options/space_id时，不传入第四个参数
-    if(space_id == undefined){
-      if(typeof query_options == "string"){
-        space_id = query_options;
-        query_options = null;
-      }
-    }
+  async get(object_name, _id, space_id, query_options) {
     const url = '/api/odata/v4/' + (space_id || this.globalData.space_id) + '/' + object_name + '/' + _id;
     const result = await req.get(url, query_options).catch((err)=>{
       console.log("error...",err.data)
