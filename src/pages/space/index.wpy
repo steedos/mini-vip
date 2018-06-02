@@ -2,50 +2,50 @@
 <style lang="less">
 page {
   height: 100%;
-  .page{
+  .page {
     .image {
       display: block;
     }
-    .page__hd{
+    .page__hd {
       padding: 0px;
-      .cover-wrapper{
-        position:relative;
+      .cover-wrapper {
+        position: relative;
         height: 296px;
-        .cover{
+        .cover {
           width: 100%;
           height: 260px;
-          position:absolute;
+          position: absolute;
         }
-        view.cover{
-          background-color:#7f7f7f;
-          background-repeat:repeat-x;
-          background-image:linear-gradient(128deg, #565656, #555 50%, #343434);
-          display:flex;
-          align-items:center;
-          justify-content:center;
-          text{
+        view.cover {
+          background-color: #7f7f7f;
+          background-repeat: repeat-x;
+          background-image: linear-gradient(128deg, #565656, #555 50%, #343434);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          text {
             color: #262626;
-            text-shadow:1px 1px 0px #686868;
-            font-size:20px;
+            text-shadow: 1px 1px 0px #686868;
+            font-size: 20px;
           }
         }
-        .avatar{
+        .avatar {
           height: 72px;
           width: 72px;
-          position:absolute;
+          position: absolute;
           left: 20rpx;
           top: 208px;
-          border:solid 2px #fff;
-          box-shadow:0px 0px 1px #6a6a6a;
+          border: solid 2px #fff;
+          box-shadow: 0px 0px 1px #6a6a6a;
         }
-        .name{
+        .name {
           color: #fff;
           text-shadow: 3px 3px 3px #333;
           font-size: 20px;
           position: absolute;
           left: 96px;
           top: 226px;
-          font-family:黑体;
+          font-family: 黑体;
         }
       }
     }
@@ -111,7 +111,7 @@ import wepy from 'wepy';
 import { baseUrl } from '@/config';
 import postList from '../../components/post_list';
 import req from '@/network';
-import util from '../../wxs/util.wxs'
+import util from '../../wxs/util.wxs';
 
 const DATA_LENGTH = 10;
 export default class Posts extends wepy.page {
@@ -149,7 +149,7 @@ export default class Posts extends wepy.page {
 
   // 分享
   onShareAppMessage(res) {
-    const space_id = this.space_id
+    const space_id = this.space_id;
     const space_name = this.space_info.name;
     return {
       title: space_name,
@@ -171,9 +171,9 @@ export default class Posts extends wepy.page {
 
   data = {
     baseUrl: baseUrl,
-    emptyImageUrlForCover: "/images/empty.png",
-    emptyImageUrlForAvatar: "/images/avatar.png",
-    type: "",
+    emptyImageUrlForCover: '/images/empty.png',
+    emptyImageUrlForAvatar: '/images/avatar.png',
+    type: '',
     posts: [],
     current_skip: 0,
     space_id: '',
@@ -189,7 +189,7 @@ export default class Posts extends wepy.page {
     util: util
   };
 
-	async loadCardInfo(){
+  async loadCardInfo() {
     const user = this.$parent.globalData.user._id;
     const options = {
       $filter: `owner eq '${user}'`,
@@ -199,26 +199,32 @@ export default class Posts extends wepy.page {
     };
     const card = await this.$parent.query('vip_card', options);
     if (card.value[0] && card.value[0].is_actived) {
-      this.card = card.value[0]
-      this.card.url = `../card?card_id=${this.card._id}&space_id=${this.space_id}`
-      const vip_category = await this.$parent.get('vip_category', this.card.card_name._id)
-      this.card.avatar = vip_category.avatar
+      this.card = card.value[0];
+      this.card.url = `../card?card_id=${this.card._id}&space_id=${
+        this.space_id
+      }`;
+      const vip_category = await this.$parent.get(
+        'vip_category',
+        this.card.card_name._id
+      );
+      this.card.avatar = vip_category.avatar;
     }
-  };
-  
-	async loadStoreInfo(){
+  }
+
+  async loadStoreInfo() {
     const spaceId = this.space_id;
-    const result = await this.$parent.get("vip_store", spaceId, spaceId);
+    const result = await this.$parent.get('vip_store', spaceId, spaceId);
     this.store_info = result;
-    const space = await this.$parent.get('spaces', this.space_id)
+    const space = await this.$parent.get('spaces', this.space_id);
     this.space_info = space;
     let globalData = this.$parent.globalData;
-    this.is_space_owner = space && globalData.user && globalData.user._id == space.owner;
+    this.is_space_owner =
+      space && globalData.user && globalData.user._id == space.owner;
     this.$apply();
-  };
+  }
 
-  async loadPostTypes(){
-    const store_id = this.space_id
+  async loadPostTypes() {
+    const store_id = this.space_id;
     const data = {
       $filter: `_id eq '${store_id}'`,
       $select: 'post_types'
@@ -226,64 +232,70 @@ export default class Posts extends wepy.page {
     const result = await this.$parent.query('vip_store', data);
     const showPostTypes = [];
     const allPostTypes = [
-        {value: "announcements", label: "公告通知", icon: "announcement"},
-        {value: "about", label: "关于我们", icon: "contact"},
-        {value: "news", label: "新闻动态", icon: "contract"},
-        {value: "course", label: "线上课程", icon: "event"},
-        {value: "help", label: "会员指南", icon: "performance"},
-        {value: "jobs", label: "招兵买马", icon: "groups"}];
-    if(result.value[0] && result.value[0].post_types && result.value[0].post_types.length>0){
+      { value: 'announcements', label: '公告通知', icon: 'announcement' },
+      { value: 'about', label: '关于我们', icon: 'contact' },
+      { value: 'news', label: '新闻动态', icon: 'contract' },
+      { value: 'course', label: '线上课程', icon: 'event' },
+      { value: 'help', label: '会员指南', icon: 'performance' },
+      { value: 'jobs', label: '招兵买马', icon: 'groups' }
+    ];
+    if (
+      result.value[0] &&
+      result.value[0].post_types &&
+      result.value[0].post_types.length > 0
+    ) {
       const dbPostTypes = result.value[0].post_types;
-      dbPostTypes.forEach(function(post){
-        const showPostType = allPostTypes.filter(function(m){
-          if(m.value==post){
+      dbPostTypes.forEach(function(post) {
+        const showPostType = allPostTypes.filter(function(m) {
+          if (m.value == post) {
             return m;
-          }else{
+          } else {
             return null;
           }
         });
-        if(showPostType && showPostType.length>0){
-          showPostTypes.push(showPostType[0]);    
+        if (showPostType && showPostType.length > 0) {
+          showPostTypes.push(showPostType[0]);
         }
       });
       this.post_types = showPostTypes;
-    }else{
+    } else {
       this.post_types = allPostTypes;
     }
     this.$apply();
   }
 
-	async loadPostList(){
+  async loadPostList() {
     const skip = this.current_skip;
     const options = {
       $expand: 'owner($select=name)',
       $count: true,
-      $select: 'name,summary,description,comment_count,enable_comment,images,video,audio,type,mini_type',
+      $select:
+        'name,summary,description,comment_count,enable_comment,images,video,audio,type,mini_type',
       $skip: skip,
       $top: DATA_LENGTH
     };
     const type = this.type;
-    if(type){
+    if (type) {
       options.$filter = `type eq '${type}'`;
     }
-    const result = await this.$parent.query("post", options);
-    if(result.value){
+    const result = await this.$parent.query('post', options);
+    if (result.value) {
       this.posts = this.posts.concat(result.value);
       this.current_skip = skip + result.value.length;
     }
     this.$apply();
     wepy.stopPullDownRefresh();
-  };
-  
+  }
+
   methods = {
-    async uploadImage(isCover){
-      if(!this.is_space_owner){
+    async uploadImage(isCover) {
+      if (!this.is_space_owner) {
         return;
       }
-      const title = isCover ? "更换封面" : "更换头像";
+      const title = isCover ? '更换封面' : '更换头像';
 
       const result = await wepy.showActionSheet({
-          itemList: [title]
+        itemList: [title]
       });
       if (!result.cancel) {
         const result2 = await wepy.chooseImage({
@@ -292,25 +304,51 @@ export default class Posts extends wepy.page {
         });
         // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
         const tempFilePaths = result2.tempFilePaths;
-        if(tempFilePaths.length){
-          if(isCover){
-            this.store_info.cover = tempFilePaths[0];
-          }
-          else{
-            this.store_info.avatar = tempFilePaths[0];
-          }
-          this.$apply();
-          // wepy.showToast({  
-          //   title: '正在上传...',  
-          //   icon: 'loading',  
-          //   mask: true,  
-          //   duration: 10000  
+        if (tempFilePaths.length) {
+          // if(isCover){
+          //   this.store_info.cover = tempFilePaths[0];
+          // }
+          // else{
+          //   this.store_info.avatar = tempFilePaths[0];
+          // }
+          // this.$apply();
+          // wepy.showToast({
+          //   title: '正在上传...',
+          //   icon: 'loading',
+          //   mask: true,
+          //   duration: 10000
           // });
           // wepy.uploadFile({
           //   url: `${baseUrl}/s3/`,
           //   filePath: tempFilePaths[0],
           //   name: ''
           // });
+          var that = this;
+          wx.uploadFile({
+            url: `${this.baseUrl}/s3/images`,
+            filePath: tempFilePaths[0],
+            name: 'file',
+            formData: {},
+            header: {
+              'X-Auth-Token': this.$parent.globalData.user.auth_token,
+              'X-User-Id': this.$parent.globalData.user._id
+            },
+            success: function(res) {
+              var data = JSON.parse(res.data);
+              if (data.errors || res.statusCode != 200) {
+                console.error(res);
+                return;
+              }
+              var fId = data._id;
+              if (isCover) {
+                that.store_info.cover = fId;
+              } else {
+                that.store_info.avatar = fId;
+              }
+              that.$apply();
+              //  TODO 更新对应表的字段
+            }
+          });
         }
       }
     }
