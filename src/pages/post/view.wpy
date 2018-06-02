@@ -26,7 +26,7 @@ video{
                     </block>
                     <block wx:else>
                       <swiper indicator-dots="{{indicatorDots}}" autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}">
-                        <block wx:for="{{post.images}}">
+                        <block wx:for="{{post.images}}" wx:key="item">
                           <swiper-item>
                             <image src="{{util.formatImageUrl(item, baseUrl)}}" mode="aspectFill" @tap="previewImage({{item}})" class="slide-image"/>
                           </swiper-item>
