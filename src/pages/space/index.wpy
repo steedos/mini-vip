@@ -127,31 +127,13 @@ export default class Posts extends wepy.page {
     });
     this.space_id = e.space_id || this.$parent.globalData.space_id;
     await this.$parent.login(this.space_id);
-
-    const user = this.$parent.globalData.user._id
-
-    const options = {
-      $filter: `owner eq '${user}'`,
-      $expand: 'space($select=name),card_name($select=name)',
-      $count: true,
-      $select: 'is_actived,name,card_name,space'
-    }
-
-    const card = await this.$parent.query('vip_card', options);
-    if (card.value[0] && card.value[0].is_actived) {
-      this.card = card.value[0]
-      this.card.url = `../card?card_id=${this.card._id}&space_id=${this.space_id}`
-      const vip_category = await this.$parent.get('vip_category', this.card.card_name._id)
-      this.card.avatar = vip_category.avatar
-    }
-
-    this.post_types = await this.setPostTypes()
-
+    await this.loadCardInfo();
+    await this.loadPostTypes();
     this.type = e.type;
     await this.loadStoreInfo();
     await this.loadPostList();
     this.is_loaded = true;
-    this.$apply()
+    this.$apply();
     wepy.hideLoading();
   }
 
@@ -206,13 +188,28 @@ export default class Posts extends wepy.page {
   wxs = {
     util: util
   };
+
+	async loadCardInfo(){
+    const user = this.$parent.globalData.user._id;
+    const options = {
+      $filter: `owner eq '${user}'`,
+      $expand: 'space($select=name),card_name($select=name)',
+      $count: true,
+      $select: 'is_actived,name,card_name,space'
+    };
+    const card = await this.$parent.query('vip_card', options);
+    if (card.value[0] && card.value[0].is_actived) {
+      this.card = card.value[0]
+      this.card.url = `../card?card_id=${this.card._id}&space_id=${this.space_id}`
+      const vip_category = await this.$parent.get('vip_category', this.card.card_name._id)
+      this.card.avatar = vip_category.avatar
+    }
+  };
   
 	async loadStoreInfo(){
     const spaceId = this.space_id;
-
     const result = await this.$parent.get("vip_store", spaceId, spaceId);
     this.store_info = result;
-
     const space = await this.$parent.get('spaces', this.space_id)
     this.space_info = space;
     let globalData = this.$parent.globalData;
@@ -220,7 +217,7 @@ export default class Posts extends wepy.page {
     this.$apply();
   };
 
-  async setPostTypes(){
+  async loadPostTypes(){
     const store_id = this.space_id
     const data = {
       $filter: `_id eq '${store_id}'`,
@@ -248,13 +245,12 @@ export default class Posts extends wepy.page {
         if(showPostType && showPostType.length>0){
           showPostTypes.push(showPostType[0]);    
         }
-      })
+      });
       this.post_types = showPostTypes;
     }else{
       this.post_types = allPostTypes;
     }
     this.$apply();
-    return;
   }
 
 	async loadPostList(){
