@@ -79,7 +79,7 @@
 </style>
 
 <template>
-  <view class="page-index">
+  <view class="page-index" wx:if="{{is_loaded}}">
   <!--
 		<view class="page__hd">
       <view class="page__hd_bg">
@@ -173,7 +173,8 @@
       allBalance: 0,
       demoSpaceId: demoSpaceId,
       demoStoreId: demoStoreId,
-      baseUrl: baseUrl
+      baseUrl: baseUrl,
+      is_loaded: false
     };
 
     wxs = {
@@ -181,47 +182,47 @@
     };
 
     async onPullDownRefresh() {
-      await this.getUserCard();
-      setTimeout(() => {
-        wx.stopPullDownRefresh();
-      }, 200);
+      await this.loadUserCard();
+      wepy.stopPullDownRefresh();
     }
 
-    async getUserCard() {
-      const self = this
+    async loadUserCard() {
       const options = {
         $expand: 'space($select=name),card_name($select=name)',
         $count: true,
         $select: 'name,card_number,grade,balance,space,card_name',
         $filter: `(owner eq '${this.$parent.globalData.user._id}' and is_actived eq true)`
       }
-      const result = await this.$parent.query('vip_card', options, 'common')
-      let allBalance = 0.00
-      self.cards = []
-      result.value.forEach(function (card) {
-        allBalance = allBalance + card.balance
-        let name = card.space.name
+      const result = await this.$parent.query('vip_card', options, 'common');
+      let allBalance = 0.00;
+      this.cards = [];
+      result.value.forEach(async (card)=> {
+        allBalance = allBalance + card.balance;
+        let name = card.space.name;
         if(card.card_name && card.card_name.name){
-          name = card.card_name.name
+          name = card.card_name.name;
           const category_options = {
             $count: true,
             $select: 'avatar'
-          }
-          const url = `/api/odata/v4/${card.space._id}/vip_category/${card.card_name._id}`
-          req.get(url, category_options).then(res => {
-            self.cards.push({_id: card._id, card_number: card.card_number, grade: card.grade, name: name, space: card.space._id, avatar: res.avatar})
-            self.allBalance = allBalance
-            self.card_count = result['@odata.count']
-            self.$apply()
-          })
+          };
+          const res = await this.$parent.get("vip_category", card.card_name._id, category_options, card.space._id);
+          this.cards.push({_id: card._id, card_number: card.card_number, grade: card.grade, name: name, space: card.space._id, avatar: res.avatar});
+          this.allBalance = allBalance;
+          this.card_count = result['@odata.count'];
+          this.$apply();
         }
       })
     }
 
     async onLoad() {
-      const self = this;
+      wepy.showLoading({
+        title: '加载中',
+        mask: true
+      });
       await this.$parent.login();
-      this.getUserCard()
+      await this.loadUserCard();
+      this.is_loaded = true;
+      wepy.hideLoading();
     }
 
     onShareAppMessage(res){
