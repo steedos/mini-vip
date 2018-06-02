@@ -53,7 +53,7 @@ page {
 }
 </style>
 <template>
-  <view class="page">
+  <view class="page" wx:if="{{is_loaded}}">
     <view class="page__hd">
       <view class="cover-wrapper">
         <block wx:if="{{store_info.cover}}">
@@ -149,9 +149,10 @@ export default class Posts extends wepy.page {
 
     this.type = e.type;
     await this.loadStoreInfo();
-    wepy.hideLoading();
-    this.loadPostList();
+    await this.loadPostList();
+    this.is_loaded = true;
     this.$apply()
+    wepy.hideLoading();
   }
 
   refresh() {
@@ -198,7 +199,8 @@ export default class Posts extends wepy.page {
     store_info: {},
     card: {},
     post_types: [],
-    is_space_owner: false
+    is_space_owner: false,
+    is_loaded: false
   };
 
   wxs = {
@@ -265,18 +267,16 @@ export default class Posts extends wepy.page {
       $top: DATA_LENGTH
     };
     const type = this.type;
-    console.log(`loadPostList of type:`, type);
     if(type){
       options.$filter = `type eq '${type}'`;
     }
     const result = await this.$parent.query("post", options);
     if(result.value){
       this.posts = this.posts.concat(result.value);
-      console.log("loadPostList", this.posts);
       this.current_skip = skip + result.value.length;
-      this.$apply();
     }
-    wx.stopPullDownRefresh();
+    this.$apply();
+    wepy.stopPullDownRefresh();
   };
   
   methods = {
@@ -310,7 +310,7 @@ export default class Posts extends wepy.page {
           //   mask: true,  
           //   duration: 10000  
           // });
-          // wx.uploadFile({
+          // wepy.uploadFile({
           //   url: `${baseUrl}/s3/`,
           //   filePath: tempFilePaths[0],
           //   name: ''
