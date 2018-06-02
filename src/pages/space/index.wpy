@@ -40,7 +40,7 @@ page {
         }
         .name {
           color: #fff;
-          text-shadow: 3px 3px 3px #333;
+          text-shadow: 0px 0px 5px #333;
           font-size: 20px;
           position: absolute;
           left: 96px;
