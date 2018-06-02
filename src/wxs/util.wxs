@@ -67,10 +67,38 @@ function getEmptyImageUrl(type) {
       break;
   }
   return url;
-} 
+}
 
+function transformFieldValue(field, value){
+  if(!value){
+    return "";
+  }
 
-
+  if(field.type === 'select'){
+    if(field.multiple){
+      var val = [];
+      field.options.forEach(function(_o){
+        if (value.indexOf(_o.value) > -1) {
+          val.push(_o.label)
+        }
+      })
+      return val.join(",");
+    }else{
+      var val = '';
+      field.options.forEach(function(_o){
+        if (value === _o.value) {
+          val = _o.label
+        }
+      })
+      return val;
+    }
+  }else if(field.type === 'location'){
+     return value.address
+  }else if(field.type === 'lookup' && field.reference_to){
+    return value.name
+  }
+  return value
+}
 
 
 module.exports = {
@@ -78,4 +106,5 @@ module.exports = {
   formatImageUrl: formatImageUrl,
   formatVideoUrl: formatVideoUrl,
   getEmptyImageUrl:getEmptyImageUrl
+  transformFieldValue: transformFieldValue
 }

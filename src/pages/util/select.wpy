@@ -1,0 +1,110 @@
+<template>
+  <view class="page-edit-text">
+    <view class="page__bd">
+      <view class="weui-cells weui-cells_after-title">
+        <checkbox-group bindchange="selectChange" data-id="{{key}}" wx:if="{{multiple}}">
+          <repeat for="{{options}}" key="index" index="index" item="option">
+            <label class="weui-cell weui-check__label">
+              <checkbox class="weui-check" value="{{option.value}}" checked="{{option.checked}}" />
+              <view class="weui-cell__bd">{{option.label}}</view>
+              <view class="weui-cell__ft weui-cell__ft_in-radio" wx:if="{{option.checked}}">
+                <icon class="weui-icon-radio" type="success_no_circle" size="16"></icon>
+              </view>
+            </label>
+          </repeat>
+        </checkbox-group>
+        <radio-group bindchange="radioChange" data-id="{{key}}" wx:else>
+          <repeat for="{{options}}" key="index" index="index" item="option">
+            <label class="weui-cell weui-check__label">
+              <radio class="weui-check" value="{{option.value}}" checked="{{option.checked}}"/>
+              <view class="weui-cell__bd">{{option.label}}</view>
+              <view class="weui-cell__ft weui-cell__ft_in-radio" wx:if="{{option.checked}}">
+                <icon class="weui-icon-radio" type="success_no_circle" size="16"></icon>
+              </view>
+            </label>
+          </repeat>
+        </radio-group>
+      </view>
+    </view>
+  </view>
+</template>
+
+
+<script>
+  import wepy from 'wepy';
+
+  export default class Select extends wepy.page {
+    config = {
+      navigationBarTitleText: '请选择'
+    };
+
+    data = {
+      key: '',
+      options: [],
+      multiple: false
+    }
+
+    setParentValue(key, value){
+      const pages = getCurrentPages();
+      const prevPage = pages[pages.length - 2]
+      prevPage.changeValue(key, value)
+    }
+
+    getObjectField(key){
+      const pages = getCurrentPages();
+      const prevPage = pages[pages.length - 2]
+      return prevPage.data.$form$schema.fields[key]
+    }
+
+    onLoad(e) {
+      if (!e) {
+        e = {}
+      }
+
+      this.key = e.key
+
+      const field = this.getObjectField(e.key)
+
+      this.multiple = field.multiple || false
+
+      console.log("field", field)
+      this.options = field.options
+      if (e.title) {
+        wx.setNavigationBarTitle({title: '请选择' + e.title});
+      }
+      console.log("onload", e.key)
+    }
+
+    methods = {
+      selectChange: function (e) {
+        console.log('checkbox发生change事件，携带value值为：', e);
+        console.log('checkbox发生change事件，携带value值为：', e.detail.value);
+
+        const values = e.detail.value, key = e.target.dataset.id;
+        let checkboxItems = this.options
+        for (let i = 0, lenI = checkboxItems.length; i < lenI; ++i) {
+          checkboxItems[i].checked = false;
+
+          for (let j = 0, lenJ = values.length; j < lenJ; ++j) {
+            if (checkboxItems[i].value == values[j]) {
+              checkboxItems[i].checked = true;
+              break;
+            }
+          }
+        }
+        this.setParentValue(key, values)
+      },
+      radioChange: function (e) {
+        console.log('radio发生change事件，携带value值为：', e.detail.value);
+
+        const radioItems = this.options, key = e.target.dataset.id;
+
+        for (let i = 0, len = radioItems.length; i < len; ++i) {
+          radioItems[i].checked = radioItems[i].value == e.detail.value;
+        }
+
+        this.setParentValue(key, e.detail.value)
+      }
+    }
+  }
+</script>
