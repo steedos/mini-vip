@@ -93,7 +93,7 @@ export default class VIP extends wepy.app {
       'pages/space/paid_list',
       'pages/util/datetime',
       'pages/util/select',
-      'pages/record/view',
+      'pages/record/edit',
       'pages/record/test',
     ],
     tabBar: {
