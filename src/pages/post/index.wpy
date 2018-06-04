@@ -2,6 +2,32 @@
 <style lang="less">
 page {
   height: 100%;
+  .footer-tabbar{
+    display: none;
+    position:absolute;
+    bottom:0px;
+    display:flex;
+    align-items:center;
+    height:50px;
+    background:#F7F7FA;
+    left:0;
+    right:0;
+    justify-content:center;
+    &:before{
+      content: " ";
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0;
+      height: 1px;
+      border-top: 1px solid #C0BFC4;
+      color: #C0BFC4;
+      -webkit-transform-origin: 0 0;
+      transform-origin: 0 0;
+      -webkit-transform: scaleY(0.5);
+      transform: scaleY(0.5);
+    }
+  }
 }
 </style>
 <template>
@@ -10,6 +36,9 @@ page {
       <scroll-view class="scroll-view_H" scroll-y="true">
         <postList :list.sync="posts" />
       </scroll-view>
+      <view class="footer-tabbar hide">
+        <view class="slds-icon-custom-custom1 slds-icon slds-icon--small slds-m-right--x-small"/>
+      </view>
     </view>
   </view>
 </template>
