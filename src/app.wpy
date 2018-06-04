@@ -91,7 +91,9 @@ export default class VIP extends wepy.app {
       'pages/space/index',
       'pages/space/register',
       'pages/space/list',
-      'pages/space/paid_list'
+      'pages/space/paid_list',
+      'pages/util/datetime',
+      'pages/util/select'
     ],
     tabBar: {
       color: '#666',
