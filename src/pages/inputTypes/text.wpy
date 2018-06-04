@@ -1,0 +1,58 @@
+<template>
+  <view class="text">
+    <view class="page__bd">
+      <view class="weui-cells weui-cells_after-title">
+        <view class="weui-cell weui-cell_input">
+          <view class="weui-cell__bd">
+            <input data-id="{{key}}" class="weui-input"
+                   value="{{value}}" bindchange="textChange"/>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
+
+
+<script>
+  import wepy from 'wepy';
+
+  export default class Text extends wepy.page {
+    config = {
+      navigationBarTitleText: '请选择'
+    };
+
+    data = {
+      key: '',
+      value: ''
+    }
+
+    setParentValue(key, value) {
+      const pages = getCurrentPages();
+      const prevPage = pages[pages.length - 2]
+      prevPage.changeValue(key, value)
+    }
+
+    onLoad(e) {
+      if (!e) {
+        e = {}
+      }
+
+      this.key = e.key
+
+      this.value = e.value || ''
+
+      if (e.title) {
+        wx.setNavigationBarTitle({title: '请填写' + e.title});
+      }
+    }
+
+    methods = {
+      textChange(e) {
+        const key = e.target.dataset.id
+        this.value = e.detail.value
+        this.setParentValue(key, e.detail.value)
+      }
+    }
+  }
+</script>

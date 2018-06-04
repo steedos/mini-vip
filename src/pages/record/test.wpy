@@ -1,55 +1,77 @@
 <template>
-  <view class="weui-cells">
-    <navigator url="/pages/record/edit?object_name=post" class="weui-cell weui-cell_access">
-      <view class="weui-cell__hd">
-        <view class="slds-icon-standard-opportunity slds-icon slds-icon--small slds-m-right--x-small"/>
-      </view>
-      <view class="weui-cell__bd">
-        <view>发布最新动态</view>
-      </view>
-      <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-    </navigator>
-  </view>
+  <view class="test">
+    <view class="weui-cells">
+      <navigator url="/pages/record/edit?action=edit&object_name=spaces&record_id={{space_id}}"
+                 class="weui-cell weui-cell_access">
+        <view class="weui-cell__hd">
+          <view class="slds-icon-standard-opportunity slds-icon slds-icon--small slds-m-right--x-small"/>
+        </view>
+        <view class="weui-cell__bd">
+          <view>查看商户</view>
+        </view>
+        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+      </navigator>
+    </view>
 
-  <view class="weui-cells">
-    <navigator url="/pages/record/edit?action=edit&object_name=spaces&record_id={{space_id}}" class="weui-cell weui-cell_access">
-      <view class="weui-cell__hd">
-        <view class="slds-icon-standard-opportunity slds-icon slds-icon--small slds-m-right--x-small"/>
-      </view>
-      <view class="weui-cell__bd">
-        <view>查看商户</view>
-      </view>
-      <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-    </navigator>
-  </view>
+    <view class="weui-cells">
+      <navigator url="/pages/record/edit?object_name=vip_store&record_id={{store_info._id}}"
+                 class="weui-cell weui-cell_access">
+        <view class="weui-cell__hd">
+          <view class="slds-icon-standard-opportunity slds-icon slds-icon--small slds-m-right--x-small"/>
+        </view>
+        <view class="weui-cell__bd">
+          <view>查看店铺（所有字段）</view>
+        </view>
+        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+      </navigator>
+    </view>
 
-  <view class="weui-cells">
-    <navigator url="/pages/record/edit?object_name=vip_store&record_id={{store_info._id}}&fields=name,description,business_hours,post_types,phone" class="weui-cell weui-cell_access">
-      <view class="weui-cell__hd">
-        <view class="slds-icon-standard-opportunity slds-icon slds-icon--small slds-m-right--x-small"/>
-      </view>
-      <view class="weui-cell__bd">
-        <view>查看店铺</view>
-      </view>
-      <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-    </navigator>
-  </view>
-  <view class="weui-cells">
-    <navigator url="/pages/record/edit?action=edit&object_name=vip_store&record_id={{store_info._id}}&fields=name,description,business_hours,post_types,phone" class="weui-cell weui-cell_access">
-      <view class="weui-cell__hd">
-        <view class="slds-icon-standard-opportunity slds-icon slds-icon--small slds-m-right--x-small"/>
-      </view>
-      <view class="weui-cell__bd">
-        <view>编辑店铺</view>
-      </view>
-      <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-    </navigator>
+    <view class="weui-cells">
+      <navigator
+        url="/pages/record/edit?object_name=vip_store&record_id={{store_info._id}}&fields=name,description,business_hours,post_types,phone"
+        class="weui-cell weui-cell_access">
+        <view class="weui-cell__hd">
+          <view class="slds-icon-standard-opportunity slds-icon slds-icon--small slds-m-right--x-small"/>
+        </view>
+        <view class="weui-cell__bd">
+          <view>查看店铺（指定字段）</view>
+        </view>
+        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+      </navigator>
+    </view>
+
+    <view class="weui-cells">
+      <navigator url="/pages/record/edit?action=edit&object_name=vip_store&record_id={{store_info._id}}"
+                 class="weui-cell weui-cell_access">
+        <view class="weui-cell__hd">
+          <view class="slds-icon-standard-opportunity slds-icon slds-icon--small slds-m-right--x-small"/>
+        </view>
+        <view class="weui-cell__bd">
+          <view>编辑店铺（所有字段）</view>
+        </view>
+        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+      </navigator>
+    </view>
+    <view class="weui-cells">
+      <navigator
+        url="/pages/record/edit?action=edit&object_name=vip_store&record_id={{store_info._id}}&fields=name,description,business_hours,post_types,phone"
+        class="weui-cell weui-cell_access">
+        <view class="weui-cell__hd">
+          <view class="slds-icon-standard-opportunity slds-icon slds-icon--small slds-m-right--x-small"/>
+        </view>
+        <view class="weui-cell__bd">
+          <view>编辑店铺（指定字段）</view>
+        </view>
+        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+      </navigator>
+    </view>
   </view>
 </template>
 
 
 <script>
   import wepy from 'wepy';
+
   export default class RecordTest extends wepy.page {
     data = {
       space_id: '',

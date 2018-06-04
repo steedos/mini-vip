@@ -1,4 +1,4 @@
-<style>
+<style lang="less">
   .btn-container {
     width: 100%;
     margin-top: 20px;
@@ -11,8 +11,15 @@
   }
 
   .weui-input-select {
-    min-height:2.58823529em;
-    line-height:2.58823529em;
+    min-height: 2.58823529em;
+    line-height: 2.58823529em;
+  }
+
+  navigator {
+    .weui-textarea {
+      min-height: 2.58823529em;
+      line-height: 2.58823529em;
+    }
   }
 </style>
 <template>
@@ -89,7 +96,7 @@
                     <view class="weui-label">{{item.label}}</view>
                   </view>
                   <view class="weui-cell__bd" auto-height="true">
-                    <view class="weui-input-readonly" auto-height="true">
+                    <view class="weui-cell__ft weui-input-readonly" auto-height="true">
                       {{util.transformFieldValue(item, values[item.name])}}
                     </view>
                   </view>
@@ -101,12 +108,18 @@
                     <view class="weui-label">{{item.label}}</view>
                   </view>
                   <view class="weui-cell__bd">
-                    <input wx:if="{{item.type === 'text'}}" data-id="{{item.name}}" class="weui-input"
-                           value="{{values[item.name]}}" bindchange="textChange"/>
+                    <navigator
+                      url="/pages/inputTypes/text?title={{item.label}}&key={{item.name}}&value={{values[item.name]}}"
+                      class="weui-input"
+                      wx:if="{{item.type === 'text'}}">
+                      <view class="weui-cell__ft">{{values[item.name]}}</view>
+                    </navigator>
 
-                    <textarea wx:elif="{{item.type === 'textarea'}}" data-id="{{item.name}}"
-                              class="weui-input weui-textarea"
-                              auto-height="true" value="{{values[item.name]}}" bindblur="textChange"/>
+                    <navigator
+                      url="/pages/inputTypes/textarea?title={{item.label}}&key={{item.name}}&value={{values[item.name]}}"
+                      wx:elif="{{item.type === 'textarea'}}" auto-height="true">
+                      <view class="weui-textarea weui-cell__ft" auto-height="true">{{values[item.name]}}</view>
+                    </navigator>
 
                     <input wx:elif="{{item.type === 'number'}}" data-id="{{item.name}}" class="weui-input" type="number"
                            bindchange="textChange"/>
@@ -114,49 +127,52 @@
                     <view wx:elif="{{item.type === 'boolean'}}" data-id="{{item.name}}" class="weui-cell__ft">
                       <switch checked class="weui-input" data-id="{{item.name}}" bindchange="textChange"/>
                     </view>
-<!--
-                    <block wx:elif="{{item.type === 'select'}}">
-                      <checkbox-group bindchange="checkboxChange" wx:if="{{item.multiple}}" data-id="{{item.name}}">
-                        <repeat for="{{item.options}}" key="index" index="index" item="option">
-                          <label class="weui-cell weui-check__label">
-                            <checkbox class="weui-check" value="{{option.value}}" checked="{{option.checked}}"/>
-                            <view class="weui-cell__hd weui-check__hd_in-checkbox">
-                              <icon class="weui-icon-checkbox_circle" type="circle" size="23"
-                                    wx:if="{{!option.checked}}"></icon>
-                              <icon class="weui-icon-checkbox_success" type="success" size="23"
-                                    wx:if="{{option.checked}}"></icon>
-                            </view>
-                            <view class="weui-cell__bd">{{option.label}}</view>
-                          </label>
-                        </repeat>
-                      </checkbox-group>
-                      <picker wx:else bindchange="selectChange" data-id="{{item.name}}"
-                              range="{{item.options}}" range-key="label">
-                        <view class="weui-input">{{item.options[pickerIndex[item.name]].label}}</view>
-                      </picker>
-                    </block>
--->
-                    <navigator url="/pages/util/datetime?title={{item.label}}&key={{item.name}}" class="weui-input"
+                    <!--
+										<block wx:elif="{{item.type === 'select'}}">
+										  <checkbox-group bindchange="checkboxChange" wx:if="{{item.multiple}}" data-id="{{item.name}}">
+											<repeat for="{{item.options}}" key="index" index="index" item="option">
+											  <label class="weui-cell weui-check__label">
+												<checkbox class="weui-check" value="{{option.value}}" checked="{{option.checked}}"/>
+												<view class="weui-cell__hd weui-check__hd_in-checkbox">
+												  <icon class="weui-icon-checkbox_circle" type="circle" size="23"
+														wx:if="{{!option.checked}}"></icon>
+												  <icon class="weui-icon-checkbox_success" type="success" size="23"
+														wx:if="{{option.checked}}"></icon>
+												</view>
+												<view class="weui-cell__bd">{{option.label}}</view>
+											  </label>
+											</repeat>
+										  </checkbox-group>
+										  <picker wx:else bindchange="selectChange" data-id="{{item.name}}"
+												  range="{{item.options}}" range-key="label">
+											<view class="weui-input">{{item.options[pickerIndex[item.name]].label}}</view>
+										  </picker>
+										</block>
+					-->
+                    <navigator url="/pages/inputTypes/datetime?title={{item.label}}&key={{item.name}}"
+                               class="weui-input"
                                wx:elif="{{item.type === 'datetime'}}">
                       <view class="weui-cell__ft">{{values[item.name]}}</view>
                     </navigator>
 
-                    <navigator url="/pages/util/select?title={{item.label}}&key={{item.name}}" class="weui-input-select"
+                    <navigator url="/pages/inputTypes/select?title={{item.label}}&key={{item.name}}"
+                               class="weui-input-select"
                                wx:elif="{{item.type === 'select'}}">
-                      <view class="weui-cell__ft11">{{util.transformFieldValue(item, values[item.name])}}</view>
+                      <view class="weui-cell__ft">{{util.transformFieldValue(item, values[item.name])}}</view>
                     </navigator>
 
-                    <navigator url="/pages/util/select?title={{item.label}}&key={{item.name}}" class="weui-input-select"
+                    <navigator url="/pages/inputTypes/select?title={{item.label}}&key={{item.name}}"
+                               class="weui-input-select"
                                wx:elif="{{item.type === 'master_detail' || item.type === 'lookup'}}">
-                      <view class="weui-cell__ft11">{{util.transformFieldValue(item, values[item.name])}}</view>
+                      <view class="weui-cell__ft">{{util.transformFieldValue(item, values[item.name])}}</view>
                     </navigator>
-<!--
-                    <picker wx:elif="{{item.type === 'master_detail' || item.type === 'lookup'}}"
-                            bindchange="optionChange" data-id="{{item.name}}"
-                            range="{{fieldOptions[item.name]}}" range-key="label">
-                      <view class="weui-input">{{fieldOptions[item.name][pickerIndex[item.name]].label}}</view>
-                    </picker>
--->
+                    <!--
+										<picker wx:elif="{{item.type === 'master_detail' || item.type === 'lookup'}}"
+												bindchange="optionChange" data-id="{{item.name}}"
+												range="{{fieldOptions[item.name]}}" range-key="label">
+										  <view class="weui-input">{{fieldOptions[item.name][pickerIndex[item.name]].label}}</view>
+										</picker>
+					-->
                     <textarea class="weui-input weui-textarea" wx:elif="{{item.type === 'location'}}" auto-height="true"
                               value="{{values[item.name] && values[item.name].address}}"/>
 
@@ -230,7 +246,7 @@
 
             let title = object.label;
 
-            if(object_name === 'spaces'){
+            if (object_name === 'spaces') {
               title = '商户';
             }
 
@@ -253,13 +269,13 @@
               }
             }
 
-            if(this.args.fields){
+            if (this.args.fields) {
               let fields = {}
               _.forEach(this.args.fields.split(','), function (field_name) {
                 fields[field_name] = object.fields[field_name]
               })
               this.fields = fields
-            }else{
+            } else {
               this.fields = object.fields
             }
 
@@ -314,18 +330,18 @@
       this.$apply();
     }
 
-    getObjectField(key){
+    getObjectField(key) {
       return this.fields[key]
     }
 
-    transformValue(){
+    transformValue() {
       const value = _.clone(this.values)
       const fields = this.fields
-      _.forEach(value, (v, k)=>{
+      _.forEach(value, (v, k) => {
         console.log("k", k)
         console.log("v", v)
-        if(fields[k].type === 'lookup' || fields[k].type === 'master_detail'){
-          if(_.isObject(v)){
+        if (fields[k].type === 'lookup' || fields[k].type === 'master_detail') {
+          if (_.isObject(v)) {
             value[k] = v._id
           }
         }
@@ -404,7 +420,7 @@
       },
       textChange(e) {
         const key = e.target.dataset.id
-        console.log("text change" , key, e)
+        console.log("text change", key, e)
         this.values[key] = e.detail.value
       },
       selectChange(e) {
@@ -502,7 +518,7 @@
         const value = this.transformValue()
         if (this.args.action === 'create') {
           await this.$parent.$parent.insert(this.args.object_name, value)
-        }else if(this.args.action === 'edit'){
+        } else if (this.args.action === 'edit') {
           await this.$parent.$parent.update(this.args.object_name, this.args.record_id, value)
         }
       }
