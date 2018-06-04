@@ -171,8 +171,13 @@
 										  <view class="weui-input">{{fieldOptions[item.name][pickerIndex[item.name]].label}}</view>
 										</picker>
 					-->
-                    <view class="weui-cell__ft weui-textarea" wx:elif="{{item.type === 'location'}}" auto-height="true"
-                          value="" @tap="getAddress" data-id="{{item.name}}">{{values[item.name] && values[item.name].address}}</view>
+                    <block wx:elif="{{item.type === 'location'}}" >
+                      <view wx:if="{{showOpenSetting}}">
+                        <button open-type="openSetting" @opensetting="openSetting">打开授权设置页</button>
+                      </view>
+                      <view wx:else class="weui-cell__ft weui-textarea" auto-height="true"
+                            value="" @tap="getAddress" data-id="{{item.name}}">{{values[item.name] && values[item.name].address}}</view>
+                    </block>
 
                     <input wx:else class="weui-input" value="{{item.type}}"/>
                   </view>
@@ -225,7 +230,8 @@
       pickerIndex: {},
       hiddenButton: {},
       fieldOptions: {},
-      fields: {}
+      fields: {},
+      showOpenSetting: false,
     };
 
     watch = {
@@ -280,7 +286,6 @@
 
           }
           if (object_name && record_id && action != 'create') {
-            console.log("this.fields", this.fields)
             let query_options = {
               $select: _.pluck(this.fields, "name").join(","),
               $filter: `_id eq '${record_id}'`
@@ -323,7 +328,12 @@
     };
 
     async onLoad() {
-
+      const setting = await wepy.getSetting()
+      console.log("setting", setting)
+      if(setting.authSetting["scope.userLocation"] === false){
+        this.showOpenSetting = true;
+      }
+      this.$apply()
     }
 
     changeValue(key, value) {
@@ -392,6 +402,14 @@
     }
 
     methods = {
+      openSetting(e){
+        self = this;
+        if(e.detail.authSetting["scope.userLocation"]){
+          this.showOpenSetting = false;
+          self.$apply();
+          self.methods.getAddress.call(self, e);
+        }
+      },
       getAddress(e) {
         console.log(e);
         self = this;
@@ -408,14 +426,21 @@
             self.$apply();
           })
           .catch(err => {
+            console.log(err)
             if (err.errMsg == 'chooseLocation:fail auth deny') {
-              wx.openSetting({
-                success: res => {
-                  if (res.authSetting['scope.userLocation']) {
-                    self.methods.getAddress.call(self, e);
-                  }
-                }
-              });
+              self.showOpenSetting = true
+              self.$apply()
+//              wx.navigateTo({
+//                url: '/pages/openSetting'
+//              })
+//
+//              wx.openSetting({
+//                success: res => {
+//                  if (res.authSetting['scope.userLocation']) {
+//                    self.methods.getAddress.call(self, e);
+//                  }
+//                }
+//              });
             }
           });
       },
