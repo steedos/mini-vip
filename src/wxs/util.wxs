@@ -45,32 +45,60 @@ function formatVideoUrl(src, baseUrl) {
 
 // 文章图片模板
 function getEmptyImageUrl(type) {
-  var result;
+  var url = "https://www-steedos-com.oss-cn-beijing.aliyuncs.com/apps/vip/covers/"
   switch (type) {
     case "announcements":
-      result = "/images/announcements.png";
+      return url = url + "announcements.jpg";
       break;
     case "about":
-       result = "/images/about.png";;
+      return url = url + "about.jpg";
       break;
     case "news":
-       result = "/images/news.png";;
+      return url = url + "news.jpg";
       break;
     case "course":
-       result = "/images/course.png";;
+      return url = url + "course.jpg";
       break;
     case "help":
-       result = "/images/help.png";;
+      return url = url + "help.jpg";
       break;
     case "jobs":
-       result = "/images/jobs.png";;
+      return url = url + "jobs.jpg";
       break;
   }
-  return result;
-} 
+  return url;
+}
 
+function transformFieldValue(field, value){
+  if(!value){
+    return "";
+  }
 
-
+  if(field.type === 'select'){
+    if(field.multiple){
+      var val = [];
+      field.options.forEach(function(_o){
+        if (value.indexOf(_o.value) > -1) {
+          val.push(_o.label)
+        }
+      })
+      return val.join(",");
+    }else{
+      var val = '';
+      field.options.forEach(function(_o){
+        if (value === _o.value) {
+          val = _o.label
+        }
+      })
+      return val;
+    }
+  }else if(field.type === 'location'){
+     return value.address
+  }else if(field.type === 'lookup' && field.reference_to){
+    return value.name
+  }
+  return value
+}
 
 
 module.exports = {
@@ -78,4 +106,5 @@ module.exports = {
   formatImageUrl: formatImageUrl,
   formatVideoUrl: formatVideoUrl,
   getEmptyImageUrl:getEmptyImageUrl
+  transformFieldValue: transformFieldValue
 }

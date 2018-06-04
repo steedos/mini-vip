@@ -84,9 +84,9 @@
     </repeat>
   </block>
   <block wx:else>
-        <view class="weui-loadmore weui-loadmore_line">
-            <view class="weui-loadmore__tips weui-loadmore__tips_in-line">暂无动态</view>
-        </view>
+    <view class="weui-loadmore weui-loadmore_line">
+      <view class="weui-loadmore__tips weui-loadmore__tips_in-line">暂无动态</view>
+    </view>
   </block>
 </view>
 </template>

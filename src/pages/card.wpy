@@ -109,7 +109,7 @@
               <view class="slds-icon-standard-contact slds-icon slds-icon--small slds-m-right--x-small"/>
             </view>
             <view class="weui-cell__bd">
-              <view>企业名片</view>
+              <view>企业首页</view>
             </view>
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
           </navigator>
@@ -233,7 +233,7 @@ export default class Card extends wepy.page {
     const space_name = this.space_name
     return {
       title: space_name,
-      path: `pages/space/index?space_id=${space_id}&store_id=${store_id}`
+      path: `pages/card?space_id=${space_id}&store_id=${store_id}`
     };
   }
 

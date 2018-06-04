@@ -1,0 +1,77 @@
+<style lang="less">
+  .datetime {
+    background-color: #FFFFFF;
+    .weui-cell__bd {
+      margin-left: 15px;
+    }
+  }
+</style>
+
+<template>
+  <view class="datetime">
+    <view class="weui-cell weui-cell_input">
+      <view class="weui-cell__hd">
+        <picker mode="date" value="{{date}}" bindchange="bindDateChange" placeholder="请选择日期">
+          <view class="weui-input">{{date}}</view>
+        </picker>
+      </view>
+      <view class="weui-cell__bd">
+        <picker mode="time" value="{{time}}" bindchange="bindTimeChange">
+          <view class="weui-input">{{time}}</view>
+        </picker>
+      </view>
+    </view>
+  </view>
+</template>
+
+
+<script>
+
+  var util = require('../../utils/util.js')
+
+  import wepy from 'wepy'
+
+  export default class DateTime extends wepy.page {
+
+    config = {
+      navigationBarTitleText: '请选择'
+    };
+
+    data = {
+      key: '',
+      date: '',
+      time: ''
+    }
+
+    setParentValue(key, value){
+      const pages = getCurrentPages();
+      const prevPage = pages[pages.length - 2]
+      prevPage.changeValue(key, value)
+    }
+
+    onLoad(e) {
+      if (!e) {
+        e = {}
+      }
+      if (e.title) {
+        wx.setNavigationBarTitle({title: '请选择' + e.title});
+      }
+      this.key = e.key
+      const now = util.formatTime(new Date)
+      this.date = e.date || now.substr(0, 10).replace(/\//g, "-")
+      this.time = e.time || now.substr(11, 5)
+      this.setParentValue(this.key, this.date + ' ' + this.time)
+    }
+
+    methods = {
+      bindDateChange(e) {
+        this.date = e.detail.value
+        this.setParentValue(this.key, this.date + ' ' + this.time)
+      },
+      bindTimeChange(e) {
+        this.time = e.detail.value
+        this.setParentValue(this.key, this.date + ' ' + this.time)
+      }
+    }
+  }
+</script>

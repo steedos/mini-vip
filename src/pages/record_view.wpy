@@ -1,6 +1,6 @@
 <template>
   <view>
-    <form :schema.sync='schema'></form>
+    <form :args.sync='args'></form>
   </view>
 </template>
 
@@ -11,21 +11,39 @@
   import form from '../components/form';
 
   export default class RecordView extends wepy.page {
+
+    config = {
+      navigationBarTitleText: ''
+    };
+
     data = {
-      schema: {}
+      args: {}
     }
 
     components = {
       form: form
     };
 
+    changeNavigationBarTitleText(title){
+      wx.setNavigationBarTitle({title:title})
+    }
 
-    onLoad(){
-      req.get(`/api/odata/v4/51ae9b1a8e296a29c9000001/objects/mini_apps`).then(res => {
-        console.log("res", res)
-        this.schema = res;
-        this.$apply()
-      })
+    async onLoad(e){
+      let args = {action: 'read'};
+      if(e && e.record_id){
+        args.record_id = e.record_id
+      }
+      if(e && e.object_name){
+        args.object_name = e.object_name
+      }else{
+        throw new Error("缺少参数：object_name")
+      }
+
+      if(e && e.action){
+        args.action = e.action
+      }
+      this.args = args;
+      this.$apply()
     }
   }
 </script>
