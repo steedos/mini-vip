@@ -101,7 +101,7 @@ page {
           <view class="weui-cell__hd">
             <view class="ion slds-icon-checkin slds-icon slds-icon--small slds-m-right--x-small"/>
           </view>
-          <view class="weui-cell__bd">{{store.address}}</view>
+          <view class="weui-cell__bd">{{store.location.address}}</view>
           <view class="weui-cell__ft weui-cell__ft_in-access"></view>
         </view>
         <view class="weui-cell weui-cell_access">
