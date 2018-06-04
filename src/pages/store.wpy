@@ -76,54 +76,66 @@ page {
   background-repeat: repeat-x;
   margin: 0 15px 20px;
 }
+
+.button-sp-area{
+  margin: 0 auto;
+  padding-top: 15px;
+  width: 60%;
+}
 </style>
 <template>
   <view class="page-store">
-      <view class="header">
-        <view class="title">
-          <view class="store-name">
-            {{store.name}}
-          </view>
-        </view>
-        <view class="avatar">
-          <image class="image" mode="aspectFill" src="{{util.formatImageUrl(store.avatar, baseUrl)}}"/>
+    <view class="header">
+      <view class="title">
+        <view class="store-name">
+          {{store.name}}
         </view>
       </view>
-      <view class="dashed">
+      <view class="avatar">
+        <image class="image" mode="aspectFill" src="{{util.formatImageUrl(store.avatar, baseUrl)}}"/>
       </view>
+    </view>
+    <view class="dashed">
+    </view>
 
-      <view class="description">
-        {{store.description}}
-      </view>
+    <view class="description">
+      {{store.description}}
+    </view>
 
-      <view class="weui-cells">
-        <view class="weui-cell weui-cell_access" hover-class="weui-cell_active" @tap="openMap">
-          <view class="weui-cell__hd">
-            <view class="ion slds-icon-checkin slds-icon slds-icon--small slds-m-right--x-small"/>
-          </view>
-          <view class="weui-cell__bd">{{store.location.address}}</view>
-          <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+    <view class="weui-cells">
+      <view class="weui-cell weui-cell_access" hover-class="weui-cell_active" @tap="openMap">
+        <view class="weui-cell__hd">
+          <view class="ion slds-icon-checkin slds-icon slds-icon--small slds-m-right--x-small"/>
         </view>
-        <view class="weui-cell weui-cell_access">
-          <view class="weui-cell__hd">
-            <view class="ion slds-icon-clock slds-icon slds-icon--small slds-m-right--x-small"/>
-          </view>
-          <view class="weui-cell__bd">{{store.business_hours}}</view>
-        </view>
-        <navigator class="weui-cell weui-cell_access" hover-class="weui-cell_active" @tap="phoneCall">
-          <view class="weui-cell__hd">
-            <view class="ion slds-icon-call slds-icon slds-icon--small slds-m-right--x-small"/>
-          </view>
-          <view class="weui-cell__bd">{{store.phone}}</view>
-          <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-        </navigator>
-        <!-- <view class="weui-cell weui-cell_access">
-          <view class="weui-cell__hd">
-            <view class="ion slds-icon-image slds-icon slds-icon--small slds-m-right--x-small"/>
-          </view>
-          <view class="weui-cell__bd">门店照片</view>
-        </view> -->
+        <view class="weui-cell__bd">{{store.location.address}}</view>
+        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
       </view>
+      <view class="weui-cell weui-cell_access">
+        <view class="weui-cell__hd">
+          <view class="ion slds-icon-clock slds-icon slds-icon--small slds-m-right--x-small"/>
+        </view>
+        <view class="weui-cell__bd">{{store.business_hours}}</view>
+      </view>
+      <navigator class="weui-cell weui-cell_access" hover-class="weui-cell_active" @tap="phoneCall">
+        <view class="weui-cell__hd">
+          <view class="ion slds-icon-call slds-icon slds-icon--small slds-m-right--x-small"/>
+        </view>
+        <view class="weui-cell__bd">{{store.phone}}</view>
+        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+      </navigator>
+      <!-- <view class="weui-cell weui-cell_access">
+        <view class="weui-cell__hd">
+          <view class="ion slds-icon-image slds-icon slds-icon--small slds-m-right--x-small"/>
+        </view>
+        <view class="weui-cell__bd">门店照片</view>
+      </view> -->
+    </view>
+
+    <view class="button-sp-area" wx:if="{{is_space_owner}}">
+      <navigator url="/pages/record/edit?action=edit&object_name=vip_store&record_id={{store._id}}&fields=name,description,business_hours,location,post_types">
+        <button class="weui-btn" type="primary" plain="true">编辑门店</button>
+      </navigator>
+    </view>
   </view>
 </template>
 
@@ -132,7 +144,7 @@ import wepy from 'wepy';
 import req from '@/network';
 import vipCard from '../components/vipCard';
 import { baseUrl } from '@/config';
-import util from '../wxs/util.wxs'; 
+import util from '../wxs/util.wxs';
 
 export default class store extends wepy.page {
   config = {
@@ -140,9 +152,20 @@ export default class store extends wepy.page {
     navigationBarBackgroundColor: '#fff',
   };
 
-  async onLoad(e) {
-    var store = await this.getStoreInfo(e.store);
+  async onShow(){
+    var store = await this.getStoreInfo(this.store_id);
     this.store = store;
+    this.$apply();
+  }
+
+  async onLoad(e) {
+    this.store_id = e.store
+    const globalData = this.$parent.globalData;
+    console.log("globalData", globalData)
+    const space = await this.$parent.get('spaces', globalData.space_id)
+    console.log("space", space)
+    this.is_space_owner =
+      space && globalData.user && globalData.user._id === space.owner;
     this.$apply();
   }
 
@@ -155,6 +178,8 @@ export default class store extends wepy.page {
   }
 
   data = {
+    store_id: '',
+    is_space_owner: false,
     store: [],
     baseUrl: baseUrl
   };
