@@ -2,8 +2,13 @@
 <style lang="less">
 page {
   height: 100%;
+  // scroll-view{
+  //   position: absolute;
+  //   top: 0;
+  //   bottom: 50px;
+  // }
   .footer-tabbar{
-    position:absolute;
+    position:fixed;
     bottom:0px;
     display:flex;
     align-items:center;
@@ -12,7 +17,6 @@ page {
     left:0;
     right:0;
     justify-content:center;
-    display: none;
     &:before{
       content: " ";
       position: absolute;
@@ -36,8 +40,8 @@ page {
       <scroll-view class="scroll-view_H" scroll-y="true">
         <postList :list.sync="posts" />
       </scroll-view>
-      <view class="footer-tabbar hide">
-        <view class="slds-icon-custom-custom1 slds-icon slds-icon--small slds-m-right--x-small"/>
+      <view class="footer-tabbar" wx:if="{{is_editable}}">
+        <view class="slds-icon-custom-custom83 slds-icon" @tap="creatorPost"/>
       </view>
     </view>
   </view>
@@ -59,6 +63,7 @@ export default class Posts extends wepy.page {
       title: '加载中',
       mask: true
     });
+    this.is_editable = e.editable;
     if(e.title){
       this.title = e.title;
       wx.setNavigationBarTitle({
@@ -115,7 +120,8 @@ export default class Posts extends wepy.page {
     space_id: "",
     posts: [],
     current_skip: 0,
-    is_loaded: false
+    is_loaded: false,
+    is_editable: false
   };
   
 	async loadPostList(){
@@ -141,5 +147,14 @@ export default class Posts extends wepy.page {
     }
     wx.stopPullDownRefresh();
   };
+
+  methods = {
+    creatorPost() {
+      let url = "/pages/record/edit?action=create&object_name=post&fields=name,summary,description,type";
+      wepy.navigateTo({
+        url: url
+      });
+    }
+  }
 }
 </script>
