@@ -8,7 +8,7 @@
 <script>
   import wepy from 'wepy';
   import req from '@/network';
-  import form from '../components/form';
+  import form from '../../components/form';
 
   export default class RecordView extends wepy.page {
 

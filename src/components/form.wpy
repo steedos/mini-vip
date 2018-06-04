@@ -146,12 +146,17 @@
                       <view class="weui-cell__ft11">{{util.transformFieldValue(item, values[item.name])}}</view>
                     </navigator>
 
+                    <navigator url="./util/select?title={{item.label}}&key={{item.name}}" class="weui-input-select"
+                               wx:elif="{{item.type === 'master_detail' || item.type === 'lookup'}}">
+                      <view class="weui-cell__ft11">{{util.transformFieldValue(item, values[item.name])}}</view>
+                    </navigator>
+<!--
                     <picker wx:elif="{{item.type === 'master_detail' || item.type === 'lookup'}}"
                             bindchange="optionChange" data-id="{{item.name}}"
                             range="{{fieldOptions[item.name]}}" range-key="label">
                       <view class="weui-input">{{fieldOptions[item.name][pickerIndex[item.name]].label}}</view>
                     </picker>
-
+-->
                     <textarea class="weui-input weui-textarea" wx:elif="{{item.type === 'location'}}" auto-height="true"
                               value="{{values[item.name] && values[item.name].address}}"/>
 
@@ -171,7 +176,7 @@
       </view>
 
       <view class="btn-container" wx:if="{{args.action === 'edit' || args.action === 'create'}}">
-        <button class="submit-btn" form-type="submit" @tap="submitActivate" disabled="{{submitDisabled}}">提交</button>
+        <button class="submit-btn" form-type="submit" @tap="submitForm" disabled="{{submitDisabled}}">提交</button>
       </view>
 
     </view>
@@ -242,7 +247,7 @@
               for (let field_name in fields) {
                 let field = fields[field_name];
                 if (field.reference_to) {
-                  this.getReferenceTo(field.name, field.reference_to)
+                  field.options = this.getReferenceTo(field.name, field.reference_to)
                 }
               }
             }
@@ -255,7 +260,7 @@
             }
             let expand = []
             _.forEach(this.schema.fields, (field) => {
-              if (field.type === 'lookup' && field.reference_to) {
+              if ((field.type === 'lookup' || field.type === 'master_detail') && field.reference_to) {
                 expand.push(`${field.name}($select=name)`)
               }
             });
@@ -301,7 +306,6 @@
       let query = {
         $select: 'name'
       };
-
       if (reference_to === 'users') {
         reference_to = 'space_users'
         query.$select = 'name,user'
@@ -316,10 +320,10 @@
           options.push({label: record.name, value: record._id});
         }
       });
-
-      this.fieldOptions[file_name] = options;
-      this.$apply();
-      console.log('this.fieldOptions', this.fieldOptions);
+      return options
+//      this.fieldOptions[file_name] = options;
+//      this.$apply();
+//      console.log('this.fieldOptions', this.fieldOptions);
     }
 
     checkRequired() {
@@ -368,12 +372,10 @@
           });
       },
       textChange(e) {
-        console.log("textChange", e)
         const key = e.target.dataset.id
         this.values[key] = e.detail.value
       },
       selectChange(e) {
-        console.log("selectChange", e)
         const index = e.detail.value;
         const key = e.target.dataset.id
         this.pickerIndex[key] = index
@@ -382,20 +384,14 @@
         this.$apply()
       },
       optionChange(e) {
-        console.log("optionChange", e);
-        console.log("this.fieldOptions", this.fieldOptions);
-
         const index = e.detail.value;
         const key = e.target.dataset.id;
         this.pickerIndex[key] = index;
         const value = this.fieldOptions[key][index].value;
         this.values[key] = value;
-        console.log("this.values[key]", this.values[key]);
-        console.log("this.index", this.pickerIndex[key]);
         this.$apply()
       },
       checkboxChange: function (e) {
-        console.log('checkbox发生change事件，携带value值为：', e.detail.value);
         const values = e.detail.value, key = e.target.dataset.id;
         let checkboxItems = _.clone(this.schema.fields[key].options);
         for (let i = 0, lenI = checkboxItems.length; i < lenI; ++i) {
@@ -427,18 +423,14 @@
         const multiple = e.target.dataset.multiple || false
         const type = e.target.dataset.type
         if (type === 'image') {
-
           let options = {
             sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
             sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
           }
-
           if (!multiple) {
             options.count = 1
           }
-
           const res = await wepy.chooseImage(options)
-
           // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
           if (!that.values[key]) {
             that.values[key] = []
@@ -471,13 +463,14 @@
           urls: this.data.files // 需要预览的图片http链接列表
         })
       },
-      async submitActivate() {
-        console.log("submitActivate", this.values)
+      async submitForm() {
         if (!this.checkRequired()) {
           return;
         }
         if (this.args.action === 'create') {
-          await this.$parent.$parent.insert("post", this.values, 'HhkRCP4eTnpXy9mce')
+          await this.$parent.$parent.insert(this.args.object_name, this.values)
+        }else if(this.args.action === 'edit'){
+          await this.$parent.$parent.update(this.args.object_name, this.args.record_id, this.values)
         }
       }
     }
