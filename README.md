@@ -133,6 +133,28 @@ this.$parent 中提供以下接口，如果接口失败，统一显示错误提�
 - 数据修改 await delete(object_name, _id)
 - 上传照片 await uploadImages(file_name, file_path)，返回 cfs_images 对象
 
-界面反馈
+### 界面反馈
 - 调用接口时，显示导航条加载动画：wx.showNavigationBarLoading()
 - 接口调用完成时，隐藏导航条加载动画：wx.hideNavigationBarLoading()
+
+### 信息发布
+type 分类，每种type在前台用不同的页面风格显示
+- announcements 公告
+- about 关于我们
+- news 新闻
+- employees 团队
+- products 产品
+- services 服务
+- course 线上课程
+- activity 线下活动
+- jobs 工作机会
+- help 帮助
+- coupon 优惠卷
+- red_packet 红包
+
+mine_type 内容样式 每种分类在详细页有不同的风格显示
+- article 文章，文章的最后可以配照片，列表显示第一张照片、文章和摘要。一篇文章最多可以传9个照片。点开详细信息可以看到照片。
+- photo 照片，列表页显示为各照片的缩略图，点击可滑动显示当前文章的所有照片。一篇文章最多可以传9个照片。
+- video 视频，列表页显示为视频，点击即播放视频，只能传一个附件
+- music 音乐，列表点击可以播放，只能传一个附件
+
