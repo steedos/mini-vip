@@ -49,6 +49,18 @@ page {
         }
       }
     }
+    .page__bd{
+      .need_read{
+        display:block;
+        background:#f00;
+        border-radius:50%;
+        width:0.4em;
+        height:0.4em;
+        margin-left:1.8rem;
+        margin-top:-0.2rem;
+        position:absolute;
+      }
+    }
   }
 }
 </style>
@@ -90,7 +102,9 @@ page {
           </block>
           <repeat for="{{post_types}}" wx:key="*this" key="index" index="index" item="post">
             <navigator url="../post/index?type={{post.value}}&title={{post.label}}" class="weui-grid" hover-class="weui-grid_active">
-              <view class="slds-icon-standard-{{post.icon}} weui-grid__icon slds-icon"/>
+              <view class="slds-icon-standard-{{post.icon}} weui-grid__icon slds-icon">
+                <view class="need_read1"></view>
+              </view>
               <view class="weui-grid__label">{{post.label}}</view>
             </navigator>
           </repeat>
