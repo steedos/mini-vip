@@ -3,7 +3,6 @@
 page {
   height: 100%;
   .footer-tabbar{
-    display: none;
     position:absolute;
     bottom:0px;
     display:flex;
@@ -13,6 +12,7 @@ page {
     left:0;
     right:0;
     justify-content:center;
+    display: none;
     &:before{
       content: " ";
       position: absolute;
