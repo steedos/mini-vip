@@ -294,19 +294,19 @@ export default class VIP extends wepy.app {
     return result
   }
 
-  async update(object_name,_id,data) {
-    const url = '/api/odata/v4/' + this.globalData.space_id + '/' + object_name + '/'+_id;
+  async update(object_name, _id, data, space_id) {
+    const url = '/api/odata/v4/' + (space_id || this.globalData.space_id) + '/' + object_name + '/'+_id;
     var doc = {}
     doc['$set'] = data
-    const result = await req.put(url,doc).catch((err)=>{
+    const result = await req.put(url, doc).catch((err)=>{
       console.log("error...",err.data)
       return {}
     })
     return result
   }
 
-  async delete(object_name,_id) {
-    const url = '/api/odata/v4/' + this.globalData.space_id + '/' + object_name + '/'+_id;
+  async delete(object_name, _id, space_id) {
+    const url = '/api/odata/v4/' + (space_id || this.globalData.space_id) + '/' + object_name + '/'+_id;
     const result = await req.delete(url).catch((err)=>{
       console.log("error...",err.data)
       return {}

@@ -330,33 +330,18 @@ export default class Posts extends wepy.page {
           }).catch((err)=>{
             console.log("error...",err)
           });
+          const fileData = JSON.parse(fileResult.data);
+          if (fileData.errors || fileResult.statusCode != 200) {
+            console.error(res);
+            return;
+          }
+          // TODO 更新对应表的字段
+          const fileId = fileData._id;
+          let storeSetKey = isCover ? "cover" : 'avatar';
+          let storeSet = {};
+          storeSet[storeSetKey] = fileId;
+          await this.$parent.update("vip_store", this.space_id, storeSet, this.space_id);
           wepy.hideLoading();
-          // var that = this;
-          // wx.uploadFile({
-          //   url: `${this.baseUrl}/s3/images`,
-          //   filePath: tempFilePaths[0],
-          //   name: 'file',
-          //   formData: {},
-          //   header: {
-          //     'X-Auth-Token': this.$parent.globalData.user.auth_token,
-          //     'X-User-Id': this.$parent.globalData.user._id
-          //   },
-          //   success: function(res) {
-          //     var data = JSON.parse(res.data);
-          //     if (data.errors || res.statusCode != 200) {
-          //       console.error(res);
-          //       return;
-          //     }
-          //     var fId = data._id;
-          //     if (isCover) {
-          //       that.store_info.cover = fId;
-          //     } else {
-          //       that.store_info.avatar = fId;
-          //     }
-          //     that.$apply();
-          //     //  TODO 更新对应表的字段
-          //   }
-          // });
         }
       }
     }
