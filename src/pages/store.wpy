@@ -1,4 +1,8 @@
 <style lang="less">
+page {
+  background: #fff;
+}
+
 .weui-media-box__desc {
   display: flex;
   margin-top: 8px;
@@ -6,35 +10,110 @@
 .weui-panel {
   margin-top: 20px !important;
 }
+
+.page-store {
+  .weui-cells::before, .weui-cells::after{
+    display: none;
+  }
+
+  .weui-cell::before {
+    display: none;
+  }
+
+  .ion {
+    width: 25px;
+    height: 20px;
+    line-height: 20px;
+    font-size: 17px;
+    text-align: center;
+    color: #dbdbdb;
+  }
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  padding: 8px 18px 20px;
+  // border-bottom: 1px dashed #e9e9e9;
+
+  .title {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+
+    .store-name {
+      letter-spacing:1px;
+      font-size: 19px;
+      font-weight: bold;
+    }
+    .store-type {
+      color: #b4b4b4;
+    }
+  }
+
+  .avatar {
+    .image {
+      display: block;
+      width: 100rpx;
+      height: 100rpx;
+      border-radius: 50%;
+    }
+  }
+}
+
+.dashed {
+  width: auto;
+  height: 1px;
+  background-image: linear-gradient(to right, #e9e9e9 0%, #e9e9e9 50%, transparent 50%);
+  background-size: 10px 1px;
+  background-repeat: repeat-x;
+  margin: 0 15px;
+}
 </style>
 <template>
-  <view class="page">
-      <view class="page__bd">
-          <view class="weui-panel">
-              <view class="weui-panel__bd">
-                  <view class="weui-media-box weui-media-box_text">
-                      <view class="weui-media-box__title weui-media-box__title_in-text">{{store.name}}</view>
-                      <view class="weui-media-box__desc">营业时间：{{store.business_hours}}</view>
-                      <block wx:if="{{store.description}}">
-                        <view class="weui-media-box__desc">{{store.description}}</view>
-                      </block>
-                  </view>
-              </view>
+  <view class="page-store">
+      <view class="header">
+        <view class="title">
+          <view class="store-name">
+            {{store.name}}
           </view>
+          <view class="store-type">
+            运动健身
+          </view>
+        </view>
+        <view class="avatar">
+          <image class="image" mode="aspectFill" src="{{util.formatImageUrl(store.avatar, baseUrl)}}"/>
+        </view>
+      </view>
+      <view class="dashed">
+      </view>
 
-          <view class="weui-cells">
-          <navigator class="weui-cell weui-cell_access" @tap="openMap">
-              <view class="weui-cell__bd">
-                <view>门店地址</view>
-              </view>
-              <view class="weui-cell__ft weui-cell__ft_in-access">查看地图</view>
-          </navigator>
-          <navigator class="weui-cell weui-cell_access" @tap="phoneCall">
-              <view class="weui-cell__bd">
-                <view>联系商家</view>
-              </view>
-              <view class="weui-cell__ft weui-cell__ft_in-access">{{store.phone}}</view>
-          </navigator>
+      <view class="weui-cells">
+        <view class="weui-cell weui-cell_access" hover-class="weui-cell_active" @tap="openMap">
+          <view class="weui-cell__hd">
+            <view class="ion slds-icon-checkin slds-icon slds-icon--small slds-m-right--x-small"/>
+          </view>
+          <view class="weui-cell__bd">{{store.address}}</view>
+          <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+        </view>
+        <view class="weui-cell weui-cell_access">
+          <view class="weui-cell__hd">
+            <view class="ion slds-icon-clock slds-icon slds-icon--small slds-m-right--x-small"/>
+          </view>
+          <view class="weui-cell__bd">{{store.business_hours}}</view>
+        </view>
+        <navigator class="weui-cell weui-cell_access" hover-class="weui-cell_active" @tap="phoneCall">
+          <view class="weui-cell__hd">
+            <view class="ion slds-icon-call slds-icon slds-icon--small slds-m-right--x-small"/>
+          </view>
+          <view class="weui-cell__bd">{{store.phone}}</view>
+          <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+        </navigator>
+        <view class="weui-cell weui-cell_access">
+          <view class="weui-cell__hd">
+            <view class="ion slds-icon-image slds-icon slds-icon--small slds-m-right--x-small"/>
+          </view>
+          <view class="weui-cell__bd">门店照片</view>
         </view>
       </view>
   </view>
@@ -44,13 +123,17 @@
 import wepy from 'wepy';
 import req from '@/network';
 import vipCard from '../components/vipCard';
+import { baseUrl } from '@/config';
+import util from '../wxs/util.wxs'; 
 
 export default class store extends wepy.page {
   config = {
-    navigationBarTitleText: '	'
+    navigationBarTitleText: '	',
+    navigationBarBackgroundColor: '#fff',
   };
 
   async onLoad(e) {
+    await this.$parent.login(e.store)
     var store = await this.getStoreInfo(e.store);
     this.store = store;
     this.$apply();
@@ -60,8 +143,13 @@ export default class store extends wepy.page {
     vipcard: vipCard
   };
 
+  wxs = {
+    util: util
+  }
+
   data = {
-    store: []
+    store: [],
+    baseUrl: baseUrl
   };
   getStoreInfo(store_id) {
     return this.$parent.get('vip_store', store_id);
