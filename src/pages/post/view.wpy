@@ -4,7 +4,7 @@
 }
 .cover{
   width: 100%;
-  height:460rpx;
+  height:480rpx;
 }
 .flex-images-box{
   display: flex;
@@ -21,7 +21,7 @@
 }
 .slide-image{
   width: 100%;
-  height:460rpx;
+  height:480rpx;
 }
 video{
   width:100%;

@@ -11,13 +11,13 @@
   .post-cover{
     image{
       width: 100%;
-      height: 460rpx;
+      height: 480rpx;
       border-top-left-radius:6px;
       border-top-right-radius:6px;
     }
     video{
       width: 100%;
-      height: 460rpx;
+      height: 480rpx;
       border-top-left-radius:6px;
       border-top-right-radius:6px;
     }
