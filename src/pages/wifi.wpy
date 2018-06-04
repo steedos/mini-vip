@@ -95,7 +95,7 @@ export default class Wifi extends wepy.page {
     if(wifis.value && wifis.value.length>0){
       _self.wifiList = wifis.value;
     }else{
-      _self.listTitle = "该门店未配置 WiFi";
+      _self.listTitle = "该商户未配置 Wi-Fi";
     }
     console.log("_self.wifiList",_self.wifiList);
 
