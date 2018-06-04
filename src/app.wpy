@@ -91,10 +91,12 @@ export default class VIP extends wepy.app {
       'pages/space/register',
       'pages/space/list',
       'pages/space/paid_list',
-      'pages/util/datetime',
-      'pages/util/select',
       'pages/record/edit',
       'pages/record/test',
+      'pages/inputTypes/datetime',
+      'pages/inputTypes/select',
+      'pages/inputTypes/text',
+      'pages/inputTypes/textarea'
     ],
     tabBar: {
       color: '#666',
@@ -130,7 +132,7 @@ export default class VIP extends wepy.app {
     space: null,
     spaceInfo: null,
     storeInfo: null,
-    launchOptions: null
+    launchOptions: null,
   }
 
   constructor () {
@@ -143,6 +145,7 @@ export default class VIP extends wepy.app {
     req.appId(appId)
     req.baseUrl(baseUrl).interceptor(interceptor.request, interceptor.response)
     const globalData = wx.getStorageSync('globalData') || {}
+    globalData.is_login = false
     this.globalData = globalData
   }
 
@@ -190,6 +193,10 @@ export default class VIP extends wepy.app {
       needs_login = true
     }
 
+    if (!globalData.is_login) {
+      needs_login = true
+    }
+
     try {
       const session_vaild = await wepy.checkSession()
       if (!session_vaild) {
@@ -198,6 +205,8 @@ export default class VIP extends wepy.app {
     } catch (error) {
       console.log(error)
     }
+
+    needs_login = true
 
     if (needs_login) {
 
@@ -227,6 +236,8 @@ export default class VIP extends wepy.app {
       globalData.user.mobile = res.mobile
       globalData.user.sex = res.sex
       globalData.user.birthdate = res.birthdate
+
+      globalData.is_login = true
 
       self.globalData = globalData
       req.header(header)
