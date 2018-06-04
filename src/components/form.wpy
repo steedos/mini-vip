@@ -15,11 +15,9 @@
     line-height: 2.58823529em;
   }
 
-  navigator {
-    .weui-textarea {
-      min-height: 2.58823529em;
-      line-height: 2.58823529em;
-    }
+  .weui-textarea {
+    min-height: 2.58823529em;
+    line-height: 2.58823529em;
   }
 </style>
 <template>
@@ -173,17 +171,18 @@
 										  <view class="weui-input">{{fieldOptions[item.name][pickerIndex[item.name]].label}}</view>
 										</picker>
 					-->
-                    <textarea class="weui-input weui-textarea" wx:elif="{{item.type === 'location'}}" auto-height="true"
-                              value="{{values[item.name] && values[item.name].address}}"/>
+                    <view class="weui-cell__ft weui-textarea" wx:elif="{{item.type === 'location'}}" auto-height="true"
+                          value="" @tap="getAddress" data-id="{{item.name}}">{{values[item.name] && values[item.name].address}}</view>
 
                     <input wx:else class="weui-input" value="{{item.type}}"/>
                   </view>
 
-                  <view class="weui-cell__ft weui-cell__ft_in-access"
-                        wx:if="{{item.type === 'datetime' || item.type === 'select'}}"></view>
-                  <view class="weui-cell__ft" wx:elif="{{item.type === 'location'}}">
-                    <view class="weui-vcode-btn" @tap="getAddress" data-id="{{item.name}}">选择</view>
+
+                  <view class="weui-cell__ft weui-cell__ft_in-access" wx:if="{{item.type === 'location'}}" @tap="getAddress" data-id="{{item.name}}">
+                    <!--<view class="weui-vcode-btn" @tap="getAddress" data-id="{{item.name}}">选择</view>-->
                   </view>
+                  <view class="weui-cell__ft weui-cell__ft_in-access"
+                        wx:else></view>
                 </view>
               </block>
             </block>
@@ -315,6 +314,8 @@
                 }
               }
             });
+            this.$apply()
+          }else{
             this.$apply()
           }
         }
@@ -521,6 +522,11 @@
         } else if (this.args.action === 'edit') {
           await this.$parent.$parent.update(this.args.object_name, this.args.record_id, value)
         }
+
+        debugger;
+        wepy.navigateBack({
+          delta: 1
+        })
       }
     }
   }
