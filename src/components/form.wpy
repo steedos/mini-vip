@@ -283,7 +283,7 @@
             console.log("this.fields", this.fields)
             let query_options = {
               $select: _.pluck(this.fields, "name").join(","),
-              $filter: `_id eq ${record_id}`
+              $filter: `_id eq '${record_id}'`
             }
             let expand = []
             _.forEach(this.fields, (field) => {
