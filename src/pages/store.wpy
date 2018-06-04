@@ -161,9 +161,7 @@ export default class store extends wepy.page {
   async onLoad(e) {
     this.store_id = e.store
     const globalData = this.$parent.globalData;
-    console.log("globalData", globalData)
     const space = await this.$parent.get('spaces', globalData.space_id)
-    console.log("space", space)
     this.is_space_owner =
       space && globalData.user && globalData.user._id === space.owner;
     this.$apply();
