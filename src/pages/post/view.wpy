@@ -2,9 +2,20 @@
 .weui-article__h1{
   text-align: center;
 }
-swiper{
+.cover{
+  width: 100%;
   height:460rpx;
-  margin:40rpx 0;
+  margin-bottom:0.9em;
+}
+.flex-images-box{
+  display: flex;
+  flex-flow: row wrap;
+  align-content: flex-start;
+  .flex-image{
+    flex:0 0 31%;
+    height:160rpx;
+    margin:0 2% 2% 0;
+  }
 }
 .slide-image{
   width: 100%;
@@ -18,28 +29,29 @@ video{
 <view class="page">
     <view class="page__bd">
         <view class="weui-article">
+            <block wx:if="{{post.mini_type == 'video' && post.video}}">
+              <video src="{{util.formatVideoUrl(post.video, baseUrl)}}" controls objectFit="contain" class="cover"></video>
+            </block>
+            <block wx:elif="{{post.images && post.images.length}}">
+              <image src="{{util.formatImageUrl(post.images[0], baseUrl)}}" mode="aspectFill" @tap="previewImage({{item}})" class="cover"/>
+            </block>
             <view class="weui-article__h1">{{post.name}}</view>
             <view class="weui-article__section">
                 <view class="weui-article__section">
-                  <view class="weui-article__c">
-                    <block wx:if="{{post.mini_type == 'video'}}">
-                      <video src="{{util.formatVideoUrl(post.video, baseUrl)}}" controls objectFit="contain"></video>
-                    </block>
-                    <block wx:else>
-                      <swiper indicator-dots="{{indicatorDots}}" autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}">
-                        <block wx:for="{{post.images}}" wx:key="item">
-                          <swiper-item>
-                            <image src="{{util.formatImageUrl(item, baseUrl)}}" mode="aspectFill" @tap="previewImage({{item}})" class="slide-image"/>
-                          </swiper-item>
-                        </block>
-                      </swiper>
-                    </block>
-                  </view>
                   <view class="weui-article__h3">
                     <text space="emsp">{{post.summary}}</text> 
                   </view>
                   <view class="weui-article__p">
                     <text space="emsp">{{post.description}}</text>
+                  </view>
+                  <view class="weui-article__c">
+                    <block wx:if="{{post.images && post.images.length > 1}}">
+                      <view class="flex-images-box">
+                        <repeat for="{{post.images}}" key="index" index="index" item="item">
+                          <image src="{{util.formatImageUrl(item, baseUrl)}}" mode="aspectFill" @tap="previewImage({{item}})" class="flex-image"/>
+                        </repeat>
+                      </view>
+                    </block>
                   </view>
                 </view>
             </view>
