@@ -20,7 +20,7 @@
     <view class="weui-toptips weui-toptips_warn" wx:if="{{showTopTips}}">{{message}}</view>
     <view class="page__bd">
       <view class="weui-cells weui-cells_after-title">
-        <repeat for="{{schema.fields}}" key="index" index="index" item="item">
+        <repeat for="{{fields}}" key="index" index="index" item="item">
           <block wx:if="{{!item.hidden}}">
             <block wx:if="{{item.type === 'image' || item.type === 'video' || item.type === 'audio'}}">
               <view class="weui-cell" wx:if="{{item.readonly || !schema.allowEdit || args.action === 'read'}}">
@@ -106,7 +106,7 @@
 
                     <textarea wx:elif="{{item.type === 'textarea'}}" data-id="{{item.name}}"
                               class="weui-input weui-textarea"
-                              auto-height="true" value="{{values[item.name]}}" bindchange="textChange"/>
+                              auto-height="true" value="{{values[item.name]}}" bindblur="textChange"/>
 
                     <input wx:elif="{{item.type === 'number'}}" data-id="{{item.name}}" class="weui-input" type="number"
                            bindchange="textChange"/>
@@ -209,7 +209,8 @@
       values: {},
       pickerIndex: {},
       hiddenButton: {},
-      fieldOptions: {}
+      fieldOptions: {},
+      fields: {}
     };
 
     watch = {
@@ -251,15 +252,26 @@
                 }
               }
             }
+
+            if(this.args.fields){
+              let fields = {}
+              _.forEach(this.args.fields.split(','), function (field_name) {
+                fields[field_name] = object.fields[field_name]
+              })
+              this.fields = fields
+            }else{
+              this.fields = object.fields
+            }
+
           }
           if (object_name && record_id && action != 'create') {
-            console.log("this.schema.fields", this.schema.fields)
+            console.log("this.fields", this.fields)
             let query_options = {
-              $select: _.pluck(this.schema.fields, "name").join(","),
+              $select: _.pluck(this.fields, "name").join(","),
               $filter: `_id eq ${record_id}`
             }
             let expand = []
-            _.forEach(this.schema.fields, (field) => {
+            _.forEach(this.fields, (field) => {
               if ((field.type === 'lookup' || field.type === 'master_detail') && field.reference_to) {
                 expand.push(`${field.name}($select=name)`)
               }
@@ -275,7 +287,7 @@
               delete this.values["@odata.editLink"]
               delete this.values["_id"]
             }
-            _.forEach(this.schema.fields, (field) => {
+            _.forEach(this.fields, (field) => {
               if (field.type === 'select' && field.multiple) {
                 let fv = this.values[field.name];
                 if (_.isArray(fv)) {
@@ -303,12 +315,12 @@
     }
 
     getObjectField(key){
-      return this.schema.fields[key]
+      return this.fields[key]
     }
 
     transformValue(){
       const value = _.clone(this.values)
-      const fields = this.schema.fields
+      const fields = this.fields
       _.forEach(value, (v, k)=>{
         console.log("k", k)
         console.log("v", v)
@@ -346,7 +358,7 @@
     }
 
     checkRequired() {
-      const fields = this.schema.fields
+      const fields = this.fields
       console.log(fields)
       for (let field_name in fields) {
         let field = fields[field_name]
@@ -392,13 +404,14 @@
       },
       textChange(e) {
         const key = e.target.dataset.id
+        console.log("text change" , key, e)
         this.values[key] = e.detail.value
       },
       selectChange(e) {
         const index = e.detail.value;
         const key = e.target.dataset.id
         this.pickerIndex[key] = index
-        const value = this.schema.fields[key].options[index].value
+        const value = this.fields[key].options[index].value
         this.values[key] = value
         this.$apply()
       },
@@ -412,7 +425,7 @@
       },
       checkboxChange: function (e) {
         const values = e.detail.value, key = e.target.dataset.id;
-        let checkboxItems = _.clone(this.schema.fields[key].options);
+        let checkboxItems = _.clone(this.fields[key].options);
         for (let i = 0, lenI = checkboxItems.length; i < lenI; ++i) {
           checkboxItems[i].checked = false;
 

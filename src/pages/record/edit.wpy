@@ -43,6 +43,11 @@
       if(e && e.action){
         args.action = e.action
       }
+
+      if(e && e.fields){
+        args.fields = e.fields
+      }
+
       this.args = args;
       this.$apply()
     }

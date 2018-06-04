@@ -24,7 +24,7 @@
   </view>
 
   <view class="weui-cells">
-    <navigator url="/pages/record/edit?object_name=vip_store&record_id={{store_info._id}}" class="weui-cell weui-cell_access">
+    <navigator url="/pages/record/edit?object_name=vip_store&record_id={{store_info._id}}&fields=name,description,business_hours,post_types,phone" class="weui-cell weui-cell_access">
       <view class="weui-cell__hd">
         <view class="slds-icon-standard-opportunity slds-icon slds-icon--small slds-m-right--x-small"/>
       </view>
@@ -35,7 +35,7 @@
     </navigator>
   </view>
   <view class="weui-cells">
-    <navigator url="/pages/record/edit?action=edit&object_name=vip_store&record_id={{store_info._id}}" class="weui-cell weui-cell_access">
+    <navigator url="/pages/record/edit?action=edit&object_name=vip_store&record_id={{store_info._id}}&fields=name,description,business_hours,post_types,phone" class="weui-cell weui-cell_access">
       <view class="weui-cell__hd">
         <view class="slds-icon-standard-opportunity slds-icon slds-icon--small slds-m-right--x-small"/>
       </view>
