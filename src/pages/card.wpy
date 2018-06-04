@@ -83,12 +83,12 @@
         </view>
 
         <view class="weui-cells">
-          <navigator url="wifi" class="weui-cell weui-cell_access">
+          <navigator url="wifi?store_id={{space_id}}" class="weui-cell weui-cell_access">
             <view class="weui-cell__hd">
               <view class="slds-icon-utility-wifi slds-icon slds-icon--small slds-m-right--x-small"/>
             </view>
             <view class="weui-cell__bd">
-              <view>连接WIFI</view>
+              <view>连接 Wi-Fi</view>
             </view>
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
           </navigator>

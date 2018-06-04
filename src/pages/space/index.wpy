@@ -108,6 +108,10 @@ page {
               <view class="weui-grid__label">{{post.label}}</view>
             </navigator>
           </repeat>
+          <navigator url="../wifi?store={{space_id}}" class="weui-grid" hover-class="weui-grid_active">
+            <view class="slds-icon-utility-wifi weui-grid__icon slds-icon"/>
+            <view class="weui-grid__label">连接 Wi-Fi</view>
+          </navigator>
           <navigator url="../store?store={{space_id}}" class="weui-grid" hover-class="weui-grid_active">
             <view class="slds-icon-standard-call weui-grid__icon slds-icon"/>
             <view class="weui-grid__label">联系我们</view>
