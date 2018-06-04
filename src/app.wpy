@@ -258,24 +258,25 @@ export default class VIP extends wepy.app {
       if (globalData[object_name] && globalData[object_name]._id == _id) {
         return globalData[object_name]
       }
-    } else {
-      const space_id = globalData.space_id
-      if (!space_id) {
-        return null;
-      }
+    } 
 
-      let url = `/api/odata/v4/${space_id}/${object_name}`
-      if (!data || _.isEmpty(data)) {
-        url = `${url}/${_id}`
-      }
-      const result = await req.get(url, data).catch((err) => {
-        console.log('carch error')
-        return {}
-      })
-      console.log('cache result.................', result)
-      globalData[object_name] = result.value[0];
-      return result.value[0];
+    const space_id = globalData.space_id
+    if (!space_id) {
+      return null;
     }
+
+    let url = `/api/odata/v4/${space_id}/${object_name}`
+    if (!data || _.isEmpty(data)) {
+      url = `${url}/${_id}`
+    }
+    const result = await req.get(url, data).catch((err) => {
+      console.log('carch error')
+      return {}
+    })
+    console.log('cache result.................', result)
+    globalData[object_name] = result.value[0];
+    return result.value[0];
+    
   }
 
   async get(object_name, _id, space_id, query_options) {
