@@ -224,6 +224,7 @@
       await this.$parent.login();
       await this.loadUserCard();
       this.is_loaded = true;
+      this.$apply()
       wepy.hideLoading();
     }
 
