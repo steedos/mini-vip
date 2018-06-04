@@ -29,6 +29,7 @@
     }
 
     async onLoad(e){
+      console.log("record view", e)
       let args = {action: 'read'};
       if(e && e.record_id){
         args.record_id = e.record_id
