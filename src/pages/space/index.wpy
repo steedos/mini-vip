@@ -335,11 +335,20 @@ export default class Posts extends wepy.page {
             title: '正在上传...',
             mask: true
           });
+          let formData = {};
+          formData.size = result2.tempFiles.length && result2.tempFiles[0].size;
+          const imageInfo = await wepy.getImageInfo({
+            src: tempFilePaths[0]
+          });
+          formData.width = imageInfo.width;
+          formData.height = imageInfo.height;
+          formData.orientation = imageInfo.orientation;
+          formData.type = imageInfo.type;
           const fileResult = await wepy.uploadFile({
             url: `${this.baseUrl}/s3/images`,
             filePath: tempFilePaths[0],
             name: 'file',
-            formData: {},
+            formData: formData,
             header: {
               'X-Auth-Token': authToken,
               'X-User-Id': userId
