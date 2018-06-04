@@ -101,7 +101,7 @@ page {
             </navigator>
           </block>
           <repeat for="{{post_types}}" wx:key="*this" key="index" index="index" item="post">
-            <navigator url="../post/index?type={{post.value}}&title={{post.label}}{{is_space_owner ? '&editable=true' : ''}}" class="weui-grid" hover-class="weui-grid_active">
+            <navigator url="../post/index?type={{post.value}}&title={{post.label}}{{is_space_owner ? '&editable=' : ''}}" class="weui-grid" hover-class="weui-grid_active">
               <view class="slds-icon-standard-{{post.icon}} weui-grid__icon slds-icon">
                 <view class="need_read1"></view>
               </view>
