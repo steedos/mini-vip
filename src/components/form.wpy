@@ -136,17 +136,17 @@
                       </picker>
                     </block>
 -->
-                    <navigator url="./util/datetime?title={{item.label}}&key={{item.name}}" class="weui-input"
+                    <navigator url="/pages/util/datetime?title={{item.label}}&key={{item.name}}" class="weui-input"
                                wx:elif="{{item.type === 'datetime'}}">
                       <view class="weui-cell__ft">{{values[item.name]}}</view>
                     </navigator>
 
-                    <navigator url="./util/select?title={{item.label}}&key={{item.name}}" class="weui-input-select"
+                    <navigator url="/pages/util/select?title={{item.label}}&key={{item.name}}" class="weui-input-select"
                                wx:elif="{{item.type === 'select'}}">
                       <view class="weui-cell__ft11">{{util.transformFieldValue(item, values[item.name])}}</view>
                     </navigator>
 
-                    <navigator url="./util/select?title={{item.label}}&key={{item.name}}" class="weui-input-select"
+                    <navigator url="/pages/util/select?title={{item.label}}&key={{item.name}}" class="weui-input-select"
                                wx:elif="{{item.type === 'master_detail' || item.type === 'lookup'}}">
                       <view class="weui-cell__ft11">{{util.transformFieldValue(item, values[item.name])}}</view>
                     </navigator>
