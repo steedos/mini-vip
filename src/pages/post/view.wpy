@@ -31,7 +31,7 @@ video{
 <view class="page">
   <view class="page__bd">
     <block wx:if="{{post.mini_type == 'video' && post.video}}">
-      <video src="{{util.formatVideoUrl(post.video, baseUrl)}}" controls objectFit="contain" class="cover"  direction= '90'></video>
+      <video src="{{util.formatVideoUrl(post.video, baseUrl)}}" controls objectFit="contain" class="cover"  direction= '90' page-gesture=true></video>
     </block>
     <block wx:elif="{{post.images && post.images.length}}">
       <image src="{{util.formatImageUrl(post.images[0], baseUrl)}}" mode="aspectFill" @tap="previewImage({{item}})" class="cover"/>
