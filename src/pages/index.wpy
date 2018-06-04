@@ -98,30 +98,32 @@
   -->
 
     <view class="page__bd">
-      <view class="weui-cells__title page__bd_mycard">我的会员卡</view>
-      <view class="weui-cells weui-cells_after-title">
-        <repeat for="{{cards}}" key="index" index="index" item="card">
-          <navigator url="card?card_id={{card._id}}&space_id={{card.space}}" class="weui-cell weui-cell_access weui-cell_access_card">
-            <view class="weui-cell__hd">
-              <image wx:if="{{card.avatar}}" class="image slds-icon slds-icon--small slds-m-right--x-small" mode="aspectFill" src="{{util.formatImageUrl(card.avatar, baseUrl)}}"/>
-              <view wx:else class="slds-icon-standard-opportunity slds-icon slds-icon--small slds-m-right--x-small"/>
-            </view>
-            <view class="weui-cell__bd">
-              <view class="card-name">{{card.name}}</view>
-            </view>
-            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-          </navigator>
-        </repeat>
+      <block wx:if="{{card_count > 0}}">
+        <view class="weui-cells__title page__bd_mycard">我的会员卡</view>
+        <view class="weui-cells weui-cells_after-title">
+          <repeat for="{{cards}}" key="index" index="index" item="card">
+            <navigator url="card?card_id={{card._id}}&space_id={{card.space}}" class="weui-cell weui-cell_access weui-cell_access_card">
+              <view class="weui-cell__hd">
+                <image wx:if="{{card.avatar}}" class="image slds-icon slds-icon--small slds-m-right--x-small" mode="aspectFill" src="{{util.formatImageUrl(card.avatar, baseUrl)}}"/>
+                <view wx:else class="slds-icon-standard-opportunity slds-icon slds-icon--small slds-m-right--x-small"/>
+              </view>
+              <view class="weui-cell__bd">
+                <view class="card-name">{{card.name}}</view>
+              </view>
+              <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+            </navigator>
+          </repeat>
 
-        <view wx:if="{{card_count > 10}}" class="weui-cells weui-cells_after-title">
-          <navigator url="card?_id={{card._id}}" class="weui-cell weui-cell_access">
-            <view class="weui-cell__bd">
-              <text  class="btn-view-all">查看全部</text>
-            </view>
-            <view class="weui-cell__ft weui-cell__ft_in-access">{{card_count}}</view>
-          </navigator>
+          <view wx:if="{{card_count > 10}}" class="weui-cells weui-cells_after-title">
+            <navigator url="card?_id={{card._id}}" class="weui-cell weui-cell_access">
+              <view class="weui-cell__bd">
+                <text  class="btn-view-all">查看全部</text>
+              </view>
+              <view class="weui-cell__ft weui-cell__ft_in-access">{{card_count}}</view>
+            </navigator>
+          </view>
         </view>
-      </view>
+      </block>
 
       <view class="weui-cells">
         <navigator url="./space/paid_list" class="weui-cell weui-cell_access">
