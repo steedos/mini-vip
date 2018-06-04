@@ -307,10 +307,13 @@ export default class Posts extends wepy.page {
         if (tempFilePaths.length) {
           const authToken = this.$parent.globalData.user.auth_token;
           const userId = this.$parent.globalData.user._id;
+          let tempSrc = "";
           if(isCover){
+            tempSrc = this.store_info.cover;
             this.store_info.cover = tempFilePaths[0];
           }
           else{
+            tempSrc = this.store_info.avatar;
             this.store_info.avatar = tempFilePaths[0];
           }
           this.$apply();
@@ -332,7 +335,17 @@ export default class Posts extends wepy.page {
           });
           const fileData = JSON.parse(fileResult.data);
           if (fileData.errors || fileResult.statusCode != 200) {
-            console.error(res);
+            wx.showToast({
+              title: "图片上传失败，请稍后再试",
+              icon: "none"
+            });
+            if(isCover){
+              this.store_info.cover = tempSrc;
+            }
+            else{
+              this.store_info.avatar = tempSrc;
+            }
+            this.$apply();
             return;
           }
           // TODO 更新对应表的字段
@@ -341,6 +354,13 @@ export default class Posts extends wepy.page {
           let storeSet = {};
           storeSet[storeSetKey] = fileId;
           await this.$parent.update("vip_store", this.space_id, storeSet, this.space_id);
+          if(isCover){
+            this.store_info.cover = fileId;
+          }
+          else{
+            this.store_info.avatar = fileId;
+          }
+          this.$apply();
           wepy.hideLoading();
         }
       }
