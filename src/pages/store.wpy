@@ -133,7 +133,7 @@ page {
 
     <view class="button-sp-area" wx:if="{{is_space_owner}}">
       <navigator url="/pages/record/edit?action=edit&object_name=vip_store&record_id={{store._id}}&fields=name,description,business_hours,location,post_types">
-        <button class="weui-btn" type="primary" plain="true">编辑门店</button>
+        <button class="weui-btn" type="primary" plain="true">编辑</button>
       </navigator>
     </view>
   </view>
