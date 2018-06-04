@@ -30,8 +30,8 @@ video{
 <template>
 <view class="page">
   <view class="page__bd">
-    <block wx:if="{{post.mini_type == 'video' && post.video}}">
-      <video src="{{util.formatVideoUrl(post.video, baseUrl)}}" controls objectFit="contain" class="cover"  direction= '90' page-gesture=true></video>
+    <block wx:if="{{post.video}}">
+      <video src="{{util.formatVideoUrl(post.video, baseUrl)}}" controls objectFit="contain" class="cover"  direction= '90' page-gesture="{{true}}" autoplay="{{false}}"></video>
     </block>
     <block wx:elif="{{post.images && post.images.length}}">
       <image src="{{util.formatImageUrl(post.images[0], baseUrl)}}" mode="aspectFill" @tap="previewImage({{item}})" class="cover"/>
@@ -47,7 +47,12 @@ video{
             <text space="emsp">{{post.description}}</text>
           </view>
           <view class="weui-article__c">
-            <block wx:if="{{post.images && post.images.length > 1}}">
+            <block wx:if="{{post.images && post.images.length == 1}}">
+              <view class="flex-images-box">
+                <image src="{{util.formatImageUrl(post.images[0], baseUrl)}}" mode="aspectFill" @tap="previewImage({{item}})"/>
+              </view>
+            </block>
+            <block wx:elif="{{post.images && post.images.length > 1}}">
               <view class="flex-images-box">
                 <repeat for="{{post.images}}" key="index" index="index" item="item">
                   <image src="{{util.formatImageUrl(item, baseUrl)}}" mode="aspectFill" @tap="previewImage({{item}})" class="flex-image {{(index + 1)%3 > 0 ? 'flex-image-item' : 'flex-image-last'}}"/>

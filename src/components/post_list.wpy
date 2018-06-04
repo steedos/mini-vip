@@ -59,7 +59,7 @@
     <repeat for="{{list}}" key="index" index="index" item="post">
       <view class="post">
         <view class="post-cover">
-          <block wx:if="{{post.mini_type == 'video'}}">
+          <block wx:if="{{post.video}}">
             <video src="{{util.formatVideoUrl(post.video, baseUrl)}}" controls objectFit="contain"></video>
           </block>
           <block wx:else>
