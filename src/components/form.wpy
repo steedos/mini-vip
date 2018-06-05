@@ -15,6 +15,10 @@
     padding-top:12px;
     padding-bottom:12px;
     min-height:1em;
+    &.weui-cell_switch{
+      padding-top:6px;
+      padding-bottom:6px;
+    }
   }
 
   .wide-cell{
@@ -130,8 +134,8 @@
                     <input wx:elif="{{item.type === 'number'}}" data-id="{{item.name}}" class="weui-input" type="number"
                            bindchange="textChange"/>
 
-                    <view wx:elif="{{item.type === 'boolean'}}" data-id="{{item.name}}" class="weui-input">
-                      <switch checked class="weui-input" data-id="{{item.name}}" bindchange="textChange"/>
+                    <view wx:elif="{{item.type === 'boolean'}}" data-id="{{item.name}}" class="weui-cell_switch weui-cell__ft">
+                      <switch checked data-id="{{item.name}}" bindchange="textChange"/>
                     </view>
                     <navigator url="/pages/edit/datetime?title={{item.label}}&key={{item.name}}"
                                class="weui-input"
