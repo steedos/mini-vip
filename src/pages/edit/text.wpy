@@ -1,53 +1,58 @@
-<style lang="less">
-.page-edit-text {
-  .page__bd {
-    margin-top: 20px;
-  }
-}
-</style>
 <template>
-  <view class="page-edit-text">
+  <view class="text">
     <view class="page__bd">
       <view class="weui-cells weui-cells_after-title">
         <view class="weui-cell weui-cell_input">
           <view class="weui-cell__bd">
-            <input class="weui-input" value="{{name}}" bindchange="bindNameChange"/>
+            <input data-id="{{key}}" class="weui-input"
+                   value="{{value}}" bindchange="textChange"/>
           </view>
         </view>
       </view>
-    </view>  
+    </view>
   </view>
 </template>
 
+
 <script>
-import wepy from 'wepy';
-import req from '@/network';
-import { serverAPI } from '@/server';
+  import wepy from 'wepy';
 
-export default class Text extends wepy.page {
-  config = {
-    navigationBarTitleText: 'WeChat'
-  };
+  export default class Text extends wepy.page {
+    config = {
+      navigationBarTitleText: '请选择'
+    };
 
-  onLoad(e) {
-    console.log(e)
-    this.text = "设置"+e.text
-    wx.setNavigationBarTitle({title:this.text})
-    this.name = e.name
-  };
+    data = {
+      key: '',
+      value: ''
+    }
 
-  data = {
-    name : ''
-  };
-
-  methods = {
-    bindNameChange(e) {
+    setParentValue(key, value) {
       const pages = getCurrentPages();
       const prevPage = pages[pages.length - 2]
-      prevPage.changeData('name', e.detail.value)
-      this.name = e.detail.value;
-      this.$apply()
-    },
-  };
-}
+      prevPage.changeValue(key, value)
+    }
+
+    onLoad(e) {
+      if (!e) {
+        e = {}
+      }
+
+      this.key = e.key
+
+      this.value = e.value || ''
+
+      if (e.title) {
+        wx.setNavigationBarTitle({title: '请填写' + e.title});
+      }
+    }
+
+    methods = {
+      textChange(e) {
+        const key = e.target.dataset.id
+        this.value = e.detail.value
+        this.setParentValue(key, e.detail.value)
+      }
+    }
+  }
 </script>

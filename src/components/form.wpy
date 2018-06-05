@@ -110,14 +110,14 @@
                   </view>
                   <view class="weui-cell__bd">
                     <navigator
-                      url="/pages/inputTypes/text?title={{item.label}}&key={{item.name}}&value={{values[item.name]}}"
+                      url="/pages/edit/text?title={{item.label}}&key={{item.name}}&value={{values[item.name]}}"
                       class="weui-cell__ft"
                       wx:if="{{item.type === 'text'}}">
                       <view>{{values[item.name]}}</view>
                     </navigator>
 
                     <navigator
-                      url="/pages/inputTypes/textarea?title={{item.label}}&key={{item.name}}&value={{values[item.name]}}"
+                      url="/pages/edit/textarea?title={{item.label}}&key={{item.name}}&value={{values[item.name]}}"
                       wx:elif="{{item.type === 'textarea'}}" class="weui-cell__ft wide-cell">
                       <block wx:if="{{values[item.name]}}">
                         <view>{{values[item.name]}}</view>
@@ -133,19 +133,19 @@
                     <view wx:elif="{{item.type === 'boolean'}}" data-id="{{item.name}}" class="weui-input">
                       <switch checked class="weui-input" data-id="{{item.name}}" bindchange="textChange"/>
                     </view>
-                    <navigator url="/pages/inputTypes/datetime?title={{item.label}}&key={{item.name}}"
+                    <navigator url="/pages/edit/datetime?title={{item.label}}&key={{item.name}}"
                                class="weui-input"
                                wx:elif="{{item.type === 'datetime'}}">
                       <view class="weui-cell__ft">{{values[item.name]}}</view>
                     </navigator>
 
-                    <navigator url="/pages/inputTypes/select?title={{item.label}}&key={{item.name}}"
+                    <navigator url="/pages/edit/select?title={{item.label}}&key={{item.name}}"
                                class="weui-cell__ft"
                                wx:elif="{{item.type === 'select'}}">
                       <view>{{util.transformFieldValue(item, values[item.name])}}</view>
                     </navigator>
 
-                    <navigator url="/pages/inputTypes/lookup?title={{item.label}}&key={{item.name}}"
+                    <navigator url="/pages/edit/lookup?title={{item.label}}&key={{item.name}}"
                                class="weui-cell__ft"
                                wx:elif="{{item.type === 'master_detail' || item.type === 'lookup'}}">
                       <view>{{util.transformFieldValue(item, values[item.name])}}</view>
