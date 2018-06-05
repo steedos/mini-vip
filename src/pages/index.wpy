@@ -190,7 +190,7 @@
 
     async loadUserCard() {
       const options = {
-        $expand: 'space($select=name),card_name($select=name)',
+        $expand: 'space($select=name),card_name($select=name,avatar)',
         $count: true,
         $select: 'name,card_number,grade,balance,space,card_name',
         $filter: `(owner eq '${this.$parent.globalData.user._id}' and is_actived eq true)`
@@ -198,22 +198,18 @@
       const result = await this.$parent.query('vip_card', options, 'common');
       let allBalance = 0.00;
       this.cards = [];
-      result.value.forEach(async (card)=> {
+      result.value.forEach((card)=> {
         allBalance = allBalance + card.balance;
         let name = card.space.name;
         if(card.card_name && card.card_name.name){
           name = card.card_name.name;
-          const category_options = {
-            $count: true,
-            $select: 'avatar'
-          };
-          const res = await this.$parent.get("vip_category", card.card_name._id, card.space._id, category_options);
-          this.cards.push({_id: card._id, card_number: card.card_number, grade: card.grade, name: name, space: card.space._id, avatar: res.avatar});
-          this.allBalance = allBalance;
-          this.card_count = result['@odata.count'];
-          this.$apply();
+          const avatar = card.card_name.avatar
+          this.cards.push({_id: card._id, card_number: card.card_number, grade: card.grade, name: name, space: card.space._id, avatar: avatar});
         }
       })
+      this.allBalance = allBalance;
+      this.card_count = result['@odata.count'];
+      this.$apply();
     }
 
     async onLoad() {
