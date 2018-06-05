@@ -67,19 +67,14 @@
 
       this.multiple = field.multiple || false
 
-      console.log("field", field)
       this.options = field.options
       if (e.title) {
         wx.setNavigationBarTitle({title: '请选择' + e.title});
       }
-      console.log("onload", e.key)
     }
 
     methods = {
       selectChange: function (e) {
-        console.log('checkbox发生change事件，携带value值为：', e);
-        console.log('checkbox发生change事件，携带value值为：', e.detail.value);
-
         const values = e.detail.value, key = e.target.dataset.id;
         let checkboxItems = this.options
         for (let i = 0, lenI = checkboxItems.length; i < lenI; ++i) {
@@ -95,14 +90,10 @@
         this.setParentValue(key, values)
       },
       radioChange: function (e) {
-        console.log('radio发生change事件，携带value值为：', e.detail.value);
-
         const radioItems = this.options, key = e.target.dataset.id;
-
         for (let i = 0, len = radioItems.length; i < len; ++i) {
           radioItems[i].checked = radioItems[i].value == e.detail.value;
         }
-
         this.setParentValue(key, e.detail.value)
       }
     }
