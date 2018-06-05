@@ -48,7 +48,7 @@
 }
 </style>
 <template>
-  <view class="card-activate">
+  <view class="card-activate" wx:if="{{is_loaded}}}">
     <view class="weui-panel weui-panel_access header">
       <vipcard :cardName.sync="cardName"/>
     </view>
@@ -139,6 +139,10 @@ export default class cardActivate extends wepy.page {
   };
 
   async onLoad(e) {
+    wepy.showLoading({
+      title: '加载中',
+      mask: true
+    });
     this.space_id = e.space_id || this.$parent.globalData.space_id;
     this.store_id = e.store_id || this.$parent.globalData.space_id;
     if (e.category_id) {
@@ -183,8 +187,10 @@ export default class cardActivate extends wepy.page {
     this.name = user.name;
     this.birthdate = user.birthdate;
     this.phoneNumber = user.mobile;
+    this.is_loaded = true
     console.log('e.category_name', e.category_name);
     this.$apply();
+    wepy.hideLoading();
   }
 
   components = {
@@ -205,7 +211,8 @@ export default class cardActivate extends wepy.page {
     submitDisabled: true,
     space_id: '',
     store_id: '',
-    price: 0
+    price: 0,
+    is_loaded: false
   };
   addVipCard() {
     this.submitDisabled = true;

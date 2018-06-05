@@ -28,7 +28,7 @@ video{
 }
 </style>
 <template>
-<view class="page">
+<view class="page" wx:if="{{is_loaded}}">
   <view class="page__bd">
     <block wx:if="{{post.video}}">
       <video src="{{util.formatVideoUrl(post.video, baseUrl)}}" controls objectFit="contain" class="cover"  direction= '90' page-gesture="{{true}}" autoplay="{{false}}"></video>
@@ -73,6 +73,10 @@ export default class View extends wepy.page {
   };
 
   async onLoad(e) {
+    wepy.showLoading({
+      title: '加载中',
+      mask: true
+    });
     if(e.space_id){
       this.$parent.globalData.space_id = e.space_id;
       await this.$parent.login(e.space_id);
@@ -80,6 +84,10 @@ export default class View extends wepy.page {
     if(e.post_id){
       this.loadView(e.post_id);
     }
+
+    this.is_loaded = true
+    this.$apply()
+    wepy.hideLoading();
   }
 
   async loadView(post_id){
@@ -110,7 +118,8 @@ export default class View extends wepy.page {
     duration: 1000,
     post: null,
     baseUrl: baseUrl,
-    space_id: ''
+    space_id: '',
+    is_loaded: false
   };
 
   wxs = {
