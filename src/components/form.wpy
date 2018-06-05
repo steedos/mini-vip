@@ -52,7 +52,6 @@
                   <view class="weui-uploader">
                     <view class="weui-uploader__hd">
                       <view class="weui-uploader__title">{{item.label}}</view>
-                      <!--<view class="weui-uploader__info">{{files.length}}/2</view>-->
                     </view>
                     <view class="weui-uploader__bd">
                       <view class="weui-uploader__files" id="uploaderFiles">
@@ -134,28 +133,6 @@
                     <view wx:elif="{{item.type === 'boolean'}}" data-id="{{item.name}}" class="weui-input">
                       <switch checked class="weui-input" data-id="{{item.name}}" bindchange="textChange"/>
                     </view>
-                    <!--
-										<block wx:elif="{{item.type === 'select'}}">
-										  <checkbox-group bindchange="checkboxChange" wx:if="{{item.multiple}}" data-id="{{item.name}}">
-											<repeat for="{{item.options}}" key="index" index="index" item="option">
-											  <label class="weui-cell weui-check__label">
-												<checkbox class="weui-check" value="{{option.value}}" checked="{{option.checked}}"/>
-												<view class="weui-cell__hd weui-check__hd_in-checkbox">
-												  <icon class="weui-icon-checkbox_circle" type="circle" size="23"
-														wx:if="{{!option.checked}}"></icon>
-												  <icon class="weui-icon-checkbox_success" type="success" size="23"
-														wx:if="{{option.checked}}"></icon>
-												</view>
-												<view class="weui-cell__bd">{{option.label}}</view>
-											  </label>
-											</repeat>
-										  </checkbox-group>
-										  <picker wx:else bindchange="selectChange" data-id="{{item.name}}"
-												  range="{{item.options}}" range-key="label">
-											<view class="weui-input">{{item.options[pickerIndex[item.name]].label}}</view>
-										  </picker>
-										</block>
-					-->
                     <navigator url="/pages/inputTypes/datetime?title={{item.label}}&key={{item.name}}"
                                class="weui-input"
                                wx:elif="{{item.type === 'datetime'}}">
@@ -168,18 +145,11 @@
                       <view>{{util.transformFieldValue(item, values[item.name])}}</view>
                     </navigator>
 
-                    <navigator url="/pages/inputTypes/select?title={{item.label}}&key={{item.name}}"
+                    <navigator url="/pages/inputTypes/lookup?title={{item.label}}&key={{item.name}}"
                                class="weui-cell__ft"
                                wx:elif="{{item.type === 'master_detail' || item.type === 'lookup'}}">
                       <view>{{util.transformFieldValue(item, values[item.name])}}</view>
                     </navigator>
-                    <!--
-										<picker wx:elif="{{item.type === 'master_detail' || item.type === 'lookup'}}"
-												bindchange="optionChange" data-id="{{item.name}}"
-												range="{{fieldOptions[item.name]}}" range-key="label">
-										  <view class="weui-input">{{fieldOptions[item.name][pickerIndex[item.name]].label}}</view>
-										</picker>
-					-->
                     <block wx:elif="{{item.type === 'location'}}" >
                       <view wx:if="{{showOpenSetting}}">
                         <button open-type="openSetting" @opensetting="openSetting">打开授权设置页</button>
@@ -193,7 +163,6 @@
 
 
                   <view class="weui-cell__ft weui-cell__ft_in-access" wx:if="{{item.type === 'location'}}" @tap="getAddress" data-id="{{item.name}}">
-                    <!--<view class="weui-vcode-btn" @tap="getAddress" data-id="{{item.name}}">选择</view>-->
                   </view>
                   <view class="weui-cell__ft weui-cell__ft_in-access"
                         wx:else></view>
@@ -278,7 +247,7 @@
               for (let field_name in fields) {
                 let field = fields[field_name];
                 if (field.reference_to) {
-                  field.options = this.getReferenceTo(field.name, field.reference_to)
+                  field.options = await this.getReferenceTo(field.name, field.reference_to)
                 }
               }
             }
@@ -317,11 +286,34 @@
               delete this.values["_id"]
             }
             _.forEach(this.fields, (field) => {
-              if (field.type === 'select' && field.multiple) {
-                let fv = this.values[field.name];
-                if (_.isArray(fv)) {
+              let fv = this.values[field.name];
+              if (field.type === 'select') {
+                if(field.multiple){
+                  if (_.isArray(fv)) {
+                    _.forEach(field.options, (option) => {
+                      if (fv.includes(option.value)) {
+                        option.checked = true
+                      }
+                    })
+                  }
+                }else{
                   _.forEach(field.options, (option) => {
-                    if (fv.includes(option.value)) {
+                    if (fv === option.value) {
+                      option.checked = true
+                    }
+                  })
+                }
+              }else if(field.type === 'lookup' || field.type === 'master_detail'){
+                if(field.multiple){
+                  let _ids = _.pluck(fv, '_id')
+                  _.forEach(field.options, (option) => {
+                    if (_ids.includes(option.value)) {
+                      option.checked = true
+                    }
+                  })
+                }else{
+                  _.forEach(field.options, (option) => {
+                    if (fv._id === option.value) {
                       option.checked = true
                     }
                   })
@@ -338,7 +330,6 @@
 
     async onLoad() {
       const setting = await wepy.getSetting()
-      console.log("setting", setting)
       if(setting.authSetting["scope.userLocation"] === false){
         this.showOpenSetting = true;
       }
@@ -358,10 +349,11 @@
       const value = _.clone(this.values)
       const fields = this.fields
       _.forEach(value, (v, k) => {
-        console.log("k", k)
-        console.log("v", v)
-        if (fields[k].type === 'lookup' || fields[k].type === 'master_detail') {
-          if (_.isObject(v)) {
+        let field = fields[k];
+        if (field.type === 'lookup' || field.type === 'master_detail') {
+          if (field.multiple && _.isArray(v)){
+            value[k] = _.compact(_.pluck(v, '_id'));
+          }else if (_.isObject(v)) {
             value[k] = v._id
           }
         }
@@ -388,17 +380,12 @@
         }
       });
       return options
-//      this.fieldOptions[file_name] = options;
-//      this.$apply();
-//      console.log('this.fieldOptions', this.fieldOptions);
     }
 
     checkRequired() {
       const fields = this.fields
-      console.log(fields)
       for (let field_name in fields) {
         let field = fields[field_name]
-        console.log(field)
         if (field.required) {
           if (!this.values[field.name]) {
             this.showTopTips = true
@@ -439,23 +426,11 @@
             if (err.errMsg == 'chooseLocation:fail auth deny') {
               self.showOpenSetting = true
               self.$apply()
-//              wx.navigateTo({
-//                url: '/pages/openSetting'
-//              })
-//
-//              wx.openSetting({
-//                success: res => {
-//                  if (res.authSetting['scope.userLocation']) {
-//                    self.methods.getAddress.call(self, e);
-//                  }
-//                }
-//              });
             }
           });
       },
       textChange(e) {
         const key = e.target.dataset.id
-        console.log("text change", key, e)
         this.values[key] = e.detail.value
       },
       selectChange(e) {
@@ -507,14 +482,13 @@
         const type = e.target.dataset.type
         if (type === 'image') {
           let options = {
-            sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
-            sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+            sizeType: ['original', 'compressed'],
+            sourceType: ['album', 'camera'],
           }
           if (!multiple) {
             options.count = 1
           }
           const res = await wepy.chooseImage(options)
-          // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
           if (!that.values[key]) {
             that.values[key] = []
           }

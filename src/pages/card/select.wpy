@@ -50,7 +50,7 @@ page{
   <view class="page__bd">
     <view class="card-list">
       <repeat for="{{categorys}}" key="index" index="index" item="card">
-        <view class="card-tap" @tap="toApplyCard({{card._id}},{{card.name}},{{card.price}})">
+        <view class="card-tap" @tap="toApplyCard({{card._id}},{{card.name}},{{card.price}},{{card.avatar}},{{card.cover}})">
         <block wx:if="{{card.cover}}">
           <view class="card" style="background-image: url({{util.formatImageUrl(card.cover, baseUrl)}});">
             <view class="card-header">
@@ -139,10 +139,20 @@ export default class CardSelect extends wepy.page {
     await this.initCategory()
   }
 
+  async getActivatedCard(user) {
+    const data = {
+      $filter: `owner eq '${user}'`,
+      $expand: 'owner($select=name)',
+      $count: true,
+      $select: 'is_actived,name'
+    };
+    return this.$parent.query('vip_card', data);
+  }
+
   async initCategory() {
     const categorys = await this.getCategory(this.space_id)
     this.categorys = categorys.value
-    const card = await this.isactivated(this.$parent.globalData.user._id)
+    const card = await this.getActivatedCard(this.$parent.globalData.user._id)
     if (card.value[0]) {
       this.isactivated = card.value[0].is_actived
       this.card_id = card.value[0]._id
@@ -179,22 +189,14 @@ export default class CardSelect extends wepy.page {
     return this.$parent.query('vip_category', data);
   }
 
-  isactivated(user) {
-    const data = {
-      $filter: `owner eq '${user}'`,
-      $expand: 'owner($select=name)',
-      $count: true,
-      $select: 'is_actived,name'
-    };
-    return this.$parent.query('vip_card', data);
-  }
+  
 
   methods = {
-    toApplyCard(category_id, category_name, price) {
+    toApplyCard(category_id, category_name, price, avatar, cover) {
       if (this.is_activated) {
         wx.reLaunch({url: `../card?card_id=${this.card_id}&space_id=${this.space_id}`})
       } else {
-        wx.navigateTo({url: `../card_activate?card_id=${this.card_id}&category_name=${category_name}&space_id=${this.space_id}&price=${price}&category_id=${category_id}`})
+        wx.navigateTo({url: `../card_activate?space_id=${this.space_id}&card_id=${this.card_id}&category_id=${category_id}`})
       }
     }
   };

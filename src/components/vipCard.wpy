@@ -53,24 +53,48 @@
 }
 </style>
 <template>
-	<view class="card">
-    <view class="user-avatar">
-      <open-data wx:if="{{isActivated}}" type="userAvatarUrl"></open-data>
-      <image wx:else class="image" mode="aspectFit" src="../images/avatar.png"/>
+<view>
+  <block wx:if="{{cardCover}}">
+    <view class="card" style="background-image: url({{util.formatImageUrl(cardCover, baseUrl)}});">
+      <view class="user-avatar">
+        <image wx:if="{{cardAvatar}}" class="image" mode="aspectFit" src="{{util.formatImageUrl(cardAvatar, baseUrl)}}"/>
+        <image wx:else class="image" mode="aspectFit" src="../images/avatar.png"/>
+      </view>
+      <view class="card-name">
+        <text>{{cardName}}</text>
+      </view>
+      <view class="card-number">
+        <text>{{formatNumber}}</text>
+      </view>
     </view>
-	  <view class="card-name">
-      <text>{{cardName}}</text>
+  </block>
+  <block wx:else>
+    <view class="card">
+      <view class="user-avatar">
+        <image wx:if="{{cardAvatar}}" class="image" mode="aspectFit" src="{{util.formatImageUrl(cardAvatar, baseUrl)}}"/>
+        <image wx:else class="image" mode="aspectFit" src="../images/avatar.png"/>
+      </view>
+      <view class="card-name">
+        <text>{{cardName}}</text>
+      </view>
+      <view class="card-number">
+        <text>{{formatNumber}}</text>
+      </view>
     </view>
-    <view class="card-number">
-      <text>{{formatNumber}}</text>
-    </view>
-	</view>
+  </block>
+</view>
 </template>
 
 <script>
 import wepy from 'wepy';
-
+import { baseUrl } from '@/config';
+import util from '../wxs/util.wxs'; 
 export default class vipCard extends wepy.component {
+
+  wxs = {
+    util: util
+  };
+
   onLoad() {}
 
   props = {
@@ -89,6 +113,18 @@ export default class vipCard extends wepy.component {
     isActivated: {
       type: Boolean,
       default: false
+    },
+    cardAvatar: {
+      type: String,
+      default: ''
+    },
+    cardCover: {
+      type: String,
+      default: ''
+    },
+    baseUrl: {
+      type: String,
+      default: baseUrl
     }
   }
 

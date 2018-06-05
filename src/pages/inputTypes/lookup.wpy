@@ -32,8 +32,8 @@
 
 <script>
   import wepy from 'wepy';
-
-  export default class Select extends wepy.page {
+  import _ from 'underscore';
+  export default class Lookup extends wepy.page {
     config = {
       navigationBarTitleText: '请选择'
     };
@@ -42,17 +42,17 @@
       key: '',
       options: [],
       multiple: false
-    }
+    };
 
     setParentValue(key, value){
       const pages = getCurrentPages();
-      const prevPage = pages[pages.length - 2]
+      const prevPage = pages[pages.length - 2];
       prevPage.changeValue(key, value)
     }
 
     getObjectField(key){
       const pages = getCurrentPages();
-      const prevPage = pages[pages.length - 2]
+      const prevPage = pages[pages.length - 2];
       return prevPage.data.$form$schema.fields[key]
     }
 
@@ -63,11 +63,11 @@
 
       this.key = e.key
 
-      const field = this.getObjectField(e.key)
+      const field = this.getObjectField(e.key);
 
-      this.multiple = field.multiple || false
+      this.multiple = field.multiple || false;
 
-      this.options = field.options
+      this.options = field.options;
       if (e.title) {
         wx.setNavigationBarTitle({title: '请选择' + e.title});
       }
@@ -76,10 +76,9 @@
     methods = {
       selectChange: function (e) {
         const values = e.detail.value, key = e.target.dataset.id;
-        let checkboxItems = this.options
+        let checkboxItems = this.options;
         for (let i = 0, lenI = checkboxItems.length; i < lenI; ++i) {
           checkboxItems[i].checked = false;
-
           for (let j = 0, lenJ = values.length; j < lenJ; ++j) {
             if (checkboxItems[i].value == values[j]) {
               checkboxItems[i].checked = true;
@@ -87,14 +86,22 @@
             }
           }
         }
-        this.setParentValue(key, values)
+
+        const checkedItems = _.filter(checkboxItems, function(item){ return item.checked; });
+        let field_values = [];
+        _.forEach(checkedItems, function (item) {
+          field_values.push({_id: item.value, name: item.label})
+        });
+
+        this.setParentValue(key, field_values)
       },
       radioChange: function (e) {
         const radioItems = this.options, key = e.target.dataset.id;
         for (let i = 0, len = radioItems.length; i < len; ++i) {
           radioItems[i].checked = radioItems[i].value == e.detail.value;
         }
-        this.setParentValue(key, e.detail.value)
+        const checkedItem  = _.find(radioItems, function(item){ return item.checked});
+        this.setParentValue(key, {_id: checkedItem.value, name: checkedItem.label})
       }
     }
   }

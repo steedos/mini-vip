@@ -96,7 +96,8 @@ export default class VIP extends wepy.app {
       'pages/inputTypes/datetime',
       'pages/inputTypes/select',
       'pages/inputTypes/text',
-      'pages/inputTypes/textarea'
+      'pages/inputTypes/textarea',
+      'pages/inputTypes/lookup',
     ],
     tabBar: {
       color: '#666',
@@ -258,7 +259,7 @@ export default class VIP extends wepy.app {
       if (globalData[object_name] && globalData[object_name]._id == _id) {
         return globalData[object_name]
       }
-    } 
+    }
 
     const space_id = globalData.space_id
     if (!space_id) {
@@ -276,7 +277,7 @@ export default class VIP extends wepy.app {
     console.log('cache result.................', result)
     globalData[object_name] = result.value[0];
     return result.value[0];
-    
+
   }
 
   async get(object_name, _id, space_id, query_options) {
