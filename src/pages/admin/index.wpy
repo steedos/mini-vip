@@ -1,0 +1,45 @@
+<style lang="less">
+.image {
+  display: block;
+}
+</style>
+
+<template>
+  <view class="page">
+    <view class="page__bd">
+      <view class="weui-cells weui-cells_after-title">
+        <repeat for="{{options}}" key="index" index="index" item="option">
+          <navigator url="{{option.url}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+            <view class="weui-cell__hd">
+              <view class="slds-icon-{{option.icon}} slds-icon slds-icon--small slds-m-right--x-small"></view>
+            </view>
+            <view class="weui-cell__bd">{{option.title}}</view>
+            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+          </navigator>
+        </repeat>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import { baseUrl } from '@/config';
+
+export default class AdminIndex extends wepy.page {
+  config = {
+    navigationBarTitleText: '商户管理'
+  };
+
+  data = {
+    options: [
+      {title: '门店', icon:'standard-address', url: '../record/list?object_name=vip_store'},
+      {title: '文章', icon:'standard-contract', url: '../record/list?object_name=post'},
+      {title: '卡项', icon:'standard-performance', url: '../record/list?object_name=vip_category'},
+      {title: '会员', icon:'standard-customers', url: '../record/list?object_name=space_users&listview_id=members'},
+      {title: '员工', icon:'standard-person-account', url: '../record/list?object_name=space_users&listview_id=emplyees'},
+      {title: 'WIFI', icon:'utility-wifi', url: '../record/list?object_name=vip_wifi'}
+    ]
+  };
+}
+</script>

@@ -88,6 +88,12 @@ page {
     <view class="page__bd">
       <view class="weui-cells">
         <view class="weui-grids">
+          <block wx:if="{{is_space_admin}}">
+            <navigator url="/pages/admin/index?space_id={{space_id}}" class="weui-grid" hover-class="weui-grid_active">
+              <view class="slds-icon-utility-settings weui-grid__icon slds-icon"/>
+              <view class="weui-grid__label">商户管理</view>
+            </navigator>
+          </block>
           <block wx:if="{{card._id}}">
             <navigator url="{{card.url}}" class="weui-grid" hover-class="weui-grid_active">
               <view class="slds-icon-standard-opportunity weui-grid__icon slds-icon"/>
@@ -144,7 +150,19 @@ export default class Posts extends wepy.page {
       mask: true
     });
     this.space_id = e.space_id || this.$parent.globalData.space_id;
+
     await this.$parent.login(this.space_id);
+
+    const userId = this.$parent.globalData.user._id
+    const space = await this.$parent.get('spaces', this.space_id)
+    const admins = space.admins
+
+    console.log(space)
+
+    if (admins.includes(userId)) {
+      this.is_space_admin = true
+    }
+
     await this.loadCardInfo();
     await this.loadPostTypes();
     this.type = e.type;
@@ -200,6 +218,7 @@ export default class Posts extends wepy.page {
     card: {},
     post_types: [],
     is_space_owner: false,
+    is_space_admin: false,
     is_loaded: false
   };
 

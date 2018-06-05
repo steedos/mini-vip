@@ -60,7 +60,7 @@
       <view class="post">
         <view class="post-cover">
           <block wx:if="{{post.video}}">
-            <video src="{{util.formatVideoUrl(post.video, baseUrl)}}" controls objectFit="contain"></video>
+            <video src="{{util.formatVideoUrl(post.video, baseUrl)}}" controls objectFit="contain" id="{{post.video}}" @play="play({{post.video}})"></video>
           </block>
           <block wx:else>
             <block wx:if="{{post.images}}">
@@ -115,7 +115,8 @@ export default class PostList extends wepy.component {
   }
 
   data = {
-    baseUrl: baseUrl
+    baseUrl: baseUrl,
+    currentPlayingVideo: null
   };
 
   wxs = {
@@ -143,6 +144,18 @@ export default class PostList extends wepy.component {
       // 当图片加载失败时，把图片数据的路径清空，formatImageUrl能默认显示加载失败的图片
       this.list[index].images[0] = "load_faild";
       this.$apply();
+    }, 
+    play(videoId){
+      if(this.currentPlayingVideo && this.currentPlayingVideo!= videoId){
+        this.videoContext = wepy.createVideoContext(this.currentPlayingVideo);
+        this.videoContext.pause()
+        this.currentPlayingVideo = videoId;
+        console.log("currentPlayingVideo:",this.currentPlayingVideo)
+        
+      }else{
+        this.currentPlayingVideo = videoId;
+        console.log("currentPlayingVideo:",this.currentPlayingVideo)
+      } 
     }
   };
 

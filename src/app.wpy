@@ -89,6 +89,7 @@ export default class VIP extends wepy.app {
       'pages/space/register',
       'pages/space/list',
       'pages/space/paid_list',
+      'pages/record/list',
       'pages/record/edit',
       'pages/record/test',
       'pages/edit/datetime',
@@ -97,6 +98,7 @@ export default class VIP extends wepy.app {
       'pages/edit/textarea',
       'pages/edit/lookup',
       'pages/edit/image',
+      'pages/admin/index',
     ],
     tabBar: {
       color: '#666',
