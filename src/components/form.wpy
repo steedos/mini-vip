@@ -308,11 +308,34 @@
               delete this.values["_id"]
             }
             _.forEach(this.fields, (field) => {
-              if (field.type === 'select' && field.multiple) {
-                let fv = this.values[field.name];
-                if (_.isArray(fv)) {
+              let fv = this.values[field.name];
+              if (field.type === 'select') {
+                if(field.multiple){
+                  if (_.isArray(fv)) {
+                    _.forEach(field.options, (option) => {
+                      if (fv.includes(option.value)) {
+                        option.checked = true
+                      }
+                    })
+                  }
+                }else{
                   _.forEach(field.options, (option) => {
-                    if (fv.includes(option.value)) {
+                    if (fv === option.value) {
+                      option.checked = true
+                    }
+                  })
+                }
+              }else if(field.type === 'lookup' || field.type === 'master_detail'){
+                if(field.multiple){
+                  let _ids = _.pluck(fv, '_id')
+                  _.forEach(field.options, (option) => {
+                    if (_ids.includes(option.value)) {
+                      option.checked = true
+                    }
+                  })
+                }else{
+                  _.forEach(field.options, (option) => {
+                    if (fv._id === option.value) {
                       option.checked = true
                     }
                   })
@@ -329,7 +352,6 @@
 
     async onLoad() {
       const setting = await wepy.getSetting()
-      console.log("setting", setting)
       if(setting.authSetting["scope.userLocation"] === false){
         this.showOpenSetting = true;
       }
@@ -387,10 +409,8 @@
 
     checkRequired() {
       const fields = this.fields
-      console.log(fields)
       for (let field_name in fields) {
         let field = fields[field_name]
-        console.log(field)
         if (field.required) {
           if (!this.values[field.name]) {
             this.showTopTips = true
@@ -447,7 +467,6 @@
       },
       textChange(e) {
         const key = e.target.dataset.id
-        console.log("text change", key, e)
         this.values[key] = e.detail.value
       },
       selectChange(e) {
