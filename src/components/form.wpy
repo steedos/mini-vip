@@ -10,14 +10,18 @@
     margin: 15px 15px 0;
   }
 
-  .weui-input-select {
-    min-height: 2.58823529em;
-    line-height: 2.58823529em;
+  .weui-cell__ft{
+    line-height:1.3em;
+    padding-top:12px;
+    padding-bottom:12px;
+    min-height:1em;
   }
 
-  .weui-textarea {
-    min-height: 2.58823529em;
-    line-height: 2.58823529em;
+  .wide-cell{
+    text-align: left;
+    .wide-cell-label{
+      color: #000;
+    }
   }
 </style>
 <template>
@@ -93,8 +97,8 @@
                   <view class="weui-cell__hd">
                     <view class="weui-label">{{item.label}}</view>
                   </view>
-                  <view class="weui-cell__bd" auto-height="true">
-                    <view class="weui-cell__ft weui-input-readonly" auto-height="true">
+                  <view class="weui-cell__bd">
+                    <view class="weui-cell__ft weui-input-readonly">
                       {{util.transformFieldValue(item, values[item.name])}}
                     </view>
                   </view>
@@ -102,27 +106,32 @@
               </block>
               <block wx:else>
                 <view class="weui-cell weui-cell_input">
-                  <view class="weui-cell__hd">
+                  <view class="weui-cell__hd" wx:if="{{item.type !== 'textarea'}}">
                     <view class="weui-label">{{item.label}}</view>
                   </view>
                   <view class="weui-cell__bd">
                     <navigator
                       url="/pages/inputTypes/text?title={{item.label}}&key={{item.name}}&value={{values[item.name]}}"
-                      class="weui-input"
+                      class="weui-cell__ft"
                       wx:if="{{item.type === 'text'}}">
-                      <view class="weui-cell__ft">{{values[item.name]}}</view>
+                      <view>{{values[item.name]}}</view>
                     </navigator>
 
                     <navigator
                       url="/pages/inputTypes/textarea?title={{item.label}}&key={{item.name}}&value={{values[item.name]}}"
-                      wx:elif="{{item.type === 'textarea'}}" auto-height="true">
-                      <view class="weui-textarea weui-cell__ft" auto-height="true">{{values[item.name]}}</view>
+                      wx:elif="{{item.type === 'textarea'}}" class="weui-cell__ft wide-cell">
+                      <block wx:if="{{values[item.name]}}">
+                        <view>{{values[item.name]}}</view>
+                      </block>
+                      <block wx:else>
+                        <view class='wide-cell-label'>{{item.label}}</view>
+                      </block>
                     </navigator>
 
                     <input wx:elif="{{item.type === 'number'}}" data-id="{{item.name}}" class="weui-input" type="number"
                            bindchange="textChange"/>
 
-                    <view wx:elif="{{item.type === 'boolean'}}" data-id="{{item.name}}" class="weui-cell__ft">
+                    <view wx:elif="{{item.type === 'boolean'}}" data-id="{{item.name}}" class="weui-input">
                       <switch checked class="weui-input" data-id="{{item.name}}" bindchange="textChange"/>
                     </view>
                     <!--
@@ -154,15 +163,15 @@
                     </navigator>
 
                     <navigator url="/pages/inputTypes/select?title={{item.label}}&key={{item.name}}"
-                               class="weui-input-select"
+                               class="weui-cell__ft"
                                wx:elif="{{item.type === 'select'}}">
-                      <view class="weui-cell__ft">{{util.transformFieldValue(item, values[item.name])}}</view>
+                      <view>{{util.transformFieldValue(item, values[item.name])}}</view>
                     </navigator>
 
                     <navigator url="/pages/inputTypes/select?title={{item.label}}&key={{item.name}}"
-                               class="weui-input-select"
+                               class="weui-cell__ft"
                                wx:elif="{{item.type === 'master_detail' || item.type === 'lookup'}}">
-                      <view class="weui-cell__ft">{{util.transformFieldValue(item, values[item.name])}}</view>
+                      <view>{{util.transformFieldValue(item, values[item.name])}}</view>
                     </navigator>
                     <!--
 										<picker wx:elif="{{item.type === 'master_detail' || item.type === 'lookup'}}"
@@ -175,7 +184,7 @@
                       <view wx:if="{{showOpenSetting}}">
                         <button open-type="openSetting" @opensetting="openSetting">打开授权设置页</button>
                       </view>
-                      <view wx:else class="weui-cell__ft weui-textarea" auto-height="true"
+                      <view wx:else class="weui-cell__ft"
                             value="" @tap="getAddress" data-id="{{item.name}}">{{values[item.name] && values[item.name].address}}</view>
                     </block>
 
