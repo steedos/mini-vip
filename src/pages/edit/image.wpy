@@ -1,0 +1,115 @@
+<template>
+  <view class="page__bd">
+    <view class="weui-cell">
+      <view class="weui-cell__bd">
+        <view class="weui-uploader">
+          <view class="weui-uploader__hd">
+            <view class="weui-uploader__title">{{item.label}}</view>
+          </view>
+          <view class="weui-uploader__bd">
+            <view class="weui-uploader__files" id="uploaderFiles">
+              <!--
+              <block wx:if="{{item.multiple}}">
+                <repeat for="{{values[item.name]}}" key="*this" item="file">
+                  <view class="weui-uploader__file" bindtap="previewImage"
+                        id="{{file}}">
+                    <image class="weui-uploader__img" src="{{util.formatImageUrl(file, baseUrl)}}"
+                           mode="aspectFill"/>
+                  </view>
+                </repeat>
+              </block>
+              <block wx:else>
+                <view class="weui-uploader__file" bindtap="previewImage">
+                  <image class="weui-uploader__img" src="{{util.formatImageUrl(values[item.name], baseUrl)}}"
+                         mode="aspectFill"/>
+                </view>
+              </block>
+              -->
+              <repeat for="{{files}}" key="*this" item="file">
+                <view class="weui-uploader__file" bindtap="previewImage" id="{{file}}">
+                  <image class="weui-uploader__img" src="{{util.formatImageUrl(file, baseUrl)}}" mode="aspectFill" />
+                </view>
+              </repeat>
+            </view>
+            <view class="weui-uploader__input-box" wx:if="{{!hiddenButton[item.name]}}">
+              <view class="weui-uploader__input" bindtap="chooseImage" data-id="{{item.name}}"
+                    data-multiple="{{item.multiple}}" data-type="{{item.type}}"></view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import {baseUrl} from '@/config';
+  import util from '../../wxs/util.wxs'
+  export default class Image extends wepy.page {
+
+    data = {
+      key: '',
+      multiple: false,
+      files: []
+    };
+
+    config = {
+      navigationBarTitleText: '请选择'
+    };
+
+    wxs = {
+      util: util
+    };
+
+    onLoad(e){
+      if(e){
+        this.key = e.key
+      }
+      console.log('image', e, this.files);
+      if (e.title) {
+        wx.setNavigationBarTitle({title: '请选择' + e.title});
+      }
+
+      if (e.multiple === 'true'){
+        this.multiple = true;
+      }
+
+      if (e.value){
+        this.files = e.value.split(',');
+      }
+
+      this.$apply();
+    }
+
+    setParentValue(key, value){
+      const pages = getCurrentPages();
+      const prevPage = pages[pages.length - 2];
+      prevPage.changeValue(key, value)
+    }
+
+    methods = {
+      async chooseImage(e) {
+        let options = {
+          sizeType: ['original', 'compressed'],
+          sourceType: ['album', 'camera'],
+        }
+        if (!this.multiple) {
+          options.count = 1
+        }
+        const res = await wepy.chooseImage(options);
+        this.files = this.files.concat(res.tempFilePaths);
+        this.setParentValue(this.key, this.files);
+        this.$apply();
+      },
+      previewImage: function(e){
+        wx.previewImage({
+          current: e.currentTarget.id, // 当前显示图片的http链接
+          urls: this.data.files // 需要预览的图片http链接列表
+        })
+      }
+    }
+
+
+  }
+</script>

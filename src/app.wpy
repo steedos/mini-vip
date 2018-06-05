@@ -97,6 +97,7 @@ export default class VIP extends wepy.app {
       'pages/edit/text',
       'pages/edit/textarea',
       'pages/edit/lookup',
+      'pages/edit/image',
       'pages/admin/index',
     ],
     tabBar: {
