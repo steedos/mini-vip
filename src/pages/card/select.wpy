@@ -139,6 +139,16 @@ export default class CardSelect extends wepy.page {
     await this.initCategory()
   }
 
+  async isactivated(user) {
+    const data = {
+      $filter: `owner eq '${user}'`,
+      $expand: 'owner($select=name)',
+      $count: true,
+      $select: 'is_actived,name'
+    };
+    return this.$parent.query('vip_card', data);
+  }
+
   async initCategory() {
     const categorys = await this.getCategory(this.space_id)
     this.categorys = categorys.value
@@ -179,15 +189,7 @@ export default class CardSelect extends wepy.page {
     return this.$parent.query('vip_category', data);
   }
 
-  isactivated(user) {
-    const data = {
-      $filter: `owner eq '${user}'`,
-      $expand: 'owner($select=name)',
-      $count: true,
-      $select: 'is_actived,name'
-    };
-    return this.$parent.query('vip_card', data);
-  }
+  
 
   methods = {
     toApplyCard(category_id, category_name, price) {
