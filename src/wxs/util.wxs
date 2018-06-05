@@ -94,8 +94,16 @@ function transformFieldValue(field, value){
     }
   }else if(field.type === 'location'){
      return value.address
-  }else if(field.type === 'lookup' && field.reference_to){
-    return value.name
+  }else if((field.type === 'lookup' || field.type === 'master_detail') && field.reference_to){
+    if(field.multiple){
+      var val = [];
+      value.forEach(function(v){
+        val.push(v.name);
+      })
+      return val.join(",");
+    }else{
+      return value.name
+    }
   }
   return value
 }

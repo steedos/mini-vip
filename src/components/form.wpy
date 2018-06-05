@@ -159,7 +159,7 @@
                       <view class="weui-cell__ft">{{util.transformFieldValue(item, values[item.name])}}</view>
                     </navigator>
 
-                    <navigator url="/pages/inputTypes/select?title={{item.label}}&key={{item.name}}"
+                    <navigator url="/pages/inputTypes/lookup?title={{item.label}}&key={{item.name}}"
                                class="weui-input-select"
                                wx:elif="{{item.type === 'master_detail' || item.type === 'lookup'}}">
                       <view class="weui-cell__ft">{{util.transformFieldValue(item, values[item.name])}}</view>
@@ -269,7 +269,7 @@
               for (let field_name in fields) {
                 let field = fields[field_name];
                 if (field.reference_to) {
-                  field.options = this.getReferenceTo(field.name, field.reference_to)
+                  field.options = await this.getReferenceTo(field.name, field.reference_to)
                 }
               }
             }
@@ -349,10 +349,11 @@
       const value = _.clone(this.values)
       const fields = this.fields
       _.forEach(value, (v, k) => {
-        console.log("k", k)
-        console.log("v", v)
-        if (fields[k].type === 'lookup' || fields[k].type === 'master_detail') {
-          if (_.isObject(v)) {
+        let field = fields[k];
+        if (field.type === 'lookup' || field.type === 'master_detail') {
+          if (field.multiple && _.isArray(v)){
+            value[k] = _.compact(_.pluck(v, '_id'));
+          }else if (_.isObject(v)) {
             value[k] = v._id
           }
         }
