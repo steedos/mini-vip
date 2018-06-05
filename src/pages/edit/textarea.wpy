@@ -5,7 +5,7 @@
         <view class="weui-cell weui-cell_input">
           <view class="weui-cell__bd">
             <textarea data-id="{{key}}"
-                      class="weui-input weui-textarea"
+                      class="weui-textarea"
                       auto-height="true" value="{{value}}" bindblur="textChange"/>
           </view>
         </view>
