@@ -1,7 +1,6 @@
 <style lang="less">
 .card {
   background-color: #7f7f7f;
-  background-repeat: repeat-x;
   background-image: linear-gradient(135deg, #555555, #898989 50%, #555555);
   height: 400rpx;
   margin-top: 20rpx;
@@ -12,6 +11,9 @@
   display: flex;
   flex-direction: column;
   position:relative;
+  margin-bottom:0px;
+  background-repeat: no-repeat;
+  background-size: cover;
 
   .user-avatar {
     width: 30px;

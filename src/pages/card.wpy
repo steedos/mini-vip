@@ -45,7 +45,7 @@
 <template>
   <view class="page-card" wx:if="{{initialized}}">
     <view class="weui-panel weui-panel_access header">
-      <vipcrad :isActivated.sync="isActivated" :cardName.sync="cardName" :cardType.sync="cardType" :cardNumber.sync="cardNumber"/>
+      <vipcrad :isActivated.sync="isActivated" :cardName.sync="cardName" :cardType.sync="cardType" :cardNumber.sync="cardNumber" :cardAvatar.sync="avatar" :cardCover.sync="cover"/>
       <block wx:if="{{isActivated}}">
         <view class="card-info">
           <view class="points s-card">
@@ -142,14 +142,17 @@ export default class Card extends wepy.page {
     isAuthorize: true,
     space_id: '',
     space_name: '',
-    store_id: ''
+    store_id: '',
+    category_id: '',
+    avatar:'',
+    cover:''
   };
 
   async getCardInfo(card_id) {
     const self = this;
     const data = {
       $filter: `_id eq '${card_id}'`,
-      $expand: 'card_name($select=name)',
+      $expand: 'card_name($select=name,_id)',
       $count: true,
       $select: 'space,grade,is_actived,balance,points,card_number,card_name,store'
     };
@@ -164,6 +167,16 @@ export default class Card extends wepy.page {
     this.cardPoints = result.points;
     this.cardBalance = result.balance.toFixed(2);
     this.cardNumber = result.card_number;
+    this.category_id = result.card_name._id;
+    this.$apply();
+  }
+
+  async getCategoryInfo(category_id) {
+    const self = this;
+    const result = await self.$parent.get('vip_category', category_id);
+    console.log("result",result)
+    this.avatar = result.avatar || '';
+    this.cover = result.cover || '';
     this.$apply();
   }
 
@@ -201,6 +214,10 @@ export default class Card extends wepy.page {
       this.$apply();
     }
 
+    if(e.card_id){
+      await this.get
+    }
+
     await this.$parent.login(this.space_id);
 
     const space = await this.$parent.get('spaces', this.space_id)
@@ -213,6 +230,7 @@ export default class Card extends wepy.page {
     console.log('Card onLoad, e', e);
     if (e.card_id) {
       await this.getCardInfo(e.card_id);
+      await this.getCategoryInfo(this.category_id);
     }
 
     this.initialized = true
