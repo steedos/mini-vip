@@ -34,7 +34,7 @@ export default class AdminIndex extends wepy.page {
   data = {
     options: [
       {title: '门店', icon:'standard-address', url: '../record/list?object_name=vip_store'},
-      {title: '文章', icon:'standard-contract', url: '../record/list?object_name=posts'},
+      {title: '文章', icon:'standard-contract', url: '../record/list?object_name=post'},
       {title: '卡项', icon:'standard-performance', url: '../record/list?object_name=vip_category'},
       {title: '会员', icon:'standard-customers', url: '../record/list?object_name=space_users&listview_id=members'},
       {title: '员工', icon:'standard-person-account', url: '../record/list?object_name=space_users&listview_id=emplyees'},
