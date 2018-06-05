@@ -14,7 +14,7 @@
     line-height:1.3em;
     padding-top:12px;
     padding-bottom:12px;
-    min-height:1em;
+    min-height:1.2em;
     &.weui-cell_switch{
       padding-top:6px;
       padding-bottom:6px;
