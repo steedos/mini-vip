@@ -9,7 +9,7 @@
     <view class="page__bd">
       <view class="weui-cells weui-cells_after-title">
         <repeat for="{{record_list}}" key="index" index="index" item="record">
-          <navigator url="" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+          <navigator url="./edit?object_name={{object_name}}&record_id={{record._id}}&fields=name" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
             <view class="weui-cell__hd">
               <image class="image slds-icon slds-icon--small slds-m-right--x-small" src="{{util.formatImageUrl(record.avatar, baseUrl)}}"></image>
             </view>
