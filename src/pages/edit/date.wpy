@@ -47,8 +47,8 @@ export default class Date extends wepy.page {
       const pages = getCurrentPages();
       const prevPage = pages[pages.length - 2]
       this.birthdate= e.detail.value
-      prevPage.changeData('birthdate', e.detail.value)
-      this.$apply(); 
+      prevPage.changeValue('birthdate', e.detail.value)
+      this.$apply();
     },
   };
 }

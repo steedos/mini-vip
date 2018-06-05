@@ -120,11 +120,6 @@ export default class meProfile extends wepy.page {
     })
   };
 
-  changeValue(key, value) {
-    this[key] = value;
-    this.$apply();
-  }
-
   methods = {
     getPhoneNumber(e) {
       if (e.detail.iv || e.detail.encryptedData) {
@@ -180,7 +175,7 @@ export default class meProfile extends wepy.page {
     }
   };
 
-  changeData(key, value) {
+  changeValue(key, value) {
     this[key] = value;
     if (this.name) {
       this.showTopTips = false
