@@ -50,7 +50,7 @@
 <template>
   <view class="card-activate" wx:if="{{is_loaded}}}">
     <view class="weui-panel weui-panel_access header">
-      <vipcard :cardName.sync="cardName"/>
+      <vipcard :cardName.sync="cardName" :cardAvatar.sync="avatar" :cardCover.sync="cover"/>
     </view>
 
     <view class="weui-cells__title">必填信息</view>
@@ -138,6 +138,10 @@ export default class cardActivate extends wepy.page {
     navigationBarTitleText: '激活会员卡'
   };
 
+  async getCategory(category_id) {
+    return this.$parent.get('vip_category', category_id);
+  }
+
   async onLoad(e) {
     wepy.showLoading({
       title: '加载中',
@@ -146,9 +150,14 @@ export default class cardActivate extends wepy.page {
     this.space_id = e.space_id || this.$parent.globalData.space_id;
     this.store_id = e.store_id || this.$parent.globalData.space_id;
     if (e.category_id) {
+      console.log("e====",JSON.stringify(e))
+      const cate_obj = await this.getCategory(e.category_id);
+      console.log("ca====",cate_obj)
       this.category_id = e.category_id;
-      this.cardName = e.category_name;
-      this.price = parseInt(e.price);
+      this.cardName = cate_obj.name;
+      this.avatar = cate_obj.avatar || '';
+      this.cover = cate_obj.cover || '';
+      this.price = parseInt(cate_obj.price);
     } else {
       const data = {
         $select: 'name,price'
@@ -212,6 +221,8 @@ export default class cardActivate extends wepy.page {
     space_id: '',
     store_id: '',
     price: 0,
+    avatar: '',
+    cover: '',
     is_loaded: false
   };
   addVipCard() {

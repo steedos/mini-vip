@@ -82,9 +82,7 @@ export default class VIP extends wepy.app {
       'pages/card_pay_fail',
       'pages/stores',
       'pages/wifi',
-      'pages/edit/text',
       'pages/post/index',
-      'pages/edit/select',
       'pages/edit/date',
       'pages/card/select',
       'pages/space/index',
@@ -94,10 +92,11 @@ export default class VIP extends wepy.app {
       'pages/record/list',
       'pages/record/edit',
       'pages/record/test',
-      'pages/inputTypes/datetime',
-      'pages/inputTypes/select',
-      'pages/inputTypes/text',
-      'pages/inputTypes/textarea'
+      'pages/edit/datetime',
+      'pages/edit/select',
+      'pages/edit/text',
+      'pages/edit/textarea',
+      'pages/edit/lookup',
     ],
     tabBar: {
       color: '#666',
@@ -259,7 +258,7 @@ export default class VIP extends wepy.app {
       if (globalData[object_name] && globalData[object_name]._id == _id) {
         return globalData[object_name]
       }
-    } 
+    }
 
     const space_id = globalData.space_id
     if (!space_id) {
@@ -277,7 +276,7 @@ export default class VIP extends wepy.app {
     console.log('cache result.................', result)
     globalData[object_name] = result.value[0];
     return result.value[0];
-    
+
   }
 
   async get(object_name, _id, space_id, query_options) {

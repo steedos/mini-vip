@@ -32,13 +32,13 @@
     <view class="weui-toptips weui-toptips_warn" wx:if="{{showTopTips}}">{{message}}</view>
     <view class="page__bd">
 			<view class="weui-cells weui-cells_after-title">
-        <navigator url="./edit/text?text=姓名&name={{name}}" class="weui-cell weui-cell_access">
+        <navigator url="./edit/text?text=姓名&key=name&value={{name}}" class="weui-cell weui-cell_access">
           <view class="weui-cell__bd">
             <view>姓名</view>
           </view>
           <view class="weui-cell__ft weui-cell__ft_in-access">{{name}}</view>
         </navigator>
-        <navigator url="./edit/select?text=性别&sex={{sex}}" class="weui-cell weui-cell_access">
+        <navigator url="./edit/select?text=性别&field={{sex_field}}&value={{sex}}" class="weui-cell weui-cell_access">
           <view class="weui-cell__bd">
             <view>性别</view>
           </view>
@@ -110,7 +110,14 @@ export default class meProfile extends wepy.page {
     phoneNumber: '',
     birthdate: '',
     showTopTips: false,
-    message: '请填写姓名'
+    message: '请填写姓名',
+    sex_field: JSON.stringify({
+      name: 'sex',
+      options: [
+        {label: '男', value: '男'},
+        {label: '女', value: '女'}
+      ]
+    })
   };
 
   methods = {
@@ -168,7 +175,7 @@ export default class meProfile extends wepy.page {
     }
   };
 
-  changeData(key, value) {
+  changeValue(key, value) {
     this[key] = value;
     if (this.name) {
       this.showTopTips = false

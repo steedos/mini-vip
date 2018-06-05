@@ -10,14 +10,18 @@
     margin: 15px 15px 0;
   }
 
-  .weui-input-select {
-    min-height: 2.58823529em;
-    line-height: 2.58823529em;
+  .weui-cell__ft{
+    line-height:1.3em;
+    padding-top:12px;
+    padding-bottom:12px;
+    min-height:1em;
   }
 
-  .weui-textarea {
-    min-height: 2.58823529em;
-    line-height: 2.58823529em;
+  .wide-cell{
+    text-align: left;
+    .wide-cell-label{
+      color: #000;
+    }
   }
 </style>
 <template>
@@ -48,7 +52,6 @@
                   <view class="weui-uploader">
                     <view class="weui-uploader__hd">
                       <view class="weui-uploader__title">{{item.label}}</view>
-                      <!--<view class="weui-uploader__info">{{files.length}}/2</view>-->
                     </view>
                     <view class="weui-uploader__bd">
                       <view class="weui-uploader__files" id="uploaderFiles">
@@ -93,8 +96,8 @@
                   <view class="weui-cell__hd">
                     <view class="weui-label">{{item.label}}</view>
                   </view>
-                  <view class="weui-cell__bd" auto-height="true">
-                    <view class="weui-cell__ft weui-input-readonly" auto-height="true">
+                  <view class="weui-cell__bd">
+                    <view class="weui-cell__ft weui-input-readonly">
                       {{util.transformFieldValue(item, values[item.name])}}
                     </view>
                   </view>
@@ -102,80 +105,56 @@
               </block>
               <block wx:else>
                 <view class="weui-cell weui-cell_input">
-                  <view class="weui-cell__hd">
+                  <view class="weui-cell__hd" wx:if="{{item.type !== 'textarea'}}">
                     <view class="weui-label">{{item.label}}</view>
                   </view>
                   <view class="weui-cell__bd">
                     <navigator
-                      url="/pages/inputTypes/text?title={{item.label}}&key={{item.name}}&value={{values[item.name]}}"
-                      class="weui-input"
+                      url="/pages/edit/text?title={{item.label}}&key={{item.name}}&value={{values[item.name]}}"
+                      class="weui-cell__ft"
                       wx:if="{{item.type === 'text'}}">
-                      <view class="weui-cell__ft">{{values[item.name]}}</view>
+                      <view>{{values[item.name]}}</view>
                     </navigator>
 
                     <navigator
-                      url="/pages/inputTypes/textarea?title={{item.label}}&key={{item.name}}&value={{values[item.name]}}"
-                      wx:elif="{{item.type === 'textarea'}}" auto-height="true">
-                      <view class="weui-textarea weui-cell__ft" auto-height="true">{{values[item.name]}}</view>
+                      url="/pages/edit/textarea?title={{item.label}}&key={{item.name}}&value={{values[item.name]}}"
+                      wx:elif="{{item.type === 'textarea'}}" class="weui-cell__ft wide-cell">
+                      <block wx:if="{{values[item.name]}}">
+                        <view>{{values[item.name]}}</view>
+                      </block>
+                      <block wx:else>
+                        <view class='wide-cell-label'>{{item.label}}</view>
+                      </block>
                     </navigator>
 
                     <input wx:elif="{{item.type === 'number'}}" data-id="{{item.name}}" class="weui-input" type="number"
                            bindchange="textChange"/>
 
-                    <view wx:elif="{{item.type === 'boolean'}}" data-id="{{item.name}}" class="weui-cell__ft">
+                    <view wx:elif="{{item.type === 'boolean'}}" data-id="{{item.name}}" class="weui-input">
                       <switch checked class="weui-input" data-id="{{item.name}}" bindchange="textChange"/>
                     </view>
-                    <!--
-										<block wx:elif="{{item.type === 'select'}}">
-										  <checkbox-group bindchange="checkboxChange" wx:if="{{item.multiple}}" data-id="{{item.name}}">
-											<repeat for="{{item.options}}" key="index" index="index" item="option">
-											  <label class="weui-cell weui-check__label">
-												<checkbox class="weui-check" value="{{option.value}}" checked="{{option.checked}}"/>
-												<view class="weui-cell__hd weui-check__hd_in-checkbox">
-												  <icon class="weui-icon-checkbox_circle" type="circle" size="23"
-														wx:if="{{!option.checked}}"></icon>
-												  <icon class="weui-icon-checkbox_success" type="success" size="23"
-														wx:if="{{option.checked}}"></icon>
-												</view>
-												<view class="weui-cell__bd">{{option.label}}</view>
-											  </label>
-											</repeat>
-										  </checkbox-group>
-										  <picker wx:else bindchange="selectChange" data-id="{{item.name}}"
-												  range="{{item.options}}" range-key="label">
-											<view class="weui-input">{{item.options[pickerIndex[item.name]].label}}</view>
-										  </picker>
-										</block>
-					-->
-                    <navigator url="/pages/inputTypes/datetime?title={{item.label}}&key={{item.name}}"
+                    <navigator url="/pages/edit/datetime?title={{item.label}}&key={{item.name}}"
                                class="weui-input"
                                wx:elif="{{item.type === 'datetime'}}">
                       <view class="weui-cell__ft">{{values[item.name]}}</view>
                     </navigator>
 
-                    <navigator url="/pages/inputTypes/select?title={{item.label}}&key={{item.name}}"
-                               class="weui-input-select"
+                    <navigator url="/pages/edit/select?title={{item.label}}&key={{item.name}}"
+                               class="weui-cell__ft"
                                wx:elif="{{item.type === 'select'}}">
-                      <view class="weui-cell__ft">{{util.transformFieldValue(item, values[item.name])}}</view>
+                      <view>{{util.transformFieldValue(item, values[item.name])}}</view>
                     </navigator>
 
-                    <navigator url="/pages/inputTypes/select?title={{item.label}}&key={{item.name}}"
-                               class="weui-input-select"
+                    <navigator url="/pages/edit/lookup?title={{item.label}}&key={{item.name}}"
+                               class="weui-cell__ft"
                                wx:elif="{{item.type === 'master_detail' || item.type === 'lookup'}}">
-                      <view class="weui-cell__ft">{{util.transformFieldValue(item, values[item.name])}}</view>
+                      <view>{{util.transformFieldValue(item, values[item.name])}}</view>
                     </navigator>
-                    <!--
-										<picker wx:elif="{{item.type === 'master_detail' || item.type === 'lookup'}}"
-												bindchange="optionChange" data-id="{{item.name}}"
-												range="{{fieldOptions[item.name]}}" range-key="label">
-										  <view class="weui-input">{{fieldOptions[item.name][pickerIndex[item.name]].label}}</view>
-										</picker>
-					-->
                     <block wx:elif="{{item.type === 'location'}}" >
                       <view wx:if="{{showOpenSetting}}">
                         <button open-type="openSetting" @opensetting="openSetting">打开授权设置页</button>
                       </view>
-                      <view wx:else class="weui-cell__ft weui-textarea" auto-height="true"
+                      <view wx:else class="weui-cell__ft"
                             value="" @tap="getAddress" data-id="{{item.name}}">{{values[item.name] && values[item.name].address}}</view>
                     </block>
 
@@ -184,7 +163,6 @@
 
 
                   <view class="weui-cell__ft weui-cell__ft_in-access" wx:if="{{item.type === 'location'}}" @tap="getAddress" data-id="{{item.name}}">
-                    <!--<view class="weui-vcode-btn" @tap="getAddress" data-id="{{item.name}}">选择</view>-->
                   </view>
                   <view class="weui-cell__ft weui-cell__ft_in-access"
                         wx:else></view>
@@ -196,7 +174,7 @@
       </view>
 
       <view class="btn-container" wx:if="{{args.action === 'edit' || args.action === 'create'}}">
-        <button class="submit-btn" form-type="submit" @tap="submitForm" disabled="{{submitDisabled}}">提交</button>
+        <button class="submit-btn" form-type="submit" @tap="submitForm" disabled="{{submitDisabled}}">保存</button>
       </view>
 
     </view>
@@ -269,7 +247,7 @@
               for (let field_name in fields) {
                 let field = fields[field_name];
                 if (field.reference_to) {
-                  field.options = this.getReferenceTo(field.name, field.reference_to)
+                  field.options = await this.getReferenceTo(field.name, field.reference_to)
                 }
               }
             }
@@ -308,11 +286,34 @@
               delete this.values["_id"]
             }
             _.forEach(this.fields, (field) => {
-              if (field.type === 'select' && field.multiple) {
-                let fv = this.values[field.name];
-                if (_.isArray(fv)) {
+              let fv = this.values[field.name];
+              if (field.type === 'select') {
+                if(field.multiple){
+                  if (_.isArray(fv)) {
+                    _.forEach(field.options, (option) => {
+                      if (fv.includes(option.value)) {
+                        option.checked = true
+                      }
+                    })
+                  }
+                }else{
                   _.forEach(field.options, (option) => {
-                    if (fv.includes(option.value)) {
+                    if (fv === option.value) {
+                      option.checked = true
+                    }
+                  })
+                }
+              }else if(field.type === 'lookup' || field.type === 'master_detail'){
+                if(field.multiple){
+                  let _ids = _.pluck(fv, '_id')
+                  _.forEach(field.options, (option) => {
+                    if (_ids.includes(option.value)) {
+                      option.checked = true
+                    }
+                  })
+                }else{
+                  _.forEach(field.options, (option) => {
+                    if (fv._id === option.value) {
                       option.checked = true
                     }
                   })
@@ -329,7 +330,6 @@
 
     async onLoad() {
       const setting = await wepy.getSetting()
-      console.log("setting", setting)
       if(setting.authSetting["scope.userLocation"] === false){
         this.showOpenSetting = true;
       }
@@ -349,10 +349,11 @@
       const value = _.clone(this.values)
       const fields = this.fields
       _.forEach(value, (v, k) => {
-        console.log("k", k)
-        console.log("v", v)
-        if (fields[k].type === 'lookup' || fields[k].type === 'master_detail') {
-          if (_.isObject(v)) {
+        let field = fields[k];
+        if (field.type === 'lookup' || field.type === 'master_detail') {
+          if (field.multiple && _.isArray(v)){
+            value[k] = _.compact(_.pluck(v, '_id'));
+          }else if (_.isObject(v)) {
             value[k] = v._id
           }
         }
@@ -379,17 +380,12 @@
         }
       });
       return options
-//      this.fieldOptions[file_name] = options;
-//      this.$apply();
-//      console.log('this.fieldOptions', this.fieldOptions);
     }
 
     checkRequired() {
       const fields = this.fields
-      console.log(fields)
       for (let field_name in fields) {
         let field = fields[field_name]
-        console.log(field)
         if (field.required) {
           if (!this.values[field.name]) {
             this.showTopTips = true
@@ -430,23 +426,11 @@
             if (err.errMsg == 'chooseLocation:fail auth deny') {
               self.showOpenSetting = true
               self.$apply()
-//              wx.navigateTo({
-//                url: '/pages/openSetting'
-//              })
-//
-//              wx.openSetting({
-//                success: res => {
-//                  if (res.authSetting['scope.userLocation']) {
-//                    self.methods.getAddress.call(self, e);
-//                  }
-//                }
-//              });
             }
           });
       },
       textChange(e) {
         const key = e.target.dataset.id
-        console.log("text change", key, e)
         this.values[key] = e.detail.value
       },
       selectChange(e) {
@@ -498,14 +482,13 @@
         const type = e.target.dataset.type
         if (type === 'image') {
           let options = {
-            sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
-            sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+            sizeType: ['original', 'compressed'],
+            sourceType: ['album', 'camera'],
           }
           if (!multiple) {
             options.count = 1
           }
           const res = await wepy.chooseImage(options)
-          // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
           if (!that.values[key]) {
             that.values[key] = []
           }

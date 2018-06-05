@@ -1,75 +1,126 @@
-<style lang="less">
-.page-edit-text {
-  .page__bd {
-    margin-top: 20px;
-  }
-}
-</style>
 <template>
   <view class="page-edit-text">
     <view class="page__bd">
       <view class="weui-cells weui-cells_after-title">
-        <radio-group bindchange="radioChange">
-          <label class="weui-cell weui-check__label" wx:for="{{radioItems}}" wx:key="value">
-            <radio class="weui-check" value="{{item.value}}" checked="{{item.checked}}"/>
-
-            <view class="weui-cell__bd">{{item.name}}</view>
-            <view class="weui-cell__ft weui-cell__ft_in-radio" wx:if="{{item.checked}}">
+        <checkbox-group bindchange="selectChange" data-id="{{key}}" wx:if="{{multiple}}">
+          <repeat for="{{options}}" key="index" index="index" item="option">
+            <label class="weui-cell weui-check__label">
+              <checkbox class="weui-check" value="{{option.value}}" checked="{{option.checked}}" />
+              <view class="weui-cell__bd">{{option.label}}</view>
+              <view class="weui-cell__ft weui-cell__ft_in-radio" wx:if="{{option.checked}}">
                 <icon class="weui-icon-radio" type="success_no_circle" size="16"></icon>
-            </view>
-          </label>
+              </view>
+            </label>
+          </repeat>
+        </checkbox-group>
+        <radio-group bindchange="radioChange" data-id="{{key}}" wx:else>
+          <repeat for="{{options}}" key="index" index="index" item="option">
+            <label class="weui-cell weui-check__label">
+              <radio class="weui-check" value="{{option.value}}" checked="{{option.checked}}"/>
+              <view class="weui-cell__bd">{{option.label}}</view>
+              <view class="weui-cell__ft weui-cell__ft_in-radio" wx:if="{{option.checked}}">
+                <icon class="weui-icon-radio" type="success_no_circle" size="16"></icon>
+              </view>
+            </label>
+          </repeat>
         </radio-group>
       </view>
-    </view>  
+    </view>
   </view>
-
 </template>
 
+
 <script>
-import wepy from 'wepy';
-import req from '@/network';
-import { serverAPI } from '@/server';
+  import wepy from 'wepy';
 
-export default class Select extends wepy.page {
-  config = {
-    navigationBarTitleText: 'WeChat'
-  };
+  export default class Select extends wepy.page {
+    config = {
+      navigationBarTitleText: '请选择'
+    };
 
-  onLoad(e) {
-    console.log(e);
-    this.text = '设置' + e.text;
-    this.sex = e.sex;
-    var radioItems = this.data.radioItems;
-    if (radioItems[0].name == e.sex) {
-      radioItems[0].checked = true;
-    } else {
-      radioItems[1].checked = true;
+    data = {
+      key: '',
+      options: [],
+      multiple: false
     }
 
-    wx.setNavigationBarTitle({ title: this.text });
-  }
-
-  data = {
-    radioItems: [
-      { name: '男', value: '男', checked: false },
-      { name: '女', value: '女', checked: false }
-    ]
-  };
-
-  methods = {
-    radioChange: function(e) {
+    setParentValue(key, value){
       const pages = getCurrentPages();
       const prevPage = pages[pages.length - 2]
-      let radioItems = this.data.radioItems;
-      for (let i = 0, len = radioItems.length; i < len; ++i) {
-        radioItems[i].checked = radioItems[i].value == e.detail.value;
+      prevPage.changeValue(key, value)
+    }
+
+    getObjectField(key){
+      const pages = getCurrentPages();
+      const prevPage = pages[pages.length - 2]
+      return prevPage.data.$form$schema.fields[key]
+    }
+
+    onLoad(e) {
+      if (!e) {
+        e = {}
       }
 
-      prevPage.changeData('sex', e.detail.value)
+      this.key = e.key
 
-      this.radioItems = radioItems
-      this.$apply()
+      let field;
+
+      if(e.field){
+        field = JSON.parse(e.field);
+        let value = e.value || '';
+        if(field.multiple){
+          value = value.split(',')
+          field.options.forEach(function (o) {
+            if(value.indexOf(o.value) > -1){
+              o.checked = true
+            }
+          });
+        }else{
+          field.options.forEach(function (o) {
+            if(o.value === value){
+              o.checked = true
+            }
+          });
+        }
+
+        if(!e.key){
+          this.key = field.name
+        }
+      }else{
+        field = this.getObjectField(e.key)
+      }
+
+      this.multiple = field.multiple || false
+
+      this.options = field.options
+      if (e.title) {
+        wx.setNavigationBarTitle({title: '请选择' + e.title});
+      }
     }
-  };
-}
+
+    methods = {
+      selectChange: function (e) {
+        const values = e.detail.value, key = e.target.dataset.id;
+        let checkboxItems = this.options
+        for (let i = 0, lenI = checkboxItems.length; i < lenI; ++i) {
+          checkboxItems[i].checked = false;
+
+          for (let j = 0, lenJ = values.length; j < lenJ; ++j) {
+            if (checkboxItems[i].value == values[j]) {
+              checkboxItems[i].checked = true;
+              break;
+            }
+          }
+        }
+        this.setParentValue(key, values)
+      },
+      radioChange: function (e) {
+        const radioItems = this.options, key = e.target.dataset.id;
+        for (let i = 0, len = radioItems.length; i < len; ++i) {
+          radioItems[i].checked = radioItems[i].value == e.detail.value;
+        }
+        this.setParentValue(key, e.detail.value)
+      }
+    }
+  }
 </script>
