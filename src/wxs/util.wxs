@@ -59,7 +59,7 @@ function formatCardBgImageUrl(src, baseUrl) {
     return baseUrl + "/api/files/images/" + src;
   }
   else{
-    return "";
+    return null;
   }
 }
 
