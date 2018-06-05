@@ -40,6 +40,15 @@ page{
       }
     }
   }
+  .button-sp-area{
+    margin: 0 auto 20px;
+    padding-top: 15px;
+    width: 60%;
+    button {
+      color: #fff;
+      border: 1px solid #fff;
+    }
+  }
 }
 </style>
 <template>
@@ -92,6 +101,11 @@ page{
       </repeat>
     </view>
   </view>
+  <view class="button-sp-area" wx:if="{{allowEdit}}">
+    <navigator url="/pages/record/list?object_name=vip_category&space_id={{space_id}}">
+      <button class="weui-btn" type="primary" plain="true">编辑卡项</button>
+    </navigator>
+  </view>
 </view>
 </template>
 <script>
@@ -120,7 +134,8 @@ export default class CardSelect extends wepy.page {
     categorys: [],
     is_activated: false,
     card_id: '',
-    baseUrl: baseUrl
+    baseUrl: baseUrl,
+    allowEdit: false
   };
 
   wxs = {
@@ -132,6 +147,12 @@ export default class CardSelect extends wepy.page {
     this.space_id = e.space_id || this.$parent.globalData.space_id
     const cur_space = await this.getSpaceInfo(e.space_id)
     this.space_name = cur_space.name
+    
+    const object = await this.$parent.get('objects', 'vip_category')
+    console.log(object)
+
+    this.allowEdit = object.allowEdit
+
     wx.setNavigationBarTitle({
       title: this.space_name
     })
@@ -154,7 +175,7 @@ export default class CardSelect extends wepy.page {
     this.categorys = categorys.value
     const card = await this.isactivated(this.$parent.globalData.user._id)
     if (card.value[0]) {
-      this.isactivated = card.value[0].is_actived
+      this.is_activated = card.value[0].is_actived
       this.card_id = card.value[0]._id
     }
     this.$apply()

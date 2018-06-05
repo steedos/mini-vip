@@ -91,6 +91,7 @@ export default class VIP extends wepy.app {
       'pages/space/register',
       'pages/space/list',
       'pages/space/paid_list',
+      'pages/record/list',
       'pages/record/edit',
       'pages/record/test',
       'pages/inputTypes/datetime',
