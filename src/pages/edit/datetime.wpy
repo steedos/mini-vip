@@ -34,7 +34,7 @@
   export default class DateTime extends wepy.page {
 
     config = {
-      navigationBarTitleText: '请选择'
+      navigationBarTitleText: '编辑'
     };
 
     data = {
@@ -54,7 +54,7 @@
         e = {}
       }
       if (e.title) {
-        wx.setNavigationBarTitle({title: '请选择' + e.title});
+        wx.setNavigationBarTitle({title: '编辑' + e.title});
       }
       this.key = e.key
       const now = util.formatTime(new Date)

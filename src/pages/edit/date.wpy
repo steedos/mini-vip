@@ -28,12 +28,12 @@ import { serverAPI } from '@/server';
 
 export default class Date extends wepy.page {
   config = {
-    navigationBarTitleText: 'WeChat'
+    navigationBarTitleText: '编辑'
   };
 
   onLoad(e) {
     console.log(e)
-    this.text = "设置"+e.text
+    this.text = "编辑"+e.text
     this.birthdate = e.birthdate
     wx.setNavigationBarTitle({title:this.text})
   };

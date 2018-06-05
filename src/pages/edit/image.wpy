@@ -55,7 +55,7 @@
     };
 
     config = {
-      navigationBarTitleText: '请选择'
+      navigationBarTitleText: '编辑'
     };
 
     wxs = {
@@ -68,7 +68,7 @@
       }
       console.log('image', e, this.files);
       if (e.title) {
-        wx.setNavigationBarTitle({title: '请选择' + e.title});
+        wx.setNavigationBarTitle({title: '编辑' + e.title});
       }
 
       if (e.multiple === 'true'){

@@ -35,7 +35,7 @@
   import _ from 'underscore';
   export default class Lookup extends wepy.page {
     config = {
-      navigationBarTitleText: '请选择'
+      navigationBarTitleText: '选择'
     };
 
     data = {
@@ -69,7 +69,7 @@
 
       this.options = field.options;
       if (e.title) {
-        wx.setNavigationBarTitle({title: '请选择' + e.title});
+        wx.setNavigationBarTitle({title: '选择' + e.title});
       }
     }
 

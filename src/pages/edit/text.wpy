@@ -19,7 +19,7 @@
 
   export default class Text extends wepy.page {
     config = {
-      navigationBarTitleText: '请选择'
+      navigationBarTitleText: '编辑'
     };
 
     data = {
@@ -43,7 +43,7 @@
       this.value = e.value || ''
 
       if (e.title) {
-        wx.setNavigationBarTitle({title: '请填写' + e.title});
+        wx.setNavigationBarTitle({title: '编辑' + e.title});
       }
     }
 
