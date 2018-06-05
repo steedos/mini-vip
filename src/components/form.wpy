@@ -174,7 +174,7 @@
       </view>
 
       <view class="btn-container" wx:if="{{args.action === 'edit' || args.action === 'create'}}">
-        <button class="submit-btn" form-type="submit" @tap="submitForm" disabled="{{submitDisabled}}">提交</button>
+        <button class="submit-btn" form-type="submit" @tap="submitForm" disabled="{{submitDisabled}}">保存</button>
       </view>
 
     </view>
