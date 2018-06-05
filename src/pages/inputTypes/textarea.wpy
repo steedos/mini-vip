@@ -35,8 +35,6 @@
     }
 
     onLoad(e) {
-      console.log("textarea", e)
-
       if (!e) {
         e = {}
       }

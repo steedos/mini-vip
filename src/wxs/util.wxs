@@ -33,6 +33,36 @@ function formatImageUrl(src, baseUrl) {
   }
 }
 
+
+// 头像地址转换
+function formatAvatarImageUrl(src, baseUrl) {
+  console.log("===src, baseUrl===",src, baseUrl)
+  if (getRegExp("^\w+:\/\/").test(src)) {
+    // http:// 或 wxfile:// 等完整路径直接返回
+    return src;
+  }
+  else if(src != "load_faild"){
+    return baseUrl + "/api/files/images/" + src;
+  }
+  else{
+    return "/images/avatar.png";
+  }
+}
+
+// 会员卡背景地址转换
+function formatCardBgImageUrl(src, baseUrl) {
+  if (getRegExp("^\w+:\/\/").test(src)) {
+    // http:// 或 wxfile:// 等完整路径直接返回
+    return src;
+  }
+  else if(src != "load_faild"){
+    return baseUrl + "/api/files/images/" + src;
+  }
+  else{
+    return "";
+  }
+}
+
 // 视频地址转换
 function formatVideoUrl(src, baseUrl) {
   if(src){
@@ -112,7 +142,9 @@ function transformFieldValue(field, value){
 module.exports = {
   datefmt: formatDate,
   formatImageUrl: formatImageUrl,
+  formatAvatarImageUrl: formatAvatarImageUrl,
+  formatCardBgImageUrl: formatCardBgImageUrl,
   formatVideoUrl: formatVideoUrl,
-  getEmptyImageUrl:getEmptyImageUrl
+  getEmptyImageUrl:getEmptyImageUrl,
   transformFieldValue: transformFieldValue
 }
