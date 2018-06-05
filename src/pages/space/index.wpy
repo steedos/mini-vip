@@ -90,7 +90,7 @@ page {
         <view class="weui-grids">
           <block wx:if="{{is_space_admin}}">
             <navigator url="/pages/admin/index?space_id={{space_id}}" class="weui-grid" hover-class="weui-grid_active">
-              <view class="slds-icon-standard-opportunity weui-grid__icon slds-icon"/>
+              <view class="slds-icon-utility-settings weui-grid__icon slds-icon"/>
               <view class="weui-grid__label">商户管理</view>
             </navigator>
           </block>
