@@ -1,3 +1,12 @@
+<style lang="less">
+  .weui-textarea {
+    line-height:1.3em;
+    height:1.3em;
+    min-height:1.3em;
+    padding-top:4px;
+    padding-bottom:4px;
+  }
+</style>
 <template>
   <view class="text">
     <view class="page__bd">
