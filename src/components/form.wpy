@@ -81,10 +81,15 @@
                           </view>
                         </block>
                       </view>
-                      <view class="weui-uploader__input-box" wx:if="{{!hiddenButton[item.name]}}">
-                        <view class="weui-uploader__input" bindtap="chooseFile" data-id="{{item.name}}"
-                              data-multiple="{{item.multiple}}" data-type="{{item.type}}"></view>
-                      </view>
+                      <navigator
+                        url="/pages/edit/image?title={{item.label}}&key={{item.name}}&value={{values[item.name]}}&multiple={{item.multiple}}"
+                        class="weui-uploader__input-box" wx:if="{{!hiddenButton[item.name]}}">
+                        <view class="weui-uploader__input"></view>
+                      </navigator>
+                      <!--<view class="weui-uploader__input-box" wx:if="{{!hiddenButton[item.name]}}">-->
+                        <!--<view class="weui-uploader__input" bindtap="chooseFile" data-id="{{item.name}}"-->
+                              <!--data-multiple="{{item.multiple}}" data-type="{{item.type}}"></view>-->
+                      <!--</view>-->
                     </view>
                   </view>
                 </view>
@@ -345,6 +350,84 @@
       return this.fields[key]
     }
 
+    isTempFile(filePath){
+      return (new RegExp(":\/\/")).test(filePath)
+    }
+
+    async uploadImage(filePath){
+      const imageInfo = await wepy.getImageInfo({
+        src: filePath
+      });
+      let formData = {
+        width: imageInfo.width,
+        height: imageInfo.height,
+        type: imageInfo.type,
+        orientation: imageInfo.orientation
+      };
+      const authToken = this.$parent.$parent.globalData.user.auth_token;
+      const userId = this.$parent.$parent.globalData.user._id;
+      const fileResult = await wepy.uploadFile({
+        url: `${baseUrl}/s3/images`,
+        filePath: filePath,
+        name: 'file',
+        formData: formData,
+        header: {
+          'X-Auth-Token': authToken,
+          'X-User-Id': userId
+        }
+      }).catch((err)=>{
+        console.log("error...",err)
+      });
+      const fileData = JSON.parse(fileResult.data);
+      if (fileData.errors || fileResult.statusCode != 200) {
+        wx.showToast({
+          title: "图片上传失败，请稍后再试",
+          icon: "none"
+        });
+        return false;
+      }else{
+        return fileData
+      }
+    }
+
+    async uploadImages() {
+      const fields = this.fields;
+      for (let k in fields) {
+        let f = fields[k]
+        if(f.type === 'image'){
+          if(f.multiple){
+            let fv = this.values[k];
+            if(_.isArray(fv)){
+              let new_fv = []
+              for (let v of fv){
+                if(this.isTempFile(v)){
+                  console.log("本地", v)
+                  const image = await this.uploadImage(v)
+                  if(image){
+                    new_fv.push(image._id)
+                  }
+                }else{
+                  console.log("非本地", v)
+                  new_fv.push(v)
+                }
+              }
+              this.values[k] = new_fv
+            }
+          }else{
+            let fv = this.values[k];
+            if(fv){
+              if(this.isTempFile(fv)){
+                const image = await this.uploadImage(v)
+                if(image){
+                  this.values[k] = image._id
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
     transformValue() {
       const value = _.clone(this.values)
       const fields = this.fields
@@ -524,7 +607,11 @@
         if (!this.checkRequired()) {
           return;
         }
-        const value = this.transformValue()
+
+        //检查临时附件，如果有，则上传附件
+        await this.uploadImages();
+
+        const value = this.transformValue();
         if (this.args.action === 'create') {
           await this.$parent.$parent.insert(this.args.object_name, value)
         } else if (this.args.action === 'edit') {
