@@ -1,7 +1,7 @@
 <template>
   <view class="page-edit-text">
     <view class="page__bd">
-      <view class="weui-cells weui-cells_after-title">
+      <view class="weui-cells">
         <checkbox-group bindchange="selectChange" data-id="{{key}}" wx:if="{{multiple}}">
           <repeat for="{{options}}" key="index" index="index" item="option">
             <label class="weui-cell weui-check__label">
