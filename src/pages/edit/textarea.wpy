@@ -13,9 +13,8 @@
       <view class="weui-cells">
         <view class="weui-cell weui-cell_input">
           <view class="weui-cell__bd">
-            <textarea data-id="{{key}}"
-                      class="weui-textarea"
-                      auto-height="true" value="{{value}}" bindinput="textChange"/>
+            <textarea data-id="{{key}}" class="weui-textarea"
+              auto-height="true" auto-focus="true" value="{{value}}" bindinput="textChange"/>
           </view>
         </view>
       </view>
