@@ -123,7 +123,7 @@
             </view>
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
           </navigator> -->
-          <!-- <navigator url="member_benefits?category_id={{category_id}}" class="weui-cell weui-cell_access">
+          <navigator url="member_benefits?category_id={{category_id}}" class="weui-cell weui-cell_access">
             <view class="weui-cell__hd">
               <view class="slds-icon-standard-team-member slds-icon slds-icon--small slds-m-right--x-small"/>
             </view>
@@ -131,7 +131,7 @@
               <view>会员权益</view>
             </view>
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-          </navigator> -->
+          </navigator>
           <navigator url="stores" class="weui-cell weui-cell_access">
             <view class="weui-cell__hd">
               <view class="slds-icon-standard-address slds-icon slds-icon--small slds-m-right--x-small"/>

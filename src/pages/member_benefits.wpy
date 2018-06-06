@@ -1,0 +1,73 @@
+<style lang="less">
+.page{
+  margin-left:15px;
+  margin-right:15px;
+}
+.slds-icon{
+  margin-left:auto;
+  margin-right:auto;
+}
+.page-hd-title{
+  text-align:center;
+  margin:8px;
+}
+.weui-form-preview__value{
+    text-align:left;
+    color:black;
+}
+.weui-form-preview__label{
+  margin-right:50rpx!important;
+}
+
+
+</style>
+<template>
+  <view class="page__bd">
+    <view class="weui-cells">
+      <view class="weui-form-preview">
+        <view class="weui-form-preview__bd">
+          <block wx:if="{{category.description}}">
+            <view class="weui-form-preview__item">
+              <view class="weui-form-preview__label">特权说明</view>
+              <text class="weui-form-preview__value">{{category.description}}</text>
+            </view>
+          </block>
+          <block wx:if="{{category.valid_period}}">
+            <view class="weui-form-preview__item">
+              <view class="weui-form-preview__label">有效日期</view>
+              <view class="weui-form-preview__value">{{category.valid_period}}天</view>
+            </view>
+          </block>
+          <block wx:if="{{category.instruction}}">
+            <view class="weui-form-preview__item">
+              <view class="weui-form-preview__label">使用须知</view>
+              <text class="weui-form-preview__value">{{category.instruction}}</text>
+            </view>
+          </block>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
+<script>
+import wepy from 'wepy';
+import req from '@/network';
+import { serverAPI } from '@/server';
+
+export default class MemberBenefits extends wepy.page {
+  config = {
+    navigationBarTitleText: '会员权益'
+  };
+  async onLoad(e) {
+    this.category = await this.$parent.get('vip_category',e.category_id)
+    this.$apply();
+    console.log("=====333=",this.category)
+  };
+  data = {
+    category:{
+    },
+    // benefits: '',
+    // date:""
+  };
+}
+</script>
