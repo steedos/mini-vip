@@ -36,68 +36,84 @@
         <repeat for="{{fields}}" key="index" index="index" item="item">
           <block wx:if="{{!item.hidden}}">
             <block wx:if="{{item.type === 'image' || item.type === 'video' || item.type === 'audio'}}">
-              <view class="weui-cell" wx:if="{{item.readonly || !schema.allowEdit || args.action === 'read'}}">
-                <view class="weui-cell__bd">
-                  <view class="weui-uploader">
-                    <view class="weui-uploader__hd">
-                      <view class="weui-uploader__title">{{item.label}}</view>
-                    </view>
-                    <view class="weui-uploader__bd">
-                      <view class="weui-uploader__file">
-                        <image class="weui-uploader__img" mode="aspectFill"
-                               src="{{util.formatImageUrl(values[item.name], baseUrl)}}"/>
+
+              <block wx:if="{{item.multiple}}">
+                <view class="weui-cell" wx:if="{{item.readonly || !schema.allowEdit || args.action === 'read'}}">
+                  <view class="weui-cell__bd">
+                    <view class="weui-uploader">
+                      <view class="weui-uploader__hd">
+                        <view class="weui-uploader__title">{{item.label}}</view>
+                      </view>
+                      <view class="weui-uploader__bd">
+                        <view class="weui-uploader__file">
+                          <image class="weui-uploader__img" mode="aspectFill"
+                                 src="{{util.formatImageUrl(values[item.name], baseUrl)}}"/>
+                        </view>
                       </view>
                     </view>
                   </view>
                 </view>
-              </view>
-              <view class="weui-cell" wx:else>
-                <view class="weui-cell__bd">
-                  <view class="weui-uploader">
-                    <view class="weui-uploader__hd">
-                      <view class="weui-uploader__title">{{item.label}}</view>
-                    </view>
-                    <view class="weui-uploader__bd">
-                      <view class="weui-uploader__files" id="uploaderFiles">
-                        <block wx:if="{{item.multiple}}">
-                          <repeat for="{{values[item.name]}}" key="*this" item="file">
-                            <view class="weui-uploader__file" wx:if="{{item.type === 'image'}}" bindtap="previewImage"
-                                  id="{{file}}">
-                              <image class="weui-uploader__img" src="{{util.formatImageUrl(file, baseUrl)}}"
-                                     mode="aspectFill"/>
-                            </view>
-                            <view class="weui-uploader__file" wx:elif="{{item.type === 'video'}}" bindtap="previewImage"
-                                  id="{{file}}">
-                              <image class="weui-uploader__img" src="{{util.formatImageUrl(file, baseUrl)}}"
-                                     mode="aspectFill"/>
-                            </view>
-                            <view class="weui-uploader__file" wx:elif="{{item.type === 'audio'}}" bindtap="previewImage"
-                                  id="{{file}}">
-                              <image class="weui-uploader__img" src="{{util.formatImageUrl(file, baseUrl)}}"
-                                     mode="aspectFill"/>
-                            </view>
-                          </repeat>
-                        </block>
-                        <block wx:else>
-                          <view class="weui-uploader__file" bindtap="previewImage">
-                            <image class="weui-uploader__img" src="{{util.formatImageUrl(values[item.name], baseUrl)}}"
-                                   mode="aspectFill"/>
-                          </view>
-                        </block>
+                <view class="weui-cell" wx:else>
+                  <view class="weui-cell__bd">
+                    <view class="weui-uploader">
+                      <view class="weui-uploader__hd">
+                        <view class="weui-uploader__title">{{item.label}}</view>
                       </view>
-                      <navigator
-                        url="/pages/edit/image?title={{item.label}}&key={{item.name}}&value={{values[item.name]}}&multiple={{item.multiple}}"
-                        class="weui-uploader__input-box" wx:if="{{!hiddenButton[item.name]}}">
-                        <view class="weui-uploader__input"></view>
-                      </navigator>
-                      <!--<view class="weui-uploader__input-box" wx:if="{{!hiddenButton[item.name]}}">-->
+                      <view class="weui-uploader__bd">
+                        <view class="weui-uploader__files" id="uploaderFiles">
+                          <block wx:if="{{item.multiple}}">
+                            <repeat for="{{values[item.name]}}" key="*this" item="file">
+                              <view class="weui-uploader__file" wx:if="{{item.type === 'image'}}" bindtap="previewImage"
+                                    id="{{file}}">
+                                <image class="weui-uploader__img" src="{{util.formatImageUrl(file, baseUrl)}}"
+                                       mode="aspectFill"/>
+                              </view>
+                              <view class="weui-uploader__file" wx:elif="{{item.type === 'video'}}" bindtap="previewImage"
+                                    id="{{file}}">
+                                <image class="weui-uploader__img" src="{{util.formatImageUrl(file, baseUrl)}}"
+                                       mode="aspectFill"/>
+                              </view>
+                              <view class="weui-uploader__file" wx:elif="{{item.type === 'audio'}}" bindtap="previewImage"
+                                    id="{{file}}">
+                                <image class="weui-uploader__img" src="{{util.formatImageUrl(file, baseUrl)}}"
+                                       mode="aspectFill"/>
+                              </view>
+                            </repeat>
+                          </block>
+                          <block wx:else>
+                            <view class="weui-uploader__file" bindtap="previewImage">
+                              <image class="weui-uploader__img" src="{{util.formatImageUrl(values[item.name], baseUrl)}}"
+                                     mode="aspectFill"/>
+                            </view>
+                          </block>
+                        </view>
+                        <navigator
+                          url="/pages/edit/image?title={{item.label}}&key={{item.name}}&value={{values[item.name]}}&multiple={{item.multiple}}" wx:if="{{!hiddenButton[item.name]}}">
+                          <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+                        </navigator>
+                        <!--<view class="weui-uploader__input-box" wx:if="{{!hiddenButton[item.name]}}">-->
                         <!--<view class="weui-uploader__input" bindtap="chooseFile" data-id="{{item.name}}"-->
-                              <!--data-multiple="{{item.multiple}}" data-type="{{item.type}}"></view>-->
-                      <!--</view>-->
+                        <!--data-multiple="{{item.multiple}}" data-type="{{item.type}}"></view>-->
+                        <!--</view>-->
+                      </view>
                     </view>
                   </view>
                 </view>
-              </view>
+              </block>
+              <block wx:else>
+                <view class="weui-cell">
+                  <view class="weui-cell__hd" >
+                    <view class="weui-label">{{item.label}}</view>
+                  </view>
+                  <view class="weui-cell__bd" style="text-align:right;">
+                    <image src="{{util.formatImageUrl(values[item.name], baseUrl)}}" class="weui-uploader__img" style="display:inline-block;"/>
+                  </view>
+                  <navigator
+                    url="/pages/edit/image?title={{item.label}}&key={{item.name}}&value={{values[item.name]}}&multiple={{item.multiple}}" wx:if="{{!hiddenButton[item.name]}}">
+                    <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+                  </navigator>
+                </view>
+              </block>
             </block>
             <block wx:else>
               <block wx:if="{{item.readonly || !schema.allowEdit || args.action === 'read'}}">
@@ -406,7 +422,7 @@
               for (let v of fv){
                 if(this.isTempFile(v)){
                   console.log("本地", v)
-                  const image = await this.uploadImage(v)
+                  const image = await this.uploadImage(v);
                   if(image){
                     new_fv.push(image._id)
                   }
@@ -421,7 +437,7 @@
             let fv = this.values[k];
             if(fv){
               if(this.isTempFile(fv)){
-                const image = await this.uploadImage(v)
+                const image = await this.uploadImage(fv);
                 if(image){
                   this.values[k] = image._id
                 }
