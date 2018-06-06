@@ -312,36 +312,38 @@
             }
             _.forEach(this.fields, (field) => {
               let fv = this.values[field.name];
-              if (field.type === 'select') {
-                if(field.multiple){
-                  if (_.isArray(fv)) {
+              if (fv) {
+                if (field.type === 'select') {
+                  if(field.multiple){
+                    if (_.isArray(fv)) {
+                      _.forEach(field.options, (option) => {
+                        if (fv.includes(option.value)) {
+                          option.checked = true
+                        }
+                      })
+                    }
+                  }else{
                     _.forEach(field.options, (option) => {
-                      if (fv.includes(option.value)) {
+                      if (fv === option.value) {
                         option.checked = true
                       }
                     })
                   }
-                }else{
-                  _.forEach(field.options, (option) => {
-                    if (fv === option.value) {
-                      option.checked = true
-                    }
-                  })
-                }
-              }else if(field.type === 'lookup' || field.type === 'master_detail'){
-                if(field.multiple){
-                  let _ids = _.pluck(fv, '_id')
-                  _.forEach(field.options, (option) => {
-                    if (_ids.includes(option.value)) {
-                      option.checked = true
-                    }
-                  })
-                }else{
-                  _.forEach(field.options, (option) => {
-                    if (fv._id === option.value) {
-                      option.checked = true
-                    }
-                  })
+                }else if(field.type === 'lookup' || field.type === 'master_detail'){
+                  if(field.multiple){
+                    let _ids = _.pluck(fv, '_id')
+                    _.forEach(field.options, (option) => {
+                      if (_ids.includes(option.value)) {
+                        option.checked = true
+                      }
+                    })
+                  }else{
+                    _.forEach(field.options, (option) => {
+                      if (fv._id === option.value) {
+                        option.checked = true
+                      }
+                    })
+                  }
                 }
               }
             });
