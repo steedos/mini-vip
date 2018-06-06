@@ -70,16 +70,17 @@ export default class Posts extends wepy.page {
       this.type = e.type;
     }
     this.space_id = e.space_id || this.$parent.globalData.space_id;
+    await this.$parent.login(this.space_id);
+    await this.loadData();
   }
 
-  async onShow(e) {
+  async loadData() {
     this.posts = [];
     this.current_skip = 0;
     wepy.showLoading({
       title: '加载中',
       mask: true
     });
-    await this.$parent.login(this.space_id);
     await this.loadPostList();
     this.is_loaded = true;
     this.$apply();
