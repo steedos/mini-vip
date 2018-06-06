@@ -180,6 +180,7 @@
   import wepy from 'wepy'
   import {baseUrl} from '@/config';
   import util from '../wxs/util.wxs'
+  const utilJs = require('../utils/util.js');
 
   import _ from 'underscore'
 
@@ -322,6 +323,8 @@
                       }
                     })
                   }
+                }else if(field.type === 'datetime'){
+                  this.values[field.name] = utilJs.formatTime(new Date(fv), '-', true)
                 }
               }
             });
