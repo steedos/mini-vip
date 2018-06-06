@@ -42,7 +42,7 @@
   }
 </style>
 <template>
-  <view class="form">
+  <view class="form" wx:if="{{is_loaded}}">
     <view class="weui-toptips weui-toptips_warn" wx:if="{{showTopTips}}">{{message}}</view>
     <view class="page__bd">
       <view class="weui-cells">
@@ -50,7 +50,7 @@
           <block wx:if="{{!item.hidden && !item.omit}}">
             <block wx:if="{{item.type === 'image' || item.type === 'video' || item.type === 'audio'}}">
               <block wx:if="{{item.multiple}}">
-                <view class="weui-cell" wx:if="{{item.readonly || !schema.allowEdit || args.action === 'read'}}">
+                <view class="weui-cell" wx:if="{{item.readonly || !schema.allowEdit || args.action === 'read'}}" hover-class='weui-grid_active'>
                   <view class="weui-cell__bd">
                     <view class="weui-uploader">
                       <view class="weui-uploader__hd">
@@ -65,7 +65,7 @@
                     </view>
                   </view>
                 </view>
-                <view wx:else class='weui-cell weui-cell_access' data-value="{{values[item.name]}}" data-edit="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}" @tap.stop="navigateTo({{item}})">
+                <view wx:else class='weui-cell weui-cell_access' hover-class='weui-grid_active' data-value="{{values[item.name]}}" data-edit="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}" @tap.stop="navigateTo({{item}})">
                   <view class="weui-cell__bd">
                     <view class="weui-uploader">
                       <view class="weui-uploader__hd">
@@ -98,35 +98,35 @@
                 </view>
               </block>
               <block wx:else>
-                <view class='weui-cell weui-cell_access' data-value="{{values[item.name]}}" data-edit="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}" @tap.stop="navigateTo({{item}})">
+                <view class='weui-cell weui-cell_access' hover-class='weui-grid_active' data-value="{{values[item.name]}}" data-edit="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}" @tap.stop="navigateTo({{item}})">
                   <view class="weui-cell__hd" >
                     <view class="weui-label">{{item.label}}</view>
                   </view>
                   <view class="weui-cell__bd" style="text-align:right;">
-                    <image src="{{util.formatImageUrl(values[item.name], baseUrl)}}" class="weui-uploader__img" style="display:inline-block;"/>
+                    <image src="{{util.formatImageUrl(values[item.name], baseUrl)}}" class="weui-uploader__img" style="display:inline-block;" wx:if="{{item.type === 'image'}}"/>
                   </view>
                   <view class="weui-cell__ft weui-cell__ft_in-access" wx:if="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}"></view>
                 </view>
               </block>
             </block>
             <block wx:elif="{{item.type === 'boolean'}}">
-              <view class="weui-cell weui-cell_switch">
+              <view class="weui-cell weui-cell_switch" hover-class='weui-grid_active'>
                 <view class="weui-cell__bd">{{item.label}}</view>
                 <view class="weui-cell__ft" data-id="{{item.name}}" >
                   <switch checked data-id="{{item.name}}" bindchange="textChange"/>
                 </view>
               </view>
             </block>
-            <block wx:elif="{{item.type === 'number'}}">
-              <view class="weui-cell weui-cell_input">
-                <view class="weui-cell__bd">{{item.label}}</view>
-                <view class="weui-cell__ft">
-                  <input data-id="{{item.name}}" class="weui-input" type="number" bindchange="textChange"/>
-                </view>
-              </view>
-            </block>
+            <!--<block wx:elif="{{item.type === 'number'}}">-->
+              <!--<view class="weui-cell weui-cell_input">-->
+                <!--<view class="weui-cell__bd">{{item.label}}</view>-->
+                <!--<view class="weui-cell__ft">-->
+                  <!--<input data-id="{{item.name}}" class="weui-input" type="number" bindchange="textChange"/>-->
+                <!--</view>-->
+              <!--</view>-->
+            <!--</block>-->
             <block wx:elif="{{item.type === 'location'}}">
-              <view class="weui-cell">
+              <view class="weui-cell" hover-class='weui-grid_active'>
                 <view class="weui-cell__hd">
                   <view class="weui-label">{{item.label}}</view>
                 </view>
@@ -141,7 +141,7 @@
               </view>
             </block>
             <block wx:else>
-              <view class='weui-cell weui-cell_access' data-value="{{values[item.name]}}" data-edit="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}" @tap.stop="navigateTo({{item}})">
+              <view class='weui-cell weui-cell_access' hover-class='weui-grid_active' data-value="{{values[item.name]}}" data-edit="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}" @tap.stop="navigateTo({{item}})">
                 <block wx:if="{{item.type === 'textarea'}}">
                   <view class="weui-cell__hd" wx:if="{{!values[item.name]}}">
                     <view class="weui-label">{{item.label}}</view>
@@ -204,6 +204,7 @@
       fieldOptions: {},
       fields: {},
       showOpenSetting: false,
+      is_loaded: false
     };
 
     watch = {
@@ -321,10 +322,17 @@
             this.$apply()
           }
         }
+        this.is_loaded = true
+        this.$apply()
+        wepy.hideLoading();
       }
     };
 
     async onLoad() {
+      wepy.showLoading({
+        title: '加载中',
+        mask: true
+      });
       const setting = await wepy.getSetting()
       if(setting.authSetting["scope.userLocation"] === false){
         this.showOpenSetting = true;
@@ -647,8 +655,8 @@
           await this.$parent.$parent.update(this.args.object_name, this.args.record_id, value)
         }
 
-        const pages = getCurrentPages()
-        const prevPage = pages[pages.length - 2]
+        const pages = getCurrentPages();
+        const prevPage = pages[pages.length - 2];
         if (prevPage.refresh) {
           prevPage.refresh()
         }
@@ -657,16 +665,11 @@
         })
       },
       navigateTo(field, e){
-        console.log("navigateTo e", e);
-        console.log("navigateTo field",  field);
         const dataset = e.currentTarget.dataset;
-
         if(!dataset.edit){
           return ;
         }
-
         let url = '';
-
         switch(field.type){
           case 'text':
             url = '/pages/edit/text';
@@ -689,15 +692,16 @@
           case 'image':
             url = '/pages/edit/image';
             break;
+          case 'number':
+            url = '/pages/edit/number';
+            break;
         }
 
         if(!url){
           return ;
         }
-
         //给url上添加参数
         url = `${url}?key=${field.name}&title=${field.label}&value=${(dataset.value || '')}`;
-
         if(field.multiple){
           url = `${url}&multiple=${field.multiple}`
         }

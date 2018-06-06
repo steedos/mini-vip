@@ -142,6 +142,10 @@ export default class Posts extends wepy.page {
     enablePullDownRefresh: true
   };
 
+  onHide(){
+    this.$invoke('postList', 'onParentHide');
+  }
+
   async onLoad(e) {
     wepy.showLoading({
       title: '加载中',

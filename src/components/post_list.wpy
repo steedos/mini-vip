@@ -116,7 +116,8 @@ export default class PostList extends wepy.component {
 
   data = {
     baseUrl: baseUrl,
-    currentPlayingVideo: null
+    previousVideoId: null,
+    currentVideoContext: null
   };
 
   wxs = {
@@ -146,18 +147,18 @@ export default class PostList extends wepy.component {
       this.$apply();
     }, 
     play(videoId){
-      if(this.currentPlayingVideo && this.currentPlayingVideo!= videoId){
-        this.videoContext = wepy.createVideoContext(this.currentPlayingVideo);
-        this.videoContext.pause()
-        this.currentPlayingVideo = videoId;
-        console.log("currentPlayingVideo:",this.currentPlayingVideo)
-        
-      }else{
-        this.currentPlayingVideo = videoId;
-        console.log("currentPlayingVideo:",this.currentPlayingVideo)
-      } 
+      this.currentVideoContext = wepy.createVideoContext(videoId);
+      if(this.previousVideoId && this.previousVideoId != videoId){
+        let videoContext = wepy.createVideoContext(this.previousVideoId);
+        videoContext.pause();
+      }
+      this.previousVideoId = videoId;
+    },
+    onParentHide(page){
+      if(this.currentVideoContext){
+        this.currentVideoContext.pause()
+      }     
     }
   };
-
 }
 </script>

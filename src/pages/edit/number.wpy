@@ -1,0 +1,58 @@
+<template>
+  <view class="text">
+    <view class="page__bd">
+      <view class="weui-cells">
+        <view class="weui-cell weui-cell_input">
+          <view class="weui-cell__bd">
+            <input data-id="{{key}}" class="weui-input"
+              auto-focus="true" value="{{value}}" bindinput="textChange" type="number"/>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
+
+
+<script>
+  import wepy from 'wepy';
+
+  export default class Number extends wepy.page {
+    config = {
+      navigationBarTitleText: '编辑'
+    };
+
+    data = {
+      key: '',
+      value: ''
+    }
+
+    setParentValue(key, value) {
+      const pages = getCurrentPages();
+      const prevPage = pages[pages.length - 2];
+      prevPage.changeValue(key, value)
+    }
+
+    onLoad(e) {
+      if (!e) {
+        e = {}
+      }
+
+      this.key = e.key
+
+      this.value = e.value || '';
+
+      if (e.title) {
+        wx.setNavigationBarTitle({title: '编辑' + e.title});
+      }
+    }
+
+    methods = {
+      textChange(e) {
+        const key = e.target.dataset.id;
+        this.value = e.detail.value;
+        this.setParentValue(key, e.detail.value)
+      }
+    }
+  }
+</script>
