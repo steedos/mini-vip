@@ -144,8 +144,7 @@
               <view class='weui-cell weui-cell_access' hover-class='weui-grid_active' data-value="{{values[item.name]}}" data-edit="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}" @tap.stop="navigateTo({{item}})">
                 <block wx:if="{{item.type === 'textarea'}}">
                   <view class="weui-cell__hd" wx:if="{{!values[item.name]}}">
-                    <view class="weui-label" wx:if="{{item.label}}">{{item.label}}</view>
-                    <view class="weui-label" wx:else>{{item.name}}</view>
+                    <view class="weui-label" >{{item.label}}</view>
                   </view>
                   <view class="weui-cell__bd">
                     <view class="weui-cell__ft wide-cell">{{util.transformFieldValue(item, values[item.name])}}</view>
@@ -153,8 +152,7 @@
                 </block>
                 <block wx:else>
                   <view class="weui-cell__hd">
-                    <view class="weui-label" wx:if="{{item.label}}">{{item.label}}</view>
-                    <view class="weui-label" wx:else>{{item.name}}</view>
+                    <view class="weui-label" >{{item.label}}</view>
                   </view>
                   <view class="weui-cell__bd">
                     <view class="weui-cell__ft">{{util.transformFieldValue(item, values[item.name])}}</view>
