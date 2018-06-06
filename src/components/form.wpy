@@ -32,7 +32,7 @@
   <view class="form">
     <view class="weui-toptips weui-toptips_warn" wx:if="{{showTopTips}}">{{message}}</view>
     <view class="page__bd">
-      <view class="weui-cells weui-cells_after-title">
+      <view class="weui-cells">
         <repeat for="{{fields}}" key="index" index="index" item="item">
           <block wx:if="{{!item.hidden}}">
             <block wx:if="{{item.type === 'image' || item.type === 'video' || item.type === 'audio'}}">
