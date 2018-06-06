@@ -106,21 +106,19 @@ page {
               <view class="weui-grid__label">加入会员</view>
             </navigator>
           </block>
-          <repeat for="{{post_types}}" wx:key="*this" key="index" index="index" item="post">
-            <navigator url="../post/index?type={{post.value}}&title={{post.label}}{{is_space_owner ? '&editable=' : ''}}" class="weui-grid" hover-class="weui-grid_active">
-              <view class="slds-icon-standard-{{post.icon}} weui-grid__icon slds-icon">
-                <view class="need_read1"></view>
-              </view>
-              <view class="weui-grid__label">{{post.label}}</view>
-            </navigator>
-          </repeat>
+          <navigator url="../post/index{{is_space_owner ? '?editable=true' : ''}}" class="weui-grid" hover-class="weui-grid_active">
+            <view class="slds-icon-standard-news weui-grid__icon slds-icon">
+              <view class="need_read1"></view>
+            </view>
+            <view class="weui-grid__label">最新动态</view>
+          </navigator>
           <navigator url="../wifi?store={{space_id}}" class="weui-grid" hover-class="weui-grid_active">
             <view class="slds-icon-utility-wifi weui-grid__icon slds-icon"/>
             <view class="weui-grid__label">连接 Wi-Fi</view>
           </navigator>
           <navigator url="../store?store={{space_id}}" class="weui-grid" hover-class="weui-grid_active">
             <view class="slds-icon-standard-call weui-grid__icon slds-icon"/>
-            <view class="weui-grid__label">联系我们</view>
+            <view class="weui-grid__label">关于我们</view>
           </navigator>
         </view>
       </view>
@@ -164,7 +162,6 @@ export default class Posts extends wepy.page {
     }
 
     await this.loadCardInfo();
-    await this.loadPostTypes();
     this.type = e.type;
     await this.loadStoreInfo();
     await this.loadPostList();
@@ -259,47 +256,6 @@ export default class Posts extends wepy.page {
     let globalData = this.$parent.globalData;
     this.is_space_owner =
       space && globalData.user && globalData.user._id == space.owner;
-    this.$apply();
-  }
-
-  async loadPostTypes() {
-    const store_id = this.space_id;
-    const data = {
-      $filter: `_id eq '${store_id}'`,
-      $select: 'post_types'
-    };
-    const result = await this.$parent.query('vip_store', data);
-    const showPostTypes = [];
-    const allPostTypes = [
-      { value: 'announcements', label: '公告通知', icon: 'announcement' },
-      { value: 'about', label: '关于我们', icon: 'contact' },
-      { value: 'news', label: '新闻动态', icon: 'contract' },
-      { value: 'course', label: '线上课程', icon: 'event' },
-      { value: 'help', label: '会员指南', icon: 'performance' },
-      { value: 'jobs', label: '招兵买马', icon: 'groups' }
-    ];
-    if (
-      result.value[0] &&
-      result.value[0].post_types &&
-      result.value[0].post_types.length > 0
-    ) {
-      const dbPostTypes = result.value[0].post_types;
-      dbPostTypes.forEach(function(post) {
-        const showPostType = allPostTypes.filter(function(m) {
-          if (m.value == post) {
-            return m;
-          } else {
-            return null;
-          }
-        });
-        if (showPostType && showPostType.length > 0) {
-          showPostTypes.push(showPostType[0]);
-        }
-      });
-      this.post_types = showPostTypes;
-    } else {
-      this.post_types = allPostTypes;
-    }
     this.$apply();
   }
 
