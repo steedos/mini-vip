@@ -109,7 +109,7 @@
                     <image src="{{util.formatImageUrl(values[item.name], baseUrl)}}" class="weui-uploader__img" style="display:inline-block;"/>
                   </view>
                   <navigator
-                    url="/pages/edit/image?title={{item.label}}&key={{item.name}}&value={{values[item.name]}}&multiple={{item.multiple}}" wx:if="{{!hiddenButton[item.name]}}">
+                    url="/pages/edit/image?title={{item.label}}&key={{item.name}}&value={{values[item.name]}}&multiple={{item.multiple}}" wx:if="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}">
                     <view class="weui-cell__ft weui-cell__ft_in-access"></view>
                   </navigator>
                 </view>
