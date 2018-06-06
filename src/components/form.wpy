@@ -42,7 +42,7 @@
   }
 </style>
 <template>
-  <view class="form">
+  <view class="form" wx:if="{{is_loaded}}">
     <view class="weui-toptips weui-toptips_warn" wx:if="{{showTopTips}}">{{message}}</view>
     <view class="page__bd">
       <view class="weui-cells">
@@ -204,6 +204,7 @@
       fieldOptions: {},
       fields: {},
       showOpenSetting: false,
+      is_loaded: false
     };
 
     watch = {
@@ -321,10 +322,17 @@
             this.$apply()
           }
         }
+        this.is_loaded = true
+        this.$apply()
+        wepy.hideLoading();
       }
     };
 
     async onLoad() {
+      wepy.showLoading({
+        title: '加载中',
+        mask: true
+      });
       const setting = await wepy.getSetting()
       if(setting.authSetting["scope.userLocation"] === false){
         this.showOpenSetting = true;
