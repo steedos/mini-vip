@@ -92,7 +92,14 @@
     setParentValue(key, value){
       const pages = getCurrentPages();
       const prevPage = pages[pages.length - 2];
-      prevPage.changeValue(key, value)
+
+      if(!this.multiple){
+        if(value.length > 0){
+          prevPage.changeValue(key, value[0])
+        }
+      }else{
+        prevPage.changeValue(key, value)
+      }
     }
 
     methods = {
