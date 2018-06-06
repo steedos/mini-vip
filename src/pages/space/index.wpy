@@ -107,7 +107,7 @@ page {
             </navigator>
           </block>
           <navigator url="../post/index{{is_space_owner ? '?editable=true' : ''}}" class="weui-grid" hover-class="weui-grid_active">
-            <view class="slds-icon-standard-news weui-grid__icon slds-icon">
+            <view class="slds-icon-standard-contract weui-grid__icon slds-icon">
               <view class="need_read1"></view>
             </view>
             <view class="weui-grid__label">最新动态</view>
@@ -117,7 +117,7 @@ page {
             <view class="weui-grid__label">连接 Wi-Fi</view>
           </navigator>
           <navigator url="../store?store={{space_id}}" class="weui-grid" hover-class="weui-grid_active">
-            <view class="slds-icon-standard-call weui-grid__icon slds-icon"/>
+            <view class="slds-icon-standard-contact weui-grid__icon slds-icon"/>
             <view class="weui-grid__label">关于我们</view>
           </navigator>
         </view>
