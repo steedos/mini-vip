@@ -2,22 +2,18 @@
 <style lang="less">
 page {
   height: 100%;
-  // scroll-view{
-  //   position: absolute;
-  //   top: 0;
-  //   bottom: 50px;
-  // }
-  .footer-tabbar{
-    position:fixed;
-    bottom:0px;
-    display:flex;
-    align-items:center;
-    height:50px;
-    background:#F7F7FA;
-    left:0;
-    right:0;
-    justify-content:center;
-    &:before{
+  .tab-bar {
+    display: flex;
+    position: fixed;
+    z-index: 500;
+    bottom: 0;
+    height: 50px;
+    width: 100%;
+    background-color: #F7F7FA;
+    justify-content: center;
+    align-items: center;
+
+    &::before {
       content: " ";
       position: absolute;
       left: 0;
@@ -31,6 +27,22 @@ page {
       -webkit-transform: scaleY(0.5);
       transform: scaleY(0.5);
     }
+
+    .add-record {
+      height: 35px;
+      width: 35px;
+      background: #ffa325;
+      text-align: center;
+      color: #fff;
+      border: 10px;
+      border-radius: 50%;
+
+      .ion {
+        line-height: 35px;
+        font-weight: bold;
+        font-size: 20px;
+      }
+    }
   }
 }
 </style>
@@ -40,8 +52,10 @@ page {
       <scroll-view class="scroll-view_H" scroll-y="true">
         <postList :list.sync="posts" />
       </scroll-view>
-      <view class="footer-tabbar" wx:if="{{is_editable}}">
-        <view class="slds-icon-custom-custom83 slds-icon" @tap="createPost"/>
+    </view>
+    <view class="tab-bar" wx:if="{{is_editable}}">
+      <view class="add-record" @tap="createPost">
+        <view class="slds-icon-add ion"></view>
       </view>
     </view>
   </view>
@@ -160,7 +174,7 @@ export default class Posts extends wepy.page {
 
   methods = {
     createPost() {
-      let url = "/pages/record/edit?action=create&object_name=post&fields=name,summary,description,type";
+      let url = "/pages/record/edit?action=create&object_name=post&fields=name,summary,description,images,video,type";
       wepy.navigateTo({
         url: url
       });
