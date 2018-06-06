@@ -70,7 +70,7 @@
         </view>
         <view class="weui-cell weui-cell_input">
           <view class="weui-cell__hd">
-            <view class="weui-label">商户名称</view>
+            <view class="weui-label">企业名称</view>
           </view>
           <view class="weui-cell__bd">
             <input class="weui-input" placeholder="" value="{{store_name}}" bindchange="bindStoreNameChange"/>
