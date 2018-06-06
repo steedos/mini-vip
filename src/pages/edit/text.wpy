@@ -5,7 +5,7 @@
         <view class="weui-cell weui-cell_input">
           <view class="weui-cell__bd">
             <input data-id="{{key}}" class="weui-input"
-                   value="{{value}}" bindinput="textChange"/>
+              auto-focus="true" value="{{value}}" bindinput="textChange"/>
           </view>
         </view>
       </view>
