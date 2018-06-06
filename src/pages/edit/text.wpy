@@ -5,7 +5,7 @@
         <view class="weui-cell weui-cell_input">
           <view class="weui-cell__bd">
             <input data-id="{{key}}" class="weui-input"
-                   value="{{value}}" bindchange="textChange"/>
+                   value="{{value}}" bindinput="textChange"/>
           </view>
         </view>
       </view>
@@ -29,7 +29,7 @@
 
     setParentValue(key, value) {
       const pages = getCurrentPages();
-      const prevPage = pages[pages.length - 2]
+      const prevPage = pages[pages.length - 2];
       prevPage.changeValue(key, value)
     }
 
@@ -40,7 +40,7 @@
 
       this.key = e.key
 
-      this.value = e.value || ''
+      this.value = e.value || '';
 
       if (e.title) {
         wx.setNavigationBarTitle({title: '编辑' + e.title});
@@ -49,8 +49,8 @@
 
     methods = {
       textChange(e) {
-        const key = e.target.dataset.id
-        this.value = e.detail.value
+        const key = e.target.dataset.id;
+        this.value = e.detail.value;
         this.setParentValue(key, e.detail.value)
       }
     }
