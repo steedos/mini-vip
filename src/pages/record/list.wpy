@@ -55,9 +55,9 @@
       <view class="weui-cells weui-cells_after-title">
         <repeat for="{{record_list}}" key="index" index="index" item="record">
           <navigator url="./edit?object_name={{object_name}}&record_id={{record._id}}&action=edit" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
-            <view class="weui-cell__hd">
+            <!-- <view class="weui-cell__hd">
               <image class="image slds-icon slds-icon--small slds-m-right--x-small" src="{{util.formatImageUrl(record.avatar, baseUrl)}}"></image>
-            </view>
+            </view> -->
             <view class="weui-cell__bd">{{record.name}}</view>
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
           </navigator>
