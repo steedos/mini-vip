@@ -82,8 +82,38 @@
           </navigator>
         </view>
 
+        <view wx:if="{{isActivated}}" class="weui-cells">
+          <view class="weui-cell weui-cell_access" @tap="toRecharge">
+            <view class="weui-cell__hd">
+              <view class="slds-icon-custom-custom17 slds-icon slds-icon--small slds-m-right--x-small"/>
+            </view>
+            <view class="weui-cell__bd">
+              <view>充值</view>
+            </view>
+            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+          </view>
+          <!-- <navigator class="weui-cell weui-cell_access" url="card_billing">
+            <view class="weui-cell__hd">
+              <view class="slds-icon-custom-custom40 slds-icon slds-icon--small slds-m-right--x-small"/>
+            </view>
+            <view class="weui-cell__bd">
+              <view>消费记录</view>
+            </view>
+            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+          </navigator> -->
+          <view class="weui-cell weui-cell_access">
+            <view class="weui-cell__hd">
+              <view class="slds-icon-custom-custom59 slds-icon slds-icon--small slds-m-right--x-small"/>
+            </view>
+            <view class="weui-cell__bd">
+              <view>积分</view>
+            </view>
+            <view class="weui-cell__ft">{{cardPoints}} 分</view>
+          </view>
+        </view>
+
         <view class="weui-cells">
-          <navigator url="wifi?store_id={{space_id}}" class="weui-cell weui-cell_access">
+          <!-- <navigator url="wifi?store_id={{space_id}}" class="weui-cell weui-cell_access">
             <view class="weui-cell__hd">
               <view class="slds-icon-utility-wifi slds-icon slds-icon--small slds-m-right--x-small"/>
             </view>
@@ -91,7 +121,16 @@
               <view>连接 Wi-Fi</view>
             </view>
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-          </navigator>
+          </navigator> -->
+          <!-- <navigator url="stores" class="weui-cell weui-cell_access">
+            <view class="weui-cell__hd">
+              <view class="slds-icon-standard-team-member slds-icon slds-icon--small slds-m-right--x-small"/>
+            </view>
+            <view class="weui-cell__bd">
+              <view>会员权益</view>
+            </view>
+            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+          </navigator> -->
           <navigator url="stores" class="weui-cell weui-cell_access">
             <view class="weui-cell__hd">
               <view class="slds-icon-standard-address slds-icon slds-icon--small slds-m-right--x-small"/>
