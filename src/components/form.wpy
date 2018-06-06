@@ -103,7 +103,7 @@
                     <view class="weui-label">{{item.label}}</view>
                   </view>
                   <view class="weui-cell__bd" style="text-align:right;">
-                    <image src="{{util.formatImageUrl(values[item.name], baseUrl)}}" class="weui-uploader__img" style="display:inline-block;"/>
+                    <image src="{{util.formatImageUrl(values[item.name], baseUrl)}}" class="weui-uploader__img" style="display:inline-block;" wx:if="{{item.type === 'image'}}"/>
                   </view>
                   <view class="weui-cell__ft weui-cell__ft_in-access" wx:if="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}"></view>
                 </view>
@@ -657,16 +657,11 @@
         })
       },
       navigateTo(field, e){
-        console.log("navigateTo e", e);
-        console.log("navigateTo field",  field);
         const dataset = e.currentTarget.dataset;
-
         if(!dataset.edit){
           return ;
         }
-
         let url = '';
-
         switch(field.type){
           case 'text':
             url = '/pages/edit/text';
@@ -697,10 +692,8 @@
         if(!url){
           return ;
         }
-
         //给url上添加参数
         url = `${url}?key=${field.name}&title=${field.label}&value=${(dataset.value || '')}`;
-
         if(field.multiple){
           url = `${url}&multiple=${field.multiple}`
         }
