@@ -1,3 +1,10 @@
+<style lang="less">
+  .weui-uploader__input-box,.weui-uploader__file{
+    margin-top: 9px;
+    margin-bottom: 0px;
+  }
+</style>
+
 <template>
   <view class="page__bd">
     <view class="weui-cell">
@@ -22,9 +29,10 @@
                 </view>
               </block>
               -->
-              <repeat for="{{files}}" key="*this" item="file">
-                <view class="weui-uploader__file" bindtap="previewImage" id="{{file}}">
-                  <image class="weui-uploader__img" src="{{util.formatImageUrl(file, baseUrl)}}" mode="aspectFill" />
+              <repeat for="{{files}}" key="*this" item="file" index="index">
+                <view class="weui-uploader__file" bindtap="previewImage" id="{{file}}" style="position:relative;">
+                  <image class="weui-uploader__img" src="{{util.formatImageUrl(file, baseUrl)}}" mode="aspectFill"/>
+                  <view style="position: absolute;top: -.4em;right: -.4em;" @tap.stop="clearImage"><icon type="clear" size="20" color="red" data-index="{{index}}"/></view>
                 </view>
               </repeat>
             </view>
@@ -104,7 +112,7 @@
       previewImage: function(e){
         console.log("e.currentTarget.id", e.currentTarget.id);
         let urls = [];
-        this.data.files.forEach(function (f) {
+        this.files.forEach(function (f) {
           urls.push(utilJs.formatImageUrl(f, baseUrl))
         });
 
@@ -112,6 +120,11 @@
           current: utilJs.formatImageUrl(e.currentTarget.id, baseUrl), // 当前显示图片的http链接
           urls: urls // 需要预览的图片http链接列表
         })
+      },
+      clearImage: function (e) {
+        this.files.splice(e.target.dataset.index,1);
+        this.$apply();
+        this.setParentValue(this.key, this.files);
       }
     }
   }
