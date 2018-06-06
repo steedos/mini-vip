@@ -7,13 +7,14 @@
 </style>
 
 <template>
-  <view class="page">
+  <view class="page" wx:if="{{is_loaded}}">
     <view class="page__bd">
       <view class="weui-cells">
         <repeat for="{{spaces}}" key="index" index="index" item="space">
           <navigator url="/pages/space/index?space_id={{space._id}}" class="weui-cell weui-cell_access">
             <view class="weui-cell__hd">
-              <view class="slds-icon-standard-account slds-icon slds-icon--small slds-m-right--x-small"/>
+              <image wx:if="{{space.avatar}}" class="image slds-icon slds-icon--small slds-m-right--x-small" mode="aspectFill" src="{{util.formatImageUrl(space.avatar, baseUrl)}}"/>
+              <view wx:else class="slds-icon-standard-account slds-icon slds-icon--small slds-m-right--x-small"/>
             </view>
             <view class="weui-cell__bd">
               <view class="card-name">{{space.name}}</view>
@@ -35,17 +36,42 @@
 <script>
   import wepy from 'wepy';
   import req from '@/network';
+  import util from '../../wxs/util.wxs';
+  import {baseUrl} from '@/config';
 
   export default class SpaceList extends wepy.page {
     config = {
-      navigationBarTitleText: '我的企业'
+      navigationBarTitleText: '我的企业',
+      enablePullDownRefresh: true
     };
 
     data = {
-      spaces: []
+      spaces: [],
+      baseUrl: baseUrl,
+      is_loaded: false
+    }
+
+    async onPullDownRefresh() {
+      await this.loadSpaces()
+      setTimeout(() => {
+        wx.stopPullDownRefresh();
+      }, 200);
+    }
+
+    wxs = {
+      util: util
     }
 
     async onLoad(e) {
+      wepy.showLoading({
+        title: '加载中',
+        mask: true
+      });
+      await this.loadSpaces()
+      wepy.hideLoading();
+    }
+
+    async loadSpaces() {
       const options = {
         $count: true,
         $select: 'name',
@@ -53,7 +79,22 @@
       };
 
       const result = await this.$parent.query('spaces', options, 'common')
-      this.spaces = result.value
+      this.spaces = []
+
+      for (let space of result.value) {
+        const url = `/api/odata/v4/${space._id}/vip_store/${space._id}`
+        const options = {
+          $filter: `_id eq '${space._id}'`,
+          $count: true,
+          $select: 'avatar'
+        }
+        const res = await this.$parent.query('vip_store', options, 'common')
+        if (res.value[0]) {
+          space.avatar = res.value[0].avatar
+        }
+        this.spaces.push(space)
+      }
+      this.is_loaded = true
       this.$apply()
     }
   }

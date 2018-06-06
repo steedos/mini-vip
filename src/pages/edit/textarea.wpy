@@ -15,7 +15,7 @@
           <view class="weui-cell__bd">
             <textarea data-id="{{key}}"
                       class="weui-textarea"
-                      auto-height="true" value="{{value}}" bindblur="textChange"/>
+                      auto-height="true" value="{{value}}" bindinput="textChange"/>
           </view>
         </view>
       </view>

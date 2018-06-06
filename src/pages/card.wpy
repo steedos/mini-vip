@@ -294,7 +294,7 @@ export default class Card extends wepy.page {
     };
   }
 
-  // 上拉刷新
+  // 下拉刷新
   async onPullDownRefresh() {
     const card_id = this.cardId;
     await this.getCardInfo(card_id);

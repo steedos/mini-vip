@@ -84,7 +84,7 @@ page {
 }
 </style>
 <template>
-  <view class="page-store">
+  <view class="page-store" wx:if="{{is_loaded}}">
     <view class="header">
       <view class="title">
         <view class="store-name">
@@ -110,7 +110,7 @@ page {
         <view class="weui-cell__bd">{{store.location.address}}</view>
         <view class="weui-cell__ft weui-cell__ft_in-access"></view>
       </view>
-      <view class="weui-cell weui-cell_access">
+      <view class="weui-cell weui-cell_access" wx:if="{{store.business_hours}}">
         <view class="weui-cell__hd">
           <view class="ion slds-icon-clock slds-icon slds-icon--small slds-m-right--x-small"/>
         </view>
@@ -123,12 +123,6 @@ page {
         <view class="weui-cell__bd">{{store.phone}}</view>
         <view class="weui-cell__ft weui-cell__ft_in-access"></view>
       </navigator>
-      <!-- <view class="weui-cell weui-cell_access">
-        <view class="weui-cell__hd">
-          <view class="ion slds-icon-image slds-icon slds-icon--small slds-m-right--x-small"/>
-        </view>
-        <view class="weui-cell__bd">门店照片</view>
-      </view> -->
     </view>
 
     <view class="button-sp-area" wx:if="{{is_space_owner}}">
@@ -154,11 +148,17 @@ export default class store extends wepy.page {
 
   async onShow(){
     var store = await this.getStoreInfo(this.store_id);
+    wepy.hideLoading();
+    this.is_loaded = true
     this.store = store;
     this.$apply();
   }
 
   async onLoad(e) {
+    wepy.showLoading({
+      title: '加载中',
+      mask: true
+    });
     this.store_id = e.store
     const globalData = this.$parent.globalData;
     const space = await this.$parent.get('spaces', globalData.space_id)
@@ -179,7 +179,8 @@ export default class store extends wepy.page {
     store_id: '',
     is_space_owner: false,
     store: [],
-    baseUrl: baseUrl
+    baseUrl: baseUrl,
+    is_loaded: false
   };
   getStoreInfo(store_id) {
     return this.$parent.get('vip_store', store_id);
