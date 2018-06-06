@@ -12,6 +12,7 @@
 
     .active-card {
       width: 380rpx;
+      margin-top:20px;
       margin-bottom: 20px;
       color: #f5a44d;
       border-color: #f5a44d;
