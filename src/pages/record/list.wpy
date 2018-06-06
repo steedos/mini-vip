@@ -2,6 +2,51 @@
   .image {
     display: block;
   }
+  .page__bd {
+    padding-bottom: 50px;
+  }
+  .tab-bar {
+    display: flex;
+    position: fixed;
+    z-index: 500;
+    bottom: 0;
+    height: 50px;
+    width: 100%;
+    background-color: #F7F7FA;
+    justify-content: center;
+    align-items: center;
+
+    &::before {
+      content: " ";
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0;
+      height: 1px;
+      border-top: 1px solid #C0BFC4;
+      color: #C0BFC4;
+      -webkit-transform-origin: 0 0;
+      transform-origin: 0 0;
+      -webkit-transform: scaleY(0.5);
+      transform: scaleY(0.5);
+    }
+
+    .add-record {
+      height: 35px;
+      width: 35px;
+      background: #ffa325;
+      text-align: center;
+      color: #fff;
+      border: 10px;
+      border-radius: 50%;
+
+      .ion {
+        line-height: 35px;
+        font-weight: bold;
+        font-size: 20px;
+      }
+    }
+  }
 </style>
 
 <template>
@@ -19,6 +64,11 @@
         </repeat>
       </view>
     </view>
+    <view class="tab-bar">
+      <view class="add-record" @tap="addRecord">
+        <view class="slds-icon-add ion"></view>
+      </view>
+    </view>
   </view>
 </template>
 
@@ -27,7 +77,7 @@ import wepy from 'wepy';
 import { baseUrl } from '@/config';
 import util from '../../wxs/util.wxs';
 
-const DATA_LENGTH = 10
+const DATA_LENGTH = 15
 
 export default class RecordList extends wepy.page {
   config = {
@@ -40,7 +90,8 @@ export default class RecordList extends wepy.page {
     object_name: '',
     space_id: '',
     baseUrl: baseUrl,
-    current_skip: 0
+    current_skip: 0,
+    allow_load: true
   }
 
   wxs = {
@@ -49,6 +100,7 @@ export default class RecordList extends wepy.page {
 
   refresh() {
     this.record_list = [];
+    this.allow_load = true;
     this.current_skip = 0;
     this.loadRecords();
   }
@@ -74,21 +126,35 @@ export default class RecordList extends wepy.page {
     await this.loadRecords()
   }
 
+  methods = {
+    addRecord() {
+      const url = `./edit?object_name=${this.object_name}&action=create`
+      wx.navigateTo({
+        url: url
+      })
+    }
+  }
+
   async loadRecords() {
     const skip = this.current_skip;
     const object_name = this.object_name
-    
-    const options = {
-      $count: true,
-      $skip: skip,
-      $top: DATA_LENGTH
-    };
-    const result = await this.$parent.query(object_name, options)
-    if (result.value) {
-      this.record_list = this.record_list.concat(result.value)
+
+    if (this.allow_load) {
+      const options = {
+        $count: true,
+        $skip: skip,
+        $top: DATA_LENGTH
+      };
+      const result = await this.$parent.query(object_name, options)
+      if (result.value) {
+        this.record_list = this.record_list.concat(result.value)
+      }
+      this.current_skip = skip + result.value.length;
+      if (this.current_skip === result['@odata.count']) {
+        this.allow_load = false
+      }
+      this.$apply();
     }
-    this.current_skip = skip + result.value.length;
-    this.$apply();
     wx.stopPullDownRefresh();
   }
 }
