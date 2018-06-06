@@ -26,6 +26,18 @@
 video{
   width:100%;
 }
+
+.btn-edit{
+  position:fixed;
+  bottom:8px;
+  left:50%;
+  width:22px;
+  height:22px;
+  margin-left:-11px;
+  background-repeat:no-repeat;
+  background-position:center;
+  background-size:60%;
+}
 </style>
 <template>
 <view class="page" wx:if="{{is_loaded}}">
@@ -59,6 +71,7 @@ video{
       </view>
     </view>
   </view>
+  <!-- <view class="btn-edit slds-icon-action-edit" @tap="editPost"/> -->
 </view>
 </template>
 <script>
@@ -136,6 +149,12 @@ export default class View extends wepy.page {
       wx.previewImage({
         current: current,
         urls: urls
+      });
+    },
+    editPost() {
+      let url = "/pages/record/edit?action=edit&object_name=post&fields=name,summary,description,type";
+      wepy.navigateTo({
+        url: url
       });
     }
   };
