@@ -1,0 +1,32 @@
+<style lang="less">
+
+</style>
+
+<template>
+  <view class="page">
+    <view class="page__bd">
+      <view class="weui-cells weui-cells_after-title">
+        商户二维码
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import { baseUrl } from '@/config';
+export default class QRCode extends wepy.page {
+  config = {
+    navigationBarTitleText: '商户二维码'
+  };
+
+  async onLoad() {
+    wepy.showLoading({
+      title: '加载中',
+      mask: true
+    });
+    
+    wepy.hideLoading();
+  }
+}
+</script>
