@@ -50,7 +50,7 @@
           <block wx:if="{{!item.hidden && !item.omit}}">
             <block wx:if="{{item.type === 'image' || item.type === 'video' || item.type === 'audio'}}">
               <block wx:if="{{item.multiple}}">
-                <view class="weui-cell" wx:if="{{item.readonly || !schema.allowEdit || args.action === 'read'}}">
+                <view class="weui-cell" wx:if="{{item.readonly || !schema.allowEdit || args.action === 'read'}}" hover-class='weui-grid_active'>
                   <view class="weui-cell__bd">
                     <view class="weui-uploader">
                       <view class="weui-uploader__hd">
@@ -65,7 +65,7 @@
                     </view>
                   </view>
                 </view>
-                <view wx:else class='weui-cell weui-cell_access' data-value="{{values[item.name]}}" data-edit="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}" @tap.stop="navigateTo({{item}})">
+                <view wx:else class='weui-cell weui-cell_access' hover-class='weui-grid_active' data-value="{{values[item.name]}}" data-edit="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}" @tap.stop="navigateTo({{item}})">
                   <view class="weui-cell__bd">
                     <view class="weui-uploader">
                       <view class="weui-uploader__hd">
@@ -98,7 +98,7 @@
                 </view>
               </block>
               <block wx:else>
-                <view class='weui-cell weui-cell_access' data-value="{{values[item.name]}}" data-edit="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}" @tap.stop="navigateTo({{item}})">
+                <view class='weui-cell weui-cell_access' hover-class='weui-grid_active' data-value="{{values[item.name]}}" data-edit="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}" @tap.stop="navigateTo({{item}})">
                   <view class="weui-cell__hd" >
                     <view class="weui-label">{{item.label}}</view>
                   </view>
@@ -110,7 +110,7 @@
               </block>
             </block>
             <block wx:elif="{{item.type === 'boolean'}}">
-              <view class="weui-cell weui-cell_switch">
+              <view class="weui-cell weui-cell_switch" hover-class='weui-grid_active'>
                 <view class="weui-cell__bd">{{item.label}}</view>
                 <view class="weui-cell__ft" data-id="{{item.name}}" >
                   <switch checked data-id="{{item.name}}" bindchange="textChange"/>
@@ -126,7 +126,7 @@
               <!--</view>-->
             <!--</block>-->
             <block wx:elif="{{item.type === 'location'}}">
-              <view class="weui-cell">
+              <view class="weui-cell" hover-class='weui-grid_active'>
                 <view class="weui-cell__hd">
                   <view class="weui-label">{{item.label}}</view>
                 </view>
@@ -141,7 +141,7 @@
               </view>
             </block>
             <block wx:else>
-              <view class='weui-cell weui-cell_access' data-value="{{values[item.name]}}" data-edit="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}" @tap.stop="navigateTo({{item}})">
+              <view class='weui-cell weui-cell_access' hover-class='weui-grid_active' data-value="{{values[item.name]}}" data-edit="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}" @tap.stop="navigateTo({{item}})">
                 <block wx:if="{{item.type === 'textarea'}}">
                   <view class="weui-cell__hd" wx:if="{{!values[item.name]}}">
                     <view class="weui-label">{{item.label}}</view>
