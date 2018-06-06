@@ -117,14 +117,14 @@
                 </view>
               </view>
             </block>
-            <block wx:elif="{{item.type === 'number'}}">
-              <view class="weui-cell weui-cell_input">
-                <view class="weui-cell__bd">{{item.label}}</view>
-                <view class="weui-cell__ft">
-                  <input data-id="{{item.name}}" class="weui-input" type="number" bindchange="textChange"/>
-                </view>
-              </view>
-            </block>
+            <!--<block wx:elif="{{item.type === 'number'}}">-->
+              <!--<view class="weui-cell weui-cell_input">-->
+                <!--<view class="weui-cell__bd">{{item.label}}</view>-->
+                <!--<view class="weui-cell__ft">-->
+                  <!--<input data-id="{{item.name}}" class="weui-input" type="number" bindchange="textChange"/>-->
+                <!--</view>-->
+              <!--</view>-->
+            <!--</block>-->
             <block wx:elif="{{item.type === 'location'}}">
               <view class="weui-cell">
                 <view class="weui-cell__hd">
@@ -647,8 +647,8 @@
           await this.$parent.$parent.update(this.args.object_name, this.args.record_id, value)
         }
 
-        const pages = getCurrentPages()
-        const prevPage = pages[pages.length - 2]
+        const pages = getCurrentPages();
+        const prevPage = pages[pages.length - 2];
         if (prevPage.refresh) {
           prevPage.refresh()
         }
@@ -688,6 +688,9 @@
             break;
           case 'image':
             url = '/pages/edit/image';
+            break;
+          case 'number':
+            url = '/pages/edit/number';
             break;
         }
 
