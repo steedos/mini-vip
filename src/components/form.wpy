@@ -495,6 +495,7 @@
       const value = _.clone(this.values)
       const fields = this.fields
       _.forEach(value, (v, k) => {
+        console.log('transformValue.....', fields[k])
         let field = fields[k];
         if (field.type === 'lookup' || field.type === 'master_detail') {
           if (field.multiple && _.isArray(v)){
@@ -687,6 +688,12 @@
           await this.uploadImages(this.args.record_id);
           const value = this.transformValue();
           await this.$parent.$parent.update(this.args.object_name, this.args.record_id, value)
+        }
+
+        const pages = getCurrentPages()
+        const prevPage = pages[pages.length - 2]
+        if (prevPage.refresh) {
+          prevPage.refresh()
         }
         wepy.navigateBack({
           delta: 1
