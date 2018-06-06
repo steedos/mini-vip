@@ -144,7 +144,7 @@
               <view class='weui-cell weui-cell_access' hover-class='weui-grid_active' data-value="{{values[item.name]}}" data-edit="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}" @tap.stop="navigateTo({{item}})">
                 <block wx:if="{{item.type === 'textarea'}}">
                   <view class="weui-cell__hd" wx:if="{{!values[item.name]}}">
-                    <view class="weui-label">{{item.label}}</view>
+                    <view class="weui-label" >{{item.label}}</view>
                   </view>
                   <view class="weui-cell__bd">
                     <view class="weui-cell__ft wide-cell">{{util.transformFieldValue(item, values[item.name])}}</view>
@@ -152,7 +152,7 @@
                 </block>
                 <block wx:else>
                   <view class="weui-cell__hd">
-                    <view class="weui-label">{{item.label}}</view>
+                    <view class="weui-label" >{{item.label}}</view>
                   </view>
                   <view class="weui-cell__bd">
                     <view class="weui-cell__ft">{{util.transformFieldValue(item, values[item.name])}}</view>
@@ -242,6 +242,9 @@
               const fields = object.fields;
               for (let field_name in fields) {
                 let field = fields[field_name];
+                if(!field.label){
+                  field.label = field_name
+                }
                 if (field.reference_to) {
                   field.options = await this.getReferenceTo(field.name, field.reference_to)
                 }
@@ -260,8 +263,14 @@
 
           }
           if (object_name && record_id && action != 'create') {
+            var keys = []
+            _.forEach(this.fields, (v, k)=> {
+              if (!v.hidden && !v.omit) {
+                keys.push(k)
+              }
+            })
             let query_options = {
-              $select: _.pluck(this.fields, "name").join(","),
+              $select: keys.join(","),
               $filter: `_id eq '${record_id}'`
             }
             let expand = []

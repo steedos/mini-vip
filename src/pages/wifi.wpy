@@ -50,8 +50,8 @@
       <scroll-view  scroll-y style="max-height: 230px;">
         <radio-group bindchange="radioChange">
           <label class="weui-cell weui-check__label" wx:for="{{wifiList}}" wx:key="value">
-            <radio class="weui-check" value="{{item.SSID}}" checked="{{item.checked}}"/>
-            <view class="weui-cell__bd">{{item.SSID}}</view>
+            <radio class="weui-check" value="{{item.name}}" checked="{{item.checked}}"/>
+            <view class="weui-cell__bd">{{item.name}}</view>
             <view class="weui-cell__ft weui-cell__ft_in-radio" wx:if="{{item.checked}}">
                 <icon class="weui-icon-radio" type="success_no_circle" size="16"></icon>
             </view>
@@ -74,69 +74,116 @@ export default class Wifi extends wepy.page {
     icon: 'power',
     status:'WiFi 未连接',
     current:'',
-    selected: {},
+    selected: {
+      name: '',
+      password: ''
+    },
     wifiList:[],
     listTitle: '门店 WiFi 列表',
     store_id: ''
   };
 
+  radioChange(e) {
+    console.log('radio发生change事件，携带value值为：', e.detail.value);
+    const selectedName = e.detail.value;
+    const radioItems = this.wifiList;
+    for (var i = 0, len = radioItems.length; i < len; i++) {
+      if(radioItems[i].name == selectedName){
+        radioItems[i].checked = true;
+        if(this.selected.name!=selectedName){
+          this.selected = radioItems[i];
+          this.icon = "power";
+        }
+      }else{
+        radioItems[i].checked = false;
+      }
+    }
+    this.wifiList = radioItems;
+    this.$apply();
+  }
+
+  async getWifiList(){
+    // 未传入 store_id，则使用space_id查询store
+    var store_id = "";
+    if(this.store_id){
+      store_id = this.store_id
+    }else{
+      store_id = this.$parent.globalData.space_id
+    }
+    console.log("store_id",store_id)
+    const options = {
+              $filter: 'store eq ' + store_id,
+              $select: 'name,password'
+            };
+    const wifis = await this.$parent.query("vip_wifi",options);
+    console.log("wifis",wifis)
+    if(wifis.value && wifis.value.length>0){
+      this.wifiList = wifis.value;
+    }else{
+      this.listTitle = "该商户未配置 Wi-Fi";
+    }
+    this.$apply();
+  };
+
   async onLoad(e) {
-    wx.showNavigationBarLoading();
+    wepy.showLoading({
+      title: '加载中',
+      mask: true
+    });
+
     if (e.store_id) {
       this.store_id = e.store_id;
     }
     const _self = this;
     wx.startWifi({
-      success: function(res) {}
+      success: function(res) {
+        console.log("======startWifi=====", res)
+
+        // 检测获取已连接中的 Wi-Fi 信息
+        console.log("检测获取已连接中的 Wi-Fi 信息");
+        
+        wx.getConnectedWifi({
+          success: function(res) {
+            console.log("=====res=======",res)
+            var radioItems = _self.wifiList;
+            var index = -1;
+            if(res.wifi){
+              _self.icon = "wifi";
+              _self.status = '已连接 ' + res.wifi.SSID;
+              _self.current = res.wifi.SSID;
+              index = radioItems.findIndex((v) => {
+                return v.name == res.wifi.SSID
+              })
+              if(index > -1){
+                radioItems[index].checked = true;
+                _self.selected = radioItems[index];
+              }
+              _self.$apply();
+            }
+          }
+        })
+      }
     })
 
     // 获取门店wifi
-    var wifis = await this.getWifiList();
-    if(wifis.value && wifis.value.length>0){
-      _self.wifiList = wifis.value;
-    }else{
-      _self.listTitle = "该商户未配置 Wi-Fi";
-    }
-    console.log("_self.wifiList",_self.wifiList);
-
-    // 检测获取已连接中的 Wi-Fi 信息
-    console.log("检测获取已连接中的 Wi-Fi 信息");
-    wx.getConnectedWifi({
-      success: function(res) {
-        console.log("=====res=======",res)
-        var radioItems = _self.wifiList;
-        var index = -1;
-        if(res.wifi){
-          _self.icon = "wifi";
-          _self.status = '已连接 ' + res.wifi.SSID;
-          _self.current = res.wifi.SSID;
-          index = radioItems.findIndex((v) => {
-            return v.SSID == res.wifi.SSID
-          })
-
-          if(index > -1){
-            radioItems[index].checked = true;
-            _self.selected = radioItems[index];
-          }
-        }
-      }
-    })
-    _self.$apply();
-    wx.hideNavigationBarLoading();
+    await this.getWifiList();
+    
+    console.log("_self.wifiList",this.wifiList);    
+    
+    wepy.hideLoading();
   };
 
   methods = {
     toConnectWifi() {
       const _self = this;
       wx.connectWifi({
-        SSID: _self.selected.SSID,
-        BSSID: _self.selected.BSSID,
+        SSID: _self.selected.name,
         password: _self.selected.password,
         success: function(res){
           console.log("==========res==========",res);
           _self.icon = "wifi";
-          _self.status = '已连接 ' + _self.selected.SSID;
-          _self.current = _self.selected.SSID;
+          _self.status = '已连接 ' + _self.selected.name;
+          _self.current = _self.selected.name;
           _self.$apply();
         },
         fail: function(res){
@@ -189,37 +236,5 @@ export default class Wifi extends wepy.page {
       });
     }
   };
-  getWifiList(){
-    // 未传入 store_id，则使用space_id查询store
-    var store_id = "";
-    if(this.store_id){
-      store_id = this.store_id
-    }else{
-      store_id = this.$parent.globalData.space_id
-    }
-    const data = {
-              $filter: 'store eq ' + store_id,
-              $select: 'SSID,BSSID,password'
-            };
-    return this.$parent.query("vip_wifi",data);
-  };
-  radioChange(e) {
-        console.log('radio发生change事件，携带value值为：', e.detail.value);
-        const selectedSSID = e.detail.value;
-        const radioItems = this.wifiList;
-        for (var i = 0, len = radioItems.length; i < len; i++) {
-          if(radioItems[i].SSID == selectedSSID){
-            radioItems[i].checked = true;
-            if(this.selected.SSID!=selectedSSID){
-              this.selected = radioItems[i];
-              this.icon = "power";
-            }
-          }else{
-            radioItems[i].checked = false;
-          }
-        }
-        this.wifiList = radioItems;
-        this.$apply();
-    }
 }
 </script>

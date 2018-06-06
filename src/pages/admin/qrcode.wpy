@@ -23,7 +23,10 @@ page{
       top: 0;
       left: 0;
       width: 100%;
-      height: 100%;
+      height: 113%;
+    }
+    .qrtext{
+      color:white;
     }
   }
 }
@@ -32,8 +35,12 @@ page{
 <template>
   <view class="page">
     <view class="qrcode_bd">
-      <image wx:if="{{ImgUrl}}" class="qrcode" mode="aspectFill" src="{{util.formatImageUrl(ImgUrl, baseUrl)}}"/>
-      <image wx:else class="qrcode" mode="aspectFill" src="../../images/avatar.png"/>
+      <block wx:if="{{imgCodeUrl}}">
+        <image class="qrcode" mode="aspectFill" src="{{util.formatImageUrl(imgCodeUrl, baseUrl)}}"/>
+      </block>
+      <block wx:else>
+        <text class="qrtext">二维码获取失败</text>
+      </block>
     </view>
   </view>
 </template>
@@ -53,9 +60,10 @@ export default class QRCode extends wepy.page {
   };
 
   data = {
-    ImgUrl: 'kvFn5MYuPcCrRF5DN'
+    baseUrl: baseUrl,
+    imgCodeUrl: ''
   };
-  
+
   wxs = {
     util: util
   };
@@ -65,21 +73,37 @@ export default class QRCode extends wepy.page {
       title: '加载中',
       mask: true
     });
-    var space_id = e.space_id || this.$parent.globalData.space_id 
-    await this.getqrCode(space_id)
+    var store_id = e.store_id || this.$parent.globalData.space_id
+    
+    await this.getqrCode(store_id)
     
     wepy.hideLoading();
   }
-  async getqrCode(space_id) {
-    const url = '/api/steedos/weixin/code';
-    const data = {
-      path:"pages/space/index?space_id=" + space_id,
-      width:430,
-      store_id:this.$parent.globalData.space_id
-    };
-    var res = await req.post(url, data);
-    // const result = 'kvFn5MYuPcCrRF5DN'
-    // this.ImgUrl = 
+  async getqrCode(store_id) {
+    const options = {
+      $filter: `_id eq '${store_id}'`,
+      $select: 'qrcode'
+    }
+    const result = await this.$parent.query('vip_store', options);
+    
+    if(result.value && result.value.length>0 && result.value[0].qrcode){
+      console.log("=======result======",result);
+      this.imgCodeUrl = result.value[0].qrcode;
+      this.$apply();
+    }
+    else{
+      const url = '/api/steedos/weixin/code';
+      const data = {
+        path:"pages/space/index?store_id=" + store_id,
+        width:430,
+        store_id: store_id
+      };
+      const res = await req.post(url, data);
+      if(res){
+        this.imgCodeUrl = res;
+        this.$apply();
+      }
+    }
   }
 }
 </script>
