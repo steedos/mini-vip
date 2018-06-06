@@ -242,6 +242,9 @@
               const fields = object.fields;
               for (let field_name in fields) {
                 let field = fields[field_name];
+                if(!field.label){
+                  field.label = field_name
+                }
                 if (field.reference_to) {
                   field.options = await this.getReferenceTo(field.name, field.reference_to)
                 }
