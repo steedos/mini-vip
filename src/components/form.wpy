@@ -27,6 +27,18 @@
       color: #000;
     }
   }
+
+  .open-setting{
+    border: none !important;
+    text-align: right;
+    height: 2.58823529em;
+    min-height: 2.58823529em;
+    line-height: 2.58823529em;
+    padding: 0;
+    font-size: 17px;
+    color: #808080;
+    background: #FFFFFF;
+  }
 </style>
 <template>
   <view class="form">
@@ -177,7 +189,7 @@
                     </navigator>
                     <block wx:elif="{{item.type === 'location'}}" >
                       <view wx:if="{{showOpenSetting}}">
-                        <button open-type="openSetting" @opensetting="openSetting">打开授权设置页</button>
+                        <button open-type="openSetting" class="open-setting" hover-class="none" plain="true" @opensetting="openSetting">打开授权设置页</button>
                       </view>
                       <view wx:else class="weui-cell__ft"
                             value="" @tap="getAddress" data-id="{{item.name}}">{{values[item.name] && values[item.name].address}}</view>
