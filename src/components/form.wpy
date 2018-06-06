@@ -103,7 +103,7 @@
                     <view class="weui-label">{{item.label}}</view>
                   </view>
                   <view class="weui-cell__bd" style="text-align:right;">
-                    <image src="{{util.formatImageUrl(values[item.name], baseUrl)}}" class="weui-uploader__img" style="display:inline-block;" wx:if="{{item.type === 'image'}}"/>
+                    <image src="{{util.formatImageUrl(values[item.name], baseUrl)}}" class="weui-uploader__img" style="display:block;float:right" wx:if="{{item.type === 'image'}}"/>
                   </view>
                   <view class="weui-cell__ft weui-cell__ft_in-access" wx:if="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}"></view>
                 </view>
