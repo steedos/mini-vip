@@ -41,7 +41,7 @@ page {
         <postList :list.sync="posts" />
       </scroll-view>
       <view class="footer-tabbar" wx:if="{{is_editable}}">
-        <view class="slds-icon-custom-custom83 slds-icon" @tap="creatorPost"/>
+        <view class="slds-icon-custom-custom83 slds-icon" @tap="createPost"/>
       </view>
     </view>
   </view>
@@ -59,10 +59,6 @@ export default class Posts extends wepy.page {
   };
 
   async onLoad(e) {
-    wepy.showLoading({
-      title: '加载中',
-      mask: true
-    });
     this.is_editable = e.editable;
     if(e.title){
       this.title = e.title;
@@ -74,6 +70,15 @@ export default class Posts extends wepy.page {
       this.type = e.type;
     }
     this.space_id = e.space_id || this.$parent.globalData.space_id;
+  }
+
+  async onShow(e) {
+    this.posts = [];
+    this.current_skip = 0;
+    wepy.showLoading({
+      title: '加载中',
+      mask: true
+    });
     await this.$parent.login(this.space_id);
     await this.loadPostList();
     this.is_loaded = true;
@@ -149,7 +154,7 @@ export default class Posts extends wepy.page {
   };
 
   methods = {
-    creatorPost() {
+    createPost() {
       let url = "/pages/record/edit?action=create&object_name=post&fields=name,summary,description,type";
       wepy.navigateTo({
         url: url
