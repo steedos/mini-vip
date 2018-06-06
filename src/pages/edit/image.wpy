@@ -31,7 +31,7 @@
                 </view>
               </repeat>
             </view>
-            <view class="weui-uploader__input-box" wx:if="{{!hiddenButton[item.name]}}">
+            <view class="weui-uploader__input-box" wx:if="{{item.multiple || files.length === 0}}">
               <view class="weui-uploader__input" bindtap="chooseImage" data-id="{{item.name}}"
                     data-multiple="{{item.multiple}}" data-type="{{item.type}}"></view>
             </view>
@@ -46,9 +46,11 @@
   import wepy from 'wepy';
   import {baseUrl} from '@/config';
   import util from '../../wxs/util.wxs'
+  const utilJs = require('../../utils/util.js');
   export default class Image extends wepy.page {
 
     data = {
+      baseUrl: baseUrl,
       key: '',
       multiple: false,
       files: []
@@ -103,13 +105,17 @@
         this.$apply();
       },
       previewImage: function(e){
+        console.log("e.currentTarget.id", e.currentTarget.id);
+        let urls = [];
+        this.data.files.forEach(function (f) {
+          urls.push(utilJs.formatImageUrl(f, baseUrl))
+        });
+
         wx.previewImage({
-          current: e.currentTarget.id, // 当前显示图片的http链接
-          urls: this.data.files // 需要预览的图片http链接列表
+          current: utilJs.formatImageUrl(e.currentTarget.id, baseUrl), // 当前显示图片的http链接
+          urls: urls // 需要预览的图片http链接列表
         })
       }
     }
-
-
   }
 </script>
