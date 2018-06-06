@@ -2,7 +2,7 @@
 </style>
 
 <template>
-  <view class="page">
+  <view class="page" wx:if="{{is_loaded}}">
     <view class="weui-panel__bd">
       <view class="weui-cells">
         <repeat for="{{stores}}" key="stores" index="index" item="store">

@@ -193,13 +193,15 @@ export default class Posts extends wepy.page {
     };
   }
 
-  // 上拉刷新
+  // 下拉刷新
   onPullDownRefresh() {
     this.refresh();
-    console.log('onPullDownRefresh....');
+    setTimeout(() => {
+      wx.stopPullDownRefresh();
+    }, 200);
   }
 
-  // 下拉加载
+  // 上拉加载
   onReachBottom() {
     this.loadPostList();
     console.log('onReachBottom');
