@@ -118,7 +118,7 @@ page {
           </navigator>
           <navigator url="../store?store={{space_id}}" class="weui-grid" hover-class="weui-grid_active">
             <view class="slds-icon-standard-contact weui-grid__icon slds-icon"/>
-            <view class="weui-grid__label">关于我们</view>
+            <view class="weui-grid__label">联系我们</view>
           </navigator>
         </view>
       </view>
