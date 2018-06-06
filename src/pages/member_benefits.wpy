@@ -18,35 +18,43 @@
 .weui-form-preview__label{
   margin-right:50rpx!important;
 }
-
-
+.weui-loadmore__tips_in-line{
+  background-color:#F5F5f2;
+}
 </style>
 <template>
   <view class="page__bd">
-    <view class="weui-cells">
-      <view class="weui-form-preview">
-        <view class="weui-form-preview__bd">
-          <block wx:if="{{category.description}}">
-            <view class="weui-form-preview__item">
-              <view class="weui-form-preview__label">特权说明</view>
-              <text class="weui-form-preview__value">{{category.description}}</text>
-            </view>
-          </block>
-          <block wx:if="{{category.valid_period}}">
-            <view class="weui-form-preview__item">
-              <view class="weui-form-preview__label">有效日期</view>
-              <view class="weui-form-preview__value">{{category.valid_period}}天</view>
-            </view>
-          </block>
-          <block wx:if="{{category.instruction}}">
-            <view class="weui-form-preview__item">
-              <view class="weui-form-preview__label">使用须知</view>
-              <text class="weui-form-preview__value">{{category.instruction}}</text>
-            </view>
-          </block>
+    <block wx:if="{{category.description||category.instruction}}">
+      <view class="weui-cells">
+        <view class="weui-form-preview">
+          <view class="weui-form-preview__bd">
+            <block wx:if="{{category.description}}">
+              <view class="weui-form-preview__item">
+                <view class="weui-form-preview__label">特权说明</view>
+                <text class="weui-form-preview__value">{{category.description}}</text>
+              </view>
+            </block>
+            <block wx:if="{{category.valid_period}}">
+              <view class="weui-form-preview__item">
+                <view class="weui-form-preview__label">有效日期</view>
+                <view class="weui-form-preview__value">{{category.valid_period}}天</view>
+              </view>
+            </block>
+            <block wx:if="{{category.instruction}}">
+              <view class="weui-form-preview__item">
+                <view class="weui-form-preview__label">使用须知</view>
+                <text class="weui-form-preview__value">{{category.instruction}}</text>
+              </view>
+            </block>
+          </view>
         </view>
       </view>
-    </view>
+    </block>
+    <block wx:else>
+      <view class="weui-loadmore weui-loadmore_line">
+        <view class="weui-loadmore__tips weui-loadmore__tips_in-line">暂无相关信息</view>
+      </view>
+    </block>
   </view>
 </template>
 <script>
