@@ -39,6 +39,7 @@ page{
 
 <script>
 import wepy from 'wepy';
+import req from '@/network';
 import { baseUrl } from '@/config';
 export default class QRCode extends wepy.page {
   config = {
@@ -53,12 +54,19 @@ export default class QRCode extends wepy.page {
       title: '加载中',
       mask: true
     });
-
-    if(e.space_id){
-
-    }
+    var space_id = e.space_id || this.$parent.globalData.space_id 
+    await this.getqrCode(space_id)
     
     wepy.hideLoading();
+  }
+  async getqrCode(space_id) {
+    const url = '/api/steedos/weixin/code';
+    const data = {
+      path:"pages/space/index?space_id=" +space_id,
+      width:430,
+      store_id:this.$parent.globalData.space_id
+    };
+    var res = await req.post(url,data);
   }
 }
 </script>
