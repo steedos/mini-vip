@@ -82,7 +82,7 @@
         this.multiple = true;
       }
 
-      if (e.value && e.multiple){
+      if (e.value){
         this.files = e.value.split(',');
       }
 
