@@ -40,142 +40,159 @@
     color: #808080;
     background: #FFFFFF;
   }
+
+  .weui-cell_footer{
+    margin-top: .3em;
+    color: #808080;
+    padding-left: 15px;
+    padding-right: 15px;
+    font-size: 14px;
+  }
 </style>
 <template>
   <view class="form" wx:if="{{is_loaded}}">
     <view class="weui-toptips weui-toptips_warn" wx:if="{{showTopTips}}">{{message}}</view>
     <view class="page__bd">
-      <view class="weui-cells">
-        <repeat for="{{fields}}" key="index" index="index" item="item">
-          <block wx:if="{{!item.hidden && !item.omit}}">
-            <block wx:if="{{item.type === 'image' || item.type === 'video' || item.type === 'audio'}}">
-              <block wx:if="{{item.multiple}}">
-                <view class="weui-cell" wx:if="{{item.readonly || !schema.allowEdit || args.action === 'read'}}" hover-class='weui-grid_active'>
-                  <view class="weui-cell__bd">
-                    <view class="weui-uploader">
-                      <view class="weui-uploader__hd">
-                        <view class="weui-uploader__title">{{item.label}}</view>
-                      </view>
-                      <view class="weui-uploader__bd">
-                        <view class="weui-uploader__file">
-                          <image class="weui-uploader__img" mode="aspectFill"
-                                 src="{{util.formatImageUrl(values[item.name], baseUrl)}}"/>
+      <repeat for="{{groupFields}}" key="index_g" index="index_g" item="groupField">
+        <block wx:if="{{groupField._groupText === '-'}}">
+          <view class="weui-cells__title">　</view>
+        </block>
+        <block wx:elif="{{groupField._groupText}}">
+          <view class="weui-cells__title">{{groupField._groupText}}</view>
+        </block>
+        <view class="weui-cells weui-cells_after-title">
+          <repeat for="{{groupField.fields}}" key="index" index="index" item="item">
+            <block wx:if="{{!item.hidden && !item.omit}}">
+              <block wx:if="{{item.type === 'image' || item.type === 'video' || item.type === 'audio'}}">
+                <block wx:if="{{item.multiple}}">
+                  <view class="weui-cell" wx:if="{{item.readonly || !schema.allowEdit || args.action === 'read'}}" hover-class='weui-grid_active'>
+                    <view class="weui-cell__bd">
+                      <view class="weui-uploader">
+                        <view class="weui-uploader__hd">
+                          <view class="weui-uploader__title">{{item.label}}</view>
+                        </view>
+                        <view class="weui-uploader__bd">
+                          <view class="weui-uploader__file">
+                            <image class="weui-uploader__img" mode="aspectFill"
+                                   src="{{util.formatImageUrl(values[item.name], baseUrl)}}"/>
+                          </view>
                         </view>
                       </view>
                     </view>
                   </view>
-                </view>
-                <view wx:else class='weui-cell weui-cell_access' hover-class='weui-grid_active' data-value="{{values[item.name]}}" data-edit="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}" @tap.stop="navigateTo({{item}})">
-                  <view class="weui-cell__bd">
-                    <view class="weui-uploader">
-                      <view class="weui-uploader__hd">
-                        <view class="weui-uploader__title">{{item.label}}</view>
-                      </view>
-                      <view class="weui-uploader__bd">
-                        <view class="weui-uploader__files" id="uploaderFiles">
-                          <repeat for="{{values[item.name]}}" key="*this" item="file">
-                            <view class="weui-uploader__file" wx:if="{{item.type === 'image'}}" bindtap="previewImage"
-                                  id="{{file}}">
-                              <image class="weui-uploader__img" src="{{util.formatImageUrl(file, baseUrl)}}"
-                                     mode="aspectFill"/>
-                            </view>
-                            <view class="weui-uploader__file" wx:elif="{{item.type === 'video'}}" bindtap="previewImage"
-                                  id="{{file}}">
-                              <image class="weui-uploader__img" src="{{util.formatImageUrl(file, baseUrl)}}"
-                                     mode="aspectFill"/>
-                            </view>
-                            <view class="weui-uploader__file" wx:elif="{{item.type === 'audio'}}" bindtap="previewImage"
-                                  id="{{file}}">
-                              <image class="weui-uploader__img" src="{{util.formatImageUrl(file, baseUrl)}}"
-                                     mode="aspectFill"/>
-                            </view>
-                          </repeat>
+                  <view wx:else class='weui-cell weui-cell_access' hover-class='weui-grid_active' data-value="{{values[item.name]}}" data-edit="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}" @tap.stop="navigateTo({{item}})">
+                    <view class="weui-cell__bd">
+                      <view class="weui-uploader">
+                        <view class="weui-uploader__hd">
+                          <view class="weui-uploader__title">{{item.label}}</view>
+                        </view>
+                        <view class="weui-uploader__bd">
+                          <view class="weui-uploader__files" id="uploaderFiles">
+                            <repeat for="{{values[item.name]}}" key="*this" item="file">
+                              <view class="weui-uploader__file" wx:if="{{item.type === 'image'}}" bindtap="previewImage"
+                                    id="{{file}}">
+                                <image class="weui-uploader__img" src="{{util.formatImageUrl(file, baseUrl)}}"
+                                       mode="aspectFill"/>
+                              </view>
+                              <view class="weui-uploader__file" wx:elif="{{item.type === 'video'}}" bindtap="previewImage"
+                                    id="{{file}}">
+                                <image class="weui-uploader__img" src="{{util.formatImageUrl(file, baseUrl)}}"
+                                       mode="aspectFill"/>
+                              </view>
+                              <view class="weui-uploader__file" wx:elif="{{item.type === 'audio'}}" bindtap="previewImage"
+                                    id="{{file}}">
+                                <image class="weui-uploader__img" src="{{util.formatImageUrl(file, baseUrl)}}"
+                                       mode="aspectFill"/>
+                              </view>
+                            </repeat>
+                          </view>
                         </view>
                       </view>
                     </view>
+                    <view class="weui-cell__ft weui-cell__ft_in-access" wx:if="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}"></view>
+                  </view>
+                </block>
+                <block wx:else>
+                  <view class='weui-cell weui-cell_access' hover-class='weui-grid_active' data-value="{{values[item.name]}}" data-edit="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}" @tap.stop="navigateTo({{item}})">
+                    <view class="weui-cell__hd" >
+                      <view class="weui-label">{{item.label}}</view>
+                    </view>
+                    <view class="weui-cell__bd" style="text-align:right;">
+                      <image src="{{util.formatImageUrl(values[item.name], baseUrl)}}" class="weui-uploader__img" style="display:block;float:right" wx:if="{{item.type === 'image' && values[item.name]}}"/>
+                    </view>
+                    <view class="weui-cell__ft weui-cell__ft_in-access" wx:if="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}"></view>
+                  </view>
+                </block>
+              </block>
+              <block wx:elif="{{item.type === 'boolean'}}">
+                <view class="weui-cell weui-cell_switch" hover-class='weui-grid_active'>
+                  <view class="weui-cell__bd">{{item.label}}</view>
+                  <view class="weui-cell__ft" data-id="{{item.name}}" >
+                    <switch checked data-id="{{item.name}}" bindchange="textChange"/>
+                  </view>
+                </view>
+              </block>
+              <!--<block wx:elif="{{item.type === 'number'}}">-->
+              <!--<view class="weui-cell weui-cell_input">-->
+              <!--<view class="weui-cell__bd">{{item.label}}</view>-->
+              <!--<view class="weui-cell__ft">-->
+              <!--<input data-id="{{item.name}}" class="weui-input" type="number" bindchange="textChange"/>-->
+              <!--</view>-->
+              <!--</view>-->
+              <!--</block>-->
+              <block wx:elif="{{item.type === 'location'}}">
+                <view class="weui-cell" hover-class='weui-grid_active'>
+                  <view class="weui-cell__hd">
+                    <view class="weui-label">{{item.label}}</view>
+                  </view>
+                  <view class="weui-cell__bd">
+                    <view wx:if="{{showOpenSetting}}">
+                      <button open-type="openSetting" class="open-setting" hover-class="none" plain="true" @opensetting="openSetting">打开授权设置页</button>
+                    </view>
+                    <view wx:else class="weui-cell__ft"
+                          value="" @tap="getAddress" data-id="{{item.name}}">{{values[item.name] && values[item.name].address}}</view>
                   </view>
                   <view class="weui-cell__ft weui-cell__ft_in-access" wx:if="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}"></view>
                 </view>
               </block>
               <block wx:else>
                 <view class='weui-cell weui-cell_access' hover-class='weui-grid_active' data-value="{{values[item.name]}}" data-edit="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}" @tap.stop="navigateTo({{item}})">
-                  <view class="weui-cell__hd" >
-                    <view class="weui-label">{{item.label}}</view>
-                  </view>
-                  <view class="weui-cell__bd" style="text-align:right;">
-                    <image src="{{util.formatImageUrl(values[item.name], baseUrl)}}" class="weui-uploader__img" style="display:block;float:right" wx:if="{{item.type === 'image' && values[item.name]}}"/>
-                  </view>
-                  <view class="weui-cell__ft weui-cell__ft_in-access" wx:if="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}"></view>
-                </view>
-              </block>
-            </block>
-            <block wx:elif="{{item.type === 'boolean'}}">
-              <view class="weui-cell weui-cell_switch" hover-class='weui-grid_active'>
-                <view class="weui-cell__bd">{{item.label}}</view>
-                <view class="weui-cell__ft" data-id="{{item.name}}" >
-                  <switch checked data-id="{{item.name}}" bindchange="textChange"/>
-                </view>
-              </view>
-            </block>
-            <!--<block wx:elif="{{item.type === 'number'}}">-->
-              <!--<view class="weui-cell weui-cell_input">-->
-                <!--<view class="weui-cell__bd">{{item.label}}</view>-->
-                <!--<view class="weui-cell__ft">-->
-                  <!--<input data-id="{{item.name}}" class="weui-input" type="number" bindchange="textChange"/>-->
-                <!--</view>-->
-              <!--</view>-->
-            <!--</block>-->
-            <block wx:elif="{{item.type === 'location'}}">
-              <view class="weui-cell" hover-class='weui-grid_active'>
-                <view class="weui-cell__hd">
-                  <view class="weui-label">{{item.label}}</view>
-                </view>
-                <view class="weui-cell__bd">
-                  <view wx:if="{{showOpenSetting}}">
-                    <button open-type="openSetting" class="open-setting" hover-class="none" plain="true" @opensetting="openSetting">打开授权设置页</button>
-                  </view>
-                  <view wx:else class="weui-cell__ft"
-                        value="" @tap="getAddress" data-id="{{item.name}}">{{values[item.name] && values[item.name].address}}</view>
-                </view>
-                <view class="weui-cell__ft weui-cell__ft_in-access" wx:if="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}"></view>
-              </view>
-            </block>
-            <block wx:else>
-              <view class='weui-cell weui-cell_access' hover-class='weui-grid_active' data-value="{{values[item.name]}}" data-edit="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}" @tap.stop="navigateTo({{item}})">
-                <block wx:if="{{item.type === 'textarea'}}">
-                  <block wx:if="{{item.is_wide}}">
-                    <view class="weui-cell__bd">
-                      <textarea class="weui-textarea" data-id="{{item.name}}" placeholder="{{item.label}}" value="{{util.transformFieldValue(item, values[item.name])}}" auto-height="true" bindinput="textChange"/>
-                    </view>
+                  <block wx:if="{{item.type === 'textarea'}}">
+                    <block wx:if="{{item.is_wide}}">
+                      <view class="weui-cell__bd">
+                        <textarea class="weui-textarea" data-id="{{item.name}}" placeholder="{{item.label}}" value="{{util.transformFieldValue(item, values[item.name])}}" auto-height="true" bindinput="textChange"/>
+                      </view>
+                    </block>
+                    <block wx:else>
+                      <view class="weui-cell__hd" wx:if="{{!values[item.name]}}">
+                        {{item.label}}
+                      </view>
+                      <view class="weui-cell__bd">
+                        <view class="weui-cell__ft wide-cell">{{util.transformFieldValue(item, values[item.name])}}</view>
+                      </view>
+                      <block wx:if="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}">
+                        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+                      </block>
+                    </block>
                   </block>
                   <block wx:else>
-                    <view class="weui-cell__hd" wx:if="{{!values[item.name]}}">
+                    <view class="weui-cell__hd">
                       {{item.label}}
                     </view>
                     <view class="weui-cell__bd">
-                      <view class="weui-cell__ft wide-cell">{{util.transformFieldValue(item, values[item.name])}}</view>
+                      <view class="weui-cell__ft">{{util.transformFieldValue(item, values[item.name])}}</view>
                     </view>
                     <block wx:if="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}">
                       <view class="weui-cell__ft weui-cell__ft_in-access"></view>
                     </block>
                   </block>
-                </block>
-                <block wx:else>
-                  <view class="weui-cell__hd">
-                    {{item.label}}
-                  </view>
-                  <view class="weui-cell__bd">
-                    <view class="weui-cell__ft">{{util.transformFieldValue(item, values[item.name])}}</view>
-                  </view>
-                  <block wx:if="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}">
-                    <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-                  </block>
-                </block>
-              </view>
+                </view>
+              </block>
             </block>
-          </block>
-        </repeat>
-      </view>
+          </repeat>
+        </view>
+        <view class="weui-cells__tips" wx:if="{{groupField._HelpText}}">{{groupField._HelpText}}</view>
+      </repeat>
 
       <view class="btn-container" wx:if="{{args.action === 'edit' || args.action === 'create'}}">
         <button class="submit-btn" form-type="submit" @tap="submitForm" disabled="{{submitDisabled}}">保存</button>
@@ -201,7 +218,7 @@
     }
 
     wxs = {
-      util: util
+      util: util,
     };
 
     data = {
@@ -215,19 +232,52 @@
       fieldOptions: {},
       fields: {},
       showOpenSetting: false,
-      is_loaded: false
+      is_loaded: false,
+      groupFields: []
     };
+
+    getGroupFields(fields){
+      let groupFields = [];
+      let groupItem = {fields: {}, _groupText:'', _HelpText:''};
+      _.forEach(fields, function (field, key) {
+        if(!field){
+         throw new Error('无效的字段: ' + key)
+        }
+        if(field.group){
+          if(!_.isEmpty(groupItem.fields)){
+            groupFields.push(groupItem);
+            groupItem = {fields: {}, _groupText:'', _HelpText:''};
+          }
+          groupItem.fields[key] = field;
+          groupItem._groupText = field.group
+
+        }else if(field.inlineHelpText){
+          groupItem.fields[key] = field;
+          groupItem._HelpText = field.inlineHelpText
+          groupFields.push(groupItem);
+          groupItem = {fields: {}, _groupText:'', _HelpText:''};
+        }
+        else{
+          groupItem.fields[key] = field
+        }
+      });
+
+      if(!_.isEmpty(groupItem.fields)){
+        groupFields.push(groupItem);
+      }
+      return groupFields
+    }
 
     watch = {
       args: async function (newValue, oldValue) {
         if (!_.isEmpty(newValue)) {
           const object_name = newValue.object_name;
           const record_id = newValue.record_id;
-          const action = newValue.action
+          const action = newValue.action;
 
           if (object_name) {
             const object = await this.$parent.$parent.get('objects', object_name);
-            object.allowEdit = true
+            object.allowEdit = true;
             this.schema = object;
 
             const pages = getCurrentPages();
@@ -270,7 +320,7 @@
             } else {
               this.fields = object.fields
             }
-
+            this.groupFields = this.getGroupFields(this.fields);
           }
           if (object_name && record_id && action != 'create') {
             var keys = []
