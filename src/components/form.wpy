@@ -143,23 +143,33 @@
             <block wx:else>
               <view class='weui-cell weui-cell_access' hover-class='weui-grid_active' data-value="{{values[item.name]}}" data-edit="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}" @tap.stop="navigateTo({{item}})">
                 <block wx:if="{{item.type === 'textarea'}}">
-                  <view class="weui-cell__hd" wx:if="{{!values[item.name]}}">
-                    <view class="weui-label" >{{item.label}}</view>
-                  </view>
-                  <view class="weui-cell__bd">
-                    <view class="weui-cell__ft wide-cell">{{util.transformFieldValue(item, values[item.name])}}</view>
-                  </view>
+                  <block wx:if="{{item.is_wide}}">
+                    <view class="weui-cell__bd">
+                      <textarea class="weui-textarea" data-id="{{item.name}}" placeholder="{{item.label}}" value="{{util.transformFieldValue(item, values[item.name])}}" auto-height="true" bindinput="textChange"/>
+                    </view>
+                  </block>
+                  <block wx:else>
+                    <view class="weui-cell__hd" wx:if="{{!values[item.name]}}">
+                      {{item.label}}
+                    </view>
+                    <view class="weui-cell__bd">
+                      <view class="weui-cell__ft wide-cell">{{util.transformFieldValue(item, values[item.name])}}</view>
+                    </view>
+                    <block wx:if="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}">
+                      <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+                    </block>
+                  </block>
                 </block>
                 <block wx:else>
                   <view class="weui-cell__hd">
-                    <view class="weui-label" >{{item.label}}</view>
+                    {{item.label}}
                   </view>
                   <view class="weui-cell__bd">
                     <view class="weui-cell__ft">{{util.transformFieldValue(item, values[item.name])}}</view>
                   </view>
-                </block>
-                <block wx:if="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}">
-                  <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+                  <block wx:if="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}">
+                    <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+                  </block>
                 </block>
               </view>
             </block>
@@ -554,8 +564,9 @@
           });
       },
       textChange(e) {
-        const key = e.target.dataset.id
-        this.values[key] = e.detail.value
+        const key = e.target.dataset.id;
+        this.values[key] = e.detail.value;
+        this.$apply()
       },
       selectChange(e) {
         const index = e.detail.value;
@@ -681,6 +692,11 @@
         if(!dataset.edit){
           return ;
         }
+
+        if((field.type === 'text' || field.type === 'textarea' ) && field.is_wide){
+          return;
+        }
+
         let url = '';
         switch(field.type){
           case 'text':
