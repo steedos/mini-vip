@@ -48,6 +48,11 @@
     padding-right: 15px;
     font-size: 14px;
   }
+
+  .weui-label{
+    width: auto;
+    min-width: 80px;
+  }
 </style>
 <template>
   <view class="form" wx:if="{{is_loaded}}">
@@ -151,7 +156,7 @@
                     </block>
                     <block wx:else>
                       <view class="weui-cell__hd" wx:if="{{!values[item.name]}}">
-                        {{item.label}}
+                        <view class="weui-label">{{item.label}}</view>
                       </view>
                       <view class="weui-cell__bd">
                         <view class="weui-cell__ft wide-cell">{{util.transformFieldValue(item, values[item.name])}}</view>
@@ -163,7 +168,7 @@
                   </block>
                   <block wx:else>
                     <view class="weui-cell__hd">
-                      {{item.label}}
+                      <view class="weui-label">{{item.label}}</view>
                     </view>
                     <view class="weui-cell__bd">
                       <view class="weui-cell__ft">{{util.transformFieldValue(item, values[item.name])}}</view>
