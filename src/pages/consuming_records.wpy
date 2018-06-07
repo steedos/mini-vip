@@ -1,48 +1,36 @@
 <style lang="less">
-.page{
-  margin-left:15px;
-  margin-right:15px;
+.font_title{
+  font-size: 12pt;
+  font-weight: bolder;
+  color:black;
 }
-.weui-form-preview__item{
-  width: 80%;
+.font_body{
+  color:#999;
+  font-size: 9pt;
+}
+.weui-loadmore__tips_in-line{
+  background-color: #F5F5F7;
 }
 </style>
 <template>
   <view class="page__bd">
     <block wx:if="{{records.value.length > 0}}">
-      <!-- <repeat for="{{records.value}}" key="records" index="index" item="record">
-        <view class="weui-cells">
-          <view class="weui-form-preview">
-            <view class="weui-form-preview__bd">
-                <view class="weui-form-preview__item">
-                  <view class="weui-form-preview__label">特权说明</view>
-                  <text class="weui-form-preview__value">{{record.name}}</text>
-                </view>
-                <view class="weui-form-preview__item">
-                  <view class="weui-form-preview__label">有效日期</view>
-                  <view class="weui-form-preview__value">{{record.valid_period}}天</view>
-                </view>
-                <view class="weui-form-preview__item">
-                  <view class="weui-form-preview__label">使用须知</view>
-                  <text class="weui-form-preview__value">{{record.instruction}}</text>
-                </view>
+      <view class="weui-form-preview">
+        <repeat for="{{records.value}}" key="records" index="index" item="record">
+          <view class="weui-cell">
+            <view class="weui-cell__bd">
+              <view class="font_title">{{record.name}}</view>
+              <view class="font_body">{{util.formatDate(record.created)}}</view>
+            </view>
+            <view wx:if="{{record.type == 'recharge'}}">
+              <view class="weui-cell__ft font_title">+{{record.amount}}</view>
+            </view>
+            <view wx:if="{{record.type == 'pay'}}">
+              <view class="weui-cell__ft font_title">-{{record.amount}}</view>
             </view>
           </view>
-        </view>
-      </repeat> -->
-      <scroll-view class="scroll-view_H" scroll-y="true">
-        <view class="weui-form-preview">
-          <repeat for="{{records.value}}" key="records" index="index" item="record">
-            <view class="weui-form-preview__bd weui-form-preview__ft">
-              <view class="weui-form-preview__item line-height_item">
-                <view class="weui-form-preview__label font-size_label">{{record.name}}</view>
-                <view class="weui-form-preview__label font-size_label">{{record.created}}</view>
-              </view>
-              <view class="weui-form-preview__value">{{record.amount}}</view>
-            </view>
-          </repeat>
-        </view>
-      </scroll-view>
+        </repeat>
+      </view>
     </block>
     <block wx:else>
       <view class="weui-loadmore weui-loadmore_line">
@@ -55,20 +43,22 @@
 import wepy from 'wepy';
 import req from '@/network';
 import { serverAPI } from '@/server';
+import util from'../wxs/util.wxs';
 
 export default class ConsumingRecords extends wepy.page {
   config = {
     navigationBarTitleText: '消费记录'
   };
   async onLoad(e) {
-    console.log("=====eeeeeeeeeeeeeeeee=",e)
     this.records = await this.$parent.query('vip_order',e.card_id)
     this.$apply();
-    console.log("=====333=",this.records.value)
   };
   data = {
     records:{
     },
+  };
+  wxs = {
+    util: util
   };
 }
 </script>
