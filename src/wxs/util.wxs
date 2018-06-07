@@ -8,6 +8,15 @@ function formatDate(value) {
   var date = value.getDate() + '日';
 
   var hours = value.getHours();
+  var minutes = value.getMinutes();
+
+  var minutes_str = '';
+  if (minutes < 10) {
+    minutes_str = '0' + minutes;
+  } else {
+    minutes_str = minutes;
+  } 
+
   var hours_str = '';
   if (hours <= 12) {
     hours_str = '上午' + hours
@@ -16,7 +25,7 @@ function formatDate(value) {
   } else {
     hours_str = '晚上' + (hours - 12);
   }
-  return year + month + date + ' ' + hours_str + ':' + value.getMinutes();
+  return year + month + date + ' ' + hours_str + ':' + minutes_str;
 }
 
 // 图片地址转换
