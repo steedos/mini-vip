@@ -134,6 +134,25 @@ function transformFieldValue(field, value){
     }else{
       return value.name
     }
+  }else if(field.type === 'datetime'){
+    if(typeof value == "string"){
+      value = getDate(value);
+    }
+    var year = value.getFullYear() + '年';
+    var month = (value.getMonth() + 1) + '月';
+    var date = value.getDate() + '日';
+
+    var hours = value.getHours();
+    var hours_str = '';
+    if(hours <= 12){
+      hours_str = '上午' + hours
+    }else if(hours <= 18){
+      hours_str = '下午' + (hours - 12);
+    }else{
+      hours_str = '晚上' + (hours - 12);
+    }
+
+    return year + month + date + ' ' + hours_str + ':' + value.getMinutes()
   }
   return value
 }
