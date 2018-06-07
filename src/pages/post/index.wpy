@@ -120,6 +120,7 @@ export default class Posts extends wepy.page {
     this.posts = [];
     this.current_skip = 0;
     this.loadPostList();
+    wepy.stopPullDownRefresh();
   }
   
   components = {
@@ -169,7 +170,6 @@ export default class Posts extends wepy.page {
       this.current_skip = skip + result.value.length;
       this.$apply();
     }
-    wx.stopPullDownRefresh();
   };
 
   methods = {

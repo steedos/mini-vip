@@ -125,7 +125,8 @@ import util from '../../wxs/util.wxs';
 
 export default class View extends wepy.page {
   config = {
-    navigationBarTitleText: ''
+    navigationBarTitleText: '',
+    enablePullDownRefresh: true
   };
 
   async onLoad(e) {
@@ -149,7 +150,8 @@ export default class View extends wepy.page {
   }
 
   async refresh() {
-    this.loadPost();
+    await this.loadPost();
+    wepy.stopPullDownRefresh();
   }
 
   async loadPost(){
@@ -166,6 +168,11 @@ export default class View extends wepy.page {
       title: post_name,
       path: `pages/post/view?space_id=${this.space_id}&post_id=${this.post._id}`
     };
+  }
+
+  // 上拉刷新
+  onPullDownRefresh() {
+    this.refresh();
   }
 
   data = {
