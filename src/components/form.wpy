@@ -216,7 +216,7 @@
 
     getGroupFields(fields){
       let groupFields = [];
-      let groupItem = {fields: {}, _groupText:'', _HelpText:''};
+      let groupItem = {fields: {}, _groupText:'-', _HelpText:''};
       _.forEach(fields, function (field, key) {
         if(!field){
          throw new Error('无效的字段: ' + key)
