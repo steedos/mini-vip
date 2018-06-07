@@ -33,8 +33,22 @@ const formatTime = (date, joiner, hideSecond) => {
     }
   };
 
+  function formatVideoUrl(src, baseUrl) {
+    if(src){
+      if((new RegExp(":\/\/")).test(src)){
+        return src;
+      }else {
+        return baseUrl + "/api/files/videos/" + src;
+      }
+    }
+    else{
+      return "/images/empty.png";
+    }
+  }
+
   module.exports = {
     formatTime: formatTime,
     formatImageUrl: formatImageUrl,
     isTempFile: isTempFile,
+    formatVideoUrl: formatVideoUrl
   };

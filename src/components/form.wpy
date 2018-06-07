@@ -119,6 +119,7 @@
                     </view>
                     <view class="weui-cell__bd" style="text-align:right;">
                       <image src="{{util.formatImageUrl(values[item.name], baseUrl)}}" class="weui-uploader__img" style="display:block;float:right" wx:if="{{item.type === 'image' && values[item.name]}}"/>
+                      <video src="{{util.formatVideoUrl(values[item.name], baseUrl)}}" style="display:block;float:right" wx:if="{{item.type === 'video' && values[item.name]}}">{{values[item.name]}}</video>
                     </view>
                     <view class="weui-cell__ft weui-cell__ft_in-access" wx:if="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}"></view>
                   </view>
@@ -403,6 +404,50 @@
       return (new RegExp(":\/\/")).test(filePath)
     }
 
+    async uploadVideo(filePath, field_name, record_id){
+      const authToken = this.$parent.$parent.globalData.user.auth_token;
+      const userId = this.$parent.$parent.globalData.user._id;
+      const fileResult = await wepy.uploadFile({
+        url: `${baseUrl}/s3/videos`,
+        filePath: filePath,
+        name: 'file',
+        header: {
+          'X-Auth-Token': authToken,
+          'X-User-Id': userId
+        }
+      }).catch((err)=>{
+        console.log("uploadVideo error...",err)
+      });
+      const fileData = JSON.parse(fileResult.data);
+      if (fileData.errors || fileResult.statusCode != 200) {
+        wx.showToast({
+          title: "视频上传失败，请稍后再试",
+          icon: "none"
+        });
+        return false;
+      }else{
+        return fileData
+      }
+    }
+
+    async uploadVideos(record_id){
+      const fields = this.fields;
+      for (let k in fields) {
+        let f = fields[k]
+        if(f.type === 'video'){
+          let fv = this.values[k];
+          if(fv){
+            if(this.isTempFile(fv)){
+              const video = await this.uploadVideo(fv, k, record_id);
+              if(video){
+                this.values[k] = video._id
+              }
+            }
+          }
+        }
+      }
+    }
+
     async uploadImage(filePath, field_name, record_id){
       const imageInfo = await wepy.getImageInfo({
         src: filePath
@@ -474,6 +519,21 @@
                   this.values[k] = image._id
                 }
               }
+            }
+          }
+        }
+      }
+    }
+
+    hasTempVideo(){
+      const fields = this.fields
+      for (let k in fields) {
+        let f = fields[k]
+        if (f.type === 'video') {
+          let fv = this.values[k]
+          if (fv) {
+            if (this.isTempFile(fv)) {
+              return true
             }
           }
         }
@@ -708,9 +768,16 @@
           const value = this.transformValue();
           const record = await this.$parent.$parent.insert(this.args.object_name, value)
 
-          if(this.hasTempImages()){
+          if (this.hasTempImages()) {
             const record_id = record.value[0]._id
             await this.uploadImages(record_id);
+            const value = this.transformValue();
+            await this.$parent.$parent.update(this.args.object_name, record_id, value)
+          }
+
+          if (this.hasTempVideo()) {
+            const record_id = record.value[0]._id
+            await this.uploadVideos(record_id);
             const value = this.transformValue();
             await this.$parent.$parent.update(this.args.object_name, record_id, value)
           }
@@ -718,6 +785,7 @@
         } else if (this.args.action === 'edit') {
           //检查临时附件，如果有，则上传附件
           await this.uploadImages(this.args.record_id);
+          await this.uploadVideos(this.args.record_id);
           const value = this.transformValue();
           await this.$parent.$parent.update(this.args.object_name, this.args.record_id, value)
         }
@@ -761,6 +829,9 @@
             break;
           case 'location':
             url = '/pages/edit/location';
+            break;
+          case 'video':
+            url = '/pages/edit/video';
             break;
         }
 

@@ -78,7 +78,11 @@ function formatCardBgImageUrl(src, baseUrl) {
 // 视频地址转换
 function formatVideoUrl(src, baseUrl) {
   if(src){
-    return baseUrl + "/api/files/videos/" + src;
+    if (getRegExp("^\w+:\/\/").test(src)){
+      return src;
+    }else {
+      return baseUrl + "/api/files/videos/" + src;
+    }
   }
   else{
     return "/images/empty.png";
