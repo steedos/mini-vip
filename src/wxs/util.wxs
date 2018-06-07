@@ -107,6 +107,9 @@ function getEmptyImageUrl(type) {
     case "jobs":
       return url = url + "jobs.jpg";
       break;
+    default : 
+      return url = url + "news.jpg";
+      break; 
   }
   return url;
 }
