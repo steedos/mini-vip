@@ -483,7 +483,6 @@
       const value = _.clone(this.values)
       const fields = this.fields
       _.forEach(value, (v, k) => {
-        console.log('transformValue.....', fields[k])
         let field = fields[k];
         if (field.type === 'lookup' || field.type === 'master_detail') {
           if (field.multiple && _.isArray(v)){
