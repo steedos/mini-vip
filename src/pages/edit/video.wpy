@@ -7,7 +7,7 @@
 
 <template>
   <view class="page__bd">
-    <video class="video" src="{{value}}"></video>
+    <video class="video" src="{{value}}" wx:if="{{value}}"></video>
     <view class="weui-btn-area">
       <button data-id="{{key}}" bindtap="bindButtonTap" class="weui-btn" type="primary">上传视频</button>
     </view>
