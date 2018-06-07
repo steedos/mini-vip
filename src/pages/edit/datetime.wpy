@@ -57,7 +57,14 @@
         wx.setNavigationBarTitle({title: '编辑' + e.title});
       }
       this.key = e.key
-      const now = util.formatTime(new Date)
+      let now = '';
+      if(e.value){
+        now = e.value
+      }else{
+        now = util.formatTime(new Date)
+      }
+
+
       this.date = e.date || now.substr(0, 10).replace(/\//g, "-")
       this.time = e.time || now.substr(11, 5)
       this.setParentValue(this.key, this.date + ' ' + this.time)
