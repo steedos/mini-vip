@@ -2,12 +2,32 @@
 .image {
   display: block;
 }
+.avatar{
+  width: 50px;
+  height: 50px; 
+  display: block;
+  border-radius:4px;
+  margin-right: 10px;
+}
 </style>
 
 <template>
-  <view class="page">
+  <view class="page" wx:if="{{is_loaded}}">
     <view class="page__bd">
-      <view class="weui-cells weui-cells_after-title">
+      <view class="weui-cells">
+        <navigator url="../record/edit?object_name=vip_store&action=edit&record_id={{space_id}}" class="weui-cell">
+          <view class="weui-cell__hd">
+            <image class="avatar" mode="aspectFill" src="{{util.formatImageUrl(store_info.avatar, baseUrl)}}"/>
+          </view>
+          <view class="weui-cell__bd">
+            <view>{{store_info.name}}</view>
+          </view>
+          <view class="weui-cell__ft weui-cell__ft_in-access">
+            <view class="slds-icon-product ion"></view>
+          </view>
+        </navigator>
+      </view>
+      <view class="weui-cells">
         <repeat for="{{options}}" key="index" index="index" item="option">
           <navigator url="{{option.url}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
             <view class="weui-cell__hd">
@@ -25,13 +45,42 @@
 <script>
 import wepy from 'wepy';
 import { baseUrl } from '@/config';
+import util from '../../wxs/util.wxs';
 
 export default class AdminIndex extends wepy.page {
   config = {
     navigationBarTitleText: '商户管理'
   };
 
+  async onLoad(e) {
+    wepy.showLoading({
+      title: '加载中',
+      mask: true
+    });
+    this.space_id = e.space_id || this.$parent.globalData.space_id;
+    await this.$parent.login(this.space_id);
+    await this.loadStoreInfo();
+    this.is_loaded = true;
+    this.$apply();
+    wepy.hideLoading();
+  }
+
+  async refresh() {
+    await this.loadStoreInfo();
+  }
+
+  async loadStoreInfo() {
+    const spaceId = this.space_id;
+    const result = await this.$parent.get('vip_store', spaceId, spaceId);
+    this.store_info = result;
+    this.$apply();
+  }
+
   data = {
+    baseUrl: baseUrl,
+    space_id: '',
+    store_info: {},
+    is_loaded: false,
     options: [
       {title: '门店', icon:'standard-address', url: '../record/list?object_name=vip_store'},
       {title: '文章', icon:'standard-contract', url: '../record/list?object_name=post'},
@@ -41,6 +90,10 @@ export default class AdminIndex extends wepy.page {
       {title: 'WIFI', icon:'utility-wifi', url: '../record/list?object_name=vip_wifi'},
       {title: '二维码', icon:'standard-product', url: 'qrcode'}      
     ]
+  };
+
+  wxs = {
+    util: util
   };
 }
 </script>
