@@ -1,19 +1,22 @@
 // 日期格式化
-function formatDate(value, isWeekNeeded) {
-  if(typeof value == "string"){
+function formatDate(value) {
+  if (typeof value == "string") {
     value = getDate(value);
   }
   var year = value.getFullYear() + '年';
   var month = (value.getMonth() + 1) + '月';
   var date = value.getDate() + '日';
-  if(isWeekNeeded){
-    var week = ["星期日", "星期六", "星期五", "星期四", "星期三", "星期二", "星期一"];
-    var day = week[value.getDay()];
-    return year + month + date + '' + day;
+
+  var hours = value.getHours();
+  var hours_str = '';
+  if (hours <= 12) {
+    hours_str = '上午' + hours
+  } else if (hours <= 18) {
+    hours_str = '下午' + (hours - 12);
+  } else {
+    hours_str = '晚上' + (hours - 12);
   }
-  else{
-    return year + month + date;
-  }
+  return year + month + date + ' ' + hours_str + ':' + value.getMinutes();
 }
 
 // 图片地址转换
