@@ -278,8 +278,8 @@ export default class cardActivate extends wepy.page {
           success: function(msg) {
             console.log('success: ', msg);
 
-            wx.redirectTo({
-              url: 'index'
+            wx.navigateTo({
+              url: 'card?card_id=' + that.card_id
             });
           },
           fail: function(msg) {
