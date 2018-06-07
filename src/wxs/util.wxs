@@ -15,7 +15,7 @@ function formatDate(value) {
     minutes_str = '0' + minutes;
   } else {
     minutes_str = minutes;
-  } 
+  }
 
   var hours_str = '';
   if (hours <= 12) {
@@ -147,9 +147,26 @@ function transformFieldValue(field, value){
       return value.name
     }
   }else if(field.type === 'datetime'){
+
     if(typeof value == "string"){
-      value = getDate(value);
+      var d0 = value.split(' ');
+
+      var d1 = d0[0];
+
+      var d2 = d0[1];
+
+      var d1_1 = d1.split('-');
+
+      var year = d1_1[0];
+      var month = d1_1[1] - 1;
+      var day = d1_1[2];
+
+      var d2_1 = d2.split(':');
+
+      value = getDate(year, month, day, d2_1[0], d2_1[1], 0, 0);
+
     }
+
     var year = value.getFullYear() + '年';
     var month = (value.getMonth() + 1) + '月';
     var date = value.getDate() + '日';
