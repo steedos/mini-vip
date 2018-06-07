@@ -133,6 +133,14 @@
                   </view>
                 </view>
               </block>
+              <block wx:elif="{{item.type === 'text' && item.is_wide}}">
+                <view class="weui-cell weui-cell_input" hover-class='weui-grid_active'>
+                  <view class="weui-cell__bd">
+                    <input data-id="{{item.name}}" class="weui-input"
+                           auto-focus="true" value="{{values[item.name]}}" bindinput="textChange" placeholder="{{item.label}}"/>
+                  </view>
+                </view>
+              </block>
               <block wx:else>
                 <view class='weui-cell weui-cell_access' hover-class='weui-grid_active' data-value="{{values[item.name]}}" data-edit="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}" @tap.stop="navigateTo({{item}})">
                   <block wx:if="{{item.type === 'textarea'}}">
