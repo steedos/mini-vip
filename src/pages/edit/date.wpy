@@ -11,9 +11,12 @@
       <view class="weui-cells">
         <view class="weui-cell weui-cell_input">
           <view class="weui-cell__bd">
-            <picker mode="date" bindchange="bindDateChange" value="{{birthdate}}">
-              <view class="weui-input">{{birthdate}}</view>
+            <picker mode="date" bindchange="bindDateChange" value="{{value}}">
+              <view class="weui-input">{{value}}</view>
             </picker>
+          </view>
+          <view class="weui-cell__ft">
+            <icon type="clear" size="20" color="red" @tap.stop='clearValue'/>
           </view>
         </view>
       </view>
@@ -33,23 +36,37 @@ export default class Date extends wepy.page {
 
   onLoad(e) {
     console.log(e)
-    this.text = "编辑"+e.text
-    this.birthdate = e.birthdate
+    this.text = "编辑"+e.text;
+    this.value = e.value;
+    this.key = e.key;
     wx.setNavigationBarTitle({title:this.text})
   };
 
   data = {
-    birthdate : ''
+    key: '',
+    text: '',
+    value : ''
   };
+
+  setParentValue(key, value){
+    const pages = getCurrentPages();
+    const prevPage = pages[pages.length - 2]
+    prevPage.changeValue(key, value)
+  }
 
   methods = {
     bindDateChange: function(e) {
       const pages = getCurrentPages();
       const prevPage = pages[pages.length - 2]
-      this.birthdate= e.detail.value
-      prevPage.changeValue('birthdate', e.detail.value)
+      this.value= e.detail.value
+      prevPage.changeValue(this.key, e.detail.value)
       this.$apply();
     },
+    clearValue(){
+      this.value = '';
+      this.setParentValue(this.key, '');
+      this.$apply();
+    }
   };
 }
 </script>
