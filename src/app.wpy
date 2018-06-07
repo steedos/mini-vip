@@ -99,9 +99,11 @@ export default class VIP extends wepy.app {
       'pages/edit/lookup',
       'pages/edit/image',
       'pages/edit/number',
+      'pages/edit/location',
       'pages/admin/index',
       'pages/admin/qrcode',
-      'pages/member_benefits'
+      'pages/member_benefits',
+      'pages/consuming_records'
     ],
     tabBar: {
       color: '#666',

@@ -132,29 +132,6 @@
                   </view>
                 </view>
               </block>
-              <!--<block wx:elif="{{item.type === 'number'}}">-->
-              <!--<view class="weui-cell weui-cell_input">-->
-              <!--<view class="weui-cell__bd">{{item.label}}</view>-->
-              <!--<view class="weui-cell__ft">-->
-              <!--<input data-id="{{item.name}}" class="weui-input" type="number" bindchange="textChange"/>-->
-              <!--</view>-->
-              <!--</view>-->
-              <!--</block>-->
-              <block wx:elif="{{item.type === 'location'}}">
-                <view class="weui-cell" hover-class='weui-grid_active'>
-                  <view class="weui-cell__hd">
-                    <view class="weui-label">{{item.label}}</view>
-                  </view>
-                  <view class="weui-cell__bd">
-                    <view wx:if="{{showOpenSetting}}">
-                      <button open-type="openSetting" class="open-setting" hover-class="none" plain="true" @opensetting="openSetting">打开授权设置页</button>
-                    </view>
-                    <view wx:else class="weui-cell__ft"
-                          value="" @tap="getAddress" data-id="{{item.name}}">{{values[item.name] && values[item.name].address}}</view>
-                  </view>
-                  <view class="weui-cell__ft weui-cell__ft_in-access" wx:if="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}"></view>
-                </view>
-              </block>
               <block wx:else>
                 <view class='weui-cell weui-cell_access' hover-class='weui-grid_active' data-value="{{values[item.name]}}" data-edit="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}" @tap.stop="navigateTo({{item}})">
                   <block wx:if="{{item.type === 'textarea'}}">
@@ -196,6 +173,7 @@
 
       <view class="btn-container" wx:if="{{args.action === 'edit' || args.action === 'create'}}">
         <button class="submit-btn" form-type="submit" @tap="submitForm" disabled="{{submitDisabled}}">保存</button>
+        <button class="submit-btn" wx:if="{{args.action === 'edit' && schema.allowDelete}}" type="warn" @tap="removeRecord">删除</button>
       </view>
 
     </view>
@@ -532,7 +510,6 @@
       const value = _.clone(this.values)
       const fields = this.fields
       _.forEach(value, (v, k) => {
-        console.log('transformValue.....', fields[k])
         let field = fields[k];
         if (field.type === 'lookup' || field.type === 'master_detail') {
           if (field.multiple && _.isArray(v)){
@@ -579,6 +556,17 @@
         }
       }
       return true
+    }
+
+    goBack(action) {
+      const pages = getCurrentPages();
+      const prevPage = pages[pages.length - 2];
+      if (prevPage.refresh) {
+        prevPage.refresh(action)
+      }
+      wepy.navigateBack({
+        delta: 1
+      })
     }
 
     methods = {
@@ -705,6 +693,12 @@
           urls: this.data.files // 需要预览的图片http链接列表
         })
       },
+      async removeRecord() {
+        if (this.args.action === 'edit') {
+          await this.$parent.$parent.delete(this.args.object_name, this.args.record_id)
+        }
+        this.goBack("remove");
+      },
       async submitForm() {
         if (!this.checkRequired()) {
           return;
@@ -727,15 +721,7 @@
           const value = this.transformValue();
           await this.$parent.$parent.update(this.args.object_name, this.args.record_id, value)
         }
-
-        const pages = getCurrentPages();
-        const prevPage = pages[pages.length - 2];
-        if (prevPage.refresh) {
-          prevPage.refresh()
-        }
-        wepy.navigateBack({
-          delta: 1
-        })
+        this.goBack(this.args.action);
       },
       navigateTo(field, e){
         const dataset = e.currentTarget.dataset;
@@ -773,13 +759,20 @@
           case 'number':
             url = '/pages/edit/number';
             break;
+          case 'location':
+            url = '/pages/edit/location';
+            break;
         }
 
         if(!url){
           return ;
         }
         //给url上添加参数
-        url = `${url}?key=${field.name}&title=${field.label}&value=${(dataset.value || '')}`;
+        let value = dataset.value || ''
+        if (value.constructor === Object) {
+          value = JSON.stringify(dataset.value)
+        }
+        url = `${url}?key=${field.name}&title=${field.label}&value=${value}`;
         if(field.multiple){
           url = `${url}&multiple=${field.multiple}`
         }

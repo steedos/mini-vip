@@ -94,7 +94,7 @@ export default class QRCode extends wepy.page {
     else{
       const url = '/api/steedos/weixin/code';
       const data = {
-        path:"pages/space/index?store_id=" + store_id,
+        path:"pages/space/index?space_id=" + store_id,
         width:430,
         store_id: store_id
       };

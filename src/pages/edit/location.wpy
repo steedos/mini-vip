@@ -1,0 +1,91 @@
+<style lang="less">
+  .ion {
+    color: #09bb07;
+  }
+  .weui-textarea {
+    height:3.3em;
+  }
+</style>
+
+<template>
+<view class="page">
+  <view class="weui-btn-area">
+    <button data-id="{{key}}" class="weui-btn" type="primary" bindtap="getAddress">选择位置</button>
+  </view>
+  <view class="page__bd">
+    <view class="weui-cells">
+      <view class="weui-cell">
+        <view class="weui-cell__bd">
+          <textarea data-id="{{key}}" class="weui-textarea" auto-focus="true" value="{{value.address}}" data-id="{{key}}" bindinput="textChange"></textarea>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import req from '@/network';
+import { serverAPI } from '@/server';
+
+export default class Location extends wepy.page {
+  config = {
+    navigationBarTitleText: '编辑'
+  }
+
+  data = {
+    key: '',
+    value: ''
+  }
+
+  onLoad(e) {
+    console.log('location', e)
+
+    this.key = e.key;
+    this.value = JSON.parse(e.value)
+
+    this.$apply()
+
+    if (e.title) {
+      wx.setNavigationBarTitle({title: '编辑' + e.title});
+    }
+  }
+
+  setParentValue(key, value) {
+    const pages = getCurrentPages();
+    const prevPage = pages[pages.length - 2];
+    prevPage.changeValue(key, value)
+  }
+
+  methods = {
+    getAddress(e) {
+      self = this;
+      const key = e.target.dataset.id;
+      wepy.chooseLocation().then(res => {
+        if (!self.value) {
+          self.value = {}
+        }
+        self.value.address = res.address;
+        self.value.latitude = res.latitude;
+        self.value.longitude = res.longitude;
+        self.setParentValue(key, self.value)
+        self.$apply();
+      }).catch(err => {
+        console.log(err)
+        if (err.errMsg == 'chooseLocation:fail auth deny') {
+          self.showOpenSetting = true
+          self.$apply()
+        }
+      });
+    },
+    textChange(e) {
+      console.log('textChange=======', e)
+      const key = e.target.dataset.id
+      this.value.address = e.detail.value
+      this.setParentValue(key, this.value)
+    }
+  }
+}
+  
+</script>

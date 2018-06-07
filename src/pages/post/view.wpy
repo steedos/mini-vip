@@ -149,7 +149,11 @@ export default class View extends wepy.page {
     wepy.hideLoading();
   }
 
-  async refresh() {
+  async refresh(action) {
+    if(action == "remove"){
+      this.goBackAfterRemove();
+      return;
+    }
     await this.loadPost();
     wepy.stopPullDownRefresh();
   }
@@ -160,6 +164,17 @@ export default class View extends wepy.page {
     this.space_id = post.space;
     this.$apply();
   };
+
+  goBackAfterRemove() {
+    const pages = getCurrentPages();
+    const prevPage = pages[pages.length - 3];
+    if (prevPage.refresh) {
+      prevPage.refresh()
+    }
+    wepy.navigateBack({
+      delta: 1
+    })
+  }
 
   // 分享
   onShareAppMessage(res) {
