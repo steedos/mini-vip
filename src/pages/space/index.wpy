@@ -106,7 +106,7 @@ page {
               <view class="weui-grid__label">加入会员</view>
             </navigator>
           </block>
-          <navigator url="../post/index{{is_space_owner ? '?editable=' : ''}}" class="weui-grid" hover-class="weui-grid_active">
+          <navigator url="../post/index{{is_space_owner ? '?editable=true' : ''}}" class="weui-grid" hover-class="weui-grid_active">
             <view class="slds-icon-standard-contract weui-grid__icon slds-icon">
               <view class="need_read1"></view>
             </view>
