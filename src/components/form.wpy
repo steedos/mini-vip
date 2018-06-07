@@ -125,7 +125,7 @@
                 <!--</view>-->
               <!--</view>-->
             <!--</block>-->
-            <block wx:elif="{{item.type === 'location'}}">
+            <!-- <block wx:elif="{{item.type === 'location'}}">
               <view class="weui-cell" hover-class='weui-grid_active'>
                 <view class="weui-cell__hd">
                   <view class="weui-label">{{item.label}}</view>
@@ -139,7 +139,7 @@
                 </view>
                 <view class="weui-cell__ft weui-cell__ft_in-access" wx:if="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}"></view>
               </view>
-            </block>
+            </block> -->
             <block wx:else>
               <view class='weui-cell weui-cell_access' hover-class='weui-grid_active' data-value="{{values[item.name]}}" data-edit="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}" @tap.stop="navigateTo({{item}})">
                 <block wx:if="{{item.type === 'textarea'}}">
@@ -733,13 +733,20 @@
           case 'number':
             url = '/pages/edit/number';
             break;
+          case 'location':
+            url = '/pages/edit/location';
+            break;
         }
 
         if(!url){
           return ;
         }
         //给url上添加参数
-        url = `${url}?key=${field.name}&title=${field.label}&value=${(dataset.value || '')}`;
+        let value = dataset.value || ''
+        if (value.constructor === Object) {
+          value = JSON.stringify(dataset.value)
+        }
+        url = `${url}?key=${field.name}&title=${field.label}&value=${value}`;
         if(field.multiple){
           url = `${url}&multiple=${field.multiple}`
         }
