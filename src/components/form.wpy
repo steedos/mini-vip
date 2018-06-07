@@ -532,11 +532,11 @@
       return true
     }
 
-    goBack() {
+    goBack(action) {
       const pages = getCurrentPages();
       const prevPage = pages[pages.length - 2];
       if (prevPage.refresh) {
-        prevPage.refresh()
+        prevPage.refresh(action)
       }
       wepy.navigateBack({
         delta: 1
@@ -671,7 +671,7 @@
         if (this.args.action === 'edit') {
           await this.$parent.$parent.delete(this.args.object_name, this.args.record_id)
         }
-        this.goBack();
+        this.goBack("remove");
       },
       async submitForm() {
         if (!this.checkRequired()) {
@@ -695,7 +695,7 @@
           const value = this.transformValue();
           await this.$parent.$parent.update(this.args.object_name, this.args.record_id, value)
         }
-        this.goBack();
+        this.goBack(this.args.action);
       },
       navigateTo(field, e){
         const dataset = e.currentTarget.dataset;
