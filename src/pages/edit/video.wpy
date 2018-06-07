@@ -1,11 +1,16 @@
 <style lang="less">
-
+  .video {
+    display:block;
+    margin:0 auto;
+  }
 </style>
 
 <template>
-  <view class="container">
-    <video src="{{value}}"></video>
-    <button bindtap="bindButtonTap">获取视频</button>
+  <view class="page__bd">
+    <video class="video" src="{{value}}"></video>
+    <view class="weui-btn-area">
+      <button data-id="{{key}}" bindtap="bindButtonTap" class="weui-btn" type="primary">上传视频</button>
+    </view>
   </view>
 </template>
 
