@@ -162,7 +162,7 @@ function transformFieldValue(field, value){
 
 
 module.exports = {
-  datefmt: formatDate,
+  formatDate: formatDate,
   formatImageUrl: formatImageUrl,
   formatAvatarImageUrl: formatAvatarImageUrl,
   formatCardBgImageUrl: formatCardBgImageUrl,

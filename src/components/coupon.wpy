@@ -77,7 +77,7 @@
           <text>满{{min_consumption}}元可用</text>
         </view>
         <view class="coupon-validity">
-          <text>{{util.datefmt(start_time)}}</text> <text>{{util.datefmt(end_time)}}</text>
+          <text>{{util.formatDate(start_time)}}</text> <text>{{util.formatDate(end_time)}}</text>
         </view>
       </view>
     </view>
