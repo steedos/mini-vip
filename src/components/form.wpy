@@ -179,6 +179,7 @@
 
       <view class="btn-container" wx:if="{{args.action === 'edit' || args.action === 'create'}}">
         <button class="submit-btn" form-type="submit" @tap="submitForm" disabled="{{submitDisabled}}">保存</button>
+        <button class="submit-btn" wx:if="{{args.action === 'edit' && schema.allowDelete}}" type="warn" @tap="removeRecord">删除</button>
       </view>
 
     </view>
@@ -531,6 +532,17 @@
       return true
     }
 
+    goBack() {
+      const pages = getCurrentPages();
+      const prevPage = pages[pages.length - 2];
+      if (prevPage.refresh) {
+        prevPage.refresh()
+      }
+      wepy.navigateBack({
+        delta: 1
+      })
+    }
+
     methods = {
       openSetting(e){
         self = this;
@@ -655,6 +667,12 @@
           urls: this.data.files // 需要预览的图片http链接列表
         })
       },
+      async removeRecord() {
+        if (this.args.action === 'edit') {
+          await this.$parent.$parent.delete(this.args.object_name, this.args.record_id)
+        }
+        this.goBack();
+      },
       async submitForm() {
         if (!this.checkRequired()) {
           return;
@@ -677,15 +695,7 @@
           const value = this.transformValue();
           await this.$parent.$parent.update(this.args.object_name, this.args.record_id, value)
         }
-
-        const pages = getCurrentPages();
-        const prevPage = pages[pages.length - 2];
-        if (prevPage.refresh) {
-          prevPage.refresh()
-        }
-        wepy.navigateBack({
-          delta: 1
-        })
+        this.goBack();
       },
       navigateTo(field, e){
         const dataset = e.currentTarget.dataset;
