@@ -10,7 +10,7 @@
 <template>
   <view class="datetime">
     <view class="weui-cell weui-cell_input">
-      <view class="weui-cell__hd">
+      <view class="weui-cell__hd" style="min-width: 85px">
         <picker mode="date" value="{{date}}" bindchange="bindDateChange" placeholder="请选择日期">
           <view class="weui-input">{{date}}</view>
         </picker>
@@ -19,6 +19,9 @@
         <picker mode="time" value="{{time}}" bindchange="bindTimeChange">
           <view class="weui-input">{{time}}</view>
         </picker>
+      </view>
+      <view class="weui-cell__ft">
+        <icon type="clear" size="20" color="red" @tap.stop='clearValue'/>
       </view>
     </view>
   </view>
@@ -72,12 +75,18 @@
 
     methods = {
       bindDateChange(e) {
-        this.date = e.detail.value
+        this.date = e.detail.value;
         this.setParentValue(this.key, this.date + ' ' + this.time)
       },
       bindTimeChange(e) {
         this.time = e.detail.value
         this.setParentValue(this.key, this.date + ' ' + this.time)
+      },
+      clearValue(){
+        this.time = '';
+        this.date = '';
+        this.setParentValue(this.key, '');
+        this.$apply();
       }
     }
   }
