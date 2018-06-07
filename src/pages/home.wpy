@@ -59,7 +59,7 @@ page {
   <scroll-view class="scroll-view_H" scroll-y="true">
     <view class="header">
       <view class="background">
-        <image src="../images/bg.png" class="bg-img" />
+        <image src="../images/empty.png" class="bg-img" />
         <view class="operate">
           <block>
             <text class="icon slds-icon-search"></text>
