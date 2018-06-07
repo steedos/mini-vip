@@ -82,7 +82,7 @@ export default class AdminIndex extends wepy.page {
     store_info: {},
     is_loaded: false,
     options: [
-      {title: '门店', icon:'standard-address', url: '../record/list?object_name=vip_store'},
+      // {title: '门店', icon:'standard-address', url: '../record/list?object_name=vip_store'},
       {title: '文章', icon:'standard-contract', url: '../record/list?object_name=post'},
       {title: '卡项', icon:'standard-work-type', url: '../record/list?object_name=vip_category'},
       // {title: '会员卡', icon:'standard-scan-card', url: '../record/list?object_name=vip_card'},
