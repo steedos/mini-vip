@@ -1,0 +1,74 @@
+<style lang="less">
+.page{
+  margin-left:15px;
+  margin-right:15px;
+}
+.weui-form-preview__item{
+  width: 80%;
+}
+</style>
+<template>
+  <view class="page__bd">
+    <block wx:if="{{records.value.length > 0}}">
+      <!-- <repeat for="{{records.value}}" key="records" index="index" item="record">
+        <view class="weui-cells">
+          <view class="weui-form-preview">
+            <view class="weui-form-preview__bd">
+                <view class="weui-form-preview__item">
+                  <view class="weui-form-preview__label">特权说明</view>
+                  <text class="weui-form-preview__value">{{record.name}}</text>
+                </view>
+                <view class="weui-form-preview__item">
+                  <view class="weui-form-preview__label">有效日期</view>
+                  <view class="weui-form-preview__value">{{record.valid_period}}天</view>
+                </view>
+                <view class="weui-form-preview__item">
+                  <view class="weui-form-preview__label">使用须知</view>
+                  <text class="weui-form-preview__value">{{record.instruction}}</text>
+                </view>
+            </view>
+          </view>
+        </view>
+      </repeat> -->
+      <scroll-view class="scroll-view_H" scroll-y="true">
+        <view class="weui-form-preview">
+          <repeat for="{{records.value}}" key="records" index="index" item="record">
+            <view class="weui-form-preview__bd weui-form-preview__ft">
+              <view class="weui-form-preview__item line-height_item">
+                <view class="weui-form-preview__label font-size_label">{{record.name}}</view>
+                <view class="weui-form-preview__label font-size_label">{{record.created}}</view>
+              </view>
+              <view class="weui-form-preview__value">{{record.amount}}</view>
+            </view>
+          </repeat>
+        </view>
+      </scroll-view>
+    </block>
+    <block wx:else>
+      <view class="weui-loadmore weui-loadmore_line">
+        <view class="weui-loadmore__tips weui-loadmore__tips_in-line">暂无消费记录</view>
+      </view>
+    </block>
+  </view>
+</template>
+<script>
+import wepy from 'wepy';
+import req from '@/network';
+import { serverAPI } from '@/server';
+
+export default class ConsumingRecords extends wepy.page {
+  config = {
+    navigationBarTitleText: '消费记录'
+  };
+  async onLoad(e) {
+    console.log("=====eeeeeeeeeeeeeeeee=",e)
+    this.records = await this.$parent.query('vip_order',e.card_id)
+    this.$apply();
+    console.log("=====333=",this.records.value)
+  };
+  data = {
+    records:{
+    },
+  };
+}
+</script>
