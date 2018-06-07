@@ -174,10 +174,11 @@ export default class Posts extends wepy.page {
     wepy.hideLoading();
   }
 
-  refresh() {
+  async refresh() {
     this.posts = [];
     this.current_skip = 0;
-    this.loadPostList();
+    await this.loadStoreInfo();
+    await this.loadPostList();
   }
 
   components = {
