@@ -50,7 +50,7 @@ page {
   <view class="page" wx:if="{{is_loaded}}">
     <view class="page__bd">
       <scroll-view class="scroll-view_H" scroll-y="true">
-        <postList :list.sync="posts" />
+        <postList :list.sync="posts" :editable.sync="is_editable" />
       </scroll-view>
     </view>
     <view class="tab-bar" wx:if="{{is_editable}}">

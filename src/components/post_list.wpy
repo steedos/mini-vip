@@ -100,8 +100,6 @@ import { demoSpaceId,demoStoreId } from '@/config'
 import util from '../wxs/util.wxs'
 
 export default class PostList extends wepy.component {
-  onLoad() {
-  }
 
   props = {
     isHeaderShow: {
@@ -111,6 +109,10 @@ export default class PostList extends wepy.component {
     list: {
       type: Array,
       default: []
+    },
+    editable: {
+      type: Boolean,
+      default: false
     }
   }
 
@@ -126,8 +128,14 @@ export default class PostList extends wepy.component {
 
   methods = {
     goDetail(post_id, event){
+      let url = `../post/view?post_id=${post_id}`;
+      if(this.editable){
+        url += '&editable=true'
+      }
+      console.log("goDetail=====================");
+      console.log(url);
       wx.navigateTo({
-        url: `../post/view?post_id=${post_id}`
+        url: url
       });
     },
     previewImage(images, event){
