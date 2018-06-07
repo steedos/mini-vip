@@ -1,0 +1,74 @@
+<style lang="less">
+  .video {
+    display:block;
+    margin:0 auto;
+  }
+</style>
+
+<template>
+  <view class="page__bd">
+    <video class="video" src="{{value}}"></video>
+    <view class="weui-btn-area">
+      <button data-id="{{key}}" bindtap="bindButtonTap" class="weui-btn" type="primary">上传视频</button>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import {baseUrl} from '@/config';
+  import util from '../../wxs/util.wxs'
+
+  const utilJs = require('../../utils/util.js');
+  
+  export default class Video extends wepy.page {
+    data = {
+      value: '',
+      key: '',
+      baseUrl: baseUrl
+    }
+
+    wxs = {
+      util: util
+    }
+
+    onLoad(e) {
+      console.log('video.........', e)
+      if (e.key) {
+        this.key = e.key
+      }
+
+      if (e.title) {
+        wx.setNavigationBarTitle({title: '编辑' + e.title});
+      }
+
+      if (e.value){
+        this.value = utilJs.formatVideoUrl(e.value, this.baseUrl)
+      }
+
+      this.$apply();
+    }
+
+    setParentValue(key, value){
+      const pages = getCurrentPages();
+      const prevPage = pages[pages.length - 2];
+
+      prevPage.changeValue(key, value)
+    }
+
+    methods = {
+      async bindButtonTap() {
+        const options = {
+          sourceType: ['album','camera'],
+          maxDuration: 60,
+          camera: 'back'
+        }
+        const res = await wepy.chooseVideo(options)
+        this.value = utilJs.formatVideoUrl(res.tempFilePath, this.baseUrl)
+        this.$apply()
+        console.log(res)
+        this.setParentValue(this.key, this.value);
+      }
+    }
+  }
+</script>

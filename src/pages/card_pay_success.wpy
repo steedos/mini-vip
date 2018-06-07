@@ -40,12 +40,13 @@ export default class CardPaySuccess extends wepy.page {
     console.log(e);
     this.payValue = e.payValue;
     this.store_name = e.store_name;
+    this.cardId = e.card_id;
   }
 
   methods = {
     back(e) {
-      wx.navigateBack({
-        delta: 2
+      wx.navigateTo({
+        url: 'card?card_id=' + this.cardId
       });
     }
   };

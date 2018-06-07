@@ -150,7 +150,9 @@ export default class CardPay extends wepy.page {
                 'card_pay_success?payValue=' +
                 that.payValue +
                 '&store_name=' +
-                that.store_name
+                that.store_name +
+                '&card_id=' +
+                that.cardId
             });
           } else if (res.errors) {
             wx.navigateTo({
@@ -200,7 +202,9 @@ export default class CardPay extends wepy.page {
                         'card_pay_success?payValue=' +
                         amount +
                         '&store_name=' +
-                        that.store_name
+                        that.store_name +
+                        '&card_id=' +
+                        that.cardId
                     });
                   },
                   fail: function(msg) {
