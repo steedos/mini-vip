@@ -84,9 +84,6 @@ video{
       <view class="weui-article__h1">{{post.name}}</view>
       <view class="weui-article__section">
         <view class="weui-article__section">
-          <view class="weui-article__h3">
-            <text space="emsp">{{post.summary}}</text> 
-          </view>
           <view class="weui-article__p">
             <text space="emsp">{{post.description}}</text>
           </view>
