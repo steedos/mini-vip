@@ -36,7 +36,7 @@ page{
   <view class="page">
     <view class="qrcode_bd">
       <block wx:if="{{imgCodeUrl}}">
-        <image class="qrcode" mode="aspectFill" src="{{util.formatImageUrl(imgCodeUrl, baseUrl)}}"/>
+        <image class="qrcode" mode="aspectFill" src="{{util.formatImageUrl(imgCodeUrl, baseUrl)}}" @tap="previewImage({{imgCodeUrl}})"/>
       </block>
       <block wx:else>
         <text class="qrtext">二维码获取失败</text>
@@ -103,6 +103,18 @@ export default class QRCode extends wepy.page {
         this.imgCodeUrl = res;
         this.$apply();
       }
+    }
+  }
+  methods = {
+    previewImage(image, event){
+      var baseUrl = this.baseUrl;
+      var current = `${baseUrl}/api/files/images/${image}`;
+      var urls = []
+      urls.push(`${baseUrl}/api/files/images/${image}`)
+      wx.previewImage({
+        current: current,
+        urls: urls
+      });
     }
   }
 }
