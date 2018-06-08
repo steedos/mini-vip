@@ -840,6 +840,9 @@
           case 'number':
             url = '/pages/edit/number';
             break;
+          case 'currency':
+            url = '/pages/edit/number';
+            break;
           case 'location':
             url = '/pages/edit/location';
             break;
