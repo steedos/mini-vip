@@ -1,0 +1,91 @@
+<style lang="less">
+
+</style>
+
+<template>
+	<view class="page" wx:if="{{is_loaded}}">
+    <view class="page__bd">
+      <scroll-view class="scroll-view_H" scroll-y="true">
+        <postList :list.sync="posts"/>
+      </scroll-view>
+    </view>
+  </view>
+</template>
+
+<script>
+	import wepy from 'wepy';
+	import postList from '../../components/post_list';
+
+	const DATA_LENGTH = 10;
+  export default class HomePost extends wepy.page {
+		config = {
+      navigationBarTitleText: '最新动态',
+      enablePullDownRefresh: true
+    };
+
+		components = {
+			postList: postList
+		}
+
+		data = {
+			is_loaded: false,
+			current_skip: 0,
+			allow_load: true,
+			posts: []
+		}
+
+		async onLoad() {
+			wepy.showLoading({
+				title: '加载中',
+				mask: true
+			});
+			await this.$parent.login();
+			await this.loadPost();
+			this.is_loaded = true;
+			this.$apply();
+			wepy.hideLoading();
+		}
+
+		onPullDownRefresh() {
+			this.refresh();
+		}
+
+		onReachBottom() {
+			this.loadPost();
+		}
+
+		refresh() {
+			this.posts = [];
+			this.allow_load = true;
+			this.current_skip = 0;
+			this.loadPost();
+		}
+
+		async loadPost() {
+			const skip = this.current_skip;
+
+			if (this.allow_load) {
+				const options = {
+					$filter: 'featured eq true',
+					$expand: 'owner($select=name)',
+					$count: true,
+					$select: 'name,summary,description,comment_count,enable_comment,images,video,audio,type,mini_type,space',
+					$skip: skip,
+					$top: DATA_LENGTH
+				}
+
+				const res = await this.$parent.query('post', options, 'common')
+				if (res.value) {
+					this.posts = this.posts.concat(res.value)
+				}
+				this.current_skip = skip + res.value.length
+
+				if (this.current_skip ===  res['@odata.count']) {
+					this.allow_load = false
+				}
+				this.$apply()
+				wx.stopPullDownRefresh();
+			}
+		}
+	}
+</script>

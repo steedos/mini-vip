@@ -71,7 +71,7 @@
             </block>
           </block>
         </view>
-        <view class="post-body weui-cells" @tap="goDetail({{post._id}})">
+        <view class="post-body weui-cells" @tap="goDetail({{post._id}}, {{post.space}})">
           <view class="weui-cell weui-cell_access">
             <view class="weui-cell__bd">
               <view class="post-name">{{post.name}}</view>
@@ -127,8 +127,8 @@ export default class PostList extends wepy.component {
   };
 
   methods = {
-    goDetail(post_id, event){
-      let url = `../post/view?post_id=${post_id}`;
+    goDetail(post_id, space_id,event){
+      let url = `../post/view?post_id=${post_id}&space_id=${space_id}`;
       if(this.editable){
         url += '&editable=true'
       }

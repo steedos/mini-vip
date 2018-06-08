@@ -25,6 +25,16 @@
   .image {
     display: block;
   }
+  .weui-grids {
+    background: #fff;
+  }
+  .support {
+    border: none;
+    border-right:1rpx solid #d9d9d9;
+    border-bottom:1rpx solid #d9d9d9;
+    border-radius: 0;
+    line-height: inherit;
+  }
 }
 .page__bd_mycard{
   font-weight: 200;
@@ -80,63 +90,20 @@
 
 <template>
   <view class="page-index" wx:if="{{is_loaded}}">
-  <!--
-		<view class="page__hd">
-      <view class="page__hd_bg">
-        <view class="page__hd_spacing">
-          <view class="weui-flex weui-flex-title">
-            <view class="weui-flex__item"><view class="placeholder">会员卡</view></view>
-            <view class="weui-flex__item"><view class="placeholder">优惠券</view></view>
-          </view>
-          <view class="weui-flex weui-flex-content">
-            <view class="weui-flex__item"><view class="placeholder">{{card_count}}</view></view>
-            <view class="weui-flex__item"><view class="placeholder">0</view></view>
-          </view>
-        </view>
-      </view>
-    </view>
-  -->
 
     <view class="page__bd">
-      <block wx:if="{{card_count > 0}}">
-        <view class="weui-cells__title page__bd_mycard">我的会员卡</view>
-        <view class="weui-cells weui-cells_after-title">
-          <repeat for="{{cards}}" key="index" index="index" item="card">
-            <navigator url="card?card_id={{card._id}}&space_id={{card.space}}" class="weui-cell weui-cell_access weui-cell_access_card">
-              <view class="weui-cell__hd">
-                <image wx:if="{{card.avatar}}" class="image slds-icon slds-icon--small slds-m-right--x-small" mode="aspectFill" src="{{util.formatImageUrl(card.avatar, baseUrl)}}"/>
-                <view wx:else class="slds-icon-standard-opportunity slds-icon slds-icon--small slds-m-right--x-small"/>
-              </view>
-              <view class="weui-cell__bd">
-                <view class="card-name">{{card.name}}</view>
-              </view>
-              <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-            </navigator>
-          </repeat>
-
-          <view wx:if="{{card_count > 10}}" class="weui-cells weui-cells_after-title">
-            <navigator url="card?_id={{card._id}}" class="weui-cell weui-cell_access">
-              <view class="weui-cell__bd">
-                <text  class="btn-view-all">查看全部</text>
-              </view>
-              <view class="weui-cell__ft weui-cell__ft_in-access">{{card_count}}</view>
-            </navigator>
-          </view>
-        </view>
-      </block>
-
-      <view class="weui-cells">
-        <navigator url="./space/paid_list" class="weui-cell weui-cell_access">
-          <view class="weui-cell__hd">
-            <view class="slds-icon-standard-topic slds-icon slds-icon--small slds-m-right--x-small"/>
-          </view>
-          <view class="weui-cell__bd">
-            <view>示范企业</view>
-          </view>
-          <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-        </navigator>
+      <view class="weui-grids">
+        <repeat for="{{options}}" index="index" key="index" item="option">
+          <navigator url="{{option.url}}" class="weui-grid" hover-class="weui-grid_active">
+            <view class="slds-icon-{{option.icon}} weui-grid__icon slds-icon"></view>
+            <view class="weui-grid__label">{{option.label}}</view>
+          </navigator>
+        </repeat>
+        <button open-type="contact" plain="true" class="weui-grid support" hover-class="weui-grid_active">
+          <view class="slds-icon-standard-call weui-grid__icon slds-icon"></view>
+          <view class="weui-grid__label">在线客服</view>
+        </button>
       </view>
-
     </view>
 
   </view>
@@ -144,11 +111,6 @@
 
 <script>
   import wepy from 'wepy';
-  import req from '@/network';
-  import { serverAPI } from '@/server';
-  import { demoSpaceId,demoStoreId } from '@/config';
-  import { baseUrl } from '@/config';
-  import util from '../wxs/util.wxs'; 
 
   export default class User extends wepy.page {
     config = {
@@ -156,60 +118,17 @@
       enablePullDownRefresh: true
     };
 
-    getCardUrl() {
-      console.log('getCardUrl', this._id);
-      return 'card';
-    }
-
     data = {
-      hasUserInfo: false,
-      canIUse: wx.canIUse('button.open-type.getUserInfo'),
-      coupon: {
-        count: 8
-      },
-      order: {
-        count: 76
-      },
-      cards: [],
-      card_count: 0,
-      allBalance: 0,
-      demoSpaceId: demoSpaceId,
-      demoStoreId: demoStoreId,
-      baseUrl: baseUrl,
-      is_loaded: false
-    };
-
-    wxs = {
-      util: util
+      is_loaded: false,
+      options: [
+        {label: '最新动态', url: 'home/post', icon: 'standard-contract'},
+        {label: '最新活动', url: 'home/event', icon: 'standard-event'},
+        {label: '入驻企业', url: 'home/store', icon: 'standard-topic'},
+      ]
     };
 
     async onPullDownRefresh() {
-      await this.loadUserCard();
-      wepy.stopPullDownRefresh();
-    }
-
-    async loadUserCard() {
-      const options = {
-        $expand: 'space($select=name),card_name($select=name,avatar)',
-        $count: true,
-        $select: 'name,card_number,grade,balance,space,card_name',
-        $filter: `(owner eq '${this.$parent.globalData.user._id}' and is_actived eq true)`
-      }
-      const result = await this.$parent.query('vip_card', options, 'common');
-      let allBalance = 0.00;
-      this.cards = [];
-      result.value.forEach((card)=> {
-        allBalance = allBalance + card.balance;
-        let name = card.space.name;
-        if(card.card_name && card.card_name.name){
-          name = card.card_name.name;
-          const avatar = card.card_name.avatar
-          this.cards.push({_id: card._id, card_number: card.card_number, grade: card.grade, name: name, space: card.space._id, avatar: avatar});
-        }
-      })
-      this.allBalance = allBalance;
-      this.card_count = result['@odata.count'];
-      this.$apply();
+      
     }
 
     async onLoad() {
@@ -218,7 +137,6 @@
         mask: true
       });
       await this.$parent.login();
-      await this.loadUserCard();
       this.is_loaded = true;
       this.$apply()
       wepy.hideLoading();

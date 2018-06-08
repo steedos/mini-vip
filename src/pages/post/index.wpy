@@ -154,7 +154,7 @@ export default class Posts extends wepy.page {
     const options = {
       $expand: 'owner($select=name)',
       $count: true,
-      $select: 'name,summary,description,comment_count,enable_comment,images,video,audio,type,mini_type',
+      $select: 'name,summary,description,comment_count,enable_comment,images,video,audio,type,mini_type,space',
       $skip: skip,
       $top: DATA_LENGTH
     };
