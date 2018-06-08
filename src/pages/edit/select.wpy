@@ -100,18 +100,29 @@
 
     methods = {
       selectChange: function (e) {
-        const values = e.detail.value, key = e.target.dataset.id;
+        let values = [];
+        const chooseOptions = e.detail.value 
+        const key = e.target.dataset.id;
         let checkboxItems = this.options
         for (let i = 0, lenI = checkboxItems.length; i < lenI; ++i) {
           checkboxItems[i].checked = false;
 
-          for (let j = 0, lenJ = values.length; j < lenJ; ++j) {
-            if (checkboxItems[i].value == values[j]) {
+          for (let j = 0, lenJ = chooseOptions.length; j < lenJ; ++j) {
+            if (checkboxItems[i].value == chooseOptions[j]) {
               checkboxItems[i].checked = true;
               break;
             }
           }
         }
+
+        this.options.forEach((option) => {
+          const v = option.value
+          if (chooseOptions && chooseOptions.includes(v)) {
+            values.push(v)
+          }
+        })
+
+        console.log('selectChange.......', values)
         this.setParentValue(key, values)
       },
       radioChange: function (e) {
