@@ -43,7 +43,11 @@ export default class Location extends wepy.page {
     console.log('location', e)
 
     this.key = e.key;
-    this.value = JSON.parse(e.value)
+    if (e.value) {
+      this.value = JSON.parse(e.value)
+    } else {
+      this.value = {}
+    }
 
     this.$apply()
 
