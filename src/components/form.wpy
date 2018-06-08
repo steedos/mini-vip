@@ -154,7 +154,7 @@
                       <textarea class="weui-textarea-input" data-id="{{item.name}}" placeholder="{{item.label}}" value="{{util.transformFieldValue(item, values[item.name])}}" auto-height="true" bindinput="textChange"/>
                     </block>
                     <block wx:else>
-                      <view class="weui-cell__ft wide-cell">{{util.transformFieldValue(item, values[item.name])}}</view>
+                      <view class="weui-cell__ft wide-cell">{{util.transformFieldValue(item, values[item.name]) || item.label}}</view>
                     </block>
                   </view>
                 </view>
@@ -168,7 +168,7 @@
                           <textarea class="weui-textarea" data-id="{{item.name}}" placeholder="{{item.label}}" value="{{util.transformFieldValue(item, values[item.name])}}" auto-height="true" bindinput="textChange" maxlength="-1"/>
                         </block>
                         <block wx:else>
-                          <view class="weui-cell__ft wide-cell">{{util.transformFieldValue(item, values[item.name])}}</view>
+                          <view class="weui-cell__ft wide-cell">{{util.transformFieldValue(item, values[item.name]) || item.label}}</view>
                         </block>
                       </view>
                     </block>
