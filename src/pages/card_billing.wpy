@@ -1,38 +1,41 @@
 <!-- 消费记录 -->
 <style lang="less">
-page {
-  height: 100%;
-  .scroll-view_H {
-    height: 100%;
-  }
-  .line-height_item {
-    line-height: 2.5em;
-  }
-  .font-size_label {
-    font-size: 17px;
-  }
-  .color_value {
-    color: #000;
-  }
+.font_title{
+  font-size: 12pt;
+  font-weight: bolder;
+  color:black;
+}
+.font_body{
+  color:#999;
+  font-size: 9pt;
+}
+.weui-loadmore__tips_in-line{
+  background-color: #F5F5F7;
 }
 </style>
 <template>
   <scroll-view class="scroll-view_H" scroll-y="true">
-    <view class="weui-form-preview">
-      <repeat for="{{bills}}" key="index" index="index" item="item">
-        <view class="weui-form-preview__bd">
-            <view class="weui-form-preview__item line-height_item">
-                <view class="weui-form-preview__label font-size_label">{{item.description}}</view>
-                <view class="weui-form-preview__value_in-hd color_value">￥ {{item.amount}}</view>
+    <block wx:if="{{bills.length > 0}}">
+      <view class="weui-form-preview">
+        <repeat for="{{bills}}" key="index" index="index" item="item">
+          <view class="weui-cell">
+            <view class="weui-cell__bd">
+              <view class="font_title">{{item.description}}</view>
+              <view class="font_body">{{item.created}}</view>
             </view>
-            <view class="weui-form-preview__item">
-                <view class="weui-form-preview__label font-size_label">{{item.created}}</view>
-                <view class="weui-form-preview__value">钱包余额：{{item.balance}}元</view>
+            <view class="weui-cell__bd">
+              <view class="weui-cell__ft font_title">{{item.amount}}</view>
+              <view class="weui-cell__ft">钱包余额：{{item.balance}}元</view>
             </view>
-        </view>
-        <view class="weui-form-preview__ft"></view>
-      </repeat>
-    </view>
+          </view>
+        </repeat>
+      </view>
+    </block>
+    <block wx:else>
+      <view class="weui-loadmore weui-loadmore_line">
+        <view class="weui-loadmore__tips weui-loadmore__tips_in-line">暂无余额明细</view>
+      </view>
+    </block>
   </scroll-view>
 </template>
 <script>
@@ -74,7 +77,7 @@ export default class CardBilling extends wepy.page {
         });
         that.bills = res.value;
         that.$apply();
-        console.log(that.bills);
+        console.log("=============",that.bills.length);
       }
     });
   }
