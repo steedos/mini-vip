@@ -154,7 +154,7 @@
                   <block wx:if="{{item.type === 'textarea'}}">
                     <block wx:if="{{item.is_wide}}">
                       <view class="weui-cell__bd">
-                        <textarea class="weui-textarea" data-id="{{item.name}}" placeholder="{{item.label}}" value="{{util.transformFieldValue(item, values[item.name])}}" auto-height="true" bindinput="textChange" maxlength=-1/>
+                        <textarea class="weui-textarea" data-id="{{item.name}}" placeholder="{{item.label}}" value="{{util.transformFieldValue(item, values[item.name])}}" auto-height="true" bindinput="textChange" maxlength="-1"/>
                       </view>
                     </block>
                     <block wx:else>
