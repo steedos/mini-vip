@@ -122,8 +122,8 @@
       is_loaded: false,
       options: [
         {label: '最新动态', url: 'home/post', icon: 'standard-contract'},
-        {label: '最新活动', url: 'home/event', icon: 'standard-event'},
-        {label: '入驻企业', url: 'home/store', icon: 'standard-topic'},
+        // {label: '最新活动', url: 'home/event', icon: 'standard-event'},
+        {label: '推荐企业', url: 'home/store', icon: 'standard-topic'},
       ]
     };
 

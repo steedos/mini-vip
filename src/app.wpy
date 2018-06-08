@@ -107,6 +107,7 @@ export default class VIP extends wepy.app {
       'pages/member_benefits',
       'pages/consuming_records',
       'pages/home/post',
+      'pages/home/store',
     ],
     tabBar: {
       color: '#666',

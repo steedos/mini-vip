@@ -1,0 +1,104 @@
+<style lang="less">
+	.image {
+		display: block;
+	}
+</style>
+
+<template>
+	<view class="page" wx:if="{{is_loaded}}">
+    <view class="page__bd">
+			<view class="weui-cells weui-cells_after-title">
+				<repeat for="{{stores}}" key="index" index="index" item="store">
+					<navigator class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+						<view class="weui-cell__hd">
+              <image wx:if="{{store.avatar}}" class="image slds-icon slds-icon--small slds-m-right--x-small" src="{{util.formatImageUrl(store.avatar, baseUrl)}}"></image>
+							<view wx:else class="slds-icon-standard-account slds-icon slds-icon--small slds-m-right--x-small"/>
+            </view>
+						<view class="weui-cell__bd">{{store.name}}</view>
+						<view class="weui-cell__ft weui-cell__ft_in-access"></view>
+					</navigator>
+				</repeat>
+			</view>
+		</view>
+  </view>
+</template>
+
+<script>
+	import wepy from 'wepy';
+	import { baseUrl } from '@/config';
+	import util from '../../wxs/util.wxs';
+
+	const DATA_LENGTH = 10;
+  export default class HomeStore extends wepy.page {
+		config = {
+      navigationBarTitleText: '推荐企业',
+      enablePullDownRefresh: true
+    };
+
+		data = {
+			baseUrl: baseUrl,
+			is_loaded: false,
+			current_skip: 0,
+			allow_load: true,
+			stores: []
+		}
+
+		wxs = {
+			util: util
+		}
+
+		async onLoad() {
+			wepy.showLoading({
+				title: '加载中',
+				mask: true
+			});
+			await this.$parent.login();
+			await this.loadStore();
+			this.is_loaded = true;
+			this.$apply();
+			wepy.hideLoading();
+		}
+
+		onPullDownRefresh() {
+			this.refresh();
+		}
+
+		onReachBottom() {
+			this.loadStore();
+		}
+
+		refresh() {
+			this.stores = [];
+			this.allow_load = true;
+			this.current_skip = 0;
+			this.loadStore();
+		}
+
+		async loadStore() {
+			const skip = this.current_skip;
+
+			if (this.allow_load) {
+				const options = {
+					$filter: 'featured eq true',
+					$expand: 'owner($select=name)',
+					$count: true,
+					$select: 'name,space,avatar',
+					$skip: skip,
+					$top: DATA_LENGTH
+				}
+
+				const res = await this.$parent.query('vip_store', options, 'common')
+				if (res.value) {
+					this.stores = this.stores.concat(res.value)
+				}
+				this.current_skip = skip + res.value.length
+
+				if (this.current_skip ===  res['@odata.count']) {
+					this.allow_load = false
+				}
+				this.$apply()
+				wx.stopPullDownRefresh();
+			}
+		}
+	}
+</script>
