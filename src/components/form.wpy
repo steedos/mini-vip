@@ -189,7 +189,12 @@
                       <view class="weui-label">{{item.label}}</view>
                     </view>
                     <view class="weui-cell__bd">
-                      <view class="weui-cell__ft">{{util.transformFieldValue(item, values[item.name])}}</view>
+                      <block wx:if="{{item.type === 'phone' && (item.readonly || !schema.allowEdit || args.action === 'read')}}">
+                        <view class="weui-cell__ft" @tap="phoneCall(values[item.name])">{{values[item.name]}}uuuuuu</view>
+                      </block>
+                      <block wx:else>
+                        <view class="weui-cell__ft">{{util.transformFieldValue(item, values[item.name])}}</view>
+                      </block>
                     </view>
                     <block wx:if="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}">
                       <view class="weui-cell__ft weui-cell__ft_in-access"></view>
@@ -849,6 +854,9 @@
           case 'text':
             url = '/pages/edit/text';
             break;
+          case 'phone':
+            url = '/pages/edit/text';
+            break;
           case 'textarea':
             url = '/pages/edit/textarea';
             break;
@@ -895,6 +903,11 @@
         }
 
         wepy.navigateTo({url: url});
+      },
+      phoneCall(number) {
+        wepy.makePhoneCall({
+          phoneNumber: number
+        });
       }
     }
   }
