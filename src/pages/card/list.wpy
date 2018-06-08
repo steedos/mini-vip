@@ -183,12 +183,5 @@
       this.$apply()
       wepy.hideLoading();
     }
-
-    onShareAppMessage(res){
-      return {
-        title: '我的会员卡',
-        path: '/pages/card/list'
-      }
-    }
   }
 </script>
