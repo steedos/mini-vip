@@ -1,0 +1,194 @@
+<style lang="less">
+.page__hd {
+  margin-bottom: 20px;
+  .page__hd_bg {
+    height: 104px;
+    overflow: hidden;
+    background-color:#fc880f;
+  }
+    .page__hd_spacing{
+      text-align: center;
+      color:white;
+      margin-top: 20px;
+    }
+      .weui-flex-title{
+        font-weight: 200;
+        font-size: 14px;
+      }
+      .weui-flex-content{
+        font-weight: 200;
+        font-size: 28px;
+      }
+}
+
+.page-index {
+  .image {
+    display: block;
+  }
+}
+.page__bd_mycard{
+  font-weight: 200;
+  color: #888;
+  font-size: 14px;
+  margin-bottom:8px!important;
+}
+
+.weui-cell_access_card{
+  font-size: 17px;
+  color: #000;
+}
+.card-name{
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.page__bd .weui-panel {
+  margin-top: 20px;
+}
+
+.weui-panel {
+  .get-user-info {
+    padding: 10px 15px;
+    text-align: left;
+    border: none;
+    line-height: 1.41176471;
+  }
+}
+.btn-my-account, .btn-my-coupons{
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 17px;
+}
+
+.btn-coupons{
+  margin-top: 20px;
+}
+
+.btn-coupons-space{
+  color:#888!important;
+}
+
+.btn-account{
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.btn-view-all{
+  vertical-align: middle;
+  font-size: 14px;
+}
+</style>
+
+<template>
+  <view class="page-index" wx:if="{{is_loaded}}">
+    <view class="page__bd">
+      <block wx:if="{{card_count > 0}}">
+        <view class="weui-cells">
+          <repeat for="{{cards}}" key="index" index="index" item="card">
+            <navigator url="../card?card_id={{card._id}}&space_id={{card.space}}" class="weui-cell weui-cell_access weui-cell_access_card">
+              <view class="weui-cell__hd">
+                <image wx:if="{{card.avatar}}" class="image slds-icon slds-icon--small slds-m-right--x-small" mode="aspectFill" src="{{util.formatImageUrl(card.avatar, baseUrl)}}"/>
+                <view wx:else class="slds-icon-standard-opportunity slds-icon slds-icon--small slds-m-right--x-small"/>
+              </view>
+              <view class="weui-cell__bd">
+                <view class="card-name">{{card.name}}</view>
+              </view>
+              <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+            </navigator>
+          </repeat>
+        </view>
+      </block>
+    </view>
+
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import req from '@/network';
+  import { serverAPI } from '@/server';
+  import { demoSpaceId,demoStoreId } from '@/config';
+  import { baseUrl } from '@/config';
+  import util from '../../wxs/util.wxs'; 
+
+  export default class CardList extends wepy.page {
+    config = {
+      navigationBarTitleText: '我的会员卡',
+      enablePullDownRefresh: true
+    };
+
+    getCardUrl() {
+      console.log('getCardUrl', this._id);
+      return 'card';
+    }
+
+    data = {
+      hasUserInfo: false,
+      canIUse: wx.canIUse('button.open-type.getUserInfo'),
+      coupon: {
+        count: 8
+      },
+      order: {
+        count: 76
+      },
+      cards: [],
+      card_count: 0,
+      allBalance: 0,
+      demoSpaceId: demoSpaceId,
+      demoStoreId: demoStoreId,
+      baseUrl: baseUrl,
+      is_loaded: false
+    };
+
+    wxs = {
+      util: util
+    };
+
+    async onPullDownRefresh() {
+      await this.loadUserCard();
+      wepy.stopPullDownRefresh();
+    }
+
+    async loadUserCard() {
+      const options = {
+        $expand: 'space($select=name),card_name($select=name,avatar)',
+        $count: true,
+        $select: 'name,card_number,grade,balance,space,card_name',
+        $filter: `(owner eq '${this.$parent.globalData.user._id}' and is_actived eq true)`
+      }
+      const result = await this.$parent.query('vip_card', options, 'common');
+      let allBalance = 0.00;
+      this.cards = [];
+      result.value.forEach((card)=> {
+        allBalance = allBalance + card.balance;
+        let name = card.space.name;
+        if(card.card_name && card.card_name.name){
+          name = card.card_name.name;
+          const avatar = card.card_name.avatar
+          this.cards.push({_id: card._id, card_number: card.card_number, grade: card.grade, name: name, space: card.space._id, avatar: avatar});
+        }
+      })
+      this.allBalance = allBalance;
+      this.card_count = result['@odata.count'];
+      this.$apply();
+    }
+
+    async onLoad() {
+      wepy.showLoading({
+        title: '加载中',
+        mask: true
+      });
+      await this.$parent.login();
+      await this.loadUserCard();
+      this.is_loaded = true;
+      this.$apply()
+      wepy.hideLoading();
+    }
+
+    onShareAppMessage(res){
+      return {
+        title: '我的会员卡',
+        path: '/pages/card/list'
+      }
+    }
+  }
+</script>
