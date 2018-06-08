@@ -80,15 +80,15 @@ export default class QRCode extends wepy.page {
     wepy.hideLoading();
   }
   async getqrCode(store_id) {
-    const options = {
-      $filter: `_id eq '${store_id}'`,
-      $select: 'qrcode'
-    }
-    const result = await this.$parent.query('vip_store', options);
+    // const options = {
+    //   $filter: `_id eq '${store_id}'`,
+    //   $select: 'qrcode'
+    // }
+    const result = await this.$parent.get('vip_store', store_id);
     
-    if(result.value && result.value.length>0 && result.value[0].qrcode){
+    if(result &&  result.qrcode){
       console.log("=======result======",result);
-      this.imgCodeUrl = result.value[0].qrcode;
+      this.imgCodeUrl = result.qrcode;
       this.$apply();
     }
     else{

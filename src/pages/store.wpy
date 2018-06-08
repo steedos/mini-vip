@@ -130,6 +130,11 @@ page {
         <button class="weui-btn" type="primary" plain="true">编辑</button>
       </navigator>
     </view>
+    <view class="button-sp-area" wx:if="{{has_qrcode || is_space_owner}}" >
+      <navigator url="/pages/admin/qrcode?space_id={{store._id}}">
+        <button class="weui-btn" type="primary" plain="true">查看二维码</button>
+      </navigator>
+    </view>
   </view>
 </template>
 
@@ -151,6 +156,9 @@ export default class store extends wepy.page {
     wepy.hideLoading();
     this.is_loaded = true
     this.store = store;
+    if(store.qrcode){
+      this.has_qrcode = true
+    }
     this.$apply();
   }
 
@@ -178,6 +186,7 @@ export default class store extends wepy.page {
   data = {
     store_id: '',
     is_space_owner: false,
+    has_qrcode:false,
     store: [],
     baseUrl: baseUrl,
     is_loaded: false
