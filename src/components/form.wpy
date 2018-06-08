@@ -150,7 +150,12 @@
               <block wx:elif="{{item.type === 'text' && item.is_wide}}">
                 <view class="weui-cell" hover-class='weui-grid_active'>
                   <view class="weui-cell__bd">
-                    <textarea class="weui-textarea-input" data-id="{{item.name}}" placeholder="{{item.label}}" value="{{util.transformFieldValue(item, values[item.name])}}" auto-height="true" bindinput="textChange"/>
+                    <block wx:if="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}">
+                      <textarea class="weui-textarea-input" data-id="{{item.name}}" placeholder="{{item.label}}" value="{{util.transformFieldValue(item, values[item.name])}}" auto-height="true" bindinput="textChange"/>
+                    </block>
+                    <block wx:else>
+                      <view class="weui-cell__ft wide-cell">{{util.transformFieldValue(item, values[item.name])}}</view>
+                    </block>
                   </view>
                 </view>
               </block>
@@ -159,7 +164,12 @@
                   <block wx:if="{{item.type === 'textarea'}}">
                     <block wx:if="{{item.is_wide}}">
                       <view class="weui-cell__bd">
-                        <textarea class="weui-textarea" data-id="{{item.name}}" placeholder="{{item.label}}" value="{{util.transformFieldValue(item, values[item.name])}}" auto-height="true" bindinput="textChange" maxlength="-1"/>
+                        <block wx:if="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}">
+                          <textarea class="weui-textarea" data-id="{{item.name}}" placeholder="{{item.label}}" value="{{util.transformFieldValue(item, values[item.name])}}" auto-height="true" bindinput="textChange" maxlength="-1"/>
+                        </block>
+                        <block wx:else>
+                          <view class="weui-cell__ft wide-cell">{{util.transformFieldValue(item, values[item.name])}}</view>
+                        </block>
                       </view>
                     </block>
                     <block wx:else>
