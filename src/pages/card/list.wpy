@@ -1,38 +1,7 @@
 <style lang="less">
-.page__hd {
-  margin-bottom: 20px;
-  .page__hd_bg {
-    height: 104px;
-    overflow: hidden;
-    background-color:#fc880f;
-  }
-    .page__hd_spacing{
-      text-align: center;
-      color:white;
-      margin-top: 20px;
-    }
-      .weui-flex-title{
-        font-weight: 200;
-        font-size: 14px;
-      }
-      .weui-flex-content{
-        font-weight: 200;
-        font-size: 28px;
-      }
+.image {
+  display: block;
 }
-
-.page-index {
-  .image {
-    display: block;
-  }
-}
-.page__bd_mycard{
-  font-weight: 200;
-  color: #888;
-  font-size: 14px;
-  margin-bottom:8px!important;
-}
-
 .weui-cell_access_card{
   font-size: 17px;
   color: #000;
@@ -41,45 +10,13 @@
   display: inline-block;
   vertical-align: middle;
 }
-
-.page__bd .weui-panel {
-  margin-top: 20px;
-}
-
-.weui-panel {
-  .get-user-info {
-    padding: 10px 15px;
-    text-align: left;
-    border: none;
-    line-height: 1.41176471;
-  }
-}
-.btn-my-account, .btn-my-coupons{
-  display: inline-block;
-  vertical-align: middle;
-  font-size: 17px;
-}
-
-.btn-coupons{
-  margin-top: 20px;
-}
-
-.btn-coupons-space{
-  color:#888!important;
-}
-
-.btn-account{
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
-.btn-view-all{
-  vertical-align: middle;
-  font-size: 14px;
+.weui-loadmore__tips_in-line{
+  background-color:#F5F5f2;
 }
 </style>
 
 <template>
-  <view class="page-index" wx:if="{{is_loaded}}">
+  <view class="page-list" wx:if="{{is_loaded}}">
     <view class="page__bd">
       <block wx:if="{{card_count > 0}}">
         <view class="weui-cells">
@@ -95,6 +32,11 @@
               <view class="weui-cell__ft weui-cell__ft_in-access"></view>
             </navigator>
           </repeat>
+        </view>
+      </block>
+      <block wx:else>
+        <view class="weui-loadmore weui-loadmore_line">
+          <view class="weui-loadmore__tips weui-loadmore__tips_in-line">还没有会员卡</view>
         </view>
       </block>
     </view>
