@@ -57,6 +57,11 @@
   .weui-textarea{
     min-height: 2.2em;
   }
+
+  .weui-cells__blank-line {
+    margin-top:20px;
+    color:#999;
+  }
 </style>
 <template>
   <view class="form" wx:if="{{is_loaded}}">
@@ -64,12 +69,12 @@
     <view class="page__bd">
       <repeat for="{{groupFields}}" key="index_g" index="index_g" item="groupField">
         <block wx:if="{{groupField._groupText === '-'}}">
-          <view class="weui-cells__title">　</view>
+          <view class="weui-cells__blank-line"></view>
         </block>
         <block wx:elif="{{groupField._groupText}}">
           <view class="weui-cells__title">{{groupField._groupText}}</view>
         </block>
-        <view class="weui-cells weui-cells_after-title">
+        <view class="weui-cells {{groupField._cellsClass}}">
           <repeat for="{{groupField.fields}}" key="index" index="index" item="item">
             <block wx:if="{{!item.hidden && !item.omit}}">
               <block wx:if="{{item.type === 'image' || item.type === 'video' || item.type === 'audio'}}">
@@ -185,7 +190,7 @@
             </block>
           </repeat>
         </view>
-        <view class="weui-cells__tips" wx:if="{{groupField._HelpText}}">{{groupField._HelpText}}</view>
+        <view class="weui-cells__tips" wx:if="{{groupField._helpText}}">{{groupField._helpText}}</view>
       </repeat>
 
       <view class="btn-container" wx:if="{{args.action === 'edit' || args.action === 'create'}}">
@@ -233,27 +238,30 @@
 
     getGroupFields(fields){
       let groupFields = [];
-      let groupItem = {fields: {}, _groupText:'-', _HelpText:''};
+      let groupItem = {fields: {}, _groupText:'-', _helpText:'', _cellsClass: ''};
       _.forEach(fields, function (field, key) {
         if(!field){
          throw new Error('无效的字段: ' + key)
         }
-        if(field.group){
-          if(!_.isEmpty(groupItem.fields)){
-            groupFields.push(groupItem);
-            groupItem = {fields: {}, _groupText:'', _HelpText:''};
-          }
-          groupItem.fields[key] = field;
-          groupItem._groupText = field.group
+        if(!field.hidden && !field.omit){
+          if(field.group){
+            if(!_.isEmpty(groupItem.fields)){
+              groupFields.push(groupItem);
+              groupItem = {fields: {}, _groupText:'', _helpText:'', _cellsClass: ''};
+            }
+            groupItem.fields[key] = field;
+            groupItem._groupText = field.group;
+            groupItem._cellsClass = 'weui-cells_after-title'
 
-        }else if(field.inlineHelpText){
-          groupItem.fields[key] = field;
-          groupItem._HelpText = field.inlineHelpText
-          groupFields.push(groupItem);
-          groupItem = {fields: {}, _groupText:'', _HelpText:''};
-        }
-        else{
-          groupItem.fields[key] = field
+          }else if(field.inlineHelpText){
+            groupItem.fields[key] = field;
+            groupItem._helpText = field.inlineHelpText;
+            groupFields.push(groupItem);
+            groupItem = {fields: {}, _groupText:'', _helpText:'', _cellsClass: ''};
+          }
+          else{
+            groupItem.fields[key] = field
+          }
         }
       });
 
