@@ -36,7 +36,7 @@
       </block>
       <block wx:else>
         <view class="weui-loadmore weui-loadmore_line">
-          <view class="weui-loadmore__tips weui-loadmore__tips_in-line">还没有会员卡</view>
+          <view class="weui-loadmore__tips weui-loadmore__tips_in-line">没有会员卡</view>
         </view>
       </block>
     </view>
