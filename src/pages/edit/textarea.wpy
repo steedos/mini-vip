@@ -1,17 +1,13 @@
 <style lang="less">
   .weui-textarea {
-    line-height:1.3em;
-    height:1.3em;
-    min-height:1.3em;
-    padding-top:4px;
-    padding-bottom:4px;
+    min-height:2.2em;
   }
 </style>
 <template>
   <view class="text">
     <view class="page__bd">
       <view class="weui-cells">
-        <view class="weui-cell weui-cell_input">
+        <view class="weui-cell">
           <view class="weui-cell__bd">
             <textarea data-id="{{key}}" class="weui-textarea"
               auto-height="true" auto-focus="true" value="{{value}}" bindinput="textChange"/>

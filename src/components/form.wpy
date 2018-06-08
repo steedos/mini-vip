@@ -53,6 +53,10 @@
     width: auto;
     min-width: 80px;
   }
+
+  .weui-textarea{
+    min-height: 2.2em;
+  }
 </style>
 <template>
   <view class="form" wx:if="{{is_loaded}}">
@@ -139,10 +143,9 @@
                 </view>
               </block>
               <block wx:elif="{{item.type === 'text' && item.is_wide}}">
-                <view class="weui-cell weui-cell_input" hover-class='weui-grid_active'>
+                <view class="weui-cell" hover-class='weui-grid_active'>
                   <view class="weui-cell__bd">
-                    <input data-id="{{item.name}}" class="weui-input"
-                           auto-focus="true" value="{{values[item.name]}}" bindinput="textChange" placeholder="{{item.label}}"/>
+                    <textarea class="weui-textarea-input" data-id="{{item.name}}" placeholder="{{item.label}}" value="{{util.transformFieldValue(item, values[item.name])}}" auto-height="true" bindinput="textChange"/>
                   </view>
                 </view>
               </block>
