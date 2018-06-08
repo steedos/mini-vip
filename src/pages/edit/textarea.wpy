@@ -10,7 +10,7 @@
         <view class="weui-cell">
           <view class="weui-cell__bd">
             <textarea data-id="{{key}}" class="weui-textarea"
-              auto-height="true" auto-focus="true" value="{{value}}" bindinput="textChange"/>
+              auto-height="true" auto-focus="true" value="{{value}}" bindinput="textChange" maxlength=-1/>
           </view>
         </view>
       </view>
