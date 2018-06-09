@@ -48,7 +48,7 @@
           <view class="weui-cell__bd">
             <view class="weui-input">
               <view wx:if="{{nickName}}">{{nickName}}</view>
-              <button wx:elif="{{canIUse}}" class="input-btn" plain="true" open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo">授权登录</button>
+              <button wx:elif="{{canIUse}}" class="input-btn" plain="true" open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo">点击获取昵称</button>
             </view>
           </view>
         </view>
