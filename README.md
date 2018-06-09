@@ -11,6 +11,8 @@
 - 热点信息：https://github.com/steedos/creator/tree/vip/packages/steedos-post/models
 - 评论：指的是对热点信息的评论https://github.com/steedos/creator/blob/vip/packages/steedos-post/models/post_comments.coffee
 - 收藏：指的是对热点信息的收藏https://github.com/steedos/creator/blob/vip/packages/steedos-post/models/post_star.coffee
+- 活动： https://github.com/steedos/creator/blob/vip/packages/steedos-vip-card/models/vip_event.coffee
+
 ### 业务逻辑规范
 - 任何一个人第一次使用卡券助手，自动创建users记录，并将userId保存在本地存储
 - 微信用户在第一次浏览商户时，自动创建space_user记录
