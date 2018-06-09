@@ -87,7 +87,7 @@
 					$top: DATA_LENGTH
 				}
 
-				const res = await this.$parent.query('vip_store', options, 'common')
+				const res = await this.$parent.query('vip_store', options, 'guest')
 				if (res.value) {
 					this.stores = this.stores.concat(res.value)
 				}
