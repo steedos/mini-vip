@@ -116,7 +116,7 @@
                 <icon class="weui-agree__checkbox-icon-check" type="success_no_circle" size="9" wx:if="{{isAgree}}"></icon>
             </view>
             我已阅读并同意
-            <navigator url="" class="weui-agree__link">《华炎会员管理系统企业使用协议》</navigator>
+            <navigator url="" class="weui-agree__link">《华炎微站企业使用协议》</navigator>
           </view>
         </label>
       </checkbox-group>
