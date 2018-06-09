@@ -56,10 +56,10 @@
           </view>
           <view class="weui-cell__bd">
             <view class="weui-input">
-              <view wx:if="{{phoneNumber}}">{{phoneNumber}}</view>
-              <button wx:else="{{phoneNumber}}" class="get-number" plain="true" open-type="getPhoneNumber"
-                      bindgetphonenumber="getPhoneNumber">点击获取手机号
-              </button>
+              <view>{{phoneNumber}}</view>
+              <!--<button wx:else="{{phoneNumber}}" class="get-number" plain="true" open-type="getPhoneNumber"-->
+                      <!--bindgetphonenumber="getPhoneNumber">点击获取手机号-->
+              <!--</button>-->
             </view>
           </view>
           <view class="weui-cell__ft">
@@ -93,6 +93,9 @@ export default class meProfile extends wepy.page {
   };
 
   onLoad() {
+
+    this.$parent.checkMobile();
+
     const user = this.$parent.globalData.user;
 
     console.log(user);
@@ -152,14 +155,14 @@ export default class meProfile extends wepy.page {
       const data = {
         sex: this.sex,
         name: this.name,
-        phoneNumber: this.phoneNumber,
+//        phoneNumber: this.phoneNumber,
         birthdate: this.birthdate
       };
       const url = '/mini/vip/user';
       req.put(url, data).then(res => {
         self.$parent.globalData.user.name = self.name;
         self.$parent.globalData.user.sex = self.sex;
-        self.$parent.globalData.user.mobile = self.phoneNumber;
+//        self.$parent.globalData.user.mobile = self.phoneNumber;
         self.$parent.globalData.user.birthdate = self.birthdate;
 
         wx.showToast({
