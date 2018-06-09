@@ -94,9 +94,9 @@
             <block wx:if="{{post.images}}">
               <image class="image" mode="aspectFill" src="{{util.formatImageUrl(post.images[0], baseUrl)}}" @tap="previewImage({{post.images}})" @error="loadImageError({{index}})" />
             </block>
-            <block wx:else>
+            <!-- <block wx:else>
               <image class="image" mode="aspectFill" src="{{util.getEmptyImageUrl(post.type)}}"/>
-            </block>
+            </block> -->
           </block>
         </view>
         <view class="post-body weui-cells" @tap="goDetail({{post._id}}, {{post.space}})">
