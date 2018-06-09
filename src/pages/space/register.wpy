@@ -53,21 +53,21 @@
     <view class="page__bd">
       <view class="weui-toptips weui-toptips_warn" wx:if="{{showTopTips}}">{{message}}</view>
       <view class="weui-cells">
-        <view class="weui-cell weui-cell_input">
-          <view class="weui-cell__hd">
-            <view class="weui-label">手机</view>
-          </view>
-          <view class="weui-cell__bd">
-            <view class="weui-input">
-              <view >{{phoneNumber}}</view>
-              <!--<button wx:else="{{phoneNumber}}" class="get-number" plain="true" open-type="getPhoneNumber"-->
-                      <!--bindgetphonenumber="getPhoneNumber">点击获取微信绑定手机号-->
-              <!--</button>-->
-            </view>
-          </view>
-          <view class="weui-cell__ft">
-          </view>
-        </view>
+        <!--<view class="weui-cell weui-cell_input">-->
+          <!--<view class="weui-cell__hd">-->
+            <!--<view class="weui-label">手机</view>-->
+          <!--</view>-->
+          <!--<view class="weui-cell__bd">-->
+            <!--<view class="weui-input">-->
+              <!--<view >{{phoneNumber}}</view>-->
+              <!--&lt;!&ndash;<button wx:else="{{phoneNumber}}" class="get-number" plain="true" open-type="getPhoneNumber"&ndash;&gt;-->
+                      <!--&lt;!&ndash;bindgetphonenumber="getPhoneNumber">点击获取微信绑定手机号&ndash;&gt;-->
+              <!--&lt;!&ndash;</button>&ndash;&gt;-->
+            <!--</view>-->
+          <!--</view>-->
+          <!--<view class="weui-cell__ft">-->
+          <!--</view>-->
+        <!--</view>-->
         <view class="weui-cell weui-cell_input">
           <view class="weui-cell__hd">
             <view class="weui-label">企业名称</view>
@@ -76,14 +76,14 @@
             <input class="weui-input" placeholder="" value="{{store_name}}" bindchange="bindStoreNameChange"/>
           </view>
         </view>
-        <view class="weui-cell weui-cell_input">
-          <view class="weui-cell__hd">
-            <view class="weui-label">姓名</view>
-          </view>
-          <view class="weui-cell__bd">
-            <input class="weui-input" placeholder="" value="{{contact_name}}" bindchange="bindContactNameChange"/>
-          </view>
-        </view>
+        <!--<view class="weui-cell weui-cell_input">-->
+          <!--<view class="weui-cell__hd">-->
+            <!--<view class="weui-label">姓名</view>-->
+          <!--</view>-->
+          <!--<view class="weui-cell__bd">-->
+            <!--<input class="weui-input" placeholder="" value="{{contact_name}}" bindchange="bindContactNameChange"/>-->
+          <!--</view>-->
+        <!--</view>-->
         <view class="weui-cell weui-cell_input weui-cell_vcode">
           <view class="weui-cell__hd">
             <view class="weui-label">地址</view>
@@ -168,18 +168,17 @@ export default class SpaceRegister extends wepy.page {
   };
 
   async onLoad() {
-
-    this.$parent.checkMobile();
-
-    wx.getLocation({
-      type: 'gcj02',
-      success: function(res) {
-        this.latitude = res.latitude;
-        this.longitude = res.longitude;
-      }
-    });
-    this.contact_name = this.$parent.globalData.user.name
-    this.phoneNumber = this.$parent.globalData.user.mobile;
+    if(this.$parent.checkMobile()){
+      wx.getLocation({
+        type: 'gcj02',
+        success: function(res) {
+          this.latitude = res.latitude;
+          this.longitude = res.longitude;
+        }
+      });
+      this.contact_name = this.$parent.globalData.user.name
+      this.phoneNumber = this.$parent.globalData.user.mobile;
+    }
   }
   methods = {
     getPhoneNumber(e) {
