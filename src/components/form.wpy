@@ -248,7 +248,8 @@
       fields: {},
       showOpenSetting: false,
       is_loaded: false,
-      groupFields: []
+      groupFields: [],
+      submitDisabled: false,
     };
 
     getGroupFields(fields){
@@ -808,9 +809,16 @@
         }
       },
       async submitForm() {
+        this.submitDisabled = true;
         if (!this.checkRequired()) {
+          this.submitDisabled = false;
           return;
         }
+
+        wx.showLoading({
+          title: '正在保存',
+          mask: true
+        });
 
         if (this.args.action === 'create') {
           const value = this.transformValue();
