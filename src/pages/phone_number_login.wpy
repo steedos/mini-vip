@@ -32,7 +32,7 @@
           <open-data wx:else class="weui-media-box__thumb" type="userNickName"></open-data>
         </view>
         <view class="user-phone">
-          <button class="weui-btn" type="primary" class="get-number" plain="true" open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber">获取手机号并登录</button>
+          <button class="weui-btn" type="primary" class="get-number" plain="true" open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber">使用手机号登录</button>
         </view>
       </view>
     </view>
@@ -46,7 +46,7 @@
   export default class phoneNumberLogin extends wepy.page {
 
     config = {
-      navigationBarTitleText: '手机号登录',
+      navigationBarTitleText: '登录',
     };
 
     data = {
