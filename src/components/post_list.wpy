@@ -2,9 +2,22 @@
 .weui-loadmore__tips_in-line{
   background-color:#F5F5f2;
 }
+
+.post-header {
+  
+  .image {
+    display: block;
+    border-radius: 50%;
+  }
+
+  .space-name {
+    line-height: 1.5rem;
+  }
+}
+
 .post {
   background: #fff;
-  margin:40rpx 20rpx;
+  margin:30rpx 20rpx;
   border:solid 1px #ededed;
   border-radius:6px;
 
@@ -58,6 +71,18 @@
   <block wx:if="{{list.length}}">
     <repeat for="{{list}}" key="index" index="index" item="post">
       <view class="post">
+        <navigator class="post-header" wx:if="{{showHeader}}" url="../space/index?space_id={{post.space}}">
+          <view class="weui-cell weui-cell_access">
+            <view class="weui-cell__hd">
+              <image wx:if="{{post.avatar}}" class="image slds-icon slds-icon--small slds-m-right--x-small" src="{{util.formatImageUrl(post.avatar, baseUrl)}}"></image>
+              <view wx:else class="slds-icon-standard-account slds-icon slds-icon--small slds-m-right--x-small"></view>
+            </view>
+            <view class="weui-cell__bd">
+              {{post.space_name}}
+            </view>
+            <!-- <view class="weui-cell__ft weui-cell__ft_in-access"></view> -->
+          </view>
+        </navigator>
         <view class="post-cover">
           <block wx:if="{{post.video}}">
             <video src="{{util.formatVideoUrl(post.video, baseUrl)}}" controls objectFit="contain" id="{{post.video}}" @play="play({{post.video}})"></video>
@@ -113,7 +138,17 @@ export default class PostList extends wepy.component {
     editable: {
       type: Boolean,
       default: false
+    },
+    showHeader: {
+      type: Boolean,
+      default: false
     }
+  }
+
+  onLoad() {
+    setTimeout(() => {
+      console.log('post list showHeader.....', this.list)
+    }, 5000);
   }
 
   data = {

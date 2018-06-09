@@ -6,7 +6,7 @@
 	<view class="page" wx:if="{{is_loaded}}">
     <view class="page__bd">
       <scroll-view class="scroll-view_H" scroll-y="true">
-        <postList :list.sync="posts"/>
+        <postList :list.sync="posts" :showHeader="show_header"/>
       </scroll-view>
     </view>
   </view>
@@ -31,6 +31,7 @@
 			is_loaded: false,
 			current_skip: 0,
 			allow_load: true,
+			show_header: true,
 			posts: []
 		}
 
@@ -67,7 +68,7 @@
 			if (this.allow_load) {
 				const options = {
 					$filter: 'featured eq true',
-					$expand: 'owner($select=name)',
+					$expand: 'owner($select=name),space($select=name)',
 					$count: true,
 					$select: 'name,summary,description,comment_count,enable_comment,images,video,audio,type,mini_type,space',
 					$skip: skip,
@@ -76,9 +77,24 @@
 
 				const res = await this.$parent.query('post', options, 'guest')
 				if (res.value) {
+					for (let v of res.value) {
+						let space_id = v.space._id
+						let space_name = v.space.name
+						const store_options = {
+							$filter: `_id eq '${space_id}'`,
+							$count: true,
+							$select: 'avatar'
+						}
+						const r = await this.$parent.query('vip_store', store_options, 'guest')
+						if (r.value[0]) {
+							v.avatar = r.value[0].avatar
+						}
+						v.space = space_id
+						v.space_name = space_name
+					}
 					this.posts = this.posts.concat(res.value)
+					this.current_skip = skip + res.value.length
 				}
-				this.current_skip = skip + res.value.length
 
 				if (this.current_skip ===  res['@odata.count']) {
 					this.allow_load = false
