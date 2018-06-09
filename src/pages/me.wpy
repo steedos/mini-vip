@@ -107,7 +107,7 @@ import { serverAPI } from '@/server';
 
 export default class Me extends wepy.page {
   config = {
-    navigationBarTitleText: ''
+    navigationBarTitleText: '我的'
   };
 
   data = {
