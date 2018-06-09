@@ -123,7 +123,7 @@
       options: [
         {label: '动态', url: 'home/post', icon: 'standard-contract'},
         // {label: '活动', url: 'home/event', icon: 'standard-event'},
-        {label: '微站', url: 'home/store', icon: 'standard-topic'},
+        {label: '微站', url: 'home/store', icon: 'standard-account'},
       ]
     };
 
