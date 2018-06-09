@@ -25,22 +25,26 @@
     image{
       width: 100%;
       height: 480rpx;
-      // border-top-left-radius:6px;
-      // border-top-right-radius:6px;
+      border-top-left-radius:6px;
+      border-top-right-radius:6px;
     }
     video{
       width: 100%;
       height: 480rpx;
-      // border-top-left-radius:6px;
-      // border-top-right-radius:6px;
+      border-top-left-radius:6px;
+      border-top-right-radius:6px;
+    }
+
+    .no-radius {
+      border-radius: 0 !important;
     }
   }
   .post-body{
     padding:30rpx;
-    margin-top:-8px;
+    margin-top: 0px;
     .post-name{
-      max-height:78px;
-      overflow:hidden;
+      max-height: 78px;
+      overflow: hidden;
     }
     .post-summary{
       color:#888;
@@ -90,12 +94,12 @@
           <block wx:if="{{post.video}}">
             <!-- <video src="{{util.formatVideoUrl(post.video, baseUrl)}}" controls objectFit="contain" id="{{post.video}}" @play="play({{post.video}})"></video> -->
             <block wx:if="{{post.images}}">
-              <image class="image" mode="aspectFill" src="{{util.formatImageUrl(post.images[0], baseUrl)}}" @tap="previewImage({{post.images}})" @error="loadImageError({{index}})" />
+              <image class="image {{showHeader ? 'no-radius' : ''}}" mode="aspectFill" src="{{util.formatImageUrl(post.images[0], baseUrl)}}" @tap="previewImage({{post.images}})" @error="loadImageError({{index}})" />
             </block>
           </block>
           <block wx:else>
             <block wx:if="{{post.images}}">
-              <image class="image" mode="aspectFill" src="{{util.formatImageUrl(post.images[0], baseUrl)}}" @tap="previewImage({{post.images}})" @error="loadImageError({{index}})" />
+              <image class="image {{showHeader ? 'no-radius' : ''}}" mode="aspectFill" src="{{util.formatImageUrl(post.images[0], baseUrl)}}" @tap="previewImage({{post.images}})" @error="loadImageError({{index}})" />
             </block>
             <!-- <block wx:else>
               <image class="image" mode="aspectFill" src="{{util.getEmptyImageUrl(post.type)}}"/>
