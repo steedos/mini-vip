@@ -313,7 +313,7 @@ export default class Posts extends wepy.page {
       $expand: 'owner($select=name)',
       $count: true,
       $select:
-        'name,summary,description,comment_count,enable_comment,images,video,audio,type,mini_type',
+        'name,summary,description,comment_count,enable_comment,images,video,audio,type,mini_type,space',
       $skip: skip,
       $top: DATA_LENGTH
     };
