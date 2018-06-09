@@ -4,6 +4,9 @@
     padding-top: 15px;
     width: 60%;
   }
+  .image{
+    display:block;
+  }
 </style>
 
 <template>
