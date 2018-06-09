@@ -37,10 +37,10 @@
   }
   .post-body{
     padding:30rpx;
-    margin-top:-8px;
+    margin-top: 0px;
     .post-name{
-      max-height:78px;
-      overflow:hidden;
+      max-height: 78px;
+      overflow: hidden;
     }
     .post-summary{
       color:#888;
