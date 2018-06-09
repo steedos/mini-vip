@@ -85,7 +85,10 @@
         </navigator>
         <view class="post-cover">
           <block wx:if="{{post.video}}">
-            <video src="{{util.formatVideoUrl(post.video, baseUrl)}}" controls objectFit="contain" id="{{post.video}}" @play="play({{post.video}})"></video>
+            <!-- <video src="{{util.formatVideoUrl(post.video, baseUrl)}}" controls objectFit="contain" id="{{post.video}}" @play="play({{post.video}})"></video> -->
+            <block wx:if="{{post.images}}">
+              <image class="image" mode="aspectFill" src="{{util.formatImageUrl(post.images[0], baseUrl)}}" @tap="previewImage({{post.images}})" @error="loadImageError({{index}})" />
+            </block>
           </block>
           <block wx:else>
             <block wx:if="{{post.images}}">
