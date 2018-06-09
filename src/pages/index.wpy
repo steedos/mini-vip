@@ -132,7 +132,7 @@
     };
 
     async onPullDownRefresh() {
-      
+       wepy.stopPullDownRefresh();
     }
 
     async onLoad() {

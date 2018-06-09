@@ -114,7 +114,7 @@ video{
     </navigator>
     <block wx:if="{{post.video}}">
       <video src="{{util.formatVideoUrl(post.video, baseUrl)}}" controls objectFit="contain" class="cover"  direction= '90' 
-      page-gesture="{{true}}" autoplay="{{false}}" custom-cache="{{false}}"></video>
+      page-gesture="{{true}}" autoplay="{{false}}"></video>
     </block>
     <block wx:elif="{{post.images && post.images.length == 1}}">
       <image src="{{util.formatImageUrl(post.images[0], baseUrl)}}" mode="aspectFill" @tap="previewImage({{item}})" class="cover"/>
