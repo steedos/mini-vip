@@ -85,7 +85,7 @@ video{
       <view class="weui-cell weui-cell_access">
         <view class="weui-cell__hd">
           <image wx:if="{{avatar}}" class="image slds-icon slds-icon--small slds-m-right--x-small" src="{{util.formatImageUrl(avatar, baseUrl)}}"></image>
-          <view wx:else class="slds-icon-standard-account slds-icon slds-icon--small slds-m-right--x-small"></view>
+          <view wx:else class="slds-icon-standard-channel-programs slds-icon slds-icon--small slds-m-right--x-small"></view>
         </view>
         <view class="weui-cell__bd">
           {{space_name}}
