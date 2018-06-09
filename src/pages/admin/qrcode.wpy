@@ -53,7 +53,7 @@ import util from '../../wxs/util.wxs';
 
 export default class QRCode extends wepy.page {
   config = {
-    navigationBarTitleText: '商户二维码',
+    navigationBarTitleText: '二维码',
     navigationBarBackgroundColor: '#353535',
     navigationBarTextStyle: 'white',
     enablePullDownRefresh: false
