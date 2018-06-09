@@ -146,7 +146,7 @@ import _ from 'underscore'
 const DATA_LENGTH = 10;
 export default class Posts extends wepy.page {
   config = {
-    navigationBarTitleText: '',
+    navigationBarTitleText: '微站',
     enablePullDownRefresh: true
   };
 

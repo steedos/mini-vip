@@ -12,7 +12,7 @@
 					<navigator url="/pages/space/index?space_id={{store._id}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
 						<view class="weui-cell__hd">
               <image wx:if="{{store.avatar}}" class="image slds-icon slds-icon--small slds-m-right--x-small" src="{{util.formatImageUrl(store.avatar, baseUrl)}}"></image>
-							<view wx:else class="slds-icon-standard-account slds-icon slds-icon--small slds-m-right--x-small"/>
+							<view wx:else class="slds-icon-standard-channel-programs slds-icon slds-icon--small slds-m-right--x-small"/>
             </view>
 						<view class="weui-cell__bd">{{store.name}}</view>
 						<view class="weui-cell__ft weui-cell__ft_in-access"></view>
