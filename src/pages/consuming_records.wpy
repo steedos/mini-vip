@@ -51,10 +51,10 @@ export default class ConsumingRecords extends wepy.page {
   };
   async onLoad(e) {
     const data = {
-        $filter: "card eq '" + e.card_id + "'",
+        $filter: `(card eq '${e.card_id}' and status eq 'completed')`,
         $expand: 'owner($select=name)',
         $count: true,
-        $select: 'name,amount,type,created'
+        $select: 'name,amount,type,created,status'
       };
     this.records = await this.$parent.query('vip_order',data)
     this.$apply();
