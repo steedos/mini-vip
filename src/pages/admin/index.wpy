@@ -49,7 +49,7 @@ import util from '../../wxs/util.wxs';
 
 export default class AdminIndex extends wepy.page {
   config = {
-    navigationBarTitleText: '商户管理'
+    navigationBarTitleText: '微站管理'
   };
 
   async onLoad(e) {

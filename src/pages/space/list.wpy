@@ -17,7 +17,7 @@
           <navigator url="/pages/space/index?space_id={{space._id}}" class="weui-cell weui-cell_access">
             <view class="weui-cell__hd">
               <image wx:if="{{space.avatar}}" class="image slds-icon slds-icon--small slds-m-right--x-small" mode="aspectFill" src="{{util.formatImageUrl(space.avatar, baseUrl)}}"/>
-              <view wx:else class="slds-icon-standard-account slds-icon slds-icon--small slds-m-right--x-small"/>
+              <view wx:else class="slds-icon-standard-channel-programs slds-icon slds-icon--small slds-m-right--x-small"/>
             </view>
             <view class="weui-cell__bd">
               <view class="card-name">{{space.name}}</view>

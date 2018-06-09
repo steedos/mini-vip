@@ -101,7 +101,7 @@ page {
           <view class="weui-cell__hd">
             <view class="slds-icon-utility-settings slds-icon slds-icon--small slds-m-right--x-small"/>
           </view>
-          <view class="weui-cell__bd">商户管理</view>
+          <view class="weui-cell__bd">微站管理</view>
           <view class="weui-cell__ft weui-cell__ft_in-access"></view>
         </navigator>
       </view>
