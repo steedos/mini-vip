@@ -64,6 +64,7 @@ setStore(store)
 export default class VIP extends wepy.app {
   config = {
     pages: [
+      'pages/home/post',
       'pages/index',
       'pages/apps',
       'pages/home',
@@ -106,7 +107,6 @@ export default class VIP extends wepy.app {
       'pages/admin/qrcode',
       'pages/member_benefits',
       'pages/consuming_records',
-      'pages/home/post',
       'pages/home/store',
       'pages/phone_number_login',
     ],
@@ -117,10 +117,16 @@ export default class VIP extends wepy.app {
       borderStyle: 'black',
       list: [
       {
-        pagePath: 'pages/index',
+        pagePath: 'pages/home/post',
         selectedIconPath: './images/tabbars/home_pressed.png',
         iconPath: './images/tabbars/home.png',
-        text: '首页',
+        text: '动态',
+      },
+      {
+        pagePath: 'pages/home/store',
+        selectedIconPath: './images/tabbars/apps_pressed.png',
+        iconPath: './images/tabbars/apps.png',
+        text: '微站',
       },
       {
         pagePath: 'pages/me',
