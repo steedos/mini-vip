@@ -68,6 +68,9 @@ page {
       border-radius: 0;
       line-height: inherit;
     }
+    .post-list-wrapper{
+      margin-top:1.17647059em;
+    }
   }
 }
 </style>
@@ -124,9 +127,11 @@ page {
           </repeat>
         </view>
       </view>
-      <scroll-view class="scroll-view_H" scroll-y="true">
-        <postList :list.sync="posts" />
-      </scroll-view>
+      <view class="post-list-wrapper">
+        <scroll-view class="scroll-view_H" scroll-y="true">
+          <postList :list.sync="posts" />
+        </scroll-view>
+      </view>
     </view>
   </view>
 </template>
