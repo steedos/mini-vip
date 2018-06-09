@@ -2,6 +2,13 @@
 .weui-article__h1{
   text-align: center;
 }
+.post-header {
+  margin-bottom: 5px;
+}
+.image {
+  display: block;
+  border-radius: 50%;
+}
 .cover{
   width: 100%;
   height:480rpx;
@@ -74,6 +81,18 @@ video{
 <template>
 <view class="page" wx:if="{{is_loaded}}">
   <view class="page__bd">
+    <navigator class="post-header" url="../space/index?space_id={{space_id}}">
+      <view class="weui-cell weui-cell_access">
+        <view class="weui-cell__hd">
+          <image wx:if="{{avatar}}" class="image slds-icon slds-icon--small slds-m-right--x-small" src="{{util.formatImageUrl(avatar, baseUrl)}}"></image>
+          <view wx:else class="slds-icon-standard-account slds-icon slds-icon--small slds-m-right--x-small"></view>
+        </view>
+        <view class="weui-cell__bd">
+          {{space_name}}
+        </view>
+        <!-- <view class="weui-cell__ft weui-cell__ft_in-access"></view> -->
+      </view>
+    </navigator>
     <block wx:if="{{post.video}}">
       <video src="{{util.formatVideoUrl(post.video, baseUrl)}}" controls objectFit="contain" class="cover"  direction= '90' page-gesture="{{true}}" autoplay="{{false}}"></video>
     </block>
@@ -135,6 +154,19 @@ export default class PostView extends wepy.page {
     if(e.space_id){
       this.$parent.globalData.space_id = e.space_id;
       await this.$parent.login(e.space_id);
+
+      const options = {
+        $filter: `_id eq '${e.space_id}'`,
+        $expand: 'space($select=name)',
+        $count: true,
+        $select: 'avatar,space'
+      }
+      const res = await this.$parent.query('vip_store', options, 'guest')
+
+      if (res.value[0]) {
+        this.space_name = res.value[0].space.name
+        this.avatar = res.value[0].avatar
+      }
     }
     if(e.post_id){
       this.post_id = e.post_id;
@@ -196,6 +228,8 @@ export default class PostView extends wepy.page {
     post: null,
     baseUrl: baseUrl,
     space_id: '',
+    space_name: '',
+    avatar: '',
     is_loaded: false,
     editable: false
   };
