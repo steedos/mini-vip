@@ -1,0 +1,108 @@
+<style lang="less">
+  .phone-login{
+    .user-avatar{
+      width:60px;
+      height:60px;
+      border-radius:3px;
+      overflow:hidden;
+      position:relative;
+      margin:12px 10px 0 14px;
+    }
+    .user-name{
+
+    }
+
+    .user-phone{
+      margin-top: 40px;
+      width: 100%;
+    }
+  }
+</style>
+
+<template>
+  <view class="page phone-login">
+    <view class="page__hd"></view>
+    <view class="page__bd page__bd_spacing">
+      <view class="container">
+        <view class="weui-media-box__hd weui-media-box__hd_in-appmsg user-avatar">
+          <open-data class="weui-media-box__thumb" type="userAvatarUrl"></open-data>
+        </view>
+        <view class="user-name">
+          <view class="phone-number" wx:if="{{phoneNumber}}">{{phoneNumber}}</view>
+          <open-data wx:else class="weui-media-box__thumb" type="userNickName"></open-data>
+        </view>
+        <view class="user-phone">
+          <button class="weui-btn" type="primary" class="get-number" plain="true" open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber">获取手机号并登录</button>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import req from '@/network';
+
+  export default class phoneNumberLogin extends wepy.page {
+
+    config = {
+      navigationBarTitleText: '手机号登录',
+    };
+
+    data = {
+      from: '',
+      phoneNumber: ''
+    };
+
+    onLoad(e){
+      this.from = e.from
+    }
+
+
+    async phoneLogin(){
+      const data = await req.post('/api/steedos/weixin/phone_login', {phone_number: this.phoneNumber})
+      if(data){
+        if(data.mobile){
+          this.$parent.globalData.user.mobile = data.mobile
+        }
+
+        if(data._id){
+          this.$parent.globalData.user.mobile = data._id
+        }
+
+        if(data.name){
+          this.$parent.globalData.user.mobile = data.name
+        }
+
+        if(data.sex){
+          this.$parent.globalData.user.mobile = data.sex
+        }
+
+        if(data.birthdate){
+          this.$parent.globalData.user.mobile = data.birthdate
+        }
+      }
+      console.log('phoneLogin', data)
+
+      wepy.redirectTo({url: this.from})
+    }
+
+    methods = {
+      getPhoneNumber(e) {
+        if (e.detail.iv || e.detail.encryptedData) {
+          req.post('/api/steedos/weixin/get_phone_number', {
+            iv: e.detail.iv,
+            encryptedData: e.detail.encryptedData
+          }).then(res => {
+            console.log('res', res);
+            this.phoneNumber = res.purePhoneNumber;
+            this.$apply();
+            this.phoneLogin()
+          });
+        } else {
+          console.error(e.detail.errMsg);
+        }
+      }
+    }
+  }
+</script>

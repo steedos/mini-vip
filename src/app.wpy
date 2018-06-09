@@ -108,6 +108,7 @@ export default class VIP extends wepy.app {
       'pages/consuming_records',
       'pages/home/post',
       'pages/home/store',
+      'pages/phone_number_login',
     ],
     tabBar: {
       color: '#666',
@@ -176,6 +177,16 @@ export default class VIP extends wepy.app {
         cb && cb(res.userInfo)
       }
     })
+  }
+
+  checkMobile(){
+    if(this.globalData.user && this.globalData.user.mobile){
+      return true
+    }else{
+      const pages = getCurrentPages();
+      const page = pages[pages.length - 1];
+      wepy.redirectTo({url: '/pages/phone_number_login?from=/' + page.route});
+    }
   }
 
   async login(space_id) {
