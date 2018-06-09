@@ -92,7 +92,7 @@ edit/ 编辑控件
 - 先判断 globalData[object_name] 存在且不为空对象，表示有缓存
 - 如果不传入 id，直接返回本地数据
 - 判断缓存的对象 id 是否相同，如果相同直接返回
-- 如果不同，调用get接口获取数据并保存到 globalData[object_name] 
+- 如果不同，调用get接口获取数据并保存到 globalData[object_name]
 - 如果接口调用失败，也保存一个空对象到 globalData[object_name], 避免页面调用时报错
 对于不需要缓存的数据，请使用标准的 this.$parent.get 函数
 
@@ -159,4 +159,9 @@ mine_type 内容样式 每种分类在详细页有不同的风格显示
 - photo 照片，列表页显示为各照片的缩略图，点击可滑动显示当前文章的所有照片。一篇文章最多可以传9个照片。
 - video 视频，列表页显示为视频，点击即播放视频，只能传一个附件
 - music 音乐，列表点击可以播放，只能传一个附件
+
+### 统一登录界面，确保手机号唯一
+- 禁止在非手机号登录界面通过`<button open-type="getPhoneNumber"></button>`获取用户手机号，应该使用`globalData.user.mobile`
+- 凡是需要用户输入的界面，请在onLoad函数中添加这个代码：`this.$parent.checkMobile();`
+- 禁止非手机号登录接口修改user.mobile
 
