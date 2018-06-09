@@ -29,11 +29,11 @@
 	import util from '../../wxs/util.wxs';
 
 	const DATA_LENGTH = 10;
-  export default class HomeStore extends wepy.page {
+  	export default class HomeStore extends wepy.page {
 		config = {
-      navigationBarTitleText: '微站',
-      enablePullDownRefresh: true
-    };
+			navigationBarTitleText: '微站',
+			enablePullDownRefresh: true
+		};
 
 		data = {
 			baseUrl: baseUrl,
