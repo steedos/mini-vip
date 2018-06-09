@@ -46,7 +46,7 @@
   export default class phoneNumberLogin extends wepy.page {
 
     config = {
-      navigationBarTitleText: '登录',
+      navigationBarTitleText: '账户登录',
     };
 
     data = {
