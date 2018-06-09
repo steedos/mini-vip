@@ -17,7 +17,13 @@
       <view class="weui-cells">
         <navigator url="../record/edit?object_name=vip_store&action=edit&record_id={{space_id}}" class="weui-cell">
           <view class="weui-cell__hd">
-            <image class="avatar" mode="aspectFill" src="{{util.formatImageUrl(store_info.avatar, baseUrl)}}"/>
+            
+            <block wx:if="{{store_info.avatar}}">
+              <image class="avatar" mode="aspectFill" src="{{util.formatImageUrl(store_info.avatar, baseUrl)}}"/>
+            </block>
+            <block wx:else>
+              <image class="avatar" mode="aspectFill" src="../../images/avatar.png"/>
+            </block>
           </view>
           <view class="weui-cell__bd">
             <view>{{store_info.name}}</view>
