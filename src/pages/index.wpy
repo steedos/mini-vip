@@ -100,7 +100,7 @@
           </navigator>
         </repeat>
         <button open-type="contact" plain="true" class="weui-grid support" hover-class="weui-grid_active">
-          <view class="slds-icon-standard-call weui-grid__icon slds-icon"></view>
+          <view class="slds-icon-standard-live-chat weui-grid__icon slds-icon"></view>
           <view class="weui-grid__label">客服</view>
         </button>
       </view>
