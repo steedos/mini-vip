@@ -267,7 +267,7 @@ export default class Posts extends wepy.page {
       },
       post: {
         label: '最新动态',
-        icon: 'standard-contract',
+        icon: 'standard-news',
         url: `../post/index${this.is_space_owner ? '?editable=true' : ''}`
       },
       // vip_activity: {
@@ -283,7 +283,7 @@ export default class Posts extends wepy.page {
       support: {
         name: 'support',
         label: '在线客服',
-        icon: 'standard-call',
+        icon: 'standard-live-chat',
       },
       vip_store: {
         label: '联系我们',
