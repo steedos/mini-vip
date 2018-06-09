@@ -92,7 +92,12 @@ page {
         </view>
       </view>
       <view class="avatar">
-        <image class="image" mode="aspectFill" src="{{util.formatImageUrl(store.avatar, baseUrl)}}"/>
+        <block wx:if="{{store.avatar}}">
+          <image class="image" mode="aspectFill" src="{{util.formatImageUrl(store.avatar, baseUrl)}}"/>
+        </block>
+        <block wx:else>
+          <image class="image" mode="aspectFill" src="../images/avatar.png"/>
+        </block>
       </view>
     </view>
     <view class="dashed">
