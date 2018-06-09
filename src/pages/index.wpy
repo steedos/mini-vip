@@ -118,7 +118,7 @@
 
   export default class User extends wepy.page {
     config = {
-      navigationBarTitleText: '华炎办公',
+      navigationBarTitleText: '发现',
       enablePullDownRefresh: true
     };
 
