@@ -100,8 +100,8 @@
           </navigator>
         </repeat>
         <button open-type="contact" plain="true" class="weui-grid support" hover-class="weui-grid_active">
-          <view class="slds-icon-standard-call weui-grid__icon slds-icon"></view>
-          <view class="weui-grid__label">在线客服</view>
+          <view class="slds-icon-standard-live-chat weui-grid__icon slds-icon"></view>
+          <view class="weui-grid__label">客服</view>
         </button>
       </view>
     </view>
@@ -121,9 +121,9 @@
     data = {
       is_loaded: false,
       options: [
-        {label: '最新动态', url: 'home/post', icon: 'standard-contract'},
-        // {label: '最新活动', url: 'home/event', icon: 'standard-event'},
-        {label: '推荐企业', url: 'home/store', icon: 'standard-topic'},
+        {label: '动态', url: 'home/post', icon: 'standard-contract'},
+        // {label: '活动', url: 'home/event', icon: 'standard-event'},
+        {label: '微站', url: 'home/store', icon: 'standard-account'},
       ]
     };
 

@@ -31,7 +31,7 @@
 	const DATA_LENGTH = 10;
   export default class HomeStore extends wepy.page {
 		config = {
-      navigationBarTitleText: '推荐企业',
+      navigationBarTitleText: '微站',
       enablePullDownRefresh: true
     };
 

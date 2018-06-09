@@ -59,10 +59,10 @@
           </view>
           <view class="weui-cell__bd">
             <view class="weui-input">
-              <view wx:if="{{phoneNumber}}">{{phoneNumber}}</view>
-              <button wx:else="{{phoneNumber}}" class="get-number" plain="true" open-type="getPhoneNumber"
-                      bindgetphonenumber="getPhoneNumber">点击获取微信绑定手机号
-              </button>
+              <view >{{phoneNumber}}</view>
+              <!--<button wx:else="{{phoneNumber}}" class="get-number" plain="true" open-type="getPhoneNumber"-->
+                      <!--bindgetphonenumber="getPhoneNumber">点击获取微信绑定手机号-->
+              <!--</button>-->
             </view>
           </view>
           <view class="weui-cell__ft">
@@ -83,7 +83,7 @@
           <view class="weui-cell__bd">
             <input class="weui-input" placeholder="" value="{{contact_name}}" bindchange="bindContactNameChange"/>
           </view>
-        </view> 
+        </view>
         <view class="weui-cell weui-cell_input weui-cell_vcode">
           <view class="weui-cell__hd">
             <view class="weui-label">地址</view>
@@ -168,6 +168,9 @@ export default class SpaceRegister extends wepy.page {
   };
 
   async onLoad() {
+
+    this.$parent.checkMobile();
+
     wx.getLocation({
       type: 'gcj02',
       success: function(res) {
@@ -176,6 +179,7 @@ export default class SpaceRegister extends wepy.page {
       }
     });
     this.contact_name = this.$parent.globalData.user.name
+    this.phoneNumber = this.$parent.globalData.user.mobile;
   }
   methods = {
     getPhoneNumber(e) {
@@ -247,7 +251,7 @@ export default class SpaceRegister extends wepy.page {
         this.showTopTips = true;
         this.message = '请填写联系人姓名';
         return;
-      } 
+      }
       if (!this.industry) {
         this.showTopTips = true;
         this.message = '请选择行业';
@@ -269,7 +273,7 @@ export default class SpaceRegister extends wepy.page {
       this.submitDisabled = true;
       console.log({
         store_name: this.store_name,
-        contact_name:this.contact_name,   
+        contact_name:this.contact_name,
         industry: this.industry,
         phoneNumber: this.phoneNumber,
         location: this.location,
