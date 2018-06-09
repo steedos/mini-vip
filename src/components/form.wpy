@@ -143,7 +143,7 @@
                 <view class="weui-cell weui-cell_switch" hover-class='weui-grid_active'>
                   <view class="weui-cell__bd">{{item.label}}</view>
                   <view class="weui-cell__ft" data-id="{{item.name}}" >
-                    <switch checked data-id="{{item.name}}" bindchange="textChange"/>
+                    <switch checked="{{values[item.name] || false}}" data-id="{{item.name}}" bindchange="textChange"/>
                   </view>
                 </view>
               </block>
