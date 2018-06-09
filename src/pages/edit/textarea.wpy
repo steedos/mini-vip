@@ -54,7 +54,7 @@
 
     methods = {
       textChange(e) {
-        const key = e.target.dataset.id
+        const key = this.key;
         this.value = e.detail.value
         this.setParentValue(key, e.detail.value)
       }
