@@ -53,6 +53,9 @@
       font-size:16px;
       border-bottom-left-radius:6px;
       border-bottom-right-radius:6px;
+      &.is-cover-empty{
+        border-radius:6px;
+      }
       &:before{
         display: none;
       }
@@ -85,18 +88,21 @@
         </navigator>
         <view class="post-cover">
           <block wx:if="{{post.video}}">
-            <video src="{{util.formatVideoUrl(post.video, baseUrl)}}" controls objectFit="contain" id="{{post.video}}" @play="play({{post.video}})"></video>
+            <!-- <video src="{{util.formatVideoUrl(post.video, baseUrl)}}" controls objectFit="contain" id="{{post.video}}" @play="play({{post.video}})"></video> -->
+            <block wx:if="{{post.images}}">
+              <image class="image" mode="aspectFill" src="{{util.formatImageUrl(post.images[0], baseUrl)}}" @tap="previewImage({{post.images}})" @error="loadImageError({{index}})" />
+            </block>
           </block>
           <block wx:else>
             <block wx:if="{{post.images}}">
               <image class="image" mode="aspectFill" src="{{util.formatImageUrl(post.images[0], baseUrl)}}" @tap="previewImage({{post.images}})" @error="loadImageError({{index}})" />
             </block>
-            <block wx:else>
+            <!-- <block wx:else>
               <image class="image" mode="aspectFill" src="{{util.getEmptyImageUrl(post.type)}}"/>
-            </block>
+            </block> -->
           </block>
         </view>
-        <view class="post-body weui-cells" @tap="goDetail({{post._id}}, {{post.space}})">
+        <view class="post-body weui-cells {{post.images ? '' : 'is-cover-empty'}}" @tap="goDetail({{post._id}}, {{post.space}})">
           <view class="weui-cell weui-cell_access">
             <view class="weui-cell__bd">
               <view class="post-name">{{post.name}}</view>

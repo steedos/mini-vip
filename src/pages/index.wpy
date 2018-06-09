@@ -118,16 +118,16 @@
 
   export default class User extends wepy.page {
     config = {
-      navigationBarTitleText: '会员小秘书',
+      navigationBarTitleText: '',
       enablePullDownRefresh: true
     };
 
     data = {
       is_loaded: false,
       options: [
-        {label: '动态', url: 'home/post', icon: 'standard-contract'},
+        {label: '动态', url: 'home/post', icon: 'standard-news'},
         // {label: '活动', url: 'home/event', icon: 'standard-event'},
-        {label: '微站', url: 'home/store', icon: 'standard-account'},
+        {label: '微站', url: 'home/store', icon: 'standard-channel-programs'},
       ]
     };
 
