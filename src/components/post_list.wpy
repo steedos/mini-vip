@@ -53,6 +53,9 @@
       font-size:16px;
       border-bottom-left-radius:6px;
       border-bottom-right-radius:6px;
+      &.is-cover-empty{
+        border-radius:6px;
+      }
       &:before{
         display: none;
       }
@@ -99,7 +102,7 @@
             </block> -->
           </block>
         </view>
-        <view class="post-body weui-cells" @tap="goDetail({{post._id}}, {{post.space}})">
+        <view class="post-body weui-cells {{post.images ? '' : 'is-cover-empty'}}" @tap="goDetail({{post._id}}, {{post.space}})">
           <view class="weui-cell weui-cell_access">
             <view class="weui-cell__bd">
               <view class="post-name">{{post.name}}</view>
