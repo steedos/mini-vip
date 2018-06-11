@@ -280,7 +280,7 @@ export default class Posts extends wepy.page {
         icon: 'standard-news',
         url: `../post/index${this.is_space_admin ? '?editable=true' : ''}`
       },
-      event: {
+      vip_event: {
         label: '最新活动',
         icon: 'standard-event',
         url: `../event/list${this.is_space_admin ? '?editable=true' : ''}`
@@ -318,7 +318,7 @@ export default class Posts extends wepy.page {
         this.enabled_objects.push(objects_list[o])
       })
     } else {
-      this.enabled_objects = [objects_list.vip_card, objects_list.post, objects_list.vip_wifi, objects_list.support, objects_list.vip_store]
+      this.enabled_objects = [objects_list.vip_card, objects_list.post, objects_list.vip_event, objects_list.vip_wifi, objects_list.support, objects_list.vip_store]
       if(this.is_space_owner || result.qrcode){
         this.enabled_objects.push(objects_list.qrcode);
       }

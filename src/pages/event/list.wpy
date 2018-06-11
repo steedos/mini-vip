@@ -50,11 +50,11 @@ page {
   <view class="page" wx:if="{{is_loaded}}">
     <view class="page__bd">
       <scroll-view class="scroll-view_H" scroll-y="true">
-        <eventList :list.sync="events" :editable.sync="is_editable" />
+        <eventList :list.sync="events" :editable.sync="editable" />
       </scroll-view>
     </view>
-    <view class="tab-bar" wx:if="{{is_editable}}">
-      <view class="add-record" @tap="createPost">
+    <view class="tab-bar" wx:if="{{editable}}">
+      <view class="add-record" @tap="createEvent">
         <view class="slds-icon-add ion"></view>
       </view>
     </view>
@@ -73,7 +73,7 @@ export default class Events extends wepy.page {
   };
 
   async onLoad(e) {
-    this.is_editable = e.editable;
+    this.editable = e.editable;
     if(e.title){
       this.title = e.title;
       wx.setNavigationBarTitle({
@@ -144,7 +144,7 @@ export default class Events extends wepy.page {
     current_skip: 0,
     is_skip_allowed: true,
     is_loaded: false,
-    is_editable: false
+    editable: false
   };
   
 	async loadEventList(){
@@ -176,8 +176,8 @@ export default class Events extends wepy.page {
   };
 
   methods = {
-    createPost() {
-      let url = "/pages/record/edit?action=create&object_name=post&fields=name,summary,description,images,video,type";
+    createEvent() {
+      let url = "/pages/record/edit?action=create&object_name=vip_event&fields=name,start,end,allDay,location,alarms,accepted_count,pending_count,rejected_count,featured,cover";
       wepy.navigateTo({
         url: url
       });
