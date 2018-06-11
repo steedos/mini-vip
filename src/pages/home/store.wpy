@@ -75,9 +75,9 @@
 				</view>
 			</block>
 			<view class="tab-bar">
-				<navigator class="add-record" url="../space/register">
+				<view class="add-record" @tap="register" hover-class='button-hover'>
 					<view class="slds-icon-add ion"></view>
-				</navigator>
+				</view>
 			</view>
 		</view>
   </view>
@@ -87,8 +87,9 @@
 	import wepy from 'wepy';
 	import { baseUrl } from '@/config';
 	import util from '../../wxs/util.wxs';
+  import pageRouter from '@/utils/pageRouter'
 
-	const DATA_LENGTH = 10;
+  const DATA_LENGTH = 10;
   	export default class HomeStore extends wepy.page {
 		config = {
 			navigationBarTitleText: '微站',
@@ -160,5 +161,11 @@
 				wx.stopPullDownRefresh();
 			}
 		}
+
+    methods = {
+      register(){
+        pageRouter.navigateTo({ url: '/pages/space/register' })
+      }
+    }
 	}
 </script>
