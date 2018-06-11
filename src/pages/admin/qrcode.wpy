@@ -50,6 +50,7 @@ import wepy from 'wepy';
 import req from '@/network';
 import { baseUrl } from '@/config';
 import util from '../../wxs/util.wxs';
+var utilJs = require('../../utils/util.js')
 
 export default class QRCode extends wepy.page {
   config = {
@@ -61,7 +62,9 @@ export default class QRCode extends wepy.page {
 
   data = {
     baseUrl: baseUrl,
-    imgCodeUrl: ''
+    imgCodeUrl: '',
+    store_id:'',
+    store_name:''
   };
 
   wxs = {
@@ -73,11 +76,25 @@ export default class QRCode extends wepy.page {
       title: '加载中',
       mask: true
     });
+    console.log("e======",e)
     var store_id = e.store_id || this.$parent.globalData.space_id
-    
+    this.store_id = store_id
+    this.$apply()
     await this.getqrCode(store_id)
     
     wepy.hideLoading();
+  }
+  onShareAppMessage(res) {
+    // const space_id = this.space_id
+    // const store_id = this.store_id
+    // const space_name = this.space_name
+    var url = utilJs.formatImageUrl(this.imgCodeUrl, this.baseUrl)
+    console.log("url=======",url)
+    return {
+      title: "欢迎加入"+this.store_name,
+      path: `pages/admin/qrcode?space_id=${this.store_id}`,
+      imageUrl:utilJs.formatImageUrl(this.imgCodeUrl, this.baseUrl)
+    };
   }
   async getqrCode(store_id) {
     // const options = {
@@ -85,7 +102,10 @@ export default class QRCode extends wepy.page {
     //   $select: 'qrcode'
     // }
     const result = await this.$parent.get('vip_store', store_id);
-    
+    if(result){
+      this.store_name = result.name
+      this.$apply();
+    }
     if(result &&  result.qrcode){
       console.log("=======result======",result);
       this.imgCodeUrl = result.qrcode;
