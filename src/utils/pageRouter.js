@@ -29,7 +29,7 @@ class PageRouter{
         }
       }
     }
-    wepy[type](object)
+    return wepy[type](object)
   }
 
   navigateTo(object){
