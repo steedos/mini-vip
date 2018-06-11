@@ -1,0 +1,166 @@
+<style lang="less">
+.weui-loadmore__tips_in-line{
+  background-color:#F5F5f2;
+}
+
+.event-header {
+  
+  .image {
+    display: block;
+    border-radius: 50%;
+  }
+
+  .space-name {
+    line-height: 1.5rem;
+  }
+}
+
+.event {
+  background: #fff;
+  margin:30rpx 20rpx;
+  border:solid 1px #ededed;
+  border-radius:6px;
+
+  .event-cover{
+    image{
+      display: block;
+      width: 100%;
+      height: 480rpx;
+      border-top-left-radius:6px;
+      border-top-right-radius:6px;
+    }
+    .no-radius {
+      border-radius: 0 !important;
+    }
+  }
+  .event-body{
+    padding:30rpx;
+    margin-top: 0px;
+    .event-name{
+      overflow:hidden;
+      display:inline-block;
+      text-overflow:ellipsis;
+      width:36%;
+      overflow:hidden;
+      white-space:nowrap;
+      font-weight:bold;
+      font-family:黑体;
+    }
+    .event-summary{
+      color:#888;
+      font-size:14px;
+      overflow:hidden;
+    }
+    &.weui-cells{
+      line-height:22px;
+      font-size:16px;
+      border-bottom-left-radius:6px;
+      border-bottom-right-radius:6px;
+      &.is-cover-empty{
+        border-radius:6px;
+      }
+      &:before{
+        display: none;
+      }
+      &:after{
+        display: none;
+      }
+      .weui-cell{
+        padding: 0px;
+      }
+    }
+  }
+}
+</style>
+<template>
+<view>
+  <block wx:if="{{list.length}}">
+    <repeat for="{{list}}" key="index" index="index" item="event">
+      <view class="event">
+        <view class="event-cover">
+          <image class="image" mode="aspectFill" src="{{util.formatImageUrl(event.cover, baseUrl)}}" />
+        </view>
+        <view class="event-body weui-cells" @tap="goDetail({{event._id}}, {{event.space}})">
+          <view class="weui-cell weui-cell_access">
+            <view class="weui-cell__bd">
+              <view class="event-name">{{event.name}}</view>
+              <view class="event-summary">
+                <view class="event-start">{{util.formatDate(event.start)}}</view>
+                <view class="event-end">{{util.formatDate(event.end)}}</view>
+                <view class="event-address" wx:if="{{event.location.address}}">地点：{{event.location.address}}</view>
+                <view class="event-accepted-count">人数：{{event.accepted_count ? event.accepted_count : 0}}人报名</view>
+              </view>
+            </view>
+            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+          </view>
+        </view>
+      </view>
+    </repeat>
+  </block>
+  <block wx:else>
+    <view class="weui-loadmore weui-loadmore_line">
+      <view class="weui-loadmore__tips weui-loadmore__tips_in-line">暂无活动</view>
+    </view>
+  </block>
+</view>
+</template>
+
+
+<script>
+import wepy from 'wepy';
+import { baseUrl } from '@/config';
+import req from '@/network';
+import { serverAPI } from '@/server';
+import { demoSpaceId,demoStoreId } from '@/config'
+import util from '../wxs/util.wxs'
+
+export default class EventList extends wepy.component {
+
+  props = {
+    isHeaderShow: {
+      type: Boolean,
+      default: false
+    },
+    list: {
+      type: Array,
+      default: []
+    },
+    editable: {
+      type: Boolean,
+      default: false
+    },
+    showHeader: {
+      type: Boolean,
+      default: false
+    }
+  }
+
+  onLoad() {
+    setTimeout(() => {
+      console.log('event list showHeader.....', this.list)
+    }, 5000);
+  }
+
+  data = {
+    baseUrl: baseUrl
+  };
+
+  wxs = {
+    util: util
+  };
+
+  methods = {
+    goDetail(event_id, space_id,event){
+      let url = `../event/view?event_id=${event_id}&space_id=${space_id}`;
+      if(this.editable){
+        url += '&editable=true'
+      }
+      console.log("goDetail=====================");
+      console.log(url);
+      wx.navigateTo({
+        url: url
+      });
+    }
+  };
+}
+</script>

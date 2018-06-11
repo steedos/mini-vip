@@ -1,0 +1,183 @@
+<style lang="less">
+page{
+  height: 100%;
+  background: #fff;
+}
+.page__hd{
+  padding: 0px;
+}
+.cover{
+  width: 100%;
+  height:480rpx;
+}
+.event-body{
+  &.weui-cells{
+    line-height:22px;
+    font-size:16px;
+    border-bottom-left-radius:6px;
+    border-bottom-right-radius:6px;
+    &:before{
+      display: none;
+    }
+    &:after{
+      display: none;
+    }
+    .weui-cell{
+      padding-left:0;
+      padding-right:0;
+      &:before{
+        display: none;
+      }
+      &:after{
+        display: none;
+      }
+    }
+  }
+}
+</style>
+<template>
+<view class="page" wx:if="{{is_loaded}}">
+  <view class="page__hd">
+    <image wx:if="{{event.cover}}" class="cover" mode="aspectFill" src="{{util.formatImageUrl(event.cover, baseUrl)}}" />
+  </view>
+  <view class="page__bd">
+    <view class="weui-article">
+        <view class="weui-article__section">
+          <view class="weui-article__h1">{{event.name}}</view>
+          <view class="event-body weui-cells">
+            <view class="weui-cell event-start">
+              <view class="weui-cell__bd">
+                {{util.formatDate(event.start)}}
+              </view>
+            </view>
+            <view class="weui-cell event-end">
+              <view class="weui-cell__bd">
+                {{util.formatDate(event.end)}}
+              </view>
+            </view>
+            <view class="weui-cell weui-cell_access event-address" wx:if="{{event.location.address}}">
+              <view class="weui-cell__bd">
+                地点：{{event.location.address}}
+              </view>
+              <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+            </view>
+            <view class="weui-cell weui-cell_access event-accepted-count">
+              <view class="weui-cell__bd">
+                人数：{{event.accepted_count ? event.accepted_count : 0}}人报名
+              </view>
+              <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+            </view>
+            <!-- <view class="weui-cell weui-cell_access">
+              <view class="weui-cell__bd">
+                <view class="event-start">{{util.formatDate(event.start)}}</view>
+                <view class="event-end">{{util.formatDate(event.end)}}</view>
+                <view class="event-address" wx:if="{{event.location.address}}">地点：{{event.location.address}}</view>
+                <view class="event-accepted-count">人数：{{event.accepted_count ? event.accepted_count : 0}}人报名</view>
+              </view>
+              <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+            </view> -->
+          </view>
+          <view class="weui-article__p">
+            <text space="emsp">{{event.description}}</text>
+          </view>
+        </view>
+    </view>
+  </view>
+</view>
+</template>
+<script>
+import wepy from 'wepy';
+import req from '@/network';
+import { baseUrl } from '@/config';
+import util from '../../wxs/util.wxs';
+
+export default class EventView extends wepy.page {
+  config = {
+    navigationBarTitleText: '',
+    enablePullDownRefresh: true
+  };
+
+  async onLoad(e) {
+    this.editable = e.editable;
+    wepy.showLoading({
+      title: '加载中',
+      mask: true
+    });
+    if(e.space_id){
+      this.$parent.globalData.space_id = e.space_id;
+      await this.$parent.login(e.space_id);
+    }
+    if(e.event_id){
+      this.event_id = e.event_id;
+      this.loadEvent();
+    }
+
+    this.is_loaded = true
+    this.$apply()
+    wepy.hideLoading();
+  }
+
+  async refresh(action) {
+    if(action == "remove"){
+      this.goBackAfterRemove();
+      return;
+    }
+    await this.loadEvent();
+    wepy.stopPullDownRefresh();
+  }
+
+  async loadEvent(){
+    var event = await this.$parent.get("vip_event", this.event_id)
+    this.event = event;
+    this.space_id = event.space;
+    this.$apply();
+  };
+
+  goBackAfterRemove() {
+    const pages = getCurrentPages();
+    const prevPage = pages[pages.length - 3];
+    if (prevPage.refresh) {
+      prevPage.refresh()
+    }
+    wepy.navigateBack({
+      delta: 1
+    })
+  }
+
+  // 分享
+  onShareAppMessage(res) {
+    const event_name = this.event.name
+    return {
+      title: event_name,
+      path: `pages/event/view?space_id=${this.space_id}&event_id=${this.event._id}`
+    };
+  }
+
+  // 上拉刷新
+  onPullDownRefresh() {
+    this.refresh();
+  }
+
+  data = {
+    event_id: null,
+    event: null,
+    baseUrl: baseUrl,
+    space_id: '',
+    is_loaded: false,
+    editable: false
+  };
+
+  wxs = {
+    util: util
+  };
+
+  methods = {
+    editEvent() {
+      let url = `/pages/record/edit?action=edit&object_name=event&record_id=${this.event_id}&fields=name,summary,description,images,video,type`;
+      wepy.navigateTo({
+        url: url
+      });
+    }
+  };
+}
+</script>
