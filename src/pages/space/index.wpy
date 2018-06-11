@@ -255,6 +255,14 @@ export default class Posts extends wepy.page {
 
   async loadStoreInfo() {
     const self = this
+    const spaceId = this.space_id;
+    const space = await this.$parent.get('spaces', spaceId);
+    const admins = space.admins
+    const globalData = this.$parent.globalData;
+    const userId = globalData.user._id
+    this.space_info = space;
+    this.is_space_owner = space && userId == space.owner;
+    this.is_space_admin = admins && admins.includes(userId);
     const objects_list = {
       vip_card: {
         label: '会员卡',
@@ -298,14 +306,6 @@ export default class Posts extends wepy.page {
         url: `/pages/admin/qrcode?space_id=${this.space_id}`
       }
     }
-    const spaceId = this.space_id;
-    const space = await this.$parent.get('spaces', spaceId);
-    const admins = space.admins
-    const globalData = this.$parent.globalData;
-    const userId = globalData.user._id
-    this.space_info = space;
-    this.is_space_owner = space && userId == space.owner;
-    this.is_space_admin = admins && admins.includes(userId);
     const result = await this.$parent.get('vip_store', spaceId, spaceId);
     this.enabled_objects = []
     if (result.enabled_objects && !_.isEmpty(result.enabled_objects)) {
