@@ -1,0 +1,19 @@
+<template>
+  <view class="page"></view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  export default class EmptyPage extends wepy.page {
+    onLoad(e){
+      wepy.showLoading({
+        title: '加载中',
+        mask: true
+      });
+
+      if(e.redirect_to){
+        wepy.redirectTo({url: decodeURIComponent(e.redirect_to)})
+      }
+    }
+  }
+</script>

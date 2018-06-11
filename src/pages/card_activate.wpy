@@ -143,9 +143,6 @@ export default class cardActivate extends wepy.page {
   }
 
   async onLoad(e) {
-
-    this.$parent.checkMobile();
-
     wepy.showLoading({
       title: '加载中',
       mask: true

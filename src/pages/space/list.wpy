@@ -28,9 +28,7 @@
       </view>
 
       <view class="button-sp-area">
-        <navigator url="register">
-        <button class="weui-btn" type="primary" plain="true">0元入驻</button>
-        </navigator>
+        <button class="weui-btn" type="primary" plain="true" @tap="register" hover-class='button-hover'>0元入驻</button>
       </view>
     </view>
   </view>
@@ -41,6 +39,7 @@
   import req from '@/network';
   import util from '../../wxs/util.wxs';
   import {baseUrl} from '@/config';
+  import pageRouter from '@/utils/pageRouter'
 
   export default class SpaceList extends wepy.page {
     config = {
@@ -99,6 +98,12 @@
       }
       this.is_loaded = true
       this.$apply()
+    }
+
+    methods = {
+      register(){
+        pageRouter.navigateTo({ url: '/pages/space/register' })
+      }
     }
   }
 </script>

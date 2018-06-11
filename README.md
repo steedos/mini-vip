@@ -162,6 +162,12 @@ mine_type 内容样式 每种分类在详细页有不同的风格显示
 
 ### 统一登录界面，确保手机号唯一
 - 禁止在非手机号登录界面通过`<button open-type="getPhoneNumber"></button>`获取用户手机号，应该使用`globalData.user.mobile`
-- 凡是需要用户输入的界面，请在onLoad函数中添加这个代码：`this.$parent.checkMobile();`
 - 禁止非手机号登录接口修改user.mobile
+- 凡是需要用户输入的页面，请在app.wpy的onLaunch函数中添加代码，并使用pageRouter.navigateTo({url: page绝对路径})进入输入页面： `
+    pageRouter.pushEnter({
+      page: 'page绝对路径',
+      script: function (to) {
+        return this.checkMobile(to)
+      }
+    });`
 
