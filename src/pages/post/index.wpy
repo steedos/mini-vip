@@ -116,7 +116,8 @@ export default class Posts extends wepy.page {
     };
   }
 
-  refresh() {
+  async refresh() {
+    this.is_skip_allowed = true;
     this.posts = [];
     this.current_skip = 0;
     this.loadPostList();
@@ -145,11 +146,15 @@ export default class Posts extends wepy.page {
     space_id: "",
     posts: [],
     current_skip: 0,
+    is_skip_allowed: true,
     is_loaded: false,
     is_editable: false
   };
   
 	async loadPostList(){
+    if(!this.is_skip_allowed){
+      return;
+    }
     const skip = this.current_skip;
     const options = {
       $expand: 'owner($select=name)',
@@ -166,10 +171,12 @@ export default class Posts extends wepy.page {
     const result = await this.$parent.query("post", options);
     if(result.value){
       this.posts = this.posts.concat(result.value);
-      console.log("loadPostList", this.posts);
       this.current_skip = skip + result.value.length;
-      this.$apply();
+      if (this.current_skip >= result['@odata.count']) {
+        this.is_skip_allowed = false;
+      }
     }
+    this.$apply();
   };
 
   methods = {

@@ -69,7 +69,7 @@ page {
       line-height: inherit;
     }
     .post-list-wrapper{
-      margin-top:1.17647059em;
+      margin-top: 8px;
     }
   }
 }
@@ -173,6 +173,7 @@ export default class Posts extends wepy.page {
   }
 
   async refresh() {
+    this.is_skip_allowed = true;
     this.posts = [];
     this.current_skip = 0;
     await this.loadStoreInfo();
@@ -214,6 +215,7 @@ export default class Posts extends wepy.page {
     type: '',
     posts: [],
     current_skip: 0,
+    is_skip_allowed: true,
     space_id: '',
     space_info: {},
     store_info: {},
@@ -321,6 +323,9 @@ export default class Posts extends wepy.page {
   }
 
   async loadPostList() {
+    if(!this.is_skip_allowed){
+      return;
+    }
     const skip = this.current_skip;
     const options = {
       $expand: 'owner($select=name)',
@@ -338,6 +343,9 @@ export default class Posts extends wepy.page {
     if (result.value) {
       this.posts = this.posts.concat(result.value);
       this.current_skip = skip + result.value.length;
+      if (this.current_skip >= result['@odata.count']) {
+        this.is_skip_allowed = false;
+      }
     }
     this.$apply();
     wepy.stopPullDownRefresh();
