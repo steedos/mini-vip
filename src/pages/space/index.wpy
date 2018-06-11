@@ -278,7 +278,12 @@ export default class Posts extends wepy.page {
       post: {
         label: '最新动态',
         icon: 'standard-news',
-        url: `../post/index${this.is_space_owner ? '?editable=true' : ''}`
+        url: `../post/index${this.is_space_admin ? '?editable=true' : ''}`
+      },
+      event: {
+        label: '最新活动',
+        icon: 'standard-event',
+        url: `../event/list${this.is_space_admin ? '?editable=true' : ''}`
       },
       // vip_activity: {
       //   label: '活动报名',

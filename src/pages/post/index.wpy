@@ -50,10 +50,10 @@ page {
   <view class="page" wx:if="{{is_loaded}}">
     <view class="page__bd">
       <scroll-view class="scroll-view_H" scroll-y="true">
-        <postList :list.sync="posts" :editable.sync="is_editable" />
+        <postList :list.sync="posts" :editable.sync="editable" />
       </scroll-view>
     </view>
-    <view class="tab-bar" wx:if="{{is_editable}}">
+    <view class="tab-bar" wx:if="{{editable}}">
       <view class="add-record" @tap="createPost">
         <view class="slds-icon-add ion"></view>
       </view>
@@ -77,7 +77,7 @@ export default class Posts extends wepy.page {
   }
 
   async onLoad(e) {
-    this.is_editable = e.editable;
+    this.editable = e.editable;
     if(e.title){
       this.title = e.title;
       wx.setNavigationBarTitle({
@@ -148,7 +148,7 @@ export default class Posts extends wepy.page {
     current_skip: 0,
     is_skip_allowed: true,
     is_loaded: false,
-    is_editable: false
+    editable: false
   };
   
 	async loadPostList(){
