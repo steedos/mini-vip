@@ -58,7 +58,7 @@ page{
     transform: scaleY(0.5);
   }
 
-  .btn-edit {
+  .btn-edit, .btn-respond {
     height: 35px;
     width: 35px;
     background: #ffa325;
@@ -126,6 +126,11 @@ page{
   <view class="tab-bar" wx:if="{{editable}}">
     <view class="btn-edit" @tap="editEvent">
       <view class="slds-icon-edit ion"></view>
+    </view>
+  </view>
+  <view class="tab-bar" wx:else>
+    <view class="btn-respond" @tap="respondEvent">
+      <view class="slds-icon-new_task ion"></view>
     </view>
   </view>
 </view>
@@ -222,6 +227,9 @@ export default class EventView extends wepy.page {
       wepy.navigateTo({
         url: url
       });
+    }
+    respondEvent() {
+
     }
   };
 }
