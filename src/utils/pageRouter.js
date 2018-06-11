@@ -12,7 +12,7 @@ class PageRouter{
 
   _enter = []; // [{page:'/index', script: function}]
 
-  _exit = [];
+  _exit = []; //TODO
 
   _app;
 
