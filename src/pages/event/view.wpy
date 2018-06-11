@@ -128,7 +128,7 @@ page{
       <view class="slds-icon-edit ion"></view>
     </view>
   </view>
-  <view class="tab-bar" wx:else>
+  <view class="tab-bar" style="display:none" wx:else>
     <view class="btn-respond" @tap="respondEvent">
       <view class="slds-icon-new_task ion"></view>
     </view>
