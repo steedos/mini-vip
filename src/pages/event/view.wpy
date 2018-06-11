@@ -32,6 +32,48 @@ page{
     }
   }
 }
+.tab-bar {
+  display: flex;
+  position: fixed;
+  z-index: 500;
+  bottom: 0;
+  height: 50px;
+  width: 100%;
+  background-color: #F7F7FA;
+  justify-content: center;
+  align-items: center;
+
+  &::before {
+    content: " ";
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    height: 1px;
+    border-top: 1px solid #C0BFC4;
+    color: #C0BFC4;
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+  }
+
+  .btn-edit {
+    height: 35px;
+    width: 35px;
+    background: #ffa325;
+    text-align: center;
+    color: #fff;
+    border: 10px;
+    border-radius: 50%;
+
+    .ion {
+      line-height: 35px;
+      font-weight: bold;
+      font-size: 16px;
+    }
+  }
+}
 </style>
 <template>
 <view class="page" wx:if="{{is_loaded}}">
@@ -79,6 +121,11 @@ page{
             <text space="emsp">{{event.description}}</text>
           </view>
         </view>
+    </view>
+  </view>
+  <view class="tab-bar" wx:if="{{editable}}">
+    <view class="btn-edit" @tap="editEvent">
+      <view class="slds-icon-edit ion"></view>
     </view>
   </view>
 </view>
@@ -171,7 +218,7 @@ export default class EventView extends wepy.page {
 
   methods = {
     editEvent() {
-      let url = `/pages/record/edit?action=edit&object_name=event&record_id=${this.event_id}&fields=name,summary,description,images,video,type`;
+      let url = `/pages/record/edit?action=edit&object_name=vip_event&record_id=${this.event_id}&fields=name,start,end,allDay,location,alarms,accepted_count,pending_count,rejected_count,featured,cover`;
       wepy.navigateTo({
         url: url
       });
