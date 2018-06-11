@@ -23,6 +23,7 @@
 
   .post-cover{
     image{
+      display: block;
       width: 100%;
       height: 480rpx;
       border-top-left-radius:6px;
