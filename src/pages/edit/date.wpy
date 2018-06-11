@@ -15,7 +15,7 @@
               <view class="weui-input">{{value}}</view>
             </picker>
           </view>
-          <view class="weui-cell__ft">
+          <view class="weui-cell__ft" wx:if="{{value}}">
             <icon type="clear" size="20" color="red" @tap.stop='clearValue'/>
           </view>
         </view>

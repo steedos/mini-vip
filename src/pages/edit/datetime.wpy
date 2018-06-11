@@ -20,7 +20,7 @@
           <view class="weui-input">{{time}}</view>
         </picker>
       </view>
-      <view class="weui-cell__ft">
+      <view class="weui-cell__ft" wx:if="{{date || time}}">
         <icon type="clear" size="20" color="red" @tap.stop='clearValue'/>
       </view>
     </view>
