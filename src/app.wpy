@@ -57,6 +57,7 @@ import * as interceptor from '@/network/interceptor'
 import { baseUrl, appId } from '@/config'
 import _ from 'underscore'
 import { serverAPI } from '@/server';
+import pageRouter from '@/utils/pageRouter'
 
 const store = configStore()
 setStore(store)
@@ -109,6 +110,7 @@ export default class VIP extends wepy.app {
       'pages/home/post',
       'pages/home/store',
       'pages/phone_number_login',
+      'pages/empty_page',
     ],
     tabBar: {
       color: '#666',
@@ -159,6 +161,30 @@ export default class VIP extends wepy.app {
     const globalData = wx.getStorageSync('globalData') || {}
     globalData.is_login = false
     this.globalData = globalData
+
+    pageRouter.setApp(this)
+
+    pageRouter.pushEnter({
+      page: '/pages/me_profile',
+      script: function (to) {
+        return this.checkMobile(to)
+      }
+    });
+
+    pageRouter.pushEnter({
+      page: '/pages/space/register',
+      script: function (to) {
+        return this.checkMobile(to)
+      }
+    })
+
+    pageRouter.pushEnter({
+      page: '/pages/card_activate',
+      script: function (to) {
+        return this.checkMobile(to)
+      }
+    })
+
   }
 
   onHide() {
@@ -179,13 +205,14 @@ export default class VIP extends wepy.app {
     })
   }
 
-  checkMobile(){
+  checkMobile(to){
     if(this.globalData.user && this.globalData.user.mobile){
       return true
     }else{
       const pages = getCurrentPages();
       const page = pages[pages.length - 1];
-      wepy.redirectTo({url: '/pages/phone_number_login?from=/' + page.route});
+      wepy.navigateTo({url: '/pages/empty_page?redirect_to=' + encodeURIComponent('/pages/phone_number_login?from=' + to)});
+      return false
     }
   }
 

@@ -94,8 +94,6 @@ export default class meProfile extends wepy.page {
 
   onLoad() {
 
-    this.$parent.checkMobile();
-
     const user = this.$parent.globalData.user;
 
     console.log(user);

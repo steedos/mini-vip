@@ -102,6 +102,7 @@
 import wepy from 'wepy';
 import req from '@/network';
 import { serverAPI } from '@/server';
+import pageRouter from '@/utils/pageRouter'
 
 export default class Me extends wepy.page {
   config = {
@@ -130,7 +131,7 @@ export default class Me extends wepy.page {
     editUser() {
       const user = this.$parent.globalData.user;
       if (user && user.name) {
-        wx.navigateTo({ url: 'me_profile' });
+        pageRouter.navigateTo({ url: '/pages/me_profile' })
       }
     },
     userLogin(e) {
