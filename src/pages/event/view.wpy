@@ -95,7 +95,7 @@ page{
                 结束时间：{{util.formatDate(event.end)}}
               </view>
             </view>
-            <view class="weui-cell weui-cell_access event-address" wx:if="{{event.location.address}}">
+            <view class="weui-cell weui-cell_access event-address" wx:if="{{event.location.address}}" hover-class="weui-cell_active" @tap="openMap">
               <view class="weui-cell__bd">
                 地点：{{event.location.address}}
               </view>
@@ -248,6 +248,18 @@ export default class EventView extends wepy.page {
         let url = `/pages/record/edit?action=edit&object_name=vip_event_attendees&record_id=${attendee.value[0]._id}`;
         wepy.navigateTo({
           url: url
+        });
+      }
+    },
+    openMap() {
+      if (this.event.location.address) {
+        var latitude = this.event.location.latitude || 31.02241;
+        var longitude = this.event.location.longitude || 121.21654;
+        var address =  this.event.location.address;
+        wepy.openLocation({
+          latitude: latitude,
+          longitude: longitude,
+          address: address
         });
       }
     }
