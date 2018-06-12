@@ -230,16 +230,15 @@ export default class EventView extends wepy.page {
     },
     async respondEvent() {
       let userId = this.$parent.globalData.user._id;
-      let userName = this.$parent.globalData.user.name;
+      let name = this.$parent.globalData.user.name;
       const query_options = {
         $filter: `event eq '${this.event_id}' and owner eq '${userId}'`,
         $select: 'name'
       };
       let attendee = await this.$parent.query("vip_event_attendees", query_options, this.space_id);
-      console.log("respondEvent attendee===1==", attendee);
       if(!attendee || !attendee.value || !attendee.value.length){
         let attendeeData = {
-          name: userName,
+          name: name,
           event: this.event_id,
           owner: userId
         };
