@@ -128,7 +128,7 @@ page{
       <view class="slds-icon-edit ion"></view>
     </view>
   </view>
-  <view class="tab-bar" style="display:none" wx:else>
+  <view class="tab-bar" wx:else>
     <view class="btn-respond" @tap="respondEvent">
       <view class="slds-icon-new_task ion"></view>
     </view>
@@ -228,8 +228,29 @@ export default class EventView extends wepy.page {
         url: url
       });
     },
-    respondEvent() {
-
+    async respondEvent() {
+      let userId = this.$parent.globalData.user._id;
+      let userName = this.$parent.globalData.user.name;
+      const query_options = {
+        $filter: `event eq '${this.event_id}' and owner eq '${userId}'`,
+        $select: 'name'
+      };
+      let attendee = await this.$parent.query("vip_event_attendees", query_options, this.space_id);
+      console.log("respondEvent attendee===1==", attendee);
+      if(!attendee || !attendee.value || !attendee.value.length){
+        let attendeeData = {
+          name: userName,
+          event: this.event_id,
+          owner: userId
+        };
+        attendee = await this.$parent.insert("vip_event_attendees", attendeeData, this.space_id);
+      }
+      if(attendee && attendee.value && attendee.value.length){
+        let url = `/pages/record/edit?action=edit&object_name=vip_event_attendees&record_id=${attendee.value[0]._id}`;
+        wepy.navigateTo({
+          url: url
+        });
+      }
     }
   };
 }
