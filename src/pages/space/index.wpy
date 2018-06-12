@@ -2,6 +2,22 @@
 <style lang="less">
 page {
   height: 100%;
+  .ion-container {
+    display: inline-block;
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    z-index: 1000;
+
+    .ion {
+      font-size: 30px;
+      color: #fff;
+    }
+
+    .stared {
+      color: #fcb95b;
+    }
+  }
   .page {
     .image {
       display: block;
@@ -78,6 +94,9 @@ page {
   <view class="page" wx:if="{{is_loaded}}">
     <view class="page__hd">
       <view class="cover-wrapper">
+        <view class="ion-container" @tap="starSpace">
+          <view class="ion {{star_id ? 'stared ion-android-favorite' : 'ion-android-favorite-outline'}}"></view>
+        </view>
         <block wx:if="{{store_info.cover}}">
           <image class="cover" mode="aspectFill" src="{{util.formatImageUrl(store_info.cover, baseUrl)}}" @tap="uploadImage(true)"/>
         </block>
@@ -167,6 +186,7 @@ export default class Posts extends wepy.page {
     this.type = e.type;
     await this.loadStoreInfo();
     await this.loadPostList();
+    await this.isSpaceStar();
     this.is_loaded = true;
     this.$apply();
     wepy.hideLoading();
@@ -224,12 +244,27 @@ export default class Posts extends wepy.page {
     post_types: [],
     is_space_owner: false,
     is_space_admin: false,
-    is_loaded: false
+    is_loaded: false,
+    star_id: ''
   };
 
   wxs = {
     util: util
   };
+
+  async isSpaceStar() {
+    const user = this.$parent.globalData.user._id;
+    const space_id = this.space_id;
+    const options = {
+      $filter: `(user eq ${user} and star_space eq ${space_id})`
+    };
+    const result = await this.$parent.query('user_star', options, space_id);
+    if (result && result.value[0]) {
+      console.log('isSpaceStar..............')
+      this.star_id = result.value[0]._id;
+      this.$apply();
+    }
+  }
 
   async loadCardInfo() {
     const user = this.$parent.globalData.user._id;
@@ -440,6 +475,36 @@ export default class Posts extends wepy.page {
           }
           this.$apply();
           wepy.hideLoading();
+        }
+      }
+    },
+    async starSpace() {
+      const space_id = this.space_id;
+      const user = this.$parent.globalData.user._id;
+      const data = {
+        user: user,
+        star_space: space_id,
+        owner: user
+      }
+      if (this.star_id) {
+        await this.$parent.delete('user_star', this.star_id, space_id)
+        this.star_id = ''
+        this.$apply()
+        wx.showToast({
+          title: '取消关注成功',
+          icon: "none",
+          duration: 1000
+        })
+      } else {
+        const result = await this.$parent.insert('user_star', data, space_id)
+        if (result.value && result.value.length) {
+          this.star_id = result.value[0]._id;
+          this.$apply()
+          wx.showToast({
+            title: '关注成功!',
+            icon: "none",
+            duration: 1000
+          })
         }
       }
     }
