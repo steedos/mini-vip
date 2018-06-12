@@ -227,7 +227,7 @@ export default class EventView extends wepy.page {
       wepy.navigateTo({
         url: url
       });
-    }
+    },
     respondEvent() {
 
     }
