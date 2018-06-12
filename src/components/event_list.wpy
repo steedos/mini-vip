@@ -85,8 +85,8 @@
             <view class="weui-cell__bd">
               <view class="event-name">{{event.name}}</view>
               <view class="event-summary">
-                <view class="event-start">{{util.formatDate(event.start)}}</view>
-                <view class="event-end">{{util.formatDate(event.end)}}</view>
+                <view class="event-start" wx:if="{{event.start}}">{{util.formatDate(event.start)}}</view>
+                <view class="event-end" wx:if="{{event.end}}">{{util.formatDate(event.end)}}</view>
                 <view class="event-address" wx:if="{{event.location.address}}">地点：{{event.location.address}}</view>
                 <view class="event-accepted-count">人数：{{event.accepted_count ? event.accepted_count : 0}}人报名</view>
               </view>
