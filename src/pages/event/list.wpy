@@ -104,12 +104,12 @@ export default class Events extends wepy.page {
 
   // 分享
   onShareAppMessage(res) {
-    const space_id = this.space_id
-    const type = this.type
-    const title = this.title
+    const space_id = this.space_id;
+    const title = this.title;
+    const featured = this.featured;
     return {
       title: title,
-      path: `pages/event/index?space_id=${space_id}&type=${type}&title=${title}`
+      path: `pages/event/list?space_id=${space_id}&featured=${featured}&title=${title}`
     };
   }
 
