@@ -28,19 +28,18 @@ page {
       height: 310px;
       background: #fff;
 
-      &::after {
-        content: " ";
-        position: absolute;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        border-top: 1rpx solid #d9d9d9;
-      }
+      // &::after {
+      //   content: " ";
+      //   position: absolute;
+      //   left: 0;
+      //   right: 0;
+      //   bottom: 0;
+      //   border-top: 1rpx solid #d9d9d9;
+      // }
 
       .cover-wrapper {
         position: relative;
         height: 200px;
-        background-image: url("https://vip-test.steedos.com:8443/api/files/images/qGmp3MeJtKKxeFp5r");
         background-size: cover;
 
         &::after {
@@ -75,10 +74,10 @@ page {
       .space-info {
         position: absolute;
         text-align: center;
-        top: 140px;
+        top: 120px;
         bottom: 10px;
-        left: 15px;
-        right: 15px;
+        left: 6px;
+        right: 6px;
         width: auto;
         background-image: linear-gradient(to bottom,#e5e5e5,#fff);
         background-clip: padding-box;
@@ -101,7 +100,7 @@ page {
         
         .wrapper {
           position: relative;
-          top: -60px;
+          top: -50px;
 
           .avatar-container {
             // position: relative;
@@ -113,8 +112,8 @@ page {
             box-shadow: 0 2px 2px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08);
             .avatar {
               display: block;
-              width: 100px;
-              height: 100px;
+              width: 70px;
+              height: 70px;
             }
           }
 
@@ -124,14 +123,32 @@ page {
             font-weight: bold;
           }
 
-          .btn-star {
+          .star-count {
+            margin-top: 6px;
+            color: #898989;
+          }
+
+          .weui-btn {
             display: inline-block;
-            margin-top: 8px;
             border-color: #018cc6;
+            line-height: 31px;
+            height: 31px;
+            margin: 8px 4px 0;
+          }
+
+          .btn-star {
             color: #018cc6;
+          }
+          .btn-manage {
+            background: #018cc6;
+            color: #fff;
           }
         }
       }
+    }
+
+    .weui-grids {
+      background: #fff;
     }
 
     
@@ -167,6 +184,9 @@ page {
       <view wx:else class="empty-cover" @tap="uploadImage(true)">
         <view class="text" wx:if="{{is_space_owner}}">轻触设置封面</view>
       </view>
+      <!-- <view class="empty-cover" @tap="uploadImage(true)">
+        <view class="text" wx:if="{{is_space_owner}}">轻触设置封面</view>
+      </view> -->
       <view class="space-info">
         <view class="wrapper">
           <view class="bg-image"></view>
@@ -175,21 +195,34 @@ page {
             <image wx:else class="avatar" mode="aspectFill" src="{{emptyImageUrlForAvatar}}" @tap.stop="uploadImage()"/>
           </view>
           <view class="store-name">{{store_info.name}}</view>
+          <view class="star-count">{{store_info.star_count}}位关注者</view>
           <button class="weui-btn btn-star" @tap="starSpace" type="primary" plain="true" size="mini">{{star_id ? "已关注" : "关注"}}</button>
+          <button class="weui-btn btn-manage" wx:if="{{is_space_admin}}" @tap="manageSpace" type="primary" size="mini">微站管理</button>
         </view>
       </view>
     </view>
+    <view class="weui-grids">
+      <repeat for="{{enabled_objects}}" key="index" index="index" item="object">
+        <block wx:if="{{object.name === 'support'}}">
+          <button open-type="contact" plain="true" class="weui-grid support" hover-class="weui-grid_active" wx:if="{{object}}">
+            <view class="slds-icon-{{object.icon}} weui-grid__icon slds-icon">
+              <view class="need_read1"></view>
+            </view>
+            <view class="weui-grid__label">{{object.label}}</view>
+          </button>
+        </block>
+        <block wx:else>
+          <navigator url="{{object.url}}" class="weui-grid" hover-class="weui-grid_active" wx:if="{{object}}">
+            <view class="slds-icon-{{object.icon}} weui-grid__icon slds-icon">
+              <view class="need_read1"></view>
+            </view>
+            <view class="weui-grid__label">{{object.label}}</view>
+          </navigator>
+        </block>
+      </repeat>
+    </view>
     <view class="page__bd">
-      <view class="weui-cells">
-        <navigator url="/pages/admin/index?space_id={{space_id}}" class="weui-cell" hover-class="weui-cell_active" wx:if="{{is_space_admin}}">
-          <view class="weui-cell__hd">
-            <view class="slds-icon-utility-settings slds-icon slds-icon--small slds-m-right--x-small"/>
-          </view>
-          <view class="weui-cell__bd">微站管理</view>
-          <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-        </navigator>
-      </view>
-      <view class="weui-cells">
+      <!-- <view class="weui-cells">
         <view class="weui-grids">
           <repeat for="{{enabled_objects}}" key="index" index="index" item="object">
             <block wx:if="{{object.name === 'support'}}">
@@ -210,7 +243,7 @@ page {
             </block>
           </repeat>
         </view>
-      </view>
+      </view> -->
       <view class="post-list-wrapper">
         <scroll-view class="scroll-view_H" scroll-y="true">
           <postList :list.sync="posts" />
@@ -309,6 +342,7 @@ export default class Posts extends wepy.page {
     is_space_owner: false,
     is_space_admin: false,
     is_loaded: false,
+    star_count: 0,
     star_id: ''
   };
 
@@ -353,6 +387,13 @@ export default class Posts extends wepy.page {
       }
     }
     
+  }
+
+  async getStarCount() {
+    const spaceId = this.space_id
+    const result = await this.$parent.get('vip_store', spaceId, spaceId);
+    this.store_info.star_count = result.star_count || 0
+    this.$apply()
   }
 
   async loadStoreInfo() {
@@ -424,6 +465,10 @@ export default class Posts extends wepy.page {
       if(this.is_space_owner || result.qrcode){
         this.enabled_objects.push(objects_list.qrcode);
       }
+    }
+
+    if (!result.star_count) {
+      result.star_count = 0
     }
     this.store_info = result;
     this.$apply();
@@ -556,6 +601,7 @@ export default class Posts extends wepy.page {
       if (this.star_id) {
         await this.$parent.delete('user_star', this.star_id, space_id)
         this.star_id = ''
+        await this.getStarCount()
         this.$apply()
         wx.showToast({
           title: '取消关注成功',
@@ -566,6 +612,7 @@ export default class Posts extends wepy.page {
         const result = await this.$parent.insert('user_star', data, space_id)
         if (result.value && result.value.length) {
           this.star_id = result.value[0]._id;
+          await this.getStarCount()
           this.$apply()
           wx.showToast({
             title: '关注成功!',
@@ -574,6 +621,12 @@ export default class Posts extends wepy.page {
           })
         }
       }
+    },
+    manageSpace() {
+      const space_id = this.space_id;
+      wx.navigateTo({
+        url: `/pages/admin/index?space_id=${space_id}`
+      })
     }
   };
 }
