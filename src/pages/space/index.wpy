@@ -22,49 +22,119 @@ page {
     .image {
       display: block;
     }
-    .page__hd {
-      padding: 0px;
+
+    .header {
+      position: relative;
+      height: 310px;
+      background: #fff;
+
+      &::after {
+        content: " ";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border-top: 1rpx solid #d9d9d9;
+      }
+
       .cover-wrapper {
         position: relative;
-        height: 266px;
-        .cover {
-          width: 100%;
-          height: 230px;
+        height: 200px;
+        background-image: url("https://vip-test.steedos.com:8443/api/files/images/qGmp3MeJtKKxeFp5r");
+        background-size: cover;
+
+        &::after {
+          content: '';
           position: absolute;
+          height: 80px;
+          bottom: -30px;
+          left: 0;
+          right: 0;
+          background-image: linear-gradient(to bottom, transparent , rgba(255, 255, 255, 1) 50%);
         }
-        view.cover {
-          background-color: #7f7f7f;
-          background-repeat: repeat-x;
-          background-image: linear-gradient(128deg, #565656, #555 50%, #343434);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          text {
-            color: #262626;
-            text-shadow: 1px 1px 0px #686868;
-            font-size: 20px;
-          }
-        }
-        .avatar {
-          height: 72px;
-          width: 72px;
-          position: absolute;
-          left: 20rpx;
-          top: 178px;
-          border: solid 2px #fff;
-          box-shadow: 0px 0px 1px #6a6a6a;
-        }
-        .name {
-          color: #fff;
-          text-shadow: 0px 0px 5px #333;
+      }
+
+      .empty-cover {
+        position: relative;
+        height: 200px;
+        background-color: #7f7f7f;
+        background-repeat: repeat-x;
+        background-image: linear-gradient(128deg, #565656, #555 50%, #343434);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .text {
+          position: relative;
+          top: -65px;
+          color: #262626;
+          text-shadow: 1px 1px 0px #686868;
           font-size: 20px;
+        }
+      }
+      .space-info {
+        position: absolute;
+        text-align: center;
+        top: 140px;
+        bottom: 10px;
+        left: 15px;
+        right: 15px;
+        width: auto;
+        background-image: linear-gradient(to bottom,#e5e5e5,#fff);
+        background-clip: padding-box;
+        border: 1px solid transparent;
+        padding: 10px;
+        border-radius: 0.25rem;
+        z-index: 100;
+
+        &::before {
+          content: '';
           position: absolute;
-          left: 96px;
-          top: 196px;
-          font-family: 黑体;
+          top: 1px; 
+          bottom: 1px;
+          left: 1px; 
+          right: 1px;
+          background: #fff;
+          z-index: -1 ;
+          border-radius: 0.25rem;
+        }
+        
+        .wrapper {
+          position: relative;
+          top: -60px;
+
+          .avatar-container {
+            // position: relative;
+            // top: -60px;
+            background: #fff;
+            padding: 5px;
+            border-radius: 0.25rem;
+            display: inline-block;
+            box-shadow: 0 2px 2px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08);
+            .avatar {
+              display: block;
+              width: 100px;
+              height: 100px;
+            }
+          }
+
+          .store-name {
+            margin-top: 8px;
+            font-size: 18px;
+            font-weight: bold;
+          }
+
+          .btn-star {
+            display: inline-block;
+            margin-top: 8px;
+            border-color: #018cc6;
+            color: #018cc6;
+          }
         }
       }
     }
+
+    
     .page__bd{
       .need_read{
         display:block;
@@ -92,26 +162,21 @@ page {
 </style>
 <template>
   <view class="page" wx:if="{{is_loaded}}">
-    <view class="page__hd">
-      <view class="cover-wrapper">
-        <view class="ion-container" @tap="starSpace">
-          <view class="ion {{star_id ? 'stared ion-android-favorite' : 'ion-android-favorite-outline'}}"></view>
-        </view>
-        <block wx:if="{{store_info.cover}}">
-          <image class="cover" mode="aspectFill" src="{{util.formatImageUrl(store_info.cover, baseUrl)}}" @tap="uploadImage(true)"/>
-        </block>
-        <block wx:else>
-          <view class="cover" @tap="uploadImage(true)">
-            <text wx:if="{{is_space_owner}}">轻触设置封面</text>
+    <view class="header">
+      <view wx:if="{{store_info.cover}}" class="cover-wrapper" @tap="uploadImage(true)" style="background-image: url({{util.formatImageUrl(store_info.cover, baseUrl)}})"></view>
+      <view wx:else class="empty-cover" @tap="uploadImage(true)">
+        <view class="text" wx:if="{{is_space_owner}}">轻触设置封面</view>
+      </view>
+      <view class="space-info">
+        <view class="wrapper">
+          <view class="bg-image"></view>
+          <view class="avatar-container">
+            <image wx:if="{{store_info.avatar}}" class="avatar" mode="aspectFill" src="{{util.formatImageUrl(store_info.avatar, baseUrl)}}" @tap.stop="uploadImage()"/>
+            <image wx:else class="avatar" mode="aspectFill" src="{{emptyImageUrlForAvatar}}" @tap.stop="uploadImage()"/>
           </view>
-        </block>
-        <block wx:if="{{store_info.avatar}}">
-          <image class="avatar" mode="aspectFill" src="{{util.formatImageUrl(store_info.avatar, baseUrl)}}" @tap.stop="uploadImage()"/>
-        </block>
-        <block wx:else>
-          <image class="avatar" mode="aspectFill" src="{{emptyImageUrlForAvatar}}" @tap.stop="uploadImage()"/>
-        </block>
-        <view class="name" @tap="uploadImage(true)">{{store_info.name}}</view>
+          <view class="store-name">{{store_info.name}}</view>
+          <button class="weui-btn btn-star" @tap="starSpace" type="primary" plain="true" size="mini">{{star_id ? "已关注" : "关注"}}</button>
+        </view>
       </view>
     </view>
     <view class="page__bd">
@@ -255,7 +320,7 @@ export default class Posts extends wepy.page {
     const user = this.$parent.globalData.user._id;
     const space_id = this.space_id;
     const options = {
-      $filter: `(user eq ${user} and star_space eq ${space_id})`
+      $filter: `user eq '${user}' and star_space eq '${space_id}'`
     };
     const result = await this.$parent.query('user_star', options, space_id);
     if (result && result.value && result.value[0]) {
