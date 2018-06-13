@@ -82,19 +82,20 @@
 
       const result = await this.$parent.query('spaces', options, 'common')
       this.spaces = []
-
-      for (let space of result.value) {
-        const url = `/api/odata/v4/${space._id}/vip_store/${space._id}`
-        const options = {
-          $filter: `_id eq '${space._id}'`,
-          $count: true,
-          $select: 'avatar'
+      if(result && result.value){
+        for (let space of result.value) {
+          const url = `/api/odata/v4/${space._id}/vip_store/${space._id}`
+          const options = {
+            $filter: `_id eq '${space._id}'`,
+            $count: true,
+            $select: 'avatar'
+          }
+          const res = await this.$parent.query('vip_store', options, 'common')
+          if (res.value[0]) {
+            space.avatar = res.value[0].avatar
+          }
+          this.spaces.push(space)
         }
-        const res = await this.$parent.query('vip_store', options, 'common')
-        if (res.value[0]) {
-          space.avatar = res.value[0].avatar
-        }
-        this.spaces.push(space)
       }
       this.is_loaded = true
       this.$apply()

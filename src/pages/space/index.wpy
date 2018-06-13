@@ -311,7 +311,7 @@ export default class Posts extends wepy.page {
       $filter: `(user eq ${user} and star_space eq ${space_id})`
     };
     const result = await this.$parent.query('user_star', options, space_id);
-    if (result && result.value[0]) {
+    if (result && result.value && result.value[0]) {
       console.log('isSpaceStar..............')
       this.star_id = result.value[0]._id;
       this.$apply();
