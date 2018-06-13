@@ -78,7 +78,7 @@
     <repeat for="{{list}}" key="index" index="index" item="event">
       <view class="event">
         <view class="event-cover">
-          <image class="image" mode="aspectFill" src="{{util.formatImageUrl(event.cover, baseUrl)}}" />
+          <image class="image" mode="aspectFill" src="{{util.formatImageUrl(event.cover, baseUrl)}}" @tap="previewImage({{event.cover}})" />
         </view>
         <view class="event-body weui-cells" @tap="goDetail({{event._id}}, {{event.space}})">
           <view class="weui-cell weui-cell_access">
@@ -160,7 +160,16 @@ export default class EventList extends wepy.component {
       wx.navigateTo({
         url: url
       });
-    }
+    },
+    previewImage(image, event){
+      var baseUrl = this.baseUrl;
+      var current = `${baseUrl}/api/files/images/${image}`;
+      var urls = [current];
+      wx.previewImage({
+        current: current,
+        urls: urls
+      });
+    },
   };
 }
 </script>

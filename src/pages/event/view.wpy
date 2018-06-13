@@ -78,7 +78,7 @@ page{
 <template>
 <view class="page" wx:if="{{is_loaded}}">
   <view class="page__hd">
-    <image wx:if="{{event.cover}}" class="cover" mode="aspectFill" src="{{util.formatImageUrl(event.cover, baseUrl)}}" />
+    <image wx:if="{{event.cover}}" class="cover" mode="aspectFill" src="{{util.formatImageUrl(event.cover, baseUrl)}}" @tap="previewImage({{event.cover}})" />
   </view>
   <view class="page__bd">
     <view class="weui-article">
@@ -265,6 +265,15 @@ export default class EventView extends wepy.page {
           name: name
         });
       }
+    },
+    previewImage(image, event){
+      var baseUrl = this.baseUrl;
+      var current = `${baseUrl}/api/files/images/${image}`;
+      var urls = [current];
+      wx.previewImage({
+        current: current,
+        urls: urls
+      });
     }
   };
 }
