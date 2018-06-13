@@ -97,7 +97,7 @@
     };
 
     async onLoad(e){
-      this.from = e.from;
+      this.from = decodeURIComponent(e.from);
 
       const res = await wepy.getSetting();
 

@@ -214,7 +214,7 @@ export default class VIP extends wepy.app {
     }else{
       const pages = getCurrentPages();
       const page = pages[pages.length - 1];
-      wepy.navigateTo({url: '/pages/empty_page?redirect_to=' + encodeURIComponent('/pages/phone_number_login?from=' + to)});
+      wepy.navigateTo({url: '/pages/empty_page?redirect_to=' + encodeURIComponent('/pages/phone_number_login?from=' + encodeURIComponent(to))});
       return false
     }
   }
