@@ -3,7 +3,6 @@
 @import "../lib/slds/slds_icons.less";
 @import "../lib/slds/slds_margin.less";
 @import "../lib/slds/slds_icons_font.less";
-@import "../lib/ionicons/ionicons.less";
 page {
   background-color: #f5f5f7;
   font-size: 16px;
