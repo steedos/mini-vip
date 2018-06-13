@@ -55,12 +55,22 @@ page {
       }
 
       .empty-cover {
+        position: relative;
+        height: 200px;
         background-color: #7f7f7f;
         background-repeat: repeat-x;
         background-image: linear-gradient(128deg, #565656, #555 50%, #343434);
         display: flex;
         align-items: center;
         justify-content: center;
+
+        .text {
+          position: relative;
+          top: -65px;
+          color: #262626;
+          text-shadow: 1px 1px 0px #686868;
+          font-size: 20px;
+        }
       }
       .space-info {
         position: absolute;
@@ -153,8 +163,10 @@ page {
 <template>
   <view class="page" wx:if="{{is_loaded}}">
     <view class="header">
-      <view wx:if="{{store_info.cover}}" class="cover-wrapper" style="background-image: url({{util.formatImageUrl(store_info.cover, baseUrl)}})"></view>
-      <view class="empty-cover"></view>
+      <view wx:if="{{store_info.cover}}" class="cover-wrapper" @tap="uploadImage(true)" style="background-image: url({{util.formatImageUrl(store_info.cover, baseUrl)}})"></view>
+      <view wx:else class="empty-cover" @tap="uploadImage(true)">
+        <view class="text" wx:if="{{is_space_owner}}">轻触设置封面</view>
+      </view>
       <view class="space-info">
         <view class="wrapper">
           <view class="bg-image"></view>
@@ -308,7 +320,7 @@ export default class Posts extends wepy.page {
     const user = this.$parent.globalData.user._id;
     const space_id = this.space_id;
     const options = {
-      $filter: `(user eq ${user} and star_space eq ${space_id})`
+      $filter: `user eq '${user}' and star_space eq '${space_id}'`
     };
     const result = await this.$parent.query('user_star', options, space_id);
     if (result && result.value && result.value[0]) {

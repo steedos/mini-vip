@@ -235,7 +235,7 @@ export default class PostView extends wepy.page {
     const user = this.$parent.globalData.user._id;
     const post_id = this.post_id;
     const options = {
-      $filter: `(user eq ${user} and star_post eq ${post_id})`
+      $filter: `user eq '${user}' and star_post eq '${post_id}'`
     };
     const result = await this.$parent.query('user_star', options, space_id);
     if (result && result.value && result.value[0]) {
