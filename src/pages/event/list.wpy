@@ -73,6 +73,7 @@ export default class Events extends wepy.page {
   };
 
   async onLoad(e) {
+    this.featured = e.featured;
     this.editable = e.editable;
     if(e.title){
       this.title = e.title;
@@ -144,7 +145,8 @@ export default class Events extends wepy.page {
     current_skip: 0,
     is_skip_allowed: true,
     is_loaded: false,
-    editable: false
+    editable: false,
+    featured: false
   };
   
 	async loadEventList(){
@@ -159,12 +161,13 @@ export default class Events extends wepy.page {
       $skip: skip,
       $top: DATA_LENGTH
     };
-    const type = this.type;
-    console.log(`loadEventList of type:`, type);
-    if(type){
-      options.$filter = `type eq '${type}'`;
+    let spaceId = this.space_id;
+    const featured = this.featured;
+    if(featured){
+      spaceId = "guest";
+      options.$filter = `featured eq true`;
     }
-    const result = await this.$parent.query("vip_event", options);
+    const result = await this.$parent.query("vip_event", options, spaceId);
     if(result.value){
       this.events = this.events.concat(result.value);
       this.current_skip = skip + result.value.length;
