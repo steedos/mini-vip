@@ -188,6 +188,13 @@ export default class VIP extends wepy.app {
       }
     })
 
+    pageRouter.pushEnter({
+      page: '/pages/record/edit',
+      script: function (to) {
+        return this.checkMobile(to)
+      }
+    })
+
   }
 
   onHide() {
