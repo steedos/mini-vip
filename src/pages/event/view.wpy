@@ -253,13 +253,15 @@ export default class EventView extends wepy.page {
     },
     openMap() {
       if (this.event.location.address) {
+        console.log("================",this.event)
         var latitude = this.event.location.latitude || 31.02241;
         var longitude = this.event.location.longitude || 121.21654;
         var address =  this.event.location.address;
         wepy.openLocation({
           latitude: latitude,
           longitude: longitude,
-          address: address
+          address: address,
+          name: "活动地点"
         });
       }
     }
