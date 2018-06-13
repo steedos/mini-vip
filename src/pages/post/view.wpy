@@ -80,19 +80,36 @@ video{
     transform: scaleY(0.5);
   }
 
-  .btn-edit {
+  .ion-container {
+    flex: 1;
+
+    &.edit {
+      text-align: center;
+    }
+
+    &.star {
+      text-align: right;
+      margin-right: 15px;
+    }
+  }
+
+  .btn-edit, .btn-star {
     height: 35px;
     width: 35px;
     background: #ffa325;
-    text-align: center;
     color: #fff;
     border: 10px;
     border-radius: 50%;
+    text-align: center;
 
-    .ion {
+    &.ion {
       line-height: 35px;
       font-weight: bold;
       font-size: 16px;
+    }
+
+    &.btn-star {
+      font-size: 28px;
     }
   }
 }
@@ -140,9 +157,15 @@ video{
       </view>
     </view>
   </view>
-  <view class="tab-bar" wx:if="{{editable}}">
-    <view class="btn-edit" @tap="editPost">
-      <view class="slds-icon-edit ion"></view>
+  <view class="tab-bar">
+    <view class="ion-container">
+      
+    </view>
+    <view class="ion-container edit">
+      <view class="slds-icon-edit ion btn-edit" @tap="editPost" wx:if="{{editable}}"></view>
+    </view>
+    <view class="ion-container star" @tap="starPost">
+      <view class="ion btn-star {{star_id ? 'stared ion-android-star' : 'ion-android-star-outline'}}"></view>
     </view>
   </view>
 </view>
@@ -208,6 +231,20 @@ export default class PostView extends wepy.page {
     this.$apply();
   };
 
+  async isPostStar() {
+    const user = this.$parent.globalData.user._id;
+    const post_id = this.post_id;
+    const options = {
+      $filter: `(user eq ${user} and star_post eq ${post_id})`
+    };
+    const result = await this.$parent.query('user_star', options, space_id);
+    if (result && result.value[0]) {
+      console.log('isSpaceStar..............')
+      this.star_id = result.value[0]._id;
+      this.$apply();
+    }
+  }
+
   goBackAfterRemove() {
     const pages = getCurrentPages();
     const prevPage = pages[pages.length - 3];
@@ -245,7 +282,8 @@ export default class PostView extends wepy.page {
     space_name: '',
     avatar: '',
     is_loaded: false,
-    editable: false
+    editable: false,
+    star_id: ''
   };
 
   wxs = {
@@ -269,6 +307,37 @@ export default class PostView extends wepy.page {
       wepy.navigateTo({
         url: url
       });
+    },
+    async starPost() {
+      const space_id = this.space_id;
+      const post_id = this.post_id;
+      const user = this.$parent.globalData.user._id;
+      const data = {
+        user: user,
+        star_post: post_id,
+        owner: user
+      }
+      if (this.star_id) {
+        await this.$parent.delete('user_star', this.star_id, space_id)
+        this.star_id = ''
+        this.$apply()
+        wx.showToast({
+          title: '取消收藏成功',
+          icon: "none",
+          duration: 1000
+        })
+      } else {
+        const result = await this.$parent.insert('user_star', data, space_id)
+        if (result.value && result.value.length) {
+          this.star_id = result.value[0]._id;
+          this.$apply()
+          wx.showToast({
+            title: '收藏成功!',
+            icon: "none",
+            duration: 1000
+          })
+        }
+      }
     }
   };
 }

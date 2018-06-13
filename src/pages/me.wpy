@@ -1,5 +1,15 @@
 <style lang="less">
 .page-me {
+  .weui-cell__hd {
+    height: 1.5rem;
+    .ion {
+      text-align: center;
+      line-height: 1.5rem;
+      border-radius: 0.25rem;
+      color: #fff;
+      background: #fcb95b;
+    }
+  }
   .weui-cell__bd {
     .nav-btn::after {
       border-radius: 0;
@@ -93,6 +103,27 @@
           <view class="weui-cell__ft weui-cell__ft_in-access"></view>
         </navigator>
       </view>
+    </view>
+
+    <view class="weui-cells">
+      <navigator url="./star/space" class="weui-cell weui-cell_access">
+        <view class="weui-cell__hd">
+          <view class="slds-icon-custom1 slds-icon slds-icon--small slds-m-right--x-small ion"/>
+        </view>
+        <view class="weui-cell__bd">
+          <view>关注</view>
+        </view>
+        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+      </navigator>
+      <navigator url="./star/post" class="weui-cell weui-cell_access">
+        <view class="weui-cell__hd">
+          <view class="slds-icon-custom11 slds-icon slds-icon--small slds-m-right--x-small ion"/>
+        </view>
+        <view class="weui-cell__bd">
+          <view>收藏</view>
+        </view>
+        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+      </navigator>
     </view>
 
   </view>
