@@ -210,7 +210,7 @@
 
       <view class="btn-container" wx:if="{{args.action === 'edit' || args.action === 'create'}}">
         <button class="submit-btn" form-type="submit" @tap="submitForm" disabled="{{submitDisabled}}">保存</button>
-        <button class="submit-btn" wx:if="{{args.action === 'edit' && schema.allowDelete}}" type="warn" @tap="removeRecord">删除</button>
+        <button class="submit-btn" wx:if="{{!args.undeletable && args.action === 'edit' && schema.allowDelete}}" type="warn" @tap="removeRecord">删除</button>
       </view>
 
     </view>
@@ -293,6 +293,7 @@
           const object_name = newValue.object_name;
           const record_id = newValue.record_id;
           const action = newValue.action;
+          let title = newValue.title;
 
           if (object_name) {
             const object = await this.$parent.$parent.get('objects', object_name);
@@ -302,16 +303,16 @@
             const pages = getCurrentPages();
             const page = pages[pages.length - 1];
 
-            let title = object.label;
-
-            if (object_name === 'spaces') {
-              title = '商户';
-            }
-
-            if (action === 'create') {
-              title = '创建' + title;
-            } else if (action === 'edit') {
-              title = '编辑' + title;
+            if(!title){
+              title = object.label;
+              if (object_name === 'spaces') {
+                title = '商户';
+              }
+              if (action === 'create') {
+                title = '创建' + title;
+              } else if (action === 'edit') {
+                title = '编辑' + title;
+              }
             }
 
             page.changeNavigationBarTitleText(title);
@@ -795,6 +796,9 @@
       },
       async removeRecord() {
         if (this.args.action !== 'edit') {
+          return;
+        }
+        if (this.args.undeletable) {
           return;
         }
         const result = await wepy.showModal({

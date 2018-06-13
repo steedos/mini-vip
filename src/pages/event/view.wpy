@@ -246,7 +246,7 @@ export default class EventView extends wepy.page {
         attendee = await this.$parent.insert("vip_event_attendees", attendeeData, this.space_id);
       }
       if(attendee && attendee.value && attendee.value.length){
-        let url = `/pages/record/edit?action=edit&object_name=vip_event_attendees&record_id=${attendee.value[0]._id}`;
+        let url = `/pages/record/edit?action=edit&object_name=vip_event_attendees&record_id=${attendee.value[0]._id}&undeletable=true&title=响应活动`;
         pageRouter.navigateTo({ url: url });
       }
     },
