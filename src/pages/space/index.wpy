@@ -304,12 +304,23 @@ export default class Posts extends wepy.page {
 
   // 分享
   onShareAppMessage(res) {
-    const space_id = this.space_id;
-    const space_name = this.space_info.name;
-    return {
-      title: space_name,
-      path: `pages/space/index?space_id=${space_id}`
-    };
+    console.log('onShareAppMessage', res)
+    if (res.from == "button") {
+      const postName = res.target.dataset.postName;
+      const postId = res.target.dataset.postId;
+      const spaceId = res.target.dataset.postSpace;
+      return {
+        title: postName,
+        path: `pages/post/view?post_id=${postId}&space_id=${spaceId}`
+      }
+    }else{
+      const space_id = this.space_id;
+      const space_name = this.space_info.name;
+      return {
+        title: space_name,
+        path: `pages/space/index?space_id=${space_id}`
+      };
+    }
   }
 
   // 下拉刷新

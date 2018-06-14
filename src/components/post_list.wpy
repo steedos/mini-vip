@@ -80,7 +80,13 @@
 
     .action {
       flex: 1;
-      padding:30rpx;
+      padding:0 30rpx;
+      font-size:13px;
+      line-height:inherit;
+      width:auto;
+      height:auto;
+      border:none;
+      line-height:50px;
     }
     .slds-icon {
       display: inline-block;
@@ -145,10 +151,14 @@
           </view>
         </view>
         <view class="post-footer ">
-          <view class="share action share-btn">
+          <button plain="true" open-type="share" data-post-name="{{post.name}}" data-post-id="{{post._id}}" data-post-space="{{post.space}}" class="share action share-btn">
             <view class="slds-icon-internal_share slds-icon slds-icon--small slds-m-right--x-small"></view>
             <view class="text">转发</view>
-          </view>
+          </button>
+          <!-- <view class="share action share-btn">
+            <view class="slds-icon-internal_share slds-icon slds-icon--small slds-m-right--x-small"></view>
+            <view class="text">转发</view>
+          </view> -->
           <view class="comment action">
           
           </view>
