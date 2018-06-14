@@ -427,7 +427,7 @@ export default class Posts extends wepy.page {
       vip_event: {
         label: '最新活动',
         icon: 'standard-event',
-        url: `../event/list${this.is_space_admin ? '?editable=true' : ''}`
+        url: `../event/list?space_id=${this.space_id}`
       },
       // vip_activity: {
       //   label: '活动报名',

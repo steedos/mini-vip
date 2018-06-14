@@ -50,7 +50,7 @@ page {
   <view class="page" wx:if="{{is_loaded}}">
     <view class="page__bd">
       <scroll-view class="scroll-view_H" scroll-y="true">
-        <eventList :list.sync="events" :editable.sync="editable" />
+        <eventList :list.sync="events" />
       </scroll-view>
     </view>
     <view class="tab-bar" wx:if="{{editable}}">
@@ -73,18 +73,17 @@ export default class Events extends wepy.page {
   };
 
   async onLoad(e) {
+    debugger
     this.featured = e.featured;
-    this.editable = e.editable;
+    this.space_id = e.space_id;
     if(e.title){
       this.title = e.title;
       wx.setNavigationBarTitle({
         title: e.title
       });
     }
-    if(e.type){
-      this.type = e.type;
-    }
-    this.space_id = e.space_id || this.$parent.globalData.space_id;
+    
+    this.editable = this.$parent.isSpaceAdmin(this.space_id);
     await this.$parent.login(this.space_id);
     await this.loadData();
   }
@@ -138,7 +137,6 @@ export default class Events extends wepy.page {
   }
 
   data = {
-    type: "",
     title: "",
     space_id: "",
     events: [],

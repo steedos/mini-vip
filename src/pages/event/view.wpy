@@ -10,7 +10,7 @@ page{
   width: 100%;
   height:480rpx;
 }
-.event-body{
+.event-body, .weui-article__h1{
   &.weui-cells{
     line-height:22px;
     font-size:16px;
@@ -31,6 +31,9 @@ page{
       }
     }
   }
+}
+.btn-edit{
+  color: #ffa325;
 }
 .tab-bar {
   display: flex;
@@ -58,7 +61,7 @@ page{
     transform: scaleY(0.5);
   }
 
-  .btn-edit, .btn-respond {
+  .btn-respond {
     height: 35px;
     width: 35px;
     background: #ffa325;
@@ -83,7 +86,18 @@ page{
   <view class="page__bd">
     <view class="weui-article">
         <view class="weui-article__section">
-          <view class="weui-article__h1">{{event.name}}</view>
+          <view class="weui-article__h1 weui-cells">
+            <view class="weui-cell">
+              <view class="weui-cell__bd">
+                {{event.name}}
+              </view>
+              <view class="weui-cell__ft" wx:if="{{editable}}">
+                <view class="btn-edit" @tap="editEvent">
+                  <view class="slds-icon-edit ion"></view>
+                </view>
+              </view>
+            </view>
+          </view>
           <view class="event-body weui-cells">
             <view class="weui-cell event-start" wx:if="{{event.start}}">
               <view class="weui-cell__bd">
@@ -123,12 +137,7 @@ page{
         </view>
     </view>
   </view>
-  <view class="tab-bar" wx:if="{{editable}}">
-    <view class="btn-edit" @tap="editEvent">
-      <view class="slds-icon-edit ion"></view>
-    </view>
-  </view>
-  <view class="tab-bar" wx:else>
+  <view class="tab-bar">
     <view class="btn-respond" @tap="respondEvent">
       <view class="slds-icon-new_task ion"></view>
     </view>
@@ -149,18 +158,19 @@ export default class EventView extends wepy.page {
   };
 
   async onLoad(e) {
-    this.editable = e.editable;
     wepy.showLoading({
       title: '加载中',
       mask: true
     });
+    await this.$parent.login();
     if(e.space_id){
       this.$parent.globalData.space_id = e.space_id;
-      await this.$parent.login(e.space_id);
+      this.space_id = e.space_id;
     }
     if(e.event_id){
       this.event_id = e.event_id;
       await this.loadEvent();
+      this.editable = this.$parent.isSpaceAdmin(this.space_id);
     }
 
     this.is_loaded = true
@@ -178,7 +188,7 @@ export default class EventView extends wepy.page {
   }
 
   async loadEvent(){
-    var event = await this.$parent.get("vip_event", this.event_id)
+    var event = await this.$parent.get("vip_event", this.event_id, this.space_id)
     this.event = event;
     this.space_id = event.space;
     this.$apply();
@@ -252,7 +262,6 @@ export default class EventView extends wepy.page {
     },
     openMap() {
       if (this.event.location.address) {
-        console.log("================",this.event)
         var latitude = this.event.location.latitude || 31.02241;
         var longitude = this.event.location.longitude || 121.21654;
         var address =  this.event.location.address;

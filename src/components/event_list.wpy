@@ -125,10 +125,6 @@ export default class EventList extends wepy.component {
       type: Array,
       default: []
     },
-    editable: {
-      type: Boolean,
-      default: false
-    },
     showHeader: {
       type: Boolean,
       default: false
@@ -152,10 +148,6 @@ export default class EventList extends wepy.component {
   methods = {
     goDetail(event_id, space_id,event){
       let url = `../event/view?event_id=${event_id}&space_id=${space_id}`;
-      if(this.editable){
-        url += '&editable=true'
-      }
-      console.log("goDetail=====================");
       console.log(url);
       wx.navigateTo({
         url: url
