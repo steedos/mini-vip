@@ -114,6 +114,7 @@ export default class VIP extends wepy.app {
       'pages/home/store',
       'pages/phone_number_login',
       'pages/empty_page',
+      'pages/404',
     ],
     tabBar: {
       color: '#666',

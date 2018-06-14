@@ -408,6 +408,46 @@ export default class Posts extends wepy.page {
     this.is_space_owner = space && userId == space.owner;
     this.is_space_admin = admins && admins.includes(userId);
     const objects_list = {
+      vip_store: {
+        label: '关于我们',
+        icon: 'standard-contact',
+        url: `../store?store=${this.space_id}`
+      },
+      post: {
+        label: '动态',
+        icon: 'standard-news',
+        url: `../post/index${this.is_space_admin ? '?editable=true' : ''}`
+      },
+      vip_event: {
+        label: '活动',
+        icon: 'standard-event',
+        url: `../event/list?space_id=${this.space_id}`
+      },
+      qrcode: {
+        label: '二维码',
+        icon: 'standard-product',
+        url: `/pages/admin/qrcode?space_id=${this.space_id}`
+      },
+      support: {
+        name: 'support',
+        label: '在线客服',
+        icon: 'standard-live-chat',
+      },
+      video: {
+        label: '视频',
+        icon: 'standard-photo',
+        url: '../404'
+      },
+      job: {
+        label: '招聘',
+        icon: 'standard-individual',
+        url: '../404'
+      },
+      vip_wifi: {
+        label: 'Wifi',
+        icon: 'utility-wifi',
+        url: `../wifi?store=${this.space_id}`
+      },
       vip_card: {
         label: '会员卡',
         icon: 'standard-opportunity',
@@ -419,41 +459,6 @@ export default class Posts extends wepy.page {
           }
         })()
       },
-      post: {
-        label: '最新动态',
-        icon: 'standard-news',
-        url: `../post/index${this.is_space_admin ? '?editable=true' : ''}`
-      },
-      vip_event: {
-        label: '最新活动',
-        icon: 'standard-event',
-        url: `../event/list?space_id=${this.space_id}`
-      },
-      // vip_activity: {
-      //   label: '活动报名',
-      //   icon: 'standard-opportunity',
-      //   url: ''
-      // },
-      vip_wifi: {
-        label: 'Wifi',
-        icon: 'utility-wifi',
-        url: `../wifi?store=${this.space_id}`
-      },
-      support: {
-        name: 'support',
-        label: '在线客服',
-        icon: 'standard-live-chat',
-      },
-      vip_store: {
-        label: '联系我们',
-        icon: 'standard-contact',
-        url: `../store?store=${this.space_id}`
-      },
-      qrcode: {
-        label: '二维码',
-        icon: 'standard-product',
-        url: `/pages/admin/qrcode?space_id=${this.space_id}`
-      }
     }
     const result = await this.$parent.get('vip_store', spaceId, spaceId);
     this.enabled_objects = []
@@ -462,10 +467,7 @@ export default class Posts extends wepy.page {
         this.enabled_objects.push(objects_list[o])
       })
     } else {
-      this.enabled_objects = [objects_list.vip_card, objects_list.post, objects_list.vip_event, objects_list.vip_wifi, objects_list.support, objects_list.vip_store]
-      if(this.is_space_owner || result.qrcode){
-        this.enabled_objects.push(objects_list.qrcode);
-      }
+      this.enabled_objects = objects_list // [objects_list.post, objects_list.vip_event, objects_list.support, objects_list.vip_store, objects_list.qrcode]
     }
 
     if (!result.star_count) {
