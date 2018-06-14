@@ -192,7 +192,7 @@ page {
           <view class="bg-image"></view>
           <view class="avatar-container">
             <image wx:if="{{store_info.avatar}}" class="avatar" mode="aspectFill" src="{{util.formatImageUrl(store_info.avatar, baseUrl)}}" @tap.stop="uploadImage()"/>
-            <image wx:else class="avatar" mode="aspectFill" src="{{emptyImageUrlForAvatar}}" @tap.stop="uploadImage()"/>
+            <image wx:else class="avatar" mode="aspectFill" src="{{baseMaterialUrl + 'avatar.png'}}" @tap.stop="uploadImage()"/>
           </view>
           <view class="store-name">{{store_info.name}}</view>
           <view class="star-count">{{store_info.star_count}}位关注者</view>
@@ -255,6 +255,7 @@ page {
 <script>
 import wepy from 'wepy';
 import { baseUrl } from '@/config';
+import { baseMaterialUrl } from '@/config';
 import postList from '../../components/post_list';
 import req from '@/network';
 import util from '../../wxs/util.wxs';
@@ -339,8 +340,8 @@ export default class Posts extends wepy.page {
 
   data = {
     baseUrl: baseUrl,
+    baseMaterialUrl: baseMaterialUrl,
     emptyImageUrlForCover: '/images/empty.png',
-    emptyImageUrlForAvatar: '/images/avatar.png',
     type: '',
     posts: [],
     current_skip: 0,
