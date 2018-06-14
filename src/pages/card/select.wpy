@@ -45,7 +45,7 @@ page{
 <template>
 <view class="page">
   <view class="page__hd">
-    <image class="header-image" mode="widthFix" src="../../images/card/select-header.png"/>
+    <image class="header-image" mode="widthFix" src="{{baseMaterialUrl + 'select-header.png'}}"/>
   </view>
   <view class="page__bd">
     <view class="card-list">
@@ -98,6 +98,7 @@ page{
 import wepy from 'wepy';
 import vipCard from '../../components/vipCard';
 import { baseUrl } from '@/config';
+import { baseMaterialUrl } from '@/config';
 import util from '../../wxs/util.wxs';
 import pageRouter from '@/utils/pageRouter'
 
@@ -122,6 +123,7 @@ export default class CardSelect extends wepy.page {
     is_activated: false,
     card_id: '',
     baseUrl: baseUrl,
+    baseMaterialUrl: baseMaterialUrl
   };
 
   wxs = {
