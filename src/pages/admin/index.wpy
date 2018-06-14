@@ -22,7 +22,7 @@
               <image class="avatar" mode="aspectFill" src="{{util.formatImageUrl(store_info.avatar, baseUrl)}}"/>
             </block>
             <block wx:else>
-              <image class="avatar" mode="aspectFill" src="../../images/avatar.png"/>
+              <image class="avatar" mode="aspectFill" src="{{baseMaterialUrl + 'avatar.png'}}"/>
             </block>
           </view>
           <view class="weui-cell__bd">
@@ -51,6 +51,7 @@
 <script>
 import wepy from 'wepy';
 import { baseUrl } from '@/config';
+import { baseMaterialUrl } from '@/config';
 import util from '../../wxs/util.wxs';
 
 export default class AdminIndex extends wepy.page {
@@ -84,6 +85,7 @@ export default class AdminIndex extends wepy.page {
 
   data = {
     baseUrl: baseUrl,
+    baseMaterialUrl: baseMaterialUrl,
     space_id: '',
     store_info: {},
     is_loaded: false,

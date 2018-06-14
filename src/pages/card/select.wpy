@@ -56,7 +56,7 @@ page{
             <view class="card-header">
               <view class="user-avatar">
                 <image wx:if="{{card.avatar}}" class="image" mode="aspectFill" src="{{util.formatImageUrl(card.avatar, baseUrl)}}"/>
-                <image wx:else class="image" mode="aspectFill" src="../../images/avatar.png"/>
+                <image wx:else class="image" mode="aspectFill" src="{{baseMaterialUrl + 'avatar.png'}}"/>
               </view>
               <view class="card-name">
                 <text>{{card.name}}</text>
@@ -69,7 +69,7 @@ page{
             <view class="card-header">
               <view class="user-avatar">
                 <image wx:if="{{card.avatar}}" class="image" mode="aspectFill" src="{{util.formatImageUrl(card.avatar, baseUrl)}}"/>
-                <image wx:else class="image" mode="aspectFill" src="../../images/avatar.png"/>
+                <image wx:else class="image" mode="aspectFill" src="{{baseMaterialUrl + 'avatar.png'}}"/>
               </view>
               <view class="card-name">
                 <text>{{card.name}}</text>
