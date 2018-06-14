@@ -470,7 +470,7 @@ export default class Posts extends wepy.page {
         url: `../wifi?store=${this.space_id}`
       },
       vip_card: {
-        label: '会员卡',
+        label: '会员',
         icon: 'standard-opportunity',
         url: (function () {
           if (self.card._id) {
@@ -491,7 +491,7 @@ export default class Posts extends wepy.page {
     } else {
       this.enabled_objects = [
         objects_list.post, objects_list.vip_event, objects_list.vip_video, 
-        objects_list.vip_product, objects_list.vip_team, objects_list.vip_job, 
+        objects_list.vip_card, objects_list.vip_wifi, objects_list.vip_job, 
         objects_list.qrcode, objects_list.vip_store, objects_list.support
       ] 
     }
