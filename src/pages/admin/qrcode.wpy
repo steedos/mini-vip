@@ -60,7 +60,7 @@ page{
 <script>
 import wepy from 'wepy';
 import req from '@/network';
-import { baseUrl } from '@/config';
+import { baseUrl, appId } from '@/config'
 import util from '../../wxs/util.wxs';
 var utilJs = require('../../utils/util.js')
 
@@ -121,7 +121,7 @@ export default class QRCode extends wepy.page {
     }
     else{
       const page = "pages/space/index"
-      const url = `/api/steedos/weixin/code?store_id=${
+      const url = `/api/steedos/weixin/code?appid=${appId}&store_id=${
         store_id
       }&page=${page}`;
       // const data = {
