@@ -312,31 +312,34 @@ export default class VIP extends wepy.app {
   }
 
   isSpaceMember(space_id) {
-    space_id = space_id || this.globalData.space_id;
     if(space_id && this.globalData.my_spaces){
       return this.globalData.my_spaces.find((space)=>{
         return space._id === space_id && space.profile === "member";
       });
+    }
+    else{
       return false;
     }
   }
 
   isSpaceUser(space_id) {
-    space_id = space_id || this.globalData.space_id;
     if(space_id && this.globalData.my_spaces){
       return this.globalData.my_spaces.find((space)=>{
         return space._id === space_id && space.profile === "user";
       });
+    }
+    else{
       return false;
     }
   }
 
   isSpaceAdmin(space_id) {
-    space_id = space_id || this.globalData.space_id;
     if(space_id && this.globalData.my_spaces){
       return this.globalData.my_spaces.find((space)=>{
         return space._id === space_id && space.profile === "admin";
       });
+    }
+    else{
       return false;
     }
   }
