@@ -16,6 +16,7 @@ page{
   .canvas {
     width: 100%;
     height: 100%;
+    top:-10000px;
   }
   .image-container {
     .qrcode {
@@ -52,9 +53,7 @@ page{
     <block wx:if="{{imageUrl}}">
       <image mode="aspectFit" src="{{util.formatImageUrl(imageUrl, baseUrl)}}" @tap="previewImage({{imageUrl}})"/>
     </block>
-    <block wx:else>
-      <canvas canvas-id="myCanvas" class="canvas"/>
-    </block>
+    <canvas canvas-id="myCanvas" class="canvas"/>
   </view>
 </template>
 
@@ -121,83 +120,87 @@ export default class QRCode extends wepy.page {
       this.$apply();
     }
     else{
-      const url = '/api/steedos/weixin/code';
-      const data = {
-        page:"pages/space/index",
-        width:430,
-        store_id: store_id
-      };
-      const res = await req.post(url, data);
-      if(res){
-        this.imgCodeUrl = res;
+      const page = "pages/space/index"
+      const url = `/api/steedos/weixin/code?store_id=${
+        store_id
+      }&page=${page}`;
+      // const data = {
+      //   page:"pages/space/index",
+      //   width:430,
+      //   store_id: store_id
+      // };
+      // const res = await req.get(url);
+      // if(res){
+      //   this.imageUrl = res;
         
         // const image = await wepy.getImageInfo({
         //   src: utilJs.formatImageUrl(this.imgCodeUrl, this.baseUrl)})
-        const self = this
-        const ctx = wepy.createCanvasContext('myCanvas')
-        const width = wepy.getSystemInfoSync().windowWidth
-        const radius = width * 105/430
-        const avatar_x = width/2 - radius/1.414
-        const avatar_y = avatar_x
-        const avatar_width = radius*1.414
-        const imgRes = await wepy.downloadFile({
-          url: utilJs.formatImageUrl(this.imgCodeUrl, this.baseUrl)
-        })
-        const avatarRes = await wepy.downloadFile({
-          url: utilJs.formatImageUrl(this.avatarUrl, this.baseUrl)
-        })
-        console.log('res.tempFilePath....',imgRes.tempFilePath)
-        ctx.drawImage(utilJs.formatImageUrl(imgRes.tempFilePath, this.baseUrl), 0, 0, width, width)
-        ctx.arc(width/2, width/2, radius, 0, 2 * Math.PI)
-        ctx.setFillStyle('white')
-        ctx.fill()
-        const avatar_radius = radius-6
-        ctx.save()
-        ctx.beginPath()
-        ctx.arc(width/2, width/2, avatar_radius, 0, 2 * Math.PI)
-        ctx.setFillStyle('white')
-        ctx.fill()
-        ctx.clip()
-        ctx.drawImage(avatarRes.tempFilePath, width/2-avatar_radius, width/2-avatar_radius, 2*avatar_radius, 2*avatar_radius)
-        ctx.restore();
-        console.log("avatarUrl",this.avatarUrl);
-        ctx.draw(true, async ()=>{
-          let x = self;
-          const res = await wepy.canvasToTempFilePath({
-            width:width,
-            height:width,
-            destWidth:width,
-            destHeight:width,
-            canvasId: 'myCanvas',
-            fileType: 'jpeg'
-          });
-          console.log("res=====",res.tempFilePath)
-          const authToken = self.$parent.globalData.user.auth_token;
-          const userId = self.$parent.globalData.user._id;
-          console.log(authToken,userId)
-          const fileResult = await wepy.uploadFile({
-            url: `${self.baseUrl}/s3/images`,
-            filePath: res.tempFilePath,
-            name: 'file',
-            // formData: formData,
-            header: {
-              'X-Auth-Token': authToken,
-              'X-User-Id': userId
-            }
-          })
-          const fileData = JSON.parse(fileResult.data);
-          console.log(fileData['_id'])
-          self.imageUrl = fileData['_id']
-          const data = {
-            qrcode: self.imageUrl
-          };
-          var store = await this.$parent.update('vip_store',store_id, data);
-          self.$apply();
+      const self = this
+      const ctx = wepy.createCanvasContext('myCanvas')
+      const width = wepy.getSystemInfoSync().windowWidth
+      const radius = width * 105/430
+      const avatar_x = width/2 - radius/1.414
+      const avatar_y = avatar_x
+      const avatar_width = radius*1.414
+      const imgRes = await wepy.downloadFile({
+        url: this.baseUrl + url
+      })
+      const avatarRes = await wepy.downloadFile({
+        url: utilJs.formatImageUrl(this.avatarUrl, this.baseUrl)
+      })
+      console.log('res.tempFilePath....',imgRes.tempFilePath)
+      ctx.drawImage(imgRes.tempFilePath, 0, 0, width, width)
+      ctx.arc(width/2, width/2, radius, 0, 2 * Math.PI)
+      ctx.setFillStyle('white')
+      ctx.fill()
+      const avatar_radius = radius-6
+      ctx.save()
+      ctx.beginPath()
+      ctx.arc(width/2, width/2, avatar_radius, 0, 2 * Math.PI)
+      ctx.setFillStyle('white')
+      ctx.fill()
+      ctx.clip()
+      ctx.drawImage(avatarRes.tempFilePath, width/2-avatar_radius, width/2-avatar_radius, 2*avatar_radius, 2*avatar_radius)
+      ctx.restore();
+      console.log("avatarUrl",this.avatarUrl);
+      ctx.draw(true, async ()=>{
+        let x = self;
+        console.log("11223344")
+        const res = await wepy.canvasToTempFilePath({
+          width:width,
+          height:width,
+          destWidth:width,
+          destHeight:width,
+          canvasId: 'myCanvas',
+          fileType: 'jpeg'
         });
-        
-        this.$apply();
-      }
+        console.log("res=====",res.tempFilePath)
+        const authToken = self.$parent.globalData.user.auth_token;
+        const userId = self.$parent.globalData.user._id;
+        console.log(authToken,userId)
+        const fileResult = await wepy.uploadFile({
+          url: `${self.baseUrl}/s3/images`,
+          filePath: res.tempFilePath,
+          name: 'file',
+          // formData: formData,
+          header: {
+            'X-Auth-Token': authToken,
+            'X-User-Id': userId
+          }
+        })
+        const fileData = JSON.parse(fileResult.data);
+        console.log(fileData['_id'])
+        self.imageUrl = fileData['_id']
+        const data = {
+          qrcode: self.imageUrl
+        };
+        var store = await this.$parent.update('vip_store',store_id, data);
+        self.$apply();
+      });
+      
+      this.$apply();
     }
+    // }
   }
   
   methods = {
