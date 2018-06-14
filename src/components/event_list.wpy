@@ -77,10 +77,10 @@
   <block wx:if="{{list.length}}">
     <repeat for="{{list}}" key="index" index="index" item="event">
       <view class="event">
-        <view class="event-cover">
+        <view wx:if="{{event.cover}}" class="event-cover">
           <image class="image" mode="aspectFill" src="{{util.formatImageUrl(event.cover, baseUrl)}}" @tap="previewImage({{event.cover}})" />
         </view>
-        <view class="event-body weui-cells" @tap="goDetail({{event._id}}, {{event.space}})">
+        <view class="event-body weui-cells {{event.cover ? '' : 'is-cover-empty'}}" @tap="goDetail({{event._id}}, {{event.space}})">
           <view class="weui-cell weui-cell_access">
             <view class="weui-cell__bd">
               <view class="event-name">{{event.name}}</view>
