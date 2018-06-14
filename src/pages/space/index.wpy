@@ -192,7 +192,7 @@ page {
           <view class="bg-image"></view>
           <view class="avatar-container">
             <image wx:if="{{store_info.avatar}}" class="avatar" mode="aspectFill" src="{{util.formatImageUrl(store_info.avatar, baseUrl)}}" @tap.stop="uploadImage()"/>
-            <image wx:else class="avatar" mode="aspectFill" src="{{emptyImageUrlForAvatar}}" @tap.stop="uploadImage()"/>
+            <image wx:else class="avatar" mode="aspectFill" src="{{baseMaterialUrl + 'avatar.png'}}" @tap.stop="uploadImage()"/>
           </view>
           <view class="store-name">{{store_info.name}}</view>
           <view class="star-count">{{store_info.star_count}}位关注者</view>
@@ -255,6 +255,7 @@ page {
 <script>
 import wepy from 'wepy';
 import { baseUrl } from '@/config';
+import { baseMaterialUrl } from '@/config';
 import postList from '../../components/post_list';
 import req from '@/network';
 import util from '../../wxs/util.wxs';
@@ -304,12 +305,23 @@ export default class Posts extends wepy.page {
 
   // 分享
   onShareAppMessage(res) {
-    const space_id = this.space_id;
-    const space_name = this.space_info.name;
-    return {
-      title: space_name,
-      path: `pages/space/index?space_id=${space_id}`
-    };
+    console.log('onShareAppMessage', res)
+    if (res.from == "button") {
+      const postName = res.target.dataset.postName;
+      const postId = res.target.dataset.postId;
+      const spaceId = res.target.dataset.postSpace;
+      return {
+        title: postName,
+        path: `pages/post/view?post_id=${postId}&space_id=${spaceId}`
+      }
+    }else{
+      const space_id = this.space_id;
+      const space_name = this.space_info.name;
+      return {
+        title: space_name,
+        path: `pages/space/index?space_id=${space_id}`
+      };
+    }
   }
 
   // 下拉刷新
@@ -328,8 +340,8 @@ export default class Posts extends wepy.page {
 
   data = {
     baseUrl: baseUrl,
+    baseMaterialUrl: baseMaterialUrl,
     emptyImageUrlForCover: '/images/empty.png',
-    emptyImageUrlForAvatar: '/images/avatar.png',
     type: '',
     posts: [],
     current_skip: 0,
@@ -459,7 +471,7 @@ export default class Posts extends wepy.page {
         url: `../wifi?store=${this.space_id}`
       },
       vip_card: {
-        label: '会员卡',
+        label: '会员',
         icon: 'standard-opportunity',
         url: (function () {
           if (self.card._id) {
@@ -480,7 +492,7 @@ export default class Posts extends wepy.page {
     } else {
       this.enabled_objects = [
         objects_list.post, objects_list.vip_event, objects_list.vip_video, 
-        objects_list.vip_product, objects_list.vip_team, objects_list.vip_job, 
+        objects_list.vip_card, objects_list.vip_wifi, objects_list.vip_job, 
         objects_list.qrcode, objects_list.vip_store, objects_list.support
       ] 
     }

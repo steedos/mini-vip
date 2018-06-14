@@ -1,39 +1,22 @@
 <style lang="less">
 page{
   height: 100%;
-  background: #fff;
 }
-.page__hd{
-  padding: 0px;
+.page__bd{
+  margin-bottom: 40px;
 }
 .cover{
   width: 100%;
   height:480rpx;
 }
-.event-body, .weui-article__h1{
-  &.weui-cells{
-    line-height:22px;
-    font-size:16px;
-    &:before{
-      display: none;
-    }
-    &:after{
-      display: none;
-    }
-    .weui-cell{
-      padding-left:0;
-      padding-right:0;
-      &:before{
-        display: none;
-      }
-      &:after{
-        display: none;
-      }
-    }
-  }
-}
 .btn-edit{
   color: #ffa325;
+}
+.weui-media-box__desc{
+  text-overflow:unset;
+  overflow:visible;
+  -webkit-line-clamp:unset;
+  line-height:1.4em;
 }
 .tab-bar {
   display: flex;
@@ -62,13 +45,16 @@ page{
   }
 
   .btn-respond {
-    height: 35px;
-    width: 35px;
     background: #ffa325;
     text-align: center;
-    color: #fff;
-    border: 10px;
-    border-radius: 50%;
+    color:#fff;
+    border:10px;
+    height:100%;
+    width:100%;
+    vertical-align:middle;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 
     .ion {
       line-height: 35px;
@@ -80,57 +66,67 @@ page{
 </style>
 <template>
 <view class="page" wx:if="{{is_loaded}}">
-  <view class="page__hd">
-    <image wx:if="{{event.cover}}" class="cover" mode="aspectFill" src="{{util.formatImageUrl(event.cover, baseUrl)}}" @tap="previewImage({{event.cover}})" />
-  </view>
+  <image wx:if="{{event.cover}}" class="cover" mode="aspectFill" src="{{util.formatImageUrl(event.cover, baseUrl)}}" @tap="previewImage({{event.cover}})" />
   <view class="page__bd">
-    <view class="weui-article">
-        <view class="weui-article__section">
-          <view class="weui-article__h1 weui-cells">
-            <view class="weui-cell">
-              <view class="weui-cell__bd">
-                {{event.name}}
-              </view>
-              <view class="weui-cell__ft" wx:if="{{editable}}">
-                <view class="btn-edit" @tap="editEvent">
-                  <view class="slds-icon-edit ion"></view>
-                </view>
-              </view>
-            </view>
-          </view>
-          <view class="event-body weui-cells">
-            <view class="weui-cell event-start" wx:if="{{event.start}}">
-              <view class="weui-cell__bd">
-                开始时间：{{util.formatDate(event.start)}}
-              </view>
-            </view>
-            <view class="weui-cell event-end" wx:if="{{event.end}}">
-              <view class="weui-cell__bd">
-                结束时间：{{util.formatDate(event.end)}}
-              </view>
-            </view>
-            <view class="weui-cell weui-cell_access event-address" wx:if="{{event.location.address}}" hover-class="weui-cell_active" @tap="openMap">
-              <view class="weui-cell__bd">
-                地点：{{event.location.address}}
-              </view>
-              <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-            </view>
-            <view class="weui-cell weui-cell_access event-accepted-count">
-              <view class="weui-cell__bd">
-                人数：{{event.accepted_count ? event.accepted_count : 0}}人报名，{{event.pending_count ? event.pending_count : 0}}人观望
-              </view>
-              <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-            </view>
-          </view>
-          <view class="weui-article__p">
-            <text space="emsp">{{event.description}}</text>
+    <view class="event-title weui-cells" @tap="editEvent">
+      <view class="weui-cell">
+        <view class="weui-cell__bd">
+          {{event.name}}
+        </view>
+        <view class="weui-cell__ft weui-cell__ft_in-access" wx:if="{{editable}}"></view>
+        <view class="weui-cell__ft" wx:if="{{editable}}">
+          <view class="btn-edit" @tap="editEvent">
+            <view class="slds-icon-edit ion"></view>
           </view>
         </view>
+      </view>
+    </view>
+    <view class="event-body weui-cells">
+      <view class="weui-cell event-start" wx:if="{{event.start}}">
+        <view class="weui-cell__bd">
+          开始时间
+        </view>
+        <view class="weui-cell__ft">
+          {{util.formatDate(event.start)}}
+        </view>
+      </view>
+      <view class="weui-cell event-end" wx:if="{{event.end}}">
+        <view class="weui-cell__bd">
+          结束时间
+        </view>
+        <view class="weui-cell__ft">
+          {{util.formatDate(event.end)}}
+        </view>
+      </view>
+      <view class="weui-cell weui-cell_access event-address" wx:if="{{event.location.address}}" hover-class="weui-cell_active" @tap="openMap">
+        <view class="weui-cell__bd">
+          地点
+        </view>
+        <view class="weui-cell__ft weui-cell__ft_in-access">
+          {{event.location.address}}
+        </view>
+      </view>
+      <view class="weui-cell weui-cell_access event-accepted-count">
+        <view class="weui-cell__bd">
+          人数
+        </view>
+        <view class="weui-cell__ft weui-cell__ft_in-access">
+          {{event.accepted_count ? event.accepted_count : 0}}人报名，{{event.pending_count ? event.pending_count : 0}}人观望
+        </view>
+      </view>
+      <view class="weui-media-box weui-media-box_text">
+        <view class="weui-media-box__title weui-media-box__title_in-text">
+          活动描述
+        </view>
+        <view class="weui-media-box__desc">
+          <text space="emsp">{{event.description}}</text>
+        </view>
+      </view>
     </view>
   </view>
   <view class="tab-bar">
     <view class="btn-respond" @tap="respondEvent">
-      <view class="slds-icon-new_task ion"></view>
+      <view>活动报名</view>
     </view>
   </view>
 </view>
@@ -225,7 +221,10 @@ export default class EventView extends wepy.page {
 
   methods = {
     editEvent() {
-      let url = `/pages/record/edit?action=edit&object_name=vip_event&record_id=${this.event_id}&fields=name,start,end,allDay,location,alarms,accepted_count,pending_count,rejected_count,featured,cover`;
+      if(!this.editable){
+        return
+      }
+      let url = `/pages/record/edit?action=edit&object_name=vip_event&record_id=${this.event_id}&fields=name,start,end,allDay,location,alarms,accepted_count,pending_count,rejected_count,featured,cover,description`;
       wepy.navigateTo({
         url: url
       });

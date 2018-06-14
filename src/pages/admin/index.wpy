@@ -28,7 +28,7 @@
               <image class="avatar" mode="aspectFill" src="{{util.formatImageUrl(store_info.avatar, baseUrl)}}"/>
             </block>
             <block wx:else>
-              <image class="avatar" mode="aspectFill" src="../../images/avatar.png"/>
+              <image class="avatar" mode="aspectFill" src="{{baseMaterialUrl + 'avatar.png'}}"/>
             </block>
           </view>
           <view class="weui-cell__bd">
@@ -64,6 +64,7 @@
 <script>
 import wepy from 'wepy';
 import { baseUrl } from '@/config';
+import { baseMaterialUrl } from '@/config';
 import util from '../../wxs/util.wxs';
 
 export default class AdminIndex extends wepy.page {
@@ -97,12 +98,14 @@ export default class AdminIndex extends wepy.page {
 
   data = {
     baseUrl: baseUrl,
+    baseMaterialUrl: baseMaterialUrl,
     space_id: '',
     store_info: {},
     is_loaded: false,
     options: [
       // {title: '门店', icon:'standard-address', url: '../record/list?object_name=vip_store'},
       {title: '动态', icon:'standard-news', url: '../record/list?object_name=post'},
+      {title: '活动', icon:'standard-event', url: '../record/list?object_name=vip_event'},
       {title: '卡项', icon:'standard-work-type', url: '../record/list?object_name=vip_category'},
       // {title: '会员卡', icon:'standard-scan-card', url: '../record/list?object_name=vip_card'},
       // {title: '员工', icon:'standard-user', url: '../record/list?object_name=space_users&listview_id=emplyees'},
