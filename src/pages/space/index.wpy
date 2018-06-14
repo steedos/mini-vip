@@ -408,11 +408,6 @@ export default class Posts extends wepy.page {
     this.is_space_owner = space && userId == space.owner;
     this.is_space_admin = admins && admins.includes(userId);
     const objects_list = {
-      vip_store: {
-        label: '关于我们',
-        icon: 'standard-contact',
-        url: `../store?store=${this.space_id}`
-      },
       post: {
         label: '动态',
         icon: 'standard-news',
@@ -423,25 +418,40 @@ export default class Posts extends wepy.page {
         icon: 'standard-event',
         url: `../event/list?space_id=${this.space_id}`
       },
-      qrcode: {
-        label: '二维码',
-        icon: 'standard-product',
-        url: `/pages/admin/qrcode?space_id=${this.space_id}`
+      vip_video: {
+        label: '视频',
+        icon: 'standard-carousel',
+        url: '../404'
+      },
+      vip_product: {
+        label: '产品',
+        icon: 'standard-record',
+        url: '../404'
+      },
+      vip_team: {
+        label: '团队',
+        icon: 'standard-team-member',
+        url: `../404`
+      },
+      vip_job: {
+        label: '招聘',
+        icon: 'standard-person-account',
+        url: '../404'
+      },
+      vip_store: {
+        label: '联系我们',
+        icon: 'standard-contact',
+        url: `../store?store=${this.space_id}`
       },
       support: {
         name: 'support',
         label: '在线客服',
         icon: 'standard-live-chat',
       },
-      video: {
-        label: '视频',
-        icon: 'standard-photo',
-        url: '../404'
-      },
-      job: {
-        label: '招聘',
-        icon: 'standard-individual',
-        url: '../404'
+      qrcode: {
+        label: '二维码',
+        icon: 'standard-product',
+        url: `/pages/admin/qrcode?space_id=${this.space_id}`
       },
       vip_wifi: {
         label: 'Wifi',
@@ -460,6 +470,7 @@ export default class Posts extends wepy.page {
         })()
       },
     }
+
     const result = await this.$parent.get('vip_store', spaceId, spaceId);
     this.enabled_objects = []
     if (result.enabled_objects && !_.isEmpty(result.enabled_objects)) {
@@ -467,7 +478,11 @@ export default class Posts extends wepy.page {
         this.enabled_objects.push(objects_list[o])
       })
     } else {
-      this.enabled_objects = objects_list // [objects_list.post, objects_list.vip_event, objects_list.support, objects_list.vip_store, objects_list.qrcode]
+      this.enabled_objects = [
+        objects_list.post, objects_list.vip_event, objects_list.vip_video, 
+        objects_list.vip_product, objects_list.vip_team, objects_list.vip_job, 
+        objects_list.qrcode, objects_list.vip_store, objects_list.support
+      ] 
     }
 
     if (!result.star_count) {
