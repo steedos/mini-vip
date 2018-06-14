@@ -104,7 +104,7 @@ export default class QRCode extends wepy.page {
     return {
       title: "欢迎加入"+this.store_name,
       path: `pages/admin/qrcode?space_id=${this.store_id}`,
-      imageUrl:utilJs.formatImageUrl(this.imgCodeUrl, this.baseUrl)
+      imageUrl:utilJs.formatImageUrl(this.imageUrl, this.baseUrl)
     };
   }
   async getqrCode(store_id) {
@@ -116,7 +116,6 @@ export default class QRCode extends wepy.page {
       this.$apply();
     }
     if(result &&  result.qrcode){
-      console.log("=======result======",result);
       this.imageUrl = result.qrcode;
       this.avatarUrl = result.avatar
       this.$apply();
@@ -124,7 +123,7 @@ export default class QRCode extends wepy.page {
     else{
       const url = '/api/steedos/weixin/code';
       const data = {
-        path:"pages/space/index?space_id=" + store_id,
+        page:"pages/space/index",
         width:430,
         store_id: store_id
       };
