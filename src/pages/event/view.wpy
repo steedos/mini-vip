@@ -123,9 +123,6 @@ page{
         </view>
       </view>
     </view>
-    <!-- <view class="weui-article__p">
-      <text space="emsp">{{event.description}}</text>
-    </view> -->
   </view>
   <view class="tab-bar">
     <view class="btn-respond" @tap="respondEvent">
