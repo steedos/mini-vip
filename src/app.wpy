@@ -295,6 +295,7 @@ export default class VIP extends wepy.app {
       globalData.user.mobile = res.mobile
       globalData.user.sex = res.sex
       globalData.user.birthdate = res.birthdate
+      globalData.user.my_spaces = res.my_spaces
 
       globalData.is_login = true
 
@@ -307,6 +308,24 @@ export default class VIP extends wepy.app {
       }
       req.header(header)
     }
+  }
+
+  isSpaceMember(space_id) {
+    return this.my_spaces.find((space)=>{
+      return space._id === space_id && space.profile === "member"
+    });
+  }
+
+  isSpaceUser(space_id) {
+    return this.my_spaces.find((space)=>{
+      return space._id === space_id && space.profile === "user"
+    });
+  }
+
+  isSpaceAdmin(space_id) {
+    return this.my_spaces.find((space)=>{
+      return space._id === space_id && space.profile === "admin"
+    });
   }
 
   async cache(object_name, _id, data, reload) {
