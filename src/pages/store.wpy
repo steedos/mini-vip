@@ -135,6 +135,11 @@ page {
         <button class="weui-btn" type="primary" plain="true">编辑</button>
       </navigator>
     </view>
+    <view class="button-sp-area">
+      <navigator url="/pages/admin/qrcode?space_id={{store._id}}">
+        <button class="weui-btn" type="primary" plain="true">查看二维码</button>
+      </navigator>
+    </view>
   </view>
 </template>
 

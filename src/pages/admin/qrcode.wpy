@@ -124,17 +124,6 @@ export default class QRCode extends wepy.page {
       const url = `/api/steedos/weixin/code?appid=${appId}&store_id=${
         store_id
       }&page=${page}`;
-      // const data = {
-      //   page:"pages/space/index",
-      //   width:430,
-      //   store_id: store_id
-      // };
-      // const res = await req.get(url);
-      // if(res){
-      //   this.imageUrl = res;
-        
-        // const image = await wepy.getImageInfo({
-        //   src: utilJs.formatImageUrl(this.imgCodeUrl, this.baseUrl)})
       const self = this
       const ctx = wepy.createCanvasContext('myCanvas')
       const width = wepy.getSystemInfoSync().windowWidth
@@ -165,7 +154,6 @@ export default class QRCode extends wepy.page {
       console.log("avatarUrl",this.avatarUrl);
       ctx.draw(true, async ()=>{
         let x = self;
-        console.log("11223344")
         const res = await wepy.canvasToTempFilePath({
           width:width,
           height:width,
@@ -174,10 +162,12 @@ export default class QRCode extends wepy.page {
           canvasId: 'myCanvas',
           fileType: 'jpeg'
         });
-        console.log("res=====",res.tempFilePath)
+        self.imageUrl = res.tempFilePath
+        self.imgCodeUrl = res.tempFilePath
+        self.$apply()
         const authToken = self.$parent.globalData.user.auth_token;
         const userId = self.$parent.globalData.user._id;
-        console.log(authToken,userId)
+        // console.log(authToken,userId)
         const fileResult = await wepy.uploadFile({
           url: `${self.baseUrl}/s3/images`,
           filePath: res.tempFilePath,
@@ -189,13 +179,10 @@ export default class QRCode extends wepy.page {
           }
         })
         const fileData = JSON.parse(fileResult.data);
-        console.log(fileData['_id'])
-        self.imageUrl = fileData['_id']
         const data = {
-          qrcode: self.imageUrl
+          qrcode: fileData['_id']
         };
         var store = await this.$parent.update('vip_store',store_id, data);
-        self.$apply();
       });
       
       this.$apply();
@@ -205,11 +192,15 @@ export default class QRCode extends wepy.page {
   
   methods = {
     previewImage(image, event){
-      console.log(image)
       var baseUrl = this.baseUrl;
       var current = `${baseUrl}/api/files/images/${image}`;
       var urls = []
-      urls.push(`${baseUrl}/api/files/images/${image}`)
+      if(this.imgCodeUrl) {
+        urls.push(this.imgCodeUrl)
+      }
+      else {
+        urls.push(`${baseUrl}/api/files/images/${image}`)
+      }
       wx.previewImage({
         current: current,
         urls: urls
