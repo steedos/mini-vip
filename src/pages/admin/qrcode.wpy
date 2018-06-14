@@ -3,11 +3,26 @@ page{
   height:100%;
   background-color: #353535;
 }
+
 .page {
   height:100%;
   width: 100%;
   background-color: #353535;
   text-align:center;
+  image{
+    width: 100%;
+    height: 100%;
+  }
+  .canvas {
+    width: 100%;
+    height: 100%;
+  }
+  .image-container {
+    .qrcode {
+      width: 100%;
+      height: 100%;
+    }
+  }
   .qrcode_bd{
     position: absolute;
     margin: auto;
@@ -33,15 +48,13 @@ page{
 </style>
 
 <template>
-  <view class="page">
-    <view class="qrcode_bd">
-      <block wx:if="{{imgCodeUrl}}">
-        <image class="qrcode" mode="aspectFill" src="{{util.formatImageUrl(imgCodeUrl, baseUrl)}}" @tap="previewImage({{imgCodeUrl}})"/>
-      </block>
-      <block wx:else>
-        <text class="qrtext">二维码获取失败</text>
-      </block>
-    </view>
+  <view class="page" wx:if="{{is_loaded}}">
+    <block wx:if="{{imageUrl}}">
+      <image mode="aspectFit" src="{{util.formatImageUrl(imageUrl, baseUrl)}}" @tap="previewImage({{imageUrl}})"/>
+    </block>
+    <block wx:else>
+      <canvas canvas-id="myCanvas" class="canvas"/>
+    </block>
   </view>
 </template>
 
@@ -64,7 +77,10 @@ export default class QRCode extends wepy.page {
     baseUrl: baseUrl,
     imgCodeUrl: '',
     store_id:'',
-    store_name:''
+    store_name:'',
+    imageUrl: '',
+    avatarUrl: '',
+    is_loaded: false
   };
 
   wxs = {
@@ -76,20 +92,15 @@ export default class QRCode extends wepy.page {
       title: '加载中',
       mask: true
     });
-    console.log("e======",e)
     var store_id = e.store_id || this.$parent.globalData.space_id
     this.store_id = store_id
     this.$apply()
     await this.getqrCode(store_id)
-    
+    this.is_loaded = true
+    this.$apply();
     wepy.hideLoading();
   }
   onShareAppMessage(res) {
-    // const space_id = this.space_id
-    // const store_id = this.store_id
-    // const space_name = this.space_name
-    var url = utilJs.formatImageUrl(this.imgCodeUrl, this.baseUrl)
-    console.log("url=======",url)
     return {
       title: "欢迎加入"+this.store_name,
       path: `pages/admin/qrcode?space_id=${this.store_id}`,
@@ -97,18 +108,17 @@ export default class QRCode extends wepy.page {
     };
   }
   async getqrCode(store_id) {
-    // const options = {
-    //   $filter: `_id eq '${store_id}'`,
-    //   $select: 'qrcode'
-    // }
     const result = await this.$parent.get('vip_store', store_id);
     if(result){
       this.store_name = result.name
+      this.avatarUrl = result.avatar
+      this.store_id = result._id
       this.$apply();
     }
     if(result &&  result.qrcode){
       console.log("=======result======",result);
-      this.imgCodeUrl = result.qrcode;
+      this.imageUrl = result.qrcode;
+      this.avatarUrl = result.avatar
       this.$apply();
     }
     else{
@@ -121,12 +131,79 @@ export default class QRCode extends wepy.page {
       const res = await req.post(url, data);
       if(res){
         this.imgCodeUrl = res;
+        
+        // const image = await wepy.getImageInfo({
+        //   src: utilJs.formatImageUrl(this.imgCodeUrl, this.baseUrl)})
+        const self = this
+        const ctx = wepy.createCanvasContext('myCanvas')
+        const width = wepy.getSystemInfoSync().windowWidth
+        const radius = width * 105/430
+        const avatar_x = width/2 - radius/1.414
+        const avatar_y = avatar_x
+        const avatar_width = radius*1.414
+        const imgRes = await wepy.downloadFile({
+          url: utilJs.formatImageUrl(this.imgCodeUrl, this.baseUrl)
+        })
+        const avatarRes = await wepy.downloadFile({
+          url: utilJs.formatImageUrl(this.avatarUrl, this.baseUrl)
+        })
+        console.log('res.tempFilePath....',imgRes.tempFilePath)
+        ctx.drawImage(utilJs.formatImageUrl(imgRes.tempFilePath, this.baseUrl), 0, 0, width, width)
+        ctx.arc(width/2, width/2, radius, 0, 2 * Math.PI)
+        ctx.setFillStyle('white')
+        ctx.fill()
+        const avatar_radius = radius-6
+        ctx.save()
+        ctx.beginPath()
+        ctx.arc(width/2, width/2, avatar_radius, 0, 2 * Math.PI)
+        ctx.setFillStyle('white')
+        ctx.fill()
+        ctx.clip()
+        ctx.drawImage(avatarRes.tempFilePath, width/2-avatar_radius, width/2-avatar_radius, 2*avatar_radius, 2*avatar_radius)
+        ctx.restore();
+        console.log("avatarUrl",this.avatarUrl);
+        ctx.draw(true, async ()=>{
+          let x = self;
+          const res = await wepy.canvasToTempFilePath({
+            width:width,
+            height:width,
+            destWidth:width,
+            destHeight:width,
+            canvasId: 'myCanvas',
+            fileType: 'jpeg'
+          });
+          console.log("res=====",res.tempFilePath)
+          const authToken = self.$parent.globalData.user.auth_token;
+          const userId = self.$parent.globalData.user._id;
+          console.log(authToken,userId)
+          const fileResult = await wepy.uploadFile({
+            url: `${self.baseUrl}/s3/images`,
+            filePath: res.tempFilePath,
+            name: 'file',
+            // formData: formData,
+            header: {
+              'X-Auth-Token': authToken,
+              'X-User-Id': userId
+            }
+          })
+          const fileData = JSON.parse(fileResult.data);
+          console.log(fileData['_id'])
+          self.imageUrl = fileData['_id']
+          const data = {
+            qrcode: self.imageUrl
+          };
+          var store = await this.$parent.update('vip_store',store_id, data);
+          self.$apply();
+        });
+        
         this.$apply();
       }
     }
   }
+  
   methods = {
     previewImage(image, event){
+      console.log(image)
       var baseUrl = this.baseUrl;
       var current = `${baseUrl}/api/files/images/${image}`;
       var urls = []
