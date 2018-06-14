@@ -115,6 +115,8 @@ export default class VIP extends wepy.app {
       'pages/phone_number_login',
       'pages/empty_page',
       'pages/404',
+      'pages/record/read',
+      'pages/space/invite_admin',
     ],
     tabBar: {
       color: '#666',
@@ -220,8 +222,6 @@ export default class VIP extends wepy.app {
     if(this.globalData.user && this.globalData.user.mobile){
       return true
     }else{
-      const pages = getCurrentPages();
-      const page = pages[pages.length - 1];
       wepy.navigateTo({url: '/pages/empty_page?redirect_to=' + encodeURIComponent('/pages/phone_number_login?from=' + encodeURIComponent(to))});
       return false
     }
