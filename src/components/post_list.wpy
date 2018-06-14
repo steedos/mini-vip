@@ -72,6 +72,34 @@
       }
     }
   }
+  .post-footer {
+    display: flex;
+    font-size: 13px;
+    border-top: 1px solid #ededed;
+    color: #888;
+
+    .action {
+      flex: 1;
+      padding:30rpx;
+    }
+    .slds-icon {
+      display: inline-block;
+      height: auto;
+      width: auto;
+    }
+    .share-btn {
+      text-align: left;
+    }
+    .star-btn {
+      text-align: right;
+    }
+    .is-stared {
+      color: #018cc6;
+    }
+    .text {
+      display: inline-block;
+    }
+}
 }
 </style>
 <template>
@@ -116,6 +144,19 @@
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
           </view>
         </view>
+        <view class="post-footer ">
+          <view class="share action share-btn">
+            <view class="slds-icon-internal_share slds-icon slds-icon--small slds-m-right--x-small"></view>
+            <view class="text">转发</view>
+          </view>
+          <view class="comment action">
+          
+          </view>
+          <view class="star action star-btn {{post.star_id ? 'is-stared' : ''}}" @tap="starPost({{post._id}}, {{post.space}}, {{index}})">
+            <view class="slds-icon-like slds-icon slds-icon--small slds-m-right--x-small"></view>
+            <view class="text">{{post.star_count || 0}}</view>
+          </view>
+      </view>
       </view>
     </repeat>
   </block>
@@ -156,11 +197,33 @@ export default class PostList extends wepy.component {
     }
   }
 
-  onLoad() {
-    setTimeout(() => {
-      console.log('post list showHeader.....', this.list)
-    }, 5000);
+  watch = {
+    list: async function (newValue, oldValue) {
+      const parent = this.$parent.$parent;
+      const user = parent.globalData.user._id;
+      for (let post of this.list) {
+        const options = {
+          $filter: `user eq '${user}' and star_post eq '${post._id}'`
+        };
+        const result = await parent.query('user_star', options, post.space);
+        if (result && result.value && result.value[0]) {
+          post.star_id = result.value[0]._id;
+        }
+      }
+      console.log('watcher', this.list)
+      this.$apply()
+    }
   }
+
+  async getStarCount(index) {
+    const post_id = this.list[index]._id
+    const space_id = this.list[index].space
+    const result = await this.$parent.$parent.get('post', post_id, space_id);
+    this.list[index].star_count = result.star_count || 0
+    this.$apply()
+  }
+
+  async onLoad() {}
 
   data = {
     baseUrl: baseUrl,
@@ -212,6 +275,28 @@ export default class PostList extends wepy.component {
       if(this.currentVideoContext){
         this.currentVideoContext.pause()
       }     
+    },
+    async starPost(post_id, space_id, index) {
+      console.log(post_id, space_id, index)
+      const parent = this.$parent.$parent
+      const user = parent.globalData.user._id;
+      const data = {
+        user: user,
+        star_post: post_id,
+        owner: user
+      }
+      if (this.list[index].star_id) {
+        await parent.delete('user_star', this.list[index].star_id, space_id)
+        this.list[index].star_id = ''
+        this.$apply()
+      } else {
+        const result = await parent.insert('user_star', data, space_id)
+        if (result.value && result.value.length) {
+          this.list[index].star_id = result.value[0]._id;
+          this.$apply()
+        }
+      }
+      await this.getStarCount(index)
     }
   };
 }

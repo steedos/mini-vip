@@ -501,7 +501,7 @@ export default class Posts extends wepy.page {
       $expand: 'owner($select=name)',
       $count: true,
       $select:
-        'name,summary,description,comment_count,enable_comment,images,video,audio,type,mini_type,space',
+        'name,summary,description,comment_count,enable_comment,images,video,audio,type,mini_type,space,star_count',
       $skip: skip,
       $top: DATA_LENGTH
     };
@@ -621,22 +621,12 @@ export default class Posts extends wepy.page {
         this.star_id = ''
         await this.getStarCount()
         this.$apply()
-        wx.showToast({
-          title: '取消关注成功',
-          icon: "none",
-          duration: 1000
-        })
       } else {
         const result = await this.$parent.insert('user_star', data, space_id)
         if (result.value && result.value.length) {
           this.star_id = result.value[0]._id;
           await this.getStarCount()
           this.$apply()
-          wx.showToast({
-            title: '关注成功!',
-            icon: "none",
-            duration: 1000
-          })
         }
       }
     },

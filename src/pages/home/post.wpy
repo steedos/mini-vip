@@ -70,7 +70,7 @@
 					$filter: 'featured eq true',
 					$expand: 'owner($select=name),space($select=name)',
 					$count: true,
-					$select: 'name,summary,description,comment_count,enable_comment,images,video,audio,type,mini_type,space',
+					$select: 'name,summary,description,comment_count,enable_comment,images,video,audio,type,mini_type,space,star_count',
 					$skip: skip,
 					$top: DATA_LENGTH
 				}
