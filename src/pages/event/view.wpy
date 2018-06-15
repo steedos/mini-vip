@@ -100,14 +100,6 @@ page{
           {{event.location.address}}
         </view>
       </view>
-      <navigator class="weui-cell weui-cell_access event-accepted-count" url="attendees?event_id={{event._id}}&&space_id={{space_id}}">
-        <view class="weui-cell__bd">
-          人数
-        </view>
-        <view class="weui-cell__ft weui-cell__ft_in-access">
-          {{event.accepted_count ? event.accepted_count : 0}}人报名，{{event.pending_count ? event.pending_count : 0}}人观望
-        </view>
-      </navigator>
       <view class="weui-media-box weui-media-box_text" wx:if="{{event.description}}">
         <view class="weui-media-box__title weui-media-box__title_in-text">
           活动描述
@@ -116,6 +108,14 @@ page{
           <text space="emsp">{{event.description}}</text>
         </view>
       </view>
+      <navigator class="weui-cell weui-cell_access event-accepted-count" url="attendees?event_id={{event._id}}&&space_id={{space_id}}">
+        <view class="weui-cell__bd">
+          人数
+        </view>
+        <view class="weui-cell__ft weui-cell__ft_in-access">
+          {{event.accepted_count ? event.accepted_count : 0}}人报名，{{event.pending_count ? event.pending_count : 0}}人观望
+        </view>
+      </navigator>
     </view>
   </view>
   <view class="tab-bar">
