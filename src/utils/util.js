@@ -42,7 +42,7 @@ const formatTime = (date, joiner, hideSecond) => {
       }
     }
     else{
-      return "/images/empty.png";
+      return "https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/empty.png";
     }
   }
 

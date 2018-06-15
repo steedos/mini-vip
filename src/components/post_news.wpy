@@ -110,7 +110,7 @@ export default class post extends wepy.component {
 
   data = {
     baseUrl: baseUrl,
-    emptyImageUrl: "/images/empty.png",
+    emptyImageUrl: "https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/empty.png",
     faildImageUrl: "/images/faild.png"
   };
 
