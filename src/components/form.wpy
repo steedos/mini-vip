@@ -151,7 +151,7 @@
                 <view class="weui-cell" hover-class='weui-grid_active'>
                   <view class="weui-cell__bd">
                     <block wx:if="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}">
-                      <textarea class="weui-textarea-input" data-id="{{item.name}}" placeholder="{{item.label}}" value="{{util.transformFieldValue(item, values[item.name])}}" auto-height="true" bindinput="textChange"/>
+                      <textarea class="weui-textarea-input" data-id="{{item.name}}" placeholder="{{item.label}}" value="{{util.transformFieldValue(item, values[item.name])}}" auto-height="true" bindblur="textChange"/>
                     </block>
                     <block wx:else>
                       <view class="weui-cell__ft wide-cell">{{util.transformFieldValue(item, values[item.name]) || item.label}}</view>
@@ -165,7 +165,7 @@
                     <block wx:if="{{item.is_wide}}">
                       <view class="weui-cell__bd">
                         <block wx:if="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}">
-                          <textarea class="weui-textarea" data-id="{{item.name}}" placeholder="{{item.label}}" value="{{util.transformFieldValue(item, values[item.name])}}" auto-height="true" bindinput="textChange" maxlength="-1"/>
+                          <textarea class="weui-textarea" data-id="{{item.name}}" placeholder="{{item.label}}" value="{{util.transformFieldValue(item, values[item.name])}}" auto-height="true" bindblur="textChange" maxlength="-1"/>
                         </block>
                         <block wx:else>
                           <view class="weui-cell__ft wide-cell">{{util.transformFieldValue(item, values[item.name]) || item.label}}</view>
@@ -609,9 +609,12 @@
 
     transformValue() {
       const value = _.clone(this.values)
-      const fields = this.fields
+      const fields = this.fields;
       _.forEach(value, (v, k) => {
         let field = fields[k];
+        if(!field){
+          throw new Error('无效的key', k)
+        }
         if (field.type === 'lookup' || field.type === 'master_detail') {
           if (field.multiple && _.isArray(v)){
             value[k] = _.compact(_.pluck(v, '_id'));
