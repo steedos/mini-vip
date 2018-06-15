@@ -131,12 +131,10 @@
             <view class="weui-cell__bd">
               {{post.space_name}}
             </view>
-            <!-- <view class="weui-cell__ft weui-cell__ft_in-access"></view> -->
           </view>
         </navigator>
         <view class="post-cover">
           <block wx:if="{{post.video}}">
-            <!-- <video src="{{util.formatVideoUrl(post.video, baseUrl)}}" controls objectFit="contain" id="{{post.video}}" @play="play({{post.video}})"></video> -->
             <block wx:if="{{post.images}}">
               <image class="image {{showHeader ? 'no-radius' : ''}}" mode="aspectFill" src="{{util.formatImageUrl(post.images[0], baseUrl)}}" @tap="previewImage({{post.images}})" @error="loadImageError({{index}})" />
             </block>
@@ -145,9 +143,6 @@
             <block wx:if="{{post.images}}">
               <image class="image {{showHeader ? 'no-radius' : ''}}" mode="aspectFill" src="{{util.formatImageUrl(post.images[0], baseUrl)}}" @tap="previewImage({{post.images}})" @error="loadImageError({{index}})" />
             </block>
-            <!-- <block wx:else>
-              <image class="image" mode="aspectFill" src="{{util.getEmptyImageUrl(post.type)}}"/>
-            </block> -->
           </block>
         </view>
         <view class="post-body weui-cells {{post.images ? '' : 'is-cover-empty'}}" @tap="goDetail({{post._id}}, {{post.space}})">
@@ -161,20 +156,14 @@
         </view>
         <view class="post-footer ">
           <button plain="true" open-type="share" data-post-name="{{post.name}}" data-post-id="{{post._id}}" data-post-space="{{post.space}}" class="share action share-btn">
-            <image class="slds-icon slds-icon--small slds-m-right--x-small" src="../images/icon/share_default.svg"></image>
-            <!-- <view class="slds-icon-internal_share slds-icon slds-icon--small slds-m-right--x-small"></view> -->
+            <view class="vip_share-default slds-icon slds-icon--small slds-m-right--x-small"></view>
             <view class="text">转发</view>
           </button>
-          <!-- <view class="share action share-btn">
-            <view class="slds-icon-internal_share slds-icon slds-icon--small slds-m-right--x-small"></view>
-            <view class="text">转发</view>
-          </view> -->
           <view class="comment action">
           
           </view>
           <view class="star action star-btn {{post.star_id ? 'is-stared' : ''}}" @tap="starPost({{post._id}}, {{post.space}}, {{index}})">
-            <image class="slds-icon slds-icon--small slds-m-right--x-small" src="../images/icon/star_{{post.star_id ? 'blue' : 'default'}}.svg"></image>
-            <!-- <view class="slds-icon-like slds-icon slds-icon--small slds-m-right--x-small"></view> -->
+            <view class="vip_star-{{post.star_id ? 'blue' : 'default'}} slds-icon slds-icon--small slds-m-right--x-small"></view>
             <view class="text">{{post.star_count || 0}}</view>
           </view>
       </view>
