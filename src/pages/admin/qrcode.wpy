@@ -167,7 +167,6 @@ export default class QRCode extends wepy.page {
         self.$apply()
         const authToken = self.$parent.globalData.user.auth_token;
         const userId = self.$parent.globalData.user._id;
-        // console.log(authToken,userId)
         const fileResult = await wepy.uploadFile({
           url: `${self.baseUrl}/s3/images`,
           filePath: res.tempFilePath,
@@ -179,10 +178,16 @@ export default class QRCode extends wepy.page {
           }
         })
         const fileData = JSON.parse(fileResult.data);
-        const data = {
+        const space = await this.$parent.get('spaces', store_id);
+        const admins = space.admins
+        const is_space_admin = admins && admins.includes(userId);
+        if(is_space_admin) {
+          const data = {
           qrcode: fileData['_id']
-        };
-        var store = await this.$parent.update('vip_store',store_id, data);
+          };
+          var store = await this.$parent.update('vip_store',store_id, data);
+        }
+       
       });
       
       this.$apply();
