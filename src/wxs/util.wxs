@@ -28,6 +28,102 @@ function formatDate(value) {
   return year + month + date + ' ' + hours_str + ':' + minutes_str;
 }
 
+function formatNumber(n) {
+  n = n.toString();
+  return n[1] ? n : '0' + n;
+}
+
+function formatWeek(day) {
+  var reValue = '周';
+  switch(day){
+    case 0:
+      reValue += '日'
+      break;
+    case 1:
+      reValue += '一'
+      break;
+    case 2:
+      reValue += '二'
+      break;
+    case 3:
+      reValue += '三'
+      break;
+    case 4:
+      reValue += '四'
+      break;
+    case 5:
+      reValue += '五'
+      break;
+    case 6:
+      reValue += '六'
+      break;
+  }
+  return reValue;
+}
+
+// 开始结束时间格式化为一个字符串
+function formatStartEnd(start, end, isAllDay) {
+  if (!start){
+    return '';
+  }
+  var reValue = '';
+  if (typeof start == "string" && start) {
+    start = getDate(start);
+  }
+  if (typeof end == "string" && end) {
+    end = getDate(end);
+  }
+  if (start && end && start > end) {
+    return '';
+  }
+
+  var sYear = start.getFullYear();
+  var sMonth = start.getMonth() + 1;
+  var sDate = start.getDate();
+  var sDay = start.getDay();
+  var sHour = start.getHours();
+  var sMinute = start.getMinutes();
+  var isShowDay = true;
+  var currentYear = getDate().getFullYear();
+  var isShowYear = currentYear != sYear;
+
+  reValue = [sYear, sMonth, sDate].map(formatNumber).join('/') + ' %@ ' + [sHour, sMinute].map(formatNumber).join(':');
+
+  if(end){
+    reValue += ' - ';
+    var eYear = end.getFullYear();
+    var eMonth = end.getMonth() + 1;
+    var eDate = end.getDate();
+    var eHour = end.getHours();
+    var eMinute = end.getMinutes();
+
+    var eDates = [];
+    if (sYear != eYear){
+      isShowYear = true;
+      eDates.push(eYear);
+    }
+    if (sYear != eYear || sMonth != eMonth || sDate != eDate) {
+      isShowDay = false;
+      eDates.push(eMonth);
+      eDates.push(eDate);
+    }
+    var eTimes = [];
+    eTimes.push(eHour);
+    eTimes.push(eMinute);
+    reValue += eDates.map(formatNumber).join('/') + ' ' + eTimes.map(formatNumber).join(':')
+  }
+  if (!isShowYear){
+    reValue = reValue.replace(getRegExp("^\d+\/"), '');
+  }
+  if (isShowDay){
+    sDay = formatWeek(sDay);
+  }
+  else{
+    sDay = '';
+  }
+  return reValue.replace('%@', sDay);
+}
+
 // 图片地址转换
 function formatImageUrl(src, baseUrl) {
   if (getRegExp("^\w+:\/\/").test(src)) {
@@ -196,6 +292,7 @@ function transformFieldValue(field, value){
 
 module.exports = {
   formatDate: formatDate,
+  formatStartEnd: formatStartEnd,
   formatImageUrl: formatImageUrl,
   formatAvatarImageUrl: formatAvatarImageUrl,
   formatCardBgImageUrl: formatCardBgImageUrl,
