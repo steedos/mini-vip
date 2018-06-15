@@ -1,0 +1,72 @@
+<style lang="less">
+
+</style>
+<template>
+
+</template>
+<script>
+import wepy from 'wepy';
+import req from '@/network';
+import pageRouter from '@/utils/pageRouter'
+
+export default class EventAttendees extends wepy.page {
+  config = {
+    navigationBarTitleText: '查看参与人',
+    enablePullDownRefresh: true
+  };
+
+  async onLoad(e) {
+    console.log("++++++++++++++++++++++++++",e)
+    wepy.showLoading({
+      title: '加载中',
+      mask: true
+    });
+
+    await this.$parent.login();
+    if(e.space_id){
+      this.$parent.globalData.space_id = e.space_id;
+      this.space_id = e.space_id;
+    }
+    if(e.event_id){
+      this.event_id = e.event_id;
+      await this.loadAttendees();
+    }
+
+    this.is_loaded = true
+    this.$apply()
+    wepy.hideLoading();
+  }
+
+  async refresh(action) {
+    await this.loadAttendees();
+    wepy.stopPullDownRefresh();
+  }
+
+  async loadAttendees(){
+    const query_options = {
+        $filter: `event eq '${this.event_id}'`,
+        $select: 'name,status,comment'
+      };
+    let attendees = await this.$parent.query("vip_event_attendees", query_options, this.space_id);
+    this.$apply();
+    console.log("************************",attendees)
+  };
+
+
+  // 上拉刷新
+  onPullDownRefresh() {
+    this.refresh();
+  }
+
+  data = {
+    event_id: null,
+    attendees: null,
+    space_id: '',
+    is_loaded: false
+  };
+
+  methods = {
+
+  };
+}
+</script>
