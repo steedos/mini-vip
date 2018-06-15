@@ -341,7 +341,7 @@ export default class Posts extends wepy.page {
   data = {
     baseUrl: baseUrl,
     baseMaterialUrl: baseMaterialUrl,
-    emptyImageUrlForCover: '/images/empty.png',
+    emptyImageUrlForCover: 'https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/empty.png',
     type: '',
     posts: [],
     current_skip: 0,
