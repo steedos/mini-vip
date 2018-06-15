@@ -114,7 +114,7 @@ export default class QRCode extends wepy.page {
       this.store_id = result._id
       this.$apply();
     }
-    if(result &&  result.qrcode){
+    if(result &&  result.qrcode && result.qrcode!=''){
       this.imageUrl = result.qrcode;
       this.avatarUrl = result.avatar
       this.$apply();

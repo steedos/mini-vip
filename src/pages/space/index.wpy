@@ -608,6 +608,7 @@ export default class Posts extends wepy.page {
           let storeSetKey = isCover ? "cover" : 'avatar';
           let storeSet = {};
           storeSet[storeSetKey] = fileId;
+          storeSet['qrcode'] = ''
           await this.$parent.update("vip_store", this.space_id, storeSet, this.space_id);
           if(isCover){
             this.store_info.cover = fileId;
