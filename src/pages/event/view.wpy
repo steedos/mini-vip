@@ -82,20 +82,12 @@ page{
       </view>
     </view>
     <view class="event-body weui-cells">
-      <view class="weui-cell event-start" wx:if="{{event.start}}">
+      <view class="weui-cell event-start-end" wx:if="{{event.start}}">
         <view class="weui-cell__bd">
-          开始时间
+          时间
         </view>
         <view class="weui-cell__ft">
-          {{util.formatDate(event.start)}}
-        </view>
-      </view>
-      <view class="weui-cell event-end" wx:if="{{event.end}}">
-        <view class="weui-cell__bd">
-          结束时间
-        </view>
-        <view class="weui-cell__ft">
-          {{util.formatDate(event.end)}}
+          {{util.formatStartEnd(event.start, event.end, event.allDay)}}
         </view>
       </view>
       <view class="weui-cell weui-cell_access event-address" wx:if="{{event.location.address}}" hover-class="weui-cell_active" @tap="openMap">
