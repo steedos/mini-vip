@@ -92,7 +92,7 @@
         <view wx:if="{{event.cover}}" class="event-cover">
           <image class="image {{showHeader ? 'no-radius' : ''}}" mode="aspectFill" src="{{util.formatImageUrl(event.cover, baseUrl)}}" @tap="previewImage({{event.cover}})" />
         </view>
-        <view class="event-body weui-cells {{event.cover ? '' : 'is-cover-empty'}}" @tap="goDetail({{event._id}}, {{event.space}})">
+        <view class="event-body weui-cells {{event.cover ? '' : 'is-cover-empty'}}" @tap="goDetail({{event._id}}, {{event.space._id}})">
           <view class="weui-cell weui-cell_access">
             <view class="weui-cell__bd">
               <view class="event-name">{{event.name}}</view>
