@@ -93,7 +93,7 @@ video{
     }
   }
 
-  .btn-edit, .btn-star {
+  .btn-star {
     display: inline-block;
     height: 35px;
     width: 35px;
@@ -163,7 +163,7 @@ video{
       
     </view>
     <view class="ion-container edit">
-      <view class="slds-icon-edit ion btn-edit" @tap="editPost"></view>
+      <view class="slds-icon_container slds-icon-action-edit slds-icon_container--circle" @tap="editPost"></view>
     </view>
     <view class="ion-container">
       
