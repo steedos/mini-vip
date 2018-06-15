@@ -108,7 +108,7 @@
     <view class="weui-cells">
       <navigator url="./star/space" class="weui-cell weui-cell_access">
         <view class="weui-cell__hd">
-          <view class="slds-icon-custom1 slds-icon slds-icon--small slds-m-right--x-small ion"/>
+          <view class="slds-icon-custom-custom1 slds-icon slds-icon--small slds-m-right--x-small"/>
         </view>
         <view class="weui-cell__bd">
           <view>关注</view>
@@ -117,7 +117,7 @@
       </navigator>
       <navigator url="./star/post" class="weui-cell weui-cell_access">
         <view class="weui-cell__hd">
-          <view class="slds-icon-custom11 slds-icon slds-icon--small slds-m-right--x-small ion"/>
+          <view class="slds-icon-custom-custom11 slds-icon slds-icon--small slds-m-right--x-small"/>
         </view>
         <view class="weui-cell__bd">
           <view>收藏</view>

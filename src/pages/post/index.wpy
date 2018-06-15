@@ -27,22 +27,6 @@ page {
       -webkit-transform: scaleY(0.5);
       transform: scaleY(0.5);
     }
-
-    .add-record {
-      height: 35px;
-      width: 35px;
-      background: #ffa325;
-      text-align: center;
-      color: #fff;
-      border: 10px;
-      border-radius: 50%;
-
-      .ion {
-        line-height: 35px;
-        font-weight: bold;
-        font-size: 20px;
-      }
-    }
   }
 }
 </style>
@@ -54,9 +38,7 @@ page {
       </scroll-view>
     </view>
     <view class="tab-bar" wx:if="{{editable}}">
-      <view class="add-record" @tap="createPost">
-        <view class="slds-icon-add ion"></view>
-      </view>
+      <view class="slds-icon-action-new" @tap="createPost"></view>
     </view>
   </view>
 </template>
