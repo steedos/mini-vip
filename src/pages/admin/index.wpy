@@ -15,6 +15,12 @@
   padding-top:15px;
   width: 60%;
 }
+
+.slds-icon-utility-user-role{
+  background-color: #6588CA;
+  border-radius:0.25rem;
+}
+
 </style>
 
 <template>
