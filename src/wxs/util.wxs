@@ -73,9 +73,6 @@ function formatStartEnd(start, end, isAllDay) {
   if (typeof end == "string" && end) {
     end = getDate(end);
   }
-  if (start && end && start > end) {
-    return '';
-  }
 
   var sYear = start.getFullYear();
   var sMonth = start.getMonth() + 1;
