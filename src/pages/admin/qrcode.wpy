@@ -124,72 +124,77 @@ export default class QRCode extends wepy.page {
       const url = `/api/steedos/weixin/code?appid=${appId}&store_id=${
         store_id
       }&page=${page}`;
-      const self = this
-      const ctx = wepy.createCanvasContext('myCanvas')
-      const width = wepy.getSystemInfoSync().windowWidth
-      const radius = width * 105/430
-      const avatar_x = width/2 - radius/1.414
-      const avatar_y = avatar_x
-      const avatar_width = radius*1.414
       const imgRes = await wepy.downloadFile({
         url: this.baseUrl + url
       })
-      const avatarRes = await wepy.downloadFile({
-        url: utilJs.formatImageUrl(this.avatarUrl, this.baseUrl)
-      })
-      console.log('res.tempFilePath....',imgRes.tempFilePath)
-      ctx.drawImage(imgRes.tempFilePath, 0, 0, width, width)
-      ctx.arc(width/2, width/2, radius, 0, 2 * Math.PI)
-      ctx.setFillStyle('white')
-      ctx.fill()
-      const avatar_radius = radius-6
-      ctx.save()
-      ctx.beginPath()
-      ctx.arc(width/2, width/2, avatar_radius, 0, 2 * Math.PI)
-      ctx.setFillStyle('white')
-      ctx.fill()
-      ctx.clip()
-      ctx.drawImage(avatarRes.tempFilePath, width/2-avatar_radius, width/2-avatar_radius, 2*avatar_radius, 2*avatar_radius)
-      ctx.restore();
-      console.log("avatarUrl",this.avatarUrl);
-      ctx.draw(true, async ()=>{
-        let x = self;
-        const res = await wepy.canvasToTempFilePath({
-          width:width,
-          height:width,
-          destWidth:width,
-          destHeight:width,
-          canvasId: 'myCanvas',
-          fileType: 'jpeg'
-        });
-        self.imageUrl = res.tempFilePath
-        self.imgCodeUrl = res.tempFilePath
-        self.$apply()
-        const authToken = self.$parent.globalData.user.auth_token;
-        const userId = self.$parent.globalData.user._id;
-        const fileResult = await wepy.uploadFile({
-          url: `${self.baseUrl}/s3/images`,
-          filePath: res.tempFilePath,
-          name: 'file',
-          // formData: formData,
-          header: {
-            'X-Auth-Token': authToken,
-            'X-User-Id': userId
+      if(this.avatarUrl) {
+        const avatarRes = await wepy.downloadFile({
+          url: utilJs.formatImageUrl(this.avatarUrl, this.baseUrl)
+       })
+        console.log('res.tempFilePath....',imgRes.tempFilePath)
+        const self = this
+        const ctx = wepy.createCanvasContext('myCanvas')
+        const width = wepy.getSystemInfoSync().windowWidth
+        const radius = width * 105/430
+        const avatar_x = width/2 - radius/1.414
+        const avatar_y = avatar_x
+        const avatar_width = radius*1.414
+        ctx.drawImage(imgRes.tempFilePath, 0, 0, width, width)
+        ctx.arc(width/2, width/2, radius, 0, 2 * Math.PI)
+        ctx.setFillStyle('white')
+        ctx.fill()
+        const avatar_radius = radius-6
+        ctx.save()
+        ctx.beginPath()
+        ctx.arc(width/2, width/2, avatar_radius, 0, 2 * Math.PI)
+        ctx.setFillStyle('white')
+        ctx.fill()
+        ctx.clip()
+        ctx.drawImage(avatarRes.tempFilePath, width/2-avatar_radius, width/2-avatar_radius, 2*avatar_radius, 2*avatar_radius)
+        ctx.restore();
+        console.log("avatarUrl",this.avatarUrl);
+        ctx.draw(true, async ()=>{
+          let x = self;
+          const res = await wepy.canvasToTempFilePath({
+            width:width,
+            height:width,
+            destWidth:width,
+            destHeight:width,
+            canvasId: 'myCanvas',
+            fileType: 'jpeg'
+          });
+          self.imageUrl = res.tempFilePath
+          self.imgCodeUrl = res.tempFilePath
+          self.$apply()
+          const authToken = self.$parent.globalData.user.auth_token;
+          const userId = self.$parent.globalData.user._id;
+          const fileResult = await wepy.uploadFile({
+            url: `${self.baseUrl}/s3/images`,
+            filePath: res.tempFilePath,
+            name: 'file',
+            // formData: formData,
+            header: {
+              'X-Auth-Token': authToken,
+              'X-User-Id': userId
+            }
+          })
+          const fileData = JSON.parse(fileResult.data);
+          const space = await this.$parent.get('spaces', store_id);
+          const admins = space.admins
+          const is_space_admin = admins && admins.includes(userId);
+          if(is_space_admin) {
+            const data = {
+            qrcode: fileData['_id']
+            };
+            var store = await this.$parent.update('vip_store',store_id, data);
           }
-        })
-        const fileData = JSON.parse(fileResult.data);
-        const space = await this.$parent.get('spaces', store_id);
-        const admins = space.admins
-        const is_space_admin = admins && admins.includes(userId);
-        if(is_space_admin) {
-          const data = {
-          qrcode: fileData['_id']
-          };
-          var store = await this.$parent.update('vip_store',store_id, data);
-        }
-       
-      });
-      
+        
+        });
+      }
+      else {
+        this.imageUrl = imgRes.tempFilePath
+        this.imgCodeUrl = imgRes.tempFilePath
+      } 
       this.$apply();
     }
     // }
