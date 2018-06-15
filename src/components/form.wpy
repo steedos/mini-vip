@@ -1,70 +1,82 @@
 <style lang="less">
-  .btn-container {
-    width: 100%;
-    margin-top: 20px;
-  }
+  .record-form{
+    .weui-media-box__desc{
+      text-overflow:unset;
+      overflow:visible;
+      -webkit-line-clamp:unset;
+      line-height:1.4em;
+      font-size: 13px;
+    }
+    .btn-container {
+      width: 100%;
+      margin-top: 20px;
+    }
 
-  .submit-btn {
-    background: #1B9AF7;
-    color: #fff;
-    margin: 15px 15px 0;
-  }
+    .submit-btn {
+      margin: 15px 15px 0;
+    }
 
-  /*先注释掉此样式，否则一行显示的特别高*/
-  /*.weui-cell__ft{*/
+    .save-btn{
+      background: #1B9AF7;
+      color: #fff;
+    }
+
+    /*先注释掉此样式，否则一行显示的特别高*/
+    /*.weui-cell__ft{*/
     /*line-height:1.3em;*/
     /*padding-top:12px;*/
     /*padding-bottom:12px;*/
     /*min-height:1.2em;*/
     /*&.weui-cell_switch{*/
-      /*padding-top:6px;*/
-      /*padding-bottom:6px;*/
+    /*padding-top:6px;*/
+    /*padding-bottom:6px;*/
     /*}*/
-  /*}*/
+    /*}*/
 
-  .wide-cell{
-    text-align: left;
-    .wide-cell-label{
-      color: #000;
+    .wide-cell{
+      text-align: left;
+      .wide-cell-label{
+        color: #000;
+      }
     }
-  }
 
-  .open-setting{
-    border: none !important;
-    text-align: right;
-    height: 2.58823529em;
-    min-height: 2.58823529em;
-    line-height: 2.58823529em;
-    padding: 0;
-    font-size: 17px;
-    color: #808080;
-    background: #FFFFFF;
-  }
+    .open-setting{
+      border: none !important;
+      text-align: right;
+      height: 2.58823529em;
+      min-height: 2.58823529em;
+      line-height: 2.58823529em;
+      padding: 0;
+      font-size: 17px;
+      color: #808080;
+      background: #FFFFFF;
+    }
 
-  .weui-cell_footer{
-    margin-top: .3em;
-    color: #808080;
-    padding-left: 15px;
-    padding-right: 15px;
-    font-size: 14px;
-  }
+    .weui-cell_footer{
+      margin-top: .3em;
+      color: #808080;
+      padding-left: 15px;
+      padding-right: 15px;
+      font-size: 14px;
+    }
 
-  .weui-label{
-    width: auto;
-    min-width: 80px;
-  }
+    .weui-label{
+      width: auto;
+      min-width: 80px;
+    }
 
-  .weui-textarea{
-    min-height: 2.2em;
-  }
+    .weui-textarea{
+      min-height: 2.2em;
+    }
 
-  .weui-cells__blank-line {
-    margin-top:20px;
-    color:#999;
+    .weui-cells__blank-line {
+      margin-top:20px;
+      color:#999;
+    }
   }
 </style>
 <template>
-  <view class="form" wx:if="{{is_loaded}}">
+  <view class="record-form" wx:if="{{is_loaded}}">
     <view class="weui-toptips weui-toptips_warn" wx:if="{{showTopTips}}">{{message}}</view>
     <view class="page__bd">
       <repeat for="{{groupFields}}" key="index_g" index="index_g" item="groupField">
@@ -148,14 +160,29 @@
                 </view>
               </block>
               <block wx:elif="{{item.type === 'text' && item.is_wide}}">
-                <view class="weui-cell" hover-class='weui-grid_active'>
-                  <view class="weui-cell__bd">
-                    <block wx:if="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}">
+                <block wx:if="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}">
+                  <view class="weui-cell">
+                    <view class="weui-cell__bd">
                       <textarea class="weui-textarea-input" data-id="{{item.name}}" placeholder="{{item.label}}" value="{{util.transformFieldValue(item, values[item.name])}}" auto-height="true" bindblur="textChange"/>
-                    </block>
-                    <block wx:else>
-                      <view class="weui-cell__ft wide-cell">{{util.transformFieldValue(item, values[item.name]) || item.label}}</view>
-                    </block>
+                    </view>
+                  </view>
+                </block>
+                <block wx:else>
+                  <view class="weui-cell">
+                    <view class="weui-cell__bd">{{item.label}}</view>
+                    <view class="weui-cell__bd">
+                      <view class="weui-cell__ft">{{util.transformFieldValue(item, values[item.name]) || item.label}}</view>
+                    </view>
+                  </view>
+                </block>
+              </block>
+              <block wx:elif="{{item.type === 'textarea' && (item.readonly || !schema.allowEdit || args.action === 'read')}}">
+                <view class="weui-media-box weui-media-box_text">
+                  <view class="weui-media-box__title weui-media-box__title_in-text">
+                    {{item.label}}
+                  </view>
+                  <view class="weui-media-box__desc">
+                    <text space="emsp">{{util.transformFieldValue(item, values[item.name])}}</text>
                   </view>
                 </view>
               </block>
@@ -208,9 +235,12 @@
         <view class="weui-cells__tips" wx:if="{{groupField._helpText}}">{{groupField._helpText}}</view>
       </repeat>
 
-      <view class="btn-container" wx:if="{{args.action === 'edit' || args.action === 'create'}}">
-        <button class="submit-btn" form-type="submit" @tap="submitForm" disabled="{{submitDisabled}}">保存</button>
-        <button class="submit-btn" wx:if="{{!args.undeletable && args.action === 'edit' && schema.allowDelete}}" type="warn" @tap="removeRecord">删除</button>
+      <view class="btn-container">
+        <button class="submit-btn save-btn" form-type="submit" @tap="submitForm" disabled="{{submitDisabled}}" wx:if="{{args.action === 'edit' || args.action === 'create'}}">保存</button>
+        <block wx:if="{{args.action === 'read'}}">
+          <button class="submit-btn" type="primary" @tap="goEdit">编辑</button>
+          <button class="submit-btn" wx:if="{{!args.undeletable && schema.allowDelete}}" type="warn" @tap="removeRecord">删除</button>
+        </block>
       </view>
 
     </view>
@@ -230,7 +260,7 @@
       args: {
         type: Object
       }
-    }
+    };
 
     wxs = {
       util: util,
@@ -252,14 +282,14 @@
       submitDisabled: false,
     };
 
-    getGroupFields(fields){
+    getGroupFields(fields, action, values){
       let groupFields = [];
       let groupItem = {fields: {}, _groupText:'-', _helpText:'', _cellsClass: ''};
       _.forEach(fields, function (field, key) {
         if(!field){
          throw new Error('无效的字段: ' + key)
         }
-        if(!field.hidden && !field.omit){
+        if(!field.hidden && !field.omit && (action != 'read' || values[key])){
           if(field.group){
             if(!_.isEmpty(groupItem.fields)){
               groupFields.push(groupItem);
@@ -340,7 +370,6 @@
             } else {
               this.fields = object.fields
             }
-            this.groupFields = this.getGroupFields(this.fields);
           }
           if (object_name && record_id && action != 'create') {
             var keys = []
@@ -362,6 +391,9 @@
             if (expand.length > 0) {
               query_options.$expand = expand.join(',')
             }
+
+            console.log('query_options', query_options)
+
             const result = await this.$parent.$parent.query(object_name, query_options);
             if (result.value.length === 1) {
               this.values = result.value[0]
@@ -413,6 +445,7 @@
           }else{
             this.$apply()
           }
+          this.groupFields = this.getGroupFields(this.fields, action, this.values);
         }
         this.is_loaded = true
         this.$apply()
@@ -923,6 +956,18 @@
         wepy.makePhoneCall({
           phoneNumber: number
         });
+      },
+      goEdit(){
+        let url_args = ''
+        for(let i in this.args){
+          if(i == 'action'){
+            url_args += `${i}=edit&`
+          }else{
+            url_args += `${i}=${this.args[i]}&`
+          }
+        }
+        console.log('url', {url: '/pages/record/edit?' + url_args});
+        wepy.navigateTo({url: '/pages/record/edit?' + url_args});
       }
     }
   }
