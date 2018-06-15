@@ -87,20 +87,29 @@
       height:auto;
       border:none;
       line-height:50px;
+
+      .slds-icon {
+        width: 1rem;
+        height: 1rem;
+        margin-right: 0.25rem;
+      }
     }
     .slds-icon {
       display: inline-block;
-      height: auto;
-      width: auto;
     }
     .share-btn {
-      text-align: left;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
     }
     .star-btn {
-      text-align: right;
-    }
-    .is-stared {
-      color: #018cc6;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+
+      &.is-stared {
+        color: #018cc6;
+      }
     }
     .text {
       display: inline-block;
@@ -152,7 +161,8 @@
         </view>
         <view class="post-footer ">
           <button plain="true" open-type="share" data-post-name="{{post.name}}" data-post-id="{{post._id}}" data-post-space="{{post.space}}" class="share action share-btn">
-            <view class="slds-icon-internal_share slds-icon slds-icon--small slds-m-right--x-small"></view>
+            <image class="slds-icon slds-icon--small slds-m-right--x-small" src="../images/icon/share_default.svg"></image>
+            <!-- <view class="slds-icon-internal_share slds-icon slds-icon--small slds-m-right--x-small"></view> -->
             <view class="text">转发</view>
           </button>
           <!-- <view class="share action share-btn">
@@ -163,7 +173,8 @@
           
           </view>
           <view class="star action star-btn {{post.star_id ? 'is-stared' : ''}}" @tap="starPost({{post._id}}, {{post.space}}, {{index}})">
-            <view class="slds-icon-like slds-icon slds-icon--small slds-m-right--x-small"></view>
+            <image class="slds-icon slds-icon--small slds-m-right--x-small" src="../images/icon/star_{{post.star_id ? 'blue' : 'default'}}.svg"></image>
+            <!-- <view class="slds-icon-like slds-icon slds-icon--small slds-m-right--x-small"></view> -->
             <view class="text">{{post.star_count || 0}}</view>
           </view>
       </view>
