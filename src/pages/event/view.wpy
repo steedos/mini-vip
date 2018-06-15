@@ -87,7 +87,7 @@ page{
           时间
         </view>
         <view class="weui-cell__ft">
-          {{util.formatStartEnd(event.start, event.end)}}
+          {{util.formatStartEnd(event.start, event.end, event.allDay)}}
         </view>
       </view>
       <view class="weui-cell weui-cell_access event-address" wx:if="{{event.location.address}}" hover-class="weui-cell_active" @tap="openMap">

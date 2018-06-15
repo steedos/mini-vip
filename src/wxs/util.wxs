@@ -84,7 +84,10 @@ function formatStartEnd(start, end, isAllDay) {
   var currentYear = getDate().getFullYear();
   var isShowYear = currentYear != sYear;
 
-  reValue = [sYear, sMonth, sDate].map(formatNumber).join('/') + ' %@ ' + [sHour, sMinute].map(formatNumber).join(':');
+  reValue = [sYear, sMonth, sDate].map(formatNumber).join('/') + ' %@ ';
+  if (!isAllDay){
+    reValue += [sHour, sMinute].map(formatNumber).join(':');
+  }
 
   if(end){
     reValue += ' - ';
@@ -107,7 +110,10 @@ function formatStartEnd(start, end, isAllDay) {
     var eTimes = [];
     eTimes.push(eHour);
     eTimes.push(eMinute);
-    reValue += eDates.map(formatNumber).join('/') + ' ' + eTimes.map(formatNumber).join(':')
+    reValue += eDates.map(formatNumber).join('/') + ' ';
+    if (!isAllDay){
+      reValue += eTimes.map(formatNumber).join(':');
+    }
   }
   if (!isShowYear){
     reValue = reValue.replace(getRegExp("^\d+\/"), '');
