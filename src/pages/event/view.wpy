@@ -82,7 +82,7 @@ page{
       </view>
     </view>
     <view class="event-body weui-cells">
-      <view class="weui-cell event-start" wx:if="{{event.start}}">
+      <view class="weui-cell event-start-end" wx:if="{{event.start}}">
         <view class="weui-cell__bd">
           时间
         </view>
