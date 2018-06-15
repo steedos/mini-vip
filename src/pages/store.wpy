@@ -96,7 +96,7 @@ page {
           <image class="image" mode="aspectFill" src="{{util.formatImageUrl(store.avatar, baseUrl)}}"/>
         </block>
         <block wx:else>
-          <image class="image" mode="aspectFill" src="../images/avatar.png"/>
+          <image class="image" mode="aspectFill" src="{{baseMaterialUrl + 'avatar.png'}}"/>
         </block>
       </view>
     </view>
@@ -148,6 +148,7 @@ import wepy from 'wepy';
 import req from '@/network';
 import vipCard from '../components/vipCard';
 import { baseUrl } from '@/config';
+import { baseMaterialUrl } from '@/config';
 import util from '../wxs/util.wxs';
 
 export default class store extends wepy.page {
@@ -190,6 +191,7 @@ export default class store extends wepy.page {
     is_space_owner: false,
     store: [],
     baseUrl: baseUrl,
+    baseMaterialUrl: baseMaterialUrl,
     is_loaded: false
   };
   getStoreInfo(store_id) {

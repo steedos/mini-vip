@@ -1,0 +1,57 @@
+<template>
+  <view>
+    <form :args.sync='args'></form>
+    <view class="btn-container">
+      <button class="submit-btn" type="warn" @tap="removeRecord">删除</button>
+    </view>
+  </view>
+</template>
+
+
+<script>
+  import wepy from 'wepy';
+  import req from '@/network';
+  import form from '../../components/form';
+
+  export default class RecordRead extends wepy.page {
+
+    config = {
+      navigationBarTitleText: ''
+    };
+
+    data = {
+      args: {}
+    }
+
+    components = {
+      form: form
+    };
+
+    changeNavigationBarTitleText(title){
+      wx.setNavigationBarTitle({title:title})
+    }
+
+    async onLoad(e){
+      console.log("record view", e)
+      let args = {action: 'read'};
+      if(e && e.record_id){
+        args.record_id = e.record_id
+      }else{
+        throw new Error("缺少参数：record_id")
+      }
+
+      if(e && e.object_name){
+        args.object_name = e.object_name
+      }else{
+        throw new Error("缺少参数：object_name")
+      }
+
+      if(e && e.fields){
+        args.fields = e.fields
+      }
+
+      this.args = args;
+      this.$apply()
+    }
+  }
+</script>

@@ -4,10 +4,16 @@
 }
 .avatar{
   width: 50px;
-  height: 50px; 
+  height: 50px;
   display: block;
   border-radius:4px;
   margin-right: 10px;
+}
+
+.button-sp-area{
+  margin:0 auto;
+  padding-top:15px;
+  width: 60%;
 }
 </style>
 
@@ -17,12 +23,12 @@
       <view class="weui-cells">
         <navigator url="../record/edit?object_name=vip_store&action=edit&record_id={{space_id}}" class="weui-cell">
           <view class="weui-cell__hd">
-            
+
             <block wx:if="{{store_info.avatar}}">
               <image class="avatar" mode="aspectFill" src="{{util.formatImageUrl(store_info.avatar, baseUrl)}}"/>
             </block>
             <block wx:else>
-              <image class="avatar" mode="aspectFill" src="../../images/avatar.png"/>
+              <image class="avatar" mode="aspectFill" src="{{baseMaterialUrl + 'avatar.png'}}"/>
             </block>
           </view>
           <view class="weui-cell__bd">
@@ -43,6 +49,13 @@
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
           </navigator>
         </repeat>
+        <navigator url="/pages/space/invite_admin?space_id={{space_id}}&store_id={{store_info._id}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+          <view class="weui-cell__hd">
+            <view class="slds-icon-individual slds-icon slds-icon--small slds-m-right--x-small"></view>
+          </view>
+          <view class="weui-cell__bd">管理员</view>
+          <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+        </navigator>
       </view>
     </view>
   </view>
@@ -51,6 +64,7 @@
 <script>
 import wepy from 'wepy';
 import { baseUrl } from '@/config';
+import { baseMaterialUrl } from '@/config';
 import util from '../../wxs/util.wxs';
 
 export default class AdminIndex extends wepy.page {
@@ -84,17 +98,19 @@ export default class AdminIndex extends wepy.page {
 
   data = {
     baseUrl: baseUrl,
+    baseMaterialUrl: baseMaterialUrl,
     space_id: '',
     store_info: {},
     is_loaded: false,
     options: [
       // {title: '门店', icon:'standard-address', url: '../record/list?object_name=vip_store'},
       {title: '动态', icon:'standard-news', url: '../record/list?object_name=post'},
+      {title: '活动', icon:'standard-event', url: '../record/list?object_name=vip_event'},
       {title: '卡项', icon:'standard-work-type', url: '../record/list?object_name=vip_category'},
       // {title: '会员卡', icon:'standard-scan-card', url: '../record/list?object_name=vip_card'},
       // {title: '员工', icon:'standard-user', url: '../record/list?object_name=space_users&listview_id=emplyees'},
       {title: 'WIFI', icon:'utility-wifi', url: '../record/list?object_name=vip_wifi'},
-      {title: '二维码', icon:'standard-product', url: 'qrcode'}      
+      {title: '二维码', icon:'standard-product', url: 'qrcode'}
     ]
   };
 

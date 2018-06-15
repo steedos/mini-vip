@@ -62,6 +62,18 @@
 			this.loadPost();
 		}
 
+		onShareAppMessage(res) {
+			if (res.from = "button") {
+				const postName = res.target.dataset.postName;
+				const postId = res.target.dataset.postId;
+				const spaceId = res.target.dataset.postSpace;
+				return {
+					title: postName,
+					path: `pages/post/view?post_id=${postId}&space_id=${spaceId}`,
+				}
+			}
+		}
+
 		async loadPost() {
 			const skip = this.current_skip;
 

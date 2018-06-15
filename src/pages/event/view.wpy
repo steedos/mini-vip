@@ -2,8 +2,8 @@
 page{
   height: 100%;
 }
-.page__hd{
-  padding: 0px;
+.page__bd{
+  margin-bottom: 40px;
 }
 .cover{
   width: 100%;
@@ -11,6 +11,12 @@ page{
 }
 .btn-edit{
   color: #ffa325;
+}
+.weui-media-box__desc{
+  text-overflow:unset;
+  overflow:visible;
+  -webkit-line-clamp:unset;
+  line-height:1.4em;
 }
 .tab-bar {
   display: flex;
@@ -60,9 +66,7 @@ page{
 </style>
 <template>
 <view class="page" wx:if="{{is_loaded}}">
-  <view class="page__hd">
-    <image wx:if="{{event.cover}}" class="cover" mode="aspectFill" src="{{util.formatImageUrl(event.cover, baseUrl)}}" @tap="previewImage({{event.cover}})" />
-  </view>
+  <image wx:if="{{event.cover}}" class="cover" mode="aspectFill" src="{{util.formatImageUrl(event.cover, baseUrl)}}" @tap="previewImage({{event.cover}})" />
   <view class="page__bd">
     <view class="event-title weui-cells" @tap="editEvent">
       <view class="weui-cell">
@@ -70,11 +74,11 @@ page{
           {{event.name}}
         </view>
         <view class="weui-cell__ft weui-cell__ft_in-access" wx:if="{{editable}}"></view>
-        <!-- <view class="weui-cell__ft" wx:if="{{editable}}">
+        <view class="weui-cell__ft" wx:if="{{editable}}">
           <view class="btn-edit" @tap="editEvent">
             <view class="slds-icon-edit ion"></view>
           </view>
-        </view> -->
+        </view>
       </view>
     </view>
     <view class="event-body weui-cells">
@@ -110,9 +114,14 @@ page{
           {{event.accepted_count ? event.accepted_count : 0}}人报名，{{event.pending_count ? event.pending_count : 0}}人观望
         </view>
       </view>
-    </view>
-    <view class="weui-article__p">
-      <text space="emsp">{{event.description}}</text>
+      <view class="weui-media-box weui-media-box_text">
+        <view class="weui-media-box__title weui-media-box__title_in-text">
+          活动描述
+        </view>
+        <view class="weui-media-box__desc">
+          <text space="emsp">{{event.description}}</text>
+        </view>
+      </view>
     </view>
   </view>
   <view class="tab-bar">
@@ -215,7 +224,7 @@ export default class EventView extends wepy.page {
       if(!this.editable){
         return
       }
-      let url = `/pages/record/edit?action=edit&object_name=vip_event&record_id=${this.event_id}&fields=name,start,end,allDay,location,alarms,accepted_count,pending_count,rejected_count,featured,cover`;
+      let url = `/pages/record/edit?action=edit&object_name=vip_event&record_id=${this.event_id}&fields=name,start,end,allDay,location,alarms,accepted_count,pending_count,rejected_count,featured,cover,description`;
       wepy.navigateTo({
         url: url
       });

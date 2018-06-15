@@ -60,7 +60,7 @@
     <view class="card" style="background-image: url({{util.formatImageUrl(cardCover, baseUrl)}});">
       <view class="user-avatar">
         <image wx:if="{{cardAvatar}}" class="image" mode="aspectFit" src="{{util.formatImageUrl(cardAvatar, baseUrl)}}"/>
-        <image wx:else class="image" mode="aspectFit" src="../images/avatar.png"/>
+        <image wx:else class="image" mode="aspectFit" src="{{baseMaterialUrl + 'avatar.png'}}"/>
       </view>
       <view class="card-name">
         <text>{{cardName}}</text>
@@ -74,7 +74,7 @@
     <view class="card">
       <view class="user-avatar">
         <image wx:if="{{cardAvatar}}" class="image" mode="aspectFit" src="{{util.formatImageUrl(cardAvatar, baseUrl)}}"/>
-        <image wx:else class="image" mode="aspectFit" src="../images/avatar.png"/>
+        <image wx:else class="image" mode="aspectFit" src="{{baseMaterialUrl + 'avatar.png'}}"/>
       </view>
       <view class="card-name">
         <text>{{cardName}}</text>
@@ -91,6 +91,7 @@
 import wepy from 'wepy';
 import { baseUrl } from '@/config';
 import util from '../wxs/util.wxs'; 
+import { baseMaterialUrl } from '@/config';
 export default class vipCard extends wepy.component {
 
   wxs = {
@@ -127,6 +128,10 @@ export default class vipCard extends wepy.component {
     baseUrl: {
       type: String,
       default: baseUrl
+    },
+    baseMaterialUrl: {
+      type: String,
+      default: baseMaterialUrl
     }
   }
 

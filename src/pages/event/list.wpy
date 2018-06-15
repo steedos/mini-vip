@@ -54,9 +54,7 @@ page {
       </scroll-view>
     </view>
     <view class="tab-bar" wx:if="{{editable}}">
-      <view class="add-record" @tap="createEvent">
-        <view class="slds-icon-add ion"></view>
-      </view>
+      <view class="slds-icon-action-new" @tap="createEvent"></view>
     </view>
   </view>
 </template>
