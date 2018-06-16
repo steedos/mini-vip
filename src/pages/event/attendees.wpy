@@ -3,6 +3,13 @@
     font-size: 13px;
     color: #888888;
   }
+  .avatar{
+    width: 50px;
+    height: 50px;
+    display: block;
+    border-radius:4px;
+    margin-right: 10px;
+  }
 </style>
 <template>
   <view class="page" wx:if="{{is_loaded}}">
@@ -10,14 +17,14 @@
       <view class="weui-cells">
         <repeat for="{{attendees}}" key="attendees" index="index" item="attendee">
           <view url="" class="weui-cell">
-            <!-- <view class="weui-cell__hd">
-              <block wx:if="{{store_info.avatar}}">
-                <image class="avatar" mode="aspectFill" src="{{util.formatImageUrl(store_info.avatar, baseUrl)}}"/>
+            <view class="weui-cell__hd">
+              <block wx:if="{{attendee.owner.profile.avatar}}">
+                <image class="avatar" mode="aspectFill" src="{{attendee.owner.profile.avatar}}"/>
               </block>
               <block wx:else>
                 <image class="avatar" mode="aspectFill" src="{{baseMaterialUrl + 'avatar.png'}}"/>
               </block>
-            </view> -->
+            </view>
             <view class="weui-cell__bd">
               <view>{{attendee.name}}</view>
               <view class="weui-cell_muted">{{attendee.comment}}</view>
@@ -35,6 +42,7 @@
 import wepy from 'wepy';
 import req from '@/network';
 import util from '../../wxs/util.wxs';
+import { baseMaterialUrl } from '@/config';
 import pageRouter from '@/utils/pageRouter';
 
 export default class EventAttendees extends wepy.page {
@@ -72,7 +80,8 @@ export default class EventAttendees extends wepy.page {
   async loadAttendees(){
     const query_options = {
         $filter: `event eq '${this.event_id}'`,
-        $select: 'name,status,comment'
+        $select: 'name,status,comment,owner',
+        $expand: 'owner($select=profile)'
       };
     let attendees = await this.$parent.query("vip_event_attendees", query_options, this.space_id);
     this.attendees = attendees.value
@@ -90,7 +99,8 @@ export default class EventAttendees extends wepy.page {
     event_id: null,
     attendees: null,
     space_id: '',
-    is_loaded: false
+    is_loaded: false,
+    baseMaterialUrl: baseMaterialUrl
   };
 
   wxs = {

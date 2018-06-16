@@ -1,6 +1,6 @@
 // 活动状态国际化
 function formatEventStatus(status) {
-  var reValue = '';
+  var reValue = '已查看';
   switch (status) {
     case 'accepted':
       reValue = '已接受';
