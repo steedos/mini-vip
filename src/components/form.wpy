@@ -57,7 +57,7 @@
       color: #808080;
       padding-left: 15px;
       padding-right: 15px;
-      font-size: 14px;
+      font-size: 17px;
     }
 
     .weui-label{
@@ -155,7 +155,7 @@
                 <view class="weui-cell weui-cell_switch" hover-class='weui-grid_active'>
                   <view class="weui-cell__bd">{{item.label}}</view>
                   <view class="weui-cell__ft" data-id="{{item.name}}" >
-                    <switch checked="{{values[item.name] || false}}" data-id="{{item.name}}" bindchange="textChange"/>
+                    <switch checked="{{values[item.name] || false}}" data-id="{{item.name}}" bindchange="textChange" disabled="{{(item.readonly || !schema.allowEdit || args.action === 'read')}}"/>
                   </view>
                 </view>
               </block>
@@ -223,7 +223,7 @@
                         <view class="weui-cell__ft">{{util.transformFieldValue(item, values[item.name])}}</view>
                       </block>
                     </view>
-                    <block wx:if="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}">
+                    <block wx:if="{{!(item.readonly || !schema.allowEdit || args.action === 'read') || item.type === 'location'}}">
                       <view class="weui-cell__ft weui-cell__ft_in-access"></view>
                     </block>
                   </block>
@@ -267,6 +267,7 @@
     };
 
     data = {
+      _record_name: '',
       showTopTips: false,
       baseUrl: baseUrl,
       message: '',
@@ -405,6 +406,11 @@
             _.forEach(this.fields, (field) => {
               let fv = this.values[field.name];
               if (fv) {
+
+                if (field.name === 'name' || field.is_name){
+                  this._record_name = fv
+                }
+
                 if (field.type === 'select') {
                   if(field.multiple){
                     if (_.isArray(fv)) {
@@ -892,6 +898,20 @@
       },
       navigateTo(field, e){
         const dataset = e.currentTarget.dataset;
+
+        console.log('dataset', dataset);
+
+        if(field.type === 'location' && !dataset.edit){
+          if(dataset.value){
+            wepy.openLocation({
+              latitude: dataset.value.latitude,
+              longitude: dataset.value.longitude,
+              address: dataset.value.address,
+              name: this._record_name || ''
+            })
+          }
+        }
+
         if(!dataset.edit){
           return ;
         }
