@@ -228,6 +228,14 @@ export default class VIP extends wepy.app {
     }
   }
 
+  hasMobile(){
+    if(this.globalData.user && this.globalData.user.mobile){
+      return true
+    }else{
+      return false
+    }
+  }
+
   async login(space_id) {
     const self = this
     let globalData = self.globalData
