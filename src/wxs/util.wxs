@@ -107,7 +107,6 @@ function formatStartEnd(start, end, isAllDay) {
   }
 
   if(end){
-    reValue += ' - ';
     var eYear = end.getFullYear();
     var eMonth = end.getMonth() + 1;
     var eDate = end.getDate();
@@ -123,6 +122,12 @@ function formatStartEnd(start, end, isAllDay) {
       isShowDay = false;
       eDates.push(eMonth);
       eDates.push(eDate);
+      reValue += ' - ';
+    }
+    else{
+      if(!isAllDay){
+        reValue += ' - ';
+      }
     }
     var eTimes = [];
     eTimes.push(eHour);
