@@ -5,7 +5,7 @@
       overflow:visible;
       -webkit-line-clamp:unset;
       line-height:1.4em;
-      font-size: 13px;
+      font-size: 17px;
     }
     .btn-container {
       width: 100%;
@@ -57,7 +57,7 @@
       color: #808080;
       padding-left: 15px;
       padding-right: 15px;
-      font-size: 17px;
+      font-size: 14px;
     }
 
     .weui-label{
@@ -272,7 +272,7 @@
                       <block wx:if="{{item.is_wide}}">
                         <view class="weui-cell__bd">
                           <block wx:if="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}">
-                            <textarea class="weui-textarea" name="{{item.name}}" data-id="{{item.name}}" bindfocus="textareaFocus" placeholder="{{item.label}}" value="{{util.transformFieldValue(item, values[item.name])}}" auto-height="true" bindblur="textChange" maxlength="-1"/>
+                            <textarea class="weui-textarea" name="{{item.name}}" data-id="{{item.name}}" placeholder="{{item.label}}" value="{{util.transformFieldValue(item, values[item.name])}}" auto-height="true" bindblur="textChange" maxlength="-1"/>
                           </block>
                           <block wx:else>
                             <view class="weui-cell__ft wide-cell">{{util.transformFieldValue(item, values[item.name]) || item.label}}</view>
@@ -368,19 +368,19 @@
       let fields_new = [];
 
       //将第一个多媒体类型字段放到第一个字段
-      let foo = false
+      let foo = false;
       _.forEach(fields, function (field, key) {
         if(!field){
           throw new Error('无效的字段: ' + key)
         }
 
-        field._key = key
+        field._key = key;
 
         if(action === 'read'){
           if(field.type === 'image' && !foo){
             field.inlineHelpText = '  ';
             field.group = '';
-            field._top = true
+            field._top = true;
             fields_new.unshift(field);
             foo = true;
           }else{
@@ -396,7 +396,6 @@
       _.forEach(fields_new, function (field) {
         let key = field._key;
         if(!field.hidden && !field.omit && (action != 'read' || values[key])){
-          console.log('field', field)
           if(field.group){
             if(!_.isEmpty(groupItem.fields)){
               groupFields.push(groupItem);
@@ -422,8 +421,6 @@
         groupFields.push(groupItem);
       }
 
-      console.log('groupFields', groupFields)
-
       return groupFields
     }
 
@@ -440,9 +437,6 @@
             object.allowEdit = true;
             this.schema = object;
 
-            const pages = getCurrentPages();
-            const page = pages[pages.length - 1];
-
             if(!title){
               title = object.label;
               if (object_name === 'spaces') {
@@ -454,8 +448,6 @@
                 title = '编辑' + title;
               }
             }
-
-            page.changeNavigationBarTitleText(title);
 
             this.$apply();
             if (object.fields) {
@@ -560,6 +552,15 @@
           }else{
             this.$apply()
           }
+
+          if(action === 'read'){
+            title = this._record_name
+          }
+
+          const pages = getCurrentPages();
+          const page = pages[pages.length - 1];
+          page.changeNavigationBarTitleText(title);
+
           this.groupFields = this.getGroupFields(this.fields, action, this.values);
         }
         this.is_loaded = true
@@ -1014,8 +1015,6 @@
       },
       navigateTo(field, e){
 
-        console.log('navigateTo', field, e)
-
         const dataset = e.currentTarget.dataset;
 
         if(field.type === 'location' && !dataset.edit){
@@ -1108,11 +1107,6 @@
         }
         console.log('url', {url: '/pages/record/edit?' + url_args});
         wepy.navigateTo({url: '/pages/record/edit?' + url_args});
-      },
-      textareaFocus(e){
-        e.currentTarget.height = '100px';
-
-        console.log('textareaFocus', e)
       }
     }
   }

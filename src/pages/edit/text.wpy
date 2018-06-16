@@ -23,6 +23,11 @@
     padding-top: 15px;
     width: 60%;
   }
+
+  .weui-textarea-input{
+    display:block;
+    width:100%;
+  }
 </style>
 
 <script>
