@@ -50,7 +50,7 @@ page {
   <view class="page" wx:if="{{is_loaded}}">
     <view class="page__bd">
       <scroll-view class="scroll-view_H" scroll-y="true">
-        <eventList :list.sync="events" :showHeader="show_header" />
+        <eventList :list.sync="events" :showHeader.sync="featured" />
       </scroll-view>
     </view>
     <view class="tab-bar" wx:if="{{editable}}">
@@ -141,7 +141,6 @@ export default class Events extends wepy.page {
     is_skip_allowed: true,
     is_loaded: false,
     editable: false,
-    show_header: true,
     featured: false
   };
   
