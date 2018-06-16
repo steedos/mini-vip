@@ -76,7 +76,7 @@
 <view>
   <block wx:if="{{list.length}}">
     <repeat for="{{list}}" key="index" index="index" item="event">
-      <view class="event">
+      <view class="event" @longpress="goDelete({{event._id}}, {{event.space._id}})">
         <navigator class="post-header" wx:if="{{showHeader}}" url="../space/index?space_id={{event.space}}">
           <view class="weui-cell weui-cell_access">
             <view class="weui-cell__hd">
@@ -157,12 +157,16 @@ export default class EventList extends wepy.component {
   };
 
   methods = {
-    goDetail(event_id, space_id,event){
+    goDetail(event_id, space_id){
       let url = `../event/view?event_id=${event_id}&space_id=${space_id}`;
       console.log(url);
       wx.navigateTo({
         url: url
       });
+    },
+    async goDelete(event_id, space_id){
+      await this.$parent.$parent.removeRecord('vip_event', event_id, space_id, this.list);
+      this.$apply();
     },
     previewImage(image, event){
       var baseUrl = this.baseUrl;

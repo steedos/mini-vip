@@ -424,9 +424,21 @@ export default class VIP extends wepy.app {
     const url = '/api/odata/v4/' + (space_id || this.globalData.space_id) + '/' + object_name + '/'+_id;
     const result = await req.delete(url).catch((err)=>{
       console.log("error...",err.data)
-      return {}
+      return false
     })
     return result
+  }
+
+  async removeRecord(object_name, _id, space_id, list) {
+    const result = await wepy.showActionSheet({
+      itemList: ['删除']
+    });
+    if (!result.cancel) {
+      let result = await this.delete(object_name, _id, space_id);
+      if(result){
+        list.splice(list.findIndex(item => item._id === _id), 1);
+      }
+    }
   }
 }
 </script>
