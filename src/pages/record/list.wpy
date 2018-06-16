@@ -38,12 +38,12 @@
     <view class="page__bd">
       <view class="weui-cells weui-cells_after-title">
         <repeat for="{{record_list}}" key="index" index="index" item="record">
-          <navigator url="./edit?object_name={{object_name}}&record_id={{record._id}}&action=edit" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
-            <!-- <view class="weui-cell__hd">
-              <image class="image slds-icon slds-icon--small slds-m-right--x-small" src="{{util.formatImageUrl(record.avatar, baseUrl)}}"></image>
-            </view> -->
-            <view class="weui-cell__bd">{{record.name}}</view>
-            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+          <navigator url="./read?object_name={{object_name}}&record_id={{record._id}}&action=edit" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+            <view class="weui-cell__hd" wx:if="{{avatar_field && record[avatar_field]}}">
+              <image src="{{util.formatImageUrl(record[avatar_field], baseUrl)}}" style="margin-right: 5px;vertical-align: middle;width:20px; height: 20px;"></image>
+            </view>
+            <view class="weui-cell__bd">{{record[name_field]}}</view>
+            <view class="weui-cell__ft weui-cell__ft_in-access">{{record[description_field]}}</view>
           </navigator>
         </repeat>
       </view>
@@ -66,7 +66,7 @@ export default class RecordList extends wepy.page {
     navigationBarTitleText: '',
     enablePullDownRefresh: true
   };
-  
+
   data = {
     record_list: [],
     object_name: '',
@@ -74,7 +74,11 @@ export default class RecordList extends wepy.page {
     baseUrl: baseUrl,
     current_skip: 0,
     allow_load: true,
-    is_loaded: false
+    is_loaded: false,
+    avatar_field: '',
+    name_field: '',
+    description_field: '',
+    date_field: ''
   }
 
   wxs = {
@@ -101,8 +105,23 @@ export default class RecordList extends wepy.page {
       title: '加载中',
       mask: true
     });
-    this.space_id = e.space_id
-    this.object_name = e.object_name
+
+    if(!e){
+      throw new Error('缺少参数:space_id,object_name')
+    }
+
+    if(!e.object_name){
+      throw new Error('缺少参数:object_name')
+    }
+
+    this.space_id = e.space_id;
+    this.object_name = e.object_name;
+
+    this.avatar_field = e.avatar_field ; // || 'owner.profile.avatar'
+    this.name_field = e.name_field || 'name';
+    this.description_field = e.description_field; //  || 'description'
+    this.date_field = e.date_field;
+
     const object = await this.$parent.get('objects', this.object_name);
 
     console.log(object)
@@ -134,17 +153,51 @@ export default class RecordList extends wepy.page {
     const skip = this.current_skip;
     const object_name = this.object_name;
 
+    const options = {
+      $count: true,
+      $skip: skip,
+      $top: DATA_LENGTH
+    };
+
+    let keys = ['space'];
+    let expand = [];
+
+    if(this.avatar_field){
+      let avatar_field = this.avatar_field;
+      let avatar = avatar_field.split('.');
+      keys.push(avatar[0]);
+      if(avatar.length > 1){
+//        expand.push(`${avatar[0]}($select=${avatar_field.substr(avatar_field.indexOf('.') + 1, avatar_field.length)})`)
+        expand.push(`${avatar[0]}($select=${avatar[1]})`)
+      }
+    }
+
+    if(this.name_field){
+      keys.push(this.name_field);
+    }
+
+    if(this.description_field){
+      keys.push(this.description_field);
+    }
+
+    if(this.date_field){
+      keys.push(this.date_field);
+    }
+
+    if (expand.length > 0) {
+      options.$expand = expand.join(',')
+    }
+
+    options.$select = keys.join(",")
+
     if (this.allow_load) {
-      const options = {
-        $count: true,
-        $skip: skip,
-        $top: DATA_LENGTH
-      };
-      const result = await this.$parent.query(object_name, options)
+
+      const result = await this.$parent.query(object_name, options);
       if (result.value) {
         this.record_list = this.record_list.concat(result.value)
       }
       this.current_skip = skip + result.value.length;
+      //此处有问题，如果有最新的记录，会导致刷新不出来 TODO: 与朱思嘉确认
       if (this.current_skip === result['@odata.count']) {
         this.allow_load = false
       }
