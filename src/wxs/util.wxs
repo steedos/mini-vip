@@ -1,3 +1,21 @@
+// 开始结束时间格式化为一个字符串
+function formatEventStatus(status) {
+  var reValue = '';
+  console.log("formatEventStatus========", status);
+  switch (status) {
+    case 'accepted':
+      reValue = '已接受';
+      break;
+    case 'pending':
+      reValue = '观望中';
+      break;
+    case 'rejected':
+      reValue = '已拒绝';
+      break;
+  }
+  return reValue;
+}
+
 // 日期格式化
 function formatDate(value) {
   if (typeof value == "string") {
@@ -37,25 +55,25 @@ function formatWeek(day) {
   var reValue = '周';
   switch(day){
     case 0:
-      reValue += '日'
+      reValue += '日';
       break;
     case 1:
-      reValue += '一'
+      reValue += '一';
       break;
     case 2:
-      reValue += '二'
+      reValue += '二';
       break;
     case 3:
-      reValue += '三'
+      reValue += '三';
       break;
     case 4:
-      reValue += '四'
+      reValue += '四';
       break;
     case 5:
-      reValue += '五'
+      reValue += '五';
       break;
     case 6:
-      reValue += '六'
+      reValue += '六';
       break;
   }
   return reValue;
