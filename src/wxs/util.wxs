@@ -1,7 +1,6 @@
-// 开始结束时间格式化为一个字符串
+// 活动状态国际化
 function formatEventStatus(status) {
   var reValue = '';
-  console.log("formatEventStatus========", status);
   switch (status) {
     case 'accepted':
       reValue = '已接受';
@@ -314,6 +313,7 @@ function transformFieldValue(field, value){
 module.exports = {
   formatDate: formatDate,
   formatStartEnd: formatStartEnd,
+  formatEventStatus: formatEventStatus,
   formatImageUrl: formatImageUrl,
   formatAvatarImageUrl: formatAvatarImageUrl,
   formatCardBgImageUrl: formatCardBgImageUrl,
