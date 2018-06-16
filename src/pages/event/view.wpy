@@ -216,19 +216,22 @@ export default class EventView extends wepy.page {
   wxs = {
     util: util
   };
+
+  getBackUrlForCheckMobile(){
+    let to = `/${this.getWxPage().route}?respond=true`;
+    let pageOptions = this.getWxPage().options;
+    for(let k in pageOptions){
+      to += `&${k}=${pageOptions[k]}`;
+    };
+    return to;
+  }
   
   async respondEvent() {
     wepy.showLoading({
       title: '加载中',
       mask: true
     });
-    if(!this.$parent.hasMobile()){
-      let to = `/${this.getWxPage().route}?respond=true`;
-      let pageOptions = this.getWxPage().options;
-      for(let k in pageOptions){
-        to += `&${k}=${pageOptions[k]}`
-      };
-      wepy.navigateTo({url: '/pages/empty_page?redirect_to=' + encodeURIComponent('/pages/phone_number_login?from=' + encodeURIComponent(to))});
+    if(!this.$parent.checkMobile(this.getBackUrlForCheckMobile())){
       return;
     }
     let userId = this.$parent.globalData.user._id;
