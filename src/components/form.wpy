@@ -377,7 +377,8 @@
         field._key = key;
 
         if(action === 'read'){
-          if(field.type === 'image' && !foo){
+          if(field.type === 'image' && !_.isEmpty(values[key]) && !foo){
+
             field.inlineHelpText = '  ';
             field.group = '';
             field._top = true;
@@ -395,7 +396,7 @@
       let groupItem = {fields: {}, _groupText:'-', _helpText:'', _cellsClass: ''};
       _.forEach(fields_new, function (field) {
         let key = field._key;
-        if(!field.hidden && !field.omit && (action != 'read' || values[key])){
+        if(!field.hidden && !field.omit && (action != 'read' || !_.isEmpty(values[key]))){
           if(field.group){
             if(!_.isEmpty(groupItem.fields)){
               groupFields.push(groupItem);
