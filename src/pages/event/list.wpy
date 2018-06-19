@@ -176,6 +176,9 @@ export default class Events extends wepy.page {
 
   methods = {
     createEvent() {
+      if(!this.editable){
+        return;
+      }
       let url = "/pages/record/edit?action=create&object_name=vip_event&fields=name,start,end,allDay,location,alarms,accepted_count,pending_count,rejected_count,featured,cover";
       wepy.navigateTo({
         url: url
