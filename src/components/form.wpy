@@ -381,6 +381,8 @@
 
         field._key = key;
 
+        field._top = false;
+
         if(action === 'read'){
           if(field.type === 'image' && !_.isEmpty(values[key]) && !foo){
 
