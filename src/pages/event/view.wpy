@@ -33,7 +33,7 @@ page{
   height: 50px;
   width: 100%;
   background-color: #F7F7FA;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
 
   &::before {
@@ -51,24 +51,35 @@ page{
     transform: scaleY(0.5);
   }
 
-  .btn-respond {
-    background: #ffa325;
-    text-align: center;
-    color:#fff;
-    border:10px;
-    height:100%;
-    width:100%;
-    vertical-align:middle;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    .ion {
-      line-height: 35px;
-      font-weight: bold;
-      font-size: 16px;
-    }
+  .btn{
+    font-size: 18px;
+    border: none!important;
+    padding: 10px 14px;
+    margin: 0px;
+    color: #333!important;
   }
+  button.btn{
+    padding: 0 14px;
+  }
+
+  // .btn-respond {
+  //   background: #ffa325;
+  //   text-align: center;
+  //   color:#fff;
+  //   border:10px;
+  //   height:100%;
+  //   width:100%;
+  //   vertical-align:middle;
+  //   display:flex;
+  //   align-items:center;
+  //   justify-content:center;
+
+  //   .ion {
+  //     line-height: 35px;
+  //     font-weight: bold;
+  //     font-size: 16px;
+  //   }
+  // }
 }
 </style>
 <template>
@@ -119,9 +130,13 @@ page{
     </view>
   </view>
   <view class="tab-bar">
-    <view class="btn-respond" @tap="respondEvent">
+    <view wx:if="{{editable}}" class="btn btn-edit" @tap="editEvent">
+      <view>编辑</view>
+    </view>
+    <view wx:else class="btn btn-respond" @tap="respondEvent">
       <view>活动报名</view>
     </view>
+    <button open-type="share" class="btn btn-invite" type="default" plain="{{true}}">邀请好友</button>
   </view>
 </view>
 </template>
