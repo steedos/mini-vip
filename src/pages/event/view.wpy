@@ -280,7 +280,7 @@ export default class EventView extends wepy.page {
     }
     wepy.hideLoading();
     if(attendee && attendee.value && attendee.value.length){
-      let url = `/pages/record/edit?action=edit&object_name=vip_event_attendees&record_id=${attendee.value[0]._id}&undeletable=true&title=响应活动`;
+      let url = `/pages/record/edit?action=edit&object_name=vip_event_attendees&record_id=${attendee.value[0]._id}&undeletable=true&title=活动报名`;
       pageRouter.navigateTo({ url: url });
     }
   }
