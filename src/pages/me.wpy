@@ -120,7 +120,7 @@
           <view class="slds-icon-custom-custom11 slds-icon slds-icon--small slds-m-right--x-small"/>
         </view>
         <view class="weui-cell__bd">
-          <view>收藏</view>
+          <view>喜欢</view>
         </view>
         <view class="weui-cell__ft weui-cell__ft_in-access"></view>
       </navigator>

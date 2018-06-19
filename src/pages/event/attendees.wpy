@@ -13,6 +13,12 @@
   .weui-cell__ft_owner{
     color:black;
   }
+  .event-status.accepted{
+    color:green;
+  }
+  .event-status.rejected{
+    color:red;
+  }
 </style>
 <template>
   <view class="page" wx:if="{{is_loaded}}">
@@ -44,7 +50,7 @@
               <view class="weui-cell_muted">{{attendee.comment}}</view>
             </view>
             <view class="weui-cell__ft">
-              <view>{{util.formatEventStatus(attendee.status)}}</view>
+              <view class="event-status {{attendee.status}}">{{util.formatEventStatus(attendee.status)}}</view>
             </view>
           </view>
         </repeat>
