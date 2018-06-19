@@ -154,6 +154,7 @@ export default class VIP extends wepy.app {
     spaceInfo: null,
     storeInfo: null,
     launchOptions: null,
+    objects: {}
   }
 
   constructor () {
@@ -167,6 +168,9 @@ export default class VIP extends wepy.app {
     req.baseUrl(baseUrl).interceptor(interceptor.request, interceptor.response)
     const globalData = wx.getStorageSync('globalData') || {}
     globalData.is_login = false
+    if(!globalData.objects){
+      globalData.objects = {}
+    }
     this.globalData = globalData
 
     pageRouter.setApp(this)
@@ -439,6 +443,35 @@ export default class VIP extends wepy.app {
         list.splice(list.findIndex(item => item._id === _id), 1);
       }
     }
+  }
+
+  async getObject(object_name){
+    if(this.globalData.objects[object_name]){
+      return this.globalData.objects[object_name];
+    }
+    const object = await this.get('objects', object_name);
+    this.globalData.objects[object_name] = object;
+    return object;
+  }
+
+  recordAllowEdit(object_name, owner){
+    const object = this.globalData.objects[object_name];
+
+    if(!object){
+      throw new Error('未在globalData中找到对象：' + object_name)
+    }
+
+    return object.modifyAllRecords || (object.allowEdit && owner === this.globalData.user._id)
+  }
+
+  recordAllowDelete(object_name, owner){
+    const object = this.globalData.objects[object_name];
+
+    if(!object){
+      throw new Error('未在globalData中找到对象：' + object_name)
+    }
+
+    return object.modifyAllRecords || (object.allowDelete && owner === this.globalData.user._id)
   }
 }
 </script>
