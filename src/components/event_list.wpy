@@ -68,7 +68,7 @@
       .weui-cell{
         padding: 0px;
         .weui-cell__bd{
-          width: 100%;
+          width: 90%;
         }
       }
     }
