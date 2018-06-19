@@ -4,17 +4,31 @@
     color: #888888;
   }
   .avatar{
-    width: 50px;
-    height: 50px;
+    width: 30px;
+    height: 30px;
     display: block;
-    border-radius:4px;
+    border-radius:100%;
     margin-right: 10px;
+  }
+  .weui-cell__ft_owner{
+    color:black;
   }
 </style>
 <template>
   <view class="page" wx:if="{{is_loaded}}">
     <view class="weui-panel__bd">
       <view class="weui-cells">
+        <view class="weui-cell">
+          <view class="weui-cell__hd">
+              <image class="avatar" mode="aspectFill" src="{{event_owner.profile.avatar}}"/>
+          </view>
+          <view class="weui-cell__bd">
+            <view>{{event_owner.name}}</view>
+          </view>
+          <view class="weui-cell__ft weui-cell__ft_owner">
+            <view>发起人</view>
+          </view>
+        </view>
         <repeat for="{{attendees}}" key="attendees" index="index" item="attendee">
           <view url="" class="weui-cell">
             <view class="weui-cell__hd">
@@ -77,7 +91,16 @@ export default class EventAttendees extends wepy.page {
     wepy.stopPullDownRefresh();
   }
 
-  async loadAttendees(){
+  async loadAttendees(){  
+    const query = {
+        $select: 'name,owner',
+        $expand: 'owner($select=profile,name)'
+      };
+    const event = await this.$parent.get("vip_event", this.event_id, this.space_id,query)
+    this.event_owner = event.owner;
+    console.log("============",this.event_owner)
+    this.$apply();
+
     const query_options = {
         $filter: `event eq '${this.event_id}'`,
         $select: 'name,status,comment,owner',
@@ -97,6 +120,7 @@ export default class EventAttendees extends wepy.page {
 
   data = {
     event_id: null,
+    event_owner: null,
     attendees: null,
     space_id: '',
     is_loaded: false,
