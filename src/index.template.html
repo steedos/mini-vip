@@ -11,6 +11,21 @@
   <style>
       html, body, #app {height: 100%;}
   </style>
+  <script>
+wx = {}    
+wx.showLoading = function showLoading(){
+    alert("loading")
+};
+
+wx.hideLoading = function hideLoading(){
+    alert("hide loading")
+};
+
+wx.getSetting = function getSetting(){
+    alert("getSetting")
+};
+
+  </script>
 </head>
 <body>
   <div id="app">
