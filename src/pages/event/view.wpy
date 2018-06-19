@@ -56,10 +56,11 @@ page{
     border: none!important;
     padding: 10px 14px;
     margin: 0px;
-    color: #333!important;
+    color: #5e9bf4;
   }
   button.btn{
     padding: 0 14px;
+    color: #5e9bf4;
   }
 
   // .btn-respond {
