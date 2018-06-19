@@ -124,6 +124,9 @@
       display:block;
       width:100%;
     }
+  .remove-btn{
+    color:#888;
+  }
   }
 </style>
 <template>
@@ -143,7 +146,7 @@
               <block wx:if="{{!item.hidden && !item.omit}}">
                 <block wx:if="{{item.type === 'image' || item.type === 'video' || item.type === 'audio'}}">
                   <block wx:if="{{item.multiple}}">
-                    <block wx:if="{{item.readonly || !schema.allowEdit || args.action === 'read'}}">
+                    <block wx:if="{{item.readonly || !_record_allowEdit || args.action === 'read'}}">
                       <block wx:if="{{!item._top}}">
                         <view class="weui-cell"  hover-class='weui-grid_active'>
                           <view class="weui-cell__bd">
@@ -178,7 +181,7 @@
                       </block>
                     </block>
                     <block wx:else>
-                      <view class='weui-cell weui-cell_access' hover-class='weui-grid_active' data-value="{{values[item.name]}}" data-edit="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}" @tap.stop="navigateTo({{item}})">
+                      <view class='weui-cell weui-cell_access' hover-class='weui-grid_active' data-value="{{values[item.name]}}" data-edit="{{!(item.readonly || !_record_allowEdit || args.action === 'read')}}" @tap.stop="navigateTo({{item}})">
                         <view class="weui-cell__bd">
                           <view class="weui-uploader">
                             <view class="weui-uploader__hd">
@@ -207,13 +210,13 @@
                             </view>
                           </view>
                         </view>
-                        <view class="weui-cell__ft weui-cell__ft_in-access" wx:if="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}"></view>
+                        <view class="weui-cell__ft weui-cell__ft_in-access" wx:if="{{!(item.readonly || !_record_allowEdit || args.action === 'read')}}"></view>
                       </view>
                     </block>
                   </block>
                   <block wx:else>
                     <block wx:if="{{!item._top}}">
-                      <view class='weui-cell weui-cell_access' hover-class='weui-grid_active' data-value="{{values[item.name]}}" data-edit="!(item.readonly || !schema.allowEdit || args.action === 'read')}}" @tap.stop="navigateTo({{item}})">
+                      <view class='weui-cell weui-cell_access' hover-class='weui-grid_active' data-value="{{values[item.name]}}" data-edit="!(item.readonly || !_record_allowEdit || args.action === 'read')}}" @tap.stop="navigateTo({{item}})">
                         <view class="weui-cell__hd" >
                           <view class="weui-label">{{item.label}}</view>
                         </view>
@@ -221,7 +224,7 @@
                           <image src="{{util.formatImageUrl(values[item.name], baseUrl)}}" class="weui-uploader__img" style="display:block;float:right" wx:if="{{item.type === 'image' && values[item.name]}}"/>
                           <video src="{{util.formatVideoUrl(values[item.name], baseUrl)}}" class="weui-uploader__img" style="display:block;float:right" wx:if="{{item.type === 'video' && values[item.name]}}">{{values[item.name]}}</video>
                         </view>
-                        <view class="weui-cell__ft weui-cell__ft_in-access" wx:if="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}"></view>
+                        <view class="weui-cell__ft weui-cell__ft_in-access" wx:if="{{!(item.readonly || !_record_allowEdit || args.action === 'read')}}"></view>
                       </view>
                     </block>
                     <block wx:else>
@@ -235,12 +238,12 @@
                   <view class="weui-cell weui-cell_switch" hover-class='weui-grid_active'>
                     <view class="weui-cell__bd">{{item.label}}</view>
                     <view class="weui-cell__ft" data-id="{{item.name}}" >
-                      <switch checked="{{values[item.name] || false}}" data-id="{{item.name}}" bindchange="textChange" disabled="{{(item.readonly || !schema.allowEdit || args.action === 'read')}}"/>
+                      <switch checked="{{values[item.name] || false}}" data-id="{{item.name}}" bindchange="textChange" disabled="{{(item.readonly || !_record_allowEdit || args.action === 'read')}}"/>
                     </view>
                   </view>
                 </block>
                 <block wx:elif="{{item.type === 'text' && item.is_wide}}">
-                  <block wx:if="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}">
+                  <block wx:if="{{!(item.readonly || !_record_allowEdit || args.action === 'read')}}">
                     <view class="weui-cell">
                       <view class="weui-cell__bd">
                         <textarea class="weui-textarea-input" data-id="{{item.name}}" name="{{item.name}}" placeholder="{{item.label}}" value="{{util.transformFieldValue(item, values[item.name])}}" auto-height="true" bindblur="textChange"/>
@@ -256,7 +259,7 @@
                     </view>
                   </block>
                 </block>
-                <block wx:elif="{{item.type === 'textarea' && (item.readonly || !schema.allowEdit || args.action === 'read')}}">
+                <block wx:elif="{{item.type === 'textarea' && (item.readonly || !_record_allowEdit || args.action === 'read')}}">
                   <view class="weui-media-box weui-media-box_text">
                     <view class="weui-media-box__title weui-media-box__title_in-text">
                       {{item.label}}
@@ -267,11 +270,11 @@
                   </view>
                 </block>
                 <block wx:else>
-                  <view class='weui-cell weui-cell_access' hover-class='weui-grid_active' data-value="{{values[item.name]}}" data-edit="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}" @tap.stop="navigateTo({{item}})">
+                  <view class='weui-cell weui-cell_access' hover-class='weui-grid_active' data-value="{{values[item.name]}}" data-edit="{{!(item.readonly || !_record_allowEdit || args.action === 'read')}}" @tap.stop="navigateTo({{item}})">
                     <block wx:if="{{item.type === 'textarea'}}">
                       <block wx:if="{{item.is_wide}}">
                         <view class="weui-cell__bd">
-                          <block wx:if="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}">
+                          <block wx:if="{{!(item.readonly || !_record_allowEdit || args.action === 'read')}}">
                             <textarea class="weui-textarea" name="{{item.name}}" data-id="{{item.name}}" placeholder="{{item.label}}" value="{{util.transformFieldValue(item, values[item.name])}}" auto-height="true" bindblur="textChange" maxlength="-1"/>
                           </block>
                           <block wx:else>
@@ -286,7 +289,7 @@
                         <view class="weui-cell__bd">
                           <view class="weui-cell__ft wide-cell">{{util.transformFieldValue(item, values[item.name])}}</view>
                         </view>
-                        <block wx:if="{{!(item.readonly || !schema.allowEdit || args.action === 'read')}}">
+                        <block wx:if="{{!(item.readonly || !_record_allowEdit || args.action === 'read')}}">
                           <view class="weui-cell__ft weui-cell__ft_in-access"></view>
                         </block>
                       </block>
@@ -296,14 +299,14 @@
                         <view class="weui-label">{{item.label}}</view>
                       </view>
                       <view class="weui-cell__bd">
-                        <block wx:if="{{item.type === 'phone' && (item.readonly || !schema.allowEdit || args.action === 'read')}}">
+                        <block wx:if="{{item.type === 'phone' && (item.readonly || !_record_allowEdit || args.action === 'read')}}">
                           <view class="weui-cell__ft" @tap="phoneCall(values[item.name])">{{values[item.name]}}uuuuuu</view>
                         </block>
                         <block wx:else>
                           <view class="weui-cell__ft">{{util.transformFieldValue(item, values[item.name])}}</view>
                         </block>
                       </view>
-                      <block wx:if="{{!(item.readonly || !schema.allowEdit || args.action === 'read') || item.type === 'location'}}">
+                      <block wx:if="{{!(item.readonly || !_record_allowEdit || args.action === 'read') || item.type === 'location'}}">
                         <view class="weui-cell__ft weui-cell__ft_in-access"></view>
                       </block>
                     </block>
@@ -318,8 +321,8 @@
         <view class="btn-container">
           <button class="submit-btn save-btn" form-type="submit" disabled="{{submitDisabled}}" wx:if="{{args.action === 'edit' || args.action === 'create'}}">保存</button>
           <block wx:if="{{args.action === 'read'}}">
-            <button class="submit-btn" type="primary" @tap="goEdit">编辑</button>
-            <button class="submit-btn" wx:if="{{!args.undeletable && schema.allowDelete}}" type="warn" @tap="removeRecord">删除</button>
+            <button class="submit-btn" type="primary" @tap="goEdit" wx:if="{{_record_allowEdit}}">编辑</button>
+            <button class="submit-btn remove-btn" wx:if="{{!args.undeletable && _record_allowDelte}}"  @tap="removeRecord">删除</button>
           </block>
         </view>
       </view>
@@ -348,6 +351,8 @@
 
     data = {
       _record_name: '',
+      _record_allowEdit: false,
+      _record_allowDelte: false,
       showTopTips: false,
       baseUrl: baseUrl,
       message: '',
@@ -434,7 +439,7 @@
           let title = newValue.title;
 
           if (object_name) {
-            const object = await this.$parent.$parent.get('objects', object_name);
+            const object = await this.$parent.$parent.getObject(object_name);
             object.allowEdit = true;
             this.schema = object;
 
@@ -474,13 +479,18 @@
               this.fields = object.fields
             }
           }
+
+          if(action === 'create'){
+            this._record_allowEdit = true;
+          }
+
           if (object_name && record_id && action != 'create') {
-            var keys = []
+            var keys = ['owner'];
             _.forEach(this.fields, (v, k)=> {
               if (!v.hidden && !v.omit) {
                 keys.push(k)
               }
-            })
+            });
             let query_options = {
               $select: keys.join(","),
               $filter: `_id eq '${record_id}'`
@@ -549,6 +559,10 @@
                 }
               }
             });
+
+            this._record_allowEdit = this.$parent.$parent.recordAllowEdit(object_name, this.values.owner);
+            this._record_allowDelte = this.$parent.$parent.recordAllowDelete(object_name, this.values.owner);
+
             this.$apply()
           }else{
             this.$apply()
@@ -763,6 +777,9 @@
     transformValue(formValues) {
       const value = _.clone(this.values)
       const fields = this.fields;
+      if(value){
+        delete value.owner
+      }
       _.forEach(value, (v, k) => {
         let field = fields[k];
         if(!field){
@@ -955,16 +972,14 @@
         })
       },
       async removeRecord() {
-        if (this.args.action !== 'edit') {
-          return;
-        }
+
         if (this.args.undeletable) {
           return;
         }
         const result = await wepy.showModal({
-          title: '确定要删除吗？',
+          title: '确认删除',
           confirmText: "确定",
-          content: "该操作不可逆，请谨慎操作。",
+          content: "您确认要删除此记录吗？",
           cancelText: "取消",
         });
         if (result.confirm) {

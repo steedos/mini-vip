@@ -56,7 +56,7 @@ page{
     border: none!important;
     padding: 10px 0;
     margin: 0px;
-    color: #333!important;
+    color: #5e9bf4;
     width:50%;
     text-align:center;
     position:relative;
@@ -76,6 +76,7 @@ page{
     }
   }
   button.btn{
+    color: #5e9bf4;
     padding: 0 0;
   }
 
