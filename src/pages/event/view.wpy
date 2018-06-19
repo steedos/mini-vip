@@ -54,12 +54,29 @@ page{
   .btn{
     font-size: 18px;
     border: none!important;
-    padding: 10px 14px;
+    padding: 10px 0;
     margin: 0px;
     color: #333!important;
+    width:50%;
+    text-align:center;
+    position:relative;
+    &:after {
+      content: " ";
+      position: absolute;
+      right: 0;
+      top: 14px;
+      bottom: 14px;
+      width: 1px;
+      border-right: 1px solid #C0BFC4;
+      color: #C0BFC4;
+      -webkit-transform-origin: 0 0;
+      transform-origin: 0 0;
+      -webkit-transform: scaleX(0.3);
+      transform: scaleX(0.3);
+    }
   }
   button.btn{
-    padding: 0 14px;
+    padding: 0 0;
   }
 
   // .btn-respond {
@@ -130,12 +147,8 @@ page{
     </view>
   </view>
   <view class="tab-bar">
-    <view wx:if="{{editable}}" class="btn btn-edit" @tap="editEvent">
-      <view>编辑</view>
-    </view>
-    <view wx:else class="btn btn-respond" @tap="respondEvent">
-      <view>活动报名</view>
-    </view>
+    <view wx:if="{{editable}}" class="btn btn-edit" @tap="editEvent">编辑</view>
+    <view wx:else class="btn btn-respond" @tap="respondEvent">活动报名</view>
     <button open-type="share" class="btn btn-invite" type="default" plain="{{true}}">邀请好友</button>
   </view>
 </view>
