@@ -40,7 +40,7 @@
       overflow:hidden;
       display:inline-block;
       text-overflow:ellipsis;
-      width:36%;
+      width:100%;
       overflow:hidden;
       white-space:nowrap;
       font-weight:bold;
@@ -67,6 +67,9 @@
       }
       .weui-cell{
         padding: 0px;
+        .weui-cell__bd{
+          width: 100%;
+        }
       }
     }
   }
