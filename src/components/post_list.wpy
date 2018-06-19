@@ -114,7 +114,7 @@
     .text {
       display: inline-block;
     }
-}
+  }
 }
 </style>
 <template>
@@ -166,7 +166,7 @@
             <view class="vip_star-{{post.star_id ? 'blue' : 'default'}} slds-icon slds-icon--small slds-m-right--x-small"></view>
             <view class="text">{{post.star_count || 0}}</view>
           </view>
-      </view>
+        </view>
       </view>
     </repeat>
   </block>
