@@ -124,6 +124,9 @@
       display:block;
       width:100%;
     }
+  .remove-btn{
+    color:#888;
+  }
   }
 </style>
 <template>
@@ -319,7 +322,7 @@
           <button class="submit-btn save-btn" form-type="submit" disabled="{{submitDisabled}}" wx:if="{{args.action === 'edit' || args.action === 'create'}}">保存</button>
           <block wx:if="{{args.action === 'read'}}">
             <button class="submit-btn" type="primary" @tap="goEdit" wx:if="{{_record_allowEdit}}">编辑</button>
-            <button class="submit-btn" wx:if="{{!args.undeletable && _record_allowDelte}}" type="warn" @tap="removeRecord">删除</button>
+            <button class="submit-btn remove-btn" wx:if="{{!args.undeletable && _record_allowDelte}}"  @tap="removeRecord">删除</button>
           </block>
         </view>
       </view>
@@ -974,9 +977,9 @@
           return;
         }
         const result = await wepy.showModal({
-          title: '确定要删除吗？',
+          title: '确认删除',
           confirmText: "确定",
-          content: "该操作不可逆，请谨慎操作。",
+          content: "您确认要删除此记录吗？",
           cancelText: "取消",
         });
         if (result.confirm) {

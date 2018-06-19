@@ -1,5 +1,5 @@
 <template>
-  <view class="page record-read">
+  <view class="page record-read  page__bd">
     <form :args.sync='args'></form>
     <!--<view class="btn-container">-->
       <!--<button class="submit-btn" type="primary" @tap="removeRecord">编辑</button>-->
