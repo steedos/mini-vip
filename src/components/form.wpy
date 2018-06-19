@@ -792,6 +792,12 @@
             value[k] = v._id
           }
         }
+
+        if(field.type === 'datetime'){
+          if(value[k]){
+            value[k] = (new Date(value[k])).toISOString()
+          }
+        }
       });
 
       _.forEach(formValues, (v, k) =>{
