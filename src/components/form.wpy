@@ -229,7 +229,7 @@
                     </block>
                     <block wx:else>
                       <view class="weui-cell weui-cell_image">
-                        <image class="cover" mode="aspectFill" src="{{util.formatImageUrl(values[item.name], baseUrl)}}"/>
+                        <image class="cover" mode="aspectFill" wx:if="{{values[item.name]}}" src="{{util.formatImageUrl(values[item.name], baseUrl)}}"/>
                       </view>
                     </block>
                   </block>
