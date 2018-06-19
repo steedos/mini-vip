@@ -232,9 +232,9 @@ function getEmptyImageUrl(type) {
     case "jobs":
       return url = url + "jobs.jpg";
       break;
-    default : 
+    default :
       return url = url + "news.jpg";
-      break; 
+      break;
   }
   return url;
 }
@@ -309,7 +309,13 @@ function transformFieldValue(field, value){
       hours_str = '晚上' + (hours - 12);
     }
 
-    return year + month + date + ' ' + hours_str + ':' + value.getMinutes()
+    var minutes = value.getMinutes();
+
+    if(minutes < 10){
+      minutes = '0' + minutes;
+    }
+
+    return year + month + date + ' ' + hours_str + ':' + minutes
   }
   return value
 }
