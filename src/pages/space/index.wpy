@@ -430,11 +430,6 @@ export default class Posts extends wepy.page {
         icon: 'standard-event',
         url: `../event/list?space_id=${this.space_id}`
       },
-      vip_video: {
-        label: '视频',
-        icon: 'standard-carousel',
-        url: '../404'
-      },
       vip_product: {
         label: '产品',
         icon: 'standard-record',
@@ -491,8 +486,7 @@ export default class Posts extends wepy.page {
       })
     } else {
       this.enabled_objects = [
-        objects_list.post, objects_list.vip_event, objects_list.vip_video, 
-        objects_list.vip_card, objects_list.vip_wifi, objects_list.vip_job, 
+        objects_list.post, objects_list.vip_event, objects_list.vip_card, 
         objects_list.qrcode, objects_list.vip_store, objects_list.support
       ] 
     }
