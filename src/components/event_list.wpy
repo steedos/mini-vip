@@ -97,7 +97,7 @@
             <view class="weui-cell__bd">
               <view class="event-name">{{event.name}}</view>
               <view class="event-summary">
-                <view class="event-start-end" wx:if="{{event.start}}">时间：{{util.formatStartEnd(event.start, event.end, event.allDay)}}</view>
+                <view class="event-start-end" wx:if="{{event.start}}">时间：{{util.formatStartEnd(event.start)}}</view>
                 <view class="event-address" wx:if="{{event.location.address}}">地点：{{event.location.address}}</view>
                 <view class="event-accepted-count">人数：{{event.accepted_count ? event.accepted_count : 0}}人报名，{{event.pending_count ? event.pending_count : 0}}人观望</view>
               </view>

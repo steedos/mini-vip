@@ -89,7 +89,7 @@ page{
           时间
         </view>
         <view class="weui-cell__ft">
-          {{util.formatStartEnd(event.start, event.end, event.allDay)}}
+          {{util.formatStartEnd(event.start)}}
         </view>
       </view>
       <view class="weui-cell weui-cell_access event-address" wx:if="{{event.location.address}}" hover-class="weui-cell_active" @tap="openMap">
@@ -261,7 +261,7 @@ export default class EventView extends wepy.page {
       if(!this.editable){
         return
       }
-      let url = `/pages/record/edit?action=edit&object_name=vip_event&record_id=${this.event_id}&fields=name,start,end,allDay,location,alarms,accepted_count,pending_count,rejected_count,featured,cover,description`;
+      let url = `/pages/record/edit?action=edit&object_name=vip_event&record_id=${this.event_id}&fields=name,start,location,alarms,accepted_count,pending_count,rejected_count,featured,cover,description`;
       wepy.navigateTo({
         url: url
       });
