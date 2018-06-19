@@ -154,6 +154,7 @@ export default class VIP extends wepy.app {
     spaceInfo: null,
     storeInfo: null,
     launchOptions: null,
+    is_login: false,
     objects: {}
   }
 
@@ -165,11 +166,7 @@ export default class VIP extends wepy.app {
 
   async onLaunch(options) {
     req.appId(appId)
-    req.baseUrl(baseUrl).interceptor(interceptor.request, interceptor.response)
-    const globalData = wx.getStorageSync('globalData') || {}
-    globalData.is_login = false
-    globalData.objects = {}
-    this.globalData = globalData
+    req.baseUrl(baseUrl).interceptor(interceptor.request, interceptor.response);
 
     pageRouter.setApp(this)
 
@@ -204,8 +201,7 @@ export default class VIP extends wepy.app {
   }
 
   onHide() {
-    const globalData = this.globalData
-    wx.setStorageSync('globalData', globalData)
+    
   }
 
   getUserInfo(cb) {
