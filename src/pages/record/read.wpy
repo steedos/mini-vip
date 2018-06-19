@@ -1,6 +1,6 @@
 <template>
   <view class="page record-read  page__bd">
-    <form :args.sync='args'></form>
+    <autoform :args.sync='args'></autoform>
     <!--<view class="btn-container">-->
       <!--<button class="submit-btn" type="primary" @tap="removeRecord">编辑</button>-->
       <!--<button class="submit-btn" type="warn" @tap="removeRecord">删除</button>-->
@@ -37,7 +37,7 @@
     }
 
     components = {
-      form: form
+      autoform: form
     };
 
     changeNavigationBarTitleText(title){
