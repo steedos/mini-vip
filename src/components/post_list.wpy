@@ -121,7 +121,7 @@
 <view>
   <block wx:if="{{list.length}}">
     <repeat for="{{list}}" key="index" index="index" item="post">
-      <view class="post">
+      <view class="post" @longpress="goDelete({{post._id}}, {{post.space}})">
         <navigator class="post-header" wx:if="{{showHeader}}" url="../space/index?space_id={{post.space}}">
           <view class="weui-cell weui-cell_access">
             <view class="weui-cell__hd">
@@ -246,7 +246,7 @@ export default class PostList extends wepy.component {
   };
 
   methods = {
-    goDetail(post_id, space_id,event){
+    goDetail(post_id, space_id){
       let url = `../post/view?post_id=${post_id}&space_id=${space_id}`;
       if(this.editable){
         url += '&editable=true'
@@ -256,6 +256,13 @@ export default class PostList extends wepy.component {
       wx.navigateTo({
         url: url
       });
+    },
+    async goDelete(post_id, space_id){
+      if(!this.$parent.$parent.isSpaceAdmin(space_id)){
+        return;
+      }
+      await this.$parent.$parent.removeRecord('post', post_id, space_id, this.list);
+      this.$apply();
     },
     previewImage(images, event){
       var baseUrl = this.baseUrl;

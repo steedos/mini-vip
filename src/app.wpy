@@ -311,10 +311,19 @@ export default class VIP extends wepy.app {
       globalData.user.birthdate = res.birthdate
       globalData.my_spaces = res.my_spaces
 
+      req.header(header)
+
+      if (globalData.userInfo && res.name) {
+        if (globalData.userInfo.avatarUrl != res.avatar) {
+          await req.put('/mini/vip/user', {name: res.name, avatar: globalData.userInfo.avatarUrl}).catch((err)=>{
+            console.log("updateAvatarError...", err.data)
+          })
+        }
+      }
+
       globalData.is_login = true
 
       self.globalData = globalData
-      req.header(header)
     } else {
       const header = {
         'X-User-Id': globalData.user._id,

@@ -33,7 +33,7 @@ page{
   height: 50px;
   width: 100%;
   background-color: #F7F7FA;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
 
   &::before {
@@ -51,24 +51,36 @@ page{
     transform: scaleY(0.5);
   }
 
-  .btn-respond {
-    background: #ffa325;
-    text-align: center;
-    color:#fff;
-    border:10px;
-    height:100%;
-    width:100%;
-    vertical-align:middle;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    .ion {
-      line-height: 35px;
-      font-weight: bold;
-      font-size: 16px;
-    }
+  .btn{
+    font-size: 18px;
+    border: none!important;
+    padding: 10px 14px;
+    margin: 0px;
+    color: #5e9bf4;
   }
+  button.btn{
+    padding: 0 14px;
+    color: #5e9bf4;
+  }
+
+  // .btn-respond {
+  //   background: #ffa325;
+  //   text-align: center;
+  //   color:#fff;
+  //   border:10px;
+  //   height:100%;
+  //   width:100%;
+  //   vertical-align:middle;
+  //   display:flex;
+  //   align-items:center;
+  //   justify-content:center;
+
+  //   .ion {
+  //     line-height: 35px;
+  //     font-weight: bold;
+  //     font-size: 16px;
+  //   }
+  // }
 }
 </style>
 <template>
@@ -89,7 +101,7 @@ page{
           时间
         </view>
         <view class="weui-cell__ft">
-          {{util.formatStartEnd(event.start, event.end, event.allDay)}}
+          {{util.formatStartEnd(event.start)}}
         </view>
       </view>
       <view class="weui-cell weui-cell_access event-address" wx:if="{{event.location.address}}" hover-class="weui-cell_active" @tap="openMap">
@@ -119,9 +131,13 @@ page{
     </view>
   </view>
   <view class="tab-bar">
-    <view class="btn-respond" @tap="respondEvent">
+    <view wx:if="{{editable}}" class="btn btn-edit" @tap="editEvent">
+      <view>编辑</view>
+    </view>
+    <view wx:else class="btn btn-respond" @tap="respondEvent">
       <view>活动报名</view>
     </view>
+    <button open-type="share" class="btn btn-invite" type="default" plain="{{true}}">邀请好友</button>
   </view>
 </view>
 </template>
@@ -261,7 +277,7 @@ export default class EventView extends wepy.page {
       if(!this.editable){
         return
       }
-      let url = `/pages/record/edit?action=edit&object_name=vip_event&record_id=${this.event_id}&fields=name,start,end,allDay,location,alarms,accepted_count,pending_count,rejected_count,featured,cover,description`;
+      let url = `/pages/record/edit?action=edit&object_name=vip_event&record_id=${this.event_id}&fields=name,start,location,alarms,accepted_count,pending_count,rejected_count,featured,cover,description`;
       wepy.navigateTo({
         url: url
       });

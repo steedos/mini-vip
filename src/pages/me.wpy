@@ -172,6 +172,7 @@ export default class Me extends wepy.page {
       if (userInfo) {
         const name = userInfo.nickName;
         const sex = userInfo.gender ? '男' : '女';
+        const avatar = userInfo.avatarUrl;
 
         this.name = name
         this.sex = sex
@@ -181,7 +182,7 @@ export default class Me extends wepy.page {
         this.$apply()
 
         const url = '/mini/vip/user'
-        req.put(url, {name: name, sex: sex}).then((res) => {
+        req.put(url, {name: name, sex: sex, avatar: avatar}).then((res) => {
           wx.navigateTo({ url: 'me_profile' })
         })
       }
