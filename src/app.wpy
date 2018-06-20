@@ -142,6 +142,7 @@ export default class VIP extends wepy.app {
       'pages/admin/index',
       'pages/admin/qrcode',
       'pages/member_benefits',
+      'pages/comment/index',
       'pages/star/post',
       'pages/star/space',
       'pages/consuming_records',

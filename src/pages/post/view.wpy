@@ -2,6 +2,10 @@
 page {
   background: #fff;
 }
+
+.page__bd {
+  padding-bottom: 65px;
+}
 .page {
   display:flex;
   flex-direction:column;
@@ -32,10 +36,18 @@ page {
   }
 }
 
-.action-bar {
-  display: flex;
+.tab-bar {
   font-size: 13px;
   color: #888;
+  display: flex;
+  position: fixed;
+  box-sizing: border-box;
+  z-index: 500;
+  bottom: 0;
+  height: auto;
+  width: 100%;
+  background-color: #F7F7FA;
+  align-items: center;
 
   .action {
     flex: 1;
@@ -105,49 +117,6 @@ video{
   width:100%;
 }
 
-.tab-bar {
-  display: flex;
-  box-sizing: border-box;
-  z-index: 500;
-  bottom: 0;
-  height: auto;
-  width: 100%;
-  background-color: #F7F7FA;
-  align-items: center;
-  padding: 15px;
-
-  .avatar {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    overflow: hidden;
-  }
-
-  form {
-    width: 100%;
-  }
-
-  .form {
-    display: flex;
-    flex: 1;
-    align-items: center;
-    .comment {
-      flex: 1;
-      width: auto;
-      padding: 0 10px;
-    }
-    .submit-btn {
-      color: #018cc6;
-      border: none;
-      margin: 0;
-      padding: 0;
-      line-height: inherit;
-      width: auto;
-      font-size: inherit;
-    }
-  }
-}
-
 .comment-area {
   padding-bottom:10px;
   .comment-title {
@@ -180,8 +149,7 @@ video{
 </style>
 <template>
 <view class="page border-top-1px" wx:if="{{is_loaded}}">
-  <view class="body">
-    <scroll-view scroll-y style="height: 100%;" bindscrolltolower="lower">
+  <view class="page__bd">
       <navigator class="post-header" url="../space/index?space_id={{space_id}}">
         <view class="weui-cell weui-cell_access">
           <view class="weui-cell__hd">
@@ -200,7 +168,7 @@ video{
       <block wx:elif="{{post.images && post.images.length == 1}}">
         <image src="{{util.formatImageUrl(post.images[0], baseUrl)}}" mode="aspectFill" @tap="previewImage({{item}})" class="cover"/>
       </block>
-      <view class="weui-article">
+      <view class="weui-article border-bottom-1px">
         <view class="weui-article__section article-section">
           <view class="weui-article__c" wx:if="{{post.images && post.images.length>1 && !post.video}}">
             <view class="flex-images-box">
@@ -210,23 +178,9 @@ video{
             </view>
           </view>
           <view class="weui-article__h1">{{post.name}}</view>
-          <view class="weui-article__p article-p border-bottom-1px">
+          <view class="weui-article__p article-p">
             <text space="emsp">{{post.description}}</text>
           </view>
-        </view>
-      </view>
-      <view class="action-bar border-bottom-1px">
-        <button plain="true" open-type="share" data-post-name="{{post.name}}" data-post-id="{{post._id}}" data-post-space="{{post.space}}" class="share action share-btn">
-          <view class="vip_share-default slds-icon slds-icon--small slds-m-right--x-small"></view>
-          <view class="text">转发</view>
-        </button>
-        <view class="comment-btn action">
-          <view class="vip_comment-default slds-icon slds-icon--small slds-m-right--x-small"></view>
-          <view class="text">评论</view>
-        </view>
-        <view class="star action star-btn {{star_id ? 'is-stared' : ''}}" @tap="starPost">
-          <view class="vip_star-{{star_id ? 'blue' : 'default'}} slds-icon slds-icon--small slds-m-right--x-small"></view>
-          <view class="text">{{post.star_count || 0}}</view>
         </view>
       </view>
       <view class="comment-area">
@@ -245,18 +199,20 @@ video{
           </view>
         </repeat>
       </view>
-    </scroll-view>
   </view>
-  <view class="tab-bar user-comment border-top-1px">
-    <view class="avatar">
-      <open-data type="userAvatarUrl"></open-data>
+  <view class="tab-bar border-top-1px">
+    <button plain="true" open-type="share" data-post-name="{{post.name}}" data-post-id="{{post._id}}" data-post-space="{{post.space}}" class="share action share-btn">
+      <view class="vip_share-default slds-icon slds-icon--small slds-m-right--x-small"></view>
+      <view class="text">转发</view>
+    </button>
+    <view class="comment-btn action" @tap="writeComment">
+      <view class="vip_comment-default slds-icon slds-icon--small slds-m-right--x-small"></view>
+      <view class="text">评论</view>
     </view>
-    <form bindsubmit="submitComment">
-      <view class="form">
-        <textarea class="comment" name="comment" value="{{value}}" show-confirm-bar="false" cursor-spacing="15" fixed="true" auto-height placeholder="说点什么..." placeholder-style="font-size:red;"/>
-        <button form-type="submit" class="submit-btn" plain="true"> 发布 </button>
-      </view>
-    </form>
+    <view class="star action star-btn {{star_id ? 'is-stared' : ''}}" @tap="starPost">
+      <view class="vip_star-{{star_id ? 'blue' : 'default'}} slds-icon slds-icon--small slds-m-right--x-small"></view>
+      <view class="text">{{post.star_count || 0}}</view>
+    </view>
   </view>
 </view>
 </template>
@@ -305,6 +261,10 @@ export default class PostView extends wepy.page {
     this.is_loaded = true
     this.$apply()
     wepy.hideLoading();
+  }
+
+  async onShow() {
+    this.loadPostComments();
   }
 
   async refresh(action) {
@@ -401,9 +361,6 @@ export default class PostView extends wepy.page {
   };
 
   methods = {
-    lower(){
-      console.log("lower....................")
-    },
     previewImage(image, event){
       var baseUrl = this.baseUrl;
       var current = `${baseUrl}/api/files/images/${image}`;
@@ -457,6 +414,11 @@ export default class PostView extends wepy.page {
           value : ''
         });
       }
+    },
+    writeComment() {
+      wx.navigateTo({
+        url: `../comment/index?object_name=post_comments&key_name=post_id&_id=${this.post_id}&space_id=${this.space_id}`
+      })
     }
   };
 }
