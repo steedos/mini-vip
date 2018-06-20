@@ -503,7 +503,7 @@ export default class Posts extends wepy.page {
       $expand: 'space($select=name),owner($select=name)',
       $count: true,
       $select:
-        'name,summary,description,comment_count,enable_comment,images,video,audio,type,mini_type,space,star_count',
+        'name,summary,description,comment_count,enable_comment,images,video,audio,type,mini_type,space,star_count,owner',
       $skip: skip,
       $top: DATA_LENGTH
     };
