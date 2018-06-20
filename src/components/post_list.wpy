@@ -77,6 +77,7 @@
     font-size: 13px;
     border-top: 1px solid #ededed;
     color: #888;
+    align-items: center;
 
     .action {
       flex: 1;
@@ -87,6 +88,7 @@
       height:auto;
       border:none;
       line-height:50px;
+      align-items: center;
 
       .slds-icon {
         width: 1rem;
@@ -101,6 +103,10 @@
       display: flex;
       justify-content: flex-start;
       align-items: center;
+    }
+    .comment-btn {
+      display: flex;
+      justify-content: center;
     }
     .star-btn {
       display: flex;
@@ -125,7 +131,7 @@
         <navigator class="post-header" wx:if="{{showHeader}}" url="../space/index?space_id={{post.space._id}}">
           <view class="weui-cell weui-cell_access">
             <view class="weui-cell__hd">
-              <image wx:if="{{post.avatar}}" class="image slds-icon slds-icon--small slds-m-right--x-small" src="{{util.formatImageUrl(post.avatar, baseUrl)}}"></image>
+              <image wx:if="{{post.space.avatar}}" class="image slds-icon slds-icon--small slds-m-right--x-small" src="{{util.formatImageUrl(post.space.avatar, baseUrl)}}"></image>
               <view wx:else class="slds-icon-standard-channel-programs slds-icon slds-icon--small slds-m-right--x-small"></view>
             </view>
             <view class="weui-cell__bd">
@@ -154,18 +160,21 @@
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
           </view>
         </view>
-        <view class="post-footer ">
+        <!-- <view class="post-footer ">
           <button plain="true" open-type="share" data-post-name="{{post.name}}" data-post-id="{{post._id}}" data-post-space="{{post.space._id}}" class="share action share-btn">
             <view class="vip_share-default slds-icon slds-icon--small slds-m-right--x-small"></view>
             <view class="text">转发</view>
           </button>
           <view class="comment action">
-          
+            <view class="comment-btn action" @tap="writeComment({{post._id}}, {{post.space._id}})">
+              <view class="vip_comment-default slds-icon slds-icon--small slds-m-right--x-small"></view>
+              <view class="text">评论</view>
+            </view>
           </view>
           <view class="star action star-btn {{post.star_id ? 'is-stared' : ''}}" @tap="starPost({{post._id}}, {{post.space._id}}, {{index}})">
             <view class="vip_star-{{post.star_id ? 'blue' : 'default'}} slds-icon slds-icon--small slds-m-right--x-small"></view>
             <view class="text">{{post.star_count || 0}}</view>
-          </view>
+          </view> -->
         </view>
       </view>
     </repeat>
@@ -313,6 +322,11 @@ export default class PostList extends wepy.component {
         }
       }
       await this.getStarCount(index)
+    },
+    writeComment(post_id, space_id) {
+      wx.navigateTo({
+        url: `../comment/index?object_name=post_comments&key_name=post_id&_id=${post_id}&space_id=${space_id}`
+      })
     }
   };
 }

@@ -41,7 +41,7 @@ page {
 }
 
 .tab-bar {
-  font-size: 13px;
+  font-size: 15px;
   color: #888;
   display: flex;
   position: fixed;
@@ -56,7 +56,7 @@ page {
   .action {
     flex: 1;
     padding:0 30rpx;
-    font-size:13px;
+    font-size:15px;
     line-height:inherit;
     width:auto;
     height:auto;
