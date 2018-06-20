@@ -144,6 +144,7 @@ export default class RecordList extends wepy.page {
     date_field: '',
     searchPlaceholder: '搜索',
     allowCreate: false,
+    filter: ''
   };
 
   wxs = {
@@ -186,10 +187,12 @@ export default class RecordList extends wepy.page {
     this.space_id = e.space_id;
     this.object_name = e.object_name;
 
-    this.avatar_field = e.avatar_field
+    this.avatar_field = e.avatar_field;
     this.name_field = e.name_field || 'name';
-    this.description_field = e.description_field
-    this.date_field = e.date_field
+    this.description_field = e.description_field;
+    this.date_field = e.date_field;
+
+    this.filter = e.filter;
 
     const object = await this.$parent.getObject(this.object_name);
 
@@ -255,11 +258,19 @@ export default class RecordList extends wepy.page {
     const options = {
       $count: true,
       $skip: skip,
-      $top: DATA_LENGTH
+      $top: DATA_LENGTH,
     };
 
+    if(this.filter){
+      options.$filter = this.filter
+    }
+
     if(searchValue){
-      options.$filter = `(contains(${this.name_field},'${searchValue}'))`
+      if(options.$filter){
+        options.$filter = options.$filter + `and (contains(${this.name_field},'${searchValue}'))`
+      }else{
+        options.$filter = `(contains(${this.name_field},'${searchValue}'))`
+      }
     }
 
     let keys = ['space'];
