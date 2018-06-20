@@ -23,6 +23,7 @@
 
   .post-cover{
     image{
+      display: block;
       width: 100%;
       height: 480rpx;
       border-top-left-radius:6px;
@@ -71,13 +72,56 @@
       }
     }
   }
+  .post-footer {
+    display: flex;
+    font-size: 13px;
+    border-top: 1px solid #ededed;
+    color: #888;
+
+    .action {
+      flex: 1;
+      padding:0 30rpx;
+      font-size:13px;
+      line-height:inherit;
+      width:auto;
+      height:auto;
+      border:none;
+      line-height:50px;
+
+      .slds-icon {
+        width: 1rem;
+        height: 1rem;
+        margin-right: 0.25rem;
+      }
+    }
+    .slds-icon {
+      display: inline-block;
+    }
+    .share-btn {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+    }
+    .star-btn {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+
+      &.is-stared {
+        color: #018cc6;
+      }
+    }
+    .text {
+      display: inline-block;
+    }
+  }
 }
 </style>
 <template>
 <view>
   <block wx:if="{{list.length}}">
     <repeat for="{{list}}" key="index" index="index" item="post">
-      <view class="post">
+      <view class="post" @longpress="goDelete({{post._id}}, {{post.space._id}}, {{post.owner}})">
         <navigator class="post-header" wx:if="{{showHeader}}" url="../space/index?space_id={{post.space}}">
           <view class="weui-cell weui-cell_access">
             <view class="weui-cell__hd">
@@ -87,12 +131,10 @@
             <view class="weui-cell__bd">
               {{post.space_name}}
             </view>
-            <!-- <view class="weui-cell__ft weui-cell__ft_in-access"></view> -->
           </view>
         </navigator>
         <view class="post-cover">
           <block wx:if="{{post.video}}">
-            <!-- <video src="{{util.formatVideoUrl(post.video, baseUrl)}}" controls objectFit="contain" id="{{post.video}}" @play="play({{post.video}})"></video> -->
             <block wx:if="{{post.images}}">
               <image class="image {{showHeader ? 'no-radius' : ''}}" mode="aspectFill" src="{{util.formatImageUrl(post.images[0], baseUrl)}}" @tap="previewImage({{post.images}})" @error="loadImageError({{index}})" />
             </block>
@@ -101,9 +143,6 @@
             <block wx:if="{{post.images}}">
               <image class="image {{showHeader ? 'no-radius' : ''}}" mode="aspectFill" src="{{util.formatImageUrl(post.images[0], baseUrl)}}" @tap="previewImage({{post.images}})" @error="loadImageError({{index}})" />
             </block>
-            <!-- <block wx:else>
-              <image class="image" mode="aspectFill" src="{{util.getEmptyImageUrl(post.type)}}"/>
-            </block> -->
           </block>
         </view>
         <view class="post-body weui-cells {{post.images ? '' : 'is-cover-empty'}}" @tap="goDetail({{post._id}}, {{post.space}})">
@@ -113,6 +152,19 @@
               <view class="post-summary">{{post.summary}}</view>
             </view>
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+          </view>
+        </view>
+        <view class="post-footer ">
+          <button plain="true" open-type="share" data-post-name="{{post.name}}" data-post-id="{{post._id}}" data-post-space="{{post.space}}" class="share action share-btn">
+            <view class="vip_share-default slds-icon slds-icon--small slds-m-right--x-small"></view>
+            <view class="text">转发</view>
+          </button>
+          <view class="comment action">
+          
+          </view>
+          <view class="star action star-btn {{post.star_id ? 'is-stared' : ''}}" @tap="starPost({{post._id}}, {{post.space}}, {{index}})">
+            <view class="vip_star-{{post.star_id ? 'blue' : 'default'}} slds-icon slds-icon--small slds-m-right--x-small"></view>
+            <view class="text">{{post.star_count || 0}}</view>
           </view>
         </view>
       </view>
@@ -155,11 +207,33 @@ export default class PostList extends wepy.component {
     }
   }
 
-  onLoad() {
-    setTimeout(() => {
-      console.log('post list showHeader.....', this.list)
-    }, 5000);
+  watch = {
+    list: async function (newValue, oldValue) {
+      const parent = this.$parent.$parent;
+      const user = parent.globalData.user._id;
+      for (let post of this.list) {
+        const options = {
+          $filter: `user eq '${user}' and star_post eq '${post._id}'`
+        };
+        const result = await parent.query('user_star', options, post.space);
+        if (result && result.value && result.value[0]) {
+          post.star_id = result.value[0]._id;
+        }
+      }
+      console.log('watcher', this.list)
+      this.$apply()
+    }
   }
+
+  async getStarCount(index) {
+    const post_id = this.list[index]._id
+    const space_id = this.list[index].space
+    const result = await this.$parent.$parent.get('post', post_id, space_id);
+    this.list[index].star_count = result.star_count || 0
+    this.$apply()
+  }
+
+  async onLoad() {}
 
   data = {
     baseUrl: baseUrl,
@@ -172,7 +246,7 @@ export default class PostList extends wepy.component {
   };
 
   methods = {
-    goDetail(post_id, space_id,event){
+    goDetail(post_id, space_id){
       let url = `../post/view?post_id=${post_id}&space_id=${space_id}`;
       if(this.editable){
         url += '&editable=true'
@@ -182,6 +256,10 @@ export default class PostList extends wepy.component {
       wx.navigateTo({
         url: url
       });
+    },
+    async goDelete(post_id, space_id, owner){
+      await this.$parent.$parent.removeRecord('post', post_id, space_id, this.list, owner);
+      this.$apply();
     },
     previewImage(images, event){
       var baseUrl = this.baseUrl;
@@ -211,6 +289,28 @@ export default class PostList extends wepy.component {
       if(this.currentVideoContext){
         this.currentVideoContext.pause()
       }     
+    },
+    async starPost(post_id, space_id, index) {
+      console.log(post_id, space_id, index)
+      const parent = this.$parent.$parent
+      const user = parent.globalData.user._id;
+      const data = {
+        user: user,
+        star_post: post_id,
+        owner: user
+      }
+      if (this.list[index].star_id) {
+        await parent.delete('user_star', this.list[index].star_id, space_id)
+        this.list[index].star_id = ''
+        this.$apply()
+      } else {
+        const result = await parent.insert('user_star', data, space_id)
+        if (result.value && result.value.length) {
+          this.list[index].star_id = result.value[0]._id;
+          this.$apply()
+        }
+      }
+      await this.getStarCount(index)
     }
   };
 }

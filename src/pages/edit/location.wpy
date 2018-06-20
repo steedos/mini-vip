@@ -5,20 +5,29 @@
   .weui-textarea {
     height:3.3em;
   }
+
+  .button-sp-area{
+    margin: 0 auto;
+    padding-top: 15px;
+    width: 60%;
+  }
 </style>
 
 <template>
 <view class="page">
-  <view class="weui-btn-area">
-    <button data-id="{{key}}" class="weui-btn" type="primary" bindtap="getAddress">选择位置</button>
-  </view>
   <view class="page__bd">
     <view class="weui-cells">
       <view class="weui-cell">
         <view class="weui-cell__bd">
-          <textarea data-id="{{key}}" class="weui-textarea" auto-focus="true" value="{{value.address}}" data-id="{{key}}" bindinput="textChange"></textarea>
+          <textarea data-id="{{key}}" class="weui-textarea" auto-focus="true" value="{{value.address}}" bindblur="textChange"></textarea>
+        </view>
+        <view class="weui-cell__ft">
+          <view class="weui-vcode-btn" @tap="getAddress">选择</view>
         </view>
       </view>
+    </view>
+    <view class="button-sp-area">
+      <button class="weui-btn" type="primary" plain="true" @tap="confirm" hover-class='button-hover'>确定</button>
     </view>
   </view>
 </view>
@@ -65,7 +74,7 @@ export default class Location extends wepy.page {
   methods = {
     getAddress(e) {
       self = this;
-      const key = e.target.dataset.id;
+      const key = this.key;
       wepy.chooseLocation().then(res => {
         if (!self.value) {
           self.value = {}
@@ -85,11 +94,16 @@ export default class Location extends wepy.page {
     },
     textChange(e) {
       console.log('textChange=======', e)
-      const key = e.target.dataset.id
+      const key = this.key
       this.value.address = e.detail.value
       this.setParentValue(key, this.value)
+    },
+    confirm(){
+      wepy.navigateBack({
+        delta: 1
+      })
     }
   }
 }
-  
+
 </script>

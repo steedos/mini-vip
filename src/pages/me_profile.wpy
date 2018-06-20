@@ -94,8 +94,6 @@ export default class meProfile extends wepy.page {
 
   onLoad() {
 
-    this.$parent.checkMobile();
-
     const user = this.$parent.globalData.user;
 
     console.log(user);
@@ -103,7 +101,7 @@ export default class meProfile extends wepy.page {
     this.name = user.name;
     this.sex = user.sex;
     this.phoneNumber = user.mobile;
-    this.birthdate = user.birthdate;
+    this.birthdate = user.birthdate || '';
     this.$apply();
   }
 

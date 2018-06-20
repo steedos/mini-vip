@@ -2,53 +2,156 @@
 <style lang="less">
 page {
   height: 100%;
+  .ion-container {
+    display: inline-block;
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    z-index: 1000;
+
+    .ion {
+      font-size: 30px;
+      color: #fff;
+    }
+
+    .stared {
+      color: #fcb95b;
+    }
+  }
   .page {
     .image {
       display: block;
     }
-    .page__hd {
-      padding: 0px;
+
+    .header {
+      position: relative;
+      height: 310px;
+      background: #fff;
+
+      // &::after {
+      //   content: " ";
+      //   position: absolute;
+      //   left: 0;
+      //   right: 0;
+      //   bottom: 0;
+      //   border-top: 1rpx solid #d9d9d9;
+      // }
+
       .cover-wrapper {
         position: relative;
-        height: 266px;
-        .cover {
-          width: 100%;
-          height: 230px;
+        height: 200px;
+        background-size: cover;
+
+        &::after {
+          content: '';
           position: absolute;
+          height: 80px;
+          bottom: -30px;
+          left: 0;
+          right: 0;
+          background-image: linear-gradient(to bottom, transparent , rgba(255, 255, 255, 1) 50%);
         }
-        view.cover {
-          background-color: #7f7f7f;
-          background-repeat: repeat-x;
-          background-image: linear-gradient(128deg, #565656, #555 50%, #343434);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          text {
-            color: #262626;
-            text-shadow: 1px 1px 0px #686868;
-            font-size: 20px;
-          }
-        }
-        .avatar {
-          height: 72px;
-          width: 72px;
-          position: absolute;
-          left: 20rpx;
-          top: 178px;
-          border: solid 2px #fff;
-          box-shadow: 0px 0px 1px #6a6a6a;
-        }
-        .name {
-          color: #fff;
-          text-shadow: 0px 0px 5px #333;
+      }
+
+      .empty-cover {
+        position: relative;
+        height: 200px;
+        background-color: #7f7f7f;
+        background-repeat: repeat-x;
+        background-image: linear-gradient(128deg, #565656, #555 50%, #343434);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .text {
+          position: relative;
+          top: -65px;
+          color: #262626;
+          text-shadow: 1px 1px 0px #686868;
           font-size: 20px;
+        }
+      }
+      .space-info {
+        position: absolute;
+        text-align: center;
+        top: 120px;
+        bottom: 10px;
+        left: 6px;
+        right: 6px;
+        width: auto;
+        background-image: linear-gradient(to bottom,#e5e5e5,#fff);
+        background-clip: padding-box;
+        border: 1px solid transparent;
+        padding: 10px;
+        border-radius: 0.25rem;
+        z-index: 100;
+
+        &::before {
+          content: '';
           position: absolute;
-          left: 96px;
-          top: 196px;
-          font-family: 黑体;
+          top: 1px; 
+          bottom: 1px;
+          left: 1px; 
+          right: 1px;
+          background: #fff;
+          z-index: -1 ;
+          border-radius: 0.25rem;
+        }
+        
+        .wrapper {
+          position: relative;
+          top: -50px;
+
+          .avatar-container {
+            // position: relative;
+            // top: -60px;
+            background: #fff;
+            padding: 5px;
+            border-radius: 0.25rem;
+            display: inline-block;
+            box-shadow: 0 2px 2px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08);
+            .avatar {
+              display: block;
+              width: 70px;
+              height: 70px;
+            }
+          }
+
+          .store-name {
+            margin-top: 8px;
+            font-size: 18px;
+            font-weight: bold;
+          }
+
+          .star-count {
+            margin-top: 6px;
+            color: #898989;
+          }
+
+          .weui-btn {
+            display: inline-block;
+            border-color: #018cc6;
+            line-height: 31px;
+            height: 31px;
+            margin: 8px 4px 0;
+          }
+
+          .btn-star {
+            color: #018cc6;
+          }
+          .btn-manage {
+            background: #018cc6;
+            color: #fff;
+          }
         }
       }
     }
+
+    .weui-grids {
+      background: #fff;
+    }
+
+    
     .page__bd{
       .need_read{
         display:block;
@@ -69,43 +172,57 @@ page {
       line-height: inherit;
     }
     .post-list-wrapper{
-      margin-top:1.17647059em;
+      margin-top: 8px;
     }
   }
 }
 </style>
 <template>
   <view class="page" wx:if="{{is_loaded}}">
-    <view class="page__hd">
-      <view class="cover-wrapper">
-        <block wx:if="{{store_info.cover}}">
-          <image class="cover" mode="aspectFill" src="{{util.formatImageUrl(store_info.cover, baseUrl)}}" @tap="uploadImage(true)"/>
-        </block>
-        <block wx:else>
-          <view class="cover" @tap="uploadImage(true)">
-            <text wx:if="{{is_space_owner}}">轻触设置封面</text>
+    <view class="header">
+      <view wx:if="{{store_info.cover}}" class="cover-wrapper" @tap="uploadImage(true)" style="background-image: url({{util.formatImageUrl(store_info.cover, baseUrl)}})"></view>
+      <view wx:else class="empty-cover" @tap="uploadImage(true)">
+        <view class="text" wx:if="{{is_space_owner}}">轻触设置封面</view>
+      </view>
+      <!-- <view class="empty-cover" @tap="uploadImage(true)">
+        <view class="text" wx:if="{{is_space_owner}}">轻触设置封面</view>
+      </view> -->
+      <view class="space-info">
+        <view class="wrapper">
+          <view class="bg-image"></view>
+          <view class="avatar-container">
+            <image wx:if="{{store_info.avatar}}" class="avatar" mode="aspectFill" src="{{util.formatImageUrl(store_info.avatar, baseUrl)}}" @tap.stop="uploadImage()"/>
+            <image wx:else class="avatar" mode="aspectFill" src="{{baseMaterialUrl + 'avatar.png'}}" @tap.stop="uploadImage()"/>
           </view>
-        </block>
-        <block wx:if="{{store_info.avatar}}">
-          <image class="avatar" mode="aspectFill" src="{{util.formatImageUrl(store_info.avatar, baseUrl)}}" @tap.stop="uploadImage()"/>
-        </block>
-        <block wx:else>
-          <image class="avatar" mode="aspectFill" src="{{emptyImageUrlForAvatar}}" @tap.stop="uploadImage()"/>
-        </block>
-        <view class="name" @tap="uploadImage(true)">{{store_info.name}}</view>
+          <view class="store-name">{{store_info.name}}</view>
+          <view class="star-count">{{store_info.star_count}}位关注者</view>
+          <button class="weui-btn btn-star" @tap="starSpace" type="primary" plain="true" size="mini">{{star_id ? "已关注" : "关注"}}</button>
+          <button class="weui-btn btn-manage" wx:if="{{is_space_admin}}" @tap="manageSpace" type="primary" size="mini">微站管理</button>
+        </view>
       </view>
     </view>
+    <view class="weui-grids">
+      <repeat for="{{enabled_objects}}" key="index" index="index" item="object">
+        <block wx:if="{{object.name === 'support'}}">
+          <button open-type="contact" plain="true" class="weui-grid support" hover-class="weui-grid_active" wx:if="{{object}}">
+            <view class="slds-icon-{{object.icon}} weui-grid__icon slds-icon">
+              <view class="need_read1"></view>
+            </view>
+            <view class="weui-grid__label">{{object.label}}</view>
+          </button>
+        </block>
+        <block wx:else>
+          <navigator url="{{object.url}}" class="weui-grid" hover-class="weui-grid_active" wx:if="{{object}}">
+            <view class="slds-icon-{{object.icon}} weui-grid__icon slds-icon">
+              <view class="need_read1"></view>
+            </view>
+            <view class="weui-grid__label">{{object.label}}</view>
+          </navigator>
+        </block>
+      </repeat>
+    </view>
     <view class="page__bd">
-      <view class="weui-cells">
-        <navigator url="/pages/admin/index?space_id={{space_id}}" class="weui-cell" hover-class="weui-cell_active" wx:if="{{is_space_admin}}">
-          <view class="weui-cell__hd">
-            <view class="slds-icon-utility-settings slds-icon slds-icon--small slds-m-right--x-small"/>
-          </view>
-          <view class="weui-cell__bd">微站管理</view>
-          <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-        </navigator>
-      </view>
-      <view class="weui-cells">
+      <!-- <view class="weui-cells">
         <view class="weui-grids">
           <repeat for="{{enabled_objects}}" key="index" index="index" item="object">
             <block wx:if="{{object.name === 'support'}}">
@@ -126,7 +243,7 @@ page {
             </block>
           </repeat>
         </view>
-      </view>
+      </view> -->
       <view class="post-list-wrapper">
         <scroll-view class="scroll-view_H" scroll-y="true">
           <postList :list.sync="posts" />
@@ -138,6 +255,7 @@ page {
 <script>
 import wepy from 'wepy';
 import { baseUrl } from '@/config';
+import { baseMaterialUrl } from '@/config';
 import postList from '../../components/post_list';
 import req from '@/network';
 import util from '../../wxs/util.wxs';
@@ -155,24 +273,26 @@ export default class Posts extends wepy.page {
   }
 
   async onLoad(e) {
+    var scene = decodeURIComponent(e.scene)
     wepy.showLoading({
       title: '加载中',
       mask: true
     });
-    this.space_id = e.space_id || this.$parent.globalData.space_id;
-
+    this.space_id = e.space_id || this.$parent.globalData.space_id || scene;
     await this.$parent.login(this.space_id);
 
     await this.loadCardInfo();
     this.type = e.type;
     await this.loadStoreInfo();
     await this.loadPostList();
+    await this.isSpaceStar();
     this.is_loaded = true;
     this.$apply();
     wepy.hideLoading();
   }
 
   async refresh() {
+    this.is_skip_allowed = true;
     this.posts = [];
     this.current_skip = 0;
     await this.loadStoreInfo();
@@ -185,12 +305,23 @@ export default class Posts extends wepy.page {
 
   // 分享
   onShareAppMessage(res) {
-    const space_id = this.space_id;
-    const space_name = this.space_info.name;
-    return {
-      title: space_name,
-      path: `pages/space/index?space_id=${space_id}`
-    };
+    console.log('onShareAppMessage', res)
+    if (res.from == "button") {
+      const postName = res.target.dataset.postName;
+      const postId = res.target.dataset.postId;
+      const spaceId = res.target.dataset.postSpace;
+      return {
+        title: postName,
+        path: `pages/post/view?post_id=${postId}&space_id=${spaceId}`
+      }
+    }else{
+      const space_id = this.space_id;
+      const space_name = this.space_info.name;
+      return {
+        title: space_name,
+        path: `pages/space/index?space_id=${space_id}`
+      };
+    }
   }
 
   // 下拉刷新
@@ -209,11 +340,12 @@ export default class Posts extends wepy.page {
 
   data = {
     baseUrl: baseUrl,
-    emptyImageUrlForCover: '/images/empty.png',
-    emptyImageUrlForAvatar: '/images/avatar.png',
+    baseMaterialUrl: baseMaterialUrl,
+    emptyImageUrlForCover: 'https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/empty.png',
     type: '',
     posts: [],
     current_skip: 0,
+    is_skip_allowed: true,
     space_id: '',
     space_info: {},
     store_info: {},
@@ -222,12 +354,28 @@ export default class Posts extends wepy.page {
     post_types: [],
     is_space_owner: false,
     is_space_admin: false,
-    is_loaded: false
+    is_loaded: false,
+    star_count: 0,
+    star_id: ''
   };
 
   wxs = {
     util: util
   };
+
+  async isSpaceStar() {
+    const user = this.$parent.globalData.user._id;
+    const space_id = this.space_id;
+    const options = {
+      $filter: `user eq '${user}' and star_space eq '${space_id}'`
+    };
+    const result = await this.$parent.query('user_star', options, space_id);
+    if (result && result.value && result.value[0]) {
+      console.log('isSpaceStar..............')
+      this.star_id = result.value[0]._id;
+      this.$apply();
+    }
+  }
 
   async loadCardInfo() {
     const user = this.$parent.globalData.user._id;
@@ -238,24 +386,87 @@ export default class Posts extends wepy.page {
       $select: 'is_actived,name,card_name,space'
     };
     const card = await this.$parent.query('vip_card', options);
-    if (card.value[0] && card.value[0].is_actived) {
-      this.card = card.value[0];
-      this.card.url = `../card?card_id=${this.card._id}&space_id=${
-        this.space_id
-      }`;
-      const vip_category = await this.$parent.get(
-        'vip_category',
-        this.card.card_name._id
-      );
-      this.card.avatar = vip_category.avatar;
+    if (card.value) {
+      if (card.value[0] && card.value[0].is_actived) {
+            this.card = card.value[0];
+            this.card.url = `../card?card_id=${this.card._id}&space_id=${
+              this.space_id
+            }`;
+            const vip_category = await this.$parent.get(
+              'vip_category',
+              this.card.card_name._id
+            );
+            this.card.avatar = vip_category.avatar;
+      }
     }
+    
+  }
+
+  async getStarCount() {
+    const spaceId = this.space_id
+    const result = await this.$parent.get('vip_store', spaceId, spaceId);
+    this.store_info.star_count = result.star_count || 0
+    this.$apply()
   }
 
   async loadStoreInfo() {
     const self = this
+    const spaceId = this.space_id;
+    const space = await this.$parent.get('spaces', spaceId);
+    const admins = space.admins
+    const globalData = this.$parent.globalData;
+    const userId = globalData.user._id
+    this.space_info = space;
+    this.is_space_owner = space && userId == space.owner;
+    this.is_space_admin = admins && admins.includes(userId);
     const objects_list = {
+      post: {
+        label: '动态',
+        icon: 'standard-news',
+        url: `../post/index${this.is_space_admin ? '?editable=true' : ''}`
+      },
+      vip_event: {
+        label: '活动',
+        icon: 'standard-event',
+        url: `../event/list?space_id=${this.space_id}`
+      },
+      vip_product: {
+        label: '产品',
+        icon: 'standard-record',
+        url: '../404'
+      },
+      vip_team: {
+        label: '团队',
+        icon: 'standard-team-member',
+        url: `../404`
+      },
+      vip_job: {
+        label: '招聘',
+        icon: 'standard-person-account',
+        url: '../404'
+      },
+      vip_store: {
+        label: '联系我们',
+        icon: 'standard-contact',
+        url: `../store?store=${this.space_id}`
+      },
+      support: {
+        name: 'support',
+        label: '在线客服',
+        icon: 'standard-live-chat',
+      },
+      qrcode: {
+        label: '二维码',
+        icon: 'standard-product',
+        url: `/pages/admin/qrcode?space_id=${this.space_id}`
+      },
+      vip_wifi: {
+        label: 'Wifi',
+        icon: 'utility-wifi',
+        url: `../wifi?store=${this.space_id}`
+      },
       vip_card: {
-        label: '会员卡',
+        label: '会员',
         icon: 'standard-opportunity',
         url: (function () {
           if (self.card._id) {
@@ -265,45 +476,8 @@ export default class Posts extends wepy.page {
           }
         })()
       },
-      post: {
-        label: '最新动态',
-        icon: 'standard-news',
-        url: `../post/index${this.is_space_owner ? '?editable=true' : ''}`
-      },
-      // vip_activity: {
-      //   label: '活动报名',
-      //   icon: 'standard-opportunity',
-      //   url: ''
-      // },
-      vip_wifi: {
-        label: 'Wifi',
-        icon: 'utility-wifi',
-        url: `../wifi?store=${this.space_id}`
-      },
-      support: {
-        name: 'support',
-        label: '在线客服',
-        icon: 'standard-live-chat',
-      },
-      vip_store: {
-        label: '联系我们',
-        icon: 'standard-contact',
-        url: `../store?store=${this.space_id}`
-      },
-      qrcode: {
-        label: '二维码',
-        icon: 'standard-product',
-        url: `/pages/admin/qrcode?space_id=${this.space_id}`
-      }
     }
-    const spaceId = this.space_id;
-    const space = await this.$parent.get('spaces', spaceId);
-    const admins = space.admins
-    const globalData = this.$parent.globalData;
-    const userId = globalData.user._id
-    this.space_info = space;
-    this.is_space_owner = space && userId == space.owner;
-    this.is_space_admin = admins && admins.includes(userId);
+
     const result = await this.$parent.get('vip_store', spaceId, spaceId);
     this.enabled_objects = []
     if (result.enabled_objects && !_.isEmpty(result.enabled_objects)) {
@@ -311,22 +485,29 @@ export default class Posts extends wepy.page {
         this.enabled_objects.push(objects_list[o])
       })
     } else {
-      this.enabled_objects = [objects_list.vip_card, objects_list.post, objects_list.vip_wifi, objects_list.support, objects_list.vip_store]
-      if(this.is_space_owner || result.qrcode){
-        this.enabled_objects.push(objects_list.qrcode);
-      }
+      this.enabled_objects = [
+        objects_list.post, objects_list.vip_event, objects_list.vip_card, 
+        objects_list.qrcode, objects_list.vip_store, objects_list.support
+      ] 
+    }
+
+    if (!result.star_count) {
+      result.star_count = 0
     }
     this.store_info = result;
     this.$apply();
   }
 
   async loadPostList() {
+    if(!this.is_skip_allowed){
+      return;
+    }
     const skip = this.current_skip;
     const options = {
       $expand: 'owner($select=name)',
       $count: true,
       $select:
-        'name,summary,description,comment_count,enable_comment,images,video,audio,type,mini_type,space',
+        'name,summary,description,comment_count,enable_comment,images,video,audio,type,mini_type,space,star_count',
       $skip: skip,
       $top: DATA_LENGTH
     };
@@ -338,6 +519,9 @@ export default class Posts extends wepy.page {
     if (result.value) {
       this.posts = this.posts.concat(result.value);
       this.current_skip = skip + result.value.length;
+      if (this.current_skip >= result['@odata.count']) {
+        this.is_skip_allowed = false;
+      }
     }
     this.$apply();
     wepy.stopPullDownRefresh();
@@ -418,6 +602,7 @@ export default class Posts extends wepy.page {
           let storeSetKey = isCover ? "cover" : 'avatar';
           let storeSet = {};
           storeSet[storeSetKey] = fileId;
+          // storeSet['qrcode'] = ''
           await this.$parent.update("vip_store", this.space_id, storeSet, this.space_id);
           if(isCover){
             this.store_info.cover = fileId;
@@ -429,6 +614,34 @@ export default class Posts extends wepy.page {
           wepy.hideLoading();
         }
       }
+    },
+    async starSpace() {
+      const space_id = this.space_id;
+      const user = this.$parent.globalData.user._id;
+      const data = {
+        user: user,
+        star_space: space_id,
+        owner: user
+      }
+      if (this.star_id) {
+        await this.$parent.delete('user_star', this.star_id, space_id)
+        this.star_id = ''
+        await this.getStarCount()
+        this.$apply()
+      } else {
+        const result = await this.$parent.insert('user_star', data, space_id)
+        if (result.value && result.value.length) {
+          this.star_id = result.value[0]._id;
+          await this.getStarCount()
+          this.$apply()
+        }
+      }
+    },
+    manageSpace() {
+      const space_id = this.space_id;
+      wx.navigateTo({
+        url: `/pages/admin/index?space_id=${space_id}`
+      })
     }
   };
 }

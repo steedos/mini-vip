@@ -6,14 +6,29 @@
           <view class="weui-cell__bd">
             <textarea class="weui-textarea-input" data-id="{{key}}"
                       value="{{value}}" auto-height="true" auto-focus="true"
-                      bindinput="textChange"/>
+                      bindblur="textChange"/>
           </view>
         </view>
+      </view>
+      <view class="button-sp-area">
+        <button class="weui-btn" type="primary" plain="true" @tap="confirm" hover-class='button-hover'>确定</button>
       </view>
     </view>
   </view>
 </template>
 
+<style>
+  .button-sp-area{
+    margin: 0 auto;
+    padding-top: 15px;
+    width: 60%;
+  }
+
+  .weui-textarea-input{
+    display:block;
+    width:100%;
+  }
+</style>
 
 <script>
   import wepy from 'wepy';
@@ -53,6 +68,11 @@
         const key = this.key;
         this.value = e.detail.value;
         this.setParentValue(key, e.detail.value)
+      },
+      confirm(){
+        wepy.navigateBack({
+          delta: 1
+        })
       }
     }
   }

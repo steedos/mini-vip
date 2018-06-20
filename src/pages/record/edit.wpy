@@ -1,6 +1,6 @@
 <template>
   <view>
-    <form :args.sync='args'></form>
+    <autoform :args.sync='args'></autoform>
   </view>
 </template>
 
@@ -21,7 +21,7 @@
     }
 
     components = {
-      form: form
+      autoform: form
     };
 
     changeNavigationBarTitleText(title){
@@ -46,6 +46,14 @@
 
       if(e && e.fields){
         args.fields = e.fields
+      }
+      
+      if(e && e.title){
+        args.title = e.title
+      }
+      
+      if(e && e.undeletable){
+        args.undeletable = e.undeletable
       }
 
       this.args = args;

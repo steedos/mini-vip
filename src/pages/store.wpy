@@ -96,7 +96,7 @@ page {
           <image class="image" mode="aspectFill" src="{{util.formatImageUrl(store.avatar, baseUrl)}}"/>
         </block>
         <block wx:else>
-          <image class="image" mode="aspectFill" src="../images/avatar.png"/>
+          <image class="image" mode="aspectFill" src="{{baseMaterialUrl + 'avatar.png'}}"/>
         </block>
       </view>
     </view>
@@ -135,6 +135,11 @@ page {
         <button class="weui-btn" type="primary" plain="true">编辑</button>
       </navigator>
     </view>
+    <view class="button-sp-area">
+      <navigator url="/pages/admin/qrcode?space_id={{store._id}}">
+        <button class="weui-btn" type="primary" plain="true">查看二维码</button>
+      </navigator>
+    </view>
   </view>
 </template>
 
@@ -143,6 +148,7 @@ import wepy from 'wepy';
 import req from '@/network';
 import vipCard from '../components/vipCard';
 import { baseUrl } from '@/config';
+import { baseMaterialUrl } from '@/config';
 import util from '../wxs/util.wxs';
 
 export default class store extends wepy.page {
@@ -185,6 +191,7 @@ export default class store extends wepy.page {
     is_space_owner: false,
     store: [],
     baseUrl: baseUrl,
+    baseMaterialUrl: baseMaterialUrl,
     is_loaded: false
   };
   getStoreInfo(store_id) {

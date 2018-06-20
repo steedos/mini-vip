@@ -2,6 +2,11 @@
   .weui-textarea {
     min-height:2.2em;
   }
+  .button-sp-area{
+    margin: 0 auto;
+    padding-top: 15px;
+    width: 60%;
+  }
 </style>
 <template>
   <view class="text">
@@ -10,9 +15,12 @@
         <view class="weui-cell">
           <view class="weui-cell__bd">
             <textarea data-id="{{key}}" class="weui-textarea"
-              auto-height="true" auto-focus="true" value="{{value}}" bindinput="textChange" maxlength="-1"/>
+              auto-height="true" auto-focus="true" value="{{value}}" bindblur="textChange" maxlength="-1"/>
           </view>
         </view>
+      </view>
+      <view class="button-sp-area">
+        <button class="weui-btn" type="primary" plain="true" @tap="confirm" hover-class='button-hover'>确定</button>
       </view>
     </view>
   </view>
@@ -57,6 +65,11 @@
         const key = this.key;
         this.value = e.detail.value
         this.setParentValue(key, e.detail.value)
+      },
+      confirm(){
+        wepy.navigateBack({
+          delta: 1
+        })
       }
     }
   }

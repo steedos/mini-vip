@@ -1,0 +1,48 @@
+<style lang="less">
+
+</style>
+
+<template>
+  <view class="page">
+    <view class="page__bd">
+      <view class="weui-cells weui-cells_after-title">
+        <repeat for="{{list}}" key="index" index="index" item="space">
+          <navigator url="../space/index?space_id={{space.star_space._id}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+            <view class="weui-cell__bd">{{space.star_space.name}}</view>
+            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+          </navigator>
+        </repeat>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+
+  export default class StarSpace extends wepy.page {
+    config = {
+      navigationBarTitleText: '关注'
+    };
+
+    data = {
+      list: []
+    }
+
+    async onLoad() {
+      await this.getStarSpace()
+    }
+
+    async getStarSpace(){
+      const user = this.$parent.globalData.user._id
+      const options = {
+        $filter: `(user eq user and star_space ne null)`,
+        $expand: 'star_space($select=name)'
+      }
+      const result = await this.$parent.query('user_star', options, 'guest')
+      this.list = result.value;
+      this.$apply()
+      console.log(result);
+    }
+  }
+</script>

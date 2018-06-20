@@ -1,0 +1,221 @@
+<!-- 最新动态 -->
+<style lang="less">
+page {
+  height: 100%;
+  .tab-bar {
+    display: flex;
+    position: fixed;
+    z-index: 500;
+    bottom: 0;
+    height: 50px;
+    width: 100%;
+    background-color: #F7F7FA;
+    justify-content: center;
+    align-items: center;
+
+    &::before {
+      content: " ";
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0;
+      height: 1px;
+      border-top: 1px solid #C0BFC4;
+      color: #C0BFC4;
+      -webkit-transform-origin: 0 0;
+      transform-origin: 0 0;
+      -webkit-transform: scaleY(0.5);
+      transform: scaleY(0.5);
+    }
+
+    .add-record {
+      height: 35px;
+      width: 35px;
+      background: #ffa325;
+      text-align: center;
+      color: #fff;
+      border: 10px;
+      border-radius: 50%;
+
+      .ion {
+        line-height: 35px;
+        font-weight: bold;
+        font-size: 20px;
+      }
+    }
+  }
+}
+</style>
+<template>
+  <view class="page" wx:if="{{is_loaded}}">
+    <view class="page__bd">
+      <scroll-view class="scroll-view_H" scroll-y="true">
+        <eventList :list.sync="events" :showHeader.sync="featured" />
+      </scroll-view>
+    </view>
+    <view class="tab-bar" wx:if="{{editable}}">
+      <view class="slds-icon-action-new" @tap="createEvent"></view>
+    </view>
+  </view>
+</template>
+<script>
+import wepy from 'wepy';
+import eventList from '../../components/event_list';
+import req from '@/network';
+import pageRouter from '@/utils/pageRouter';
+
+const DATA_LENGTH = 10;
+export default class Events extends wepy.page {
+  config = {
+    navigationBarTitleText: '活动',
+    enablePullDownRefresh: true
+  };
+
+  async onLoad(e) {
+    this.featured = e.featured;
+    this.space_id = e.space_id;
+    if(e.title){
+      this.title = e.title;
+      wx.setNavigationBarTitle({
+        title: e.title
+      });
+    }
+    
+    this.editable = this.$parent.isSpaceAdmin(this.space_id);
+    await this.$parent.login(this.space_id);
+    await this.loadData();
+    if(e.respond){
+      // 如果是新建活动时手机号填写界面回来的，自动跳转到新建界面
+      this.createEvent();
+    }
+  }
+
+  async loadData() {
+    this.events = [];
+    this.current_skip = 0;
+    wepy.showLoading({
+      title: '加载中',
+      mask: true
+    });
+    await this.loadEventList();
+    this.is_loaded = true;
+    this.$apply();
+    wepy.hideLoading();
+  }
+
+  // 分享
+  onShareAppMessage(res) {
+    const space_id = this.space_id;
+    const title = this.title;
+    const featured = this.featured;
+    return {
+      title: title,
+      path: `pages/event/list?space_id=${space_id}&featured=${featured}&title=${title}`
+    };
+  }
+
+  async refresh() {
+    this.is_skip_allowed = true;
+    this.events = [];
+    this.current_skip = 0;
+    this.loadEventList();
+    wepy.stopPullDownRefresh();
+  }
+  
+  components = {
+    eventList: eventList
+  };
+
+  // 上拉刷新
+  onPullDownRefresh() {
+    this.refresh();
+    console.log('onPullDownRefresh....');
+  }
+
+  // 下拉加载
+  onReachBottom() {
+    this.loadEventList();
+    console.log('onReachBottom');
+  }
+
+  data = {
+    title: "",
+    space_id: "",
+    events: [],
+    current_skip: 0,
+    is_skip_allowed: true,
+    is_loaded: false,
+    editable: false,
+    featured: false
+  };
+  
+	async loadEventList(){
+    if(!this.is_skip_allowed){
+      return;
+    }
+    const skip = this.current_skip;
+    const options = {
+      $expand: 'space($select=name)',
+      $count: true,
+      $select: 'name,start,location,alarms,accepted_count,pending_count,rejected_count,featured,cover,space,owner',
+      $skip: skip,
+      $top: DATA_LENGTH
+    };
+    let spaceId = this.space_id;
+    const featured = this.featured;
+    if(featured){
+      spaceId = "guest";
+      options.$filter = `featured eq true`;
+    }
+    const result = await this.$parent.query("vip_event", options, spaceId);
+    if(result.value){
+      this.events = this.events.concat(result.value);
+      this.current_skip = skip + result.value.length;
+      if (this.current_skip >= result['@odata.count']) {
+        this.is_skip_allowed = false;
+      }
+    }
+    this.$apply();
+  };
+
+  getBackUrlForCheckMobile(){
+    let to = `/${this.getWxPage().route}?respond=true`;
+    let pageOptions = this.getWxPage().options;
+    for(let k in pageOptions){
+      to += `&${k}=${pageOptions[k]}`;
+    };
+    return to;
+  }
+  
+  async createEvent() {
+    if(!this.editable){
+      return;
+    }
+    wepy.showLoading({
+      title: '加载中',
+      mask: true
+    });
+    if(!this.$parent.checkMobile(this.getBackUrlForCheckMobile(), true)){
+      return;
+    }
+    let userId = this.$parent.globalData.user._id;
+    let name = this.$parent.globalData.user.name;
+    let eventData = {
+      featured: false,
+      owner: userId
+    };
+    let event = await this.$parent.insert("vip_event", eventData, this.space_id);
+    wepy.hideLoading();
+    if(event && event.value && event.value.length){
+      let url = `/pages/record/edit?action=edit&object_name=vip_event&record_id=${event.value[0]._id}&undeletable=true&title=新建活动`;
+      pageRouter.navigateTo({ url: url });
+    }
+  }
+
+  methods = {
+    createEvent() {
+      this.createEvent();
+    }
+  }
+}
+</script>

@@ -1,0 +1,186 @@
+<style lang="less">
+.weui-loadmore__tips_in-line{
+  background-color:#F5F5f2;
+}
+
+.event-header {
+  
+  .image {
+    display: block;
+    border-radius: 50%;
+  }
+
+  .space-name {
+    line-height: 1.5rem;
+  }
+}
+
+.event {
+  background: #fff;
+  margin:30rpx 20rpx;
+  border:solid 1px #ededed;
+  border-radius:6px;
+
+  .event-cover{
+    image{
+      display: block;
+      width: 100%;
+      height: 480rpx;
+      border-top-left-radius:6px;
+      border-top-right-radius:6px;
+    }
+    .no-radius {
+      border-radius: 0 !important;
+    }
+  }
+  .event-body{
+    padding:30rpx;
+    margin-top: 0px;
+    .event-name{
+      overflow:hidden;
+      display:inline-block;
+      text-overflow:ellipsis;
+      width:100%;
+      overflow:hidden;
+      white-space:nowrap;
+      font-weight:bold;
+      font-family:黑体;
+    }
+    .event-summary{
+      color:#888;
+      font-size:14px;
+      overflow:hidden;
+    }
+    &.weui-cells{
+      line-height:22px;
+      font-size:16px;
+      border-bottom-left-radius:6px;
+      border-bottom-right-radius:6px;
+      &.is-cover-empty{
+        border-radius:6px;
+      }
+      &:before{
+        display: none;
+      }
+      &:after{
+        display: none;
+      }
+      .weui-cell{
+        padding: 0px;
+        .weui-cell__bd{
+          width: 90%;
+        }
+      }
+    }
+  }
+}
+</style>
+<template>
+<view>
+  <block wx:if="{{list.length}}">
+    <repeat for="{{list}}" key="index" index="index" item="event">
+      <view class="event" @longpress="goDelete({{event._id}}, {{event.space._id}}, {{event.owner}})">
+        <navigator class="event-header" wx:if="{{showHeader}}" url="../space/index?space_id={{event.space._id}}">
+          <view class="weui-cell weui-cell_access">
+            <view class="weui-cell__hd">
+              <image wx:if="{{event.avatar}}" class="image slds-icon slds-icon--small slds-m-right--x-small" src="{{util.formatImageUrl(event.avatar, baseUrl)}}"></image>
+              <view wx:else class="slds-icon-standard-channel-programs slds-icon slds-icon--small slds-m-right--x-small"></view>
+            </view>
+            <view class="weui-cell__bd">
+              {{event.space.name}}
+            </view>
+            <!-- <view class="weui-cell__ft weui-cell__ft_in-access"></view> -->
+          </view>
+        </navigator>
+        <view wx:if="{{event.cover}}" class="event-cover">
+          <image class="image {{showHeader ? 'no-radius' : ''}}" mode="aspectFill" src="{{util.formatImageUrl(event.cover, baseUrl)}}" @tap="previewImage({{event.cover}})" />
+        </view>
+        <view class="event-body weui-cells {{event.cover ? '' : 'is-cover-empty'}}" @tap="goDetail({{event._id}}, {{event.space._id}})">
+          <view class="weui-cell weui-cell_access">
+            <view class="weui-cell__bd">
+              <view class="event-name">{{event.name}}</view>
+              <view class="event-summary">
+                <view class="event-start-end" wx:if="{{event.start}}">时间：{{util.formatStartEnd(event.start)}}</view>
+                <view class="event-address" wx:if="{{event.location.address}}">地点：{{event.location.address}}</view>
+                <view class="event-accepted-count">人数：{{event.accepted_count ? event.accepted_count : 0}}人报名，{{event.pending_count ? event.pending_count : 0}}人观望</view>
+              </view>
+            </view>
+            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+          </view>
+        </view>
+      </view>
+    </repeat>
+  </block>
+  <block wx:else>
+    <view class="weui-loadmore weui-loadmore_line">
+      <view class="weui-loadmore__tips weui-loadmore__tips_in-line">暂无活动</view>
+    </view>
+  </block>
+</view>
+</template>
+
+
+<script>
+import wepy from 'wepy';
+import { baseUrl } from '@/config';
+import req from '@/network';
+import { serverAPI } from '@/server';
+import { demoSpaceId,demoStoreId } from '@/config'
+import util from '../wxs/util.wxs'
+
+export default class EventList extends wepy.component {
+
+  props = {
+    isHeaderShow: {
+      type: Boolean,
+      default: false
+    },
+    list: {
+      type: Array,
+      default: []
+    },
+    showHeader: {
+      type: Boolean,
+      default: false
+    }
+  }
+
+  onLoad() {
+    setTimeout(() => {
+      console.log('event list showHeader.....', this.list)
+    }, 5000);
+  }
+
+  data = {
+    baseUrl: baseUrl
+  };
+
+  wxs = {
+    util: util
+  };
+
+  methods = {
+    goDetail(event_id, space_id){
+      let url = `../event/view?event_id=${event_id}&space_id=${space_id}`;
+      console.log(url);
+      wx.navigateTo({
+        url: url
+      });
+    },
+    async goDelete(event_id, space_id, owner){
+      console.log("goDelete==============list===========");
+      await this.$parent.$parent.removeRecord('vip_event', event_id, space_id, this.list, owner);
+      this.$apply();
+    },
+    previewImage(image, event){
+      var baseUrl = this.baseUrl;
+      var current = `${baseUrl}/api/files/images/${image}`;
+      var urls = [current];
+      wx.previewImage({
+        current: current,
+        urls: urls
+      });
+    },
+  };
+}
+</script>

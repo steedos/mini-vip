@@ -112,7 +112,7 @@ export default class Wifi extends wepy.page {
     }
     console.log("store_id",store_id)
     const options = {
-              $filter: 'store eq ' + store_id,
+              $filter: `store eq '${store_id}'`,
               $select: 'name,password'
             };
     const wifis = await this.$parent.query("vip_wifi",options);

@@ -2,26 +2,90 @@
 page {
   background: #fff;
 }
-.page::before {
-  content: " ";
-  position: absolute;
+
+.page__bd {
+  padding-bottom: 65px;
+}
+.page {
+  display:flex;
+  flex-direction:column;
+  position:absolute;
+  top:0;
+  bottom:0;
   left: 0;
-  top: 0;
   right: 0;
-  height: 1px;
-  border-top: 1px solid #C0BFC4;
-  color: #C0BFC4;
-  -webkit-transform-origin: 0 0;
-  transform-origin: 0 0;
-  -webkit-transform: scaleY(0.5);
-  transform: scaleY(0.5);
+
+  .body {
+    flex: 1;
+    overflow: auto;
+  }
 }
 .weui-article__c {
   margin-bottom: 10px;
 }
 
 .weui-article {
-  padding: 15px;
+  padding: 30rpx 30rpx 0;
+}
+
+.article-section {
+  margin: 0;
+  .article-p {
+    padding:0 0 0.8em;
+    margin: 0;
+  }
+}
+
+.tab-bar {
+  font-size: 13px;
+  color: #888;
+  display: flex;
+  position: fixed;
+  box-sizing: border-box;
+  z-index: 500;
+  bottom: 0;
+  height: auto;
+  width: 100%;
+  background-color: #F7F7FA;
+  align-items: center;
+
+  .action {
+    flex: 1;
+    padding:0 30rpx;
+    font-size:13px;
+    line-height:inherit;
+    width:auto;
+    height:auto;
+    border:none;
+    line-height:50px;
+    display: flex;
+    align-items: center;
+
+    .slds-icon {
+      width: 1rem;
+      height: 1rem;
+      margin-right: 0.25rem;
+    }
+  }
+  .slds-icon {
+    display: inline-block;
+  }
+  .share-btn {
+    justify-content: flex-start;
+  }
+  .comment-btn {
+    justify-content: center;
+  }
+  .star-btn {
+    justify-content: flex-end;
+
+    &.is-stared {
+      color: #018cc6;
+    }
+  }
+  .text {
+    display: inline-block;
+  }
 }
 
 .image {
@@ -53,78 +117,59 @@ video{
   width:100%;
 }
 
-
-.tab-bar {
-  display: flex;
-  position: fixed;
-  z-index: 500;
-  bottom: 0;
-  height: 50px;
-  width: 100%;
-  background-color: #F7F7FA;
-  justify-content: center;
-  align-items: center;
-
-  &::before {
-    content: " ";
-    position: absolute;
-    left: 0;
-    top: 0;
-    right: 0;
-    height: 1px;
-    border-top: 1px solid #C0BFC4;
-    color: #C0BFC4;
-    -webkit-transform-origin: 0 0;
-    transform-origin: 0 0;
-    -webkit-transform: scaleY(0.5);
-    transform: scaleY(0.5);
+.comment-area {
+  padding-bottom:10px;
+  .comment-title {
+    padding: 10px 15px;
   }
+  .comment-container {
+    padding: 10px 15px 0;
+    display: flex;
 
-  .btn-edit {
-    height: 35px;
-    width: 35px;
-    background: #ffa325;
-    text-align: center;
-    color: #fff;
-    border: 10px;
-    border-radius: 50%;
+    .avatar-container {
+      width: 30px;
+      .avatar {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+      }
+    }
+    .detail-container {
+      flex: 1;
+      margin-left: 10px;
+      padding-bottom: 10px;
 
-    .ion {
-      line-height: 35px;
-      font-weight: bold;
-      font-size: 16px;
+      .user-name {
+        height: 30px;
+        line-height: 30px;
+      }
     }
   }
 }
 </style>
 <template>
-<view class="page" wx:if="{{is_loaded}}">
+<view class="page border-top-1px" wx:if="{{is_loaded}}">
   <view class="page__bd">
-    <navigator class="post-header" url="../space/index?space_id={{space_id}}">
-      <view class="weui-cell weui-cell_access">
-        <view class="weui-cell__hd">
-          <image wx:if="{{avatar}}" class="image slds-icon slds-icon--small slds-m-right--x-small" src="{{util.formatImageUrl(avatar, baseUrl)}}"></image>
-          <view wx:else class="slds-icon-standard-channel-programs slds-icon slds-icon--small slds-m-right--x-small"></view>
+      <navigator class="post-header" url="../space/index?space_id={{space_id}}">
+        <view class="weui-cell weui-cell_access">
+          <view class="weui-cell__hd">
+            <image wx:if="{{avatar}}" class="image slds-icon slds-icon--small slds-m-right--x-small" src="{{util.formatImageUrl(avatar, baseUrl)}}"></image>
+            <view wx:else class="slds-icon-standard-channel-programs slds-icon slds-icon--small slds-m-right--x-small"></view>
+          </view>
+          <view class="weui-cell__bd">
+            {{space_name}}
+          </view>
+          <view class="weui-cell__ft weui-cell__ft_in-access"></view>
         </view>
-        <view class="weui-cell__bd">
-          {{space_name}}
-        </view>
-        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-      </view>
-    </navigator>
-    <block wx:if="{{post.video}}">
-      <video src="{{util.formatVideoUrl(post.video, baseUrl)}}" objectFit="contain" class="cover"  direction= '90'></video>
-    </block>
-    <block wx:elif="{{post.images && post.images.length == 1}}">
-      <image src="{{util.formatImageUrl(post.images[0], baseUrl)}}" mode="aspectFill" @tap="previewImage({{item}})" class="cover"/>
-    </block>
-    <view class="weui-article">
-      <!-- <view class="weui-article__h1">{{post.name}}</view> -->
-      <view class="weui-article__section">
-        <view class="weui-article__section">
-          <!-- <view class="weui-article__p">
-            <text space="emsp">{{post.description}}</text>
-          </view> -->
+      </navigator>
+      <block wx:if="{{post.video}}">
+        <video src="{{post.video_url}}" objectFit="contain" class="cover"  direction= '90' custom-cache="{{false}}"></video>
+      </block>
+      <block wx:elif="{{post.images && post.images.length == 1}}">
+        <image src="{{util.formatImageUrl(post.images[0], baseUrl)}}" mode="aspectFill" @tap="previewImage({{item}})" class="cover"/>
+      </block>
+      <view class="weui-article border-bottom-1px">
+        <view class="weui-article__section article-section">
           <view class="weui-article__c" wx:if="{{post.images && post.images.length>1 && !post.video}}">
             <view class="flex-images-box">
               <repeat for="{{post.images}}" key="index" index="index" item="item">
@@ -133,16 +178,40 @@ video{
             </view>
           </view>
           <view class="weui-article__h1">{{post.name}}</view>
-          <view class="weui-article__p">
+          <view class="weui-article__p article-p">
             <text space="emsp">{{post.description}}</text>
           </view>
         </view>
       </view>
-    </view>
+      <view class="comment-area">
+        <view class="comment-title">
+          评论({{post_comments.length}})
+        </view>
+        <repeat for="{{post_comments}}" key="index" index="index" item="comment">
+          <view class="comment-container">
+            <view class="avatar-container">
+              <image class="avatar" mode="aspectFill" src="{{comment.owner.profile.avatar}}"></image>
+            </view>
+            <view class="detail-container border-bottom-1px">
+              <view class="user-name">{{comment.owner.name}}</view>
+              <view class="comment-detail">{{comment.name}}</view>
+            </view>
+          </view>
+        </repeat>
+      </view>
   </view>
-  <view class="tab-bar" wx:if="{{editable}}">
-    <view class="btn-edit" @tap="editPost">
-      <view class="slds-icon-edit ion"></view>
+  <view class="tab-bar border-top-1px">
+    <button plain="true" open-type="share" data-post-name="{{post.name}}" data-post-id="{{post._id}}" data-post-space="{{post.space}}" class="share action share-btn">
+      <view class="vip_share-default slds-icon slds-icon--small slds-m-right--x-small"></view>
+      <view class="text">转发</view>
+    </button>
+    <view class="comment-btn action" @tap="writeComment">
+      <view class="vip_comment-default slds-icon slds-icon--small slds-m-right--x-small"></view>
+      <view class="text">评论</view>
+    </view>
+    <view class="star action star-btn {{star_id ? 'is-stared' : ''}}" @tap="starPost">
+      <view class="vip_star-{{star_id ? 'blue' : 'default'}} slds-icon slds-icon--small slds-m-right--x-small"></view>
+      <view class="text">{{post.star_count || 0}}</view>
     </view>
   </view>
 </view>
@@ -184,12 +253,18 @@ export default class PostView extends wepy.page {
     }
     if(e.post_id){
       this.post_id = e.post_id;
-      this.loadPost();
+      await this.loadPost();
+      await this.isPostStar();
+      await this.loadPostComments()
     }
 
     this.is_loaded = true
     this.$apply()
     wepy.hideLoading();
+  }
+
+  async onShow() {
+    this.loadPostComments();
   }
 
   async refresh(action) {
@@ -198,7 +273,22 @@ export default class PostView extends wepy.page {
       return;
     }
     await this.loadPost();
+    await this.loadPostComments();
     wepy.stopPullDownRefresh();
+  }
+
+  async loadPostComments() {
+    const post_id = this.post_id;
+    const options = {
+      $filter: `post_id eq '${post_id}'`,
+      $count: true,
+      $expand: 'owner($select=profile,name)'
+    };
+    const result = await this.$parent.query('post_comments', options, 'guest');
+    if (result && result.value) {
+      this.post_comments = result.value;
+      this.$apply()
+    }
   }
 
   async loadPost(){
@@ -207,6 +297,21 @@ export default class PostView extends wepy.page {
     this.space_id = post.space;
     this.$apply();
   };
+
+  async isPostStar() {
+    const user = this.$parent.globalData.user._id;
+    const post_id = this.post_id;
+    const space_id = this.space_id;
+    const options = {
+      $filter: `user eq '${user}' and star_post eq '${post_id}'`
+    };
+    const result = await this.$parent.query('user_star', options, space_id);
+    if (result && result.value && result.value[0]) {
+      console.log('isSpaceStar..............')
+      this.star_id = result.value[0]._id;
+      this.$apply();
+    }
+  }
 
   goBackAfterRemove() {
     const pages = getCurrentPages();
@@ -245,7 +350,10 @@ export default class PostView extends wepy.page {
     space_name: '',
     avatar: '',
     is_loaded: false,
-    editable: false
+    editable: false,
+    star_id: '',
+    value: '',
+    post_comments: []
   };
 
   wxs = {
@@ -269,6 +377,48 @@ export default class PostView extends wepy.page {
       wepy.navigateTo({
         url: url
       });
+    },
+    async starPost() {
+      const space_id = this.space_id;
+      const post_id = this.post_id;
+      const user = this.$parent.globalData.user._id;
+      const data = {
+        user: user,
+        star_post: post_id,
+        owner: user
+      }
+      if (this.star_id) {
+        await this.$parent.delete('user_star', this.star_id, space_id);
+        this.star_id = ''
+      } else {
+        const result = await this.$parent.insert('user_star', data, space_id)
+        if (result.value && result.value.length) {
+          this.star_id = result.value[0]._id;
+        }
+      }
+      const post = await this.$parent.get('post', this.post._id, this.post.space);
+      this.post = post;
+      this.$apply()
+    },
+    async submitComment(e) {
+      const comment = e.detail.value.comment;
+      const space_id = this.space_id;
+      if (comment) {
+        const data = {
+          name: comment,
+          post_id: this.post_id
+        }
+        await this.$parent.insert('post_comments', data, space_id);
+        await this.loadPostComments();
+        this.setData({
+          value : ''
+        });
+      }
+    },
+    writeComment() {
+      wx.navigateTo({
+        url: `../comment/index?object_name=post_comments&key_name=post_id&_id=${this.post_id}&space_id=${this.space_id}`
+      })
     }
   };
 }

@@ -2,7 +2,7 @@
 @import "../lib/weui/weui.wxss";
 @import "../lib/slds/slds_icons.less";
 @import "../lib/slds/slds_margin.less";
-@import "../lib/slds/slds_icons_font.less";
+@import "../lib/vip/vip.less";
 page {
   background-color: #f5f5f7;
   font-size: 16px;
@@ -44,6 +44,40 @@ page {
   justify-content: space-between;
   box-sizing: border-box;
 }
+.border-bottom-1px {
+  position: relative;
+  &::after {
+    content: " ";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    height: 1px;
+    border-top: 1px solid #C0BFC4;
+    color: #C0BFC4;
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+  }
+}
+.border-top-1px {
+  position: relative;
+  &::before {
+    content: " ";
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    height: 1px;
+    border-top: 1px solid #C0BFC4;
+    color: #C0BFC4;
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+  }
+}
 </style>
 
 <script>
@@ -57,6 +91,7 @@ import * as interceptor from '@/network/interceptor'
 import { baseUrl, appId } from '@/config'
 import _ from 'underscore'
 import { serverAPI } from '@/server';
+import pageRouter from '@/utils/pageRouter'
 
 const store = configStore()
 setStore(store)
@@ -64,14 +99,12 @@ setStore(store)
 export default class VIP extends wepy.app {
   config = {
     pages: [
-      'pages/home/post',
       'pages/index',
+      'pages/home/post',
       'pages/apps',
       'pages/home',
       'pages/me',
       'pages/me_profile',
-      'pages/postList',
-      'pages/post/view',
       'pages/coupons',
       'pages/store',
       'pages/card',
@@ -83,7 +116,11 @@ export default class VIP extends wepy.app {
       'pages/card_pay_fail',
       'pages/stores',
       'pages/wifi',
+      'pages/event/list',
+      'pages/event/view',
+      'pages/event/attendees',
       'pages/post/index',
+      'pages/post/view',
       'pages/edit/date',
       'pages/card/list',
       'pages/card/select',
@@ -106,9 +143,16 @@ export default class VIP extends wepy.app {
       'pages/admin/index',
       'pages/admin/qrcode',
       'pages/member_benefits',
+      'pages/comment/index',
+      'pages/star/post',
+      'pages/star/space',
       'pages/consuming_records',
       'pages/home/store',
       'pages/phone_number_login',
+      'pages/empty_page',
+      'pages/404',
+      'pages/record/read',
+      'pages/space/invite_admin',
     ],
     tabBar: {
       color: '#666',
@@ -117,16 +161,10 @@ export default class VIP extends wepy.app {
       borderStyle: 'black',
       list: [
       {
-        pagePath: 'pages/home/post',
+        pagePath: 'pages/index',
         selectedIconPath: './images/tabbars/home_pressed.png',
         iconPath: './images/tabbars/home.png',
-        text: '动态',
-      },
-      {
-        pagePath: 'pages/home/store',
-        selectedIconPath: './images/tabbars/apps_pressed.png',
-        iconPath: './images/tabbars/apps.png',
-        text: '微站',
+        text: '首页',
       },
       {
         pagePath: 'pages/me',
@@ -151,6 +189,8 @@ export default class VIP extends wepy.app {
     spaceInfo: null,
     storeInfo: null,
     launchOptions: null,
+    is_login: false,
+    objects: {}
   }
 
   constructor () {
@@ -161,15 +201,42 @@ export default class VIP extends wepy.app {
 
   async onLaunch(options) {
     req.appId(appId)
-    req.baseUrl(baseUrl).interceptor(interceptor.request, interceptor.response)
-    const globalData = wx.getStorageSync('globalData') || {}
-    globalData.is_login = false
-    this.globalData = globalData
+    req.baseUrl(baseUrl).interceptor(interceptor.request, interceptor.response);
+
+    pageRouter.setApp(this)
+
+    pageRouter.pushEnter({
+      page: '/pages/me_profile',
+      script: function (to) {
+        return this.checkMobile(to)
+      }
+    });
+
+    pageRouter.pushEnter({
+      page: '/pages/space/register',
+      script: function (to) {
+        return this.checkMobile(to)
+      }
+    })
+
+    pageRouter.pushEnter({
+      page: '/pages/card_activate',
+      script: function (to) {
+        return this.checkMobile(to)
+      }
+    })
+
+    pageRouter.pushEnter({
+      page: '/pages/record/edit',
+      script: function (to) {
+        return this.checkMobile(to)
+      }
+    })
+
   }
 
   onHide() {
-    const globalData = this.globalData
-    wx.setStorageSync('globalData', globalData)
+    
   }
 
   getUserInfo(cb) {
@@ -185,13 +252,26 @@ export default class VIP extends wepy.app {
     })
   }
 
-  checkMobile(){
+  checkMobile(to, isRedirect){
     if(this.globalData.user && this.globalData.user.mobile){
       return true
     }else{
-      const pages = getCurrentPages();
-      const page = pages[pages.length - 1];
-      wepy.redirectTo({url: '/pages/phone_number_login?from=/' + page.route});
+      const url = '/pages/empty_page?redirect_to=' + encodeURIComponent('/pages/phone_number_login?from=' + encodeURIComponent(to));
+      if(isRedirect){
+        wepy.redirectTo({url: url});
+      }
+      else{
+        wepy.navigateTo({url: url});
+      }
+      return false
+    }
+  }
+
+  hasMobile(){
+    if(this.globalData.user && this.globalData.user.mobile){
+      return true
+    }else{
+      return false
     }
   }
 
@@ -264,17 +344,60 @@ export default class VIP extends wepy.app {
       globalData.user.mobile = res.mobile
       globalData.user.sex = res.sex
       globalData.user.birthdate = res.birthdate
+      globalData.my_spaces = res.my_spaces
+
+      req.header(header)
+
+      if (globalData.userInfo && res.name) {
+        if (globalData.userInfo.avatarUrl != res.avatar) {
+          await req.put('/mini/vip/user', {name: res.name, avatar: globalData.userInfo.avatarUrl}).catch((err)=>{
+            console.log("updateAvatarError...", err.data)
+          })
+        }
+      }
 
       globalData.is_login = true
 
       self.globalData = globalData
-      req.header(header)
     } else {
       const header = {
         'X-User-Id': globalData.user._id,
         'X-Auth-Token': globalData.user.auth_token,
       }
       req.header(header)
+    }
+  }
+
+  isSpaceMember(space_id) {
+    if(space_id && this.globalData.my_spaces){
+      return this.globalData.my_spaces.find((space)=>{
+        return space._id === space_id && space.profile === "member";
+      });
+    }
+    else{
+      return false;
+    }
+  }
+
+  isSpaceUser(space_id) {
+    if(space_id && this.globalData.my_spaces){
+      return this.globalData.my_spaces.find((space)=>{
+        return space._id === space_id && space.profile === "user";
+      });
+    }
+    else{
+      return false;
+    }
+  }
+
+  isSpaceAdmin(space_id) {
+    if(space_id && this.globalData.my_spaces){
+      return this.globalData.my_spaces.find((space)=>{
+        return space._id === space_id && space.profile === "admin";
+      });
+    }
+    else{
+      return false;
     }
   }
 
@@ -349,9 +472,55 @@ export default class VIP extends wepy.app {
     const url = '/api/odata/v4/' + (space_id || this.globalData.space_id) + '/' + object_name + '/'+_id;
     const result = await req.delete(url).catch((err)=>{
       console.log("error...",err.data)
-      return {}
+      return false
     })
     return result
+  }
+
+  async removeRecord(object_name, _id, space_id, list, owner) {
+    let allow = await this.recordAllowDelete(object_name, owner);
+    if(!allow){
+      return;
+    }
+    const result = await wepy.showActionSheet({
+      itemList: ['删除']
+    });
+    if (!result.cancel) {
+      let result = await this.delete(object_name, _id, space_id);
+      if(result){
+        list.splice(list.findIndex(item => item._id === _id), 1);
+      }
+    }
+  }
+
+  async getObject(object_name){
+    if(this.globalData.objects[object_name]){
+      return this.globalData.objects[object_name];
+    }
+    const object = await this.get('objects', object_name);
+    this.globalData.objects[object_name] = object;
+    return object;
+  }
+
+  async recordAllowEdit(object_name, owner){
+    const object = await this.getObject(object_name);
+
+    if(!object){
+      throw new Error('未在globalData中找到对象：' + object_name)
+    }
+
+    return object.modifyAllRecords || (object.allowEdit && owner === this.globalData.user._id)
+  }
+
+  async recordAllowDelete(object_name, owner){
+    const object = await this.getObject(object_name);
+    console.log("recordAllowDelete=========object_name==========", object_name);
+    console.log("recordAllowDelete=========owner==========", owner);
+    console.log("recordAllowDelete=========object==========", object);
+    if(!object){
+      throw new Error('未在globalData中找到对象：' + object_name)
+    }
+    return object.modifyAllRecords || (object.allowDelete && owner === this.globalData.user._id)
   }
 }
 </script>

@@ -168,17 +168,15 @@ export default class SpaceRegister extends wepy.page {
   };
 
   async onLoad() {
-    if(this.$parent.checkMobile()){
-      wx.getLocation({
-        type: 'gcj02',
-        success: function(res) {
-          this.latitude = res.latitude;
-          this.longitude = res.longitude;
-        }
-      });
-      this.contact_name = this.$parent.globalData.user.name
-      this.phoneNumber = this.$parent.globalData.user.mobile;
-    }
+    wx.getLocation({
+      type: 'gcj02',
+      success: (res)=> {
+        this.location.latitude = res.latitude;
+        this.location.longitude = res.longitude;
+      }
+    });
+    this.contact_name = this.$parent.globalData.user.name
+    this.phoneNumber = this.$parent.globalData.user.mobile;
   }
   methods = {
     getPhoneNumber(e) {

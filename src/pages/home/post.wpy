@@ -62,6 +62,18 @@
 			this.loadPost();
 		}
 
+		onShareAppMessage(res) {
+			if (res.from = "button") {
+				const postName = res.target.dataset.postName;
+				const postId = res.target.dataset.postId;
+				const spaceId = res.target.dataset.postSpace;
+				return {
+					title: postName,
+					path: `pages/post/view?post_id=${postId}&space_id=${spaceId}`,
+				}
+			}
+		}
+
 		async loadPost() {
 			const skip = this.current_skip;
 
@@ -70,7 +82,7 @@
 					$filter: 'featured eq true',
 					$expand: 'owner($select=name),space($select=name)',
 					$count: true,
-					$select: 'name,summary,description,comment_count,enable_comment,images,video,audio,type,mini_type,space',
+					$select: 'name,summary,description,comment_count,enable_comment,images,video,audio,type,mini_type,space,star_count,owner',
 					$skip: skip,
 					$top: DATA_LENGTH
 				}

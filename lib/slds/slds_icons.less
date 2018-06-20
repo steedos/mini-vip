@@ -1,8 +1,7 @@
-@icon-root-url: "//www-steedos-com.oss-cn-beijing.aliyuncs.com/libs/slds/2.6.1/assets/icons";
-@icon-image-size: 60;
+@icon-root-url: "http://www-steedos-com.oss-cn-beijing.aliyuncs.com/libs/slds/2.6.1/assets/icons";
 
 .icon-image(@category, @name) {
-  @icon-url: %("%s/%s/%s_%s.png", @icon-root-url, @category, @name, @icon-image-size);
+  @icon-url: %("%s/%s/%s_60.png", @icon-root-url, @category, @name);
   background-image: url(@icon-url);
 }
 
@@ -96,6 +95,13 @@
   background-size:cover;
 }
 
+[class*='slds-icon-action-']{
+  width:18px;
+  height:18px;
+  background-repeat:no-repeat;
+  background-position:center;
+  background-size:60%;
+}
 [class*='slds-icon-standard-'] .slds-icon, [class*='slds-icon-standard-'].slds-icon,
 [class*='slds-icon-action-'] .slds-icon,
 [class*='slds-icon-action-'].slds-icon,
