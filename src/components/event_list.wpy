@@ -168,6 +168,7 @@ export default class EventList extends wepy.component {
       });
     },
     async goDelete(event_id, space_id, owner){
+      console.log("goDelete==============list===========");
       await this.$parent.$parent.removeRecord('vip_event', event_id, space_id, this.list, owner);
       this.$apply();
     },
