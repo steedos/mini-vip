@@ -71,6 +71,14 @@
     border-bottom: 0px;
   }
 
+  .avatar-field{
+    border-radius:0.15rem;
+    margin-right: 5px;
+    vertical-align: middle;
+    width:40px;
+    height: 40px;
+  }
+
 }
 
 </style>
@@ -85,7 +93,7 @@
         <repeat for="{{record_list}}" key="index" index="index" item="record">
           <navigator url="./edit?object_name={{object_name}}&record_id={{record._id}}&action=edit" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
             <view class="weui-cell__hd" wx:if="{{avatar_field}}">
-              <image src="{{util.formatAvatarImageUrl(record[avatar_field], baseUrl)}}" style="margin-right: 5px;vertical-align: middle;width:40px; height: 40px;"></image>
+              <image src="{{util.formatAvatarImageUrl(record[avatar_field], baseUrl)}}" class='avatar-field'></image>
             </view>
             <view class="weui-cell__bd item-body">
               <view class="item-body-1">
