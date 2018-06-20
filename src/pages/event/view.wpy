@@ -109,6 +109,9 @@ page{
 .article-section {
   margin: 0;
 }
+.event-header{
+  background-color: #fff;
+}
 </style>
 <template>
 <view class="page" wx:if="{{is_loaded}}">

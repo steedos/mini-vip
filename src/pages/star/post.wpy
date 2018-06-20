@@ -22,7 +22,7 @@
 
   export default class StarPost extends wepy.page {
     config = {
-      navigationBarTitleText: '我喜欢的'
+      navigationBarTitleText: '喜欢'
     };
 
     data = {

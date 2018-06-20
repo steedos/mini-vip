@@ -22,7 +22,7 @@
 
   export default class StarSpace extends wepy.page {
     config = {
-      navigationBarTitleText: '我的关注'
+      navigationBarTitleText: '关注'
     };
 
     data = {
