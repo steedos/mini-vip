@@ -151,7 +151,7 @@ export default class VIP extends wepy.app {
       'pages/phone_number_login',
       'pages/empty_page',
       'pages/404',
-      'pages/record/read',
+      'pages/record/view',
       'pages/space/invite_admin',
     ],
     tabBar: {
@@ -236,7 +236,7 @@ export default class VIP extends wepy.app {
   }
 
   onHide() {
-    
+
   }
 
   getUserInfo(cb) {
