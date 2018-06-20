@@ -129,7 +129,7 @@
               <view wx:else class="slds-icon-standard-channel-programs slds-icon slds-icon--small slds-m-right--x-small"></view>
             </view>
             <view class="weui-cell__bd">
-              {{post.space_name}}
+              {{post.space.name}}
             </view>
           </view>
         </navigator>
