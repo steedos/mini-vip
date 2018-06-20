@@ -67,7 +67,7 @@ import pageRouter from '@/utils/pageRouter';
 const DATA_LENGTH = 10;
 export default class Events extends wepy.page {
   config = {
-    navigationBarTitleText: '最新活动',
+    navigationBarTitleText: '活动',
     enablePullDownRefresh: true
   };
 
@@ -195,7 +195,7 @@ export default class Events extends wepy.page {
       title: '加载中',
       mask: true
     });
-    if(!this.$parent.checkMobile(this.getBackUrlForCheckMobile())){
+    if(!this.$parent.checkMobile(this.getBackUrlForCheckMobile(), true)){
       return;
     }
     let userId = this.$parent.globalData.user._id;

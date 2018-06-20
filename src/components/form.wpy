@@ -330,7 +330,7 @@
 </template>
 <script>
   import wepy from 'wepy'
-  import {baseUrl, aliyunOSSEndpoint} from '@/config';
+  import {baseUrl} from '@/config';
   import util from '../wxs/util.wxs'
   const utilJs = require('../utils/util.js');
 
@@ -650,9 +650,6 @@
               const video = await this.uploadVideo(fv, k, record_id);
               if(video){
                 this.values[k] = video._id;
-                if (this.fields['video_url']) {
-                  this.values['video_url'] = aliyunOSSEndpoint + 'videos/videos-' + video._id + '-' + encodeURIComponent(video.original.name)
-                }
               }
             }
           }

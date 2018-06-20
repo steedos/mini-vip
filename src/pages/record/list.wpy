@@ -1,4 +1,5 @@
 <style lang="less">
+.record-list{
   .image {
     display: block;
   }
@@ -31,19 +32,72 @@
       transform: scaleY(0.5);
     }
   }
+
+  .item-body{
+    width: 55%;
+  }
+
+  .description-field{
+    text-overflow:ellipsis;
+    width:100%;
+    overflow:hidden;
+    white-space:nowrap;
+    font-size: 13px;
+    color: #888888;
+  }
+
+  .name-field{
+    text-overflow:ellipsis;
+    overflow:hidden;
+    white-space:nowrap;
+    flex: 1;
+  }
+
+  .date-field{
+    font-size: 13px;
+    color:#888888;
+  }
+
+  .item-body-1{
+    display:flex;
+    align-items:center;
+  }
+
+  .page__hd{
+    padding: 0px;
+  }
+
+  .weui-search-bar{
+    border-bottom: 0px;
+  }
+
+}
+
 </style>
 
 <template>
-  <view class="page" wx:if="{{is_loaded}}">
+  <view class="page record-list" wx:if="{{is_loaded}}">
+    <view class="page__hd">
+      <searchbar :placeholder.sync="searchPlaceholder" @confirm.user="searchRecords" />
+    </view>
     <view class="page__bd">
       <view class="weui-cells weui-cells_after-title">
         <repeat for="{{record_list}}" key="index" index="index" item="record">
-          <navigator url="./read?object_name={{object_name}}&record_id={{record._id}}&action=edit" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
-            <view class="weui-cell__hd" wx:if="{{avatar_field && record[avatar_field]}}">
-              <image src="{{util.formatImageUrl(record[avatar_field], baseUrl)}}" style="margin-right: 5px;vertical-align: middle;width:20px; height: 20px;"></image>
+          <navigator url="./edit?object_name={{object_name}}&record_id={{record._id}}&action=edit" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+            <view class="weui-cell__hd" wx:if="{{avatar_field}}">
+              <image src="{{util.formatAvatarImageUrl(record[avatar_field], baseUrl)}}" style="margin-right: 5px;vertical-align: middle;width:40px; height: 40px;"></image>
             </view>
-            <view class="weui-cell__bd">{{record[name_field]}}</view>
-            <view class="weui-cell__ft weui-cell__ft_in-access">{{record[description_field]}}</view>
+            <view class="weui-cell__bd item-body">
+              <view class="item-body-1">
+                <view class="name-field">{{record[name_field]}}</view>
+                <view class="date-field" wx:if="{{record[date_field]}}">{{util.formatDateMini(record[date_field])}}</view>
+              </view>
+
+              <view class="description-field" wx:if="{{record[description_field]}}">{{record[description_field]}}</view>
+            </view>
+            <view class="weui-cell__ft">
+              <view class="weui-cell__ft_in-access"></view>
+            </view>
           </navigator>
         </repeat>
       </view>
@@ -58,6 +112,7 @@
 import wepy from 'wepy';
 import { baseUrl } from '@/config';
 import util from '../../wxs/util.wxs';
+import searchbar from '../../components/searchbar';
 
 const DATA_LENGTH = 15
 
@@ -78,12 +133,17 @@ export default class RecordList extends wepy.page {
     avatar_field: '',
     name_field: '',
     description_field: '',
-    date_field: ''
-  }
+    date_field: '',
+    searchPlaceholder: '搜索',
+  };
 
   wxs = {
     util: util
-  }
+  };
+
+  components = {
+    searchbar: searchbar,
+  };
 
   refresh() {
     this.record_list = [];
@@ -117,14 +177,14 @@ export default class RecordList extends wepy.page {
     this.space_id = e.space_id;
     this.object_name = e.object_name;
 
-    this.avatar_field = e.avatar_field ; // || 'owner.profile.avatar'
+    this.avatar_field = e.avatar_field
     this.name_field = e.name_field || 'name';
-    this.description_field = e.description_field; //  || 'description'
-    this.date_field = e.date_field;
+    this.description_field = e.description_field
+    this.date_field = e.date_field
 
-    const object = await this.$parent.get('objects', this.object_name);
+    const object = await this.$parent.getObject(this.object_name);
 
-    console.log(object)
+    this.searchPlaceholder = '搜索' + object.label;
 
     wx.setNavigationBarTitle({
       title: object.label
@@ -141,10 +201,38 @@ export default class RecordList extends wepy.page {
       wx.navigateTo({
         url: url
       })
+    },
+    searchRecords(searchValue, evt){
+      this.record_list = [];
+      this.allow_load = true;
+      this.current_skip = 0;
+      this.loadRecords(searchValue);
+    }
+  };
+
+  getExpand(field){
+    let fieldArr = field.split('.');
+    if(fieldArr.length > 1){
+      //        expand.push(`${avatar[0]}($select=${avatar_field.substr(avatar_field.indexOf('.') + 1, avatar_field.length)})`)
+
+      return `${fieldArr[0]}($select=${fieldArr[1]})`
     }
   }
 
-  async loadRecords() {
+  getFieldValue(field, value){
+    if(!value){
+      return ''
+    }
+
+    let fieldArr = field.split('.');
+    if(fieldArr.length > 1){
+      return this.getFieldValue(field.substr(field.indexOf('.') + 1, field.length), value[fieldArr[0]])
+    }else{
+      return value[fieldArr[0]]
+    }
+  }
+
+  async loadRecords(searchValue) {
     wepy.showLoading({
       title: '加载中',
       mask: true
@@ -159,6 +247,10 @@ export default class RecordList extends wepy.page {
       $top: DATA_LENGTH
     };
 
+    if(searchValue){
+      options.$filter = `(contains(${this.name_field},'${searchValue}'))`
+    }
+
     let keys = ['space'];
     let expand = [];
 
@@ -167,13 +259,17 @@ export default class RecordList extends wepy.page {
       let avatar = avatar_field.split('.');
       keys.push(avatar[0]);
       if(avatar.length > 1){
-//        expand.push(`${avatar[0]}($select=${avatar_field.substr(avatar_field.indexOf('.') + 1, avatar_field.length)})`)
-        expand.push(`${avatar[0]}($select=${avatar[1]})`)
+        expand.push(this.getExpand(avatar_field))
       }
     }
 
     if(this.name_field){
-      keys.push(this.name_field);
+      let name_field = this.name_field;
+      let name = name_field.split('.');
+      keys.push(name[0]);
+      if(name.length > 1){
+        expand.push(this.getExpand(name_field))
+      }
     }
 
     if(this.description_field){
@@ -194,10 +290,18 @@ export default class RecordList extends wepy.page {
 
       const result = await this.$parent.query(object_name, options);
       if (result.value) {
-        this.record_list = this.record_list.concat(result.value)
+        let records = []
+
+        for(let record of result.value){
+
+          if(this.avatar_field){
+            record[this.avatar_field] = this.getFieldValue(this.avatar_field, record)
+          }
+          records.push(record)
+        }
+        this.record_list = this.record_list.concat(records)
       }
       this.current_skip = skip + result.value.length;
-      //此处有问题，如果有最新的记录，会导致刷新不出来 TODO: 与朱思嘉确认
       if (this.current_skip === result['@odata.count']) {
         this.allow_load = false
       }
