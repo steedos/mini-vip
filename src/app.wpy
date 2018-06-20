@@ -251,11 +251,17 @@ export default class VIP extends wepy.app {
     })
   }
 
-  checkMobile(to){
+  checkMobile(to, isRedirect){
     if(this.globalData.user && this.globalData.user.mobile){
       return true
     }else{
-      wepy.navigateTo({url: '/pages/empty_page?redirect_to=' + encodeURIComponent('/pages/phone_number_login?from=' + encodeURIComponent(to))});
+      const url = '/pages/empty_page?redirect_to=' + encodeURIComponent('/pages/phone_number_login?from=' + encodeURIComponent(to));
+      if(isRedirect){
+        wepy.redirectTo({url: url});
+      }
+      else{
+        wepy.navigateTo({url: url});
+      }
       return false
     }
   }

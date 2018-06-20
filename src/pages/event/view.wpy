@@ -294,7 +294,7 @@ export default class EventView extends wepy.page {
       title: '加载中',
       mask: true
     });
-    if(!this.$parent.checkMobile(this.getBackUrlForCheckMobile())){
+    if(!this.$parent.checkMobile(this.getBackUrlForCheckMobile(), true)){
       return;
     }
     let userId = this.$parent.globalData.user._id;
