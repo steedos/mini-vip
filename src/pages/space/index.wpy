@@ -203,7 +203,7 @@ page {
             <view class="store-name">{{store_info.name}}</view>
             <view class="star-count">{{store_info.star_count}}位关注者</view>
             <button class="weui-btn btn-star" @tap="starSpace" type="primary" plain="true" size="mini">{{star_id ? "已关注" : "关注"}}</button>
-            <!-- <button class="weui-btn btn-manage" wx:if="{{is_space_admin}}" @tap="manageSpace" type="primary" size="mini">微站管理</button> -->
+            <button class="weui-btn btn-manage" open-type="share" type="primary" size="mini">转发</button>
           </view>
         </view>
       </view>
@@ -302,7 +302,7 @@ export default class Posts extends wepy.page {
   // 分享
   onShareAppMessage(res) {
     console.log('onShareAppMessage', res)
-    if (res.from == "button") {
+    if (res.from == "button" && res.target.dataset.postId) {
       const postName = res.target.dataset.postName;
       const postId = res.target.dataset.postId;
       const spaceId = res.target.dataset.postSpace;
