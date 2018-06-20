@@ -101,8 +101,8 @@
 						if (r.value[0]) {
 							v.avatar = r.value[0].avatar
 						}
-						v.space = space_id
-						v.space_name = space_name
+						// v.space = space_id
+						// v.space_name = space_name
 					}
 					this.posts = this.posts.concat(res.value)
 					this.current_skip = skip + res.value.length
