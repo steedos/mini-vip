@@ -41,6 +41,11 @@
     };
 
     changeNavigationBarTitleText(title){
+
+      if(title && title.length > 10){
+        title = title.substr(0,10) + '...'
+      }
+
       wx.setNavigationBarTitle({title:title})
     }
 

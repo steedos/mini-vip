@@ -1,0 +1,109 @@
+<style lang="less" scoped>
+.editor-comp {
+  width: 100%;
+  .textarea{
+    width: 100%;
+    height: 150px;
+    font-size: 15px;
+    border: none;
+    color: #444;
+    margin: 0;
+    padding: 5px;
+    box-sizing: border-box;
+    background-color: #fff;
+  }
+  .tools{
+    width: 100%;
+    height: 40px;
+    display:flex;
+    justify-content:flex-end;
+    background-color: #f9f9f9;
+    border-bottom: 1px solid #dadada;
+    border-top: 1px solid #dadada;
+    align-items: center;
+    .tool{
+      width: 50px;
+      height: 100%;
+      text-align: center;
+      > icon {
+        font-size: 24px;
+        color: #666;
+      }
+    }
+    .submit-btn{
+      color:#fff;
+      margin:0;
+      margin-right:15px;
+    }
+  }
+}
+</style>
+
+<template>
+  <view class="container">
+    <view class="editor-comp">
+			<form bindsubmit="formSubmit">
+				<textarea name="content" value="{{editorContent}}" name="comment" placeholder="{{placeholder}}" class="textarea" bindinput="contentChange"/>
+				<view class="tools flex-row">
+          <button class="weui-btn mini-btn submit-btn" disabled="{{disabled}}" form-type="submit" type="primary" size="mini">发布</button>
+				</view>
+			</form>
+		</view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+
+export default class Comment extends wepy.page {
+  config = {
+    navigationBarTitleText: '评论'
+  }
+
+  data = {
+    editorPlaceholder: '说点什么...',
+    object_name: '',
+    key_name: '',
+    _id: '',
+    space_id: '',
+    disabled: true
+  }
+
+  onLoad(e) {
+    this.object_name = e.object_name;
+    this.key_name = e.key_name;
+    this._id = e._id;
+    this.space_id = e.space_id;
+    this.$apply();
+  }
+
+  methods = {
+    async formSubmit(e) {
+      const comment = e.detail.value.comment;
+      const object_name = this.object_name;
+      const key_name = this.key_name;
+      const _id = this._id
+      const space_id = this.space_id
+      if (comment) {
+        let data = {
+          name: comment,
+        };
+        data[key_name] = _id;
+        await this.$parent.insert(object_name, data, space_id);
+      }
+      wx.navigateBack();
+    },
+    contentChange(e) {
+      if (e.detail.value) {
+        this.disabled = false
+        this.$apply()
+      } else {
+        this.disabled = true
+        this.$apply()
+      }
+    }
+  }
+
+  events = {}
+}
+</script>
