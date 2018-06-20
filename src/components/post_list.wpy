@@ -160,7 +160,7 @@
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
           </view>
         </view>
-        <view class="post-footer ">
+        <!-- <view class="post-footer ">
           <button plain="true" open-type="share" data-post-name="{{post.name}}" data-post-id="{{post._id}}" data-post-space="{{post.space._id}}" class="share action share-btn">
             <view class="vip_share-default slds-icon slds-icon--small slds-m-right--x-small"></view>
             <view class="text">转发</view>
@@ -174,7 +174,7 @@
           <view class="star action star-btn {{post.star_id ? 'is-stared' : ''}}" @tap="starPost({{post._id}}, {{post.space._id}}, {{index}})">
             <view class="vip_star-{{post.star_id ? 'blue' : 'default'}} slds-icon slds-icon--small slds-m-right--x-small"></view>
             <view class="text">{{post.star_count || 0}}</view>
-          </view>
+          </view> -->
         </view>
       </view>
     </repeat>
