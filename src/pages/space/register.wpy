@@ -170,9 +170,9 @@ export default class SpaceRegister extends wepy.page {
   async onLoad() {
     wx.getLocation({
       type: 'gcj02',
-      success: function(res) {
-        this.latitude = res.latitude;
-        this.longitude = res.longitude;
+      success: (res)=> {
+        this.location.latitude = res.latitude;
+        this.location.longitude = res.longitude;
       }
     });
     this.contact_name = this.$parent.globalData.user.name
