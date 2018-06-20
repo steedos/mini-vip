@@ -91,7 +91,7 @@
     <view class="page__bd">
       <view class="weui-cells weui-cells_after-title">
         <repeat for="{{record_list}}" key="index" index="index" item="record">
-          <navigator url="./edit?object_name={{object_name}}&record_id={{record._id}}&action=edit" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+          <navigator url="{{url}}&object_name={{object_name}}&record_id={{record._id}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
             <view class="weui-cell__hd" wx:if="{{avatar_field}}">
               <image src="{{util.formatAvatarImageUrl(record[avatar_field], baseUrl)}}" class='avatar-field'></image>
             </view>
@@ -144,7 +144,8 @@ export default class RecordList extends wepy.page {
     date_field: '',
     searchPlaceholder: '搜索',
     allowCreate: false,
-    filter: ''
+    filter: '',
+    url: './edit'
   };
 
   wxs = {
@@ -182,6 +183,16 @@ export default class RecordList extends wepy.page {
 
     if(!e.object_name){
       throw new Error('缺少参数:object_name')
+    }
+
+    if(e.url){
+      this.url = e.url
+    }
+
+    if(this.url.indexOf('?') > -1){
+      this.url = this.url + '&action=edit'
+    }else{
+      this.url = this.url + '?action=edit'
     }
 
     this.space_id = e.space_id;
