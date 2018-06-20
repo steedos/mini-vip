@@ -194,7 +194,7 @@ export default class cardActivate extends wepy.page {
     const user = this.$parent.globalData.user;
     this.sexValue = user.sex;
     this.name = user.name;
-    this.birthdate = user.birthdate;
+    this.birthdate = user.birthdate || '';
     this.phoneNumber = user.mobile;
     this.is_loaded = true
     console.log('e.category_name', e.category_name);
@@ -353,7 +353,7 @@ export default class cardActivate extends wepy.page {
         phoneNumber: this.phoneNumber
       };
       req.put(url, data).then(res => {
-        wx.reLaunch({
+        wx.redirectTo({
           url: './card?space=' + this.space_id + '&card_id=' + this.card_id
         });
       });

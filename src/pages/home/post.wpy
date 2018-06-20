@@ -80,7 +80,7 @@
 			if (this.allow_load) {
 				const options = {
 					$filter: 'featured eq true',
-					$expand: 'owner($select=name),space($select=name)',
+					$expand: 'owner($select=name),space($select=name,avatar)',
 					$count: true,
 					$select: 'name,summary,description,comment_count,enable_comment,images,video,audio,type,mini_type,space,star_count,owner',
 					$skip: skip,
@@ -89,21 +89,6 @@
 
 				const res = await this.$parent.query('post', options, 'guest')
 				if (res.value) {
-					for (let v of res.value) {
-						let space_id = v.space._id
-						let space_name = v.space.name
-						const store_options = {
-							$filter: `_id eq '${space_id}'`,
-							$count: true,
-							$select: 'avatar'
-						}
-						const r = await this.$parent.query('vip_store', store_options, 'guest')
-						if (r.value[0]) {
-							v.avatar = r.value[0].avatar
-						}
-						// v.space = space_id
-						// v.space_name = space_name
-					}
 					this.posts = this.posts.concat(res.value)
 					this.current_skip = skip + res.value.length
 				}
