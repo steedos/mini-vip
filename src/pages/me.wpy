@@ -1,5 +1,9 @@
 <style lang="less">
 .page-me {
+  .image {
+    width: 100%;
+    height: 100%;
+  }
   .weui-cell__hd {
     height: 1.5rem;
     .ion {
@@ -49,18 +53,23 @@
     <view class="weui-panel__bd">
       <view class="weui-cells">
         <view @tap="editUser" class="weui-media-box weui-media-box_appmsg" hover-class="weui-cell_active">
-          <view class="weui-media-box__hd weui-media-box__hd_in-appmsg" style="width: 50px; height: 50px; line-height: 50px;">
-            <open-data class="weui-media-box__thumb" type="userAvatarUrl"></open-data>
+          <view class="weui-media-box__hd weui-media-box__hd_in-appmsg" style="width: 50px; height: 50px; line-height: 50px;border-radius:50%;overflow:hidden;">
+            <image class="image" mode="aspectFill" wx:if="{{isAuthUserInfo}}" src="{{userInfo.avatarUrl}}"></image>
+            <image class="image" mode="aspectFill" wx:else src="https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/avatar.png"></image>
           </view>
           <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
-            <view class="weui-media-box__title">
-              {{name}}
-              <block wx:if="{{!name}}">
+            <block wx:if="{{!isAuthUserInfo}}">
+              <view class="weui-media-box__title">
                 <button open-type="getUserInfo" bindgetuserinfo="userLogin" plain="true" class="user-active">
                   <open-data type="userNickName"></open-data>
                 </button>
-              </block>
-            </view>
+              </view>
+            </block>
+            <block wx:else>
+              <view class="weui-media-box__title">
+                {{name}}
+              </view>
+            </block>
             <view class="weui-media-box__desc">
               {{user}}
             </view>
@@ -142,8 +151,19 @@ export default class Me extends wepy.page {
 
   data = {
     name: '',
-    mobile: ''
+    mobile: '',
+    isAuthUserInfo: false,
+    userInfo: null
   };
+
+  async onLoad() {
+    const setting = await wepy.getSetting()
+    if (setting.authSetting['scope.userInfo']) {
+      this.isAuthUserInfo = true
+      this.userInfo = this.$parent.globalData.userInfo
+    }
+    this.$apply()
+  }
 
   onShow() {
     const user = this.$parent.globalData.user;
@@ -160,8 +180,7 @@ export default class Me extends wepy.page {
     },
     // TODO 使用修改用户信息接口，保存用户信息
     editUser() {
-      const user = this.$parent.globalData.user;
-      if (user && user.name) {
+      if (this.isAuthUserInfo) {
         pageRouter.navigateTo({ url: '/pages/me_profile' })
       }
     },
@@ -174,6 +193,8 @@ export default class Me extends wepy.page {
         const sex = userInfo.gender ? '男' : '女';
         const avatar = userInfo.avatarUrl;
 
+        this.userInfo = userInfo
+        this.isAuthUserInfo = true
         this.name = name
         this.sex = sex
         this.$parent.globalData.userInfo = userInfo
