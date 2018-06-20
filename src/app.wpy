@@ -477,7 +477,11 @@ export default class VIP extends wepy.app {
     return result
   }
 
-  async removeRecord(object_name, _id, space_id, list) {
+  async removeRecord(object_name, _id, space_id, list, owner) {
+    let allow = await this.recordAllowDelete(object_name, owner);
+    if(!allow){
+      return;
+    }
     const result = await wepy.showActionSheet({
       itemList: ['删除']
     });
@@ -498,8 +502,8 @@ export default class VIP extends wepy.app {
     return object;
   }
 
-  recordAllowEdit(object_name, owner){
-    const object = this.globalData.objects[object_name];
+  async recordAllowEdit(object_name, owner){
+    const object = await this.getObject(object_name);
 
     if(!object){
       throw new Error('未在globalData中找到对象：' + object_name)
@@ -508,13 +512,14 @@ export default class VIP extends wepy.app {
     return object.modifyAllRecords || (object.allowEdit && owner === this.globalData.user._id)
   }
 
-  recordAllowDelete(object_name, owner){
-    const object = this.globalData.objects[object_name];
-
+  async recordAllowDelete(object_name, owner){
+    const object = await this.getObject(object_name);
+    console.log("recordAllowDelete=========object_name==========", object_name);
+    console.log("recordAllowDelete=========owner==========", owner);
+    console.log("recordAllowDelete=========object==========", object);
     if(!object){
       throw new Error('未在globalData中找到对象：' + object_name)
     }
-
     return object.modifyAllRecords || (object.allowDelete && owner === this.globalData.user._id)
   }
 }

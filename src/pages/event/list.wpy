@@ -157,7 +157,7 @@ export default class Events extends wepy.page {
     const options = {
       $expand: 'space($select=name)',
       $count: true,
-      $select: 'name,start,end,allDay,location,alarms,accepted_count,pending_count,rejected_count,featured,cover,space',
+      $select: 'name,start,location,alarms,accepted_count,pending_count,rejected_count,featured,cover,space,owner',
       $skip: skip,
       $top: DATA_LENGTH
     };
