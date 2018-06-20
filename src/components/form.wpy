@@ -320,6 +320,7 @@
 
         <view class="btn-container" wx:if="!hiddenBtn">
           <button class="submit-btn save-btn" form-type="submit" disabled="{{submitDisabled}}" wx:if="{{args.action === 'edit' || args.action === 'create'}}">保存</button>
+          <button class="submit-btn remove-btn" wx:if="{{!args.undeletable && _record_allowDelte}}"  @tap="removeRecord">删除</button>
           <block wx:if="{{args.action === 'read'}}">
             <button class="submit-btn" type="primary" @tap="goEdit" wx:if="{{_record_allowEdit}}">编辑</button>
             <button class="submit-btn remove-btn" wx:if="{{!args.undeletable && _record_allowDelte}}"  @tap="removeRecord">删除</button>
