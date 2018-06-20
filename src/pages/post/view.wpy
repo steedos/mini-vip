@@ -94,7 +94,10 @@ page {
 
 .image {
   display: block;
-  border-radius: 50%;
+  width:30px;
+  height:30px;
+  border-radius:4px;
+
 }
 .cover{
   width: 100%;
@@ -172,6 +175,19 @@ video{
     }
   }
 }
+.weui-cell__bd{
+  .space_name{
+    height: 30px;
+    line-height: 30px;
+    font-size: 13px;
+    color: #333;
+  }
+  .post-time{
+    font-size: 11px;
+    color: #929292;
+    margin-bottom: 2px;
+  }
+}
 </style>
 <template>
 <view class="page border-top-1px" wx:if="{{is_loaded}}">
@@ -183,9 +199,9 @@ video{
             <view wx:else class="slds-icon-standard-channel-programs slds-icon slds-icon--small slds-m-right--x-small"></view>
           </view>
           <view class="weui-cell__bd">
-            {{space_name}}
+            <view class="space-name">{{space_name}}</view>
+            <view class="post-time">{{util.formatDate(post.created)}}</view>
           </view>
-          <view class="weui-cell__ft weui-cell__ft_in-access"></view>
         </view>
       </navigator>
       <block wx:if="{{post.video}}">
