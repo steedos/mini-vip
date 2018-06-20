@@ -10,7 +10,7 @@
   import req from '@/network';
   import form from '../../components/form';
 
-  export default class RecordView extends wepy.page {
+  export default class RecordEdit extends wepy.page {
 
     config = {
       navigationBarTitleText: ''
