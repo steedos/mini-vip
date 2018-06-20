@@ -222,7 +222,7 @@ export default class RecordList extends wepy.page {
 
   methods = {
     addRecord() {
-      const url = `./edit?object_name=${this.object_name}&action=create`
+      const url = `./create?object_name=${this.object_name}`
       wx.navigateTo({
         url: url
       })
