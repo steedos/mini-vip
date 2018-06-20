@@ -28,7 +28,7 @@ page {
 }
 
 .weui-article {
-  padding: 30rpx 30rpx 0;
+  padding: 5px 15px;
   border-bottom:1px solid #dadada;
 }
 
@@ -133,11 +133,11 @@ video{
   border-top:1px solid #dadada;
   margin-top:6px;
   .comment-title {
-    padding: 10px 15px;
+    padding: 5px 15px;
     border-bottom:1px solid #dadada;
   }
   .comment-container {
-    padding: 10px 15px 0;
+    padding: 5px 15px;
     display: flex;
     border-bottom:1px solid #dadada;
 
