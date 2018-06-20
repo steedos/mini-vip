@@ -440,7 +440,9 @@
           const action = newValue.action;
           let title = newValue.title;
 
-          this.hiddenBtn = newValue.hidden_btn || false
+          let defaultValues = newValue.defaultValues || {}
+
+          this.hiddenBtn = newValue.hidden_btn || false;
 
           if (object_name) {
             const object = await this.$parent.$parent.getObject(object_name);
@@ -470,6 +472,10 @@
                 if (field.reference_to) {
                   field.options = await this.getReferenceTo(field.name, field.reference_to)
                 }
+
+//                if(field.defaultValues){
+//                  defaultValues[field_name] = field.defaultValue
+//                }
               }
             }
 
@@ -486,6 +492,7 @@
 
           if(action === 'create'){
             this._record_allowEdit = true;
+            this.values = defaultValues;
           }
 
           if (object_name && record_id && action != 'create') {

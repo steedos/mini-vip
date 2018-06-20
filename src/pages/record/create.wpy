@@ -59,6 +59,10 @@
         args.fields = e.fields
       }
 
+      if(e && e.values){
+        args.defaultValues = JSON.parse(e.values)
+      }
+
       this.args = args;
       this.$apply()
     }
@@ -72,21 +76,6 @@
       wepy.navigateBack({
         delta: 1
       })
-    }
-
-    methods = {
-      async removeRecord() {
-        const result = await wepy.showModal({
-          title: '确定要删除吗？',
-          confirmText: "确定",
-          content: "该操作不可逆，请谨慎操作。",
-          cancelText: "取消",
-        });
-        if (result.confirm) {
-          await this.$parent.delete(this.args.object_name, this.args.record_id)
-          this.goBack("remove");
-        }
-      },
     }
   }
 </script>
