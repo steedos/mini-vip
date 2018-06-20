@@ -11,7 +11,7 @@
     <view class="weui-search-bar__form">
       <view class="weui-search-bar__box">
         <icon class="weui-icon-search_in-box" type="search" size="14"></icon>
-        <input type="text" class="weui-search-bar__input" confirm-type="search" placeholder="{{placeholder}}" value="{{inputVal}}" 
+        <input type="text" class="weui-search-bar__input" confirm-type="search" placeholder="{{placeholder}}" value="{{inputVal}}"
           focus="{{inputShowed}}" @input="inputTyping" @confirm="confirm" />
         <view class="weui-icon-clear" wx:if="{{inputVal.length > 0}}" @tap="clearInput">
           <icon type="clear" size="14"></icon>
@@ -56,6 +56,7 @@ export default class post extends wepy.component {
     hideInput: function () {
       this.inputShowed = false;
       this.inputVal = "";
+      this.$emit('confirm', this.inputVal);
       this.$apply();
     },
     clearInput: function () {
