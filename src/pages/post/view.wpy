@@ -8,6 +8,8 @@ page {
   position:absolute;
   top:0;
   bottom:0;
+  left: 0;
+  right: 0;
 
   .body {
     flex: 1;
@@ -121,12 +123,17 @@ video{
     overflow: hidden;
   }
 
+  form {
+    width: 100%;
+  }
+
   .form {
     display: flex;
     flex: 1;
     align-items: center;
     .comment {
       flex: 1;
+      width: auto;
       padding: 0 10px;
     }
     .submit-btn {
