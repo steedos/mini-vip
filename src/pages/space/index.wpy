@@ -500,7 +500,7 @@ export default class Posts extends wepy.page {
     }
     const skip = this.current_skip;
     const options = {
-      $expand: 'owner($select=name)',
+      $expand: 'space($select=name),owner($select=name)',
       $count: true,
       $select:
         'name,summary,description,comment_count,enable_comment,images,video,audio,type,mini_type,space,star_count',
