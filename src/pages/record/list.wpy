@@ -95,9 +95,9 @@
 
               <view class="description-field" wx:if="{{record[description_field]}}">{{record[description_field]}}</view>
             </view>
-            <view class="weui-cell__ft">
-              <view class="weui-cell__ft_in-access"></view>
-            </view>
+            <!--<view class="weui-cell__ft">-->
+              <!--<view class="weui-cell__ft_in-access"></view>-->
+            <!--</view>-->
           </navigator>
         </repeat>
       </view>
