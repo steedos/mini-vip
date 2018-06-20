@@ -79,7 +79,7 @@
 <view>
   <block wx:if="{{list.length}}">
     <repeat for="{{list}}" key="index" index="index" item="event">
-      <view class="event" @longpress="goDelete({{event._id}}, {{event.space._id}})">
+      <view class="event" @longpress="goDelete({{event._id}}, {{event.space._id}}, {{event.owner}})">
         <navigator class="event-header" wx:if="{{showHeader}}" url="../space/index?space_id={{event.space._id}}">
           <view class="weui-cell weui-cell_access">
             <view class="weui-cell__hd">
@@ -167,11 +167,8 @@ export default class EventList extends wepy.component {
         url: url
       });
     },
-    async goDelete(event_id, space_id){
-      if(!this.$parent.$parent.isSpaceAdmin(space_id)){
-        return;
-      }
-      await this.$parent.$parent.removeRecord('vip_event', event_id, space_id, this.list);
+    async goDelete(event_id, space_id, owner){
+      await this.$parent.$parent.removeRecord('vip_event', event_id, space_id, this.list, owner);
       this.$apply();
     },
     previewImage(image, event){
