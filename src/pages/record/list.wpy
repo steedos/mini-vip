@@ -110,7 +110,7 @@
         </repeat>
       </view>
     </view>
-    <view class="tab-bar">
+    <view class="tab-bar" wx:if="{{allowCreate}}">
       <view class="slds-icon-action-new" @tap="addRecord"></view>
     </view>
   </view>
@@ -143,6 +143,7 @@ export default class RecordList extends wepy.page {
     description_field: '',
     date_field: '',
     searchPlaceholder: '搜索',
+    allowCreate: false,
   };
 
   wxs = {
@@ -191,6 +192,8 @@ export default class RecordList extends wepy.page {
     this.date_field = e.date_field
 
     const object = await this.$parent.getObject(this.object_name);
+
+    this.allowCreate = object.allowCreate;
 
     this.searchPlaceholder = '搜索' + object.label;
 
