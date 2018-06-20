@@ -220,7 +220,7 @@ video{
             </view>
             <view class="detail-container">
               <view class="user-name">{{comment.owner.name}}</view>
-              <view class="comment-time">{{comment.created}}</view>
+              <view class="comment-time">{{util.formatDate(comment.created)}}</view>
               <view class="comment-detail">{{comment.name}}</view>
             </view>
           </view>
