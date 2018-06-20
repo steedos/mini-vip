@@ -1,16 +1,23 @@
 <template>
-  <view>
+  <view class="page record-read  page__bd">
     <autoform :args.sync='args'></autoform>
   </view>
 </template>
 
+<style lang="less">
+  .record-read{
+    .page__bd {
+      padding-bottom: 0px;
+    }
+  }
+</style>
 
 <script>
   import wepy from 'wepy';
   import req from '@/network';
   import form from '../../components/form';
 
-  export default class RecordEdit extends wepy.page {
+  export default class RecordCreate extends wepy.page {
 
     config = {
       navigationBarTitleText: ''
@@ -18,6 +25,11 @@
 
     data = {
       args: {}
+    };
+
+    refresh(){
+      this.args.timestamps = new Date()
+      console.log('this.args', this.args)
     }
 
     components = {
@@ -25,39 +37,45 @@
     };
 
     changeNavigationBarTitleText(title){
+
+      if(title && title.length > 10){
+        title = title.substr(0,10) + '...'
+      }
+
       wx.setNavigationBarTitle({title:title})
     }
 
     async onLoad(e){
       console.log("record view", e)
-      let args = {action: 'read'};
-      if(e && e.record_id){
-        args.record_id = e.record_id
-      }
+      let args = {action: 'create'};
+
       if(e && e.object_name){
         args.object_name = e.object_name
       }else{
         throw new Error("缺少参数：object_name")
       }
 
-      if(e && e.action){
-        args.action = e.action
-      }
-
       if(e && e.fields){
         args.fields = e.fields
       }
-      
-      if(e && e.title){
-        args.title = e.title
-      }
-      
-      if(e && e.undeletable){
-        args.undeletable = e.undeletable
+
+      if(e && e.values){
+        args.defaultValues = JSON.parse(e.values)
       }
 
       this.args = args;
       this.$apply()
+    }
+
+    goBack(action) {
+      const pages = getCurrentPages();
+      const prevPage = pages[pages.length - 2];
+      if (prevPage.refresh) {
+        prevPage.refresh(action)
+      }
+      wepy.navigateBack({
+        delta: 1
+      })
     }
   }
 </script>

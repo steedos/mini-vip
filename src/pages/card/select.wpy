@@ -197,7 +197,7 @@ export default class CardSelect extends wepy.page {
   methods = {
     toApplyCard(category_id, category_name, price, avatar, cover) {
       if (this.is_activated) {
-        wx.reLaunch({url: `../card?card_id=${this.card_id}&space_id=${this.space_id}`})
+        wx.redirectTo({url: `../card?card_id=${this.card_id}&space_id=${this.space_id}`})
       } else {
         pageRouter.navigateTo({url: `/pages/card_activate?space_id=${this.space_id}&card_id=${this.card_id}&category_id=${category_id}`})
       }

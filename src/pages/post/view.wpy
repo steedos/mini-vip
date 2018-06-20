@@ -1,8 +1,11 @@
 <style lang="less">
 page {
-  background: #fff;
+ background-color:#F0EFF5;
 }
 
+.body_color{
+   background-color:#fff;
+}
 .page__bd {
   padding-bottom: 65px;
 }
@@ -25,7 +28,8 @@ page {
 }
 
 .weui-article {
-  padding: 30rpx 30rpx 0;
+  padding: 5px 15px;
+  border-bottom:1px solid #dadada;
 }
 
 .article-section {
@@ -37,7 +41,7 @@ page {
 }
 
 .tab-bar {
-  font-size: 13px;
+  font-size: 15px;
   color: #888;
   display: flex;
   position: fixed;
@@ -52,7 +56,7 @@ page {
   .action {
     flex: 1;
     padding:0 30rpx;
-    font-size:13px;
+    font-size:15px;
     line-height:inherit;
     width:auto;
     height:auto;
@@ -90,7 +94,10 @@ page {
 
 .image {
   display: block;
-  border-radius: 50%;
+  width:30px;
+  height:30px;
+  border-radius:4px;
+
 }
 .cover{
   width: 100%;
@@ -116,18 +123,27 @@ page {
 video{
   width:100%;
 }
-
+image{
+  display: block; 
+}
+video{
+  display: block;
+}
 .comment-area {
-  padding-bottom:10px;
+  border-top:1px solid #dadada;
+  margin-top:6px;
   .comment-title {
-    padding: 10px 15px;
+    padding: 5px 15px;
+    border-bottom:1px solid #dadada;
   }
   .comment-container {
-    padding: 10px 15px 0;
+    padding: 5px 15px;
     display: flex;
+    border-bottom:1px solid #dadada;
 
     .avatar-container {
       width: 30px;
+      margin-top:10px;
       .avatar {
         width: 30px;
         height: 30px;
@@ -142,24 +158,50 @@ video{
       .user-name {
         height: 30px;
         line-height: 30px;
+        font-size: 13px;
+        color: #333;
+      }
+      .comment-time{
+        font-size: 11px;
+        color: #929292;
+        margin-bottom: 2px;
+      }
+      .comment-detail {
+        line-height: 20px;
+        color: #5d5d5d;
+        word-wrap: break-word; 
+        word-break: normal; 
       }
     }
+  }
+}
+.weui-cell__bd{
+  .space_name{
+    height: 30px;
+    line-height: 30px;
+    font-size: 13px;
+    color: #333;
+  }
+  .post-time{
+    font-size: 11px;
+    color: #929292;
+    margin-bottom: 2px;
   }
 }
 </style>
 <template>
 <view class="page border-top-1px" wx:if="{{is_loaded}}">
   <view class="page__bd">
-      <navigator class="post-header" url="../space/index?space_id={{space_id}}">
+      <navigator class="post-header body_color" url="../space/index?space_id={{space_id}}">
         <view class="weui-cell weui-cell_access">
           <view class="weui-cell__hd">
             <image wx:if="{{avatar}}" class="image slds-icon slds-icon--small slds-m-right--x-small" src="{{util.formatImageUrl(avatar, baseUrl)}}"></image>
             <view wx:else class="slds-icon-standard-channel-programs slds-icon slds-icon--small slds-m-right--x-small"></view>
           </view>
           <view class="weui-cell__bd">
-            {{space_name}}
+            <view class="space-name">{{space_name}}</view>
+            <view class="post-time">{{util.formatDate(post.created)}}</view>
           </view>
-          <view class="weui-cell__ft weui-cell__ft_in-access"></view>
         </view>
       </navigator>
       <block wx:if="{{post.video}}">
@@ -168,7 +210,7 @@ video{
       <block wx:elif="{{post.images && post.images.length == 1}}">
         <image src="{{util.formatImageUrl(post.images[0], baseUrl)}}" mode="aspectFill" @tap="previewImage({{item}})" class="cover"/>
       </block>
-      <view class="weui-article border-bottom-1px">
+      <view class="weui-article body_color">
         <view class="weui-article__section article-section">
           <view class="weui-article__c" wx:if="{{post.images && post.images.length>1 && !post.video}}">
             <view class="flex-images-box">
@@ -183,7 +225,7 @@ video{
           </view>
         </view>
       </view>
-      <view class="comment-area">
+      <view class="comment-area body_color">
         <view class="comment-title">
           评论({{post_comments.length}})
         </view>
@@ -192,8 +234,9 @@ video{
             <view class="avatar-container">
               <image class="avatar" mode="aspectFill" src="{{comment.owner.profile.avatar}}"></image>
             </view>
-            <view class="detail-container border-bottom-1px">
+            <view class="detail-container">
               <view class="user-name">{{comment.owner.name}}</view>
+              <view class="comment-time">{{util.formatDate(comment.created)}}</view>
               <view class="comment-detail">{{comment.name}}</view>
             </view>
           </view>
@@ -229,6 +272,9 @@ export default class PostView extends wepy.page {
   };
 
   async onLoad(e) {
+
+    console.log('view onLoad.................',e)
+
     this.editable = e.editable;
     wepy.showLoading({
       title: '加载中',
