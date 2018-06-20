@@ -108,6 +108,7 @@ page{
 }
 .article-section {
   margin: 0;
+  padding-left:15rpx;
 }
 .event-header{
   background-color: #fff;
