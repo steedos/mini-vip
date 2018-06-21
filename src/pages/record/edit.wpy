@@ -28,6 +28,10 @@
       wx.setNavigationBarTitle({title:title})
     }
 
+    onUnload(){
+      this.$broadcast('record_save');
+    }
+
     async onLoad(e){
       console.log("record view", e)
       let args = {action: 'read'};
@@ -47,11 +51,11 @@
       if(e && e.fields){
         args.fields = e.fields
       }
-      
+
       if(e && e.title){
         args.title = e.title
       }
-      
+
       if(e && e.undeletable){
         args.undeletable = e.undeletable
       }

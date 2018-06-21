@@ -246,7 +246,7 @@
                   <block wx:if="{{!(item.readonly || !_record_allowEdit || args.action === 'read')}}">
                     <view class="weui-cell">
                       <view class="weui-cell__bd">
-                        <textarea class="weui-textarea-input" data-id="{{item.name}}" name="{{item.name}}" placeholder="{{item.label}}" value="{{util.transformFieldValue(item, values[item.name])}}" auto-height="true" bindblur="textChange"/>
+                        <textarea class="weui-textarea-input" data-id="{{item.name}}" name="{{item.name}}" placeholder="{{item.label}}" value="{{util.transformFieldValue(item, values[item.name])}}" auto-height="true" bindinput="textChange"/>
                       </view>
                     </view>
                   </block>
@@ -275,7 +275,7 @@
                       <block wx:if="{{item.is_wide}}">
                         <view class="weui-cell__bd">
                           <block wx:if="{{!(item.readonly || !_record_allowEdit || args.action === 'read')}}">
-                            <textarea class="weui-textarea" name="{{item.name}}" data-id="{{item.name}}" placeholder="{{item.label}}" value="{{util.transformFieldValue(item, values[item.name])}}" auto-height="true" bindblur="textChange" maxlength="-1"/>
+                            <textarea class="weui-textarea" name="{{item.name}}" data-id="{{item.name}}" placeholder="{{item.label}}" value="{{util.transformFieldValue(item, values[item.name])}}" auto-height="true" bindinput="textChange" maxlength="-1"/>
                           </block>
                           <block wx:else>
                             <view class="weui-cell__ft wide-cell">{{util.transformFieldValue(item, values[item.name]) || item.label}}</view>
@@ -860,6 +860,31 @@
         delta: 1
       })
     }
+
+    events = {
+      async record_save(){
+        if(this.args.action === 'edit'){
+          if (!this.checkRequired()) {
+            return;
+          }
+          wx.showLoading({
+            title: '正在保存',
+            mask: true
+          });
+          console.log('record_save.....')
+          await this.uploadImages(this.args.record_id);
+          await this.uploadVideos(this.args.record_id);
+          const value = this.transformValue();
+          await this.$parent.$parent.update(this.args.object_name, this.args.record_id, value);
+          const pages = getCurrentPages();
+          const prevPage = pages[pages.length - 1];
+          if (prevPage.refresh) {
+            prevPage.refresh('edit')
+          }
+          wx.hideLoading()
+        }
+      }
+    };
 
     methods = {
       openSetting(e){
