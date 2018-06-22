@@ -300,7 +300,7 @@
                       </view>
                       <view class="weui-cell__bd">
                         <block wx:if="{{item.type === 'phone' && (item.readonly || !_record_allowEdit || args.action === 'read')}}">
-                          <view class="weui-cell__ft" @tap="phoneCall(values[item.name])">{{values[item.name]}}uuuuuu</view>
+                          <view class="weui-cell__ft" @tap="phoneCall(values[item.name])">{{values[item.name]}}</view>
                         </block>
                         <block wx:else>
                           <view class="weui-cell__ft">{{util.transformFieldValue(item, values[item.name])}}</view>
