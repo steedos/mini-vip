@@ -153,8 +153,7 @@ import util from '../wxs/util.wxs';
 
 export default class store extends wepy.page {
   config = {
-    navigationBarTitleText: '	',
-    navigationBarBackgroundColor: '#fff',
+    navigationBarTitleText: '	'
   };
 
   async onShow(){
