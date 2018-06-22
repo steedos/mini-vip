@@ -365,7 +365,8 @@
       is_loaded: false,
       groupFields: [],
       submitDisabled: false,
-      hiddenBtn: false
+      hiddenBtn: false,
+      _changeValue: {},
     };
 
     getGroupFields(fields, action, values){
@@ -609,6 +610,7 @@
 
     changeValue(key, value) {
       this.values[key] = value;
+      this._changeValue[key] = value;
       this.$apply();
     }
 
@@ -863,7 +865,7 @@
 
     events = {
       async record_save(){
-        if(this.args.action === 'edit'){
+        if(this.args.action === 'edit' && !_.isEmpty(this._changeValue)){
           if (!this.checkRequired()) {
             return;
           }
@@ -921,6 +923,7 @@
       textChange(e) {
         const key = e.target.dataset.id;
         this.values[key] = e.detail.value;
+        this._changeValue[key] = e.detail.value;
         this.$apply()
       },
       selectChange(e) {
