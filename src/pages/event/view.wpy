@@ -1,6 +1,7 @@
 <style lang="less">
 page{
   height: 100%;
+  background: #fff;
 }
 .page__bd{
   padding-bottom: 80px;
@@ -16,6 +17,7 @@ page{
 .event-body{
   padding:30rpx;
   border-radius:6px;
+  box-shadow:0px 0px 6px #ccc;
   margin:30rpx;
   margin-top: -60rpx;
   line-height:24px;
@@ -52,6 +54,24 @@ page{
   }
 }
 .event-attendees{
+  &.weui-cells{
+    border-bottom:solid 1px #dfdfdf;
+    &:before{
+      display: none;
+    }
+    &:after{
+      display: none;
+    }
+    .weui-cell{
+      border-top:solid 1px #dfdfdf;
+      &:before{
+        display: none;
+      }
+      &:after{
+        display: none;
+      }
+    }
+  }
   .weui-cell_muted{
     font-size: 13px;
     color: #888888;
@@ -166,11 +186,11 @@ page{
         </view>
         <view class="weui-cell__ft weui-cell__ft_in-access"></view>
       </view>
-      <view class="weui-cell">
+      <!-- <view class="weui-cell">
         <view class="weui-cell__bd">
           <view class="event-accepted-count event-field">人数：{{event.accepted_count ? event.accepted_count : 0}}人报名，{{event.pending_count ? event.pending_count : 0}}人观望</view>
         </view>
-      </view>
+      </view> -->
       <view class="weui-cell" wx:if="{{event.description}}">
         <view class="weui-cell__bd">
           <view class="event-description">{{event.description}}</view>
@@ -178,6 +198,11 @@ page{
       </view>
     </view>
     <view class="event-attendees weui-cells">
+      <view class="weui-cell">
+        <view class="weui-cell__bd">
+          <view>{{event.accepted_count ? event.accepted_count : 0}}人报名，{{event.pending_count ? event.pending_count : 0}}人观望</view>
+        </view>
+      </view>
       <view class="weui-cell">
         <view class="weui-cell__hd">
             <image class="avatar" mode="aspectFill" src="{{event.owner.profile.avatar}}"/>
