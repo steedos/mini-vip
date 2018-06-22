@@ -330,7 +330,7 @@
 </template>
 <script>
   import wepy from 'wepy'
-  import {baseUrl} from '@/config';
+  import { baseUrl, appId } from '@/config'
   import util from '../wxs/util.wxs'
   const utilJs = require('../utils/util.js');
 
@@ -1046,8 +1046,9 @@
 
         if (this.args.action === 'create') {
           const value = this.transformValue(formValues);
-          if(this.args.object_name == 'vip_event_attendees'){
-            value['wx_form_id'] = e.detail.formId
+          if(Object.keys(this.fields).indexOf('wx_form_id') > 0){
+            if(this.fields.indexOf('wx_form_id') > 0)
+            value['wx_form_id'] = appId + ':'+ e.detail.formId
           }
           const record = await this.$parent.$parent.insert(this.args.object_name, value)
 
@@ -1070,8 +1071,8 @@
           await this.uploadImages(this.args.record_id);
           await this.uploadVideos(this.args.record_id);
           const value = this.transformValue(formValues);
-          if(this.args.object_name == 'vip_event_attendees'){
-            value['wx_form_id'] = e.detail.formId
+          if(Object.keys(this.fields).indexOf('wx_form_id') > 0){
+            value['wx_form_id'] = appId + ':'+ e.detail.formId
           }
           await this.$parent.$parent.update(this.args.object_name, this.args.record_id, value)
         }
