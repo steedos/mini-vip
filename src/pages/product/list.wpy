@@ -1,0 +1,13 @@
+<style lang="less" scoped>
+
+</style>
+
+<template>
+	Product
+</template>
+
+<script>
+export default class Product extends wepy.page {
+	
+}
+</script>

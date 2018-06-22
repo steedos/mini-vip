@@ -207,8 +207,8 @@ page {
           </view>
         </view>
       </view>
-      <view class="weui-cells">
-        <navigator url="/pages/admin/index?space_id={{space_id}}" class="weui-cell" hover-class="weui-cell_active" wx:if="{{is_space_admin}}">
+      <view class="weui-cells" wx:if="{{is_space_admin}}">
+        <navigator url="/pages/admin/index?space_id={{space_id}}" class="weui-cell" hover-class="weui-cell_active">
           <view class="weui-cell__hd">
             <view class="slds-icon-utility-settings slds-icon slds-icon--small slds-m-right--x-small"/>
           </view>
