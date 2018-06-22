@@ -146,9 +146,6 @@ export default class EventList extends wepy.component {
   }
 
   onLoad() {
-    setTimeout(() => {
-      console.log('event list showHeader.....', this.list)
-    }, 5000);
   }
 
   data = {
@@ -161,7 +158,7 @@ export default class EventList extends wepy.component {
 
   methods = {
     goDetail(event_id, space_id){
-      let url = `../event/view?event_id=${event_id}&space_id=${space_id}`;
+      let url = `../event/view?event_id=${event_id}&space_id=${space_id}${this.showHeader ? "&showHeader=1" : ""}`;
       console.log(url);
       wx.navigateTo({
         url: url

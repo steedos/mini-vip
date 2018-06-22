@@ -131,7 +131,7 @@ page{
 </style>
 <template>
 <view class="page" wx:if="{{is_loaded}}">
-  <navigator class="event-header" url="../space/index?space_id={{space_id}}">
+  <navigator wx:if="{{showHeader}}" class="event-header" url="../space/index?space_id={{space_id}}">
     <view class="weui-cell weui-cell_access">
       <view class="weui-cell__hd">
         <image wx:if="{{avatar}}" class="image slds-icon slds-icon--small slds-m-right--x-small" src="{{util.formatImageUrl(avatar, baseUrl)}}"></image>
@@ -225,7 +225,7 @@ import util from '../../wxs/util.wxs';
 import pageRouter from '@/utils/pageRouter'
 import { baseMaterialUrl } from '@/config';
 
-export default class EventView2 extends wepy.page {
+export default class EventView extends wepy.page {
   config = {
     navigationBarTitleText: '',
     enablePullDownRefresh: true
@@ -237,6 +237,7 @@ export default class EventView2 extends wepy.page {
       mask: true
     });
     await this.$parent.login();
+    this.showHeader = e.showHeader ? true : false;
     if(e.space_id){
       this.$parent.globalData.space_id = e.space_id;
       this.space_id = e.space_id;
@@ -251,8 +252,6 @@ export default class EventView2 extends wepy.page {
       if (res.value[0]) {
         this.space_name = res.value[0].space.name
         this.avatar = res.value[0].avatar
-        console.log("====space_name=====",this.space_name)
-        console.log("=====avatar====",this.avatar)
       }
     } 
     if(e.event_id){
@@ -300,7 +299,6 @@ export default class EventView2 extends wepy.page {
     let attendees = await this.$parent.query("vip_event_attendees", query_options, this.space_id);
     this.attendees = attendees.value;
     this.$apply();
-    console.log("************************",this.attendees)
   };
 
   goBackAfterRemove() {
@@ -338,7 +336,8 @@ export default class EventView2 extends wepy.page {
     avatar: '',
     is_loaded: false,
     editable: false,
-    baseMaterialUrl: baseMaterialUrl
+    baseMaterialUrl: baseMaterialUrl,
+    showHeader: true
   };
 
   wxs = {
