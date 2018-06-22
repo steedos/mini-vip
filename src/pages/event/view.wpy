@@ -122,58 +122,43 @@ page{
   width: initial;
 }
 .tab-bar {
+  font-size: 15px;
   display: flex;
   position: fixed;
+  box-sizing: border-box;
   z-index: 500;
   bottom: 0;
-  height: 50px;
+  height: auto;
   width: 100%;
-  background-color: #F7F7FA;
-  justify-content: space-around;
+  background-color: #fff;
+  color: #6d6d78;
   align-items: center;
 
-  &::before {
-    content: " ";
-    position: absolute;
-    left: 0;
-    top: 0;
-    right: 0;
-    height: 1px;
-    border-top: 1px solid #C0BFC4;
-    color: #C0BFC4;
-    -webkit-transform-origin: 0 0;
-    transform-origin: 0 0;
-    -webkit-transform: scaleY(0.5);
-    transform: scaleY(0.5);
-  }
-
-  .btn{
-    font-size: 18px;
+  .btn {
+    flex: 1;
+    padding:0 30rpx;
+    font-size:15px;
+    line-height:inherit;
+    width:auto;
+    height:auto;
     border: none!important;
-    padding: 10px 0;
-    margin: 0px;
-    color: #5e9bf4;
-    width:50%;
-    text-align:center;
-    position:relative;
-    &:after {
-      content: " ";
-      position: absolute;
-      right: 0;
-      top: 14px;
-      bottom: 14px;
-      width: 1px;
-      border-right: 1px solid #C0BFC4;
-      color: #C0BFC4;
-      -webkit-transform-origin: 0 0;
-      transform-origin: 0 0;
-      -webkit-transform: scaleX(0.3);
-      transform: scaleX(0.3);
+    line-height:50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .slds-icon {
+      width: 1rem;
+      height: 1rem;
+      margin-right: 0.25rem;
     }
   }
-  button.btn{
-    color: #5e9bf4;
-    padding: 0 0;
+  .slds-icon {
+    display: inline-block;
+  }
+  .text {
+    display: inline-block;
+    color: #6d6d78;
   }
 }
 </style>
@@ -262,10 +247,19 @@ page{
       </view>
     </view>
   </view>
-  <view class="tab-bar">
-    <view wx:if="{{editable}}" class="btn btn-edit" @tap="editEvent">编辑</view>
-    <view wx:else class="btn btn-respond" @tap="respondEvent">活动报名</view>
-    <button open-type="share" class="btn btn-invite" type="default" plain="{{true}}">邀请好友</button>
+  <view class="tab-bar border-top-1px">
+    <view wx:if="{{editable}}" class="btn btn-edit" @tap="editEvent">
+      <view class="vip_new_direct_message-default slds-icon slds-icon--small slds-m-right--x-small"></view>
+      <view class="text">编辑</view>
+    </view>
+    <view wx:else class="btn btn-respond" @tap="respondEvent">
+      <view class="vip_answer-default slds-icon slds-icon--small slds-m-right--x-small"></view>
+      <view class="text">活动报名</view>
+    </view>
+    <button open-type="share" class="btn btn-invite" type="default" plain="{{true}}">
+      <view class="vip_share-default slds-icon slds-icon--small slds-m-right--x-small"></view>
+      <view class="text">邀请好友</view>
+    </button>
   </view>
 </view>
 </template>
