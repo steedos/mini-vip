@@ -55,13 +55,6 @@
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
           </navigator>
         </repeat>
-        <navigator url="/pages/space/invite_admin?space_id={{space_id}}&store_id={{store_info._id}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
-          <view class="weui-cell__hd">
-            <image class="slds-icon slds-icon--small slds-m-right--x-small space_admins" src="../../images/icon/space_admins.svg"></image>
-          </view>
-          <view class="weui-cell__bd">管理员</view>
-          <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-        </navigator>
       </view>
     </view>
   </view>
@@ -86,6 +79,19 @@ export default class AdminIndex extends wepy.page {
     this.space_id = e.space_id || this.$parent.globalData.space_id;
     await this.$parent.login(this.space_id);
     await this.loadStoreInfo();
+    this.is_space_owner = this.$parent.isSpaceOwner(this.space_id, this.$parent.globalData.user._id);
+
+    this.options = [
+      // {title: '门店', icon:'standard-address', url: '../record/list?object_name=vip_store'},
+      {title: '动态', icon:'standard-news', url: '../record/list?object_name=post&avatar_field=owner.profile.avatar&description_field=summary&date_field=modified'},
+      {title: '活动', icon:'standard-event', url: '../record/list?object_name=vip_event'},
+      {title: '卡项', icon:'standard-work-type', url: '../record/list?object_name=vip_category'},
+      // {title: '会员卡', icon:'standard-scan-card', url: '../record/list?object_name=vip_card'},
+      {title: '员工', icon:'standard-user', url: '../record/list?object_name=space_users&avatar_field=user.profile.avatar&description_field=mobile&filter=(((profile eq \'user\') or (profile eq \'admin\')))&add_url=/pages/space/invite_user&allow_create=' + this.is_space_owner},
+      {title: 'WIFI', icon:'utility-wifi', url: '../record/list?object_name=vip_wifi'},
+      {title: '二维码', icon:'standard-product', url: 'qrcode'}
+    ]
+
     this.is_loaded = true;
     this.$apply();
     wepy.hideLoading();
@@ -108,16 +114,8 @@ export default class AdminIndex extends wepy.page {
     space_id: '',
     store_info: {},
     is_loaded: false,
-    options: [
-      // {title: '门店', icon:'standard-address', url: '../record/list?object_name=vip_store'},
-      {title: '动态', icon:'standard-news', url: '../record/list?object_name=post&avatar_field=owner.profile.avatar&description_field=summary&date_field=modified'},
-      {title: '活动', icon:'standard-event', url: '../record/list?object_name=vip_event'},
-      {title: '卡项', icon:'standard-work-type', url: '../record/list?object_name=vip_category'},
-      // {title: '会员卡', icon:'standard-scan-card', url: '../record/list?object_name=vip_card'},
-       {title: '员工', icon:'standard-user', url: '../record/list?object_name=space_users&avatar_field=user.profile.avatar&description_field=mobile&filter=(((profile eq \'user\') or (profile eq \'admin\')))'},
-      {title: 'WIFI', icon:'utility-wifi', url: '../record/list?object_name=vip_wifi'},
-      {title: '二维码', icon:'standard-product', url: 'qrcode'}
-    ]
+    is_space_owner: false,
+    options: []
   };
 
   wxs = {

@@ -197,7 +197,7 @@ export default class RecordList extends wepy.page {
       this.url = this.url + '?action=edit'
     }
 
-    this.space_id = e.space_id;
+    this.space_id = e.space_id || this.$parent.globalData.space_id;
     this.object_name = e.object_name;
 
     if(e.add_url){
@@ -205,9 +205,9 @@ export default class RecordList extends wepy.page {
     }
 
     if(this.add_url.indexOf('?') > -1){
-      this.add_url = this.add_url + '&object_name=' + this.object_name + '&space_id=' + this.space_id + "&store_id=" + this.store_id
+      this.add_url = this.add_url + '&object_name=' + this.object_name + '&space_id=' + this.space_id + "&store_id=" + this.space_id
     }else{
-      this.add_url = this.add_url + '?object_name=' + this.object_name + '&space_id=' + this.space_id + "&store_id=" + this.store_id
+      this.add_url = this.add_url + '?object_name=' + this.object_name + '&space_id=' + this.space_id + "&store_id=" + this.space_id
     }
 
     this.avatar_field = e.avatar_field;
@@ -220,11 +220,9 @@ export default class RecordList extends wepy.page {
     const object = await this.$parent.getObject(this.object_name);
 
     this.allowCreate = object.allowCreate;
-
-    if(e.add_url){
+    if(e.allow_create === 'true'){
       this.allowCreate = true
     }
-
     this.searchPlaceholder = '搜索' + object.label;
 
     wx.setNavigationBarTitle({

@@ -153,7 +153,6 @@ export default class VIP extends wepy.app {
       'pages/404',
       'pages/record/view',
       'pages/record/create',
-      'pages/space/invite_admin',
       'pages/space/invite_user',
     ],
     tabBar: {
@@ -373,6 +372,23 @@ export default class VIP extends wepy.app {
         'X-Auth-Token': globalData.user.auth_token,
       }
       req.header(header)
+    }
+  }
+
+  isSpaceOwner(space_id, user_id){
+    if(space_id && this.globalData.my_spaces){
+      const space = this.globalData.my_spaces.find((space)=>{
+        return space._id === space_id && space.owner === user_id;
+      });
+
+      if(space){
+        return true;
+      }else{
+        return false;
+      }
+    }
+    else{
+      return false;
     }
   }
 

@@ -156,6 +156,15 @@
     .message{
       padding-top: 15px;
     }
+
+    .explanation{
+      padding:0 .34em;
+      font-size:12px;
+    }
+
+    .btn-invite{
+      margin-bottom: 15px;
+    }
   }
 </style>
 <template>
@@ -171,13 +180,17 @@
             <image wx:else class="avatar" mode="aspectFill" src="{{emptyImageUrlForAvatar}}" @tap.stop="uploadImage()"/>
           </view>
           <!--<view class="store-name">{{store_info.name}}</view>-->
-          <view class="message">{{introducer_name}}邀请您加入<b>{{store_info.name}}</b>管理员</view>
-          <button class="weui-btn btn-star" @tap="joinAdmins" type="primary" plain="true" size="mini" wx:if="{{!is_space_admin}}">加入</button>
+          <view class="message" wx:if="{{introducer}}">{{introducer_name}}邀请您加入<b>{{store_info.name}}</b></view>
+          <view class="message" wx:else>
+            <view class="explanation">点击下面的按钮，邀请用户加入<b>{{store_info.name}}</b></view>
+            <view class="explanation">此邀请的有效期为：24小时</view>
+          </view>
+          <button class="weui-btn btn-join" @tap="joinUser" type="primary" plain="true" size="mini" wx:if="{{!is_space_admin}}">加入</button>
         </view>
       </view>
     </view>
     <view class="page__bd container">
-      <button class="weui-btn btn-star" open-type="share" type="primary" plain="true" size="mini" wx:if="{{is_space_owner}}">邀请</button>
+      <button class="weui-btn btn-invite" open-type="share" type="primary" plain="true" size="mini" wx:if="{{is_space_owner}}">邀请</button>
     </view>
   </view>
 </template>
@@ -205,7 +218,7 @@
       const temp_token = this.token.temp_token
       return {
         title: `${this.$parent.globalData.user.name}邀请您加入${this.store_info.name}`,
-        path: `/pages/space/invite_admin?space_id=${space_id}&store_id=${store_id}&introducer=${introducer}&token=${temp_token}&introducer_name=${encodeURI(this.introducer_name)}`
+        path: `/pages/space/invite_user?space_id=${space_id}&store_id=${store_id}&introducer=${introducer}&token=${temp_token}&introducer_name=${encodeURI(this.introducer_name)}`
       };
     }
 
@@ -244,7 +257,7 @@
         this.introducer_name = decodeURI(e.introducer_name)
       }
 
-      if(this.$parent.checkMobile(`/pages/space/invite_admin?space_id=${this.space_id}&store_id=${this.store_id}&introducer=${this.introducer}&token=${this.token}&introducer_name=${encodeURI(this.introducer_name)}`)){
+      if(this.$parent.checkMobile(`/pages/space/invite_user?space_id=${this.space_id}&store_id=${this.store_id}&introducer=${this.introducer}&token=${this.token}&introducer_name=${encodeURI(this.introducer_name)}`)){
         const space = await this.$parent.get('spaces', this.space_id, this.space_id);
         this.is_space_owner = space && userId == space.owner;
         if(this.is_space_owner){
@@ -254,7 +267,7 @@
         if(!this.is_space_owner && this.is_space_admin){
           wepy.redirectTo({url: '/pages/space/index?space_id=' + this.space_id})
         }
-        const result = await this.$parent.get('vip_store', this.store_id, this.space_id);
+        const result = await this.$parent.get('vip_store', this.store_id, this.space_id, {$select: '_id,name,cover,avatar'});
         this.store_info = result;
         this.is_loaded = true;
         wepy.hideLoading();
@@ -263,9 +276,9 @@
     }
 
     methods = {
-      async joinAdmins(){
+      async joinUser(){
         if(!this.is_space_admin){
-          const result = await req.post('/api/steedos/weixin/invite_admin', {space_id: this.space_id, store_id: this.store_id, introducer: this.introducer, token: this.token}).catch((err)=>{
+          const result = await req.post('/api/steedos/weixin/invite_user', {space_id: this.space_id, store_id: this.store_id, introducer: this.introducer, token: this.token}).catch((err)=>{
             this.showTopTips = true
             this.message = err.data.errors
             this.$apply()
