@@ -132,7 +132,7 @@
 <template>
   <view class="record-form" wx:if="{{is_loaded}}">
     <view class="weui-toptips weui-toptips_warn" wx:if="{{showTopTips}}">{{message}}</view>
-    <form bindsubmit="submitForm">
+    <form bindsubmit="submitForm" report-submit='true' >
       <view class="page__bd">
         <repeat for="{{groupFields}}" key="index_g" index="index_g" item="groupField">
           <block wx:if="{{groupField._groupText === '-'}}">
@@ -1046,6 +1046,9 @@
 
         if (this.args.action === 'create') {
           const value = this.transformValue(formValues);
+          if(this.args.object_name == 'vip_event_attendees'){
+            value['wx_form_id'] = e.detail.formId
+          }
           const record = await this.$parent.$parent.insert(this.args.object_name, value)
 
           if (this.hasTempImages()) {
@@ -1067,6 +1070,9 @@
           await this.uploadImages(this.args.record_id);
           await this.uploadVideos(this.args.record_id);
           const value = this.transformValue(formValues);
+          if(this.args.object_name == 'vip_event_attendees'){
+            value['wx_form_id'] = e.detail.formId
+          }
           await this.$parent.$parent.update(this.args.object_name, this.args.record_id, value)
         }
         this.goBack(this.args.action);
