@@ -154,6 +154,7 @@ export default class VIP extends wepy.app {
       'pages/record/view',
       'pages/record/create',
       'pages/space/invite_admin',
+      'pages/space/invite_user',
     ],
     tabBar: {
       color: '#666',

@@ -188,10 +188,12 @@
   import util from '../../wxs/util.wxs';
   import req from '@/network';
 
-  export default class InviteAdmin extends wepy.page {
+  export default class InviteUser extends wepy.page {
+
     config = {
-      navigationBarTitleText: '邀请管理员'
+      navigationBarTitleText: '邀请用户'
     };
+
     wxs = {
       util: util
     };
@@ -202,7 +204,7 @@
       const introducer = this.$parent.globalData.user._id;
       const temp_token = this.token.temp_token
       return {
-        title: '邀请管理员',
+        title: `${this.$parent.globalData.user.name}邀请您加入${this.store_info.name}`,
         path: `/pages/space/invite_admin?space_id=${space_id}&store_id=${store_id}&introducer=${introducer}&token=${temp_token}&introducer_name=${encodeURI(this.introducer_name)}`
       };
     }
