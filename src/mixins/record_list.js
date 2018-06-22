@@ -19,8 +19,8 @@ export default class recordList extends wepy.mixin {
     searchPlaceholder: '搜索',
     allowCreate: false,
     filter: '',
-    url: './edit',
-    add_url: './create'
+    url: '/pages/record/edit',
+    add_url: '/pages/record/create'
   };
 
   refresh() {
@@ -46,6 +46,8 @@ export default class recordList extends wepy.mixin {
   }
 
   async onLoad(e) {
+    console.log('mixin onLoad...', this.object_name, this.baseUrl, e);
+
     wepy.showLoading({
       title: '加载中',
       mask: true
@@ -55,7 +57,7 @@ export default class recordList extends wepy.mixin {
       throw new Error('缺少参数:space_id,object_name')
     }
 
-    if(!e.object_name){
+    if(!e.object_name && !this.object_name){
       throw new Error('缺少参数:object_name')
     }
 
@@ -69,8 +71,8 @@ export default class recordList extends wepy.mixin {
       this.url = this.url + '?action=edit'
     }
 
-    this.space_id = e.space_id || this.$parent.globalData.space_id;
-    this.object_name = e.object_name;
+    this.space_id = e.space_id || this.space_id || this.$parent.globalData.space_id;
+    this.object_name = e.object_name || this.object_name;
 
     if(e.add_url){
       this.add_url = e.add_url
