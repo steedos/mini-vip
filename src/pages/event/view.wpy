@@ -146,6 +146,9 @@ page{
     <view wx:if="{{event.cover}}" class="event-cover">
       <image class="image cover" mode="aspectFill" src="{{util.formatImageUrl(event.cover, baseUrl)}}" @tap="previewImage({{event.cover}})" />
     </view>
+    <view wx:else class="event-cover">
+      <image class="image cover" mode="aspectFill" src="{{baseMaterialUrl + 'event.jpg'}}"/>
+    </view>
     <view class="event-body weui-cells">
       <view class="weui-cell">
         <view class="weui-cell__bd">
@@ -220,6 +223,7 @@ import req from '@/network';
 import { baseUrl } from '@/config';
 import util from '../../wxs/util.wxs';
 import pageRouter from '@/utils/pageRouter'
+import { baseMaterialUrl } from '@/config';
 
 export default class EventView2 extends wepy.page {
   config = {
@@ -333,7 +337,8 @@ export default class EventView2 extends wepy.page {
     space_name: '',
     avatar: '',
     is_loaded: false,
-    editable: false
+    editable: false,
+    baseMaterialUrl: baseMaterialUrl
   };
 
   wxs = {
