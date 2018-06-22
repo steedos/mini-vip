@@ -730,9 +730,11 @@
   <scroll-view class="container" scroll-y="true">
     <view wx:if="{{!openAttr}}">
       <swiper class="goodsimgs" indicator-dots="true" autoplay="true" interval="3000" duration="1000">
-        <swiper-item wx:for="{{gallery}}" wx:key="{{item.id}}">
-          <image src="{{item.img_url}}" background-size="cover"></image>
-        </swiper-item>
+        <repeat for="{{product.covers}}" key="index" index="index" item="img">
+          <swiper-item>
+            <image src="{{util.formatImageUrl(img, baseUrl)}}" mode="aspectFill"></image>
+          </swiper-item>
+        </repeat>
       </swiper>
       <view class="service-policy">
         <view class="item">30天无忧退货</view>
@@ -741,9 +743,9 @@
       </view>
       <view class="goods-info">
         <view class="c">
-          <text class="name">{{goods.name}}</text>
-          <text class="desc">{{goods.goods_brief}}</text>
-          <text class="price">￥{{goods.retail_price}}</text>
+          <text class="name">{{product.name}}</text>
+          <text class="desc">{{product.description}}</text>
+          <text class="price">￥{{product.default_price}}</text>
           <view class="brand" wx:if="{{brand.name}}">
             <navigator url="../brandDetail/brandDetail?id={{brand.brandId}}">
               <text>{{brand.name}}</text>
@@ -755,14 +757,6 @@
         <view class="t">请选择规格数量</view>
         <image class="i" src="../../static/images/address_right.png" background-size="cover"></image>
       </view>
-      <!--<view class="section-nav section-act">
-        <view class="t">
-          <view class="label">1个促销:</view>
-          <view class="tag">万圣趴</view>
-          <view class="text">全场满499，额外送糖果</view>
-        </view>
-        <image class="i" src="../../static/images/address_right.png" background-size="cover"></image>
-      </view>-->
       <view class="comments" wx:if="{{comment.count > 0}}">
         <view class="h">
           <navigator url="../comment/comment?valueId={{goods.id}}&typeId=0">
@@ -800,6 +794,9 @@
       </view>
 
       <view class="detail">
+        <repeat for="{{product.images}}" key="index" index="index" item="img">
+          <image src="{{util.formatImageUrl(img, baseUrl)}}" mode="widthFix"></image> 
+        </repeat>
       </view>
 
 
@@ -885,17 +882,22 @@
 
 <script>
   import wepy from 'wepy'
-  // import WxParse from '../../lib/wxParse/wxParse.js'
-  // import util from '../../utils/util.js'
-  // import api from '../../config/api.js'
+  import { baseUrl } from '@/config'
+  import util from '../../wxs/util.wxs'
 
   export default class ProduceView extends wepy.page {
 		config = {
 			navigationBarTitleText: '商品详情',
 			enablePullDownRefresh: true
-		};
+    };
+    
+    wxs = {
+      util: util
+    }
 
     data = {
+      baseUrl: baseUrl,
+      product: null,
       id: 0,
       goods: {},
       gallery: [],
@@ -914,6 +916,17 @@
       noCollectImage: '/static/images/icon_collect.png',
       hasCollectImage: '/static/images/icon_collect_checked.png',
       collectBackImage: '/static/images/ic_menu_choice_nor.png'
+    }
+
+    async onLoad (e) {
+      await this.$parent.login('eKYuE9bggPrSad92g');
+      const options = {
+        $filter: `_id eq 'fq6ixzY4wSKqiGomH'`,
+        $select: 'name,default_price,compared_price,description,covers,images,avatar,categories,tags,vendor,status'
+      };
+      const product = await this.$parent.query('vip_product', options, 'guest');
+      this.product = product.value[0];
+      this.$apply();
     }
     // methods = {
     //   switchAttrPop: function () {
@@ -1136,15 +1149,6 @@
     //       return false
     //     }
     //   })
-    // }
-    // async onLoad (options) {
-    //   // 页面初始化 options为页面跳转所带来的参数
-    //   this.id = parseInt(options.id)
-    //   await this.getGoodsInfo()
-    //   let res = await util.request(api.CartGoodsCount)
-    //   if (res.errno === 0) {
-    //     this.cartGoodsCount = res.data.cartTotal.goodsCount
-    //   }
     // }
   }
 </script>
