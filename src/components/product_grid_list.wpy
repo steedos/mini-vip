@@ -10,7 +10,7 @@
           <view class="product_name" wx:if="{{showTitle}}">{{item.name}}</view>
           <view class="product_info">
             <view class="price">￥{{item.default_price}}</view>
-            <view class="cost_price">￥{{item.compared_price}}</view>
+            <view class="cost_price" wx:if="{{item.compared_price}}">￥{{item.compared_price}}</view>
             <view class="sale_num">销量{{item.saleCount || 998}}件</view>
           </view>
         </view>
