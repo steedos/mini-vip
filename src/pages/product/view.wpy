@@ -795,7 +795,7 @@
 
       <view class="detail">
         <repeat for="{{product.images}}" key="index" index="index" item="img">
-          <image src="{{util.formatImageUrl(img, baseUrl)}}" mode="widthFix"></image> 
+          <image src="{{util.formatImageUrl(img, baseUrl)}}" mode="widthFix"></image>
         </repeat>
       </view>
 
@@ -890,7 +890,7 @@
 			navigationBarTitleText: '商品详情',
 			enablePullDownRefresh: true
     };
-    
+
     wxs = {
       util: util
     }
@@ -919,7 +919,7 @@
     }
 
     async onLoad (e) {
-      await this.$parent.login('eKYuE9bggPrSad92g');
+//      await this.$parent.login('eKYuE9bggPrSad92g');
       const options = {
         $filter: `_id eq 'fq6ixzY4wSKqiGomH'`,
         $select: 'name,default_price,compared_price,description,covers,images,avatar,categories,tags,vendor,status'
