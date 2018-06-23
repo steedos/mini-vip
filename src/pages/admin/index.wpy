@@ -90,7 +90,7 @@ export default class AdminIndex extends wepy.page {
       {title: '员工', icon:'standard-user', url: '../record/list?object_name=space_users&avatar_field=user.profile.avatar&description_field=mobile&filter=(((profile eq \'user\') or (profile eq \'admin\')))&add_url=/pages/space/invite_user&allow_create=' + this.is_space_owner},
       {title: 'WIFI', icon:'utility-wifi', url: '../record/list?object_name=vip_wifi'},
       {title: '二维码', icon:'standard-product', url: 'qrcode'},
-      {title: '商品', icon:'standard-product', url: '../product/list'}
+      {title: '商品', icon:'standard-shipment', url: '../product/list'}
     ]
 
     this.is_loaded = true;
