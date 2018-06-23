@@ -94,9 +94,9 @@
         <productGridList :list.sync="record_list"></productGridList>
       </view>
     </view>
-    <view class="tab-bar" wx:if="{{allowCreate}}">
-      <view class="slds-icon-action-new" @tap="addRecord"></view>
-    </view>
+    <!--<view class="tab-bar" wx:if="{{allowCreate}}">-->
+      <!--<view class="slds-icon-action-new" @tap="addRecord"></view>-->
+    <!--</view>-->
   </view>
 </template>
 
