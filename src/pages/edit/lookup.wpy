@@ -53,7 +53,7 @@
     getObjectField(key){
       const pages = getCurrentPages();
       const prevPage = pages[pages.length - 2];
-      return prevPage.data.$form$schema.fields[key]
+      return prevPage.data.$autoform$schema.fields[key]
     }
 
     onLoad(e) {
