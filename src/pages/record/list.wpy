@@ -92,7 +92,7 @@
     <view class="page__bd">
       <view class="weui-cells weui-cells_after-title">
         <repeat for="{{record_list}}" key="index" index="index" item="record">
-          <navigator url="{{url}}&object_name={{object_name}}&record_id={{record._id}}&space_id={{record.space}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+          <navigator url="{{url}}&record_id={{record._id}}&space_id={{record.space}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
             <view class="weui-cell__hd" wx:if="{{avatar_field}}">
               <image src="{{util.formatAvatarImageUrl(record[avatar_field], baseUrl)}}" class='avatar-field'></image>
             </view>
@@ -139,6 +139,10 @@ export default class RecordList extends wepy.page {
   };
 
   mixins = [recordList];
+
+  refresh(){
+    this.dataRefresh()
+  }
 
   methods = {
     searchRecords(searchValue, evt){

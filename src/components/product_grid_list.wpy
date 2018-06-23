@@ -1,0 +1,126 @@
+<!--商品列表模块-->
+<template>
+  <scroll-view scroll-y="true" class="swiper-item-box">
+    <view class="shop_item">
+      <navigator class="list" wx:for="{{list}}" wx:key="item" url="/pages/goods_detail?id={{item.id}}&purchasetype={{purchasetype}}&special={{special}}">
+        <view class="image_box">
+          <image src="{{util.formatImageUrl(item.avatar, baseUrl)}}"></image>
+        </view>
+        <view class="goods">
+          <view class="product_name" wx:if="{{showTitle}}">{{item.name}}</view>
+          <view class="product_info">
+            <view class="price">￥{{item.default_price}}</view>
+            <view class="cost_price">￥{{item.compared_price}}</view>
+            <view class="sale_num">销量{{item.saleCount || 998}}件</view>
+          </view>
+        </view>
+      </navigator>
+    </view>
+  </scroll-view>
+</template>
+<script>
+import wepy from 'wepy'
+import { baseUrl} from '@/config'
+import util from '../wxs/util.wxs'
+
+
+export default class ProductGridList extends wepy.component {
+  props = {
+    list: [],
+    purchasetype: {
+      default: 1  //类型:1-商品订单;2-商品补单;
+    },
+    special:{
+      default: 0 //0-正常入库;1-特价专区和换货专区
+    },
+    showTitle:{
+      default:true
+    }
+  }
+
+  wxs = {
+    util: util,
+  };
+
+  data = {
+    baseUrl: baseUrl,
+  }
+
+  events = {
+
+  }
+
+  methods = {
+
+  }
+
+  onLoad() {
+
+  }
+}
+
+</script>
+<style lang="less">
+.shop_item {
+  padding: 0rpx 15rpx;
+  background: #f7f7f7;
+  display: flex;
+  flex-wrap: wrap;
+  padding-bottom: 30rpx;
+}
+
+.list:nth-child(odd) {
+  margin-right: 10rpx;
+}
+
+.list {
+  background: #fff;
+  width: 355rpx;
+  margin-top: 15rpx;
+  .image_box {
+    image {
+      width: 100%;
+      height: 345rpx;
+    }
+  }
+  .product_name {
+    color: #1a1a1a;
+    font-size: 28rpx;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    word-break: break-all;
+  }
+  .price {
+    color: #de0000;
+    font-size: 35rpx;
+    font-weight: 600;
+  }
+  .cost_price {
+    color: #666666;
+    font-size: 24rpx;
+    text-decoration: line-through;
+    font-weight: 600;
+  }
+  .sale_num {
+    color: #666666;
+    font-size: 22rpx;
+  }
+  .goods {
+    padding: 15rpx 12rpx;
+  }
+  .product_info {
+    padding-top: 20rpx;
+    display: flex;
+    align-items: flex-end;
+  }
+  .cost_price {
+    padding-left: 20rpx;
+  }
+  .sale_num {
+    padding-left: 20rpx;
+  }
+}
+
+</style>
