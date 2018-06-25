@@ -1,7 +1,7 @@
 import wepy from 'wepy'
 import _ from 'underscore'
 import { handleActions } from 'redux-actions'
-import { ADD_PRODUCT, DECREASE_PRODUCT, UPDATE_PRODUCT_INFO, CART_PRODUCT_COUNT } from '../types/counter'
+import { ADD_PRODUCT, DECREASE_PRODUCT, UPDATE_PRODUCT_COUNT, UPDATE_PRODUCT_INFO, CART_PRODUCT_COUNT } from '../types/counter'
 
 const cartList = wx.getStorageSync('cartList') || []
 
@@ -29,7 +29,7 @@ export default handleActions({
     const cartList = state.cartList;
     if (cartList && cartList.constructor === Array) {
       for (let p of cartList) {
-        if (p._id === product_id) {
+        if (p._id === product_id && p.count > 1) {
           p.count--;
         }
       }
@@ -39,6 +39,9 @@ export default handleActions({
   [UPDATE_PRODUCT_INFO] (state, action) {
     state.cartList = action.payload
     return {...state}
+  },
+  [UPDATE_PRODUCT_COUNT] (state, action) {
+
   },
   [CART_PRODUCT_COUNT] (state, action) {
     const cartList = state.cartList;

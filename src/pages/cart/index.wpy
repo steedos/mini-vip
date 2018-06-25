@@ -1,5 +1,5 @@
 <style lang="less" scoped>
-	view,image,text,navigator {
+	view,image,text,navigator,input {
 		box-sizing: border-box;
 	}
   page{
@@ -176,32 +176,48 @@
   .cart-view .item .selnum{
     width: 235rpx;
     height: 52rpx;
-    border: 1rpx solid #ccc;
-    display: flex;
+    // border: 1rpx solid #686868;
+		display: flex;
+		
+		view, input {
+			display:flex;
+			justify-content:center;
+			align-items:center;
+		}
   }
 
   .selnum .cut{
     width: 70rpx;
     height: 100%;
-    text-align: center;
-    line-height: 50rpx;
+		text-align: center;
+		height: 50rpx;
+		line-height: 50rpx;
+		border: 1rpx solid #686868;
+
+		&.disabled {
+			border-color: #aaa;
+			border-right-color: #686868;
+		}
   }
 
   .selnum .number{
     flex: 1;
     height: 100%;
-    text-align: center;
-    line-height: 68.75rpx;
-    border-left: 1px solid #ccc;
-    border-right: 1px solid #ccc;
+		text-align: center;
+		height: 50rpx;
+    line-height: 50rpx;
+    border-top: 1rpx solid #686868;
+    border-bottom: 1rpx solid #686868;
     float: left;
   }
 
   .selnum .add{
     width: 80rpx;
     height: 100%;
-    text-align: center;
-    line-height: 50rpx;
+		text-align: center;
+		height: 50rpx;
+		line-height: 50rpx;
+		border: 1rpx solid #686868;
   }
 
 
@@ -340,9 +356,9 @@
 										<view class="b">
 											<text class="price">￥{{goods.default_price}}</text>
 											<view class="selnum">
-												<view class="cut" bindtap="cutNumber" data-item-index="{{index}}">-</view>
+												<view class="cut {{goods.count > 1 ? 'enabled' : 'disabled'}}" @tap="cutNumber" data-item-id="{{goods._id}}">-</view>
 												<input value="{{goods.count}}" class="number" disabled="true" type="number" />
-												<view class="add" bindtap="addNumber" data-item-index="{{index}}">+</view>
+												<view class="add" @tap="addNumber" data-item-id="{{goods._id}}">+</view>
 											</view>
 										</view>
 									</view>
@@ -353,11 +369,11 @@
         </view>
       </view>
       <view class="cart-bottom">
-        <view class="checkbox {{checkedAllStatus ? 'checked' : ''}}" bindtap="checkedAll">全选({{cartTotal.checkedGoodsCount}})</view>
+        <view class="checkbox {{checkedAllStatus ? 'checked' : ''}}" @tap="checkedAll">全选({{cartTotal.checkedGoodsCount}})</view>
         <view class="total">{{!isEditCart ? '￥'+cartTotal.checkedGoodsAmount : ''}}</view>
-        <view class="delete" bindtap="editCart">{{!isEditCart ? '编辑' : '完成'}}</view>
-        <view class="checkout" bindtap="deleteCart" wx:if="{{isEditCart}}">删除所选</view>
-        <view class="checkout" bindtap="checkoutOrder" wx:if="{{!isEditCart}}">下单</view>
+        <view class="delete" @tap="editCart">{{!isEditCart ? '编辑' : '完成'}}</view>
+        <view class="checkout" @tap="deleteCart" wx:if="{{isEditCart}}">删除所选</view>
+        <view class="checkout" @tap="checkoutOrder" wx:if="{{!isEditCart}}">下单</view>
       </view>
     </view>
   </view>
@@ -545,21 +561,12 @@
         }
       },
       cutNumber: function (event) {
-        let itemIndex = event.target.dataset.itemIndex
-        let cartItem = this.cartGoods[itemIndex]
-        let number = (cartItem.number - 1 > 1) ? cartItem.number - 1 : 1
-        cartItem.number = number
-        this.updateCart(cartItem.product_id, cartItem.goods_id, number, cartItem.id)
+    		const itemId = event.target.dataset.itemId
+        store.dispatch({type: 'DECREASE_PRODUCT', payload: itemId})
       },
       addNumber: function (event) {
-        let itemIndex = event.target.dataset.itemIndex
-        let cartItem = this.cartGoods[itemIndex]
-        let number = cartItem.number + 1
-        cartItem.number = number
-        this.setData({
-          cartGoods: this.cartGoods
-        })
-        this.updateCart(cartItem.product_id, cartItem.goods_id, number, cartItem.id)
+				const itemId = event.target.dataset.itemId
+        store.dispatch({type: 'ADD_PRODUCT', payload: {_id: itemId, count: 1}})
       },
       checkoutOrder: function () {
         // 获取已选择的商品
