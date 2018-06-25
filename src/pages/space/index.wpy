@@ -427,14 +427,14 @@ export default class Posts extends wepy.page {
         url: `../event/list?space_id=${this.space_id}`
       },
       vip_product: {
-        label: '产品',
-        icon: 'standard-record',
-        url: '../404'
+        label: '商品',
+        icon: 'standard-shipment',
+        url: `../product/list?space_id=${this.space_id}`
       },
       vip_team: {
         label: '团队',
         icon: 'standard-team-member',
-        url: `../404`
+        url: '../404'
       },
       vip_job: {
         label: '招聘',
@@ -482,7 +482,7 @@ export default class Posts extends wepy.page {
       })
     } else {
       this.enabled_objects = [
-        objects_list.post, objects_list.vip_event, objects_list.vip_card, 
+        objects_list.post, objects_list.vip_event, objects_list.vip_product, objects_list.vip_card, 
         objects_list.qrcode, objects_list.vip_store, objects_list.support
       ] 
     }

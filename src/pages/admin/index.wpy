@@ -47,14 +47,25 @@
       </view>
       <view class="weui-cells">
         <repeat for="{{options}}" key="index" index="index" item="option">
-          <navigator url="{{option.url}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+          <view class="weui-cells">
+            <repeat for="{{option}}" key="index" index="index" item="o">
+              <navigator url="{{o.url}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+                <view class="weui-cell__hd">
+                  <view class="slds-icon-{{o.icon}} slds-icon slds-icon--small slds-m-right--x-small"></view>
+                </view>
+                <view class="weui-cell__bd">{{o.title}}</view>
+                <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+              </navigator>
+            </repeat>
+          <!-- <navigator url="/pages/space/invite_admin?space_id={{space_id}}&store_id={{store_info._id}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
             <view class="weui-cell__hd">
-              <view class="slds-icon-{{option.icon}} slds-icon slds-icon--small slds-m-right--x-small"></view>
+              <image class="slds-icon slds-icon--small slds-m-right--x-small space_admins" src="../../images/icon/space_admins.svg"></image>
             </view>
-            <view class="weui-cell__bd">{{option.title}}</view>
+            <view class="weui-cell__bd">管理员</view>
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-          </navigator>
-        </repeat>
+          </navigator> -->
+          </view>
+      </repeat>
       </view>
     </view>
   </view>
@@ -83,14 +94,16 @@ export default class AdminIndex extends wepy.page {
 
     this.options = [
       // {title: '门店', icon:'standard-address', url: '../record/list?object_name=vip_store'},
-      {title: '动态', icon:'standard-news', url: '../record/list?object_name=post&avatar_field=owner.profile.avatar&description_field=summary&date_field=modified'},
+      [{title: '动态', icon:'standard-news', url: '../record/list?object_name=post'},
       {title: '活动', icon:'standard-event', url: '../record/list?object_name=vip_event'},
-      {title: '卡项', icon:'standard-work-type', url: '../record/list?object_name=vip_category'},
+      {title: '卡项', icon:'standard-work-type', url: '../record/list?object_name=vip_category'}],
       // {title: '会员卡', icon:'standard-scan-card', url: '../record/list?object_name=vip_card'},
-      {title: '员工', icon:'standard-user', url: '../record/list?object_name=space_users&avatar_field=user.profile.avatar&description_field=mobile&filter=(((profile eq \'user\') or (profile eq \'admin\')))&add_url=/pages/space/invite_user&allow_create=' + this.is_space_owner},
-      {title: 'WIFI', icon:'utility-wifi', url: '../record/list?object_name=vip_wifi'},
-      {title: '二维码', icon:'standard-product', url: 'qrcode'},
-      {title: '商品', icon:'standard-shipment', url: '../product/list'}
+      // {title: '员工', icon:'standard-user', url: '../record/list?object_name=space_users&listview_id=emplyees'},
+      [{title: '商品', icon:'standard-shipment', url: '../product/list'},
+      {title:'商品分类',icon:'standard-product-item', url:'../product/list?object_name=vip_product_category'}],
+      
+      [{title: 'WIFI', icon:'utility-wifi', url: '../record/list?object_name=vip_wifi'},
+      {title: '二维码', icon:'standard-product', url: 'qrcode'}]
     ]
 
     this.is_loaded = true;
