@@ -309,16 +309,12 @@ export default class EventView extends wepy.page {
       await this.loadEvent();
       await this.loadAttendees();
       let owner = this.event && this.event.owner && this.event.owner._id;
-      this.editable = this.$parent.recordAllowEdit("vip_event", owner, this.space_id);
+      this.editable = await this.$parent.recordAllowEdit("vip_event", owner, this.space_id);
     }
 
     this.is_loaded = true
     this.$apply();
     wepy.hideLoading();
-    if(e.respond){
-      // 如果是活动报名时手机号填写界面回来的，自动跳转到报名界面
-      this.respondEvent();
-    }
   }
 
   async refresh(action) {
@@ -405,36 +401,6 @@ export default class EventView extends wepy.page {
     return to;
   }
 
-  async respondEvent() {
-    wepy.showLoading({
-      title: '加载中',
-      mask: true
-    });
-//    if(!this.$parent.checkMobile(this.getBackUrlForCheckMobile(), true)){
-//      return;
-//    }
-    let userId = this.$parent.globalData.user._id;
-    let name = this.$parent.globalData.user.name;
-    const query_options = {
-      $filter: `event eq '${this.event_id}' and owner eq '${userId}'`,
-      $select: 'name'
-    };
-    let attendee = await this.$parent.query("vip_event_attendees", query_options, this.space_id);
-    if(!attendee || !attendee.value || !attendee.value.length){
-      let attendeeData = {
-        name: name,
-        event: this.event_id,
-        owner: userId
-      };
-      attendee = await this.$parent.insert("vip_event_attendees", attendeeData, this.space_id);
-    }
-    wepy.hideLoading();
-    if(attendee && attendee.value && attendee.value.length){
-      let url = `/pages/record/edit?action=edit&object_name=vip_event_attendees&record_id=${attendee.value[0]._id}&undeletable=true&title=活动报名`;
-      pageRouter.navigateTo({ url: url });
-    }
-  }
-
   methods = {
     editEvent() {
       if(!this.editable){
@@ -446,7 +412,31 @@ export default class EventView extends wepy.page {
       });
     },
     async respondEvent() {
-      this.respondEvent();
+      let userId = this.$parent.globalData.user._id;
+      let name = this.$parent.globalData.user.name;
+      const query_options = {
+        $filter: `event eq '${this.event_id}' and owner eq '${userId}'`,
+        $select: 'name'
+      };
+      let attendee = await this.$parent.query("vip_event_attendees", query_options, this.space_id);
+      console.log("respondEvent==========this.space_id=========", this.space_id);
+      if(!attendee || !attendee.value || !attendee.value.length){
+        let values = {
+          name: name,
+          event: this.event_id,
+          owner: userId
+        };
+        values = JSON.stringify(values);
+        let url = `/pages/record/create?space_id=${this.space_id}&object_name=vip_event_attendees&values=${values}&title=活动报名`;
+        pageRouter.navigateTo({
+          url: url
+        });
+        return;
+      }
+      if(attendee && attendee.value && attendee.value.length){
+        let url = `/pages/record/edit?action=edit&space_id=${this.space_id}&object_name=vip_event_attendees&record_id=${attendee.value[0]._id}&undeletable=true&title=活动报名`;
+        pageRouter.navigateTo({ url: url });
+      }
     },
     openMap() {
       if (this.event.location.address) {
