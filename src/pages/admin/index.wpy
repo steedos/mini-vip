@@ -94,11 +94,11 @@ export default class AdminIndex extends wepy.page {
 
     this.options = [
       // {title: '门店', icon:'standard-address', url: '../record/list?object_name=vip_store'},
-      [{title: '动态', icon:'standard-news', url: '../record/list?object_name=post'},
+      [{title: '动态', icon:'standard-news', url: '../record/list?object_name=post&avatar_field=owner.profile.avatar&description_field=summary&date_field=modified'},
       {title: '活动', icon:'standard-event', url: '../record/list?object_name=vip_event'},
       {title: '卡项', icon:'standard-work-type', url: '../record/list?object_name=vip_category'}],
       [{title: '会员卡', icon:'standard-scan-card', url: '../record/list?object_name=vip_card'},
-      {title: '团队', icon:'standard-user', url: '../record/list?object_name=space_users&listview_id=emplyees'}],
+       {title: '团队', icon:'standard-user', url: '../record/list?object_name=space_users&avatar_field=user.profile.avatar&description_field=mobile&filter=(((profile eq \'user\') or (profile eq \'admin\')))&add_url=/pages/space/invite_user&allow_create=' + this.is_space_owner}],
       [{title: '商品', icon:'standard-shipment', url: '../product/list'},
       {title:'商品分类',icon:'standard-product-item', url:'../product/list?object_name=vip_product_category'}],
       
