@@ -1,29 +1,12 @@
+import wepy from 'wepy'
+import _ from 'underscore'
 import { handleActions } from 'redux-actions'
-import { INCREMENT, DECREMENT, ASYNC_INCREMENT, CART_PRODUCT_COUNT, ADD_PRODUCT } from '../types/counter'
+import { ADD_PRODUCT, DECREASE_PRODUCT, UPDATE_PRODUCT_INFO, CART_PRODUCT_COUNT } from '../types/counter'
 
 const cartList = wx.getStorageSync('cartList') || []
 
 export default handleActions({
-  [INCREMENT] (state) {
-    return {
-      ...state,
-      num: state.num + 1
-    }
-  },
-  [DECREMENT] (state) {
-    return {
-      ...state,
-      num: state.num - 1
-    }
-  },
-  [ASYNC_INCREMENT] (state, action) {
-    return {
-      ...state,
-      asyncNum: state.asyncNum + action.payload
-    }
-  },
   [ADD_PRODUCT] (state, action) {
-    console.log('cartList......', state.cartList);
     const payload = action.payload;
     const cartList = state.cartList;
     let is_added = false;
@@ -41,6 +24,22 @@ export default handleActions({
     }
     return {...state}
   },
+  [DECREASE_PRODUCT] (state, action) {
+    const product_id = action.payload;
+    const cartList = state.cartList;
+    if (cartList && cartList.constructor === Array) {
+      for (let p of cartList) {
+        if (p._id === product_id) {
+          p.count--;
+        }
+      }
+    }
+    return {...state}
+  },
+  [UPDATE_PRODUCT_INFO] (state, action) {
+    state.cartList = action.payload
+    return {...state}
+  },
   [CART_PRODUCT_COUNT] (state, action) {
     const cartList = state.cartList;
     let cartProductCount = 0;
@@ -55,8 +54,6 @@ export default handleActions({
     }
   }
 }, {
-  num: 0,
-  asyncNum: 0,
   cartList: cartList,
   cartProductCount: 0
 })

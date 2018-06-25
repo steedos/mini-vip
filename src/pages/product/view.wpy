@@ -884,8 +884,7 @@
   import wepy from 'wepy'
   import { baseUrl } from '@/config'
   import util from '../../wxs/util.wxs'
-  import { connect } from 'wepy-redux'
-  import { getStore } from 'wepy-redux'
+  import { connect, getStore } from 'wepy-redux'
   import { ADD_PRODUCT } from '../../store/types/counter'
  
   const store = getStore()
@@ -963,7 +962,12 @@
         if (_id) {
           store.dispatch({type: 'ADD_PRODUCT', payload: {_id: _id, count: 1}})
         }
-      }
+      },
+      openCartPage: function () {
+        wx.navigateTo({
+          url: '../cart/index'
+        })
+      },
     }
     // methods = {
     //   switchAttrPop: function () {
