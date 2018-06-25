@@ -856,26 +856,26 @@
         <view class="number-item">
           <view class="name">数量</view>
           <view class="selnum">
-            <view class="cut" bindtap="cutNumber">-</view>
+            <view class="cut" @tap="cutNumber">-</view>
             <input value="{{number}}" class="number" disabled="true" type="number" />
-            <view class="add" bindtap="addNumber">+</view>
+            <view class="add" @tap="addNumber">+</view>
           </view>
         </view>
       </view>
     </view>
     <view class="bottom-btn">
-      <view class="l l-collect {{ openAttr ? 'back' : ''}}" bindtap="closeAttrOrCollect">
+      <view class="l l-collect {{ openAttr ? 'back' : ''}}" @tap="closeAttrOrCollect">
         <image class="icon" src="{{ collectBackImage }}"></image>
       </view>
       <view class="l l-cart">
         <view class="box">
-          <text class="cart-count">{{cartGoodsCount}}</text>
-          <image bindtap="openCartPage" class="icon" src="/static/images/ic_menu_shoping_nor.png"></image>
+          <text class="cart-count">{{getProductCount}}</text>
+          <image @tap="openCartPage" class="icon" src="/static/images/ic_menu_shoping_nor.png"></image>
 
         </view>
       </view>
       <view class="c">立即购买</view>
-      <view class="r" bindtap="addToCart">加入购物车</view>
+      <view class="r" @tap="addProduct">加入购物车</view>
     </view>
   </scroll-view>
 </template>
@@ -884,6 +884,19 @@
   import wepy from 'wepy'
   import { baseUrl } from '@/config'
   import util from '../../wxs/util.wxs'
+  import { connect } from 'wepy-redux'
+  import { getStore } from 'wepy-redux'
+  import { ADD_PRODUCT } from '../../store/types/counter'
+ 
+  const store = getStore()
+
+  console.log(store)
+
+  @connect({
+    cartList(state) {
+      return state.counter.cartList;
+    }
+  })
 
   export default class ProduceView extends wepy.page {
 		config = {
@@ -919,14 +932,38 @@
     }
 
     async onLoad (e) {
-//      await this.$parent.login('eKYuE9bggPrSad92g');
+      console.log('e', e)
+      const _id = e.record_id
       const options = {
-        $filter: `_id eq 'fq6ixzY4wSKqiGomH'`,
+        $filter: `_id eq '${_id}'`,
         $select: 'name,default_price,compared_price,description,covers,images,avatar,categories,tags,vendor,status'
       };
       const product = await this.$parent.query('vip_product', options, 'guest');
       this.product = product.value[0];
       this.$apply();
+    }
+
+    computed = {
+      getProductCount() {
+        const cartList = this.cartList;
+        console.log('getProductCount....', cartList)
+        let cartProductCount = 0;
+        if (cartList && cartList.constructor === Array) {
+          cartList.forEach(p => {
+            cartProductCount += p.count
+          });
+        }
+        return cartProductCount
+      }
+    }
+
+    methods = {
+      addProduct() {
+        const _id = this.product._id
+        if (_id) {
+          store.dispatch({type: 'ADD_PRODUCT', payload: {_id: _id, count: 1}})
+        }
+      }
     }
     // methods = {
     //   switchAttrPop: function () {

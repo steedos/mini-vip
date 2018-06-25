@@ -84,7 +84,7 @@ page {
 import wepy from 'wepy'
 import 'wepy-async-function'
 
-import { setStore } from 'wepy-redux'
+import { setStore, getStore } from 'wepy-redux'
 import configStore from './store'
 import req from '@/network'
 import * as interceptor from '@/network/interceptor'
@@ -245,7 +245,9 @@ export default class VIP extends wepy.app {
   }
 
   onHide() {
-
+    const store = getStore();
+    const cartList = store.getState().counter.cartList
+    wx.setStorageSync('cartList', cartList)
   }
 
   getUserInfo(cb) {

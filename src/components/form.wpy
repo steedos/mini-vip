@@ -1046,8 +1046,7 @@
 
         if (this.args.action === 'create') {
           const value = this.transformValue(formValues);
-          if(Object.keys(this.fields).indexOf('wx_form_id') > 0){
-            if(this.fields.indexOf('wx_form_id') > 0)
+          if(Object.keys(this.fields).indexOf('wx_form_id') > -1){
             value['wx_form_id'] = appId + ':'+ e.detail.formId
           }
           const record = await this.$parent.$parent.insert(this.args.object_name, value)
@@ -1071,7 +1070,7 @@
           await this.uploadImages(this.args.record_id);
           await this.uploadVideos(this.args.record_id);
           const value = this.transformValue(formValues);
-          if(Object.keys(this.fields).indexOf('wx_form_id') > 0){
+          if(Object.keys(this.fields).indexOf('wx_form_id') > -1){
             value['wx_form_id'] = appId + ':'+ e.detail.formId
           }
           await this.$parent.$parent.update(this.args.object_name, this.args.record_id, value)
