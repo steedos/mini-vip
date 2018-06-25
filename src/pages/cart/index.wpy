@@ -407,8 +407,8 @@
 			await this.$parent.login()
 			const store = getStore()
 			// cartList是数组，需要clone，避免修改
-			this.cartGoods = _.clone(this.cartList);
-			const newList = await this.getProductInfo();
+			const products = _.clone(this.cartList);
+			const newList = await this.getProductInfo(products);
 			store.dispatch({type: 'UPDATE_PRODUCT_INFO', payload: newList});
 			this.is_loaded = false;
 			this.$apply()
@@ -419,8 +419,7 @@
 			util: util
 		}
 
-		async getProductInfo () {
-			const products = this.cartGoods;
+		async getProductInfo (products) {
 			for (let p of products) {
 				const options = {
 					$filter: `_id eq '${p._id}'`,
