@@ -60,6 +60,10 @@
         args.undeletable = e.undeletable
       }
 
+      if(e && e.space_id){
+        args.space_id = e.space_id
+      }
+
       this.args = args;
       this.$apply()
     }

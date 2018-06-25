@@ -164,7 +164,7 @@ page{
 </style>
 <template>
 <view class="page" wx:if="{{is_loaded}}">
-  <navigator wx:if="{{showHeader}}" class="event-header" url="../space/index?space_id={{space_id}}">
+  <navigator wx:if="{{showHeader && event.space}}" class="event-header" url="../space/index?space_id={{space_id}}">
     <view class="weui-cell weui-cell_access">
       <view class="weui-cell__hd">
         <image wx:if="{{avatar}}" class="image slds-icon slds-icon--small slds-m-right--x-small" src="{{util.formatImageUrl(avatar, baseUrl)}}"></image>
@@ -278,6 +278,7 @@ export default class EventView extends wepy.page {
   };
 
   async onLoad(e) {
+    console.log("event/view........e:", e);
     wepy.showLoading({
       title: '加载中',
       mask: true
@@ -295,16 +296,20 @@ export default class EventView extends wepy.page {
       }
       const res = await this.$parent.query('vip_store', options, 'guest')
 
-      if (res.value[0]) {
+      if (res.value && res.value[0]) {
         this.space_name = res.value[0].space.name
         this.avatar = res.value[0].avatar
       }
     } 
+    else{
+      this.space_id = "guest";
+    }
     if(e.event_id){
       this.event_id = e.event_id;
       await this.loadEvent();
       await this.loadAttendees();
-      this.editable = this.$parent.isSpaceAdmin(this.space_id);
+      let owner = this.event && this.event.owner && this.event.owner._id;
+      this.editable = this.$parent.recordAllowEdit("vip_event", owner, this.space_id);
     }
 
     this.is_loaded = true
@@ -328,11 +333,12 @@ export default class EventView extends wepy.page {
 
   async loadEvent(){
     const query = {
+      $filter: `_id eq '${this.event_id}'`,
       $expand: 'owner($select=profile,name)'
     };
-    var event = await this.$parent.get("vip_event", this.event_id, this.space_id, query)
-    this.event = event;
-    this.space_id = event.space;
+    var event = await this.$parent.query("vip_event", query, this.space_id)
+    this.event = event.value && event.value[0];
+    this.space_id = this.event && this.event.space;
     this.$apply();
   };
 
