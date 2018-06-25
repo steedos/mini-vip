@@ -59,6 +59,10 @@
         args.fields = e.fields
       }
 
+      if(e && e.title){
+        args.title = e.title
+      }
+
       if(e && e.values){
         args.defaultValues = JSON.parse(e.values)
       }
