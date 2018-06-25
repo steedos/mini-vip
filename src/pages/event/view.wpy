@@ -422,6 +422,8 @@ export default class EventView extends wepy.page {
       if(!attendee || !attendee.value || !attendee.value.length){
         let values = {
           name: name,
+          status: 'accepted',
+          alarms: this.event.alarms,
           event: this.event_id,
           owner: userId
         };
