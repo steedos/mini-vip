@@ -203,46 +203,69 @@ export default class VIP extends wepy.app {
     this.use('promisify')
   }
 
+  onShow(options){
+    //通过分享直接进入page
+//    if(options.path == 'pages/space/invite_user'){
+//      this.checkMobile()
+//    }
+
+  }
+
   async onLaunch(options) {
+    console.log('onLaunch', options);
     req.appId(appId)
     req.baseUrl(baseUrl).interceptor(interceptor.request, interceptor.response);
 
-    pageRouter.setApp(this)
+    pageRouter.setApp(this);
 
     pageRouter.pushEnter({
       page: '/pages/me_profile',
       script: function (to) {
-        return this.checkMobile(to)
+        return this.checkMobile()
       }
     });
 
     pageRouter.pushEnter({
       page: '/pages/space/register',
       script: function (to) {
-        return this.checkMobile(to)
+        return this.checkMobile()
       }
-    })
+    });
 
     pageRouter.pushEnter({
       page: '/pages/card_activate',
       script: function (to) {
-        return this.checkMobile(to)
+        return this.checkMobile()
       }
-    })
+    });
+
+    pageRouter.pushEnter({
+      page: '/pages/record/create',
+      script: function (to) {
+        return this.checkMobile()
+      }
+    });
+
+    pageRouter.pushEnter({
+      page: '/pages/space/invite_user',
+      script: function (to) {
+        return this.checkMobile()
+      }
+    });
+
+    pageRouter.pushEnter({
+      page: '/pages/record/edit',
+      script: function (to) {
+        return this.checkMobile()
+      }
+    });
 
     pageRouter.pushEnter({
       page: '/pages/record/create',
       script: function (to) {
         return this.checkMobile(to)
       }
-    })
-
-    pageRouter.pushEnter({
-      page: '/pages/record/edit',
-      script: function (to) {
-        return this.checkMobile(to)
-      }
-    })
+    });
   }
 
   onHide() {
@@ -264,17 +287,12 @@ export default class VIP extends wepy.app {
     })
   }
 
-  checkMobile(to, isRedirect){
+  checkMobile(){
     if(this.globalData.user && this.globalData.user.mobile){
       return true
     }else{
-      const url = '/pages/empty_page?redirect_to=' + encodeURIComponent('/pages/phone_number_login?from=' + encodeURIComponent(to));
-      if(isRedirect){
-        wepy.redirectTo({url: url});
-      }
-      else{
-        wepy.navigateTo({url: url});
-      }
+      let url = '/pages/phone_number_login';
+      wepy.navigateTo({url: url});
       return false
     }
   }
@@ -507,6 +525,7 @@ export default class VIP extends wepy.app {
   }
 
   async removeRecord(object_name, _id, space_id, list, owner) {
+    space_id = space_id ? space_id : 'guest';
     let allow = await this.recordAllowDelete(object_name, owner, space_id);
     if(!allow){
       return;
@@ -523,6 +542,7 @@ export default class VIP extends wepy.app {
   }
 
   async getObject(object_name, space_id){
+    space_id = space_id ? space_id : 'guest';
     const key = object_name + space_id;
     if(this.globalData.objects[key]){
       return this.globalData.objects[key];
@@ -532,25 +552,41 @@ export default class VIP extends wepy.app {
     return object;
   }
 
+  async recordAllowCreate(object_name, space_id){
+    space_id = space_id ? space_id : 'guest';
+    console.log("recordAllowCreate=======================object_name===", object_name);
+    console.log("recordAllowCreate=======================space_id===", space_id);
+    const object = await this.getObject(object_name, space_id);
+    console.log("recordAllowCreate=======================object===", object);
+
+    if(!object){
+      throw new Error('未在globalData中找到对象：' + object_name);
+    }
+
+    return object.allowCreate;
+  }
+
   async recordAllowEdit(object_name, owner, space_id){
+    space_id = space_id ? space_id : 'guest';
     const object = await this.getObject(object_name, space_id);
 
     if(!object){
-      throw new Error('未在globalData中找到对象：' + object_name)
+      throw new Error('未在globalData中找到对象：' + object_name);
     }
 
-    return object.modifyAllRecords || (object.allowEdit && owner === this.globalData.user._id)
+    return object.modifyAllRecords || (object.allowEdit && owner === this.globalData.user._id);
   }
 
   async recordAllowDelete(object_name, owner, space_id){
+    space_id = space_id ? space_id : 'guest';
     const object = await this.getObject(object_name, space_id);
     console.log("recordAllowDelete=========object_name==========", object_name);
     console.log("recordAllowDelete=========owner==========", owner);
     console.log("recordAllowDelete=========object==========", object);
     if(!object){
-      throw new Error('未在globalData中找到对象：' + object_name)
+      throw new Error('未在globalData中找到对象：' + object_name);
     }
-    return object.modifyAllRecords || (object.allowDelete && owner === this.globalData.user._id)
+    return object.modifyAllRecords || (object.allowDelete && owner === this.globalData.user._id);
   }
 }
 </script>
