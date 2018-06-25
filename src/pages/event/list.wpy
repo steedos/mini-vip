@@ -152,7 +152,7 @@ export default class Events extends wepy.page {
     }
     const skip = this.current_skip;
     const options = {
-      $expand: 'space($select=name)',
+      $expand: 'space($select=name,avatar)',
       $count: true,
       $select: 'name,start,location,alarms,accepted_count,pending_count,rejected_count,featured,cover,space,owner',
       $skip: skip,

@@ -192,7 +192,7 @@ export default class Me extends wepy.page {
 
         const url = '/mini/vip/user'
         req.put(url, {name: name, sex: sex, avatar: avatar}).then((res) => {
-          wx.navigateTo({ url: 'me_profile' })
+          pageRouter.navigateTo({ url: '/pages/me_profile' })
         })
       }
     }
