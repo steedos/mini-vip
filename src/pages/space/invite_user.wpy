@@ -257,22 +257,20 @@
         this.introducer_name = decodeURI(e.introducer_name)
       }
 
-      if(this.$parent.checkMobile(`/pages/space/invite_user?space_id=${this.space_id}&store_id=${this.store_id}&introducer=${this.introducer}&token=${this.token}&introducer_name=${encodeURI(this.introducer_name)}`)){
-        this.is_space_owner = this.$parent.isSpaceOwner(this.space_id, userId)
-        if(this.is_space_owner){
-          this.is_space_admin = true;
-          this.token = await req.get('/api/steedos/weixin/temp_token');
-        }
-        const isSpaceUser = this.$parent.isSpaceUser(this.space_id);
-        const isSpaceAdmin = this.$parent.isSpaceAdmin(this.space_id);
-        if(!this.is_space_owner && (isSpaceUser || isSpaceAdmin)){
-          wepy.redirectTo({url: '/pages/space/index?space_id=' + this.space_id})
-        }
-        const result = await this.$parent.get('vip_store', this.store_id, this.space_id, {$select: '_id,name,cover,avatar'});
-        this.store_info = result;
-        this.is_loaded = true;
-        wepy.hideLoading();
+      this.is_space_owner = this.$parent.isSpaceOwner(this.space_id, userId)
+      if(this.is_space_owner){
+        this.is_space_admin = true;
+        this.token = await req.get('/api/steedos/weixin/temp_token');
       }
+      const isSpaceUser = this.$parent.isSpaceUser(this.space_id);
+      const isSpaceAdmin = this.$parent.isSpaceAdmin(this.space_id);
+      if(!this.is_space_owner && (isSpaceUser || isSpaceAdmin)){
+        wepy.redirectTo({url: '/pages/space/index?space_id=' + this.space_id})
+      }
+      const result = await this.$parent.get('vip_store', this.store_id, this.space_id, {$select: '_id,name,cover,avatar'});
+      this.store_info = result;
+      this.is_loaded = true;
+      wepy.hideLoading();
       this.$apply();
     }
 

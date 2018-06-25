@@ -1049,7 +1049,7 @@
           if(Object.keys(this.fields).indexOf('wx_form_id') > -1){
             value['wx_form_id'] = appId + ':'+ e.detail.formId
           }
-          const record = await this.$parent.$parent.insert(this.args.object_name, value)
+          const record = await this.$parent.$parent.insert(this.args.object_name, value, this.args.space_id)
 
           if (this.hasTempImages()) {
             const record_id = record.value[0]._id
