@@ -7,7 +7,10 @@
 
 <template>
   <view class="page__bd">
-    <video class="video" src="{{value}}" wx:if="{{value}}"></video>
+    <view wx:if="{{value}}" style="position:relative;margin-top: 15px;margin-left: 20px; margin-right: 20px;background-color: #000">
+      <video class="video" src="{{value}}"></video>
+      <view style="position: absolute;top: -.4em;right: -.4em;" @tap.stop="clearVideo"><icon type="clear" size="20" color="red" data-index="{{index}}"/></view>
+    </view>
     <view class="weui-btn-area">
       <button data-id="{{key}}" bindtap="bindButtonTap" class="weui-btn" type="primary">上传视频</button>
     </view>
@@ -20,7 +23,7 @@
   import util from '../../wxs/util.wxs'
 
   const utilJs = require('../../utils/util.js');
-  
+
   export default class Video extends wepy.page {
     data = {
       value: '',
@@ -68,6 +71,11 @@
         this.$apply()
         console.log(res)
         this.setParentValue(this.key, this.value);
+      },
+      clearVideo: function (e) {
+        this.value = '';
+        this.$apply();
+        this.setParentValue(this.key, '');
       }
     }
   }
