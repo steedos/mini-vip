@@ -97,8 +97,8 @@ export default class AdminIndex extends wepy.page {
       [{title: '动态', icon:'standard-news', url: '../record/list?object_name=post'},
       {title: '活动', icon:'standard-event', url: '../record/list?object_name=vip_event'},
       {title: '卡项', icon:'standard-work-type', url: '../record/list?object_name=vip_category'}],
-      // {title: '会员卡', icon:'standard-scan-card', url: '../record/list?object_name=vip_card'},
-      // {title: '员工', icon:'standard-user', url: '../record/list?object_name=space_users&listview_id=emplyees'},
+      [{title: '会员卡', icon:'standard-scan-card', url: '../record/list?object_name=vip_card'},
+      {title: '团队', icon:'standard-user', url: '../record/list?object_name=space_users&listview_id=emplyees'}],
       [{title: '商品', icon:'standard-shipment', url: '../product/list'},
       {title:'商品分类',icon:'standard-product-item', url:'../product/list?object_name=vip_product_category'}],
       
