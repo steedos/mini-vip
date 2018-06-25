@@ -29,9 +29,74 @@ page {
     }
   }
 }
++.zan-tab {
+    height: 45px
+}
+
+.zan-tab__bd {
+    width: 750rpx;
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1rpx solid #e5e5e5;
+    background: #fff
+}
+
+.zan-tab__bd--fixed {
+    position: fixed;
+    top: 0;
+    z-index: 2
+}
+
+.zan-tab__item {
+    flex: 1;
+    display: inline-block;
+    padding: 0 10px;
+    line-height: 0;
+    box-sizing: border-box;
+    overflow: hidden;
+    text-align: center
+}
+
+.zan-tab__title {
+    display: inline-block;
+    max-width: 100%;
+    height: 44px;
+    line-height: 44px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    box-sizing: border-box;
+    word-break: keep-all;
+    font-size: 14px;
+    color: #666
+}
+
+.zan-tab__item--selected .zan-tab__title {
+    color: rgb(27, 24, 224);
+    border-bottom: 2px solid rgb(134, 24, 224);
+}
+
+.zan-tab__bd--scroll {
+    display: block;
+    white-space: nowrap
+}
+
+.zan-tab__bd--scroll .zan-tab__item {
+    min-width: 80px
+}
 </style>
 <template>
   <view class="page" wx:if="{{is_loaded}}">
+    <block wx:if="{{ categories }}">
+      <view class="zan-tab">
+          <scroll-view class="zan-tab__bd zan-tab__bd--scroll" scroll-x="true">
+            <repeat for="{{categories}}" key="index" index="index" item="item">
+              <view class="zan-tab__item {{index == seleted_id ? 'zan-tab__item--selected' : ''}}"  @tap="changeCategory({{item._id}},{{index}})">
+                <view class="zan-tab__title">{{ item.name }}</view>
+              </view>
+            </repeat>
+          </scroll-view>
+      </view>
+    </block>
     <view class="page__bd">
       <scroll-view class="scroll-view_H" scroll-y="true">
         <postList :list.sync="posts" :editable.sync="editable" />
@@ -85,6 +150,7 @@ export default class Posts extends wepy.page {
       title: '加载中',
       mask: true
     });
+    await this.loadCategories();
     await this.loadPostList();
     this.is_loaded = true;
     this.$apply();
@@ -142,17 +208,25 @@ export default class Posts extends wepy.page {
     space_id: "",
     posts: [],
     current_skip: 0,
+    seleted_id: 0,
     is_skip_allowed: true,
     is_loaded: false,
-    editable: false
+    editable: false,
+    categories: []
   };
   
-	async loadPostList(){
-    if(!this.is_skip_allowed){
-      return;
+	async loadPostList(category_id){
+    // if(!this.is_skip_allowed){
+    //   return;
+    // }
+    var skip = this.current_skip;
+    var options = {}
+    if(category_id) {
+      this.posts = [];
+      options['$filter'] = `categories eq '${category_id}'`
+      skip = 0
     }
-    const skip = this.current_skip;
-    const options = {
+    options = {
       $expand: 'owner($select=name),space($select=name)',
       $count: true,
       $select: 'name,summary,description,comment_count,enable_comment,images,video,audio,type,mini_type,space,star_count,owner',
@@ -160,9 +234,8 @@ export default class Posts extends wepy.page {
       $top: DATA_LENGTH
     };
     const type = this.type;
-    console.log(`loadPostList of type:`, type);
-    if(type){
-      options.$filter = `type eq '${type}'`;
+    if(category_id){
+      options.$filter = `categories eq '${category_id}'`;
     }
     const result = await this.$parent.query("post", options);
     if(result.value){
@@ -174,13 +247,30 @@ export default class Posts extends wepy.page {
     }
     this.$apply();
   };
-
+  async loadCategories(){
+    const options = {
+      $count: true,
+      $select: 'name,sort_no',
+      $orderby:'sort_no'
+    };
+    const result = await this.$parent.query("post_category", options);
+    if(result.value){
+      this.categories = result.value
+      this.default_category = result.value[0]._id
+      this.$apply();
+    } 
+  }
   methods = {
     createPost() {
       let url = "/pages/record/edit?action=create&object_name=post&fields=name,summary,description,images,video,type";
       wepy.navigateTo({
         url: url
       });
+    },
+    changeCategory(category_id, index) {
+      this.seleted_id = index
+      this.$apply()
+      this.loadPostList(category_id)
     }
   }
 }
