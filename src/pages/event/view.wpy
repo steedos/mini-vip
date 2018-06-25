@@ -100,8 +100,8 @@ page{
       .text {
         line-height: 20px;
         color: #5d5d5d;
-        word-wrap: break-word; 
-        word-break: normal; 
+        word-wrap: break-word;
+        word-break: normal;
       }
     }
   }
@@ -205,7 +205,7 @@ page{
         </view>
       </view>
     </view>
-    
+
     <view class="comments">
       <view class="title">{{event.accepted_count ? event.accepted_count : 0}}人报名，{{event.pending_count ? event.pending_count : 0}}人观望</view>
       <view class="clist">
@@ -299,7 +299,7 @@ export default class EventView extends wepy.page {
         this.space_name = res.value[0].space.name
         this.avatar = res.value[0].avatar
       }
-    } 
+    }
     if(e.event_id){
       this.event_id = e.event_id;
       await this.loadEvent();
@@ -336,7 +336,7 @@ export default class EventView extends wepy.page {
     this.$apply();
   };
 
-  async loadAttendees(){  
+  async loadAttendees(){
     const query_options = {
         $filter: `event eq '${this.event_id}'`,
         $select: 'name,status,comment,owner,created',
@@ -398,15 +398,15 @@ export default class EventView extends wepy.page {
     };
     return to;
   }
-  
+
   async respondEvent() {
     wepy.showLoading({
       title: '加载中',
       mask: true
     });
-    if(!this.$parent.checkMobile(this.getBackUrlForCheckMobile(), true)){
-      return;
-    }
+//    if(!this.$parent.checkMobile(this.getBackUrlForCheckMobile(), true)){
+//      return;
+//    }
     let userId = this.$parent.globalData.user._id;
     let name = this.$parent.globalData.user.name;
     const query_options = {

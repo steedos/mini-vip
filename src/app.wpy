@@ -202,46 +202,69 @@ export default class VIP extends wepy.app {
     this.use('promisify')
   }
 
+  onShow(options){
+    //通过分享直接进入page
+//    if(options.path == 'pages/space/invite_user'){
+//      this.checkMobile()
+//    }
+
+  }
+
   async onLaunch(options) {
+    console.log('onLaunch', options);
     req.appId(appId)
     req.baseUrl(baseUrl).interceptor(interceptor.request, interceptor.response);
 
-    pageRouter.setApp(this)
+    pageRouter.setApp(this);
 
     pageRouter.pushEnter({
       page: '/pages/me_profile',
       script: function (to) {
-        return this.checkMobile(to)
+        return this.checkMobile()
       }
     });
 
     pageRouter.pushEnter({
       page: '/pages/space/register',
       script: function (to) {
-        return this.checkMobile(to)
+        return this.checkMobile()
       }
-    })
+    });
 
     pageRouter.pushEnter({
       page: '/pages/card_activate',
       script: function (to) {
-        return this.checkMobile(to)
+        return this.checkMobile()
       }
-    })
+    });
+
+    pageRouter.pushEnter({
+      page: '/pages/record/create',
+      script: function (to) {
+        return this.checkMobile()
+      }
+    });
+
+    pageRouter.pushEnter({
+      page: '/pages/space/invite_user',
+      script: function (to) {
+        return this.checkMobile()
+      }
+    });
+
+    pageRouter.pushEnter({
+      page: '/pages/record/edit',
+      script: function (to) {
+        return this.checkMobile()
+      }
+    });
 
     pageRouter.pushEnter({
       page: '/pages/record/create',
       script: function (to) {
         return this.checkMobile(to)
       }
-    })
-
-    pageRouter.pushEnter({
-      page: '/pages/record/edit',
-      script: function (to) {
-        return this.checkMobile(to)
-      }
-    })
+    });
   }
 
   onHide() {
@@ -263,17 +286,12 @@ export default class VIP extends wepy.app {
     })
   }
 
-  checkMobile(to, isRedirect){
+  checkMobile(){
     if(this.globalData.user && this.globalData.user.mobile){
       return true
     }else{
-      const url = '/pages/empty_page?redirect_to=' + encodeURIComponent('/pages/phone_number_login?from=' + encodeURIComponent(to));
-      if(isRedirect){
-        wepy.redirectTo({url: url});
-      }
-      else{
-        wepy.navigateTo({url: url});
-      }
+      let url = '/pages/phone_number_login';
+      wepy.navigateTo({url: url});
       return false
     }
   }

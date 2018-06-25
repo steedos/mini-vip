@@ -1,5 +1,6 @@
 import wepy from 'wepy'
 import { baseUrl } from '@/config';
+import pageRouter from '@/utils/pageRouter';
 
 const PAGESIZE = 15;
 
@@ -151,7 +152,7 @@ export default class recordList extends wepy.mixin {
   //点击添加按钮时触发
   addRecord(){
     console.log('mixins addRecord.... ')
-    wx.navigateTo({
+    pageRouter.navigateTo({
       url: this.add_url
     })
   }
