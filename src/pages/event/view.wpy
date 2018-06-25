@@ -278,7 +278,6 @@ export default class EventView extends wepy.page {
   };
 
   async onLoad(e) {
-    console.log("event/view........e:", e);
     wepy.showLoading({
       title: '加载中',
       mask: true
@@ -335,6 +334,7 @@ export default class EventView extends wepy.page {
     var event = await this.$parent.query("vip_event", query, this.space_id)
     this.event = event.value && event.value[0];
     this.space_id = this.event && this.event.space;
+    this.space_id = this.space_id ? this.space_id : 'guest';
     this.$apply();
   };
 
@@ -419,7 +419,6 @@ export default class EventView extends wepy.page {
         $select: 'name'
       };
       let attendee = await this.$parent.query("vip_event_attendees", query_options, this.space_id);
-      console.log("respondEvent==========this.space_id=========", this.space_id);
       if(!attendee || !attendee.value || !attendee.value.length){
         let values = {
           name: name,
