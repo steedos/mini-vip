@@ -4,7 +4,7 @@
 @import "../lib/slds/slds_margin.less";
 @import "../lib/vip/vip.less";
 page {
-  background-color: #f5f5f7;
+  background-color: #efeef3;
   font-size: 16px;
   font-family: -apple-system-font,Helvetica Neue,Helvetica,sans-serif;
 }
@@ -181,7 +181,7 @@ export default class VIP extends wepy.app {
       navigationBarBackgroundColor: '#353535',
       navigationBarTitleText: '华炎客服',
       navigationBarTextStyle: 'white',
-      backgroundColor: "#f5f5f7",
+      backgroundColor: "#efeef3",
       backgroundTextStyle: 'dark',
     }
   }
