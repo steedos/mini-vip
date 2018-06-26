@@ -17,7 +17,7 @@
 
 .post {
   background: #fff;
-  margin:30rpx 20rpx;
+  margin:30rpx 30rpx;
   border:solid 1px #ededed;
   border-radius:6px;
 
