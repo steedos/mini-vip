@@ -183,7 +183,7 @@
         const record_id = event.target.dataset.addressId
         let url = ''
         if (record_id) {
-          url = `/pages/record/edit?object_name=vip_address&fields=name,address,door,gender,phone,is_default&record_id=${record_id}`
+          url = `/pages/record/edit?action=edit&object_name=vip_address&fields=name,address,door,gender,phone,is_default&record_id=${record_id}`
         } else {
           url = '/pages/record/create?object_name=vip_address&fields=name,address,door,gender,phone,is_default'
         }
