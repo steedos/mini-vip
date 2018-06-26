@@ -5,7 +5,6 @@ page {
 
   .top-container {
     position: relative;
-    background: #fff;
   }
   .ion-container {
     display: inline-block;
@@ -30,7 +29,6 @@ page {
 
     .header {
       position: relative;
-      height: 285px;
       background: #fff;
 
       // &::after {
@@ -44,7 +42,7 @@ page {
 
       .cover-wrapper {
         position: relative;
-        height: 200px;
+        height: 210px;
         background-size: cover;
 
         &::after {
@@ -54,7 +52,7 @@ page {
           bottom: -30px;
           left: 0;
           right: 0;
-          background-image: linear-gradient(to bottom, transparent , rgba(255, 255, 255, 1) 50%);
+          background-image: linear-gradient(to bottom, transparent , #efeef3 50%);
         }
       }
 
@@ -79,13 +77,11 @@ page {
       .space-info {
         position: absolute;
         text-align: center;
-        top: 120px;
-        bottom: 10px;
+        top: 80px;
+        bottom: -10px;
         left: 6px;
         right: 6px;
         width: auto;
-        background-image: linear-gradient(to bottom,#e5e5e5,#fff);
-        background-clip: padding-box;
         border: 1px solid transparent;
         padding: 10px;
         border-radius: 0.25rem;
@@ -98,7 +94,7 @@ page {
           bottom: 1px;
           left: 1px; 
           right: 1px;
-          background: #fff;
+          background: rgba(255,255,255,0.8);
           z-index: -1 ;
           border-radius: 0.25rem;
         }
@@ -129,8 +125,9 @@ page {
           }
 
           .star-count {
-            margin-top: 6px;
+            margin-top: 0px;
             color: #898989;
+            display: none;
           }
 
           .weui-btn {
@@ -207,15 +204,6 @@ page {
           </view>
         </view>
       </view>
-      <view class="weui-cells" wx:if="{{is_space_admin}}">
-        <navigator url="/pages/admin/index?space_id={{space_id}}" class="weui-cell" hover-class="weui-cell_active">
-          <view class="weui-cell__hd">
-            <view class="slds-icon-utility-settings slds-icon slds-icon--small slds-m-right--x-small"/>
-          </view>
-          <view class="weui-cell__bd">微站管理</view>
-          <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-        </navigator>
-      </view>
       <view class="weui-cells">
         <view class="weui-grids">
           <repeat for="{{enabled_objects}}" key="index" index="index" item="object">
@@ -238,6 +226,17 @@ page {
           </repeat>
         </view>
       </view>
+      <!--
+      <view class="weui-cells" wx:if="{{is_space_admin}}">
+        <navigator url="/pages/admin/index?space_id={{space_id}}" class="weui-cell" hover-class="weui-cell_active">
+          <view class="weui-cell__hd">
+            <view class="slds-icon-utility-settings slds-icon slds-icon--small slds-m-right--x-small"/>
+          </view>
+          <view class="weui-cell__bd">微站管理</view>
+          <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+        </navigator>
+      </view>
+      -->
     </view>
     <view class="page__bd">
       <view class="post-list-wrapper">
@@ -421,15 +420,15 @@ export default class Posts extends wepy.page {
         icon: 'standard-news',
         url: `../post/index${this.is_space_admin ? '?editable=true' : ''}`
       },
+      vip_product: {
+        label: '产品',
+        icon: 'standard-shipment',
+        url: `../product/list?space_id=${this.space_id}`
+      },
       vip_event: {
         label: '活动',
         icon: 'standard-event',
         url: `../event/list?space_id=${this.space_id}`
-      },
-      vip_product: {
-        label: '商品',
-        icon: 'standard-shipment',
-        url: `../product/list?space_id=${this.space_id}`
       },
       vip_team: {
         label: '团队',
@@ -482,8 +481,8 @@ export default class Posts extends wepy.page {
       })
     } else {
       this.enabled_objects = [
-        objects_list.post, objects_list.vip_event, objects_list.vip_product, objects_list.vip_card, 
-        objects_list.qrcode, objects_list.vip_store, objects_list.support
+        objects_list.post, objects_list.vip_event, objects_list.vip_product, 
+        objects_list.vip_card, objects_list.vip_store, objects_list.support
       ] 
     }
 
