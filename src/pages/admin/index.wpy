@@ -45,7 +45,7 @@
           </view>
         </navigator>
       </view>
-      <view class="weui-cells">
+      <view>
         <repeat for="{{options}}" key="index" index="index" item="option">
           <view class="weui-cells">
             <repeat for="{{option}}" key="index" index="index" item="o">
