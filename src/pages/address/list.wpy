@@ -147,7 +147,7 @@
           </view>
           <view class="c">
             <view class="mobile">{{item.phone}}</view>
-            <view class="address">{{item.address.address + item.door}}</view>
+            <view class="address">{{item.address.address}}{{item.door ? item.door : ''}}</view>
           </view>
           <view class="r">
             <image catchtap="addressAddOrUpdate" data-address-id="{{item._id}}" class="del" src="http://yanxuan.nosdn.127.net/hxm/yanxuan-wap/p/20161201/style/img/icon-normal/address-edit-7fee7b0d63.png"></image>
