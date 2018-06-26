@@ -446,7 +446,7 @@
           this.hiddenBtn = newValue.hidden_btn || false;
 
           if (object_name) {
-            const object = JSON.parse(JSON.stringify(await this.$parent.$parent.getObject(object_name)));
+            const object = JSON.parse(JSON.stringify(await this.$parent.$parent.getObject(object_name, this.args.space_id)));
             object.allowEdit = true;
             this.schema = object;
 

@@ -186,7 +186,7 @@ export default class recordList extends wepy.mixin {
 
     this.filter = this.getQueryFilter(e);
 
-    const object = await this.$parent.getObject(this.object_name);
+    const object = await this.$parent.getObject(this.object_name, e.space_id);
 
     this.allowCreate = object.allowCreate;
     if(e.allow_create === 'true'){
