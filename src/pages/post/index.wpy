@@ -255,6 +255,7 @@ export default class Posts extends wepy.page {
     const result = await this.$parent.query("post_category", options);
     if(result.value){
       this.categories = _.union(this.categories,result.value)
+      this.default_category = result.value[0]._id
       this.$apply();
     } 
   }
