@@ -116,6 +116,26 @@
     }
 
 
+//    onUnload(){
+//
+//      const pages = this.getCurrentPages();
+//
+//      const tabBarList = this.$parent.config.tabBar.list;
+//
+//      let isTabBarPage = false;
+//
+//      const firstPage = pages[0];
+//
+//      tabBarList.forEach((t)=>{
+//        if(t.pagePath === firstPage.route){
+//          isTabBarPage = true;
+//        }
+//      });
+//
+//      if(pages.length < 3 && !isTabBarPage){
+//        wepy.switchTab({url: '/pages/index'})
+//      }
+//    }
 
 
     methods = {
@@ -181,7 +201,10 @@
         }
         console.log('phoneLogin', data)
 
-        wepy.redirectTo({url: this.from})
+//        wepy.redirectTo({url: this.from})
+        wx.navigateBack({
+          delta: 1
+        })
       }
     }
   }

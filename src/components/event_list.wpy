@@ -79,11 +79,11 @@
 <view>
   <block wx:if="{{list.length}}">
     <repeat for="{{list}}" key="index" index="index" item="event">
-      <view class="event" @longpress="goDelete({{event._id}}, {{event.space._id}}, {{event.owner}})">
-        <navigator class="event-header" wx:if="{{showHeader}}" url="../space/index?space_id={{event.space._id}}">
+      <view class="event" @longpress="goDelete({{event._id}}, {{event.space ? event.space._id : 'guest'}}, {{event.owner}})">
+        <navigator class="event-header" wx:if="{{showHeader && event.space}}" url="../space/index?space_id={{event.space._id}}">
           <view class="weui-cell weui-cell_access">
             <view class="weui-cell__hd">
-              <image wx:if="{{event.avatar}}" class="image slds-icon slds-icon--small slds-m-right--x-small" src="{{util.formatImageUrl(event.avatar, baseUrl)}}"></image>
+              <image wx:if="{{event.space.avatar}}" class="image slds-icon slds-icon--small slds-m-right--x-small" src="{{util.formatImageUrl(event.space.avatar, baseUrl)}}"></image>
               <view wx:else class="slds-icon-standard-channel-programs slds-icon slds-icon--small slds-m-right--x-small"></view>
             </view>
             <view class="weui-cell__bd">
@@ -93,9 +93,9 @@
           </view>
         </navigator>
         <view wx:if="{{event.cover}}" class="event-cover">
-          <image class="image {{showHeader ? 'no-radius' : ''}}" mode="aspectFill" src="{{util.formatImageUrl(event.cover, baseUrl)}}" @tap="previewImage({{event.cover}})" />
+          <image class="image {{showHeader && event.space ? 'no-radius' : ''}}" mode="aspectFill" src="{{util.formatImageUrl(event.cover, baseUrl)}}" @tap="previewImage({{event.cover}})" />
         </view>
-        <view class="event-body weui-cells {{event.cover ? '' : 'is-cover-empty'}}" @tap="goDetail({{event._id}}, {{event.space._id}})">
+        <view class="event-body weui-cells {{event.cover ? '' : 'is-cover-empty'}}" @tap="goDetail({{event._id}}, {{event.space ? event.space._id : ''}})">
           <view class="weui-cell weui-cell_access">
             <view class="weui-cell__bd">
               <view class="event-name">{{event.name}}</view>
@@ -146,9 +146,6 @@ export default class EventList extends wepy.component {
   }
 
   onLoad() {
-    setTimeout(() => {
-      console.log('event list showHeader.....', this.list)
-    }, 5000);
   }
 
   data = {
@@ -161,7 +158,8 @@ export default class EventList extends wepy.component {
 
   methods = {
     goDetail(event_id, space_id){
-      let url = `../event/view?event_id=${event_id}&space_id=${space_id}`;
+      console.log("goDetail event========space_id===", space_id);
+      let url = `../event/view?event_id=${event_id}&space_id=${space_id}${this.showHeader ? "&showHeader=1" : ""}`;
       console.log(url);
       wx.navigateTo({
         url: url

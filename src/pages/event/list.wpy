@@ -53,7 +53,7 @@ page {
         <eventList :list.sync="events" :showHeader.sync="featured" />
       </scroll-view>
     </view>
-    <view class="tab-bar" wx:if="{{editable}}">
+    <view class="tab-bar" wx:if="{{creatable}}">
       <view class="slds-icon-action-new" @tap="createEvent"></view>
     </view>
   </view>
@@ -63,6 +63,7 @@ import wepy from 'wepy';
 import eventList from '../../components/event_list';
 import req from '@/network';
 import pageRouter from '@/utils/pageRouter';
+import utilJs from '@/utils/util';
 
 const DATA_LENGTH = 10;
 export default class Events extends wepy.page {
@@ -73,7 +74,7 @@ export default class Events extends wepy.page {
 
   async onLoad(e) {
     this.featured = e.featured;
-    this.space_id = e.space_id;
+    this.space_id = e.space_id ? e.space_id : 'guest';
     if(e.title){
       this.title = e.title;
       wx.setNavigationBarTitle({
@@ -81,13 +82,9 @@ export default class Events extends wepy.page {
       });
     }
     
-    this.editable = this.$parent.isSpaceAdmin(this.space_id);
+    this.creatable = this.$parent.recordAllowCreate("vip_event", this.space_id);
     await this.$parent.login(this.space_id);
     await this.loadData();
-    if(e.respond){
-      // 如果是新建活动时手机号填写界面回来的，自动跳转到新建界面
-      this.createEvent();
-    }
   }
 
   async loadData() {
@@ -145,7 +142,7 @@ export default class Events extends wepy.page {
     current_skip: 0,
     is_skip_allowed: true,
     is_loaded: false,
-    editable: false,
+    creatable: false,
     featured: false
   };
   
@@ -155,7 +152,7 @@ export default class Events extends wepy.page {
     }
     const skip = this.current_skip;
     const options = {
-      $expand: 'space($select=name)',
+      $expand: 'space($select=name,avatar)',
       $count: true,
       $select: 'name,start,location,alarms,accepted_count,pending_count,rejected_count,featured,cover,space,owner',
       $skip: skip,
@@ -178,43 +175,29 @@ export default class Events extends wepy.page {
     this.$apply();
   };
 
-  getBackUrlForCheckMobile(){
-    let to = `/${this.getWxPage().route}?respond=true`;
-    let pageOptions = this.getWxPage().options;
-    for(let k in pageOptions){
-      to += `&${k}=${pageOptions[k]}`;
-    };
-    return to;
-  }
-  
-  async createEvent() {
-    if(!this.editable){
-      return;
-    }
-    wepy.showLoading({
-      title: '加载中',
-      mask: true
-    });
-    if(!this.$parent.checkMobile(this.getBackUrlForCheckMobile(), true)){
-      return;
-    }
-    let userId = this.$parent.globalData.user._id;
-    let name = this.$parent.globalData.user.name;
-    let eventData = {
-      featured: false,
-      owner: userId
-    };
-    let event = await this.$parent.insert("vip_event", eventData, this.space_id);
-    wepy.hideLoading();
-    if(event && event.value && event.value.length){
-      let url = `/pages/record/edit?action=edit&object_name=vip_event&record_id=${event.value[0]._id}&undeletable=true&title=新建活动`;
-      pageRouter.navigateTo({ url: url });
-    }
-  }
-
   methods = {
     createEvent() {
-      this.createEvent();
+      if(!this.creatable){
+        return;
+      }
+      const alarms = "-PT1H";
+      // 默认取值为下一个整点
+      let start = new Date();
+      start = new Date(start.getTime() + 1 * 60 * 60 * 1000);
+      start.setMinutes(0);
+      start.setSeconds(0);
+      start = utilJs.formatTime(start, '-', true);
+      let values = {
+        alarms: alarms,
+        start: start
+      };
+      values = JSON.stringify(values);
+      console.log("createEvent=====values======", values);
+      console.log("createEvent=====this.space_id======", this.space_id);
+      let url = `/pages/record/create?&space_id=${this.space_id}&object_name=vip_event&values=${values}`;
+      pageRouter.navigateTo({
+        url: url
+      });
     }
   }
 }

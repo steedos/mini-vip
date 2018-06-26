@@ -47,28 +47,37 @@ module.exports = {
   }
 }
 
-if (prod) {
+if (prod || true) {
 
   // 压缩sass
   // module.exports.compilers['sass'] = {outputStyle: 'compressed'}
 
   // 压缩js
   module.exports.plugins = {
+    autoprefixer: {
+      filter: /\.(wxss|css)$/,
+      config: {
+        browsers: ['last 11 iOS versions']
+      }
+    },
     uglifyjs: {
       filter: /\.js$/,
       config: {
       }
     },
-    imagemin: {
-      filter: /\.(jpg|png|jpeg)$/,
-      config: {
-        jpg: {
-          quality: 80
-        },
-        png: {
-          quality: 80
-        }
-      }
+    // imagemin: {
+    //   filter: /\.(jpg|png|jpeg)$/,
+    //   config: {
+    //     jpg: {
+    //       quality: 80
+    //     },
+    //     png: {
+    //       quality: 80
+    //     }
+    //   }
+    // },
+    filemin: {
+      filter: /\.(wxml)$/
     }
   }
 }

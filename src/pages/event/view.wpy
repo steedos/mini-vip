@@ -7,116 +7,164 @@ page{
 }
 .cover{
   width: 100%;
-  height:480rpx;
+  height:380rpx;
+  display: block;
+  background: #eee;
 }
 .image {
   display: block;
-  border-radius: 50%;
-}
-.weui-cell__bd{
-  min-width: 3em;
-}
-.weui-cells{
-  .weui-media-box{
-    padding: 10px 15px;
-    .weui-media-box__desc{
-      padding-left: 4px;
-      text-overflow:unset;
-      overflow:visible;
-      -webkit-line-clamp:unset;
-      line-height:1.4em;
-      font-size: 17px;
-    }
-  }
-}
-.tab-bar {
-  display: flex;
-  position: fixed;
-  z-index: 500;
-  bottom: 0;
-  height: 50px;
-  width: 100%;
-  background-color: #F7F7FA;
-  justify-content: space-around;
-  align-items: center;
-
-  &::before {
-    content: " ";
-    position: absolute;
-    left: 0;
-    top: 0;
-    right: 0;
-    height: 1px;
-    border-top: 1px solid #C0BFC4;
-    color: #C0BFC4;
-    -webkit-transform-origin: 0 0;
-    transform-origin: 0 0;
-    -webkit-transform: scaleY(0.5);
-    transform: scaleY(0.5);
-  }
-
-  .btn{
-    font-size: 18px;
-    border: none!important;
-    padding: 10px 0;
-    margin: 0px;
-    color: #5e9bf4;
-    width:50%;
-    text-align:center;
-    position:relative;
-    &:after {
-      content: " ";
-      position: absolute;
-      right: 0;
-      top: 14px;
-      bottom: 14px;
-      width: 1px;
-      border-right: 1px solid #C0BFC4;
-      color: #C0BFC4;
-      -webkit-transform-origin: 0 0;
-      transform-origin: 0 0;
-      -webkit-transform: scaleX(0.3);
-      transform: scaleX(0.3);
-    }
-  }
-  button.btn{
-    color: #5e9bf4;
-    padding: 0 0;
-  }
-
-  // .btn-respond {
-  //   background: #ffa325;
-  //   text-align: center;
-  //   color:#fff;
-  //   border:10px;
-  //   height:100%;
-  //   width:100%;
-  //   vertical-align:middle;
-  //   display:flex;
-  //   align-items:center;
-  //   justify-content:center;
-
-  //   .ion {
-  //     line-height: 35px;
-  //     font-weight: bold;
-  //     font-size: 16px;
-  //   }
-  // }
-}
-.weui-article {
-  padding: 30rpx 30rpx 0;
-}
-.article-section {
-  margin: 0;
-  padding-left:15rpx;
 }
 .event-header{
+  background: #fff;
+}
+.event-body{
+  padding:30rpx;
+  border-radius:6px;
+  box-shadow:0px 0px 6px #ccc;
+  margin:30rpx;
+  margin-top: -60rpx;
+  line-height:24px;
+  .event-name{
+    font-weight:bold;
+    margin-bottom:8px;
+    font-size:18px;
+  }
+  .event-field{
+  }
+  .event-description{
+    color: #888;
+    margin-top: 8px;
+  }
+  &.weui-cells{
+    &:before{
+      display: none;
+    }
+    &:after{
+      display: none;
+    }
+    .weui-cell{
+      padding: 0px;
+      .weui-cell__bd{
+        width: 90%;
+      }
+      &:before{
+        display: none;
+      }
+      &:after{
+        display: none;
+      }
+    }
+  }
+}
+
+.weui-cell__ft_owner{
+  color:black;
+}
+.event-status.accepted{
+  color:green;
+}
+.event-status.rejected{
+  color:red;
+}
+.comments {
   background-color: #fff;
+  border-top: 1px solid #dadada;
+  border-bottom: 1px solid #dadada;
+  margin-bottom: 15px;
+  .title {
+    height: 35px;
+    line-height: 35px;
+    padding: 0 10px;
+    font-size: 13px;
+  }
+  .comment {
+    border-top: 1px solid #dadada;
+    padding: 10px;
+    font-size: 14px;
+    .avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: 30px;
+    }
+    .detail {
+      margin-left: 8px;
+      .name {
+        font-size: 13px;
+        color: #333;
+      }
+      .time {
+        font-size: 11px;
+        color: #929292;
+        margin-bottom: 2px;
+      }
+      .text {
+        line-height: 20px;
+        color: #5d5d5d;
+        word-wrap: break-word;
+        word-break: normal;
+      }
+    }
+  }
+}
+.flex-row {
+  display: -webkit-box !important;
+  display: -ms-flexbox !important;
+  display: flex !important;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+.flex-row .flex-rest-width {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  width: initial;
+}
+.tab-bar {
+  font-size: 15px;
+  display: flex;
+  position: fixed;
+  box-sizing: border-box;
+  z-index: 500;
+  bottom: 0;
+  height: auto;
+  width: 100%;
+  background-color: #fff;
+  color: #6d6d78;
+  align-items: center;
+
+  .btn {
+    flex: 1;
+    padding:0 30rpx;
+    font-size:15px;
+    line-height:inherit;
+    width:auto;
+    height:auto;
+    border: none!important;
+    line-height:50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .slds-icon {
+      width: 1rem;
+      height: 1rem;
+      margin-right: 0.25rem;
+    }
+  }
+  .slds-icon {
+    display: inline-block;
+  }
+  .text {
+    display: inline-block;
+    color: #6d6d78;
+  }
 }
 </style>
 <template>
 <view class="page" wx:if="{{is_loaded}}">
-  <navigator class="event-header" url="../space/index?space_id={{space_id}}">
+  <navigator wx:if="{{showHeader && event.space}}" class="event-header" url="../space/index?space_id={{space_id}}">
     <view class="weui-cell weui-cell_access">
       <view class="weui-cell__hd">
         <image wx:if="{{avatar}}" class="image slds-icon slds-icon--small slds-m-right--x-small" src="{{util.formatImageUrl(avatar, baseUrl)}}"></image>
@@ -127,52 +175,91 @@ page{
       </view>
     </view>
   </navigator>
-  <image wx:if="{{event.cover}}" class="cover" mode="aspectFill" src="{{util.formatImageUrl(event.cover, baseUrl)}}" @tap="previewImage({{event.cover}})" />
   <view class="page__bd">
-    <view class="weui-article"  @tap="editEvent">
-      <view class="weui-article__section article-section">
-        <view class="weui-article__h1">{{event.name}}</view>
-      </view>
+    <view wx:if="{{event.cover}}" class="event-cover">
+      <image class="image cover" mode="aspectFill" src="{{util.formatImageUrl(event.cover, baseUrl)}}" />
+    </view>
+    <view wx:else class="event-cover">
+      <image class="image cover" mode="aspectFill" src="{{baseMaterialUrl + 'event.jpg'}}"/>
     </view>
     <view class="event-body weui-cells">
-      <view class="weui-cell event-start-end" wx:if="{{event.start}}">
+      <view class="weui-cell">
         <view class="weui-cell__bd">
-          时间
-        </view>
-        <view class="weui-cell__ft">
-          {{util.formatStartEnd(event.start)}}
+          <view class="event-name">{{event.name}}</view>
         </view>
       </view>
-      <view class="weui-cell weui-cell_access event-address" wx:if="{{event.location.address}}" hover-class="weui-cell_active" @tap="openMap">
+      <view class="weui-cell" wx:if="{{event.start}}">
         <view class="weui-cell__bd">
-          地点
-        </view>
-        <view class="weui-cell__ft weui-cell__ft_in-access">
-          {{event.location.address}}
+          <view class="event-start-end  event-field">时间：{{util.formatStartEnd(event.start)}}</view>
         </view>
       </view>
-      <view class="weui-media-box weui-media-box_text" wx:if="{{event.description}}">
-        <view class="weui-media-box__title weui-media-box__title_in-text">
-          备注
+      <view class="weui-cell weui-cell_access" wx:if="{{event.location.address}}" @tap="openMap">
+        <view class="weui-cell__bd">
+          <view class="event-address event-field">地点：{{event.location.address}}</view>
         </view>
-        <view class="weui-media-box__desc">
-          <text space="emsp">{{event.description}}</text>
+        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+      </view>
+      <view class="weui-cell" wx:if="{{event.description}}">
+        <view class="weui-cell__bd">
+          <view class="event-description">{{event.description}}</view>
         </view>
       </view>
-      <navigator class="weui-cell weui-cell_access event-accepted-count" url="attendees?event_id={{event._id}}&&space_id={{space_id}}">
-        <view class="weui-cell__bd">
-          人数
+    </view>
+
+    <view class="comments">
+      <view class="title">{{event.accepted_count ? event.accepted_count : 0}}人报名，{{event.pending_count ? event.pending_count : 0}}人观望</view>
+      <view class="clist">
+        <view class="comment flex-row">
+          <block wx:if="{{event.owner.profile.avatar}}">
+            <image class="avatar" mode="aspectFill" src="{{event.owner.profile.avatar}}"/>
+          </block>
+          <block wx:else>
+            <image class="avatar" mode="aspectFill" src="{{baseMaterialUrl + 'avatar.png'}}"/>
+          </block>
+          <view class="detail flex-rest-width">
+            <view class="name">{{event.owner.name}}</view>
+            <view class="time">{{util.formatDate(event.created)}}</view>
+          </view>
+          <view class="weui-cell__ft weui-cell__ft_owner">
+            <view>发起人</view>
+          </view>
         </view>
-        <view class="weui-cell__ft weui-cell__ft_in-access">
-          {{event.accepted_count ? event.accepted_count : 0}}人报名，{{event.pending_count ? event.pending_count : 0}}人观望
+        <view wx:if="{{ attendees.length }}">
+          <repeat for="{{attendees}}" key="index" index="index" item="attendee">
+            <view class="comment flex-row">
+              <block wx:if="{{attendee.owner.profile.avatar}}">
+                <image class="avatar" mode="aspectFill" src="{{attendee.owner.profile.avatar}}"/>
+              </block>
+              <block wx:else>
+                <image class="avatar" mode="aspectFill" src="{{baseMaterialUrl + 'avatar.png'}}"/>
+              </block>
+              <view class="detail flex-rest-width">
+                <view class="name">{{attendee.name}}</view>
+                <view class="time">{{util.formatDate(attendee.created)}}</view>
+                <view class="text">{{attendee.comment}}</view>
+              </view>
+              <view class="weui-cell__ft">
+                <view class="event-status {{attendee.status}}">{{util.formatEventStatus(attendee.status)}}</view>
+              </view>
+            </view>
+          </repeat>
         </view>
-      </navigator>
+      </view>
     </view>
   </view>
-  <view class="tab-bar">
-    <view wx:if="{{editable}}" class="btn btn-edit" @tap="editEvent">编辑</view>
-    <view wx:else class="btn btn-respond" @tap="respondEvent">活动报名</view>
-    <button open-type="share" class="btn btn-invite" type="default" plain="{{true}}">邀请好友</button>
+  <view class="tab-bar border-top-1px">
+    <view wx:if="{{editable}}" class="btn btn-edit" @tap="editEvent">
+      <view class="vip_new_direct_message-default slds-icon slds-icon--small slds-m-right--x-small"></view>
+      <view class="text">编辑</view>
+    </view>
+    <view wx:else class="btn btn-respond" @tap="respondEvent">
+      <view class="vip_answer-default slds-icon slds-icon--small slds-m-right--x-small"></view>
+      <view class="text">活动报名</view>
+    </view>
+    <button open-type="share" class="btn btn-invite" type="default" plain="{{true}}">
+      <view class="vip_share-default slds-icon slds-icon--small slds-m-right--x-small"></view>
+      <view class="text">邀请好友</view>
+    </button>
   </view>
 </view>
 </template>
@@ -182,6 +269,7 @@ import req from '@/network';
 import { baseUrl } from '@/config';
 import util from '../../wxs/util.wxs';
 import pageRouter from '@/utils/pageRouter'
+import { baseMaterialUrl } from '@/config';
 
 export default class EventView extends wepy.page {
   config = {
@@ -195,6 +283,7 @@ export default class EventView extends wepy.page {
       mask: true
     });
     await this.$parent.login();
+    this.showHeader = e.showHeader ? true : false;
     if(e.space_id){
       this.$parent.globalData.space_id = e.space_id;
       this.space_id = e.space_id;
@@ -206,26 +295,25 @@ export default class EventView extends wepy.page {
       }
       const res = await this.$parent.query('vip_store', options, 'guest')
 
-      if (res.value[0]) {
+      if (res.value && res.value[0]) {
         this.space_name = res.value[0].space.name
         this.avatar = res.value[0].avatar
-        console.log("====space_name=====",this.space_name)
-        console.log("=====avatar====",this.avatar)
       }
     } 
+    else{
+      this.space_id = "guest";
+    }
     if(e.event_id){
       this.event_id = e.event_id;
       await this.loadEvent();
-      this.editable = this.$parent.isSpaceAdmin(this.space_id);
+      await this.loadAttendees();
+      let owner = this.event && this.event.owner && this.event.owner._id;
+      this.editable = await this.$parent.recordAllowEdit("vip_event", owner, this.space_id);
     }
 
     this.is_loaded = true
     this.$apply();
     wepy.hideLoading();
-    if(e.respond){
-      // 如果是活动报名时手机号填写界面回来的，自动跳转到报名界面
-      this.respondEvent();
-    }
   }
 
   async refresh(action) {
@@ -234,13 +322,30 @@ export default class EventView extends wepy.page {
       return;
     }
     await this.loadEvent();
+    await this.loadAttendees();
     wepy.stopPullDownRefresh();
   }
 
   async loadEvent(){
-    var event = await this.$parent.get("vip_event", this.event_id, this.space_id)
-    this.event = event;
-    this.space_id = event.space;
+    const query = {
+      $filter: `_id eq '${this.event_id}'`,
+      $expand: 'owner($select=profile,name)'
+    };
+    var event = await this.$parent.query("vip_event", query, this.space_id)
+    this.event = event.value && event.value[0];
+    this.space_id = this.event && this.event.space;
+    this.space_id = this.space_id ? this.space_id : 'guest';
+    this.$apply();
+  };
+
+  async loadAttendees(){
+    const query_options = {
+        $filter: `event eq '${this.event_id}'`,
+        $select: 'name,status,comment,owner,created',
+        $expand: 'owner($select=profile)'
+      };
+    let attendees = await this.$parent.query("vip_event_attendees", query_options, this.space_id);
+    this.attendees = attendees.value;
     this.$apply();
   };
 
@@ -272,12 +377,15 @@ export default class EventView extends wepy.page {
   data = {
     event_id: null,
     event: null,
+    attendees: [],
     baseUrl: baseUrl,
     space_id: '',
     space_name: '',
     avatar: '',
     is_loaded: false,
-    editable: false
+    editable: false,
+    baseMaterialUrl: baseMaterialUrl,
+    showHeader: true
   };
 
   wxs = {
@@ -292,36 +400,6 @@ export default class EventView extends wepy.page {
     };
     return to;
   }
-  
-  async respondEvent() {
-    wepy.showLoading({
-      title: '加载中',
-      mask: true
-    });
-    if(!this.$parent.checkMobile(this.getBackUrlForCheckMobile(), true)){
-      return;
-    }
-    let userId = this.$parent.globalData.user._id;
-    let name = this.$parent.globalData.user.name;
-    const query_options = {
-      $filter: `event eq '${this.event_id}' and owner eq '${userId}'`,
-      $select: 'name'
-    };
-    let attendee = await this.$parent.query("vip_event_attendees", query_options, this.space_id);
-    if(!attendee || !attendee.value || !attendee.value.length){
-      let attendeeData = {
-        name: name,
-        event: this.event_id,
-        owner: userId
-      };
-      attendee = await this.$parent.insert("vip_event_attendees", attendeeData, this.space_id);
-    }
-    wepy.hideLoading();
-    if(attendee && attendee.value && attendee.value.length){
-      let url = `/pages/record/edit?action=edit&object_name=vip_event_attendees&record_id=${attendee.value[0]._id}&undeletable=true&title=活动报名`;
-      pageRouter.navigateTo({ url: url });
-    }
-  }
 
   methods = {
     editEvent() {
@@ -334,7 +412,32 @@ export default class EventView extends wepy.page {
       });
     },
     async respondEvent() {
-      this.respondEvent();
+      let userId = this.$parent.globalData.user._id;
+      let name = this.$parent.globalData.user.name;
+      const query_options = {
+        $filter: `event eq '${this.event_id}' and owner eq '${userId}'`,
+        $select: 'name'
+      };
+      let attendee = await this.$parent.query("vip_event_attendees", query_options, this.space_id);
+      if(!attendee || !attendee.value || !attendee.value.length){
+        let values = {
+          name: name,
+          status: 'accepted',
+          alarms: this.event.alarms,
+          event: this.event_id,
+          owner: userId
+        };
+        values = JSON.stringify(values);
+        let url = `/pages/record/create?space_id=${this.space_id}&object_name=vip_event_attendees&values=${values}&title=活动报名`;
+        pageRouter.navigateTo({
+          url: url
+        });
+        return;
+      }
+      if(attendee && attendee.value && attendee.value.length){
+        let url = `/pages/record/edit?action=edit&space_id=${this.space_id}&object_name=vip_event_attendees&record_id=${attendee.value[0]._id}&undeletable=true&title=活动报名`;
+        pageRouter.navigateTo({ url: url });
+      }
     },
     openMap() {
       if (this.event.location.address) {
@@ -349,15 +452,6 @@ export default class EventView extends wepy.page {
           name: name
         });
       }
-    },
-    previewImage(image, event){
-      var baseUrl = this.baseUrl;
-      var current = `${baseUrl}/api/files/images/${image}`;
-      var urls = [current];
-      wx.previewImage({
-        current: current,
-        urls: urls
-      });
     }
   };
 }

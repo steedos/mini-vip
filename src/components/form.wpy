@@ -132,7 +132,7 @@
 <template>
   <view class="record-form" wx:if="{{is_loaded}}">
     <view class="weui-toptips weui-toptips_warn" wx:if="{{showTopTips}}">{{message}}</view>
-    <form bindsubmit="submitForm">
+    <form bindsubmit="submitForm" report-submit='true' >
       <view class="page__bd">
         <repeat for="{{groupFields}}" key="index_g" index="index_g" item="groupField">
           <block wx:if="{{groupField._groupText === '-'}}">
@@ -246,7 +246,7 @@
                   <block wx:if="{{!(item.readonly || !_record_allowEdit || args.action === 'read')}}">
                     <view class="weui-cell">
                       <view class="weui-cell__bd">
-                        <textarea class="weui-textarea-input" data-id="{{item.name}}" name="{{item.name}}" placeholder="{{item.label}}" value="{{util.transformFieldValue(item, values[item.name])}}" auto-height="true" bindblur="textChange"/>
+                        <textarea class="weui-textarea-input" data-id="{{item.name}}" name="{{item.name}}" placeholder="{{item.label}}" value="{{util.transformFieldValue(item, values[item.name])}}" auto-height="true" bindinput="textChange"/>
                       </view>
                     </view>
                   </block>
@@ -275,7 +275,7 @@
                       <block wx:if="{{item.is_wide}}">
                         <view class="weui-cell__bd">
                           <block wx:if="{{!(item.readonly || !_record_allowEdit || args.action === 'read')}}">
-                            <textarea class="weui-textarea" name="{{item.name}}" data-id="{{item.name}}" placeholder="{{item.label}}" value="{{util.transformFieldValue(item, values[item.name])}}" auto-height="true" bindblur="textChange" maxlength="-1"/>
+                            <textarea class="weui-textarea" name="{{item.name}}" data-id="{{item.name}}" placeholder="{{item.label}}" value="{{util.transformFieldValue(item, values[item.name])}}" auto-height="true" bindinput="textChange" maxlength="-1"/>
                           </block>
                           <block wx:else>
                             <view class="weui-cell__ft wide-cell">{{util.transformFieldValue(item, values[item.name]) || item.label}}</view>
@@ -300,7 +300,7 @@
                       </view>
                       <view class="weui-cell__bd">
                         <block wx:if="{{item.type === 'phone' && (item.readonly || !_record_allowEdit || args.action === 'read')}}">
-                          <view class="weui-cell__ft" @tap="phoneCall(values[item.name])">{{values[item.name]}}uuuuuu</view>
+                          <view class="weui-cell__ft" @tap="phoneCall(values[item.name])">{{values[item.name]}}</view>
                         </block>
                         <block wx:else>
                           <view class="weui-cell__ft">{{util.transformFieldValue(item, values[item.name])}}</view>
@@ -330,7 +330,7 @@
 </template>
 <script>
   import wepy from 'wepy'
-  import {baseUrl} from '@/config';
+  import { baseUrl, appId } from '@/config'
   import util from '../wxs/util.wxs'
   const utilJs = require('../utils/util.js');
 
@@ -365,7 +365,8 @@
       is_loaded: false,
       groupFields: [],
       submitDisabled: false,
-      hiddenBtn: false
+      hiddenBtn: false,
+      _changeValue: {},
     };
 
     getGroupFields(fields, action, values){
@@ -445,7 +446,7 @@
           this.hiddenBtn = newValue.hidden_btn || false;
 
           if (object_name) {
-            const object = await this.$parent.$parent.getObject(object_name);
+            const object = JSON.parse(JSON.stringify(await this.$parent.$parent.getObject(object_name, this.args.space_id)));
             object.allowEdit = true;
             this.schema = object;
 
@@ -462,8 +463,10 @@
             }
 
             this.$apply();
+
             if (object.fields) {
               const fields = object.fields;
+              let thisFields = {}
               for (let field_name in fields) {
                 let field = fields[field_name];
                 if(!field.label){
@@ -473,26 +476,27 @@
                   field.options = await this.getReferenceTo(field.name, field.reference_to)
                 }
 
+                thisFields[field_name] = field
+
 //                if(field.defaultValues){
 //                  defaultValues[field_name] = field.defaultValue
 //                }
               }
+              this.fields = thisFields;
             }
 
             if (this.args.fields) {
-              let fields = {}
+              let fields = {};
               _.forEach(this.args.fields.split(','), function (field_name) {
                 fields[field_name] = object.fields[field_name]
               })
               this.fields = fields
-            } else {
-              this.fields = object.fields
             }
           }
 
           if(action === 'create'){
             this._record_allowEdit = true;
-            this.values = defaultValues;
+            this.values = _.clone(defaultValues);
           }
 
           if (object_name && record_id && action != 'create') {
@@ -515,9 +519,7 @@
             if (expand.length > 0) {
               query_options.$expand = expand.join(',')
             }
-
             console.log('query_options', query_options)
-
             const result = await this.$parent.$parent.query(object_name, query_options);
             if (result.value.length === 1) {
               this.values = result.value[0]
@@ -526,58 +528,56 @@
               delete this.values["@odata.editLink"]
               delete this.values["_id"]
             }
-            _.forEach(this.fields, (field) => {
-              let fv = this.values[field.name];
-              if (fv) {
-
-                if (field.name === 'name' || field.is_name){
-                  this._record_name = fv
-                }
-
-                if (field.type === 'select') {
-                  if(field.multiple){
-                    if (_.isArray(fv)) {
-                      _.forEach(field.options, (option) => {
-                        if (fv.includes(option.value)) {
-                          option.checked = true
-                        }
-                      })
-                    }
-                  }else{
-                    _.forEach(field.options, (option) => {
-                      if (fv === option.value) {
-                        option.checked = true
-                      }
-                    })
-                  }
-                }else if(field.type === 'lookup' || field.type === 'master_detail'){
-                  if(field.multiple){
-                    let _ids = _.pluck(fv, '_id')
-                    _.forEach(field.options, (option) => {
-                      if (_ids.includes(option.value)) {
-                        option.checked = true
-                      }
-                    })
-                  }else{
-                    _.forEach(field.options, (option) => {
-                      if (fv._id === option.value) {
-                        option.checked = true
-                      }
-                    })
-                  }
-                }else if(field.type === 'datetime'){
-                  this.values[field.name] = utilJs.formatTime(new Date(fv), '-', true)
-                }
-              }
-            });
-
             this._record_allowEdit = this.$parent.$parent.recordAllowEdit(object_name, this.values.owner);
             this._record_allowDelte = this.$parent.$parent.recordAllowDelete(object_name, this.values.owner);
-
-            this.$apply()
-          }else{
-            this.$apply()
           }
+
+          _.forEach(this.fields, (field) => {
+            let fv = this.values[field.name];
+            if (fv) {
+
+              if (field.name === 'name' || field.is_name){
+                this._record_name = fv
+              }
+
+              if (field.type === 'select') {
+                if(field.multiple){
+                  if (_.isArray(fv)) {
+                    _.forEach(field.options, (option) => {
+                      if (fv.includes(option.value)) {
+                        option.checked = true
+                      }
+                    })
+                  }
+                }else{
+                  _.forEach(field.options, (option) => {
+                    if (fv === option.value) {
+                      option.checked = true
+                    }
+                  })
+                }
+              }else if(field.type === 'lookup' || field.type === 'master_detail'){
+                if(field.multiple){
+                  let _ids = _.pluck(fv, '_id')
+                  _.forEach(field.options, (option) => {
+                    if (_ids.includes(option.value)) {
+                      option.checked = true
+                    }
+                  })
+                }else{
+                  _.forEach(field.options, (option) => {
+                    if (fv._id === option.value) {
+                      option.checked = true
+                    }
+                  })
+                }
+              }else if(field.type === 'datetime'){
+                this.values[field.name] = utilJs.formatTime(new Date(fv), '-', true)
+              }
+            }
+          });
+
+          this.$apply();
 
           if(action === 'read'){
             title = this._record_name
@@ -609,6 +609,7 @@
 
     changeValue(key, value) {
       this.values[key] = value;
+      this._changeValue[key] = value;
       this.$apply();
     }
 
@@ -861,6 +862,31 @@
       })
     }
 
+    events = {
+      async record_save(){
+        if(this.args.action === 'edit' && !_.isEmpty(this._changeValue)){
+          if (!this.checkRequired()) {
+            return;
+          }
+          wx.showLoading({
+            title: '正在保存',
+            mask: true
+          });
+          console.log('record_save.....')
+          await this.uploadImages(this.args.record_id);
+          await this.uploadVideos(this.args.record_id);
+          const value = this.transformValue();
+          await this.$parent.$parent.update(this.args.object_name, this.args.record_id, value);
+          const pages = getCurrentPages();
+          const prevPage = pages[pages.length - 1];
+          if (prevPage.refresh) {
+            prevPage.refresh('edit')
+          }
+          wx.hideLoading()
+        }
+      }
+    };
+
     methods = {
       openSetting(e){
         self = this;
@@ -896,6 +922,7 @@
       textChange(e) {
         const key = e.target.dataset.id;
         this.values[key] = e.detail.value;
+        this._changeValue[key] = e.detail.value;
         this.$apply()
       },
       selectChange(e) {
@@ -1018,7 +1045,10 @@
 
         if (this.args.action === 'create') {
           const value = this.transformValue(formValues);
-          const record = await this.$parent.$parent.insert(this.args.object_name, value)
+          if(Object.keys(this.fields).indexOf('wx_form_id') > -1){
+            value['wx_form_id'] = appId + ':'+ e.detail.formId
+          }
+          const record = await this.$parent.$parent.insert(this.args.object_name, value, this.args.space_id)
 
           if (this.hasTempImages()) {
             const record_id = record.value[0]._id
@@ -1039,8 +1069,14 @@
           await this.uploadImages(this.args.record_id);
           await this.uploadVideos(this.args.record_id);
           const value = this.transformValue(formValues);
+          if(Object.keys(this.fields).indexOf('wx_form_id') > -1){
+            value['wx_form_id'] = appId + ':'+ e.detail.formId
+          }
           await this.$parent.$parent.update(this.args.object_name, this.args.record_id, value)
         }
+
+        this._changeValue = {}
+
         this.goBack(this.args.action);
       },
       navigateTo(field, e){

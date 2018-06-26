@@ -1,0 +1,224 @@
+<style lang="less">
+  // view,image,text,navigator,input {
+	// 	box-sizing: border-box;
+	// }
+
+  page{
+    height: 100%;
+    width: 100%;
+    background: #f4f4f4;
+  }
+
+  .container{
+    height: 100%;
+    width: 100%;
+  }
+
+  .address-list{
+    width: 100%;
+    box-sizing: border-box;
+    padding-left: 31.25rpx;
+    background: #fff url(http://yanxuan.nosdn.127.net/hxm/yanxuan-wap/p/20161201/style/img/icon-normal/address-bg-bd30f2bfeb.png) 0 0 repeat-x;
+    background-size: auto 10.5rpx;
+    margin-bottom: 90rpx;
+  }
+
+  .address-list .item{
+    padding: 32rpx 31.25rpx 32rpx 0;
+    align-items: center;
+    display: flex;
+    border-bottom: 1rpx solid #DCD9D9;
+  }
+
+  .address-list .item:last-child{
+
+    border-bottom: none;
+  }
+
+  .address-list .l{
+    width: 125rpx;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .address-list .name{
+    width: 100%;
+    line-height: 44rpx;
+    font-size: 29rpx;
+    color: #333;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    margin-bottom: 8rpx;
+  }
+
+  .address-list .default{
+    width: 62.5rpx;
+    text-align: center;
+    font-size: 20rpx;
+    color: #e96900;
+    border-radius: 5rpx;
+    border: 1rpx solid #e96900;
+    visibility: visible;
+    &.hide {
+      visibility: hidden;
+    }
+  }
+
+
+  .address-list .c{
+    flex: 1;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .address-list .mobile{
+    line-height: 44rpx;
+    margin-bottom: 8rpx;
+    font-size: 29rpx;
+    overflow: hidden;
+    color: #333;
+  }
+
+  .address-list .address{
+    font-size: 25rpx;
+    overflow: hidden;
+    color: rgb(158, 158, 158);
+  }
+
+  .address-list .r{
+    width: 52rpx;
+    height: auto;
+    overflow: hidden;
+    margin-right: 16.5rpx;
+  }
+
+  .address-list .del{
+    display: block;
+    width: 52rpx;
+    height: 52rpx;
+  }
+
+  .add-address{
+    background: #b4282d;
+    text-align: center;
+    width: 100%;
+    height: 100rpx;
+    line-height: 100rpx;
+    position: fixed;
+    border-radius: 0;
+    border: none;
+    color: #fff;
+    font-size: 30rpx;
+    bottom: 0;
+    left:0;
+  }
+
+  .empty-view{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .empty-view .icon{
+    height: 248rpx;
+    width: 258rpx;
+    margin-bottom: 10rpx;
+  }
+
+  .empty-view .text{
+    width: auto;
+    font-size: 28rpx;
+    line-height: 35rpx;
+    color: #999;
+  }
+</style>
+<template>
+  <view class="container">
+    <view class="address-list" wx:if="{{ addressList.length > 0 }}">
+      <repeat for="{{addressList}}" key="index" index="index" item="item">
+        <view class="item" bindtap="selectAddress" data-address-id="{{item._id}}">
+          <view class="l">
+            <view class="name">{{item.name}}</view>
+            <view class="default {{item.is_default ? 'show' : 'hide'}}">默认</view>
+          </view>
+          <view class="c">
+            <view class="mobile">{{item.phone}}</view>
+            <view class="address">{{item.address.address + item.door}}</view>
+          </view>
+          <view class="r">
+            <image catchtap="addressAddOrUpdate" data-address-id="{{item._id}}" class="del" src="http://yanxuan.nosdn.127.net/hxm/yanxuan-wap/p/20161201/style/img/icon-normal/address-edit-7fee7b0d63.png"></image>
+          </view>
+        </view>
+      </repeat>
+    </view>
+    <view class="empty-view" wx:if="{{ addressList.length <= 0 }}">
+      <image class="icon" src="http://yanxuan.nosdn.127.net/hxm/yanxuan-wap/p/20161201/style/img/icon-normal/noAddress-26d570cefa.png"></image>
+      <text class="text">收货地址在哪里</text>
+    </view>
+    <view class="add-address" bindtap="addressAddOrUpdate">新建</view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import pageRouter from '@/utils/pageRouter'
+
+  export default class AddressList extends wepy.page {
+    data = {
+      addressList: null
+    }
+    onLoad() {
+      // this.getAddressList()
+    }
+    onShow() {
+      this.getAddressList()
+    }
+    methods = {
+      addressAddOrUpdate (event) {
+        console.log('addressAddOrUpdate...', event)
+        const record_id = event.target.dataset.addressId
+        let url = ''
+        if (record_id) {
+          url = `/pages/record/edit?object_name=vip_address&fields=name,address,door,gender,phone,is_default&record_id=${record_id}`
+        } else {
+          url = '/pages/record/create?object_name=vip_address&fields=name,address,door,gender,phone,is_default'
+        }
+        pageRouter.navigateTo({
+          url: url
+        })
+      },
+      async deleteAddress(event) {
+        console.log(event.target)
+        let res = wepy.showModal({
+          title: '',
+          content: '确定要删除地址？'
+        })
+        if (res.confirm) {
+          let addressId = event.target.dataset.addressId
+          let ret = await util.request(api.AddressDelete, { id: addressId }, 'POST')
+          if (ret.errno === 0) {
+            this.getAddressList()
+          }
+          console.log('用户点击确定')
+        }
+        return false
+      }
+    }
+    async getAddressList () {
+      const user_id = this.$parent.globalData.user._id;
+      const options = {
+        $filter: `owner eq '${user_id}'`,
+        $count: true
+      };
+      const result = await this.$parent.query('vip_address', options, 'guest');
+      if (result.value) {
+        this.addressList = result.value;
+        this.$apply();
+      }
+    }
+  }
+</script>
