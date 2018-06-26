@@ -90,7 +90,7 @@ page {
       <view class="zan-tab">
           <scroll-view class="zan-tab__bd zan-tab__bd--scroll" scroll-x="true">
             <repeat for="{{categories}}" key="index" index="index" item="item">
-              <view class="zan-tab__item {{index == seleted_id ? 'zan-tab__item--selected' : ''}}"  @tap="changeCategory({{item._id}},{{index}})">
+              <view class="zan-tab__item {{index == seleted_id ? 'zan-tab__item--selected' : ''}}"  @tap="changeCategory({{index}},{{item._id}})">
                 <view class="zan-tab__title">{{ item.name }}</view>
               </view>
             </repeat>
@@ -111,7 +111,7 @@ page {
 import wepy from 'wepy';
 import postList from '../../components/post_list';
 import req from '@/network';
-
+import _ from 'underscore'
 const DATA_LENGTH = 10;
 export default class Posts extends wepy.page {
   config = {
@@ -212,7 +212,7 @@ export default class Posts extends wepy.page {
     is_skip_allowed: true,
     is_loaded: false,
     editable: false,
-    categories: []
+    categories: [{name:'全部'}]
   };
   
 	async loadPostList(category_id){
@@ -223,7 +223,6 @@ export default class Posts extends wepy.page {
     var options = {}
     if(category_id) {
       this.posts = [];
-      options['$filter'] = `categories eq '${category_id}'`
       skip = 0
     }
     options = {
@@ -255,7 +254,7 @@ export default class Posts extends wepy.page {
     };
     const result = await this.$parent.query("post_category", options);
     if(result.value){
-      this.categories = result.value
+      this.categories = _.union(this.categories,result.value)
       this.default_category = result.value[0]._id
       this.$apply();
     } 
@@ -267,9 +266,12 @@ export default class Posts extends wepy.page {
         url: url
       });
     },
-    changeCategory(category_id, index) {
+    changeCategory( index,category_id) {
       this.seleted_id = index
       this.$apply()
+      if(index == 0){
+        category_id = ''
+      }
       this.loadPostList(category_id)
     }
   }
