@@ -493,7 +493,7 @@
 
           if(action === 'create'){
             this._record_allowEdit = true;
-            this.values = defaultValues;
+            this.values = _.clone(defaultValues);
           }
 
           if (object_name && record_id && action != 'create') {
@@ -516,9 +516,7 @@
             if (expand.length > 0) {
               query_options.$expand = expand.join(',')
             }
-
             console.log('query_options', query_options)
-
             const result = await this.$parent.$parent.query(object_name, query_options);
             if (result.value.length === 1) {
               this.values = result.value[0]
@@ -527,58 +525,56 @@
               delete this.values["@odata.editLink"]
               delete this.values["_id"]
             }
-            _.forEach(this.fields, (field) => {
-              let fv = this.values[field.name];
-              if (fv) {
-
-                if (field.name === 'name' || field.is_name){
-                  this._record_name = fv
-                }
-
-                if (field.type === 'select') {
-                  if(field.multiple){
-                    if (_.isArray(fv)) {
-                      _.forEach(field.options, (option) => {
-                        if (fv.includes(option.value)) {
-                          option.checked = true
-                        }
-                      })
-                    }
-                  }else{
-                    _.forEach(field.options, (option) => {
-                      if (fv === option.value) {
-                        option.checked = true
-                      }
-                    })
-                  }
-                }else if(field.type === 'lookup' || field.type === 'master_detail'){
-                  if(field.multiple){
-                    let _ids = _.pluck(fv, '_id')
-                    _.forEach(field.options, (option) => {
-                      if (_ids.includes(option.value)) {
-                        option.checked = true
-                      }
-                    })
-                  }else{
-                    _.forEach(field.options, (option) => {
-                      if (fv._id === option.value) {
-                        option.checked = true
-                      }
-                    })
-                  }
-                }else if(field.type === 'datetime'){
-                  this.values[field.name] = utilJs.formatTime(new Date(fv), '-', true)
-                }
-              }
-            });
-
             this._record_allowEdit = this.$parent.$parent.recordAllowEdit(object_name, this.values.owner);
             this._record_allowDelte = this.$parent.$parent.recordAllowDelete(object_name, this.values.owner);
-
-            this.$apply()
-          }else{
-            this.$apply()
           }
+
+          _.forEach(this.fields, (field) => {
+            let fv = this.values[field.name];
+            if (fv) {
+
+              if (field.name === 'name' || field.is_name){
+                this._record_name = fv
+              }
+
+              if (field.type === 'select') {
+                if(field.multiple){
+                  if (_.isArray(fv)) {
+                    _.forEach(field.options, (option) => {
+                      if (fv.includes(option.value)) {
+                        option.checked = true
+                      }
+                    })
+                  }
+                }else{
+                  _.forEach(field.options, (option) => {
+                    if (fv === option.value) {
+                      option.checked = true
+                    }
+                  })
+                }
+              }else if(field.type === 'lookup' || field.type === 'master_detail'){
+                if(field.multiple){
+                  let _ids = _.pluck(fv, '_id')
+                  _.forEach(field.options, (option) => {
+                    if (_ids.includes(option.value)) {
+                      option.checked = true
+                    }
+                  })
+                }else{
+                  _.forEach(field.options, (option) => {
+                    if (fv._id === option.value) {
+                      option.checked = true
+                    }
+                  })
+                }
+              }else if(field.type === 'datetime'){
+                this.values[field.name] = utilJs.formatTime(new Date(fv), '-', true)
+              }
+            }
+          });
+
+          this.$apply();
 
           if(action === 'read'){
             title = this._record_name
