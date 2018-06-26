@@ -89,28 +89,37 @@
   }
 
   .cart-view .item{
-    // height: 164rpx;
+    display: flex;
     width: 100%;
     overflow: hidden;
+    .check-img {
+      height: 34rpx;
+      width: 34rpx;
+    }
   }
   .cart-view .item .checkbox{
-    float: left;
-    height: 34rpx;
+    display: flex;
+    align-content: center;
+    align-items: center;
     width: 34rpx;
-    margin: 65rpx 18rpx 65rpx 26rpx;
-    background: url(http://nos.netease.com/mailpub/hxm/yanxuan-wap/p/20150730/style/img/icon-normal/checkbox-0e09baa37e.png) no-repeat;
-    background-size: 34rpx;
+    margin: 0 26rpx;
+    .check-img {
+      background: url(http://nos.netease.com/mailpub/hxm/yanxuan-wap/p/20150730/style/img/icon-normal/checkbox-0e09baa37e.png) no-repeat;
+      background-size: 34rpx;
+    }
   }
 
   .cart-view .item .checkbox.checked{
-    background: url(http://nos.netease.com/mailpub/hxm/yanxuan-wap/p/20150730/style/img/icon-normal/checkbox-checked-822e54472a.png) no-repeat;
-    background-size: 34rpx;
+    .check-img {
+      background: url(http://nos.netease.com/mailpub/hxm/yanxuan-wap/p/20150730/style/img/icon-normal/checkbox-checked-822e54472a.png) no-repeat;
+      background-size: 34rpx;
+    }
   }
 
   .cart-view .item .cart-goods{
+    flex: 1;
 		display: flex;
     float: left;
-    width: 672rpx;
     border-bottom: 1px solid #f4f4f4;
   }
 
@@ -130,26 +139,21 @@
   }
 
   .cart-view .item .t{
+    display: flex;
     margin: 8rpx 0;
-    height: 28rpx;
-    font-size: 25rpx;
+    font-size: 30rpx;
     color: #333;
     overflow: hidden;
   }
 
 
   .cart-view .item .name{
-    height: 28rpx;
-    max-width: 310rpx;
-    line-height: 28rpx;
-    font-size: 25rpx;
+    flex: 1;
     color: #333;
     overflow: hidden;
   }
 
   .cart-view .item .num{
-    height: 28rpx;
-    line-height: 28rpx;
     float: right;
   }
 
@@ -283,44 +287,57 @@
     width: 100%;
     background: #fff;
     display: flex;
+    font-size: 30rpx;
+    align-items: center;
+    align-content: center;
+    
+    .checkbox {
+      display: flex;
+      box-sizing: content-box;
+      height: 100%;
+      padding-left: 26rpx;
+      align-items: center;
+      align-content: center;
+      .check-img {
+        width: 34rpx;
+        height: 34rpx;
+        box-sizing: content-box;
+        padding-right: 30rpx;
+      }
+    }
   }
 
   .cart-bottom .checkbox{
-    height: 34rpx;
-
-    padding-left: 60rpx;
-    line-height: 34rpx;
-    margin: 33rpx 18rpx 33rpx 26rpx;
-    background: url(http://nos.netease.com/mailpub/hxm/yanxuan-wap/p/20150730/style/img/icon-normal/checkbox-0e09baa37e.png) no-repeat;
-    background-size: 34rpx;
-    font-size: 29rpx;
+    .check-img {
+      background: url(http://nos.netease.com/mailpub/hxm/yanxuan-wap/p/20150730/style/img/icon-normal/checkbox-0e09baa37e.png) no-repeat;
+      background-size: 34rpx;
+    }
   }
 
   .cart-bottom .checkbox.checked{
-    background: url(http://nos.netease.com/mailpub/hxm/yanxuan-wap/p/20150730/style/img/icon-normal/checkbox-checked-822e54472a.png) no-repeat;
-    background-size: 34rpx;
+    .check-img {
+      background: url(http://nos.netease.com/mailpub/hxm/yanxuan-wap/p/20150730/style/img/icon-normal/checkbox-checked-822e54472a.png) no-repeat;
+      background-size: 34rpx;
+    }
   }
 
   .cart-bottom .total{
-    height: 34rpx;
     flex: 1;
-    margin: 33rpx 10rpx;
-    font-size: 29rpx;
+    text-align: right;
+    margin-right: 30rpx;
   }
 
   .cart-bottom .delete{
     height: 34rpx;
     width: auto;
     margin: 33rpx 18rpx;
-    font-size: 29rpx;
   }
 
   .cart-bottom .checkout{
-    height: 100rpx;
+    height: 100%;
+    line-height: 100rpx;
     width: 210rpx;
     text-align: center;
-    line-height: 100rpx;
-    font-size: 29rpx;
     background: #b4282d;
     color: #fff;
   }
@@ -344,7 +361,9 @@
           <view class="goods">
 						<repeat for="{{cartList}}" key="index" index="index" item="goods">
 							<view class="item">
-								<view class="checkbox {{item.checked ? 'checked' : ''}}" @tap="checkedItem" data-item-index="{{index}}"></view>
+								<view class="checkbox {{goods.checked ? 'checked' : ''}}" @tap="checkedItem" data-item-id="{{goods._id}}">
+                  <view class="check-img" data-item-id="{{goods._id}}"></view>
+                </view>
 								<view class="cart-goods">
 									<image class="img" src="{{util.formatImageUrl(goods.avatar, baseUrl)}}"></image>
 									<view class="info">
@@ -369,9 +388,12 @@
         </view>
       </view>
       <view class="cart-bottom">
-        <view class="checkbox {{checkedAllStatus ? 'checked' : ''}}" @tap="checkedAll">全选({{cartTotal.checkedGoodsCount}})</view>
-        <view class="total">{{!isEditCart ? '￥'+cartTotal.checkedGoodsAmount : ''}}</view>
-        <view class="delete" @tap="editCart">{{!isEditCart ? '编辑' : '完成'}}</view>
+        <view class="checkbox {{isCheckekAll ? 'checked' : ''}}" @tap="checkedAll">
+          <view class="check-img"></view>
+        </view>
+        <view class="text">全选({{checkedProductCount}})</view>
+        <view class="total">{{'￥'+checkedProductAmount}}</view>
+        <!-- <view class="delete" @tap="editCart">{{!isEditCart ? '编辑' : '完成'}}</view> -->
         <view class="checkout" @tap="deleteCart" wx:if="{{isEditCart}}">删除所选</view>
         <view class="checkout" @tap="checkoutOrder" wx:if="{{!isEditCart}}">下单</view>
       </view>
@@ -452,70 +474,43 @@
 			}
 			return products
 		}
-    async getCartList () {
-      let res = await util.request(api.CartList)
-      if (res.errno === 0) {
-        console.log(res.data)
-        this.cartGoods = res.data.cartList
-        this.cartTotal = res.data.cartTotal
-      }
-      this.checkedAllStatus = this.isCheckedAll()
-    }
-    isCheckedAll () {
-      // 判断购物车商品已全选
-      return this.cartGoods.every(function (element, index, array) {
-        if (element.checked === true) {
-          return true
-        } else {
-          return false
+   
+    computed = {
+      isCheckekAll() {
+        const cartList = store.getState().counter.cartList;
+        return cartList.every(function (element, index, array) {
+          if (element.checked === true) {
+            return true
+          } else {
+            return false
+          }
+        })
+      },
+      checkedProductCount() {
+        const cartList = store.getState().counter.cartList;
+        let checkedProductCount = 0;
+        if (cartList && cartList.constructor === Array) {
+          cartList.forEach(p => {
+            p.checked ? checkedProductCount += p.count : checkedProductCount
+          });
         }
-      })
-    }
-    getCheckedGoodsCount () {
-      let checkedGoodsCount = 0
-      this.cartGoods.forEach(function (v) {
-        if (v.checked === true) {
-          checkedGoodsCount += v.number
+        return checkedProductCount
+      },
+      checkedProductAmount() {
+        const cartList = store.getState().counter.cartList;
+        let checkedProductAmount = 0.00;
+        if (cartList && cartList.constructor === Array) {
+          cartList.forEach(p => {
+            p.checked ? checkedProductAmount += (p.default_price * p.count) : checkedProductAmount
+          });
         }
-      })
-      console.log(checkedGoodsCount)
-      return checkedGoodsCount
-    }
-    async updateCart (productId, goodsId, number, id) {
-      let res = await util.request(api.CartUpdate, {
-        productId: productId,
-        goodsId: goodsId,
-        number: number,
-        id: id
-      }, 'POST')
-      if (res.errno === 0) {
-        console.log(res.data)
+        return checkedProductAmount.toFixed(2)
       }
-      this.checkedAllStatus = this.isCheckedAll()
     }
     methods = {
-      checkedItem: function (event) {
-        let itemIndex = event.target.dataset.itemIndex
-        if (!this.isEditCart) {
-          let res = util.request(api.CartChecked, { productIds: this.cartGoods[itemIndex].product_id, isChecked: this.cartGoods[itemIndex].checked ? 0 : 1 }, 'POST')
-          if (res.errno === 0) {
-            console.log(res.data)
-            this.cartGoods = res.data.cartList
-            this.cartTotal = res.data.cartTotal
-          }
-          this.checkedAllStatus = this.isCheckedAll()
-        } else {
-          // 编辑状态
-          let tmpCartData = this.cartGoods.map(function (element, index, array) {
-            if (index === itemIndex) {
-              element.checked = !element.checked
-            }
-            return element
-          })
-          this.cartGoods = tmpCartData
-          this.checkedAllStatus = this.isCheckedAll()
-          this.cartTotal.checkedGoodsCount = this.getCheckedGoodsCount()
-        }
+      checkedItem(e) {
+        const itemId = e.target.dataset.itemId;
+        store.dispatch({type: 'CHECK_PRODUCT', payload: itemId})
       },
       checkedAll: function () {
         if (!this.isEditCart) {
@@ -584,40 +579,6 @@
           url: '../shopping/checkout/checkout'
         })
       },
-      deleteCart: async function () {
-        // 获取已选择的商品
-        let productIds = this.cartGoods.filter(function (element, index, array) {
-          if (element.checked === true) {
-            return true
-          } else {
-            return false
-          }
-        })
-        if (productIds.length <= 0) {
-          return false
-        }
-        productIds = productIds.map(function (element, index, array) {
-          if (element.checked === true) {
-            return element.product_id
-          }
-        })
-        let res = await util.request(api.CartDelete, {
-          productIds: productIds.join(',')
-        }, 'POST')
-        if (res) {
-          if (res.errno === 0) {
-            console.log(res.data)
-            let cartList = res.data.cartList.map(v => {
-              console.log(v)
-              v.checked = false
-              return v
-            })
-            this.cartGoods = cartList
-            this.cartTotal = res.data.cartTotal
-          }
-          this.checkedAllStatus = this.isCheckedAll()
-        }
-      }
     }
   }
 </script>
