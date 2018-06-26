@@ -1,4 +1,5 @@
 <style lang="less">
+@import '../../wemark/wemark.wxss';
 page {
  background-color:#F0EFF5;
 }
@@ -221,7 +222,9 @@ video{
           </view>
           <view class="weui-article__h1">{{post.name}}</view>
           <view class="weui-article__p article-p">
-            <text space="emsp">{{post.description}}</text>
+            <!-- <text space="emsp">{{post.description}}</text> -->
+            <import src="../../wemark/wemark.wxml"/>
+            <template is="wemark" data="{{...wemark}}"></template>
           </view>
         </view>
       </view>
@@ -264,7 +267,7 @@ import wepy from 'wepy';
 import req from '@/network';
 import { baseUrl } from '@/config';
 import util from '../../wxs/util.wxs';
-
+import wemark from '../../wemark/wemark';
 export default class PostView extends wepy.page {
   config = {
     navigationBarTitleText: '',
@@ -272,9 +275,6 @@ export default class PostView extends wepy.page {
   };
 
   async onLoad(e) {
-
-    console.log('view onLoad.................',e)
-
     this.editable = e.editable;
     wepy.showLoading({
       title: '加载中',
@@ -341,6 +341,15 @@ export default class PostView extends wepy.page {
     var post = await this.$parent.get("post", this.post_id)
     this.post = post;
     this.space_id = post.space;
+    let postMd = this.post && this.post.description;
+    //支持标准的图片markdown，格式为："![图片描述](http://192.168.0.195:5000/api/files/images/s8589uhysxKk7CEnp)";
+    //如果传入imagePathPrefix，则可以进一步支持"![图片描述](s8589uhysxKk7CEnp)"
+    if(postMd){
+      wemark.parse(postMd, this, {
+        name: 'wemark',
+        imagePathPrefix: `${baseUrl}/api/files/images/`
+      });
+    }
     this.$apply();
   };
 
@@ -399,7 +408,8 @@ export default class PostView extends wepy.page {
     editable: false,
     star_id: '',
     value: '',
-    post_comments: []
+    post_comments: [],
+    wemark: {}
   };
 
   wxs = {
