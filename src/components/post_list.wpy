@@ -25,11 +25,11 @@
     image{
       display: block;
       width: 100%;
-      height: 480rpx;
+      height: 400rpx;
     }
     video{
       width: 100%;
-      height: 480rpx;
+      height: 400rpx;
     }
 
     .no-radius {
