@@ -24,12 +24,18 @@ page {
     overflow: auto;
   }
 }
+.weui-article__h1 {
+  font-size: 22px;
+  font-weight: bold;
+}
 .weui-article__c {
   margin-bottom: 10px;
 }
 
 .weui-article {
   border-bottom:1px solid #dadada;
+  font-size:17px;
+  color: #353535;
 }
 
 .article-section {
