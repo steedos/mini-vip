@@ -37,6 +37,7 @@ page {
 .image{
   display: block;
   height: 180px;
+  width: 100%;
 }
 
 .zan-tab__bd {
@@ -77,8 +78,8 @@ page {
 }
 
 .zan-tab__item--selected .zan-tab__title {
-    color: rgb(27, 24, 224);
-    border-bottom: 2px solid rgb(27, 24, 224);
+    color:#018cc6;
+    border-bottom: 2px solid#018cc6;
 }
 
 .zan-tab__bd--scroll {
@@ -126,13 +127,15 @@ page {
             </repeat>
           </scroll-view>
       </view>
-      <view class="post-cover">
-        <image class="image" mode="aspectFill" src="{{util.formatImageUrl(cover, baseUrl)}}" text="eeeeeeeeeeeeeeeewwwwwwwwwwwwwwwww"/>
-        <view class="post-category">
-          <view class="post-category-title">{{category_name}}</view>
-          <view class="post-category-des">{{category_description}}</view>
+      <block wx:if="{{ cover }}">
+        <view class="post-cover">
+          <image class="image" mode="aspectFill" src="{{util.formatImageUrl(cover, baseUrl)}}"/>
+          <view class="post-category">
+            <view class="post-category-title">{{category_name}}</view>
+            <view class="post-category-des">{{category_description}}</view>
+          </view>
         </view>
-      </view>
+      </block>
     </block>
     <view class="page__bd">
       <scroll-view class="scroll-view_H" scroll-y="true">
@@ -256,7 +259,7 @@ export default class Posts extends wepy.page {
     is_skip_allowed: true,
     is_loaded: false,
     editable: false,
-    categories: [{name:'全部'}]
+    categories: ''
   };
   wxs = {
     util: util
@@ -295,27 +298,30 @@ export default class Posts extends wepy.page {
       $orderby:'sort_no'
     };
     const result = await this.$parent.query("post_category", options);
-    if(result.value){
-      this.categories = _.union(this.categories,result.value)
+    if(result.value.length > 0){
+      this.categories = _.union([{name:'全部'}],result.value)
       this.$apply();
     } 
   }
   methods = {
     createPost() {
-      let url = "/pages/record/edit?action=create&object_name=post&fields=name,summary,description,images,video,type";
+      let url = "/pages/record/edit?action=create&object_name=post&fields=name,summary,description,images,video,type,categories";
       wepy.navigateTo({
         url: url
       });
     },
     changeCategory( index,category) {
       this.seleted_id = index
-      this.cover = category.cover
-      this.category_name = category.name
-      this.category_description = category.description
       if(index == 0){
         this.category_id = ''
+        this.cover = ''
+        this.category_name = ''
+        this.category_description = ''
       }else {
         this.category_id = category._id
+        this.cover = category.cover
+        this.category_name = category.name
+        this.category_description = category.description
       }
       this.posts = []
       this.current_skip = 0
