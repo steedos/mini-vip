@@ -61,6 +61,10 @@ function parse(md, page, options){
 						content: token.content
 					});
 					env = '';
+				}
+				else if(['softbreak', 'hardbreak'].indexOf(token.type) > -1){ 
+					ret.push({ type: 'text', content: '\n' }); 
+					env = ''; 
 				}else if(token.type === 'del_open'){
 					env = 'deleted';
 				}else if(token.type === 'strong_open'){
