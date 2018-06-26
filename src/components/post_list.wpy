@@ -17,23 +17,19 @@
 
 .post {
   background: #fff;
-  margin:30rpx 30rpx;
+  margin:30rpx 0 30rpx 0;
   border:solid 1px #ededed;
-  border-radius:6px;
+  border-radius:0px;
 
   .post-cover{
     image{
       display: block;
       width: 100%;
       height: 480rpx;
-      border-top-left-radius:6px;
-      border-top-right-radius:6px;
     }
     video{
       width: 100%;
       height: 480rpx;
-      border-top-left-radius:6px;
-      border-top-right-radius:6px;
     }
 
     .no-radius {
