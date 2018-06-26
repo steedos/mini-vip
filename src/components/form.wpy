@@ -446,7 +446,7 @@
           this.hiddenBtn = newValue.hidden_btn || false;
 
           if (object_name) {
-            const object = await this.$parent.$parent.getObject(object_name);
+            const object = JSON.parse(JSON.stringify(await this.$parent.$parent.getObject(object_name)));
             object.allowEdit = true;
             this.schema = object;
 
@@ -463,8 +463,10 @@
             }
 
             this.$apply();
+
             if (object.fields) {
               const fields = object.fields;
+              let thisFields = {}
               for (let field_name in fields) {
                 let field = fields[field_name];
                 if(!field.label){
@@ -474,20 +476,21 @@
                   field.options = await this.getReferenceTo(field.name, field.reference_to)
                 }
 
+                thisFields[field_name] = field
+
 //                if(field.defaultValues){
 //                  defaultValues[field_name] = field.defaultValue
 //                }
               }
+              this.fields = thisFields;
             }
 
             if (this.args.fields) {
-              let fields = {}
+              let fields = {};
               _.forEach(this.args.fields.split(','), function (field_name) {
                 fields[field_name] = object.fields[field_name]
               })
               this.fields = fields
-            } else {
-              this.fields = object.fields
             }
           }
 
