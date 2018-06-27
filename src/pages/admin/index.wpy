@@ -41,7 +41,7 @@
             <view>{{store_info.name}}</view>
           </view>
           <view class="weui-cell__ft weui-cell__ft_in-access">
-            <view class="slds-icon-product ion"></view>
+            <view class="vip_page_qrcode slds-icon slds-icon--small slds-m-right--x-small"></view>
           </view>
         </navigator>
       </view>
