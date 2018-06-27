@@ -98,6 +98,9 @@ page {
     right: 2px
   }
 }
+.weui-loadmore__tips_in-line{
+  background-color:#EFEEF3;
+}
 </style>
 
 <script>
@@ -179,7 +182,6 @@ export default class VIP extends wepy.app {
       'pages/cart/index',
       'pages/cart/checkout',
       'pages/address/list',
-      'pages/address/add'
     ],
     tabBar: {
       color: '#666',

@@ -276,6 +276,11 @@
 
     methods = {
       async joinUser(){
+
+        if(!this.$parent.checkMobile()){
+          return ;
+        }
+
         if(!this.is_space_admin){
           const result = await req.post('/api/steedos/weixin/invite_user', {space_id: this.space_id, store_id: this.store_id, introducer: this.introducer, token: this.token}).catch((err)=>{
             this.showTopTips = true

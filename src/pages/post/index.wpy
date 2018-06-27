@@ -153,9 +153,11 @@ import wepy from 'wepy';
 import { baseUrl } from '@/config';
 import postList from '../../components/post_list';
 import util from '../../wxs/util.wxs';
+import pageRouter from '@/utils/pageRouter';
 import req from '@/network';
 import _ from 'underscore'
 const DATA_LENGTH = 10;
+
 export default class Posts extends wepy.page {
   config = {
     navigationBarTitleText: '动态',
@@ -306,8 +308,8 @@ export default class Posts extends wepy.page {
   }
   methods = {
     createPost() {
-      let url = "/pages/record/edit?action=create&object_name=post&fields=name,summary,description,images,video,type,categories";
-      wepy.navigateTo({
+      let url = `/pages/record/create?space_id=${this.space_id}&object_name=post&fields=name,summary,description,images,video,type,categories`;
+      pageRouter.navigateTo({
         url: url
       });
     },
@@ -320,7 +322,7 @@ export default class Posts extends wepy.page {
         this.category_description = ''
       }else {
         this.category_id = category._id
-        this.cover = category.cover
+        this.cover = category.cover || ''
         this.category_name = category.name
         this.category_description = category.description
       }

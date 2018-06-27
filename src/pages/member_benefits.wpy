@@ -18,9 +18,6 @@
 .weui-form-preview__label{
   margin-right:50rpx!important;
 }
-.weui-loadmore__tips_in-line{
-  background-color:#F5F5f2;
-}
 </style>
 <template>
   <view class="page__bd">

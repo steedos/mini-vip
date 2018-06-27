@@ -58,7 +58,7 @@ page {
 
       .empty-cover {
         position: relative;
-        height: 200px;
+        height: 210px;
         background-color: #7f7f7f;
         background-repeat: repeat-x;
         background-image: linear-gradient(128deg, #565656, #555 50%, #343434);
@@ -68,7 +68,7 @@ page {
 
         .text {
           position: relative;
-          top: -65px;
+          top: -82px;
           color: #262626;
           text-shadow: 1px 1px 0px #686868;
           font-size: 20px;
