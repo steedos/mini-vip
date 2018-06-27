@@ -390,7 +390,8 @@ export default class Posts extends wepy.page {
             }`;
             const vip_category = await this.$parent.get(
               'vip_category',
-              this.card.card_name._id
+              this.card.card_name._id,
+              this.space_id
             );
             this.card.avatar = vip_category.avatar;
       }

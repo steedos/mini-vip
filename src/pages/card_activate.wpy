@@ -143,7 +143,6 @@ export default class cardActivate extends wepy.page {
   }
 
   async onLoad(e) {
-    console.log("激活会员卡================================================================================激活会员卡");
     wepy.showLoading({
       title: '加载中',
       mask: true
@@ -185,7 +184,6 @@ export default class cardActivate extends wepy.page {
         $count: true,
         $select: 'is_actived,name'
       };
-      console.log("=========vip_card11==============", this.space_id);
       const card = await this.$parent.query('vip_card', data, this.space_id);
       if (!card.value[0]) {
         await this.addVipCard();
