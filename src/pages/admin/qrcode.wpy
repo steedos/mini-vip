@@ -91,7 +91,7 @@ export default class QRCode extends wepy.page {
       title: '加载中',
       mask: true
     });
-    var store_id = e.store_id || this.$parent.globalData.space_id
+    var store_id = e.store_id
     this.store_id = store_id
     this.$apply()
     await this.getqrCode(store_id)

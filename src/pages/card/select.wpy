@@ -150,7 +150,7 @@ export default class CardSelect extends wepy.page {
       $count: true,
       $select: 'is_actived,name'
     };
-    return this.$parent.query('vip_card', data);
+    return this.$parent.query('vip_card', data, this.space_id);
   }
 
   async initCategory() {
@@ -181,7 +181,7 @@ export default class CardSelect extends wepy.page {
     const data = {
       $select: 'name'
     };
-    return this.$parent.get('spaces', space_id);
+    return this.$parent.get('spaces', space_id, space_id);
   }
 
   getCategory(space_id) {
@@ -190,7 +190,7 @@ export default class CardSelect extends wepy.page {
       $filter: `space eq '${space_id}'`,
       $select: 'name,summary,avatar,cover,price'
     };
-    return this.$parent.query('vip_category', data);
+    return this.$parent.query('vip_category', data, space_id);
   }
 
 

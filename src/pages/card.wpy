@@ -193,14 +193,14 @@ export default class Card extends wepy.page {
 
   async getCardInfo(card_id) {
     const self = this;
-    const data = {
+    const query_options = {
       $filter: `_id eq '${card_id}'`,
       $expand: 'card_name($select=name,_id)',
       $count: true,
       $select: 'space,grade,is_actived,balance,points,card_number,card_name,store'
     };
 
-    const result = await self.$parent.cache('vip_card', card_id, data, true);
+    const result = await self.$parent.get('vip_card', card_id, this.space_id, query_options);
 
     console.log('getCardInfo..........', result);
     this.cardId = card_id;
@@ -264,7 +264,7 @@ export default class Card extends wepy.page {
 
     await this.$parent.login(this.space_id);
 
-    const space = await this.$parent.get('spaces', this.space_id)
+    const space = await this.$parent.get('spaces', this.space_id, this.space_id)
     this.space_name = space.name
 
     wx.setNavigationBarTitle({
@@ -325,7 +325,7 @@ export default class Card extends wepy.page {
         this.isAuthorize = true;
         this.$apply();
         wx.navigateTo({
-          url: 'card_activate'
+          url: `card_activate?space_id=${this.space_id}`
         });
       } else {
         return;
