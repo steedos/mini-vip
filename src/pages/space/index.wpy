@@ -58,7 +58,7 @@ page {
 
       .empty-cover {
         position: relative;
-        height: 200px;
+        height: 210px;
         background-color: #7f7f7f;
         background-repeat: repeat-x;
         background-image: linear-gradient(128deg, #565656, #555 50%, #343434);
@@ -68,7 +68,7 @@ page {
 
         .text {
           position: relative;
-          top: -65px;
+          top: -82px;
           color: #262626;
           text-shadow: 1px 1px 0px #686868;
           font-size: 20px;
@@ -418,7 +418,7 @@ export default class Posts extends wepy.page {
       post: {
         label: '动态',
         icon: 'standard-news',
-        url: `../post/index${this.is_space_admin ? '?editable=true' : ''}&title=${space.name}`
+        url: `../post/index${this.is_space_admin ? '?editable=true' : ''}?title=${space.name}`
       },
       vip_product: {
         label: '产品',
@@ -590,6 +590,7 @@ export default class Posts extends wepy.page {
               this.store_info.avatar = tempSrc;
             }
             this.$apply();
+            wepy.hideLoading();
             return;
           }
           // TODO 更新对应表的字段
@@ -597,13 +598,18 @@ export default class Posts extends wepy.page {
           let storeSetKey = isCover ? "cover" : 'avatar';
           let storeSet = {};
           storeSet[storeSetKey] = fileId;
-          // storeSet['qrcode'] = ''
-          await this.$parent.update("vip_store", this.space_id, storeSet, this.space_id);
-          if(isCover){
-            this.store_info.cover = fileId;
-          }
-          else{
-            this.store_info.avatar = fileId;
+          let updateSuc = await this.$parent.update("vip_store", this.space_id, storeSet, this.space_id);
+          if(!updateSuc){
+            wx.showToast({
+              title: "图片上传失败，请稍后再试",
+              icon: "none"
+            });
+            if(isCover){
+              this.store_info.cover = tempSrc;
+            }
+            else{
+              this.store_info.avatar = tempSrc;
+            }
           }
           this.$apply();
           wepy.hideLoading();

@@ -1,8 +1,4 @@
 <style lang="less">
-.weui-loadmore__tips_in-line{
-  background-color:#F5F5f2;
-}
-
 .post-header {
   
   .image {
@@ -220,6 +216,9 @@ export default class PostList extends wepy.component {
     list: async function (newValue, oldValue) {
       const parent = this.$parent.$parent;
       const user = parent.globalData.user._id;
+      if(!this.list || !this.list.length){
+        return;
+      }
       const post_ids = this.list.map(function (post) {
         return post._id;
       })

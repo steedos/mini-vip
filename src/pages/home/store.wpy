@@ -5,9 +5,6 @@
 	.page__bd {
     padding-bottom: 50px;
   }
-	.weui-loadmore__tips_in-line{
-		background-color:#F5F5f2;
-	}
 	.tab-bar {
     display: flex;
     position: fixed;

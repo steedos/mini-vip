@@ -78,6 +78,9 @@ page {
     transform: scaleY(0.5);
   }
 }
+.weui-loadmore__tips_in-line{
+  background-color:#EFEEF3;
+}
 </style>
 
 <script>
@@ -157,8 +160,7 @@ export default class VIP extends wepy.app {
       'pages/product/view',
       'pages/product/list',
       'pages/cart/index',
-      'pages/address/list',
-      'pages/address/add'
+      'pages/address/list'
     ],
     tabBar: {
       color: '#666',
@@ -501,7 +503,7 @@ export default class VIP extends wepy.app {
     const url = '/api/odata/v4/' + (space_id || this.globalData.space_id) + '/' + object_name;
     const result = await req.post(url, data).catch((err)=>{
       console.log("error...",err.data)
-      return {}
+      return false
     })
     return result
   }
@@ -512,7 +514,7 @@ export default class VIP extends wepy.app {
     doc['$set'] = data
     const result = await req.put(url, doc).catch((err)=>{
       console.log("error...",err.data)
-      return {}
+      return false
     })
     return result
   }

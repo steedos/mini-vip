@@ -123,6 +123,12 @@
     border-bottom: 1px solid #f4f4f4;
   }
 
+  .cart-view .group-item .item:last-of-type {
+    .cart-goods {
+      border-bottom: none;
+    } 
+  }
+
   .cart-view .item .img{
     float: left;
     height:150rpx;
@@ -388,7 +394,7 @@
         </view>
       </view>
       <view class="cart-bottom">
-        <view class="checkbox {{isCheckekAll ? 'checked' : ''}}" @tap="checkedAll">
+        <view class="checkbox {{isCheckedAll ? 'checked' : ''}}" @tap="checkedAll">
           <view class="check-img"></view>
         </view>
         <view class="text">全选({{checkedProductCount}})</view>
@@ -476,7 +482,7 @@
 		}
    
     computed = {
-      isCheckekAll() {
+      isCheckedAll() {
         const cartList = store.getState().counter.cartList;
         return cartList.every(function (element, index, array) {
           if (element.checked === true) {
@@ -512,31 +518,9 @@
         const itemId = e.target.dataset.itemId;
         store.dispatch({type: 'CHECK_PRODUCT', payload: itemId})
       },
-      checkedAll: function () {
-        if (!this.isEditCart) {
-          var productIds = this.cartGoods.map(function (v) {
-            return v.product_id
-          })
-          let res = util.request(api.CartChecked, { productIds: productIds.join(','), isChecked: this.isCheckedAll() ? 0 : 1 }, 'POST')
-          if (res) {
-            if (res.errno === 0) {
-              console.log(res.data)
-              this.cartGoods = res.data.cartList
-              this.cartTotal = res.data.cartTotal
-            }
-            this.checkedAllStatus = this.isCheckedAll()
-          }
-        } else {
-          // 编辑状态
-          let checkedAllStatus = this.isCheckedAll()
-          let tmpCartData = this.cartGoods.map(function (v) {
-            v.checked = !checkedAllStatus
-            return v
-          })
-          this.cartGoods = tmpCartData
-          this.checkedAllStatus = this.isCheckedAll()
-          this.cartTotal.checkedGoodsCount = this.getCheckedGoodsCount()
-        }
+      checkedAll() {
+				const isCheckedAll = this.computed.isCheckedAll()
+				store.dispatch({type: 'CHECK_ALL_PRODUCT', payload: !isCheckedAll})
       },
       editCart: function () {
         if (this.isEditCart) {
