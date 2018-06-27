@@ -322,7 +322,7 @@ export default class Posts extends wepy.page {
         this.category_description = ''
       }else {
         this.category_id = category._id
-        this.cover = category.cover
+        this.cover = category.cover || ''
         this.category_name = category.name
         this.category_description = category.description
       }
