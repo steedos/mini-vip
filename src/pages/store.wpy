@@ -24,11 +24,6 @@ page {
     display: none;
   }
 
-  .description {
-    margin: 10px 18px;
-    color: #b4b4b4;
-  }
-
   .ion {
     width: 25px;
     height: 20px;
@@ -38,34 +33,15 @@ page {
     color: #dbdbdb;
   }
 }
-
-.header {
-  display: flex;
-  flex-direction: row;
-  padding: 8px 18px 20px;
-  // border-bottom: 1px dashed #e9e9e9;
-
-  .title {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-
-    .store-name {
-      letter-spacing:1px;
-      line-height: 100rpx;
-      font-size: 19px;
-      font-weight: bold;
-    }
-  }
-
-  .avatar {
-    .image {
-      display: block;
-      width: 100rpx;
-      height: 100rpx;
-      border-radius: 50%;
-    }
-  }
+.image {
+  display: block;
+}
+.avatar{
+  width: 50px;
+  height: 50px;
+  display: block;
+  border-radius:4px;
+  margin-right: 10px;
 }
 
 .dashed {
@@ -82,39 +58,36 @@ page {
   padding-top: 15px;
   width: 60%;
 }
+map{
+  margin-left:auto;
+  margin-right:auto;
+
+}
 </style>
 <template>
   <view class="page-store" wx:if="{{is_loaded}}">
-    <view class="header">
-      <view class="title">
-        <view class="store-name">
-          {{store.name}}
+    <view class="weui-cells">
+      <navigator url="/pages/admin/qrcode?space_id={{store._id}}" class="weui-cell">
+        <view class="weui-cell__hd">
+          <block wx:if="{{store.avatar}}">
+            <image class="avatar" mode="aspectFill" src="{{util.formatImageUrl(store.avatar, baseUrl)}}"/>
+          </block>
+          <block wx:else>
+            <image class="avatar" mode="aspectFill" src="{{baseMaterialUrl + 'avatar.png'}}"/>
+          </block>
         </view>
-      </view>
-      <view class="avatar">
-        <block wx:if="{{store.avatar}}">
-          <image class="image" mode="aspectFill" src="{{util.formatImageUrl(store.avatar, baseUrl)}}"/>
-        </block>
-        <block wx:else>
-          <image class="image" mode="aspectFill" src="{{baseMaterialUrl + 'avatar.png'}}"/>
-        </block>
-      </view>
+        <view class="weui-cell__bd">
+          <view>{{store.name}}</view>
+        </view>
+        <view class="weui-cell__ft weui-cell__ft_in-access">
+          <view class="vip_page_qrcode slds-icon slds-icon--small slds-m-right--x-small"></view>
+        </view>
+      </navigator>
     </view>
     <view class="dashed">
     </view>
 
-    <view class="description">
-      {{store.description}}
-    </view>
-
     <view class="weui-cells">
-      <view class="weui-cell weui-cell_access" hover-class="weui-cell_active" @tap="openMap">
-        <view class="weui-cell__hd">
-          <view class="vip_page_location slds-icon slds-icon--small slds-m-right--x-small"/> 
-        </view>
-        <view class="weui-cell__bd">{{store.location.address}}</view>
-        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-      </view>
       <view class="weui-cell weui-cell_access" wx:if="{{store.business_hours}}">
         <view class="weui-cell__hd">
           <view class="vip_page_time slds-icon slds-icon--small slds-m-right--x-small"/>
@@ -128,6 +101,15 @@ page {
         <view class="weui-cell__bd">{{store.phone}}</view>
         <view class="weui-cell__ft weui-cell__ft_in-access"></view>
       </navigator>
+      <view class="weui-cell weui-cell_access" hover-class="weui-cell_active" @tap="openMap">
+        <view class="weui-cell__hd">
+          <view class="vip_page_location slds-icon slds-icon--small slds-m-right--x-small"/> 
+        </view>
+        <view class="weui-cell__bd">{{store.location.address}}</view>
+        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+      </view>
+
+      <map id="myMap" latitude="{{store.location.latitude}}"  longitude="{{store.location.longitude}}" show-location="true" />
     </view>
 
     <!-- <view class="button-sp-area" wx:if="{{is_space_owner}}">
