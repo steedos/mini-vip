@@ -1,12 +1,15 @@
 <style lang="less">
-  .video {
-    display:block;
-    margin:0 auto;
+  .video-view{
+    .video {
+      display:block;
+      margin:0 15px;
+      width:auto;
+    }
   }
 </style>
 
 <template>
-  <view class="page__bd">
+  <view class="page__bd video-view">
     <view wx:if="{{value}}" style="position:relative;margin-top: 15px;margin-left: 20px; margin-right: 20px;background-color: #000">
       <video class="video" src="{{value}}"></video>
       <view style="position: absolute;top: -.4em;right: -.4em;" @tap.stop="clearVideo"><icon type="clear" size="20" color="red" data-index="{{index}}"/></view>
