@@ -1,8 +1,4 @@
 <style lang="less">
-  // view,image,text,navigator,input {
-	// 	box-sizing: border-box;
-	// }
-
   page{
     height: 100%;
     width: 100%;
@@ -56,9 +52,9 @@
     width: 62.5rpx;
     text-align: center;
     font-size: 20rpx;
-    color: #e96900;
+    color: #b4282d;
     border-radius: 5rpx;
-    border: 1rpx solid #e96900;
+    border: 1rpx solid #b4282d;
     visibility: visible;
     &.hide {
       visibility: hidden;
@@ -140,7 +136,7 @@
   <view class="container">
     <view class="address-list" wx:if="{{ addressList.length > 0 }}">
       <repeat for="{{addressList}}" key="index" index="index" item="item">
-        <view class="item" bindtap="selectAddress" data-address-id="{{item._id}}">
+        <view class="item" bindtap="selectAddress" data-address-id="{{item._id}}" @touchstart="touchstart" @touchmove="touchmove" @touchend="touchend">
           <view class="l">
             <view class="name">{{item.name}}</view>
             <view class="default {{item.is_default ? 'show' : 'hide'}}">默认</view>
@@ -190,6 +186,15 @@
         pageRouter.navigateTo({
           url: url
         })
+      },
+      touchstart (event) {
+        console.log('[touchstart]', event)
+      },
+      touchmove (event) {
+        console.log('[touchmove]', event)
+      },
+      touchend (event) {
+        console.log('[touchend]', event)
       },
       async deleteAddress(event) {
         console.log(event.target)

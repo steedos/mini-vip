@@ -400,8 +400,8 @@
         <view class="text">全选({{checkedProductCount}})</view>
         <view class="total">{{'￥'+checkedProductAmount}}</view>
         <!-- <view class="delete" @tap="editCart">{{!isEditCart ? '编辑' : '完成'}}</view> -->
-        <view class="checkout" @tap="deleteCart" wx:if="{{isEditCart}}">删除所选</view>
-        <view class="checkout" @tap="checkoutOrder" wx:if="{{!isEditCart}}">下单</view>
+        <!-- <view class="checkout" @tap="deleteCart" wx:if="{{isEditCart}}">删除所选</view> -->
+        <view class="checkout" @tap="checkoutOrder">下单</view>
       </view>
     </view>
   </view>
@@ -548,19 +548,8 @@
         store.dispatch({type: 'ADD_PRODUCT', payload: {_id: itemId, count: 1}})
       },
       checkoutOrder: function () {
-        // 获取已选择的商品
-        var checkedGoods = this.cartGoods.filter(function (element, index, array) {
-          if (element.checked === true) {
-            return true
-          } else {
-            return false
-          }
-        })
-        if (checkedGoods.length <= 0) {
-          return false
-        }
         wepy.navigateTo({
-          url: '../shopping/checkout/checkout'
+          url: './checkout'
         })
       },
     }
