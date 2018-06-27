@@ -60,7 +60,6 @@ page {
     padding: 0 10px;
     line-height: 0;
     box-sizing: border-box;
-    overflow: hidden;
     text-align: center
 }
 
@@ -83,12 +82,12 @@ page {
 }
 
 .zan-tab__bd--scroll {
-    display: block;
+    // display: block;
     white-space: nowrap
 }
 
 .zan-tab__bd--scroll .zan-tab__item {
-    min-width: 20px
+    // min-width: 20px
 }
 .post-cover{
   position:relative;
@@ -118,13 +117,15 @@ page {
 <template>
   <view class="page" wx:if="{{is_loaded}}">
     <block wx:if="{{ categories }}">
-      <view class="zan-tab">
-          <scroll-view class="zan-tab__bd zan-tab__bd--scroll" scroll-x="true">
+      <view >
+          <scroll-view  scroll-x="true">
+            <view style="display: flex">
             <repeat for="{{categories}}" key="index" index="index" item="item">
-              <view class="zan-tab__item {{index == seleted_id ? 'zan-tab__item--selected' : ''}}"  @tap="changeCategory({{index}},{{item}})"> 
+              <view class="zan-tab__item {{index == seleted_id ? 'zan-tab__item--selected' : ''}}"   @tap="changeCategory({{index}},{{item}})" style="flex:1; white-space: nowrap;padding: 0 10px; text-align:center" > 
                 <view class="zan-tab__title">{{ item.name }}</view>
               </view>
             </repeat>
+            </view>
           </scroll-view>
       </view>
       <block wx:if="{{ cover }}">
