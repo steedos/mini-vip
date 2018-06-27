@@ -1,252 +1,255 @@
 <style lang="less">
+.address-box {
+  width: 100%;
+  box-sizing: border-box;
+  background: #fffced
+    url(http://yanxuan.nosdn.127.net/hxm/yanxuan-wap/p/20161201/style/img/icon-normal/address-bg-bd30f2bfeb.png)
+    0 0 repeat-x;
+  background-size: auto 10.5rpx;
+  margin-bottom: 20rpx;
 
-  .address-box{
+  .address-item {
+    padding: 32rpx 31.25rpx;
+    align-items: center;
+    display: flex;
+  }
+
+  .l {
+    width: 125rpx;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .name {
     width: 100%;
-    box-sizing: border-box;
-    background: #fffced url(http://yanxuan.nosdn.127.net/hxm/yanxuan-wap/p/20161201/style/img/icon-normal/address-bg-bd30f2bfeb.png) 0 0 repeat-x;
-    background-size: auto 10.5rpx;
-    margin-bottom: 20rpx;
+    line-height: 44rpx;
+    font-size: 29rpx;
+    color: #333;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    margin-bottom: 8rpx;
+  }
 
-    .address-item {
-      padding: 32rpx 31.25rpx;
-      align-items: center;
-      display: flex;  
+  .default {
+    width: 62.5rpx;
+    text-align: center;
+    font-size: 20rpx;
+    color: #b4282d;
+    border-radius: 5rpx;
+    border: 1rpx solid #b4282d;
+    visibility: visible;
+    &.hide {
+      visibility: hidden;
+    }
+  }
+
+  .c {
+    flex: 1;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .mobile {
+    line-height: 44rpx;
+    margin-bottom: 8rpx;
+    font-size: 29rpx;
+    overflow: hidden;
+    color: #333;
+  }
+
+  .address {
+    font-size: 25rpx;
+    overflow: hidden;
+    color: rgb(158, 158, 158);
+  }
+
+  .r {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    width: 50rpx;
+    height: 50rpx;
+  }
+}
+
+.order-box {
+  background: #fff;
+  margin-bottom: 20rpx;
+
+  .order-item {
+    box-sizing: border-box;
+    padding: 32rpx 31.25rpx 32rpx 0;
+    margin-left: 31.25rpx;
+    width: auto;
+    height: auto;
+    overflow: hidden;
+    display: flex;
+    border-bottom: 1px solid #d9d9d9;
+
+    &:last-of-type {
+      border-bottom: none;
     }
 
     .l {
-      width: 125rpx;
-      height: 100%;
-      overflow: hidden;
-    }
-
-    .name {
-      width: 100%;
-      line-height: 44rpx;
-      font-size: 29rpx;
-      color: #333;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      overflow: hidden;
-      margin-bottom: 8rpx;
-    }
-
-    .default {
-      width: 62.5rpx;
-      text-align: center;
-      font-size: 20rpx;
-      color: #b4282d;
-      border-radius: 5rpx;
-      border: 1rpx solid #b4282d;
-      visibility: visible;
-      &.hide {
-        visibility: hidden;
-      }
-    }
-
-    .c {
       flex: 1;
-      height: 100%;
-      overflow: hidden;
-    }
-
-    .mobile {
-      line-height: 44rpx;
-      margin-bottom: 8rpx;
-      font-size: 29rpx;
-      overflow: hidden;
-      color: #333;
-    }
-
-    .address {
-      font-size: 25rpx;
-      overflow: hidden;
-      color: rgb(158, 158, 158);
-    }
-
-    .r {
-      display: flex;
-      position: relative;
-      justify-content: center;
-      align-items: center;
-      width: 50rpx;
-      height: 50rpx;
-    }
-	}
-
-  .order-box {
-    background: #fff;
-    margin-bottom: 20rpx;
-
-    .order-item {
-      box-sizing: border-box;
-      padding: 32rpx 31.25rpx 32rpx 0;
-      margin-left: 31.25rpx;
-      width: auto;
-      height: auto;
-      overflow: hidden;
-      display: flex;
-      border-bottom: 1px solid #d9d9d9;
-
-      &:last-of-type {
-        border-bottom: none;
-      }
-      
-      .l {
-        flex: 1;
-      }
     }
   }
+}
 
-  .goods-items{
-    width: 100%;
-    height: auto;
-    overflow: hidden;
-    background: #fff;
-  }
+.goods-items {
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+  background: #fff;
+}
 
-  .goods-items .item{
-    display: flex;
-    width: auto;
-    overflow: hidden;
-    padding: 19.5rpx 31.25rpx;
-    .check-img {
-      height: 34rpx;
-      width: 34rpx;
-    }
-  }
-  .goods-items .item .checkbox{
-    display: flex;
-    align-content: center;
-    align-items: center;
+.goods-items .item {
+  display: flex;
+  width: auto;
+  overflow: hidden;
+  padding: 19.5rpx 31.25rpx;
+  .check-img {
+    height: 34rpx;
     width: 34rpx;
-    margin: 0 26rpx;
-    .check-img {
-      background: url(http://nos.netease.com/mailpub/hxm/yanxuan-wap/p/20150730/style/img/icon-normal/checkbox-0e09baa37e.png) no-repeat;
-      background-size: 34rpx;
-    }
   }
-
-  .goods-items .item .checkbox.checked{
-    .check-img {
-      background: url(http://nos.netease.com/mailpub/hxm/yanxuan-wap/p/20150730/style/img/icon-normal/checkbox-checked-822e54472a.png) no-repeat;
-      background-size: 34rpx;
-    }
+}
+.goods-items .item .checkbox {
+  display: flex;
+  align-content: center;
+  align-items: center;
+  width: 34rpx;
+  margin: 0 26rpx;
+  .check-img {
+    background: url(http://nos.netease.com/mailpub/hxm/yanxuan-wap/p/20150730/style/img/icon-normal/checkbox-0e09baa37e.png)
+      no-repeat;
+    background-size: 34rpx;
   }
+}
 
-  .goods-items .item .cart-goods{
-    flex: 1;
-		display: flex;
-    float: left;
-    border-bottom: 1px solid #d9d9d9;
+.goods-items .item .checkbox.checked {
+  .check-img {
+    background: url(http://nos.netease.com/mailpub/hxm/yanxuan-wap/p/20150730/style/img/icon-normal/checkbox-checked-822e54472a.png)
+      no-repeat;
+    background-size: 34rpx;
   }
+}
 
-  .goods-items .group-item .item:last-of-type {
-    .cart-goods {
-      border-bottom: none;
-    } 
+.goods-items .item .cart-goods {
+  flex: 1;
+  display: flex;
+  float: left;
+  border-bottom: 1px solid #d9d9d9;
+}
+
+.goods-items .group-item .item:last-of-type {
+  .cart-goods {
+    border-bottom: none;
   }
+}
 
-  .goods-items .item .img{
-    float: left;
-    height:150rpx;
-    width: 150rpx;
-    background: #f4f4f4;
-    margin: 19.5rpx 18rpx 19.5rpx 0;
-  }
+.goods-items .item .img {
+  float: left;
+  height: 150rpx;
+  width: 150rpx;
+  background: #f4f4f4;
+  margin: 19.5rpx 18rpx 19.5rpx 0;
+}
 
-  .goods-items .item .info{
-		flex: 1;
-    float: left;
-    height:150rpx;
-    margin: 19.5rpx 0 19.5rpx 0;
-  }
+.goods-items .item .info {
+  flex: 1;
+  float: left;
+  height: 150rpx;
+  margin: 19.5rpx 0 19.5rpx 0;
+}
 
-  .goods-items .item .t{
+.goods-items .item .t {
+  display: flex;
+  margin: 8rpx 0;
+  font-size: 30rpx;
+  color: #333;
+  overflow: hidden;
+}
+
+.goods-items .item .name {
+  flex: 1;
+  color: #333;
+  overflow: hidden;
+}
+
+.goods-items .item .num {
+  float: right;
+}
+
+.goods-items .item .attr {
+  margin-bottom: 17rpx;
+  height: 24rpx;
+  line-height: 24rpx;
+  font-size: 22rpx;
+  color: #666;
+  overflow: hidden;
+}
+
+.goods-items .item .b {
+  display: flex;
+  font-size: 25rpx;
+  color: #333;
+}
+
+.goods-items .item .price {
+  flex: 1;
+  line-height: 52rpx;
+}
+
+.goods-items .item .selnum {
+  width: 235rpx;
+  height: 52rpx;
+  // border: 1rpx solid #686868;
+  display: flex;
+
+  view,
+  input {
     display: flex;
-    margin: 8rpx 0;
-    font-size: 30rpx;
-    color: #333;
-    overflow: hidden;
+    justify-content: center;
+    align-items: center;
   }
+}
 
+.order-total {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  height: 100rpx;
+  width: 100%;
+  display: flex;
+}
 
-  .goods-items .item .name{
-    flex: 1;
-    color: #333;
-    overflow: hidden;
-  }
+.order-total .l {
+  flex: 1;
+  height: 100rpx;
+  line-height: 100rpx;
+  color: #b4282d;
+  background: #fff;
+  font-size: 33rpx;
+  padding-left: 31.25rpx;
+  border-top: 1rpx solid rgba(0, 0, 0, 0.2);
+  border-bottom: 1rpx solid rgba(0, 0, 0, 0.2);
+}
 
-  .goods-items .item .num{
-    float: right;
-  }
-
-  .goods-items .item .attr{
-    margin-bottom: 17rpx;
-    height: 24rpx;
-    line-height: 24rpx;
-    font-size: 22rpx;
-    color: #666;
-    overflow: hidden;
-  }
-
-  .goods-items .item .b{
-		display: flex;
-    font-size: 25rpx;
-    color: #333;
-  }
-
-  .goods-items .item .price{
-		flex: 1;
-		line-height: 52rpx;
-  }
-	
-  .goods-items .item .selnum{
-    width: 235rpx;
-    height: 52rpx;
-    // border: 1rpx solid #686868;
-		display: flex;
-		
-		view, input {
-			display:flex;
-			justify-content:center;
-			align-items:center;
-		}
-  }
-
-  .order-total{
-    position: fixed;
-    left:0;
-    bottom: 0;
-    height: 100rpx;
-    width: 100%;
-    display: flex;
-  }
-
-  .order-total .l{
-    flex: 1;
-    height: 100rpx;
-    line-height: 100rpx;
-    color: #b4282d;
-    background: #fff;
-    font-size: 33rpx;
-    padding-left: 31.25rpx;
-    border-top: 1rpx solid rgba(0,0,0,0.2);
-    border-bottom: 1rpx solid rgba(0,0,0,0.2);
-  }
-
-  .order-total .r{
-    width: 233rpx;
-    height: 100rpx;
-    background: #b4282d;
-    border: 1px solid #b4282d;
-    line-height: 100rpx;
-    text-align: center;
-    color: #fff;
-    font-size: 30rpx;
-  }
+.order-total .r {
+  width: 233rpx;
+  height: 100rpx;
+  background: #b4282d;
+  border: 1px solid #b4282d;
+  line-height: 100rpx;
+  text-align: center;
+  color: #fff;
+  font-size: 30rpx;
+}
 </style>
 <template>
-  <view class="page">
+  <view class="page" wx:if="{{is_loaded}}">
     <view class="address-box">
 			<view class="address-item" @tap="selectAddress" wx:if="{{checkedAddress._id}}">
 				<view class="l">
@@ -326,113 +329,130 @@
 </template>
 
 <script>
-  import wepy from 'wepy'
-  import { connect, getStore } from 'wepy-redux'
-  import util from '../../wxs/util.wxs'
-	import { baseUrl } from '@/config'
+import wepy from 'wepy';
+import { connect, getStore } from 'wepy-redux';
+import util from '../../wxs/util.wxs';
+import { baseUrl } from '@/config';
 
-  const store = getStore()
+const store = getStore();
 
-	export default class Checkout extends wepy.page {
-    data = {
-      baseUrl: baseUrl,
-      checkedProductList: [],
-      checkedAddress: {},
-      checkedCoupon: [],
-      couponList: [],
-      goodsTotalPrice: 0.00,
-      freightPrice: 0.00,    // 快递费
-      couponPrice: 0.00,     // 优惠券的价格
-      orderTotalPrice: 0.00,  // 订单总价
-      actualPrice: 0.00,     // 实际需要支付的总价
-      addressId: 0,
-      couponId: 0
-    }
-    
-    wxs = {
-      util: util
-    }
+export default class Checkout extends wepy.page {
+  config = {
+    navigationBarTitleText: '填写订单',
+    backgroundColor: '#f4f4f4'
+  };
 
-    getcheckedProductList() {
-      const cartList = store.getState().counter.cartList;
-      const checkedProductList = [];
-      cartList.forEach(p => {
-        p.checked ? checkedProductList.push(p) : checkedProductList
-      })
-      return checkedProductList
-    }
+  data = {
+    baseUrl: baseUrl,
+    is_loaded: false,
+    checkedProductList: [],
+    checkedAddress: {},
+    checkedCoupon: [],
+    couponList: [],
+    goodsTotalPrice: 0.0,
+    freightPrice: 0.0, // 快递费
+    couponPrice: 0.0, // 优惠券的价格
+    orderTotalPrice: 0.0, // 订单总价
+    actualPrice: 0.0, // 实际需要支付的总价
+    addressId: 0,
+    couponId: 0
+  };
 
-    getgoodsTotalPrice(checkedProductList) {
-      let goodsTotalPrice = 0;
-      if (checkedProductList && checkedProductList.constructor === Array) {
-        checkedProductList.forEach(p => {
-          goodsTotalPrice += (p.default_price * p.count);
-        });
-      }
-      return goodsTotalPrice.toFixed(2)
-    }
-		
-		async onLoad() {
-			await this.$parent.login();
-			const user_id = this.$parent.globalData.user._id;
-			const options = {
-				$filter: `owner eq '${user_id}'`
-			};
-			const result = await this.$parent.query('vip_address', options, 'guest');
-      this.checkedAddress = result.value[0];
-      
-      this.checkedProductList = this.getcheckedProductList()
+  wxs = {
+    util: util
+  };
 
-      console.log('[this.checkedProductList]', this.checkedProductList)
-
-      this.goodsTotalPrice = this.getgoodsTotalPrice(this.checkedProductList)
-
-      console.log('[this.goodsTotalPrice]', this.goodsTotalPrice)
-			this.$apply()
-    }
-    
-    computed = {
-     
-    }
-		
-    methods = {
-      selectAddress() {
-        wepy.navigateTo({
-          url: '/pages/shopping/address'
-        })
-      },
-      addAddress() {
-        wepy.navigateTo({
-          url: '/pages/shopping/addressAdd'
-        })
-      },
-      async submitOrder() {
-        const data = {
-          address: this.checkedAddress,
-          amount: this.goodsTotalPrice,
-          products: this.checkedProductList
-        }
-      }
-    }
-    onShow() {
-      
-    }
-    async getCheckoutInfo () {
-      let res = await util.request(api.CartCheckout, {addressId: this.addressId, couponId: this.couponId})
-      if (res.errno === 0) {
-        console.log(res.data)
-        this.checkedGoodsList = res.data.checkedGoodsList
-        this.checkedAddress = res.data.checkedAddress
-        this.actualPrice = res.data.actualPrice
-        this.checkedCoupon = res.data.checkedCoupon
-        this.couponList = res.data.couponList
-        this.couponPrice = res.data.couponPrice
-        this.freightPrice = res.data.freightPrice
-        this.goodsTotalPrice = res.data.goodsTotalPrice
-        this.orderTotalPrice = res.data.orderTotalPrice
-        this.$apply()
-      }
-      wepy.hideLoading()
-    }
+  getcheckedProductList() {
+    const cartList = store.getState().counter.cartList;
+    const checkedProductList = [];
+    cartList.forEach(p => {
+      p.checked ? checkedProductList.push(p) : checkedProductList;
+    });
+    return checkedProductList;
   }
+
+  getgoodsTotalPrice(checkedProductList) {
+    let goodsTotalPrice = 0;
+    if (checkedProductList && checkedProductList.constructor === Array) {
+      checkedProductList.forEach(p => {
+        goodsTotalPrice += p.default_price * p.count;
+      });
+    }
+    return goodsTotalPrice.toFixed(2);
+  }
+
+  async onLoad() {
+    wepy.showLoading({
+      title: '加载中'
+    });
+    await this.$parent.login();
+    const user_id = this.$parent.globalData.user._id;
+    const options = {
+      $filter: `owner eq '${user_id}'`
+    };
+    const result = await this.$parent.query('vip_address', options, 'guest');
+    this.checkedAddress = result.value[0];
+
+    this.checkedProductList = this.getcheckedProductList();
+
+    console.log('[this.checkedProductList]', this.checkedProductList);
+
+    this.goodsTotalPrice = this.getgoodsTotalPrice(this.checkedProductList);
+
+    console.log('[this.goodsTotalPrice]', this.goodsTotalPrice);
+
+    this.is_loaded = true;
+    this.$apply();
+
+    wepy.hideLoading();
+  }
+
+  upDateAddress(address) {
+    this.checkedAddress = address;
+    this.$apply();
+  }
+
+  computed = {};
+
+  methods = {
+    selectAddress() {
+      wepy.navigateTo({
+        url: '../address/list?is_choose=true'
+      });
+    },
+    addAddress() {
+      wepy.navigateTo({
+        url: '/pages/shopping/addressAdd'
+      });
+    },
+    async submitOrder() {
+      const data = {
+        address: this.checkedAddress,
+        amount: this.goodsTotalPrice,
+        products: this.checkedProductList
+      };
+    }
+  };
+  onShow() {}
+  async getCheckoutInfo() {
+    let res = await util.request(api.CartCheckout, {
+      addressId: this.addressId,
+      couponId: this.couponId
+    });
+    if (res.errno === 0) {
+      console.log(res.data);
+      this.checkedGoodsList = res.data.checkedGoodsList;
+      this.checkedAddress = res.data.checkedAddress;
+      this.actualPrice = res.data.actualPrice;
+      this.checkedCoupon = res.data.checkedCoupon;
+      this.couponList = res.data.couponList;
+      this.couponPrice = res.data.couponPrice;
+      this.freightPrice = res.data.freightPrice;
+      this.goodsTotalPrice = res.data.goodsTotalPrice;
+      this.orderTotalPrice = res.data.orderTotalPrice;
+      this.$apply();
+    }
+    wepy.hideLoading();
+  }
+}
 </script>
