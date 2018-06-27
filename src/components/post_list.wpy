@@ -1,8 +1,4 @@
 <style lang="less">
-.weui-loadmore__tips_in-line{
-  background-color:#F5F5f2;
-}
-
 .post-header {
   
   .image {

@@ -9,9 +9,6 @@
   color:#999;
   font-size: 9pt;
 }
-.weui-loadmore__tips_in-line{
-  background-color: #F5F5F7;
-}
 </style>
 <template>
   <scroll-view class="scroll-view_H" scroll-y="true">
