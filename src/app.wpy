@@ -501,7 +501,7 @@ export default class VIP extends wepy.app {
     const url = '/api/odata/v4/' + (space_id || this.globalData.space_id) + '/' + object_name;
     const result = await req.post(url, data).catch((err)=>{
       console.log("error...",err.data)
-      return {}
+      return false
     })
     return result
   }
@@ -512,7 +512,7 @@ export default class VIP extends wepy.app {
     doc['$set'] = data
     const result = await req.put(url, doc).catch((err)=>{
       console.log("error...",err.data)
-      return {}
+      return false
     })
     return result
   }
