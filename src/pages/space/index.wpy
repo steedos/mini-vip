@@ -418,7 +418,7 @@ export default class Posts extends wepy.page {
       post: {
         label: '动态',
         icon: 'standard-news',
-        url: `../post/index${this.is_space_admin ? '?editable=true' : ''}&title=${space.name}`
+        url: `../post/index${this.is_space_admin ? '?editable=true' : ''}?title=${space.name}`
       },
       vip_product: {
         label: '产品',
