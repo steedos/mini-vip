@@ -123,6 +123,12 @@
     border-bottom: 1px solid #f4f4f4;
   }
 
+  .cart-view .group-item .item:last-of-type {
+    .cart-goods {
+      border-bottom: none;
+    } 
+  }
+
   .cart-view .item .img{
     float: left;
     height:150rpx;
