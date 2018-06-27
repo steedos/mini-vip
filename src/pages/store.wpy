@@ -130,7 +130,7 @@ page {
       </navigator>
     </view>
 
-    <view class="button-sp-area" wx:if="{{is_space_owner}}">
+    <!-- <view class="button-sp-area" wx:if="{{is_space_owner}}">
       <navigator url="/pages/record/edit?action=edit&object_name=vip_store&record_id={{store._id}}&fields=name,description,business_hours,location,phone">
         <button class="weui-btn" type="primary" plain="true">编辑</button>
       </navigator>
@@ -139,7 +139,7 @@ page {
       <navigator url="/pages/admin/qrcode?space_id={{store._id}}">
         <button class="weui-btn" type="primary" plain="true">查看二维码</button>
       </navigator>
-    </view>
+    </view> -->
   </view>
 </template>
 
@@ -169,12 +169,17 @@ export default class store extends wepy.page {
       title: '加载中',
       mask: true
     });
-    this.store_id = e.store
-    const globalData = this.$parent.globalData;
-    const space = await this.$parent.get('spaces', globalData.space_id)
-    this.is_space_owner =
-      space && globalData.user && globalData.user._id === space.owner;
+    this.store_id = e.store;
     this.$apply();
+  }
+  
+  // 分享
+  onShareAppMessage(res) {
+    const store_name = this.store.name
+    return {
+      title: store_name,
+      path: `pages/store?store=${this.store_id}`
+    };
   }
 
   components = {
@@ -194,7 +199,7 @@ export default class store extends wepy.page {
     is_loaded: false
   };
   getStoreInfo(store_id) {
-    return this.$parent.get('vip_store', store_id);
+    return this.$parent.get('vip_store', store_id, store_id);
   }
 
   methods = {
