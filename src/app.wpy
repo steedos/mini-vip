@@ -124,7 +124,6 @@ export default class VIP extends wepy.app {
     pages: [
       'pages/index',
       'pages/apps',
-      'pages/home',
       'pages/me',
       'pages/me_profile',
       'pages/coupons',
@@ -136,7 +135,6 @@ export default class VIP extends wepy.app {
       'pages/card_pay',
       'pages/card_pay_success',
       'pages/card_pay_fail',
-      'pages/stores',
       'pages/wifi',
       'pages/event/list',
       'pages/event/view',
