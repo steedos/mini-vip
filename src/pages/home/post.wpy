@@ -63,7 +63,7 @@
 		}
 
 		onShareAppMessage(res) {
-			if (res.from = "button") {
+			if (res.from === "button") {
 				const postName = res.target.dataset.postName;
 				const postId = res.target.dataset.postId;
 				const spaceId = res.target.dataset.postSpace;
