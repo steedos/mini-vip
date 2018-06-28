@@ -1,9 +1,30 @@
 import { handleActions } from 'redux-actions'
-import { ADD_PRODUCT, DECREASE_PRODUCT, UPDATE_PRODUCT_INFO, CART_PRODUCT_COUNT, CHECK_PRODUCT, CHECK_ALL_PRODUCT } from '../types/counter'
+import { ADD_PRODUCT, DECREASE_PRODUCT, UPDATE_PRODUCT_INFO, CART_PRODUCT_COUNT, CHECK_PRODUCT, CHECK_ALL_PRODUCT, UPDATE_PRODUCT_COUNT } from '../types/counter'
 
 const cartList = wx.getStorageSync('cartList') || []
 
 export default handleActions({
+  [UPDATE_PRODUCT_COUNT] (state, action) {
+    const operation = action.payload.operation;
+    const product = action.payload.product;
+    const cartList = state.cartList;
+    if (cartList && cartList.constructor === Array) {
+      if (product.count > 0) {
+        let is_added = false;
+        for (let p of cartList) {
+          if (p._id === product._id) {
+            p.count = product.count;
+            is_added = true;
+          }
+        }
+
+        if (!is_added) {
+          cartList.push(product)
+        }
+      }
+    }
+    return {...state}
+  },
   [ADD_PRODUCT] (state, action) {
     const payload = action.payload;
     const cartList = state.cartList;

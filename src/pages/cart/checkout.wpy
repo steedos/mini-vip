@@ -103,116 +103,74 @@
   height: auto;
   overflow: hidden;
   background: #fff;
-}
 
-.goods-items .item {
-  display: flex;
-  width: auto;
-  overflow: hidden;
-  padding: 19.5rpx 31.25rpx;
-  .check-img {
-    height: 34rpx;
-    width: 34rpx;
-  }
-}
-.goods-items .item .checkbox {
-  display: flex;
-  align-content: center;
-  align-items: center;
-  width: 34rpx;
-  margin: 0 26rpx;
-  .check-img {
-    background: url(http://nos.netease.com/mailpub/hxm/yanxuan-wap/p/20150730/style/img/icon-normal/checkbox-0e09baa37e.png)
-      no-repeat;
-    background-size: 34rpx;
-  }
-}
-
-.goods-items .item .checkbox.checked {
-  .check-img {
-    background: url(http://nos.netease.com/mailpub/hxm/yanxuan-wap/p/20150730/style/img/icon-normal/checkbox-checked-822e54472a.png)
-      no-repeat;
-    background-size: 34rpx;
-  }
-}
-
-.goods-items .item .cart-goods {
-  flex: 1;
-  display: flex;
-  float: left;
-  border-bottom: 1px solid #d9d9d9;
-}
-
-.goods-items .group-item .item:last-of-type {
-  .cart-goods {
-    border-bottom: none;
-  }
-}
-
-.goods-items .item .img {
-  float: left;
-  height: 150rpx;
-  width: 150rpx;
-  background: #f4f4f4;
-  margin: 19.5rpx 18rpx 19.5rpx 0;
-}
-
-.goods-items .item .info {
-  flex: 1;
-  float: left;
-  height: 150rpx;
-  margin: 19.5rpx 0 19.5rpx 0;
-}
-
-.goods-items .item .t {
-  display: flex;
-  margin: 8rpx 0;
-  font-size: 30rpx;
-  color: #333;
-  overflow: hidden;
-}
-
-.goods-items .item .name {
-  flex: 1;
-  color: #333;
-  overflow: hidden;
-}
-
-.goods-items .item .num {
-  float: right;
-}
-
-.goods-items .item .attr {
-  margin-bottom: 17rpx;
-  height: 24rpx;
-  line-height: 24rpx;
-  font-size: 22rpx;
-  color: #666;
-  overflow: hidden;
-}
-
-.goods-items .item .b {
-  display: flex;
-  font-size: 25rpx;
-  color: #333;
-}
-
-.goods-items .item .price {
-  flex: 1;
-  line-height: 52rpx;
-}
-
-.goods-items .item .selnum {
-  width: 235rpx;
-  height: 52rpx;
-  // border: 1rpx solid #686868;
-  display: flex;
-
-  view,
-  input {
+  .item {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    width: auto;
+    overflow: hidden;
+    padding: 0 31.25rpx;
+  }
+
+  .cart-goods {
+    flex: 1;
+    display: flex;
+    float: left;
+    border-bottom: 1px solid #d9d9d9;
+  }
+
+  .item:last-of-type {
+    .cart-goods {
+      border-bottom: none;
+    }
+  }
+
+  .img {
+    float: left;
+    height: 150rpx;
+    width: 150rpx;
+    background: #f4f4f4;
+    margin: 19.5rpx 18rpx 19.5rpx 0;
+  }
+
+  .info {
+    flex: 1;
+    float: left;
+    height: 150rpx;
+    margin: 19.5rpx 0 19.5rpx 0;
+  }
+
+  .t {
+    display: flex;
+    margin: 8rpx 0;
+    font-size: 30rpx;
+    color: #333;
+    overflow: hidden;
+  }
+
+  .name {
+    flex: 1;
+    color: #333;
+    overflow: hidden;
+  }
+
+  .attr {
+    margin-bottom: 17rpx;
+    height: 24rpx;
+    line-height: 24rpx;
+    font-size: 22rpx;
+    color: #666;
+    overflow: hidden;
+  }
+  
+  .b {
+    display: flex;
+    font-size: 25rpx;
+    color: #333;
+  }
+
+  .price {
+    flex: 1;
+    line-height: 52rpx;
   }
 }
 
@@ -264,14 +222,13 @@
 				</view>
 			</view>
 
-      <view class="address-item address-empty" bindtap="addAddress" wx:if="{{checkedAddress.id <= 0}}">
+      <!-- <view class="address-item address-empty" bindtap="addAddress" >
         <view class="m">
           还没有收货地址，去添加
         </view>
-        <view class="r">
-          <image src="/static/images/address_right.png"></image>
+        <view class="r after-chevronright">
         </view>
-      </view>
+      </view> -->
     </view>
 
     <view class="order-box">
@@ -333,6 +290,7 @@ import wepy from 'wepy';
 import { connect, getStore } from 'wepy-redux';
 import util from '../../wxs/util.wxs';
 import { baseUrl } from '@/config';
+import pageRouter from '@/utils/pageRouter';
 
 const store = getStore();
 
@@ -386,30 +344,40 @@ export default class Checkout extends wepy.page {
       title: '加载中'
     });
     await this.$parent.login();
+  }
+  
+  async onShow() {
     const user_id = this.$parent.globalData.user._id;
     const options = {
       $filter: `owner eq '${user_id}'`
     };
     const result = await this.$parent.query('vip_address', options, 'guest');
-    this.checkedAddress = result.value[0];
 
-    this.checkedProductList = this.getcheckedProductList();
+    if (result && result.value && result.value[0]) {
+      this.checkedAddress = result.value[0];
+      this.checkedProductList = this.getcheckedProductList();
 
-    console.log('[this.checkedProductList]', this.checkedProductList);
+      console.log('[this.checkedProductList]', this.checkedProductList);
 
-    this.goodsTotalPrice = this.getgoodsTotalPrice(this.checkedProductList);
+      this.goodsTotalPrice = this.getgoodsTotalPrice(this.checkedProductList);
 
-    console.log('[this.goodsTotalPrice]', this.goodsTotalPrice);
+      console.log('[this.goodsTotalPrice]', this.goodsTotalPrice);
 
-    this.is_loaded = true;
-    this.$apply();
+      this.is_loaded = true;
+      this.$apply();
 
-    wepy.hideLoading();
+      wepy.hideLoading();
+    } else {
+      pageRouter.navigateTo({
+        url: '/pages/record/create?object_name=vip_address&fields=name,address,door,gender,phone,is_default'
+      })
+    }
   }
 
   upDateAddress(address) {
-    this.checkedAddress = address;
-    this.$apply();
+    if (address) {
+      this.checkedAddress = address;
+    }
   }
 
   computed = {};
@@ -433,7 +401,7 @@ export default class Checkout extends wepy.page {
       };
     }
   };
-  onShow() {}
+
   async getCheckoutInfo() {
     let res = await util.request(api.CartCheckout, {
       addressId: this.addressId,
