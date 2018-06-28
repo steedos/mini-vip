@@ -24,6 +24,13 @@
       text-align:center;
     }
   }
+.vip_wifi_power, .vip_wifi_btn{
+  width: 100px;
+  height: 100px;
+  margin-left:auto;
+  margin-right:auto;
+  margin-top:100px;
+}
 </style>
 <template>
   <!-- <button type="default" @tap="toTestWifi"> 附近Wifi </button> -->
@@ -31,12 +38,12 @@
     <view class="group wifi-control">
       <view class="wifi-status">
         <block wx:if="{{icon=='power'}}">
-          <text class="icon slds-icon-power" style="color: #A7A7A7" @tap="toConnectWifi">
-          </text>
+          <view class="vip_wifi_power" @tap="toConnectWifi">
+          </view>
         </block>
         <block wx:elif="{{icon=='wifi'}}">
-          <text class="icon slds-icon-wifi" style="color: #3FAA41">
-          </text>
+          <view class="vip_wifi_btn">
+          </view>
         </block>
       </view>
       <view class="wifi-info">
