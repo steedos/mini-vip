@@ -1,18 +1,20 @@
 <template>
   <view class="text">
     <view class="page__bd">
-      <view class="weui-cells">
-        <view class="weui-cell">
-          <view class="weui-cell__bd">
-            <textarea class="weui-textarea-input" data-id="{{key}}"
-                      value="{{value}}" auto-height="true" auto-focus="true"
-                      bindblur="textChange"/>
+      <form bindsubmit="submitFieldForm" report-submit='true' >
+        <view class="weui-cells">
+          <view class="weui-cell">
+            <view class="weui-cell__bd">
+              <textarea class="weui-textarea-input" data-id="{{key}}" name="{{key}}"
+                        value="{{value}}" auto-height="true" auto-focus="true"
+                        />
+            </view>
           </view>
         </view>
-      </view>
-      <view class="button-sp-area">
-        <button class="weui-btn" type="primary" plain="true" @tap="confirm" hover-class='button-hover'>确定</button>
-      </view>
+        <view class="button-sp-area">
+          <button class="weui-btn" type="primary" form-type="submit" plain="true" @tap="confirm" hover-class='button-hover'>确定</button>
+        </view>
+      </form>
     </view>
   </view>
 </template>
@@ -64,12 +66,17 @@
     }
 
     methods = {
-      textChange(e) {
+//      textChange(e) {
+//        const key = this.key;
+//        this.value = e.detail.value;
+//        this.setParentValue(key, e.detail.value)
+//      },
+      submitFieldForm(e){
+        const formValues = e.detail.value;
         const key = this.key;
-        this.value = e.detail.value;
-        this.setParentValue(key, e.detail.value)
-      },
-      confirm(){
+        const value = formValues[key];
+        console.log('formValues', formValues)
+        this.setParentValue(key, value);
         wepy.navigateBack({
           delta: 1
         })
