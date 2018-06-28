@@ -16,19 +16,21 @@
 <template>
 <view class="page">
   <view class="page__bd">
-    <view class="weui-cells">
-      <view class="weui-cell">
-        <view class="weui-cell__bd">
-          <textarea data-id="{{key}}" class="weui-textarea" auto-focus="true" value="{{value.address}}" bindblur="textChange"></textarea>
-        </view>
-        <view class="weui-cell__ft">
-          <view class="weui-vcode-btn" @tap="getAddress">选择</view>
+    <form bindsubmit="submitFieldForm" report-submit='true' >
+      <view class="weui-cells">
+        <view class="weui-cell">
+          <view class="weui-cell__bd">
+            <textarea data-id="{{key}}" name="{{key}}" class="weui-textarea" auto-focus="true" value="{{value.address}}" ></textarea>
+          </view>
+          <view class="weui-cell__ft">
+            <view class="weui-vcode-btn" @tap="getAddress">选择</view>
+          </view>
         </view>
       </view>
-    </view>
-    <view class="button-sp-area">
-      <button class="weui-btn" type="primary" plain="true" @tap="confirm" hover-class='button-hover'>确定</button>
-    </view>
+      <view class="button-sp-area">
+        <button class="weui-btn" type="primary" form-type="submit" plain="true" @tap="confirm" hover-class='button-hover'>确定</button>
+      </view>
+    </form>
   </view>
 </view>
 </template>
@@ -92,13 +94,11 @@ export default class Location extends wepy.page {
         }
       });
     },
-    textChange(e) {
-      console.log('textChange=======', e)
-      const key = this.key
-      this.value.address = e.detail.value
-      this.setParentValue(key, this.value)
-    },
-    confirm(){
+    submitFieldForm(e){
+      const formValues = e.detail.value;
+      const key = this.key;
+      this.value.address = formValues[key];
+      this.setParentValue(key, this.value);
       wepy.navigateBack({
         delta: 1
       })
