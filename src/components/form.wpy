@@ -558,12 +558,7 @@
                 }
               }else if(field.type === 'lookup' || field.type === 'master_detail'){
                 if(field.multiple){
-                  let _ids = []
-                  if(field.reference_to === 'space_users'){
-                    _ids = fv
-                  }else {
-                    _ids = _.pluck(fv, '_id')
-                  }                  
+                  let _ids = _.pluck(fv, '_id')                 
                   _.forEach(field.options, (option) => {
                     if (_ids.includes(option.value)) {
                       option.checked = true

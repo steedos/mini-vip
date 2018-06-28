@@ -64,6 +64,10 @@
     color: rgb(158, 158, 158);
   }
 
+  .m {
+    flex: 1;
+  }
+
   .r {
     display: flex;
     position: relative;
@@ -222,13 +226,13 @@
 				</view>
 			</view>
 
-      <!-- <view class="address-item address-empty" bindtap="addAddress" >
+      <view class="address-item address-empty" bindtap="selectAddress" wx:if="{{!checkedAddress._id}}">
         <view class="m">
           还没有收货地址，去添加
         </view>
         <view class="r after-chevronright">
         </view>
-      </view> -->
+      </view>
     </view>
 
     <view class="order-box">
@@ -355,23 +359,20 @@ export default class Checkout extends wepy.page {
 
     if (result && result.value && result.value[0]) {
       this.checkedAddress = result.value[0];
-      this.checkedProductList = this.getcheckedProductList();
-
-      console.log('[this.checkedProductList]', this.checkedProductList);
-
-      this.goodsTotalPrice = this.getgoodsTotalPrice(this.checkedProductList);
-
-      console.log('[this.goodsTotalPrice]', this.goodsTotalPrice);
-
-      this.is_loaded = true;
-      this.$apply();
-
-      wepy.hideLoading();
-    } else {
-      pageRouter.navigateTo({
-        url: '/pages/record/create?object_name=vip_address&fields=name,address,door,gender,phone,is_default'
-      })
     }
+
+    this.checkedProductList = this.getcheckedProductList();
+
+    console.log('[this.checkedProductList]', this.checkedProductList);
+
+    this.goodsTotalPrice = this.getgoodsTotalPrice(this.checkedProductList);
+
+    console.log('[this.goodsTotalPrice]', this.goodsTotalPrice);
+
+    this.is_loaded = true;
+    this.$apply();
+
+    wepy.hideLoading();
   }
 
   upDateAddress(address) {
@@ -386,11 +387,6 @@ export default class Checkout extends wepy.page {
     selectAddress() {
       wepy.navigateTo({
         url: '../address/list?is_choose=true'
-      });
-    },
-    addAddress() {
-      wepy.navigateTo({
-        url: '/pages/shopping/addressAdd'
       });
     },
     async submitOrder() {
