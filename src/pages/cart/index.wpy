@@ -5,10 +5,8 @@
   page{
     height: 100%;
     min-height: 100%;
-    background: #f4f4f4;
   }
   .container{
-    background: #f4f4f4;
     width: 100%;
     height: auto;
     min-height: 100%;
@@ -382,7 +380,7 @@
 											<text class="price">￥{{goods.default_price}}</text>
 											<view class="selnum">
 												<view class="cut {{goods.count > 1 ? 'enabled' : 'disabled'}}" @tap="cutNumber" data-item-id="{{goods._id}}">-</view>
-												<input value="{{goods.count}}" class="number" disabled="true" type="number" />
+												<input value="{{goods.count}}" class="number" data-item-id="{{goods._id}}" type="number" bindblur="updateNumber"/>
 												<view class="add" @tap="addNumber" data-item-id="{{goods._id}}">+</view>
 											</view>
 										</view>
@@ -516,36 +514,24 @@
     methods = {
       checkedItem(e) {
         const itemId = e.target.dataset.itemId;
-        store.dispatch({type: 'CHECK_PRODUCT', payload: itemId})
+        store.dispatch({type: 'CHECK_PRODUCT', payload: itemId});
       },
       checkedAll() {
-				const isCheckedAll = this.computed.isCheckedAll()
-				store.dispatch({type: 'CHECK_ALL_PRODUCT', payload: !isCheckedAll})
+				const isCheckedAll = this.computed.isCheckedAll();
+				store.dispatch({type: 'CHECK_ALL_PRODUCT', payload: !isCheckedAll});
       },
-      editCart: function () {
-        if (this.isEditCart) {
-          this.getCartList()
-          this.isEditCart = !this.isEditCart
-        } else {
-          // 编辑状态
-          let tmpCartList = this.cartGoods.map(function (v) {
-            v.checked = false
-            return v
-          })
-          this.editCartList = this.cartGoods
-          this.cartGoods = tmpCartList
-          this.isEditCart = !this.isEditCart
-          this.checkedAllStatus = this.isCheckedAll()
-          this.cartTotal.checkedGoodsCount = this.getCheckedGoodsCount()
-        }
+      cutNumber(event) {
+    		const itemId = event.target.dataset.itemId;
+        store.dispatch({type: 'DECREASE_PRODUCT', payload: itemId});
       },
-      cutNumber: function (event) {
-    		const itemId = event.target.dataset.itemId
-        store.dispatch({type: 'DECREASE_PRODUCT', payload: itemId})
+      addNumber(event) {
+				const itemId = event.target.dataset.itemId;
+        store.dispatch({type: 'ADD_PRODUCT', payload: {_id: itemId, count: 1}});
       },
-      addNumber: function (event) {
-				const itemId = event.target.dataset.itemId
-        store.dispatch({type: 'ADD_PRODUCT', payload: {_id: itemId, count: 1}})
+      updateNumber(event) {
+        const itemId = event.target.dataset.itemId;
+        const count = parseInt(event.detail.value);
+        store.dispatch({type: 'UPDATE_PRODUCT_COUNT', payload: {operation:'update', product: {_id: itemId, count: count}}})
       },
       checkoutOrder: function () {
         wepy.navigateTo({
