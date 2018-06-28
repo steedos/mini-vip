@@ -461,7 +461,7 @@ export default class Posts extends wepy.page {
       vip_wifi: {
         label: 'Wifi',
         icon: 'utility-wifi',
-        url: `../wifi?store=${this.space_id}`
+        url: `../wifi?space_id=${this.space_id}`
       },
       vip_card: {
         label: '会员',

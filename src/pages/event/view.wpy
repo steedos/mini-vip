@@ -285,7 +285,6 @@ export default class EventView extends wepy.page {
     await this.$parent.login();
     this.showHeader = e.showHeader ? true : false;
     if(e.space_id){
-      this.$parent.globalData.space_id = e.space_id;
       this.space_id = e.space_id;
       const options = {
         $filter: `_id eq '${e.space_id}'`,
@@ -392,21 +391,14 @@ export default class EventView extends wepy.page {
     util: util
   };
 
-  getBackUrlForCheckMobile(){
-    let to = `/${this.getWxPage().route}?respond=true`;
-    let pageOptions = this.getWxPage().options;
-    for(let k in pageOptions){
-      to += `&${k}=${pageOptions[k]}`;
-    };
-    return to;
-  }
-
   methods = {
     editEvent() {
       if(!this.editable){
         return
       }
-      let url = `/pages/record/edit?action=edit&object_name=vip_event&record_id=${this.event_id}&fields=name,start,location,alarms,accepted_count,pending_count,rejected_count,featured,cover,description`;
+      console.log("editEvent=================", this.space_id);
+      let url = `/pages/record/edit?action=edit&space_id=${this.space_id}&object_name=vip_event&record_id=${this.event_id}&fields=name,start,location,alarms,accepted_count,pending_count,rejected_count,featured,cover,description`;
+      console.log("editEvent==========url=======", url);
       pageRouter.navigateTo({
         url: url
       });
