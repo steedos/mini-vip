@@ -364,8 +364,8 @@
         <view class="group-item">
           <view class="goods">
 						<repeat for="{{cartList}}" key="index" index="index" item="goods">
-							<view class="item">
-								<view class="checkbox {{goods.checked ? 'checked' : ''}}" @tap="checkedItem" data-item-id="{{goods._id}}">
+							<view class="item" @tap="viewDetail" data-item-id="{{goods._id}}">
+								<view class="checkbox {{goods.checked ? 'checked' : ''}}" @tap.stop="checkedItem" data-item-id="{{goods._id}}">
                   <view class="check-img" data-item-id="{{goods._id}}"></view>
                 </view>
 								<view class="cart-goods">
@@ -379,9 +379,9 @@
 										<view class="b">
 											<text class="price">￥{{goods.default_price}}</text>
 											<view class="selnum">
-												<view class="cut {{goods.count > 1 ? 'enabled' : 'disabled'}}" @tap="cutNumber" data-item-id="{{goods._id}}">-</view>
+												<view class="cut {{goods.count > 1 ? 'enabled' : 'disabled'}}" @tap.stop="cutNumber" data-item-id="{{goods._id}}">-</view>
 												<input value="{{goods.count}}" class="number" data-item-id="{{goods._id}}" type="number" bindblur="updateNumber"/>
-												<view class="add" @tap="addNumber" data-item-id="{{goods._id}}">+</view>
+												<view class="add" @tap.stop="addNumber" data-item-id="{{goods._id}}">+</view>
 											</view>
 										</view>
 									</view>
@@ -533,11 +533,17 @@
         const count = parseInt(event.detail.value);
         store.dispatch({type: 'UPDATE_PRODUCT_COUNT', payload: {operation:'update', product: {_id: itemId, count: count}}})
       },
-      checkoutOrder: function () {
+      checkoutOrder() {
         wepy.navigateTo({
           url: './checkout'
         })
       },
+      viewDetail(event) {
+        const itemId = event.currentTarget.dataset.itemId;
+        wepy.navigateTo({
+          url: `../product/view?record_id=${itemId}`
+        })
+      }
     }
   }
 </script>
