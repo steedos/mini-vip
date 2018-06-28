@@ -538,7 +538,7 @@ export default class VIP extends wepy.app {
   }
 
   async delete(object_name, _id, space_id) {
-    const url = '/api/odata/v4/' + (space_id || this.globalData.space_id) + '/' + object_name + '/'+_id;
+    const url = '/api/odata/v4/' + space_id + '/' + object_name + '/'+_id;
     const result = await req.delete(url).catch((err)=>{
       console.log("error...",err.data)
       return false
