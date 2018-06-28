@@ -59,7 +59,7 @@
             </view>
             <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
               <view class="weui-media-box__title">
-                  <open-data type="userNickName"></open-data>
+                {{name}}
               </view>
             </view>
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
