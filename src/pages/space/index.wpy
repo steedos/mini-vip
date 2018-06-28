@@ -424,7 +424,7 @@ export default class Posts extends wepy.page {
         url: `../post/index?space_id=${this.space_id}${this.is_space_admin ? '&editable=true' : ''}&title=${space.name}`
       },
       vip_product: {
-        label: '产品',
+        label: '商城',
         icon: 'standard-shipment',
         url: `../product/list?space_id=${this.space_id}`
       },
