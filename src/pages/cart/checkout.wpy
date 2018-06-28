@@ -344,6 +344,9 @@ export default class Checkout extends wepy.page {
       title: '加载中'
     });
     await this.$parent.login();
+  }
+  
+  async onShow() {
     const user_id = this.$parent.globalData.user._id;
     const options = {
       $filter: `owner eq '${user_id}'`
@@ -372,8 +375,9 @@ export default class Checkout extends wepy.page {
   }
 
   upDateAddress(address) {
-    this.checkedAddress = address;
-    this.$apply();
+    if (address) {
+      this.checkedAddress = address;
+    }
   }
 
   computed = {};
@@ -397,7 +401,7 @@ export default class Checkout extends wepy.page {
       };
     }
   };
-  onShow() {}
+
   async getCheckoutInfo() {
     let res = await util.request(api.CartCheckout, {
       addressId: this.addressId,
