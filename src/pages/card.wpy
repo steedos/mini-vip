@@ -73,7 +73,7 @@
     <view class="page__bd">
 
         <view wx:if="{{isActivated}}" class="weui-cells">
-          <navigator url="card_pay?card_id={{cardId}}&balance={{cardBalance}}&store_id={{store_id}}" class="weui-cell weui-cell_access">
+          <navigator url="card_pay?card_id={{cardId}}&balance={{cardBalance}}&space_id={{space_id}}" class="weui-cell weui-cell_access">
             <view class="weui-cell__hd">
               <view class="slds-icon-standard-product slds-icon slds-icon--small slds-m-right--x-small"/>
             </view>
@@ -185,7 +185,6 @@ export default class Card extends wepy.page {
     isAuthorize: true,
     space_id: '',
     space_name: '',
-    store_id: '',
     category_id: '',
     avatar:'',
     cover:''
@@ -225,6 +224,7 @@ export default class Card extends wepy.page {
   }
 
   async onLoad(e) {
+    console.log("card================onLoad=====e=====", e);
     wx.showLoading({
       title: '加载中',
       mask: true
@@ -235,9 +235,6 @@ export default class Card extends wepy.page {
       this.$parent.globalData.space_id = e.space_id;
     }else{
       this.space_id = this.$parent.globalData.space_id
-    }
-    if (e.store_id) {
-      this.store_id = e.store_id;
     }
 
     if (this.$parent.globalData.userInfo) {
@@ -291,11 +288,10 @@ export default class Card extends wepy.page {
 
   onShareAppMessage(res) {
     const space_id = this.space_id
-    const store_id = this.store_id
     const space_name = this.space_name
     return {
       title: space_name,
-      path: `pages/card?space_id=${space_id}&store_id=${store_id}`
+      path: `pages/card?space_id=${space_id}`
     };
   }
 
@@ -315,7 +311,7 @@ export default class Card extends wepy.page {
   methods = {
     toOpenCard() {
       console.log("this.space_id",this.space_id)
-      const url = `./card/select?space_id=${this.space_id}&store_id=${this.store_id}`
+      const url = `./card/select?space_id=${this.space_id}`
       console.log('toOpenCard', url)
       wx.navigateTo({ url: url });
     },
@@ -338,8 +334,8 @@ export default class Card extends wepy.page {
           this.cardId +
           '&balance=' +
           this.cardBalance +
-          '&store_id=' +
-          this.store_id
+          '&space_id=' +
+          this.space_id
       });
     }
   };

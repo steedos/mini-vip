@@ -67,7 +67,8 @@ export default class CardPay extends wepy.page {
     cardId: '',
     cardBalance: '',
     store_name: '',
-    store_avatar: ''
+    store_avatar: '',
+    space_id: null
   };
 
   onLoad(e) {
@@ -75,10 +76,9 @@ export default class CardPay extends wepy.page {
     console.log(e);
     this.cardId = e.card_id;
     this.cardBalance = e.balance;
-    this.storeId = e.store_id;
-    this.space_id = e.store_id;
+    this.space_id = e.space_id;
 
-    var storeId = this.storeId;
+    var storeId = this.space_id;
     var that = this;
     if (storeId) {
       this.$parent.get('vip_store', storeId, this.space_id).then(s => {
@@ -91,7 +91,7 @@ export default class CardPay extends wepy.page {
     } else {
       this.$parent.get('vip_card', e.card_id, this.space_id).then(c => {
         if (c.store) {
-          that.$parent.get('vip_store', c.store, this.space_id).then(s => {
+          that.$parent.get('vip_store', c.store, that.space_id).then(s => {
             that.store_name = s.name;
             if (s.avatar) {
               that.store_avatar = `${baseUrl}/api/files/images/${s.avatar}`;
@@ -153,7 +153,9 @@ export default class CardPay extends wepy.page {
                 '&store_name=' +
                 that.store_name +
                 '&card_id=' +
-                that.cardId
+                that.cardId +
+                '&space_id=' +
+                that.space_id
             });
           } else if (res.errors) {
             wx.navigateTo({
@@ -171,7 +173,7 @@ export default class CardPay extends wepy.page {
           name: '店内消费',
           amount: amount,
           status: 'draft',
-          store: this.storeId,
+          store: this.space_id,
           card: this.cardId,
           type: 'pay',
           owner: this.$parent.globalData.user._id
@@ -205,7 +207,9 @@ export default class CardPay extends wepy.page {
                         '&store_name=' +
                         that.store_name +
                         '&card_id=' +
-                        that.cardId
+                        that.cardId +
+                        '&space_id=' +
+                        that.space_id
                     });
                   },
                   fail: function(msg) {

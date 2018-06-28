@@ -279,7 +279,7 @@ export default class cardActivate extends wepy.page {
             console.log('success: ', msg);
 
             wx.navigateTo({
-              url: 'card?card_id=' + that.card_id
+              url: `card?card_id=${that.card_id}&space_id=${that.space_id}`
             });
           },
           fail: function(msg) {
