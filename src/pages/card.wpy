@@ -125,7 +125,7 @@
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
           </navigator> -->
           <view wx:if="{{isActivated}}">
-            <navigator url="member_benefits?category_id={{category_id}}" class="weui-cell weui-cell_access">
+            <navigator url="member_benefits?space_id={{space_id}}&category_id={{category_id}}" class="weui-cell weui-cell_access">
               <view class="weui-cell__hd">
                 <view class="slds-icon-standard-team-member slds-icon slds-icon--small slds-m-right--x-small"/>
               </view>
@@ -216,7 +216,7 @@ export default class Card extends wepy.page {
 
   async getCategoryInfo(category_id) {
     const self = this;
-    const result = await self.$parent.get('vip_category', category_id);
+    const result = await self.$parent.get('vip_category', category_id, this.space_id);
     console.log("result",result)
     this.avatar = result.avatar || '';
     this.cover = result.cover || '';

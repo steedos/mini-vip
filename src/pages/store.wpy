@@ -147,6 +147,7 @@ export default class store extends wepy.page {
   }
 
   async onLoad(e) {
+    console.log("store========================onLoad===========");
     wepy.showLoading({
       title: '加载中',
       mask: true

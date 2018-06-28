@@ -502,7 +502,7 @@ export default class VIP extends wepy.app {
   // }
 
   async get(object_name, _id, space_id, query_options) {
-    const url = '/api/odata/v4/' + (space_id || this.globalData.space_id) + '/' + object_name + '/' + _id;
+    const url = '/api/odata/v4/' + space_id + '/' + object_name + '/' + _id;
     const result = await req.get(url, query_options).catch((err)=>{
       console.log("error...",err.data)
       return {}
