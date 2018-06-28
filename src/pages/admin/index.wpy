@@ -27,9 +27,8 @@
   <view class="page" wx:if="{{is_loaded}}">
     <view class="page__bd">
       <view class="weui-cells">
-        <navigator url="../record/edit?object_name=vip_store&action=edit&record_id={{space_id}}" class="weui-cell">
+        <navigator url="../record/edit?space_id={{space_id}}&object_name=vip_store&action=edit&record_id={{space_id}}" class="weui-cell">
           <view class="weui-cell__hd">
-
             <block wx:if="{{store_info.avatar}}">
               <image class="avatar" mode="aspectFill" src="{{util.formatImageUrl(store_info.avatar, baseUrl)}}"/>
             </block>
