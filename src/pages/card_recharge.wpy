@@ -151,7 +151,7 @@ export default class CardRecharge extends wepy.page {
     },
     toBillingRecords() {
       wx.navigateTo({
-        url: 'card_billing?card_id=' + this.cardId
+        url: `card_billing?space_id=${this.space_id}&card_id=${this.cardId}`
       });
     }
   };

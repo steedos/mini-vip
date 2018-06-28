@@ -162,7 +162,7 @@ export default class cardActivate extends wepy.page {
       const data = {
         $select: 'name,price'
       };
-      var category = await this.$parent.query('vip_category', data);
+      var category = await this.$parent.query('vip_category', data, this.space_id);
       console.log('category=====', category);
       if (!category.value[0]) {
         await this.addVipCard();

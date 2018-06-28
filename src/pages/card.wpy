@@ -54,7 +54,7 @@
             <view class="title">积分</view>
             <view class="count">{{cardPoints}} 分</view>
           </view>
-          <navigator url="coupons" class="coupon s-card">
+          <navigator url="coupons?space_id={{space_id}}" class="coupon s-card">
             <view class="title">优惠券</view>
             <view class="count">0 张</view>
           </navigator>
@@ -94,7 +94,7 @@
             </view>
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
           </view>
-          <navigator class="weui-cell weui-cell_access" url="consuming_records?card_id={{cardId}}">
+          <navigator class="weui-cell weui-cell_access" url="consuming_records?space_id={{space_id}}&card_id={{cardId}}">
             <view class="weui-cell__hd">
               <view class="slds-icon-custom-custom40 slds-icon slds-icon--small slds-m-right--x-small"/>
             </view>
