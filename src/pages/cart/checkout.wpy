@@ -209,7 +209,7 @@
 <template>
   <view class="page" wx:if="{{is_loaded}}">
     <view class="address-box">
-			<!-- <view class="address-item" @tap="selectAddress" wx:if="{{checkedAddress._id}}">
+			<view class="address-item" @tap="selectAddress" wx:if="{{checkedAddress._id}}">
 				<view class="l">
 					<view class="name">{{checkedAddress.name}}</view>
 					<view class="default {{checkedAddress.is_default ? 'show' : 'hide'}}">默认</view>
@@ -220,15 +220,15 @@
 				</view>
 				<view class="r after-chevronright">
 				</view>
-			</view> -->
+			</view>
 
-      <view class="address-item address-empty" bindtap="addAddress" >
+      <!-- <view class="address-item address-empty" bindtap="addAddress" >
         <view class="m">
           还没有收货地址，去添加
         </view>
         <view class="r after-chevronright">
         </view>
-      </view>
+      </view> -->
     </view>
 
     <view class="order-box">
