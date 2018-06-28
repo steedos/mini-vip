@@ -518,7 +518,7 @@ export default class VIP extends wepy.app {
   }
 
   async insert(object_name,data, space_id) {
-    const url = '/api/odata/v4/' + (space_id || this.globalData.space_id) + '/' + object_name;
+    const url = '/api/odata/v4/' + space_id + '/' + object_name;
     const result = await req.post(url, data).catch((err)=>{
       console.log("error...",err.data)
       return false
@@ -527,7 +527,7 @@ export default class VIP extends wepy.app {
   }
 
   async update(object_name, _id, data, space_id) {
-    const url = '/api/odata/v4/' + (space_id || this.globalData.space_id) + '/' + object_name + '/'+_id;
+    const url = '/api/odata/v4/' + space_id + '/' + object_name + '/'+_id;
     var doc = {}
     doc['$set'] = data
     const result = await req.put(url, doc).catch((err)=>{
