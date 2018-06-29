@@ -966,6 +966,14 @@
           url: `./list?space_id=${space_id}`
         })
       },
+      buyNow() {
+        let product = this.product;
+        product.count = 1;
+        product = JSON.stringify(product);
+        wx.navigateTo({
+          url: `../cart/checkout?product=${product}`
+        })
+      }
     }
     // methods = {
     //   switchAttrPop: function () {

@@ -343,13 +343,25 @@ export default class Checkout extends wepy.page {
     return goodsTotalPrice.toFixed(2);
   }
 
-  async onLoad() {
+  async onLoad(e) {
     wepy.showLoading({
       title: '加载中'
     });
+
+    await this.$parent.login();
+
+    if (e.product) {
+      const product = JSON.parse(e.product);
+      this.checkedProductList = [product];
+      this.goodsTotalPrice = this.getgoodsTotalPrice(this.checkedProductList);
+    } else {
+      this.checkedProductList = this.getcheckedProductList();
+      this.goodsTotalPrice = this.getgoodsTotalPrice(this.checkedProductList);
+    }
+    this.$apply();
   }
   
-  async onShow() {
+  async onShow(e) {
     await this.$parent.login();
     const user_id = this.$parent.globalData.user._id;
     const options = {
@@ -357,17 +369,9 @@ export default class Checkout extends wepy.page {
     };
     const result = await this.$parent.query('vip_address', options, 'guest');
 
-    if (result && result.value && result.value[0]) {
+    if (result && result.value && result.value[0] && !this.checkedAddress) {
       this.checkedAddress = result.value[0];
     }
-
-    this.checkedProductList = this.getcheckedProductList();
-
-    console.log('[this.checkedProductList]', this.checkedProductList);
-
-    this.goodsTotalPrice = this.getgoodsTotalPrice(this.checkedProductList);
-
-    console.log('[this.goodsTotalPrice]', this.goodsTotalPrice);
 
     this.is_loaded = true;
     this.$apply();
