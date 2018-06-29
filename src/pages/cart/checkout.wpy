@@ -347,10 +347,10 @@ export default class Checkout extends wepy.page {
     wepy.showLoading({
       title: '加载中'
     });
-    await this.$parent.login();
   }
   
   async onShow() {
+    await this.$parent.login();
     const user_id = this.$parent.globalData.user._id;
     const options = {
       $filter: `owner eq '${user_id}'`
