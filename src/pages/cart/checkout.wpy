@@ -295,6 +295,7 @@ import { connect, getStore } from 'wepy-redux';
 import util from '../../wxs/util.wxs';
 import { baseUrl } from '@/config';
 import pageRouter from '@/utils/pageRouter';
+import _ from 'underscore';
 
 const store = getStore();
 
@@ -369,7 +370,7 @@ export default class Checkout extends wepy.page {
     };
     const result = await this.$parent.query('vip_address', options, 'guest');
 
-    if (result && result.value && result.value[0] && !this.checkedAddress) {
+    if (result && result.value && result.value[0] && _.isEmpty(this.checkedAddress)) {
       this.checkedAddress = result.value[0];
     }
 
