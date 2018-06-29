@@ -266,7 +266,7 @@
       <repeat for="{{checkedProductList}}" key="index" index="index" item="goods">
         <view class="item">
           <view class="cart-goods">
-            <image class="img" src="{{util.formatImageUrl(goods.avatar, baseUrl)}}"></image>
+            <image class="img" src="{{util.formatImageUrl(goods.avatar, baseUrl)}}" mode="aspectFill"></image>
             <view class="info">
               <view class="t">
                 <text class="name">{{goods.name}}</text>
