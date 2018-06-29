@@ -804,7 +804,7 @@
 
         if(field.type === 'datetime'){
           if(value[k]){
-            value[k] = (new Date(value[k])).toISOString()
+            value[k] = (new Date(value[k].replace(/-/g,"/"))).toISOString()
           }
         }
       });
