@@ -75,7 +75,7 @@ export default class QRCode extends wepy.page {
   data = {
     baseUrl: baseUrl,
     imgCodeUrl: '',
-    store_id:'',
+    space_id:'',
     store_name:'',
     imageUrl: '',
     avatarUrl: '',
@@ -91,10 +91,9 @@ export default class QRCode extends wepy.page {
       title: '加载中',
       mask: true
     });
-    var store_id = e.store_id || this.$parent.globalData.space_id
-    this.store_id = store_id
+    this.space_id = e.space_id
     this.$apply()
-    await this.getqrCode(store_id)
+    await this.getqrCode(this.space_id)
     this.is_loaded = true
     this.$apply();
     wepy.hideLoading();
@@ -102,16 +101,15 @@ export default class QRCode extends wepy.page {
   onShareAppMessage(res) {
     return {
       title: "欢迎加入"+this.store_name,
-      path: `pages/admin/qrcode?space_id=${this.store_id}`,
+      path: `pages/admin/qrcode?space_id=${this.space_id}`,
       imageUrl:utilJs.formatImageUrl(this.imageUrl, this.baseUrl)
     };
   }
   async getqrCode(store_id) {
-    const result = await this.$parent.get('vip_store', store_id);
+    const result = await this.$parent.get('vip_store', store_id, this.space_id);
     if(result){
       this.store_name = result.name
       this.avatarUrl = result.avatar
-      this.store_id = result._id
       this.$apply();
     }
     if(result &&  result.qrcode && result.qrcode!=''){
@@ -179,14 +177,14 @@ export default class QRCode extends wepy.page {
             }
           })
           const fileData = JSON.parse(fileResult.data);
-          const space = await this.$parent.get('spaces', store_id);
+          const space = await this.$parent.get('spaces', store_id, this.space_id);
           const admins = space.admins
           const is_space_admin = admins && admins.includes(userId);
           if(is_space_admin) {
             const data = {
             qrcode: fileData['_id']
             };
-            var store = await this.$parent.update('vip_store',store_id, data);
+            var store = await this.$parent.update('vip_store',store_id, data, this.space_id);
           }
         
         });

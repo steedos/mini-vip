@@ -266,7 +266,7 @@
       <repeat for="{{checkedProductList}}" key="index" index="index" item="goods">
         <view class="item">
           <view class="cart-goods">
-            <image class="img" src="{{util.formatImageUrl(goods.avatar, baseUrl)}}"></image>
+            <image class="img" src="{{util.formatImageUrl(goods.avatar, baseUrl)}}" mode="aspectFill"></image>
             <view class="info">
               <view class="t">
                 <text class="name">{{goods.name}}</text>
@@ -295,7 +295,6 @@ import { connect, getStore } from 'wepy-redux';
 import util from '../../wxs/util.wxs';
 import { baseUrl } from '@/config';
 import pageRouter from '@/utils/pageRouter';
-import _ from 'underscore'
 
 const store = getStore();
 
@@ -348,6 +347,7 @@ export default class Checkout extends wepy.page {
     wepy.showLoading({
       title: '加载中'
     });
+
     await this.$parent.login();
 
     if (e.product) {
@@ -361,14 +361,15 @@ export default class Checkout extends wepy.page {
     this.$apply();
   }
   
-  async onShow() {
+  async onShow(e) {
+    await this.$parent.login();
     const user_id = this.$parent.globalData.user._id;
     const options = {
       $filter: `owner eq '${user_id}'`
     };
     const result = await this.$parent.query('vip_address', options, 'guest');
 
-    if (result && result.value && result.value[0] && _.isEmpty(this.checkedAddress)) {
+    if (result && result.value && result.value[0] && !this.checkedAddress) {
       this.checkedAddress = result.value[0];
     }
 

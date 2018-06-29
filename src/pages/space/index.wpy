@@ -273,7 +273,8 @@ export default class Posts extends wepy.page {
       title: '加载中',
       mask: true
     });
-    this.space_id = e.space_id || this.$parent.globalData.space_id || scene;
+    console.log("onLoad==============space_index===================", e.space_id);
+    this.space_id = e.space_id || scene;
     await this.$parent.login(this.space_id);
 
     await this.loadCardInfo();
@@ -380,7 +381,7 @@ export default class Posts extends wepy.page {
       $count: true,
       $select: 'is_actived,name,card_name,space'
     };
-    const card = await this.$parent.query('vip_card', options);
+    const card = await this.$parent.query('vip_card', options, this.space_id);
     if (card.value) {
       if (card.value[0] && card.value[0].is_actived) {
             this.card = card.value[0];
@@ -389,7 +390,8 @@ export default class Posts extends wepy.page {
             }`;
             const vip_category = await this.$parent.get(
               'vip_category',
-              this.card.card_name._id
+              this.card.card_name._id,
+              this.space_id
             );
             this.card.avatar = vip_category.avatar;
       }
@@ -407,7 +409,8 @@ export default class Posts extends wepy.page {
   async loadStoreInfo() {
     const self = this
     const spaceId = this.space_id;
-    const space = await this.$parent.get('spaces', spaceId);
+    console.log("loadStoreInfo===================", spaceId);
+    const space = await this.$parent.get('spaces', spaceId, spaceId);
     const admins = space.admins
     const globalData = this.$parent.globalData;
     const userId = globalData.user._id
@@ -418,7 +421,7 @@ export default class Posts extends wepy.page {
       post: {
         label: '动态',
         icon: 'standard-news',
-        url: `../post/index${this.is_space_admin ? '?editable=true' : ''}?title=${space.name}`
+        url: `../post/index?space_id=${this.space_id}${this.is_space_admin ? '&editable=true' : ''}&title=${space.name}`
       },
       vip_product: {
         label: '商城',
@@ -458,7 +461,7 @@ export default class Posts extends wepy.page {
       vip_wifi: {
         label: 'Wifi',
         icon: 'utility-wifi',
-        url: `../wifi?store=${this.space_id}`
+        url: `../wifi?space_id=${this.space_id}`
       },
       vip_card: {
         label: '会员',
@@ -510,7 +513,7 @@ export default class Posts extends wepy.page {
     if (type) {
       options.$filter = `type eq '${type}'`;
     }
-    const result = await this.$parent.query('post', options);
+    const result = await this.$parent.query('post', options, this.space_id);
     if (result.value) {
       this.posts = this.posts.concat(result.value);
       this.current_skip = skip + result.value.length;

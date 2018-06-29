@@ -138,7 +138,6 @@ export default class VIP extends wepy.app {
       'pages/wifi',
       'pages/event/list',
       'pages/event/view',
-      'pages/event/attendees',
       'pages/post/index',
       'pages/post/view',
       'pages/edit/date',
@@ -328,7 +327,7 @@ export default class VIP extends wepy.app {
     }
   }
 
-  async login(space_id) {
+  async login() {
     const self = this
     let globalData = self.globalData
     let needs_login = false
@@ -345,10 +344,10 @@ export default class VIP extends wepy.app {
       globalData.user = {}
     }
 
-    if (space_id && space_id != globalData.space_id) {
-      globalData.space_id = space_id
-      needs_login = true
-    }
+    // if (space_id && space_id != globalData.space_id) {
+    //   globalData.space_id = space_id
+    //   needs_login = true
+    // }
 
     if (!globalData.user._id || !globalData.user.auth_token) {
       needs_login = true
@@ -376,9 +375,9 @@ export default class VIP extends wepy.app {
       const old_auth_token = globalData.user.auth_token || ''
       let url = `${serverAPI.LOGIN}?code=${data.code}&old_user_id=${old_user_id}&old_auth_token=${old_auth_token}`
 
-      if (space_id) {
-        url = `${url}&space_id=${space_id}`
-      }
+      // if (space_id) {
+      //   url = `${url}&space_id=${space_id}`
+      // }
 
       const res = await req.post(url).catch((err) => {
         console.log("cache error...");
@@ -471,37 +470,37 @@ export default class VIP extends wepy.app {
     }
   }
 
-  async cache(object_name, _id, data, reload) {
+  // async cache(object_name, _id, data, reload) {
 
-    const globalData = this.globalData
+  //   const globalData = this.globalData
 
-    if (!reload) {
-      if (globalData[object_name] && globalData[object_name]._id == _id) {
-        return globalData[object_name]
-      }
-    }
+  //   if (!reload) {
+  //     if (globalData[object_name] && globalData[object_name]._id == _id) {
+  //       return globalData[object_name]
+  //     }
+  //   }
 
-    const space_id = globalData.space_id
-    if (!space_id) {
-      return null;
-    }
+  //   const space_id = globalData.space_id
+  //   if (!space_id) {
+  //     return null;
+  //   }
 
-    let url = `/api/odata/v4/${space_id}/${object_name}`
-    if (!data || _.isEmpty(data)) {
-      url = `${url}/${_id}`
-    }
-    const result = await req.get(url, data).catch((err) => {
-      console.log('carch error')
-      return {}
-    })
-    console.log('cache result.................', result)
-    globalData[object_name] = result.value[0];
-    return result.value[0];
+  //   let url = `/api/odata/v4/${space_id}/${object_name}`
+  //   if (!data || _.isEmpty(data)) {
+  //     url = `${url}/${_id}`
+  //   }
+  //   const result = await req.get(url, data).catch((err) => {
+  //     console.log('carch error')
+  //     return {}
+  //   })
+  //   console.log('cache result.................', result)
+  //   globalData[object_name] = result.value[0];
+  //   return result.value[0];
 
-  }
+  // }
 
   async get(object_name, _id, space_id, query_options) {
-    const url = '/api/odata/v4/' + (space_id || this.globalData.space_id) + '/' + object_name + '/' + _id;
+    const url = '/api/odata/v4/' + space_id + '/' + object_name + '/' + _id;
     const result = await req.get(url, query_options).catch((err)=>{
       console.log("error...",err.data)
       return {}
@@ -510,7 +509,7 @@ export default class VIP extends wepy.app {
   }
 
   async query(object_name, query_options, space_id) {
-    const url = '/api/odata/v4/' + (space_id || this.globalData.space_id) + '/' + object_name;
+    const url = '/api/odata/v4/' + space_id + '/' + object_name;
     const result = await req.get(url, query_options).catch((err)=>{
       console.log("error...",err.data)
       return {}
@@ -519,7 +518,7 @@ export default class VIP extends wepy.app {
   }
 
   async insert(object_name,data, space_id) {
-    const url = '/api/odata/v4/' + (space_id || this.globalData.space_id) + '/' + object_name;
+    const url = '/api/odata/v4/' + space_id + '/' + object_name;
     const result = await req.post(url, data).catch((err)=>{
       console.log("error...",err.data)
       return false
@@ -528,7 +527,7 @@ export default class VIP extends wepy.app {
   }
 
   async update(object_name, _id, data, space_id) {
-    const url = '/api/odata/v4/' + (space_id || this.globalData.space_id) + '/' + object_name + '/'+_id;
+    const url = '/api/odata/v4/' + space_id + '/' + object_name + '/'+_id;
     var doc = {}
     doc['$set'] = data
     const result = await req.put(url, doc).catch((err)=>{
@@ -539,7 +538,7 @@ export default class VIP extends wepy.app {
   }
 
   async delete(object_name, _id, space_id) {
-    const url = '/api/odata/v4/' + (space_id || this.globalData.space_id) + '/' + object_name + '/'+_id;
+    const url = '/api/odata/v4/' + space_id + '/' + object_name + '/'+_id;
     const result = await req.delete(url).catch((err)=>{
       console.log("error...",err.data)
       return false

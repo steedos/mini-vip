@@ -52,7 +52,7 @@ export default class CardRecharge extends wepy.page {
     canDoRecharge: false,
     cardId: '',
     cardBalance: '',
-    storeId: ''
+    space_id: ''
   };
 
   onLoad(e) {
@@ -60,7 +60,7 @@ export default class CardRecharge extends wepy.page {
     console.log(e);
     this.cardId = e.card_id;
     this.cardBalance = e.balance;
-    this.storeId = e.store_id || this.$parent.globalData.space_id;
+    this.space_id = e.space_id;
     console.log(this.$parent.globalData.vip_card);
   }
 
@@ -88,12 +88,12 @@ export default class CardRecharge extends wepy.page {
         name: '会员卡充值',
         amount: amount,
         status: 'draft',
-        store: this.storeId,
+        store: this.space_id,
         card: this.cardId,
         type: 'recharge',
         owner: this.$parent.globalData.user._id
       };
-      this.$parent.insert('vip_order', newOrder).then(o => {
+      this.$parent.insert('vip_order', newOrder, this.space_id).then(o => {
         console.log(o);
         if (o.value) {
           var data = {
@@ -119,7 +119,7 @@ export default class CardRecharge extends wepy.page {
                     title: '更新余额中',
                     mask: true
                   });
-                  that.$parent.get('vip_card', that.cardId).then(c => {
+                  that.$parent.get('vip_card', that.cardId, that.space_id).then(c => {
                     that.cardBalance = c.balance.toFixed(2);
                     that.rechargeValue = '';
                     that.canDoRecharge = false;
@@ -151,7 +151,7 @@ export default class CardRecharge extends wepy.page {
     },
     toBillingRecords() {
       wx.navigateTo({
-        url: 'card_billing?card_id=' + this.cardId
+        url: `card_billing?space_id=${this.space_id}&card_id=${this.cardId}`
       });
     }
   };

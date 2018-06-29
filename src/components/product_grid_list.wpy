@@ -4,7 +4,7 @@
     <view class="shop_item">
       <navigator class="list" wx:for="{{list}}" wx:key="item" url="/pages/product/view?record_id={{item._id}}&space_id={{item.space}}">
         <view class="image_box">
-          <image src="{{util.formatImageUrl(item.avatar, baseUrl)}}"></image>
+          <image src="{{util.formatImageUrl(item.avatar, baseUrl)}}" mode="aspectFill"></image>
         </view>
         <view class="goods">
           <view class="product_name" wx:if="{{showTitle}}">{{item.name}}</view>
