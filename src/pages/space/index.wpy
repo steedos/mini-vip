@@ -207,21 +207,37 @@ page {
       <view class="weui-cells">
         <view class="weui-grids">
           <repeat for="{{enabled_objects}}" key="index" index="index" item="object">
-            <block wx:if="{{object.name === 'support'}}">
-              <button open-type="contact" plain="true" class="weui-grid support" hover-class="weui-grid_active" wx:if="{{object}}">
-                <view class="slds-icon-{{object.icon}} weui-grid__icon slds-icon">
-                  <view class="need_read1"></view>
-                </view>
-                <view class="weui-grid__label">{{object.label}}</view>
-              </button>
-            </block>
+            <block wx:if="{{is_default_menu}}">
+              <block wx:if="{{object.name === 'support'}}">
+                <button open-type="contact" plain="true" class="weui-grid support" hover-class="weui-grid_active" wx:if="{{object}}">
+                  <view class="slds-icon-{{object.icon}} weui-grid__icon slds-icon">
+                    <view class="need_read1"></view>
+                  </view>
+                  <view class="weui-grid__label">{{object.label}}</view>
+                </button>
+              </block>
+              <block wx:else>
+                <navigator url="{{object.url}}" class="weui-grid" hover-class="weui-grid_active" wx:if="{{object}}">
+                  <view class="slds-icon-{{object.icon}} weui-grid__icon slds-icon">
+                    <view class="need_read1"></view>
+                  </view>
+                  <view class="weui-grid__label">{{object.label}}</view>
+                </navigator>
+              </block>
+            </block>  
             <block wx:else>
-              <navigator url="{{object.url}}" class="weui-grid" hover-class="weui-grid_active" wx:if="{{object}}">
-                <view class="slds-icon-{{object.icon}} weui-grid__icon slds-icon">
-                  <view class="need_read1"></view>
-                </view>
-                <view class="weui-grid__label">{{object.label}}</view>
-              </navigator>
+              <block wx:if="{{object.name === 'support'}}">
+                <button open-type="contact" plain="true" class="weui-grid support" hover-class="weui-grid_active" wx:if="{{object}}">
+                  <image wx:if="{{object.avatar}}" class="image weui-grid__icon slds-icon" src="{{util.formatImageUrl(object.avatar, baseUrl)}}"></image>
+                  <view class="weui-grid__label">{{object.name}}</view>
+                </button>
+              </block>
+              <block wx:else>
+                <navigator url="{{object.url}}" class="weui-grid" hover-class="weui-grid_active" wx:if="{{object}}">
+                  <image wx:if="{{object.avatar}}" class="image weui-grid__icon slds-icon" src="{{util.formatImageUrl(object.avatar, baseUrl)}}"></image>
+                  <view class="weui-grid__label">{{object.name}}</view>
+                </navigator>
+              </block>
             </block>
           </repeat>
         </view>
@@ -276,7 +292,6 @@ export default class Posts extends wepy.page {
     console.log("onLoad==============space_index===================", e.space_id);
     this.space_id = e.space_id || scene;
     await this.$parent.login(this.space_id);
-
     await this.loadCardInfo();
     this.type = e.type;
     await this.loadStoreInfo();
@@ -352,7 +367,8 @@ export default class Posts extends wepy.page {
     is_space_admin: false,
     is_loaded: false,
     star_count: 0,
-    star_id: ''
+    star_id: '',
+    is_default_menu:false
   };
 
   wxs = {
@@ -405,7 +421,27 @@ export default class Posts extends wepy.page {
     this.store_info.star_count = result.star_count || 0
     this.$apply()
   }
-
+  // async loadMenu() {
+  //   const options = {
+  //     $expand: 'space($select=name)',
+  //     $count: true,
+  //     $select:'name,avatar,related_to,sort_no,enabled'
+  //   };
+  //   const result = await this.$parent.query('vip_menu', options);
+  //   console.log("menu====================",result.value)
+  //   if (result.value) {
+  //     this.enabled_objects = result.value
+  //     this.enabled_objects.forEach(object => {
+  //       if(object.related_to == 'post_category'){
+  //         object['url'] = `../post/index${this.is_space_admin ? '?editable=true' : ''}?title=${space.name}`
+  //       }
+  //       if(object.related_to == 'vip_product_category'){
+  //         object['url'] = `../product/list?space_id=${this.space_id}`
+  //       }
+  //     });
+  //   }
+  //   this.$apply();
+  // }
   async loadStoreInfo() {
     const self = this
     const spaceId = this.space_id;
@@ -477,17 +513,54 @@ export default class Posts extends wepy.page {
     }
 
     const result = await this.$parent.get('vip_store', spaceId, spaceId);
-    this.enabled_objects = []
-    if (result.enabled_objects && !_.isEmpty(result.enabled_objects)) {
-      _.each(result.enabled_objects, (o) => {
-        this.enabled_objects.push(objects_list[o])
-      })
-    } else {
+    const options = {
+      $expand: 'space($select=name)',
+      $count: true,
+      $select:'name,avatar,related_to,sort_no,enabled'
+    };
+    const menu = await this.$parent.query('vip_menu', options,spaceId);
+    if (menu.value.length>0) {
+      this.enabled_objects = menu.value
+      this.enabled_objects.forEach(object => {
+        if(object.related_to.o == 'post_category'){
+          object['url'] = `../post/index?&category_id=${object.related_to.ids[0]}&space_id=${this.space_id}${this.is_space_admin ? '&editable=true' : ''}&title=${space.name}`
+        }
+        if(object.related_to.o == 'post'){
+          object['url'] = `../post/view?post_id=${object.related_to.ids[0]}&space_id=${spaceId}`
+        }
+        if(object.related_to.o == 'vip_product_category'){
+          object['url'] = `../product/list?space_id=${this.space_id}`
+        }
+        if(object.related_to.o == 'vip_product'){
+          object['url'] = `../product/view?record_id=${object.related_to.ids[0]}&space_id=${spaceId}`
+        }
+        if(object.related_to.o == 'vip_store'){
+          object['url'] = `../store?store=${this.space_id}`
+        }
+        if(object.related_to.o == 'vip_event'){
+          object['url'] = `../event/view?space_id=${this.space_id}&event_id=${object.related_to.ids[0]}`
+        }
+      });
+    }else{
       this.enabled_objects = [
         objects_list.post, objects_list.vip_event, objects_list.vip_product, 
         objects_list.vip_card, objects_list.vip_store, objects_list.support
-      ] 
+      ]
+      this.is_default_menu = true 
     }
+    console.log(this.is_default_menu)
+    this.$apply()
+    // this.enabled_objects = []
+    // if (result.enabled_objects && !_.isEmpty(result.enabled_objects)) {
+    //   _.each(result.enabled_objects, (o) => {
+    //     this.enabled_objects.push(objects_list[o])
+    //   })
+    // } else {
+    //   this.enabled_objects = [
+    //     objects_list.post, objects_list.vip_event, objects_list.vip_product, 
+    //     objects_list.vip_card, objects_list.vip_store, objects_list.support
+    //   ] 
+    // }
 
     if (!result.star_count) {
       result.star_count = 0

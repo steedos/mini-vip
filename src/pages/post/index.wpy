@@ -179,13 +179,14 @@ export default class Posts extends wepy.page {
     if(e.type){
       this.type = e.type;
     }
-    if(e.seleted_id){
-      this.seleted_id = e.seleted_id
-    }
     this.space_id = e.space_id;
     await this.$parent.login(this.space_id);
     await this.loadData();
-
+    if(e.category_id){     
+      this.seleted_id =  _.findIndex(this.categories,{'_id':e.category_id})
+      this.cover = this.categories[this.seleted_id].cover
+      this.$apply()
+    }
     wx.showShareMenu({
       withShareTicket: true,
     })
