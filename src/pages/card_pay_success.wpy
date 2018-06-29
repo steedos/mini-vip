@@ -32,9 +32,7 @@ export default class CardPaySuccess extends wepy.page {
 
   data = {
     payValue: '',
-    store_name: '',
-    card_id: null,
-    space_id: null
+    store_name: ''
   };
 
   onLoad(e) {
@@ -42,14 +40,13 @@ export default class CardPaySuccess extends wepy.page {
     console.log(e);
     this.payValue = e.payValue;
     this.store_name = e.store_name;
-    this.card_id = e.card_id;
-    this.space_id = e.space_id;
+    this.cardId = e.card_id;
   }
 
   methods = {
     back(e) {
       wx.navigateTo({
-        url: './card?space_id=' + this.space_id + '&card_id=' + this.card_id
+        url: 'card?card_id=' + this.cardId
       });
     }
   };

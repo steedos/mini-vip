@@ -67,8 +67,7 @@ export default class CardPay extends wepy.page {
     cardId: '',
     cardBalance: '',
     store_name: '',
-    store_avatar: '',
-    space_id: null
+    store_avatar: ''
   };
 
   onLoad(e) {
@@ -76,12 +75,12 @@ export default class CardPay extends wepy.page {
     console.log(e);
     this.cardId = e.card_id;
     this.cardBalance = e.balance;
-    this.space_id = e.space_id;
+    this.storeId = e.store_id || this.$parent.globalData.space_id;
 
-    var storeId = this.space_id;
+    var storeId = this.storeId;
     var that = this;
     if (storeId) {
-      this.$parent.get('vip_store', storeId, this.space_id).then(s => {
+      this.$parent.get('vip_store', storeId).then(s => {
         that.store_name = s.name;
         if (s.avatar) {
           that.store_avatar = `${baseUrl}/api/files/images/${s.avatar}`;
@@ -89,9 +88,9 @@ export default class CardPay extends wepy.page {
         that.$apply();
       });
     } else {
-      this.$parent.get('vip_card', e.card_id, this.space_id).then(c => {
+      this.$parent.get('vip_card', e.card_id).then(c => {
         if (c.store) {
-          that.$parent.get('vip_store', c.store, that.space_id).then(s => {
+          that.$parent.get('vip_store', c.store).then(s => {
             that.store_name = s.name;
             if (s.avatar) {
               that.store_avatar = `${baseUrl}/api/files/images/${s.avatar}`;
@@ -153,9 +152,7 @@ export default class CardPay extends wepy.page {
                 '&store_name=' +
                 that.store_name +
                 '&card_id=' +
-                that.cardId +
-                '&space_id=' +
-                that.space_id
+                that.cardId
             });
           } else if (res.errors) {
             wx.navigateTo({
@@ -173,12 +170,12 @@ export default class CardPay extends wepy.page {
           name: '店内消费',
           amount: amount,
           status: 'draft',
-          store: this.space_id,
+          store: this.storeId,
           card: this.cardId,
           type: 'pay',
           owner: this.$parent.globalData.user._id
         };
-        this.$parent.insert('vip_order', newOrder, this.space_id).then(o => {
+        this.$parent.insert('vip_order', newOrder).then(o => {
           console.log(o);
           if (o.value) {
             var data = {
@@ -207,9 +204,7 @@ export default class CardPay extends wepy.page {
                         '&store_name=' +
                         that.store_name +
                         '&card_id=' +
-                        that.cardId +
-                        '&space_id=' +
-                        that.space_id
+                        that.cardId
                     });
                   },
                   fail: function(msg) {

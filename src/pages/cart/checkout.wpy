@@ -266,7 +266,7 @@
       <repeat for="{{checkedProductList}}" key="index" index="index" item="goods">
         <view class="item">
           <view class="cart-goods">
-            <image class="img" src="{{util.formatImageUrl(goods.avatar, baseUrl)}}" mode="aspectFill"></image>
+            <image class="img" src="{{util.formatImageUrl(goods.avatar, baseUrl)}}"></image>
             <view class="info">
               <view class="t">
                 <text class="name">{{goods.name}}</text>
@@ -343,35 +343,31 @@ export default class Checkout extends wepy.page {
     return goodsTotalPrice.toFixed(2);
   }
 
-  async onLoad(e) {
+  async onLoad() {
     wepy.showLoading({
       title: '加载中'
     });
-
     await this.$parent.login();
-
-    if (e.product) {
-      const product = JSON.parse(e.product);
-      this.checkedProductList = [product];
-      this.goodsTotalPrice = this.getgoodsTotalPrice(this.checkedProductList);
-    } else {
-      this.checkedProductList = this.getcheckedProductList();
-      this.goodsTotalPrice = this.getgoodsTotalPrice(this.checkedProductList);
-    }
-    this.$apply();
   }
   
-  async onShow(e) {
-    await this.$parent.login();
+  async onShow() {
     const user_id = this.$parent.globalData.user._id;
     const options = {
       $filter: `owner eq '${user_id}'`
     };
     const result = await this.$parent.query('vip_address', options, 'guest');
 
-    if (result && result.value && result.value[0] && !this.checkedAddress) {
+    if (result && result.value && result.value[0]) {
       this.checkedAddress = result.value[0];
     }
+
+    this.checkedProductList = this.getcheckedProductList();
+
+    console.log('[this.checkedProductList]', this.checkedProductList);
+
+    this.goodsTotalPrice = this.getgoodsTotalPrice(this.checkedProductList);
+
+    console.log('[this.goodsTotalPrice]', this.goodsTotalPrice);
 
     this.is_loaded = true;
     this.$apply();

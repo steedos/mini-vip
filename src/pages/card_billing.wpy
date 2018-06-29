@@ -46,7 +46,6 @@ export default class CardBilling extends wepy.page {
   };
   components = {};
   onLoad(e) {
-    this.space_id = e.space_id;
     console.log('Card onLoad, e', e);
     const self = this;
     this.getBilling(e.card_id);
@@ -64,7 +63,7 @@ export default class CardBilling extends wepy.page {
 
     var that = this;
 
-    this.$parent.query('vip_billing', data, this.space_id).then(res => {
+    this.$parent.query('vip_billing', data).then(res => {
       console.log('res: ', res);
       if (res.value) {
         res.value.forEach(function(b) {

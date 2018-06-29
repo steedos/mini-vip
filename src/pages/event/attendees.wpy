@@ -1,0 +1,144 @@
+<style lang="less">
+  .weui-cell_muted{
+    font-size: 13px;
+    color: #888888;
+  }
+  .avatar{
+    width: 30px;
+    height: 30px;
+    display: block;
+    border-radius:100%;
+    margin-right: 10px;
+  }
+  .weui-cell__ft_owner{
+    color:black;
+  }
+  .event-status.accepted{
+    color:green;
+  }
+  .event-status.rejected{
+    color:red;
+  }
+</style>
+<template>
+  <view class="page" wx:if="{{is_loaded}}">
+    <view class="weui-panel__bd">
+      <view class="weui-cells">
+        <view class="weui-cell">
+          <view class="weui-cell__hd">
+              <image class="avatar" mode="aspectFill" src="{{event_owner.profile.avatar}}"/>
+          </view>
+          <view class="weui-cell__bd">
+            <view>{{event_owner.name}}</view>
+          </view>
+          <view class="weui-cell__ft weui-cell__ft_owner">
+            <view>发起人</view>
+          </view>
+        </view>
+        <repeat for="{{attendees}}" key="attendees" index="index" item="attendee">
+          <view url="" class="weui-cell">
+            <view class="weui-cell__hd">
+              <block wx:if="{{attendee.owner.profile.avatar}}">
+                <image class="avatar" mode="aspectFill" src="{{attendee.owner.profile.avatar}}"/>
+              </block>
+              <block wx:else>
+                <image class="avatar" mode="aspectFill" src="{{baseMaterialUrl + 'avatar.png'}}"/>
+              </block>
+            </view>
+            <view class="weui-cell__bd">
+              <view>{{attendee.name}}</view>
+              <view class="weui-cell_muted">{{attendee.comment}}</view>
+            </view>
+            <view class="weui-cell__ft">
+              <view class="event-status {{attendee.status}}">{{util.formatEventStatus(attendee.status)}}</view>
+            </view>
+          </view>
+        </repeat>
+      </view>
+    </view>   
+  </view>
+</template>
+<script>
+import wepy from 'wepy';
+import req from '@/network';
+import util from '../../wxs/util.wxs';
+import { baseMaterialUrl } from '@/config';
+import pageRouter from '@/utils/pageRouter';
+
+export default class EventAttendees extends wepy.page {
+  config = {
+    navigationBarTitleText: '活动参与人',
+    enablePullDownRefresh: true
+  };
+
+  async onLoad(e) {
+    wepy.showLoading({
+      title: '加载中',
+      mask: true
+    });
+
+    await this.$parent.login();
+    if(e.space_id){
+      this.$parent.globalData.space_id = e.space_id;
+      this.space_id = e.space_id;
+    }
+    if(e.event_id){
+      this.event_id = e.event_id;
+      await this.loadAttendees();
+    }
+
+    this.is_loaded = true
+    this.$apply()
+    wepy.hideLoading();
+  }
+
+  async refresh(action) {
+    await this.loadAttendees();
+    wepy.stopPullDownRefresh();
+  }
+
+  async loadAttendees(){  
+    const query = {
+        $select: 'name,owner',
+        $expand: 'owner($select=profile,name)'
+      };
+    const event = await this.$parent.get("vip_event", this.event_id, this.space_id,query)
+    this.event_owner = event.owner;
+    console.log("============",this.event_owner)
+    this.$apply();
+
+    const query_options = {
+        $filter: `event eq '${this.event_id}'`,
+        $select: 'name,status,comment,owner',
+        $expand: 'owner($select=profile)'
+      };
+    let attendees = await this.$parent.query("vip_event_attendees", query_options, this.space_id);
+    this.attendees = attendees.value
+    this.$apply();
+    console.log("************************",this.attendees)
+  };
+
+
+  // 上拉刷新
+  onPullDownRefresh() {
+    this.refresh();
+  }
+
+  data = {
+    event_id: null,
+    event_owner: null,
+    attendees: null,
+    space_id: '',
+    is_loaded: false,
+    baseMaterialUrl: baseMaterialUrl
+  };
+
+  wxs = {
+    util: util
+  };
+
+  methods = {
+
+  };
+}
+</script>

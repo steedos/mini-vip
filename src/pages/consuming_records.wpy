@@ -47,14 +47,13 @@ export default class ConsumingRecords extends wepy.page {
     navigationBarTitleText: '消费记录'
   };
   async onLoad(e) {
-    this.space_id = e.space_id;
     const data = {
         $filter: `(card eq '${e.card_id}' and status eq 'completed')`,
         $expand: 'owner($select=name)',
         $count: true,
         $select: 'name,amount,type,created,status'
       };
-    this.records = await this.$parent.query('vip_order', data, this.space_id)
+    this.records = await this.$parent.query('vip_order',data)
     this.$apply();
   };
   data = {

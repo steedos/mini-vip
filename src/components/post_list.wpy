@@ -272,7 +272,7 @@ export default class PostList extends wepy.component {
       if(this.editable){
         url += '&editable=true'
       }
-      console.log("goDetail=====================", space_id);
+      console.log("goDetail=====================");
       console.log(url);
       wx.navigateTo({
         url: url

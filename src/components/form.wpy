@@ -520,7 +520,7 @@
               query_options.$expand = expand.join(',')
             }
             console.log('query_options', query_options)
-            const result = await this.$parent.$parent.query(object_name, query_options, this.args.space_id);
+            const result = await this.$parent.$parent.query(object_name, query_options);
             if (result.value.length === 1) {
               this.values = result.value[0]
               delete this.values["@odata.id"]
@@ -528,8 +528,8 @@
               delete this.values["@odata.editLink"]
               delete this.values["_id"]
             }
-            this._record_allowEdit = this.$parent.$parent.recordAllowEdit(object_name, this.values.owner, this.args.space_id);
-            this._record_allowDelte = this.$parent.$parent.recordAllowDelete(object_name, this.values.owner, this.args.space_id);
+            this._record_allowEdit = this.$parent.$parent.recordAllowEdit(object_name, this.values.owner);
+            this._record_allowDelte = this.$parent.$parent.recordAllowDelete(object_name, this.values.owner);
           }
 
           _.forEach(this.fields, (field) => {
@@ -824,7 +824,7 @@
         query.$select = 'name,user'
       }
 
-      const data = await this.$parent.$parent.query(reference_to, query, this.args.space_id)
+      const data = await this.$parent.$parent.query(reference_to, query)
       let options = []
       data.value.forEach(function (record) {
         if (reference_to === 'space_users') {
@@ -876,7 +876,7 @@
           await this.uploadImages(this.args.record_id);
           await this.uploadVideos(this.args.record_id);
           const value = this.transformValue();
-          await this.$parent.$parent.update(this.args.object_name, this.args.record_id, value, this.args.space_id);
+          await this.$parent.$parent.update(this.args.object_name, this.args.record_id, value);
           const pages = getCurrentPages();
           const prevPage = pages[pages.length - 1];
           if (prevPage.refresh) {
@@ -1024,7 +1024,7 @@
           cancelText: "取消",
         });
         if (result.confirm) {
-          await this.$parent.$parent.delete(this.args.object_name, this.args.record_id, this.args.space_id)
+          await this.$parent.$parent.delete(this.args.object_name, this.args.record_id)
           this.goBack("remove");
         }
       },
@@ -1054,14 +1054,14 @@
             const record_id = record.value[0]._id
             await this.uploadImages(record_id);
             const value = this.transformValue(formValues);
-            await this.$parent.$parent.update(this.args.object_name, record_id, value, this.args.space_id)
+            await this.$parent.$parent.update(this.args.object_name, record_id, value)
           }
 
           if (this.hasTempVideo()) {
             const record_id = record.value[0]._id
             await this.uploadVideos(record_id);
             const value = this.transformValue(formValues);
-            await this.$parent.$parent.update(this.args.object_name, record_id, value, this.args.space_id)
+            await this.$parent.$parent.update(this.args.object_name, record_id, value)
           }
 
         } else if (this.args.action === 'edit') {
@@ -1072,7 +1072,7 @@
           if(Object.keys(this.fields).indexOf('wx_form_id') > -1){
             value['wx_form_id'] = appId + ':'+ e.detail.formId
           }
-          await this.$parent.$parent.update(this.args.object_name, this.args.record_id, value, this.args.space_id)
+          await this.$parent.$parent.update(this.args.object_name, this.args.record_id, value)
         }
 
         this._changeValue = {}

@@ -182,7 +182,7 @@ export default class Posts extends wepy.page {
     if(e.seleted_id){
       this.seleted_id = e.seleted_id
     }
-    this.space_id = e.space_id;
+    this.space_id = e.space_id || this.$parent.globalData.space_id;
     await this.$parent.login(this.space_id);
     await this.loadData();
 
@@ -287,7 +287,7 @@ export default class Posts extends wepy.page {
     if(category_id){
       options.$filter = `categories eq '${category_id}'`;
     }
-    const result = await this.$parent.query("post", options, this.space_id);
+    const result = await this.$parent.query("post", options);
     if(result.value){
       this.posts = this.posts.concat(result.value);
       this.current_skip = skip + result.value.length;
@@ -303,7 +303,7 @@ export default class Posts extends wepy.page {
       $select: 'name,sort_no,description,cover',
       $orderby:'sort_no'
     };
-    const result = await this.$parent.query("post_category", options, this.space_id);
+    const result = await this.$parent.query("post_category", options);
     if(result.value.length > 0){
       this.categories = _.union([{name:'全部'}],result.value)
       this.$apply();

@@ -173,7 +173,7 @@ export default class recordList extends wepy.mixin {
       throw new Error('缺少参数:object_name')
     }
 
-    this.space_id = e.space_id;
+    this.space_id = e.space_id || this.space_id || this.$parent.globalData.space_id;
     this.object_name = e.object_name || this.object_name;
     this.avatar_field = e.avatar_field;
     this.name_field = e.name_field || 'name';
@@ -248,7 +248,7 @@ export default class recordList extends wepy.mixin {
 
     if (this.allow_load) {
 
-      const result = await this.$parent.query(object_name, queryOptions, this.space_id);
+      const result = await this.$parent.query(object_name, queryOptions);
       if (result.value) {
         let records = [];
         for(let record of result.value){
