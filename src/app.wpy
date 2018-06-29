@@ -471,6 +471,7 @@ export default class VIP extends wepy.app {
   }
 
   // async cache(object_name, _id, data, reload) {
+    // console.log("""");
 
   //   const globalData = this.globalData
 
