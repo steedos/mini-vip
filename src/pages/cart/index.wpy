@@ -100,7 +100,7 @@
     align-content: center;
     align-items: center;
     width: 34rpx;
-    margin: 0 26rpx;
+    margin: 0 31.25rpx;
     .check-img {
       background: url(http://nos.netease.com/mailpub/hxm/yanxuan-wap/p/20150730/style/img/icon-normal/checkbox-0e09baa37e.png) no-repeat;
       background-size: 34rpx;
@@ -139,7 +139,7 @@
 		flex: 1;
     float: left;
     height:150rpx;
-    margin: 19.5rpx 26rpx 19.5rpx 0;
+    margin: 19.5rpx 31.25rpx 19.5rpx 0;
   }
 
   .cart-view .item .t{
@@ -299,7 +299,7 @@
       display: flex;
       box-sizing: content-box;
       height: 100%;
-      padding-left: 26rpx;
+      padding-left: 31.25rpx;
       align-items: center;
       align-content: center;
       .check-img {
@@ -369,7 +369,7 @@
                   <view class="check-img" data-item-id="{{goods._id}}"></view>
                 </view>
 								<view class="cart-goods">
-									<image class="img" src="{{util.formatImageUrl(goods.avatar, baseUrl)}}"></image>
+									<image class="img" src="{{util.formatImageUrl(goods.avatar, baseUrl)}}" mode="aspectFill"></image>
 									<view class="info">
 										<view class="t">
 											<text class="name">{{goods.name}}</text>

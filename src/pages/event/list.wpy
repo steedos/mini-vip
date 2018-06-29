@@ -186,13 +186,13 @@ export default class Events extends wepy.page {
       start = new Date(start.getTime() + 1 * 60 * 60 * 1000);
       start.setMinutes(0);
       start.setSeconds(0);
-      start = utilJs.formatTime(start, '-', true);
+      start = utilJs.formatTime(start);
       let values = {
         alarms: alarms,
         start: start
       };
       values = JSON.stringify(values);
-      console.log("createEvent=====values======", values);
+      console.log("createEvent=====values==1=2===", values);
       console.log("createEvent=====this.space_id======", this.space_id);
       let url = `/pages/record/create?&space_id=${this.space_id}&object_name=vip_event&values=${values}`;
       pageRouter.navigateTo({
