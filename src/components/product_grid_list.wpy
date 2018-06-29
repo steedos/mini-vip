@@ -8,10 +8,10 @@
         </view>
         <view class="goods">
           <view class="product_name" wx:if="{{showTitle}}">{{item.name}}</view>
+          <view class="sale_num">销量{{item.saleCount || 998}}件</view>
           <view class="product_info">
             <view class="price">￥{{item.default_price}}</view>
             <view class="cost_price" wx:if="{{item.compared_price}}">￥{{item.compared_price}}</view>
-            <view class="sale_num">销量{{item.saleCount || 998}}件</view>
           </view>
         </view>
       </navigator>
@@ -106,20 +106,18 @@ export default class ProductGridList extends wepy.component {
   .sale_num {
     color: #666666;
     font-size: 22rpx;
+    margin-top: 8rpx;
   }
   .goods {
     padding: 15rpx 12rpx;
   }
   .product_info {
-    padding-top: 20rpx;
+    margin-top: 8rpx;
     display: flex;
-    align-items: flex-end;
+    align-items: center;
   }
   .cost_price {
-    padding-left: 20rpx;
-  }
-  .sale_num {
-    padding-left: 20rpx;
+    padding-left: 16rpx;
   }
 }
 
