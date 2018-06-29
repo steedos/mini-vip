@@ -732,7 +732,8 @@
   }
 </style>
 <template>
-  <scroll-view class="container" scroll-y="true">
+  <view class="page__bd">
+  <!-- <view class="container" scroll-y="true"> -->
     <view wx:if="{{!openAttr}}">
       <swiper class="goodsimgs" indicator-dots="true" autoplay="true" interval="3000" duration="1000">
         <repeat for="{{product.covers}}" key="index" index="index" item="img">
@@ -881,7 +882,7 @@
       <view class="c" @tap="buyNow">立即购买</view>
       <view class="r" @tap="addProduct">加入购物车</view>
     </view>
-  </scroll-view>
+  </view>
 </template>
 
 <script>
