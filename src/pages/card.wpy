@@ -221,6 +221,7 @@ export default class Card extends wepy.page {
     console.log("result",result)
     this.avatar = result.avatar || '';
     this.cover = result.cover || '';
+    this.cardName = result.name || '';
     this.$apply();
   }
 
@@ -261,7 +262,9 @@ export default class Card extends wepy.page {
     if(e.card_id){
       await this.get
     }
-
+    if(e.category_id){
+      await this.getCategoryInfo(e.category_id);
+    }
     await this.$parent.login(this.space_id);
 
     const space = await this.$parent.get('spaces', this.space_id)
@@ -293,9 +296,10 @@ export default class Card extends wepy.page {
     const space_id = this.space_id
     const store_id = this.store_id
     const space_name = this.space_name
+    const category_id = this.category_id
     return {
       title: space_name,
-      path: `pages/card?space_id=${space_id}&store_id=${store_id}`
+      path: `pages/card?space_id=${space_id}&store_id=${store_id}&category_id=${category_id}`
     };
   }
 
