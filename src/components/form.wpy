@@ -1159,6 +1159,10 @@
           url = `${url}&rows=${field.rows}`
         }
 
+        if(field.type === 'number' && field.scale > 0){
+          url = `${url}&scale=${field.scale}`
+        }
+
         wepy.navigateTo({url: url});
       },
       phoneCall(number) {
