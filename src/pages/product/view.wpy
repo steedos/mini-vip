@@ -52,7 +52,6 @@
 
   .goods-info{
     width: 750rpx;
-    height: 306rpx;
     overflow: hidden;
     background: #fff;
   }
@@ -60,7 +59,6 @@
   .goods-info .c{
     display: block;
     width: 718.75rpx;
-    height: 100%;
     margin-left: 31.25rpx;
     padding: 38rpx 31.25rpx 38rpx 0;
     border-bottom: 1px solid #f4f4f4;
@@ -73,15 +71,20 @@
   }
 
   .goods-info .name{
-    height: 41rpx;
     margin-bottom: 5.208rpx;
     font-size: 41rpx;
     line-height: 41rpx;
+    max-height:34px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    display: -webkit-box!important;
+    -webkit-line-clamp:2;
+    -webkit-box-orient:vertical;
   }
 
   .goods-info .desc{
-    height: 43rpx;
-    margin-bottom: 41rpx;
+    margin-top: 5px;
+    margin-bottom: 10px;
     font-size: 24rpx;
     line-height: 36rpx;
     color: #999;
@@ -89,7 +92,6 @@
 
 
   .goods-info .price{
-    height: 35rpx;
     font-size: 35rpx;
     line-height: 35rpx;
     color: #b4282d;
