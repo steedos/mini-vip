@@ -90,6 +90,7 @@
     display: flex;
     width: 100%;
     overflow: hidden;
+    align-items: stretch;
     .check-img {
       height: 34rpx;
       width: 34rpx;
@@ -100,7 +101,8 @@
     align-content: center;
     align-items: center;
     width: 34rpx;
-    margin: 0 31.25rpx;
+    padding: 0 31.25rpx;
+    box-sizing: content-box;
     .check-img {
       background: url(http://nos.netease.com/mailpub/hxm/yanxuan-wap/p/20150730/style/img/icon-normal/checkbox-0e09baa37e.png) no-repeat;
       background-size: 34rpx;
@@ -129,7 +131,7 @@
 
   .cart-view .item .img{
     float: left;
-    height:150rpx;
+    height: 150rpx;
     width: 150rpx;
     background: #f4f4f4;
     margin: 19.5rpx 18rpx 19.5rpx 0;
@@ -138,7 +140,7 @@
   .cart-view .item .info{
 		flex: 1;
     float: left;
-    height:150rpx;
+    height: auto;
     margin: 19.5rpx 31.25rpx 19.5rpx 0;
   }
 
@@ -168,6 +170,7 @@
     font-size: 22rpx;
     color: #666;
     overflow: hidden;
+    word-break: break-all;
   }
 
   .cart-view .item .b{
@@ -178,12 +181,12 @@
 
   .cart-view .item .price{
 		flex: 1;
-		line-height: 52rpx;
+		line-height: 57rpx;
   }
 	
   .cart-view .item .selnum{
     width: 235rpx;
-    height: 52rpx;
+    height: 57rpx;
     // border: 1rpx solid #686868;
 		display: flex;
 		
@@ -198,8 +201,8 @@
     width: 70rpx;
     height: 100%;
 		text-align: center;
-		height: 50rpx;
-		line-height: 50rpx;
+		height: 55rpx;
+		line-height: 55rpx;
 		border: 1rpx solid #686868;
 
 		&.disabled {
@@ -212,8 +215,9 @@
     flex: 1;
     height: 100%;
 		text-align: center;
-		height: 50rpx;
-    line-height: 50rpx;
+    height: 55rpx;
+    min-height: 55rpx;
+    line-height: 55rpx;
     border-top: 1rpx solid #686868;
     border-bottom: 1rpx solid #686868;
     float: left;
@@ -223,8 +227,8 @@
     width: 80rpx;
     height: 100%;
 		text-align: center;
-		height: 50rpx;
-		line-height: 50rpx;
+		height: 55rpx;
+		line-height: 55rpx;
 		border: 1rpx solid #686868;
   }
 
@@ -365,7 +369,7 @@
           <view class="goods">
 						<repeat for="{{cartList}}" key="index" index="index" item="goods">
 							<view class="item" @tap="viewDetail" data-item-id="{{goods._id}}">
-								<view class="checkbox {{goods.checked ? 'checked' : ''}}" @tap.stop="checkedItem" data-item-id="{{goods._id}}">
+                <view class="checkbox {{goods.checked ? 'checked' : ''}}" @tap.stop="checkedItem" data-item-id="{{goods._id}}">
                   <view class="check-img" data-item-id="{{goods._id}}"></view>
                 </view>
 								<view class="cart-goods">
