@@ -361,7 +361,7 @@ export default class VIP extends wepy.app {
       console.log(error)
     }
 
-    needs_login = true;
+    // needs_login = true;
 
     if (needs_login) {
 
