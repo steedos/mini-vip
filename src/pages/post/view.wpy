@@ -213,14 +213,14 @@ video{
       <block wx:if="{{post.video}}">
         <video src="{{post.video_url}}" objectFit="contain" class="cover"  direction= '90' custom-cache="{{false}}"></video>
       </block>
-      <block wx:elif="{{post.images && post.images.length == 1}}">
-        <image src="{{util.formatImageUrl(post.images[0], baseUrl)}}" mode="aspectFill" @tap="previewImage({{item}})" class="cover"/>
+      <block wx:elif="{{withoutMarkdownImages && withoutMarkdownImages.length == 1}}">
+        <image src="{{util.formatImageUrl(withoutMarkdownImages[0], baseUrl)}}" mode="aspectFill" @tap="previewImage({{item}})" class="cover"/>
       </block>
       <view class="weui-article body_color">
         <view class="weui-article__section article-section">
-          <view class="weui-article__c" wx:if="{{post.images && post.images.length>1 && !post.video}}">
+          <view class="weui-article__c" wx:if="{{withoutMarkdownImages && withoutMarkdownImages.length>1 && !post.video}}">
             <view class="flex-images-box">
-              <repeat for="{{post.images}}" key="index" index="index" item="item">
+              <repeat for="{{withoutMarkdownImages}}" key="index" index="index" item="item">
                 <image src="{{util.formatImageUrl(item, baseUrl)}}" mode="aspectFill" @tap="previewImage({{item}})" class="flex-image {{(index + 1)%3 > 0 ? 'flex-image-item' : 'flex-image-last'}}"/>
               </repeat>
             </view>
@@ -416,6 +416,33 @@ export default class PostView extends wepy.page {
     value: '',
     post_comments: [],
     wemark: {}
+  };
+
+  computed = {
+    withoutMarkdownImages () {
+      // 从this.post.images中排除this.post.description的markdown语法中已有的图片
+      if(!this.post){
+        return []
+      }
+      let md = this.post.description;
+      if(md && md.length){
+        let mdImages = md.match(/\!\[.*?\]\((.+?)\)/gm);//找出所有格式为![...](...)的图片字符串
+        if(mdImages && mdImages.length){
+          let strMdImages = mdImages.join(",");
+          console.log("withoutMarkdownImages============================", strMdImages);
+          return this.post.images.filter((n)=>{
+            let tempReg = new RegExp(`\(.*?${n}.*?\)`);//匹配图片markdown字符串中的括号里面是否包含字符n
+            return !tempReg.test(strMdImages);
+          })
+        }
+        else{
+          return this.post.images;
+        }
+      }
+      else{
+        return this.post.images;
+      }
+    }
   };
 
   wxs = {
