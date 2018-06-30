@@ -344,11 +344,6 @@ export default class VIP extends wepy.app {
       globalData.user = {}
     }
 
-    // if (space_id && space_id != globalData.space_id) {
-    //   globalData.space_id = space_id
-    //   needs_login = true
-    // }
-
     if (!globalData.user._id || !globalData.user.auth_token) {
       needs_login = true
     }
@@ -365,8 +360,6 @@ export default class VIP extends wepy.app {
     } catch (error) {
       console.log(error)
     }
-
-    needs_login = true
 
     if (needs_login) {
 
