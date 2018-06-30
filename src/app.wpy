@@ -604,7 +604,7 @@ export default class VIP extends wepy.app {
     if(!object){
       throw new Error('未在globalData中找到对象：' + object_name);
     }
-    return object.modifyAllRecords || (object.allowDelete && owner === this.globalData.user._id);
+    return (object.allowDelete && object.modifyAllRecords) || (object.allowDelete && owner === this.globalData.user._id);
   }
 }
 </script>
