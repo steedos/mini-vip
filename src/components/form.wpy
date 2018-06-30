@@ -275,7 +275,7 @@
                       <block wx:if="{{item.is_wide}}">
                         <view class="weui-cell__bd">
                           <block wx:if="{{!(item.readonly || !_record_allowEdit || args.action === 'read')}}">
-                            <textarea class="weui-textarea" name="{{item.name}}" data-id="{{item.name}}" placeholder="{{item.label}}" value="{{util.transformFieldValue(item, values[item.name])}}" auto-height="true" bindinput="textChange" maxlength="-1"/>
+                            <textarea style="min-height: {{(item.rows || 2) * 1.1}}em" class="weui-textarea" name="{{item.name}}" data-id="{{item.name}}" placeholder="{{item.label}}" value="{{util.transformFieldValue(item, values[item.name])}}" auto-height="true" bindinput="textChange" maxlength="-1"/>
                           </block>
                           <block wx:else>
                             <view class="weui-cell__ft wide-cell">{{util.transformFieldValue(item, values[item.name]) || item.label}}</view>
@@ -558,7 +558,7 @@
                 }
               }else if(field.type === 'lookup' || field.type === 'master_detail'){
                 if(field.multiple){
-                  let _ids = _.pluck(fv, '_id')                 
+                  let _ids = _.pluck(fv, '_id')
                   _.forEach(field.options, (option) => {
                     if (_ids.includes(option.value)) {
                       option.checked = true
@@ -1153,6 +1153,10 @@
         url = `${url}?key=${field.name}&title=${field.label}&value=${value}`;
         if(field.multiple){
           url = `${url}&multiple=${field.multiple}`
+        }
+
+        if(field.type === 'textarea' && field.rows){
+          url = `${url}&rows=${field.rows}`
         }
 
         wepy.navigateTo({url: url});
