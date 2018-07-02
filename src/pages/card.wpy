@@ -235,6 +235,25 @@ export default class Card extends wepy.page {
     }
     if(e.category_id){
       await this.getCategoryInfo(e.category_id);
+      const query_options = {
+        $filter: `owner eq '${this.$parent.globalData.user._id}' and card_name eq '${e.category_id}'`,
+        $expand: 'card_name($select=name,_id)',
+        $count: true,
+        $select: 'space,grade,is_actived,balance,points,card_number,card_name,store,owner'
+      };
+      const result = await this.$parent.query('vip_card', query_options, this.space_id);
+      if(result.value[0]){
+        if(result.value[0].is_actived){
+          this.cardId = result.value[0]._id;
+          this.cardName = result.value[0].card_name.name;
+          this.cardType = result.value[0].grade;
+          this.isActivated = result.value[0].is_actived;
+          this.cardPoints = result.value[0].points;
+          this.cardBalance = result.value[0].balance.toFixed(2);
+          this.cardNumber = result.value[0].card_number;
+          this.$apply();
+        }
+      }
     }
     if (this.$parent.globalData.userInfo) {
       this.isAuthorize = true;
