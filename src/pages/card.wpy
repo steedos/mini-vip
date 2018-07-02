@@ -65,7 +65,7 @@
         </view>
       </block>
       <block wx:else>
-        <button wx:if="{{isAuthorize}}" class="active-card" plain="true" @tap="toOpenCard">激活会员卡</button>
+        <button wx:if="{{isAuthorize && !category_id}}" class="active-card" plain="true" @tap="toOpenCard">激活会员卡</button>
         <button wx:else class="active-card" plain="true" open-type="getUserInfo" bindgetuserinfo="userInfo">激活会员卡</button>
       </block>
     </view>
@@ -198,7 +198,6 @@ export default class Card extends wepy.page {
       $count: true,
       $select: 'space,grade,is_actived,balance,points,card_number,card_name,store'
     };
-
     const result = await self.$parent.get('vip_card', card_id, this.space_id, query_options);
 
     console.log('getCardInfo..........', result);
@@ -221,11 +220,11 @@ export default class Card extends wepy.page {
     this.avatar = result.avatar || '';
     this.cover = result.cover || '';
     this.cardName = result.name || '';
+    this.category_id = category_id;
     this.$apply();
   }
 
   async onLoad(e) {
-    console.log("card================onLoad=====e=====", e);
     wx.showLoading({
       title: '加载中',
       mask: true
@@ -289,9 +288,10 @@ export default class Card extends wepy.page {
   onShareAppMessage(res) {
     const space_id = this.space_id
     const space_name = this.space_name
+    const category_id = this.category_id
     return {
       title: space_name,
-      path: `pages/card?space_id=${space_id}&store_id=${store_id}&category_id=${category_id}`
+      path: `pages/card?space_id=${space_id}&store_id=${space_id}&category_id=${category_id}`
     };
   }
 
@@ -321,7 +321,7 @@ export default class Card extends wepy.page {
         this.isAuthorize = true;
         this.$apply();
         wx.navigateTo({
-          url: `card_activate?space_id=${this.space_id}`
+          url: `card_activate?space_id=${this.space_id}&category_id=${this.category_id}`
         });
       } else {
         return;

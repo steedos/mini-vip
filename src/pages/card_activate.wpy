@@ -179,7 +179,7 @@ export default class cardActivate extends wepy.page {
       await this.$parent.update('vip_card', e.card_id, data, this.space_id);
     } else {
       const data = {
-        $filter: `user eq '${this.$parent.globalData.user._id}'`,
+        $filter: `owner eq '${this.$parent.globalData.user._id}'`,
         $expand: 'owner($select=name)',
         $count: true,
         $select: 'is_actived,name'
