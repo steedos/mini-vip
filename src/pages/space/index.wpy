@@ -565,7 +565,7 @@ export default class Posts extends wepy.page {
     }else{
       this.enabled_objects = [
         objects_list.post, objects_list.vip_event, objects_list.vip_product,
-        objects_list.vip_card, objects_list.vip_store, objects_list.support
+        objects_list.vip_card, objects_list.vip_store, objects_list.support,objects_list.wifi
       ]
       this.is_default_menu = true
     }
