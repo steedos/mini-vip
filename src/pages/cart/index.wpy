@@ -368,7 +368,7 @@
         <view class="group-item">
           <view class="goods">
 						<repeat for="{{cartList}}" key="index" index="index" item="goods">
-							<view class="item" @tap="viewDetail" data-item-id="{{goods._id}}">
+							<view class="item" @tap="viewDetail" data-item-id="{{goods._id}}" data-item-space="{{goods.space}}">
                 <view class="checkbox {{goods.checked ? 'checked' : ''}}" @tap.stop="checkedItem" data-item-id="{{goods._id}}">
                   <view class="check-img" data-item-id="{{goods._id}}"></view>
                 </view>
@@ -384,7 +384,7 @@
 											<text class="price">￥{{goods.default_price}}</text>
 											<view class="selnum">
 												<view class="cut {{goods.count > 1 ? 'enabled' : 'disabled'}}" @tap.stop="cutNumber" data-item-id="{{goods._id}}">-</view>
-												<input value="{{goods.count}}" class="number" data-item-id="{{goods._id}}" type="number" bindblur="updateNumber"/>
+												<input value="{{goods.count}}" class="number" data-target="input" data-item-id="{{goods._id}}" type="number" bindblur="updateNumber"/>
 												<view class="add" @tap.stop="addNumber" data-item-id="{{goods._id}}">+</view>
 											</view>
 										</view>
@@ -469,7 +469,7 @@
 			for (let p of products) {
 				const options = {
 					$filter: `_id eq '${p._id}'`,
-					$select: 'name,default_price,compared_price,description,covers,images,avatar,categories,tags,vendor,status'
+					$select: 'name,default_price,compared_price,description,covers,images,avatar,categories,tags,vendor,status,space'
 				};
 				let product_info = await this.$parent.query('vip_product', options, 'guest');
 				if (product_info && product_info.value && product_info.value[0]) {
@@ -516,8 +516,8 @@
       }
     }
     methods = {
-      checkedItem(e) {
-        const itemId = e.target.dataset.itemId;
+      checkedItem(event) {
+        const itemId = event.target.dataset.itemId;
         store.dispatch({type: 'CHECK_PRODUCT', payload: itemId});
       },
       checkedAll() {
@@ -543,10 +543,15 @@
         })
       },
       viewDetail(event) {
+        console.log('[viewDetail]', event)
         const itemId = event.currentTarget.dataset.itemId;
-        wepy.navigateTo({
-          url: `../product/view?record_id=${itemId}`
-        })
+        const spaceId = event.currentTarget.dataset.itemSpace;
+        const target = event.target.dataset.target;
+        if (!target) {
+          wepy.navigateTo({
+            url: `../product/view?record_id=${itemId}&space_id=${spaceId}`
+          })
+        }
       }
     }
   }
