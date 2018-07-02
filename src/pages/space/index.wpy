@@ -306,6 +306,7 @@ export default class Posts extends wepy.page {
     this.is_skip_allowed = true;
     this.posts = [];
     this.current_skip = 0;
+    await this.loadCardInfo();
     await this.loadStoreInfo();
     await this.loadPostList();
   }

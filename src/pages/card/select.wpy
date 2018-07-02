@@ -192,6 +192,18 @@ export default class CardSelect extends wepy.page {
     return this.$parent.query('vip_category', data, space_id);
   }
 
+  onShow(){
+    if(this.card){
+      wepy.redirectTo({url: `/pages/card?card_id=${this.card.card_id}&space_id=${this.card.space_id}`})
+    }
+  }
+
+  toCard(card_id, space_id){
+    this.card = {card_id: card_id, space_id: space_id}
+  }
+
+
+
 
   methods = {
     toApplyCard(category_id, category_name, price, avatar, cover) {
