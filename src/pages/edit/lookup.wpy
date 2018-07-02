@@ -130,7 +130,7 @@
 
       const field = this.getObjectField(e.key);
 
-      const fieldValue = this.getObjectFieldValue(e.key);
+      const fieldValue = this.getObjectFieldValue(e.key) || {};
 
       this.multiple = field.multiple || false;
 
@@ -146,7 +146,7 @@
             rto = fieldValue["reference_to.o"]
           }
 
-          if(fieldValue && rto){
+          if(rto){
             this.objects.forEach((o, i)=>{
               if(o.value === rto){
                 this.objectCode = o.value;
