@@ -286,9 +286,16 @@ export default class SpaceRegister extends wepy.page {
           space_name: this.space_name
         })
         .then(res => {
-          wx.navigateTo({
-            url: './list'
-          });
+
+          const pages = getCurrentPages();
+          const prevPage = pages[pages.length - 2];
+
+          if (prevPage.loadSpaces) {
+            prevPage.loadSpaces()
+          }
+          wepy.navigateBack({
+            delta: 1
+          })
         });
     }
   };
