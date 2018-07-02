@@ -558,6 +558,37 @@ export default class VIP extends wepy.app {
     }
   }
 
+  async getObjects(object_names, space_id){
+    if(!space_id){
+      throw new Error('缺少参数space_id')
+    }
+
+    let objects = [];
+
+    object_names = _.clone(object_names)
+
+    object_names.forEach((object_name, index)=>{
+      const o = this.globalData.objects[object_name + space_id];
+      if(o){
+        objects.push(o)
+        delete object_names[index]
+      }
+    });
+
+    const lastObjectNames =  _.compact(object_names);
+
+    if(lastObjectNames.length > 0){
+      const result = await this.get('objects', lastObjectNames.join(','), space_id);
+      for(const o in result){
+        const object = result[o];
+        this.globalData.objects[object.name + space_id] = object;
+        objects.push(object)
+      }
+    }
+    console.log('objects', objects);
+    return objects
+  }
+
   async getObject(object_name, space_id){
     space_id = space_id ? space_id : 'guest';
     const key = object_name + space_id;

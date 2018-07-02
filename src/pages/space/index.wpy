@@ -90,15 +90,15 @@ page {
         &::before {
           content: '';
           position: absolute;
-          top: 1px; 
+          top: 1px;
           bottom: 1px;
-          left: 1px; 
+          left: 1px;
           right: 1px;
           background: rgba(255,255,255,0.8);
           z-index: -1 ;
           border-radius: 0.25rem;
         }
-        
+
         .wrapper {
           position: relative;
           top: -50px;
@@ -153,7 +153,7 @@ page {
       background: #fff;
     }
 
-    
+
     .page__bd{
       .need_read{
         display:block;
@@ -224,7 +224,7 @@ page {
                   <view class="weui-grid__label">{{object.label}}</view>
                 </navigator>
               </block>
-            </block>  
+            </block>
             <block wx:else>
               <block wx:if="{{object.name === 'support'}}">
                 <button open-type="contact" plain="true" class="weui-grid support" hover-class="weui-grid_active" wx:if="{{object}}">
@@ -412,7 +412,7 @@ export default class Posts extends wepy.page {
             this.card.avatar = vip_category.avatar;
       }
     }
-    
+
   }
 
   async getStarCount() {
@@ -543,10 +543,10 @@ export default class Posts extends wepy.page {
       });
     }else{
       this.enabled_objects = [
-        objects_list.post, objects_list.vip_event, objects_list.vip_product, 
+        objects_list.post, objects_list.vip_event, objects_list.vip_product,
         objects_list.vip_card, objects_list.vip_store, objects_list.support
       ]
-      this.is_default_menu = true 
+      this.is_default_menu = true
     }
     console.log(this.is_default_menu)
     this.$apply()
@@ -557,9 +557,9 @@ export default class Posts extends wepy.page {
     //   })
     // } else {
     //   this.enabled_objects = [
-    //     objects_list.post, objects_list.vip_event, objects_list.vip_product, 
+    //     objects_list.post, objects_list.vip_event, objects_list.vip_product,
     //     objects_list.vip_card, objects_list.vip_store, objects_list.support
-    //   ] 
+    //   ]
     // }
 
     if (!result.star_count) {

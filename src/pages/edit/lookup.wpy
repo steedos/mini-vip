@@ -2,6 +2,16 @@
   <view class="page-edit-text">
     <view class="page__bd">
       <view class="weui-cells">
+        <view class="weui-cell weui-cell_select">
+          <view class="weui-cell__bd">
+            <picker bindchange="bindObjectCodeChange" value="{{objectCodeIndex}}" range="{{objects}}" range-key="label">
+              <view class="weui-select">{{objects[objectCodeIndex].label}}</view>
+            </picker>
+          </view>
+        </view>
+      </view>
+
+      <view class="weui-cells">
         <checkbox-group bindchange="selectChange" data-id="{{key}}" wx:if="{{multiple}}">
           <repeat for="{{options}}" key="index" index="index" item="option">
             <label class="weui-cell weui-check__label">
@@ -39,10 +49,27 @@
     };
 
     data = {
+      space_id: '',
       key: '',
+      objects: [],
       options: [],
-      multiple: false
+      multiple: false,
+      objectCode: '',
+      objectCodeIndex: 0
     };
+
+    async getObjects(object_names){
+      wepy.showLoading({
+        title: '正在保存',
+        mask: true
+      });
+      let objects = [];
+      (await this.$parent.getObjects(object_names, this.space_id)).forEach((object)=>{
+        objects.push({label: object.label || object.name, value: object.name})
+      });
+      wepy.hideLoading();
+      return objects;
+    }
 
     setParentValue(key, value){
       const pages = getCurrentPages();
@@ -56,18 +83,94 @@
       return prevPage.data.$autoform$schema.fields[key]
     }
 
-    onLoad(e) {
+    getObjectFieldValue(key){
+      const pages = getCurrentPages();
+      const prevPage = pages[pages.length - 2];
+      return prevPage.data.$autoform$values[key]
+    }
+
+    async getReferenceTo(reference_to) {
+
+      wepy.showLoading({
+        title: '正在保存',
+        mask: true
+      });
+
+      if(_.isArray(reference_to)){
+        return []
+      }
+
+      let query = {
+        $select: 'name'
+      };
+      if (reference_to === 'users' || reference_to === 'space_users') {
+        reference_to = 'space_users'
+        query.$select = 'name,user'
+      }
+
+      const data = await this.$parent.query(reference_to, query, this.space_id);
+      let options = []
+      data.value.forEach(function (record) {
+        if (reference_to === 'space_users') {
+          options.push({label: record.name, value: record.user});
+        } else {
+          options.push({label: record.name, value: record._id});
+        }
+      });
+      wepy.hideLoading();
+      return options
+    }
+
+    async onLoad(e) {
       if (!e) {
         e = {}
       }
 
-      this.key = e.key
+      this.key = e.key;
 
       const field = this.getObjectField(e.key);
 
+      const fieldValue = this.getObjectFieldValue(e.key);
+
       this.multiple = field.multiple || false;
 
-      this.options = field.options;
+      this.space_id = e.space_id
+
+      if(_.isArray(field.reference_to)){
+        this.objects = await this.getObjects(field.reference_to);
+        if(this.objects.length > 0){
+
+          let rto = fieldValue["o"]
+
+          if(fieldValue["reference_to.o"]){
+            rto = fieldValue["reference_to.o"]
+          }
+
+          if(fieldValue && rto){
+            this.objects.forEach((o, i)=>{
+              if(o.value === rto){
+                this.objectCode = o.value;
+                this.objectCodeIndex = i;
+              }
+            })
+          }else{
+            this.objectCode = this.objects[0].value
+          }
+        }
+        this.options = await this.getReferenceTo(this.objectCode);
+
+        if(fieldValue && fieldValue['_id']){
+          this.options.forEach((o)=>{
+            if(o.value === fieldValue['_id']){
+              o.checked = true
+            }
+          })
+        }
+        this.$apply()
+      }else{
+        this.options = field.options;
+      }
+
       if (e.title) {
         wx.setNavigationBarTitle({title: '选择' + e.title});
       }
@@ -75,7 +178,7 @@
 
     methods = {
       selectChange: function (e) {
-        const values = e.detail.value, key = e.target.dataset.id;
+        const values = e.detail.value, key = this.key;
         let checkboxItems = this.options;
         for (let i = 0, lenI = checkboxItems.length; i < lenI; ++i) {
           checkboxItems[i].checked = false;
@@ -95,13 +198,28 @@
 
         this.setParentValue(key, field_values)
       },
-      radioChange: function (e) {
-        const radioItems = this.options, key = e.target.dataset.id;
+      radioChange: async function (e) {
+        const radioItems = this.options, key = this.key;
         for (let i = 0, len = radioItems.length; i < len; ++i) {
           radioItems[i].checked = radioItems[i].value == e.detail.value;
         }
         const checkedItem  = _.find(radioItems, function(item){ return item.checked});
-        this.setParentValue(key, {_id: checkedItem.value, name: checkedItem.label})
+
+        let value = {_id: checkedItem.value, name: checkedItem.label}
+
+        if(this.objects && _.isArray(this.objects)){
+          value.object_name = this.objectCode
+          value.object_label = (await this.$parent.getObject(value.object_name, this.space_id)).label
+        }
+
+        this.setParentValue(key, value)
+      },
+      bindObjectCodeChange: async function (e){
+        this.objectCodeIndex = e.detail.value;
+        this.objectCode = this.objects[this.objectCodeIndex].value;
+        this.options = await this.getReferenceTo(this.objectCode);
+        this.setParentValue(this.key, {object_name: this.objectCode, object_label: (await this.$parent.getObject(this.objectCode, this.space_id)).label});
+        this.$apply();
       }
     }
   }
