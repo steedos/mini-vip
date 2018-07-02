@@ -62,6 +62,9 @@
   .goods-info .c text{
     display: block;
     width: 687.5rpx;
+  }
+
+  .goods-info .c .name{
     text-align: center;
   }
 

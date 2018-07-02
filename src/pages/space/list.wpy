@@ -76,33 +76,13 @@
       });
       const options = {
         $count: true,
-        $select: 'name',
+        $select: 'name,avatar',
         $filter: `(admins eq '${this.$parent.globalData.user._id}')`
       };
-
-      const result = await this.$parent.query('spaces', options, 'common')
-      this.spaces = []
-      let store_filter = []
+      const result = await this.$parent.query('spaces', options, 'common');
       if(result && result.value){
-        for (let space of result.value) {
-          store_filter.push(`(_id eq '${space._id}')`);
-          this.spaces.push(space)
-        }
+        this.spaces = result.value;
       }
-
-      //获取商户avatar
-      const res = await this.$parent.query('vip_store', {$count: true, $select: 'avatar', $filter: `(${store_filter.join(' or ')})`}, 'common');
-      res.value.forEach((v)=>{
-        if(v.avatar){
-          let s = _.find(this.spaces, (space)=>{
-            return space._id = v._id
-          })
-
-          if(s){
-            s.avatar = v.avatar
-          }
-        }
-      });
 
       this.is_loaded = true;
       this.$apply();

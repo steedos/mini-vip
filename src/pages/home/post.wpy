@@ -1,7 +1,3 @@
-<style lang="less">
-
-</style>
-
 <template>
 	<view class="page" wx:if="{{is_loaded}}">
     <view class="page__bd">

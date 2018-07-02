@@ -353,9 +353,18 @@ export default class cardActivate extends wepy.page {
         phoneNumber: this.phoneNumber
       };
       req.put(url, data).then(res => {
-        wx.redirectTo({
-          url: './card?space_id=' + this.space_id + '&card_id=' + this.card_id
-        });
+        const pages = getCurrentPages();
+        const prevPage = pages[pages.length - 2];
+
+        if (prevPage.toCard) {
+          prevPage.toCard(this.card_id, this.space_id)
+        }
+        wepy.navigateBack({
+          delta: 1
+        })
+//        wx.redirectTo({
+//          url: './card?space_id=' + this.space_id + '&card_id=' + this.card_id
+//        });
       });
     }
   };
