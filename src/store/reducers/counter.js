@@ -1,5 +1,6 @@
 import { handleActions } from 'redux-actions'
-import { ADD_PRODUCT, DECREASE_PRODUCT, UPDATE_PRODUCT_INFO, CART_PRODUCT_COUNT, CHECK_PRODUCT, CHECK_ALL_PRODUCT, UPDATE_PRODUCT_COUNT } from '../types/counter'
+import { ADD_PRODUCT, DECREASE_PRODUCT, UPDATE_PRODUCT_INFO, CART_PRODUCT_COUNT, CHECK_PRODUCT, CHECK_ALL_PRODUCT, UPDATE_PRODUCT_COUNT, DELETE_PRODUCT } from '../types/counter'
+import _ from 'underscore'
 
 const cartList = wx.getStorageSync('cartList') || []
 
@@ -42,6 +43,13 @@ export default handleActions({
       state.cartList.push(action.payload);
     }
     return {...state}
+  },
+  [DELETE_PRODUCT] (state, action) {
+    const product_id = action.payload;
+    const cartList = _.filter(state.cartList, function(p){
+      return p._id != product_id;
+    })
+    return {...state, cartList}
   },
   [DECREASE_PRODUCT] (state, action) {
     const product_id = action.payload;

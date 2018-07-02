@@ -89,8 +89,8 @@
   .cart-view .item{
     display: flex;
     width: 100%;
-    overflow: hidden;
     align-items: stretch;
+    position: relative;
     .check-img {
       height: 34rpx;
       width: 34rpx;
@@ -113,6 +113,23 @@
     .check-img {
       background: url(http://nos.netease.com/mailpub/hxm/yanxuan-wap/p/20150730/style/img/icon-normal/checkbox-checked-822e54472a.png) no-repeat;
       background-size: 34rpx;
+    }
+  }
+
+  .cart-view .item {
+    transition: all 0.2s linear;
+    .delete {
+      position: absolute;
+      width: 60px;
+      background: #b4282d;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content:center;
+      height: 100%;
+      right: 0;
+      top: 0;
+      transform: translateX(60px);
     }
   }
 
@@ -368,7 +385,7 @@
         <view class="group-item">
           <view class="goods">
 						<repeat for="{{cartList}}" key="index" index="index" item="goods">
-							<view class="item" @tap="viewDetail" data-item-id="{{goods._id}}" data-item-space="{{goods.space}}">
+							<view class="item" @tap="viewDetail" style="transform: translateX({{styleList[goods._id].offsetX}}px)" @touchstart="touchstart" @touchmove="touchmove" @touchend="touchend" data-item-id="{{goods._id}}" data-item-space="{{goods.space}}">
                 <view class="checkbox {{goods.checked ? 'checked' : ''}}" @tap.stop="checkedItem" data-item-id="{{goods._id}}">
                   <view class="check-img" data-item-id="{{goods._id}}"></view>
                 </view>
@@ -390,6 +407,9 @@
 										</view>
 									</view>
 								</view>
+                <view class="delete" @tap.stop="delete" data-item-id="{{goods._id}}">
+                  删除
+                </view>
 							</view>
 						</repeat>
           </view>
@@ -433,7 +453,7 @@
     data = {
 			baseUrl: baseUrl,
 			is_loaded: true,
-      cartGoods: [],
+      styleList: {},
       cartTotal: {
         'goodsCount': 0,
         'goodsAmount': 0.00,
@@ -455,6 +475,7 @@
 			// cartList是数组，需要clone，避免修改
 			const products = _.clone(this.cartList);
 			const newList = await this.getProductInfo(products);
+      this.styleList = this.initStyleList(newList);
 			store.dispatch({type: 'UPDATE_PRODUCT_INFO', payload: newList});
 			this.is_loaded = false;
 			this.$apply()
@@ -464,6 +485,14 @@
 		wxs = {
 			util: util
 		}
+
+    initStyleList(cartList) {
+      let styleList = {};
+      for (let p of cartList) {
+        styleList[p._id] = {positionX: 0, offsetX: 0}
+      }
+      return styleList
+    }
 
 		async getProductInfo (products) {
 			for (let p of products) {
@@ -543,7 +572,6 @@
         })
       },
       viewDetail(event) {
-        console.log('[viewDetail]', event)
         const itemId = event.currentTarget.dataset.itemId;
         const spaceId = event.currentTarget.dataset.itemSpace;
         const target = event.target.dataset.target;
@@ -552,6 +580,47 @@
             url: `../product/view?record_id=${itemId}&space_id=${spaceId}`
           })
         }
+      },
+      touchstart(event) {
+        const itemId = event.currentTarget.dataset.itemId;
+        const positionX = event.touches[0].pageX;
+        this.styleList[itemId].positionX = positionX;
+        this.$apply();
+      },
+      touchmove(event) {
+        const itemId = event.currentTarget.dataset.itemId;
+        const newPositionX = event.touches[0].pageX;
+        const oldPositionX = this.styleList[itemId].positionX;
+        const oldOffsetX = this.styleList[itemId].offsetX;
+        const offsetX = newPositionX - oldPositionX;
+
+        if (offsetX < 0) {
+          if (oldOffsetX < 0 && oldOffsetX < offsetX) {
+            this.styleList[itemId].offsetX = -60 + offsetX;
+          } else {
+            this.styleList[itemId].offsetX = offsetX;
+          }
+        } else if (offsetX > 0) {
+          this.styleList[itemId].offsetX = 10;
+        }
+        this.$apply();
+      },
+      touchend(event) {
+        const itemId = event.currentTarget.dataset.itemId;
+        let offsetX = this.styleList[itemId].offsetX
+        if ((-60 < offsetX && offsetX < -30) || offsetX < -60) {
+          offsetX = -60;
+        } else {
+          offsetX = 0;
+        }
+        this.styleList[itemId].positionX = 0;
+        this.styleList[itemId].offsetX = offsetX;
+        this.$apply();
+      },
+      delete(event) {
+        const itemId = event.currentTarget.dataset.itemId;
+        console.log('delete', itemId)
+        store.dispatch({type: 'DELETE_PRODUT', payload: itemId});
       }
     }
   }
