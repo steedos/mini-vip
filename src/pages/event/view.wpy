@@ -314,18 +314,6 @@ export default class EventView extends wepy.page {
   }
 
   async loadEvent(){
-    // const options = {
-    //   $filter: `_id eq '${e.space_id}'`,
-    //   $expand: 'space($select=name)',
-    //   $count: true,
-    //   $select: 'avatar,space'
-    // }
-    // const res = await this.$parent.query('vip_store', options, 'guest')
-
-    // if (res.value && res.value[0]) {
-    //   this.space_name = res.value[0].space.name
-    //   this.avatar = res.value[0].avatar
-    // }
     const query = {
       $filter: `_id eq '${this.event_id}'`,
       $expand: 'space($select=name,avatar),owner($select=profile,name)'
