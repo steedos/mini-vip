@@ -45,7 +45,7 @@ page{
 <template>
 <view class="page">
   <view class="page__hd">
-    <image class="header-image" mode="widthFix" src="{{baseMaterialUrl + 'select-header.png'}}"/>
+    <image class="header-image" mode="widthFix" src="{{baseMaterialUrl + 'select-header.png'}}" wx:if="{{baseMaterialUrl}}"/>
   </view>
   <view class="page__bd">
     <view class="card-list">
