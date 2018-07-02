@@ -523,22 +523,42 @@ export default class Posts extends wepy.page {
       this.enabled_objects = menu.value
       this.enabled_objects.forEach(object => {
         if(object.related_to.o == 'post_category'){
-          object['url'] = `../post/index?&category_id=${object.related_to.ids[0]}&space_id=${this.space_id}${this.is_space_admin ? '&editable=true' : ''}&title=${space.name}`
+          if(object.related_to.ids){
+            object['url'] = `../post/index?&category_id=${object.related_to.ids[0]}&space_id=${this.space_id}${this.is_space_admin ? '&editable=true' : ''}&title=${space.name}`
+          }else{
+            object['url'] = `../post/index?space_id=${this.space_id}${this.is_space_admin ? '&editable=true' : ''}&title=${space.name}`
+          }
         }
         if(object.related_to.o == 'post'){
-          object['url'] = `../post/view?post_id=${object.related_to.ids[0]}&space_id=${spaceId}`
+          if(object.related_to.ids){
+            object['url'] = `../post/view?post_id=${object.related_to.ids[0]}&space_id=${spaceId}`
+          }else{
+            object['url'] = `../post/index?space_id=${this.space_id}${this.is_space_admin ? '&editable=true' : ''}&title=${space.name}`
+          }         
         }
         if(object.related_to.o == 'vip_product_category'){
-          object['url'] = `../product/list?space_id=${this.space_id}`
+          if(object.related_to.ids) {
+            object['url'] = `../product/list?space_id=${this.space_id}`
+          }else{
+            object['url'] = `../product/list?space_id=${this.space_id}`
+          }
         }
         if(object.related_to.o == 'vip_product'){
-          object['url'] = `../product/view?record_id=${object.related_to.ids[0]}&space_id=${spaceId}`
+          if(object.related_to.ids){
+            object['url'] = `../product/view?record_id=${object.related_to.ids[0]}&space_id=${spaceId}`
+          }else{
+            object['url'] = `../product/list?space_id=${this.space_id}`
+          }
         }
         if(object.related_to.o == 'vip_store'){
           object['url'] = `../store?store=${this.space_id}`
         }
         if(object.related_to.o == 'vip_event'){
-          object['url'] = `../event/view?space_id=${this.space_id}&event_id=${object.related_to.ids[0]}`
+          if(object.related_to.ids){
+            object['url'] = `../event/view?space_id=${this.space_id}&event_id=${object.related_to.ids[0]}`
+          }else{
+            object['url'] = `../event/list?space_id=${this.space_id}`
+          }          
         }
       });
     }else{
