@@ -196,7 +196,7 @@ export default class Card extends wepy.page {
       $filter: `_id eq '${card_id}'`,
       $expand: 'card_name($select=name,_id)',
       $count: true,
-      $select: 'space,grade,is_actived,balance,points,card_number,card_name,store'
+      $select: 'space,grade,is_actived,balance,points,card_number,card_name,store,owner'
     };
     const result = await self.$parent.get('vip_card', card_id, this.space_id, query_options);
 
