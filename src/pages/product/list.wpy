@@ -1,5 +1,5 @@
 <style lang="less">
-  .product-list{
+.product-list {
     .image {
       display: block;
     }
@@ -13,19 +13,19 @@
       bottom: 0;
       height: 50px;
       width: 100%;
-      background-color: #F7F7FA;
+    background-color: #f7f7fa;
       justify-content: center;
       align-items: center;
 
       &::before {
-        content: " ";
+      content: ' ';
         position: absolute;
         left: 0;
         top: 0;
         right: 0;
         height: 1px;
-        border-top: 1px solid #C0BFC4;
-        color: #C0BFC4;
+      border-top: 1px solid #c0bfc4;
+      color: #c0bfc4;
         -webkit-transform-origin: 0 0;
         transform-origin: 0 0;
         -webkit-transform: scaleY(0.5);
@@ -33,59 +33,125 @@
       }
     }
 
-    .item-body{
+  .item-body {
       width: 55%;
     }
 
-    .description-field{
-      text-overflow:ellipsis;
-      width:100%;
-      overflow:hidden;
-      white-space:nowrap;
+  .description-field {
+    text-overflow: ellipsis;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
       font-size: 13px;
       color: #888888;
     }
 
-    .name-field{
-      text-overflow:ellipsis;
-      overflow:hidden;
-      white-space:nowrap;
+  .name-field {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
       flex: 1;
-      min-height:24px;
+    min-height: 24px;
     }
 
-    .date-field{
+  .date-field {
       font-size: 13px;
-      color:#888888;
+    color: #888888;
     }
 
-    .item-body-1{
-      display:flex;
-      align-items:center;
+  .item-body-1 {
+    display: flex;
+    align-items: center;
     }
 
-    .page__hd{
+  .page__hd {
       padding: 0px;
     }
 
-    .weui-search-bar{
+  .weui-search-bar {
       border-bottom: 0px;
     }
 
-    .avatar-field{
-      border-radius:0.15rem;
+  .avatar-field {
+    border-radius: 0.15rem;
       margin-right: 5px;
       vertical-align: middle;
-      width:40px;
+    width: 40px;
       height: 40px;
     }
 
+  .zan-tab {
+    scroll-view {
+      border: none;
+    }
+  }
+  .image {
+    display: block;
+    height: 180px;
+    width: 100%;
   }
 
+  .zan-tab__bd {
+    width: 750rpx;
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1rpx solid #e5e5e5;
+    background: #fff;
+  }
+
+  .zan-tab__bd--fixed {
+    position: fixed;
+    top: 0;
+    z-index: 2;
+  }
+
+  .zan-tab__item {
+    flex: 1;
+    display: inline-block;
+    padding: 0 10px;
+    line-height: 0;
+    box-sizing: border-box;
+    text-align: center;
+  }
+
+  .zan-tab__title {
+    display: inline-block;
+    max-width: 100%;
+    height: 44px;
+    line-height: 44px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    box-sizing: border-box;
+    word-break: keep-all;
+    font-size: 14px;
+    color: #666;
+  }
+
+  .zan-tab__item--selected .zan-tab__title {
+    color: #018cc6;
+    border-bottom: 2px solid#018cc6;
+  }
+
+  .zan-tab__bd--scroll {
+    // display: block;
+    white-space: nowrap;
+  }
+}
 </style>
 
 <template>
   <view class="page product-list" wx:if="{{is_loaded}}">
+    <view >
+      <scroll-view  scroll-x="true">
+        <view style="display: flex">
+        <repeat for="{{categories}}" key="index" index="index" item="item">
+          <view class="zan-tab__item {{item._id == seleted_id ? 'zan-tab__item--selected' : ''}}"   @tap="changeCategory({{item._id}})" style="flex:1; white-space: nowrap;padding: 0 10px; text-align:center" > 
+            <view class="zan-tab__title">{{ item.name }}</view>
+          </view>
+        </repeat>
+        </view>
+      </scroll-view>
+    </view>
     <view class="page__hd">
       <searchbar :placeholder.sync="searchPlaceholder" @confirm.user="searchRecords" />
     </view>
@@ -106,7 +172,7 @@ import { baseUrl } from '@/config';
 import util from '../../wxs/util.wxs';
 import searchbar from '../../components/searchbar';
 import recordList from '../../mixins/record_list';
-import productGridList from '@/components/product_grid_list'
+import productGridList from '@/components/product_grid_list';
 
 export default class ProductList extends wepy.page {
   config = {
@@ -116,12 +182,29 @@ export default class ProductList extends wepy.page {
 
   data = {
     pageSize: 10,
+    categories: [],
+    filter: '',
     object_name: 'vip_product',
-    fields: ['name', 'default_price', 'compared_price','avatar','vendor'],
-  }
+    fields: ['name', 'default_price', 'compared_price', 'avatar', 'vendor', 'categories'],
+    seleted_id: ''
+  };
 
-  onLoad() {
-    console.log('ProductList onLoad...');
+  async onLoad(e) {
+    await this.$parent.login();
+    const space_id = e.space_id;
+    const options = {
+      $orderby: 'sort_no',
+      $filter: `space eq '${space_id}'`,
+      $count: true,
+      $select: 'name,sort_no'
+    }
+    const result = await this.$parent.query('vip_product_category', options, 'guest');
+    if (result && result.value && result.value[0]) {
+      this.seleted_id = result.value[0]._id;
+      this.categories = result.value;
+      this.filter = `(categories eq '${this.seleted_id}')`;
+    }
+    this.$apply();
   }
 
   components = {
@@ -136,9 +219,20 @@ export default class ProductList extends wepy.page {
   mixins = [recordList];
 
   methods = {
-    searchRecords(searchValue, evt){
-      this.searchRecords(searchValue, evt)
+    searchRecords(searchValue, evt) {
+      this.searchRecords(searchValue, evt);
+    },
+    async changeCategory(category_id) {
+      this.seleted_id = category_id;
+      this.filter = `(categories eq '${category_id}')`;
+      await this.dataRefresh();
+      this.$apply();
+      // console.log('[changeCategory]', category_id)
     }
   };
+
+  computed = {
+    
+  }
 }
 </script>

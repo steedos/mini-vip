@@ -86,9 +86,6 @@ page {
     white-space: nowrap
 }
 
-.zan-tab__bd--scroll .zan-tab__item {
-    // min-width: 20px
-}
 .post-cover{
   position:relative;
   .post-category{
