@@ -83,7 +83,7 @@ export default class recordList extends wepy.mixin {
     return add_url
   }
 
-  getQueryFilter(e){
+  async getQueryFilter(e){
     return e.filter || this.filter
   }
 
@@ -184,7 +184,7 @@ export default class recordList extends wepy.mixin {
 
     this.add_url = this.getAddUrl(e);
 
-    this.filter = this.getQueryFilter(e);
+    this.filter = await this.getQueryFilter(e);
 
     const object = await this.$parent.getObject(this.object_name, e.space_id);
 

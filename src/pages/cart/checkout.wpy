@@ -10,7 +10,7 @@
 
   .address-item {
     padding: 32rpx 31.25rpx;
-    align-items: center;
+    align-items: stretch;
     display: flex;
   }
 
@@ -73,6 +73,7 @@
     position: relative;
     justify-content: center;
     align-items: center;
+    align-self: center;
     width: 50rpx;
     height: 50rpx;
   }
@@ -165,7 +166,7 @@
     color: #666;
     overflow: hidden;
   }
-  
+
   .b {
     display: flex;
     font-size: 25rpx;
@@ -296,6 +297,7 @@ import util from '../../wxs/util.wxs';
 import { baseUrl } from '@/config';
 import pageRouter from '@/utils/pageRouter';
 import _ from 'underscore';
+import req from '@/network';
 
 const store = getStore();
 
@@ -361,7 +363,7 @@ export default class Checkout extends wepy.page {
     }
     this.$apply();
   }
-  
+
   async onShow(e) {
     await this.$parent.login();
     const user_id = this.$parent.globalData.user._id;
@@ -372,6 +374,11 @@ export default class Checkout extends wepy.page {
 
     if (result && result.value && result.value[0] && _.isEmpty(this.checkedAddress)) {
       this.checkedAddress = result.value[0];
+      for (let address of result.value) {
+        if (address.is_default) {
+          this.checkedAddress = address;
+        }
+      }
     }
 
     this.is_loaded = true;
@@ -395,11 +402,86 @@ export default class Checkout extends wepy.page {
       });
     },
     async submitOrder() {
-      const data = {
-        address: this.checkedAddress,
-        amount: this.goodsTotalPrice,
-        products: this.checkedProductList
+      // const data = {
+      //   address: this.checkedAddress,
+      //   amount: this.goodsTotalPrice,
+      //   products: this.checkedProductList
+      // };
+      wx.showLoading({
+        title: '正在准备支付',
+        mask: true
+      });
+      var amount = parseFloat(parseFloat(this.goodsTotalPrice).toFixed(2));
+      var spaceId = this.checkedProductList[0].space;
+      var products = [];
+      this.checkedProductList.forEach(p => {
+        var tp = {};
+        Object.keys(p).forEach(k => {
+          if (k.indexOf('@odata.') < 0) {
+            tp[k] = p[k];
+          }
+          products.push(tp);
+        });
+      });
+
+      var address = {};
+      Object.keys(this.checkedAddress).forEach(k => {
+        if (k.indexOf('@odata.') < 0) {
+          address[k] = this.checkedAddress[k];
+        }
+      });
+      var newOrder = {
+        name: '商城购物',
+        amount: amount,
+        status: 'draft',
+        store: spaceId,
+        type: 'pay',
+        owner: this.$parent.globalData.user._id,
+        address: address,
+        products: products
       };
+      this.$parent.insert('vip_order', newOrder, spaceId).then(o => {
+        console.log(o);
+        if (o.value) {
+          var data = {
+            // amount: amount,
+            amount: 0.01,
+            order_id: o.value[0]._id
+          };
+
+          req.post('/api/steedos/weixin/card/recharge', data).then(res => {
+            wx.hideLoading();
+            console.log('res: ', res);
+
+            if (res.paySign) {
+              wx.requestPayment({
+                timeStamp: res.timeStamp,
+                nonceStr: res.nonceStr,
+                package: res.package,
+                signType: 'MD5',
+                paySign: res.paySign,
+                success: function(msg) {
+                  console.log('success: ', msg);
+
+                },
+                fail: function(msg) {
+                  console.log('fail: ', msg);
+                },
+                complete: function(msg) {}
+              });
+            } else {
+              console.error(res);
+              wx.showModal({
+                content: '请求超时，请检查网络状况',
+                showCancel: false
+              });
+            }
+          });
+        } else if (o.error) {
+          console.error(o.error);
+        }
+      });
+
     }
   };
 
