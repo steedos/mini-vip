@@ -90,26 +90,33 @@
       <searchbar :placeholder.sync="searchPlaceholder" @confirm.user="searchRecords" />
     </view>
     <view class="page__bd">
-      <view class="weui-cells weui-cells_after-title">
-        <repeat for="{{record_list}}" key="index" index="index" item="record">
-          <navigator url="{{url}}&record_id={{record._id}}&space_id={{record.space}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
-            <view class="weui-cell__hd" wx:if="{{avatar_field}}">
-              <image src="{{util.formatAvatarImageUrl(record[avatar_field], baseUrl)}}" class='avatar-field'></image>
-            </view>
-            <view class="weui-cell__bd item-body">
-              <view class="item-body-1">
-                <view class="name-field">{{record[name_field]}}</view>
-                <view class="date-field" wx:if="{{record[date_field]}}">{{util.formatDateMini(record[date_field])}}</view>
+      <block wx:if="{{list.length}}">
+        <view class="weui-cells weui-cells_after-title">
+          <repeat for="{{record_list}}" key="index" index="index" item="record">
+            <navigator url="{{url}}&record_id={{record._id}}&space_id={{record.space}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+              <view class="weui-cell__hd" wx:if="{{avatar_field}}">
+                <image src="{{util.formatAvatarImageUrl(record[avatar_field], baseUrl)}}" class='avatar-field'></image>
               </view>
+              <view class="weui-cell__bd item-body">
+                <view class="item-body-1">
+                  <view class="name-field">{{record[name_field]}}</view>
+                  <view class="date-field" wx:if="{{record[date_field]}}">{{util.formatDateMini(record[date_field])}}</view>
+                </view>
 
-              <view class="description-field" wx:if="{{record[description_field]}}">{{record[description_field]}}</view>
-            </view>
-            <!--<view class="weui-cell__ft">-->
-              <!--<view class="weui-cell__ft_in-access"></view>-->
-            <!--</view>-->
-          </navigator>
-        </repeat>
-      </view>
+                <view class="description-field" wx:if="{{record[description_field]}}">{{record[description_field]}}</view>
+              </view>
+              <!--<view class="weui-cell__ft">-->
+                <!--<view class="weui-cell__ft_in-access"></view>-->
+              <!--</view>-->
+            </navigator>
+          </repeat>
+        </view>
+      </block>
+      <block wx:else>
+        <view class="weui-loadmore weui-loadmore_line">
+          <view class="weui-loadmore__tips weui-loadmore__tips_in-line">暂无记录</view>
+        </view>
+      </block>
     </view>
     <view class="tab-bar" wx:if="{{allowCreate}}">
       <view class="slds-icon-action-new" @tap="addRecord"></view>
