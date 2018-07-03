@@ -12,7 +12,7 @@
     color: #333;
   }
   .page {
-    margin-bottom: 100rpx;
+    margin-bottom: 200rpx;
     position: relative;
   }
   .goodsimgs{
@@ -55,8 +55,7 @@
     display: block;
     width: auto;
     margin-left: 31.25rpx;
-    padding: 38rpx 31.25rpx 38rpx 0;
-    border-bottom: 1px solid #f4f4f4;
+    padding: 38rpx 31.25rpx 0rpx 0;
   }
 
   .goods-info .c text{
@@ -67,7 +66,7 @@
 
   .goods-info .name{
     font-weight:bold;
-    margin-bottom: 15rpx;
+    margin-bottom: 20rpx;
     font-size: 41rpx;
     line-height: 41rpx;
     max-height:34px;
@@ -838,7 +837,6 @@
         </view>
       </view>
       <view class="goods-attr">
-        <view class="t">商品介绍</view>
           <import src="../../wemark/wemark.wxml"/>
           <template class="desc" is="wemark" data="{{...wemark}}"></template>
         <!-- <view class="l">
