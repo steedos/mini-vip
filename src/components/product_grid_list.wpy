@@ -124,6 +124,7 @@ export default class ProductGridList extends wepy.component {
   .product_info {
     display: flex;
     align-items: center;
+    margin-top:-2px;
   }
   .cost_price {
     padding-left: 16rpx;
