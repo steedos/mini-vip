@@ -189,7 +189,10 @@ export default class ProductList extends wepy.page {
   };
 
   async onLoad(e) {
-    await this.$parent.login();
+    this.$apply();
+  }
+
+  async getQueryFilter(e){
     const space_id = e.space_id;
     const options = {
       $orderby: 'sort_no',
@@ -204,6 +207,7 @@ export default class ProductList extends wepy.page {
       this.filter = `(categories eq '${this.seleted_id}')`;
     }
     this.$apply();
+    return this.filter;
   }
 
   components = {
