@@ -55,7 +55,7 @@
     display: block;
     width: auto;
     margin-left: 31.25rpx;
-    padding: 38rpx 31.25rpx 0rpx 0;
+    padding: 38rpx 31.25rpx 0 0;
   }
 
   .goods-info .c text{
@@ -78,6 +78,7 @@
   }
 
   .goods-info .desc{
+    margin-left: 38rpx;
     margin-top: 5px;
     margin-bottom: 10px;
     font-size: 24rpx;
@@ -343,6 +344,7 @@
   }
 
   .detail{
+    background-color: #fff;
     width: auto;
     height: auto;
     overflow: hidden;
@@ -778,6 +780,15 @@
     font-weight: 600;
     overflow:hidden;
   }
+  .flex-images-box{
+    margin:0px -15px;
+  }
+  .weui-article{
+    padding:0px 15px 20px 15px;
+  }
+  .weui-article__c{
+    padding:0 15px;
+  }
 </style>
 <template>
   <view class="page">
@@ -836,21 +847,37 @@
           </view>
         </view>
       </view>
-      <view class="goods-attr">
-          <import src="../../wemark/wemark.wxml"/>
-          <template class="desc" is="wemark" data="{{...wemark}}"></template>
-        <!-- <view class="l">
+      <!-- <view class="goods-attr">
+        <view class="l">
           <view class="item" wx:for="{{attribute}}" wx:key="{{item.name}}">
             <text class="left">{{item.name}}</text>
             <text class="right">{{item.value}}</text>
           </view>
-        </view> -->
-      </view>
+        </view>
+      </view> -->
 
       <view class="detail">
+        <!-- <import src="../../wemark/wemark.wxml"/>
+        <template class="desc" is="wemark" data="{{...wemark}}"></template>
         <repeat for="{{product.images}}" key="index" index="index" item="img">
           <image src="{{util.formatImageUrl(img, baseUrl)}}" mode="widthFix"></image>
-        </repeat>
+        </repeat> -->
+
+        <view class="weui-article body_color">
+          <view class="weui-article__section article-section">
+            <view class="weui-article__p article-p">
+              <import src="../../wemark/wemark.wxml"/>
+              <template class="desc" is="wemark" data="{{...wemark}}"></template>
+            </view>
+            <view class="weui-article__c" wx:if="{{withoutMarkdownImages && withoutMarkdownImages.length>1}}">
+              <view class="flex-images-box">
+                <repeat for="{{withoutMarkdownImages}}" key="index" index="index" item="item">
+                  <image src="{{util.formatImageUrl(item, baseUrl)}}" mode="widthFix" @tap="previewImage({{item}})" class="flex-image {{(index + 1)%3 > 0 ? 'flex-image-item' : 'flex-image-last'}}"/>
+                </repeat>
+              </view>
+            </view>
+          </view>
+        </view>
       </view>
 
 
@@ -971,6 +998,7 @@
       product: null,
       space_id: null,
       showPop: false,
+      baseUrl: baseUrl,
       count: 1,
       noCollectImage: '/static/images/icon_collect.png',
       hasCollectImage: '/static/images/icon_collect_checked.png',
@@ -1014,10 +1042,45 @@
           });
         }
         return cartProductCount
+      },
+      withoutMarkdownImages () {
+        // 从this.post.images中排除this.post.description的markdown语法中已有的图片
+        if(!this.product){
+          return []
+        }
+        let md = this.product.description;
+        if(md && md.length){
+          let mdImages = md.match(/\!\[.*?\]\((.+?)\)/gm);//找出所有格式为![...](...)的图片字符串
+          if(mdImages && mdImages.length){
+            let strMdImages = mdImages.join(",");
+            console.log("withoutMarkdownImages============================", strMdImages);
+            return this.product.images.filter((n)=>{
+              let tempReg = new RegExp(`\(.*?${n}.*?\)`);//匹配图片markdown字符串中的括号里面是否包含字符n
+              return !tempReg.test(strMdImages);
+            })
+          }
+          else{
+            return this.product.images;
+          }
+        }
+        else{
+          return this.product.images;
+        }
       }
     }
 
     methods = {
+      previewImage(image, event){
+        var baseUrl = this.baseUrl;
+        var current = `${baseUrl}/api/files/images/${image}`;
+        var urls = this.product.images.map((n)=>{
+          return  `${baseUrl}/api/files/images/${n}`;
+        });
+        wx.previewImage({
+          current: current,
+          urls: urls
+        });
+      },
       addProduct() {
         const _id = this.product._id
         if (_id) {
