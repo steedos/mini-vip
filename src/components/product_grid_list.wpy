@@ -1,7 +1,7 @@
 <!--商品列表模块-->
 <template>
   <block wx:if="{{list.length}}">
-    <view class="weui-cells weui-cells_after-title">
+    <view class="weui-cells_after-title">
       <scroll-view scroll-y="true" class="swiper-item-box">
         <view class="shop_item">
           <navigator class="list" wx:for="{{list}}" wx:key="item" url="/pages/product/view?record_id={{item._id}}&space_id={{item.space}}">
