@@ -12,7 +12,7 @@
     color: #333;
   }
   .page {
-    margin-bottom: 100rpx;
+    margin-bottom: 200rpx;
     position: relative;
   }
   .goodsimgs{
@@ -55,8 +55,7 @@
     display: block;
     width: auto;
     margin-left: 31.25rpx;
-    padding: 38rpx 31.25rpx 38rpx 0;
-    border-bottom: 1px solid #f4f4f4;
+    padding: 38rpx 31.25rpx 0rpx 0;
   }
 
   .goods-info .c text{
@@ -64,12 +63,10 @@
     width: 687.5rpx;
   }
 
-  .goods-info .c .name{
-    text-align: center;
-  }
 
   .goods-info .name{
-    margin-bottom: 5.208rpx;
+    font-weight:bold;
+    margin-bottom: 20rpx;
     font-size: 41rpx;
     line-height: 41rpx;
     max-height:34px;
@@ -90,6 +87,8 @@
 
 
   .goods-info .price{
+    display:inline!important;
+    margin-top:15px;
     font-size: 35rpx;
     line-height: 35rpx;
     color: #b4282d;
@@ -302,7 +301,7 @@
     width: auto;
     height: auto;
     overflow: hidden;
-    padding: 0 31.25rpx 25rpx 31.25rpx;
+    padding: 0 31.25rpx 0rpx 31.25rpx;
     background: #fff;
   }
 
@@ -310,7 +309,7 @@
     width: auto;
     height: 104rpx;
     line-height: 104rpx;
-    font-size: 38.5rpx;
+    font-size: 29rpx;
   }
 
   .goods-attr .item{
@@ -770,6 +769,15 @@
 		line-height: 55rpx;
 		border: 1rpx solid #686868;
   }
+  .cost_price {
+    padding-left:16rpx;
+    display:inline;
+    color: #666666;
+    font-size: 24rpx;
+    text-decoration: line-through;
+    font-weight: 600;
+    overflow:hidden;
+  }
 </style>
 <template>
   <view class="page">
@@ -789,10 +797,9 @@
       <view class="goods-info">
         <view class="c">
           <text class="name">{{product.name}}</text>
-          <!-- <text class="desc">{{product.description}}</text> -->
-          <import src="../../wemark/wemark.wxml"/>
-          <template class="desc" is="wemark" data="{{...wemark}}"></template>
+          <!-- <text class="page__desc">{{product.description}}</text> -->
           <text class="price">￥{{product.default_price}}</text>
+          <view class="cost_price" wx:if="{{product.compared_price && product.compared_price!=product.default_price}}">￥{{product.compared_price}}</view>
           <view class="brand" wx:if="{{brand.name}}">
             <navigator url="../brandDetail/brandDetail?id={{brand.brandId}}">
               <text>{{brand.name}}</text>
@@ -830,13 +837,14 @@
         </view>
       </view>
       <view class="goods-attr">
-        <view class="t">商品参数</view>
-        <view class="l">
+          <import src="../../wemark/wemark.wxml"/>
+          <template class="desc" is="wemark" data="{{...wemark}}"></template>
+        <!-- <view class="l">
           <view class="item" wx:for="{{attribute}}" wx:key="{{item.name}}">
             <text class="left">{{item.name}}</text>
             <text class="right">{{item.value}}</text>
           </view>
-        </view>
+        </view> -->
       </view>
 
       <view class="detail">
@@ -847,10 +855,10 @@
 
 
       <view class="common-problem">
-        <view class="h">
+        <!-- <view class="h">
           <view class="line"></view>
           <text class="title">常见问题</text>
-        </view>
+        </view> -->
         <view class="b">
           <view class="item" wx:for="{{issueList}}" wx:key="{{item.id}}">
             <view class="question-box">

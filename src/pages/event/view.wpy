@@ -320,7 +320,7 @@ export default class EventView extends wepy.page {
     };
     var event = await this.$parent.query("vip_event", query, this.space_id)
     this.event = event.value && event.value[0];
-    this.space_id = this.event && this.event.space;
+    this.space_id = this.event && this.event.space && this.event.space._id;
     this.space_id = this.space_id ? this.space_id : 'guest';
     this.$apply();
   };
@@ -366,7 +366,7 @@ export default class EventView extends wepy.page {
     event: null,
     attendees: [],
     baseUrl: baseUrl,
-    space_id: '',
+    space_id: null,
     is_loaded: false,
     editable: false,
     baseMaterialUrl: baseMaterialUrl,
