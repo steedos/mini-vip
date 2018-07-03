@@ -10,7 +10,7 @@
 
   .address-item {
     padding: 32rpx 31.25rpx;
-    align-items: center;
+    align-items: stretch;
     display: flex;
   }
 
@@ -73,6 +73,7 @@
     position: relative;
     justify-content: center;
     align-items: center;
+    align-self: center;
     width: 50rpx;
     height: 50rpx;
   }
@@ -373,6 +374,11 @@ export default class Checkout extends wepy.page {
 
     if (result && result.value && result.value[0] && _.isEmpty(this.checkedAddress)) {
       this.checkedAddress = result.value[0];
+      for (let address of result.value) {
+        if (address.is_default) {
+          this.checkedAddress = address;
+        }
+      }
     }
 
     this.is_loaded = true;
