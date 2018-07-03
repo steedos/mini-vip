@@ -59,9 +59,7 @@ page {
       .empty-cover {
         position: relative;
         height: 210px;
-        background-color: #7f7f7f;
-        background-repeat: repeat-x;
-        background-image: linear-gradient(128deg, #565656, #555 50%, #343434);
+        background-image: url("https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/empty.png");
         display: flex;
         align-items: center;
         justify-content: center;
@@ -185,11 +183,8 @@ page {
       <view class="header">
         <view wx:if="{{store_info.cover}}" class="cover-wrapper" @tap="uploadImage(true)" style="background-image: url({{util.formatImageUrl(store_info.cover, baseUrl)}})"></view>
         <view wx:else class="empty-cover" @tap="uploadImage(true)">
-          <view class="text" wx:if="{{is_space_owner}}">轻触设置封面</view>
+          <view class="text" wx:if="{{is_space_owner}}"></view>
         </view>
-        <!-- <view class="empty-cover" @tap="uploadImage(true)">
-          <view class="text" wx:if="{{is_space_owner}}">轻触设置封面</view>
-        </view> -->
         <view class="space-info">
           <view class="wrapper">
             <view class="bg-image"></view>

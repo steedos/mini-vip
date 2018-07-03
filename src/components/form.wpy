@@ -366,7 +366,7 @@
       groupFields: [],
       submitDisabled: false,
       hiddenBtn: false,
-      _changeValue: {},
+      _changeValue: {}
     };
 
     getGroupFields(fields, action, values){

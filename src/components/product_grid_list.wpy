@@ -1,22 +1,31 @@
 <!--商品列表模块-->
 <template>
-  <scroll-view scroll-y="true" class="swiper-item-box">
-    <view class="shop_item">
-      <navigator class="list" wx:for="{{list}}" wx:key="item" url="/pages/product/view?record_id={{item._id}}&space_id={{item.space}}">
-        <view class="image_box">
-          <image src="{{util.formatImageUrl(item.avatar, baseUrl)}}" mode="aspectFill"></image>
+  <block wx:if="{{list.length}}">
+    <view class="weui-cells weui-cells_after-title">
+      <scroll-view scroll-y="true" class="swiper-item-box">
+        <view class="shop_item">
+          <navigator class="list" wx:for="{{list}}" wx:key="item" url="/pages/product/view?record_id={{item._id}}&space_id={{item.space}}">
+            <view class="image_box">
+              <image src="{{util.formatImageUrl(item.avatar, baseUrl)}}" mode="aspectFill"></image>
+            </view>
+            <view class="goods">
+              <view class="product_name" wx:if="{{showTitle}}">{{item.name}}</view>
+              <!-- <view class="sale_num">销量{{item.saleCount || 998}}件</view> -->
+              <view class="product_info">
+                <view class="price">￥{{item.default_price}}</view>
+                <view class="cost_price" wx:if="{{item.compared_price && item.compared_price!=item.default_price}}">￥{{item.compared_price}}</view>
+              </view>
+            </view>
+          </navigator>
         </view>
-        <view class="goods">
-          <view class="product_name" wx:if="{{showTitle}}">{{item.name}}</view>
-          <!-- <view class="sale_num">销量{{item.saleCount || 998}}件</view> -->
-          <view class="product_info">
-            <view class="price">￥{{item.default_price}}</view>
-            <view class="cost_price" wx:if="{{item.compared_price && item.compared_price!=item.default_price}}">￥{{item.compared_price}}</view>
-          </view>
-        </view>
-      </navigator>
+      </scroll-view>
     </view>
-  </scroll-view>
+  </block>
+  <block wx:else>
+    <view class="weui-loadmore weui-loadmore_line">
+      <view class="weui-loadmore__tips weui-loadmore__tips_in-line">暂无商品</view>
+    </view>
+  </block>
 </template>
 <script>
 import wepy from 'wepy'

@@ -91,9 +91,7 @@
       <searchbar :placeholder.sync="searchPlaceholder" @confirm.user="searchRecords" />
     </view>
     <view class="page__bd">
-      <view class="weui-cells_after-title">
-        <productGridList :list.sync="record_list"></productGridList>
-      </view>
+      <productGridList :list.sync="record_list"></productGridList>
     </view>
     <!--<view class="tab-bar" wx:if="{{allowCreate}}">-->
       <!--<view class="slds-icon-action-new" @tap="addRecord"></view>-->
