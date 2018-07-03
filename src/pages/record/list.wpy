@@ -90,7 +90,7 @@
       <searchbar :placeholder.sync="searchPlaceholder" @confirm.user="searchRecords" />
     </view>
     <view class="page__bd">
-      <block wx:if="{{list.length}}">
+      <block wx:if="{{record_list.length}}">
         <view class="weui-cells weui-cells_after-title">
           <repeat for="{{record_list}}" key="index" index="index" item="record">
             <navigator url="{{url}}&record_id={{record._id}}&space_id={{record.space}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
