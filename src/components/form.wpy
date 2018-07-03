@@ -367,6 +367,7 @@
       submitDisabled: false,
       hiddenBtn: false,
       _changeValue: {},
+      space_id: null
     };
 
     getGroupFields(fields, action, values){
