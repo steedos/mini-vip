@@ -122,6 +122,7 @@ setStore(store)
 export default class VIP extends wepy.app {
   config = {
     pages: [
+      'pages/home/store',
       'pages/index',
       'pages/home/post',
       'pages/apps',
@@ -167,7 +168,6 @@ export default class VIP extends wepy.app {
       'pages/star/post',
       'pages/star/space',
       'pages/consuming_records',
-      'pages/home/store',
       'pages/phone_number_login',
       'pages/empty_page',
       'pages/404',
@@ -187,7 +187,7 @@ export default class VIP extends wepy.app {
       borderStyle: 'black',
       list: [
       {
-        pagePath: 'pages/index',
+        pagePath: 'pages/home/store',
         selectedIconPath: './images/tabbars/home_pressed.png',
         iconPath: './images/tabbars/home.png',
         text: '首页',
