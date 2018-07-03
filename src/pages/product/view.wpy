@@ -67,9 +67,9 @@
   .goods-info .name{
     font-weight:bold;
     margin-bottom: 20rpx;
-    font-size: 41rpx;
-    line-height: 41rpx;
-    max-height:34px;
+    font-size: 45rpx;
+    line-height: 45rpx;
+    max-height:87rpx;
     overflow:hidden;
     text-overflow:ellipsis;
     display: -webkit-box!important;
@@ -88,9 +88,10 @@
 
 
   .goods-info .price{
+    font-weight: bold;
     display:inline!important;
     margin-top:15px;
-    font-size: 35rpx;
+    font-size: 40rpx;
     line-height: 35rpx;
     color: #b4282d;
   }
@@ -522,6 +523,7 @@
   }
 
   .bottom-btn{
+    
     position: fixed;
     left:0;
     bottom:0;
@@ -774,10 +776,9 @@
   .cost_price {
     padding-left:16rpx;
     display:inline;
-    color: #666666;
+    color: #9b9b9b;
     font-size: 24rpx;
     text-decoration: line-through;
-    font-weight: 600;
     overflow:hidden;
   }
   .flex-images-box{
@@ -789,10 +790,16 @@
   .weui-article__c{
     padding:0 15px;
   }
+  .page_body{
+    padding-bottom:50px;
+  }
+  .button-hover{
+    background-color:#e05c60!important;
+  }
 </style>
 <template>
   <view class="page">
-    <view>
+    <view class="page_body">
       <swiper class="goodsimgs" indicator-dots="true" autoplay="true" interval="3000" duration="1000">
         <repeat for="{{product.covers}}" key="index" index="index" item="img">
           <swiper-item>
@@ -949,18 +956,18 @@
       </view>
     </view>
     <view class="bottom-btn">
-      <view class="l l-collect" @tap="enterProductIndex">
+      <view class="l l-collect" hover-class='weui-grid_active' @tap="enterProductIndex">
         <image class="icon" src="{{ collectBackImage }}"></image>
       </view>
-      <view class="l l-cart" @tap="openCartPage">
+      <view class="l l-cart" @tap="openCartPage" hover-class='weui-grid_active'>
         <view class="box">
           <text class="cart-count">{{getProductCount}}</text>
           <image class="icon" src="/static/images/ic_menu_shoping_nor.png"></image>
 
         </view>
       </view>
-      <view class="c" @tap="buyNow">立即购买</view>
-      <view class="r" @tap="addProduct">加入购物车</view>
+      <view class="c" @tap="buyNow" hover-class='weui-grid_active'>立即购买</view>
+      <view class="r" @tap="addProduct" hover-class='button-hover'>加入购物车1</view>
     </view>
   </view>
 </template>
