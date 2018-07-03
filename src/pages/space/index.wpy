@@ -520,7 +520,7 @@ export default class Posts extends wepy.page {
       $select:'name,avatar,related_to,sort_no,enabled'
     };
     const menu = await this.$parent.query('vip_menu', options,spaceId);
-    if (menu.value.length>0) {
+    if (menu.value && menu.value.length) {
       this.enabled_objects = menu.value
       this.enabled_objects.forEach(object => {
         if(object.related_to.o == 'post_category'){
@@ -562,10 +562,11 @@ export default class Posts extends wepy.page {
           }          
         }
       });
-    }else{
+    }
+    else{
       this.enabled_objects = [
         objects_list.post, objects_list.vip_event, objects_list.vip_product,
-        objects_list.vip_card, objects_list.vip_store, objects_list.support,objects_list.wifi
+        objects_list.vip_card, objects_list.vip_store, objects_list.vip_wifi
       ]
       this.is_default_menu = true
     }
