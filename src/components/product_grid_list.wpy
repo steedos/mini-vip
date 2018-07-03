@@ -79,7 +79,7 @@ export default class ProductGridList extends wepy.component {
 }
 
 .list:nth-child(odd) {
-  margin-right: 10rpx;
+  margin-right: 15rpx;
 }
 
 .list {
@@ -95,7 +95,7 @@ export default class ProductGridList extends wepy.component {
   }
   .product_name {
     color: #1a1a1a;
-    font-size: 36rpx;
+    font-size: 17px;
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 1;
