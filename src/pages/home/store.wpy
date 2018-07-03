@@ -5,31 +5,10 @@
 	.page__bd {
     padding-bottom: 50px;
   }
-	.tab-bar {
-    display: flex;
-    position: fixed;
-    z-index: 500;
-    bottom: 0;
-    height: 50px;
-    width: 100%;
-    background-color: #F7F7FA;
-    justify-content: center;
-    align-items: center;
-
-    &::before {
-      content: " ";
-      position: absolute;
-      left: 0;
-      top: 0;
-      right: 0;
-      height: 1px;
-      border-top: 1px solid #C0BFC4;
-      color: #C0BFC4;
-      -webkit-transform-origin: 0 0;
-      transform-origin: 0 0;
-      -webkit-transform: scaleY(0.5);
-      transform: scaleY(0.5);
-    }
+  .button-sp-area{
+    margin: 0 auto;
+    padding-top: 15px;
+    width: 60%;
   }
 </style>
 
@@ -55,8 +34,9 @@
 					<view class="weui-loadmore__tips weui-loadmore__tips_in-line">暂无微站</view>
 				</view>
 			</block>
-			<view class="tab-bar">
-				<view class="slds-icon-action-new" @tap="register"></view>
+
+			<view class="button-sp-area">
+				<button class="weui-btn" type="primary" plain="true" @tap="register" hover-class='button-hover'>0元入驻</button>
 			</view>
 		</view>
   </view>
