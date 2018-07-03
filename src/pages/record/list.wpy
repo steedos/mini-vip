@@ -16,21 +16,6 @@
     background-color: #F7F7FA;
     justify-content: center;
     align-items: center;
-
-    &::before {
-      content: " ";
-      position: absolute;
-      left: 0;
-      top: 0;
-      right: 0;
-      height: 1px;
-      border-top: 1px solid #C0BFC4;
-      color: #C0BFC4;
-      -webkit-transform-origin: 0 0;
-      transform-origin: 0 0;
-      -webkit-transform: scaleY(0.5);
-      transform: scaleY(0.5);
-    }
   }
 
   .item-body{
@@ -118,7 +103,7 @@
         </view>
       </block>
     </view>
-    <view class="tab-bar" wx:if="{{allowCreate}}">
+    <view class="tab-bar border-top-1px" wx:if="{{allowCreate}}">
       <view class="slds-icon-action-new" @tap="addRecord"></view>
     </view>
   </view>
