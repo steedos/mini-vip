@@ -1,0 +1,89 @@
+<template>
+  <view class="page record-read  page__bd">
+    <autoform :args.sync='args'></autoform>
+  </view>
+</template>
+
+<style lang="less">
+  .record-read{
+    .page__bd {
+      padding-bottom: 0px;
+    }
+  }
+</style>
+
+<script>
+  import wepy from 'wepy';
+  import req from '@/network';
+  import form from '../../components/form';
+
+  export default class RecordChildCreate extends wepy.page {
+
+    config = {
+      navigationBarTitleText: ''
+    };
+
+    data = {
+      args: {create_child: true}
+    };
+
+    refresh(){
+      this.args.timestamps = new Date()
+      console.log('this.args', this.args)
+    }
+
+
+    components = {
+      autoform: form
+    };
+
+    changeNavigationBarTitleText(title){
+
+      if(title && title.length > 10){
+        title = title.substr(0,10) + '...'
+      }
+
+      wx.setNavigationBarTitle({title:title})
+    }
+
+    async onLoad(e){
+      let args = {action: 'create', create_child: true};
+
+      if(e && e.object_name){
+        args.object_name = e.object_name
+      }else{
+        throw new Error("缺少参数：object_name")
+      }
+
+      if(e && e.fields){
+        args.fields = e.fields
+      }
+
+      if(e && e.title){
+        args.title = e.title
+      }
+
+      if(e && e.values){
+        args.defaultValues = JSON.parse(e.values)
+      }
+
+      if(e && e.space_id){
+        args.space_id = e.space_id
+      }
+
+      this.args = args;
+      this.$apply()
+    }
+
+    goBack(action) {
+      const pages = getCurrentPages();
+      const prevPage = pages[pages.length - 2];
+      if (prevPage.refresh) {
+        prevPage.refresh(action)
+      }
+      wepy.navigateBack({
+        delta: 1
+      })
+    }
+  }
+</script>

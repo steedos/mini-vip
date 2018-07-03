@@ -365,6 +365,9 @@
     text-align: center;
     background: #b4282d;
     color: #fff;
+    &.disabled {
+      background: #b2b2b2;
+    }
   }
 </style>
 <template>
@@ -423,7 +426,7 @@
         <view class="total">{{'￥'+checkedProductAmount}}</view>
         <!-- <view class="delete" @tap="editCart">{{!isEditCart ? '编辑' : '完成'}}</view> -->
         <!-- <view class="checkout" @tap="deleteCart" wx:if="{{isEditCart}}">删除所选</view> -->
-        <view class="checkout" @tap="checkoutOrder">下单</view>
+        <view class="checkout {{checkedProductCount ? '' : 'disabled'}}" @tap="checkoutOrder">下单</view>
       </view>
     </view>
   </view>
@@ -567,9 +570,11 @@
         store.dispatch({type: 'UPDATE_PRODUCT_COUNT', payload: {operation:'update', product: {_id: itemId, count: count}}})
       },
       checkoutOrder() {
-        wepy.navigateTo({
-          url: './checkout'
-        })
+        if (this.checkedProductCount) {
+          wepy.navigateTo({
+            url: './checkout'
+          })
+        }
       },
       viewDetail(event) {
         const itemId = event.currentTarget.dataset.itemId;

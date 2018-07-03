@@ -876,11 +876,11 @@
       return true
     }
 
-    goBack(action) {
+    goBack(action, record_id) {
       const pages = getCurrentPages();
       const prevPage = pages[pages.length - 2];
       if (prevPage.refresh) {
-        prevPage.refresh(action)
+        prevPage.refresh(action, record_id)
       }
       wepy.navigateBack({
         delta: 1
@@ -1068,41 +1068,42 @@
           mask: true
         });
 
+        let record_id;
+
         if (this.args.action === 'create') {
           const value = this.transformValue(formValues);
           if(Object.keys(this.fields).indexOf('wx_form_id') > -1){
             value['wx_form_id'] = appId + ':'+ e.detail.formId
           }
           const record = await this.$parent.$parent.insert(this.args.object_name, value, this.args.space_id)
-
+          record_id = record.value[0]._id;
           if (this.hasTempImages()) {
-            const record_id = record.value[0]._id
             await this.uploadImages(record_id);
             const value = this.transformValue(formValues);
             await this.$parent.$parent.update(this.args.object_name, record_id, value, this.args.space_id)
           }
 
           if (this.hasTempVideo()) {
-            const record_id = record.value[0]._id
             await this.uploadVideos(record_id);
             const value = this.transformValue(formValues);
             await this.$parent.$parent.update(this.args.object_name, record_id, value, this.args.space_id)
           }
 
         } else if (this.args.action === 'edit') {
+          record_id = this.args.record_id;
           //检查临时附件，如果有，则上传附件
-          await this.uploadImages(this.args.record_id);
-          await this.uploadVideos(this.args.record_id);
+          await this.uploadImages(record_id);
+          await this.uploadVideos(record_id);
           const value = this.transformValue(formValues);
           if(Object.keys(this.fields).indexOf('wx_form_id') > -1){
             value['wx_form_id'] = appId + ':'+ e.detail.formId
           }
-          await this.$parent.$parent.update(this.args.object_name, this.args.record_id, value, this.args.space_id)
+          await this.$parent.$parent.update(this.args.object_name, record_id, value, this.args.space_id)
         }
 
         this._changeValue = {}
 
-        this.goBack(this.args.action);
+        this.goBack(this.args.action, record_id);
       },
       navigateTo(field, e){
 
@@ -1142,7 +1143,11 @@
             url = '/pages/edit/datetime';
             break;
           case 'lookup':
-            url = '/pages/edit/lookup';
+            if(this.args.create_child){
+              url = '/pages/edit/lookup_child';
+            }else{
+              url = '/pages/edit/lookup';
+            }
             break;
           case 'master_detail':
             url = '/pages/edit/lookup';
