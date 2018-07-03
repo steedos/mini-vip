@@ -18,13 +18,9 @@ class PageRouter{
 
   go(type, object){
     for(let e of this._enter){
-      console.log('go e', e)
-      console.log('go object.url', )
       if(e.page === object.url || object.url.startsWith(e.page + '?')){
         const v = e.script.call(this._app, object.url)
-        console.log('v', v)
         if(v === false){
-          console.log('return ....')
           return ;
         }
       }

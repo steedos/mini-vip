@@ -67,9 +67,6 @@
         </radio-group>
       </view>
     </view>
-    <view class="tab-bar" wx:if="{{allowCreate}}">
-      <view class="slds-icon-action-new" @tap="addRecord"></view>
-    </view>
   </view>
 </template>
 
@@ -79,7 +76,7 @@
   import _ from 'underscore';
   import pageRouter from '@/utils/pageRouter';
 
-  export default class Lookup extends wepy.page {
+  export default class LookupChild extends wepy.page {
     config = {
       navigationBarTitleText: '选择'
     };
@@ -97,10 +94,8 @@
     };
 
     async refresh(action, record_id){
-      console.log('lookup ref', record_id)
       this.options = await this.getReferenceTo(this.objectCode);
       const fieldValue = this.getObjectFieldValue(this.key) || {};
-      console.log('fieldValue', fieldValue)
       if(!_.isEmpty(fieldValue)){
         if(this.multiple){
           fieldValue.forEach((v)=>{
@@ -150,7 +145,6 @@
     setParentValue(key, value){
       const pages = getCurrentPages();
       const prevPage = pages[pages.length - 2];
-      console.log('setParentValue', key, value)
       prevPage.changeValue(key, value)
 //      prevPage.data.$autoform$values[key] = value
 
@@ -213,8 +207,6 @@
 
       const field = this.getObjectField(e.key);
 
-      console.log('field', field);
-
       const fieldValue = this.getObjectFieldValue(e.key) || {};
 
       this.multiple = field.multiple || false;
@@ -254,7 +246,6 @@
       }else{
         this.objectCode = field.reference_to
         this.options = await this.getReferenceTo(this.objectCode);
-        console.log('fieldValue', fieldValue);
 
         if(!_.isEmpty(fieldValue)){
           if(this.multiple){
@@ -276,7 +267,6 @@
           }
         }
         const object = await this.$parent.getObject(field.reference_to, this.space_id);
-        console.log('object', object)
         this.allowCreate = object.allowCreate;
       }
 
