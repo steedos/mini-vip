@@ -70,6 +70,7 @@
 
     .weui-search-bar{
       border-bottom: 0px;
+      padding:8px 15rpx;
     }
 
     .avatar-field{
@@ -90,7 +91,7 @@
       <searchbar :placeholder.sync="searchPlaceholder" @confirm.user="searchRecords" />
     </view>
     <view class="page__bd">
-      <view class="weui-cells weui-cells_after-title">
+      <view class="weui-cells_after-title">
         <productGridList :list.sync="record_list"></productGridList>
       </view>
     </view>

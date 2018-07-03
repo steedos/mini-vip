@@ -63,7 +63,7 @@ export default class ProductGridList extends wepy.component {
 <style lang="less">
 .shop_item {
   padding: 0rpx 15rpx;
-  background: #f7f7f7;
+  background: #EFEEF3;
   display: flex;
   flex-wrap: wrap;
   padding-bottom: 30rpx;
@@ -74,7 +74,7 @@ export default class ProductGridList extends wepy.component {
 }
 
 .list {
-  background: #fff;
+  background: #EFEEF3;
   width: 355rpx;
   margin-top: 15rpx;
   .image_box {
@@ -84,8 +84,9 @@ export default class ProductGridList extends wepy.component {
     }
   }
   .product_name {
+    font-weight:bold; 
     color: #1a1a1a;
-    font-size: 28rpx;
+    font-size: 36rpx;
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 1;
