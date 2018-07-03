@@ -54,7 +54,7 @@
             <view class="title">积分</view>
             <view class="count">{{cardPoints}} 分</view>
           </view>
-          <navigator url="coupons" class="coupon s-card">
+          <navigator url="coupons?space_id={{space_id}}" class="coupon s-card">
             <view class="title">优惠券</view>
             <view class="count">0 张</view>
           </navigator>
@@ -65,7 +65,7 @@
         </view>
       </block>
       <block wx:else>
-        <button wx:if="{{isAuthorize}}" class="active-card" plain="true" @tap="toOpenCard">激活会员卡</button>
+        <button wx:if="{{isAuthorize && !category_id}}" class="active-card" plain="true" @tap="toOpenCard">激活会员卡</button>
         <button wx:else class="active-card" plain="true" open-type="getUserInfo" bindgetuserinfo="userInfo">激活会员卡</button>
       </block>
     </view>
@@ -73,7 +73,7 @@
     <view class="page__bd">
 
         <view wx:if="{{isActivated}}" class="weui-cells">
-          <navigator url="card_pay?card_id={{cardId}}&balance={{cardBalance}}&store_id={{store_id}}" class="weui-cell weui-cell_access">
+          <navigator url="card_pay?card_id={{cardId}}&balance={{cardBalance}}&space_id={{space_id}}" class="weui-cell weui-cell_access">
             <view class="weui-cell__hd">
               <view class="slds-icon-standard-product slds-icon slds-icon--small slds-m-right--x-small"/>
             </view>
@@ -94,7 +94,7 @@
             </view>
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
           </view>
-          <navigator class="weui-cell weui-cell_access" url="consuming_records?card_id={{cardId}}">
+          <navigator class="weui-cell weui-cell_access" url="consuming_records?space_id={{space_id}}&card_id={{cardId}}">
             <view class="weui-cell__hd">
               <view class="slds-icon-custom-custom40 slds-icon slds-icon--small slds-m-right--x-small"/>
             </view>
@@ -125,7 +125,7 @@
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
           </navigator> -->
           <view wx:if="{{isActivated}}">
-            <navigator url="member_benefits?category_id={{category_id}}" class="weui-cell weui-cell_access">
+            <navigator url="member_benefits?space_id={{space_id}}&category_id={{category_id}}" class="weui-cell weui-cell_access">
               <view class="weui-cell__hd">
                 <view class="slds-icon-standard-team-member slds-icon slds-icon--small slds-m-right--x-small"/>
               </view>
@@ -185,7 +185,6 @@ export default class Card extends wepy.page {
     isAuthorize: true,
     space_id: '',
     space_name: '',
-    store_id: '',
     category_id: '',
     avatar:'',
     cover:''
@@ -193,14 +192,13 @@ export default class Card extends wepy.page {
 
   async getCardInfo(card_id) {
     const self = this;
-    const data = {
+    const query_options = {
       $filter: `_id eq '${card_id}'`,
       $expand: 'card_name($select=name,_id)',
       $count: true,
-      $select: 'space,grade,is_actived,balance,points,card_number,card_name,store'
+      $select: 'space,grade,is_actived,balance,points,card_number,card_name,store,owner'
     };
-
-    const result = await self.$parent.cache('vip_card', card_id, data, true);
+    const result = await self.$parent.get('vip_card', card_id, this.space_id, query_options);
 
     console.log('getCardInfo..........', result);
     this.cardId = card_id;
@@ -217,10 +215,12 @@ export default class Card extends wepy.page {
 
   async getCategoryInfo(category_id) {
     const self = this;
-    const result = await self.$parent.get('vip_category', category_id);
+    const result = await self.$parent.get('vip_category', category_id, this.space_id);
     console.log("result",result)
     this.avatar = result.avatar || '';
     this.cover = result.cover || '';
+    this.cardName = result.name || '';
+    this.category_id = category_id;
     this.$apply();
   }
 
@@ -232,14 +232,29 @@ export default class Card extends wepy.page {
     const vip_card = this.$parent.globalData.vip_card;
     if (e.space_id) {
       this.space_id = e.space_id;
-      this.$parent.globalData.space_id = e.space_id;
-    }else{
-      this.space_id = this.$parent.globalData.space_id
     }
-    if (e.store_id) {
-      this.store_id = e.store_id;
+    if(e.category_id){
+      await this.getCategoryInfo(e.category_id);
+      const query_options = {
+        $filter: `owner eq '${this.$parent.globalData.user._id}' and card_name eq '${e.category_id}'`,
+        $expand: 'card_name($select=name,_id)',
+        $count: true,
+        $select: 'space,grade,is_actived,balance,points,card_number,card_name,store,owner'
+      };
+      const result = await this.$parent.query('vip_card', query_options, this.space_id);
+      if(result.value[0]){
+        if(result.value[0].is_actived){
+          this.cardId = result.value[0]._id;
+          this.cardName = result.value[0].card_name.name;
+          this.cardType = result.value[0].grade;
+          this.isActivated = result.value[0].is_actived;
+          this.cardPoints = result.value[0].points;
+          this.cardBalance = result.value[0].balance.toFixed(2);
+          this.cardNumber = result.value[0].card_number;
+          this.$apply();
+        }
+      }
     }
-
     if (this.$parent.globalData.userInfo) {
       this.isAuthorize = true;
     } else {
@@ -264,7 +279,7 @@ export default class Card extends wepy.page {
 
     await this.$parent.login(this.space_id);
 
-    const space = await this.$parent.get('spaces', this.space_id)
+    const space = await this.$parent.get('spaces', this.space_id, this.space_id)
     this.space_name = space.name
 
     wx.setNavigationBarTitle({
@@ -291,11 +306,11 @@ export default class Card extends wepy.page {
 
   onShareAppMessage(res) {
     const space_id = this.space_id
-    const store_id = this.store_id
     const space_name = this.space_name
+    const category_id = this.category_id
     return {
       title: space_name,
-      path: `pages/card?space_id=${space_id}&store_id=${store_id}`
+      path: `pages/card?space_id=${space_id}&store_id=${space_id}&category_id=${category_id}`
     };
   }
 
@@ -315,7 +330,7 @@ export default class Card extends wepy.page {
   methods = {
     toOpenCard() {
       console.log("this.space_id",this.space_id)
-      const url = `./card/select?space_id=${this.space_id}&store_id=${this.store_id}`
+      const url = `./card/select?space_id=${this.space_id}`
       console.log('toOpenCard', url)
       wx.navigateTo({ url: url });
     },
@@ -325,7 +340,7 @@ export default class Card extends wepy.page {
         this.isAuthorize = true;
         this.$apply();
         wx.navigateTo({
-          url: 'card_activate'
+          url: `card_activate?space_id=${this.space_id}&category_id=${this.category_id}`
         });
       } else {
         return;
@@ -338,8 +353,8 @@ export default class Card extends wepy.page {
           this.cardId +
           '&balance=' +
           this.cardBalance +
-          '&store_id=' +
-          this.store_id
+          '&space_id=' +
+          this.space_id
       });
     }
   };

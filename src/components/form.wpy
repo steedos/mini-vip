@@ -275,7 +275,7 @@
                       <block wx:if="{{item.is_wide}}">
                         <view class="weui-cell__bd">
                           <block wx:if="{{!(item.readonly || !_record_allowEdit || args.action === 'read')}}">
-                            <textarea class="weui-textarea" name="{{item.name}}" data-id="{{item.name}}" placeholder="{{item.label}}" value="{{util.transformFieldValue(item, values[item.name])}}" auto-height="true" bindinput="textChange" maxlength="-1"/>
+                            <textarea style="min-height: {{(item.rows || 2) * 1.1}}em" class="weui-textarea" name="{{item.name}}" data-id="{{item.name}}" placeholder="{{item.label}}" value="{{util.transformFieldValue(item, values[item.name])}}" auto-height="true" bindinput="textChange" maxlength="-1"/>
                           </block>
                           <block wx:else>
                             <view class="weui-cell__ft wide-cell">{{util.transformFieldValue(item, values[item.name]) || item.label}}</view>
@@ -366,7 +366,7 @@
       groupFields: [],
       submitDisabled: false,
       hiddenBtn: false,
-      _changeValue: {},
+      _changeValue: {}
     };
 
     getGroupFields(fields, action, values){
@@ -473,6 +473,10 @@
                   field.label = field_name
                 }
                 if (field.reference_to) {
+                  if(_.isArray(field.reference_to)){
+                    field.referenceToIsArray = true
+                  }
+
                   field.options = await this.getReferenceTo(field.name, field.reference_to)
                 }
 
@@ -519,8 +523,7 @@
             if (expand.length > 0) {
               query_options.$expand = expand.join(',')
             }
-            console.log('query_options', query_options)
-            const result = await this.$parent.$parent.query(object_name, query_options);
+            const result = await this.$parent.$parent.query(object_name, query_options, this.args.space_id);
             if (result.value.length === 1) {
               this.values = result.value[0]
               delete this.values["@odata.id"]
@@ -528,11 +531,11 @@
               delete this.values["@odata.editLink"]
               delete this.values["_id"]
             }
-            this._record_allowEdit = this.$parent.$parent.recordAllowEdit(object_name, this.values.owner);
-            this._record_allowDelte = this.$parent.$parent.recordAllowDelete(object_name, this.values.owner);
+            this._record_allowEdit = this.$parent.$parent.recordAllowEdit(object_name, this.values.owner, this.args.space_id);
+            this._record_allowDelte = this.$parent.$parent.recordAllowDelete(object_name, this.values.owner, this.args.space_id);
           }
-
-          _.forEach(this.fields, (field) => {
+          for (let k in this.fields) {
+            let field = this.fields[k];
             let fv = this.values[field.name];
             if (fv) {
 
@@ -570,12 +573,23 @@
                       option.checked = true
                     }
                   })
+
+                  if(field.referenceToIsArray){
+                    let rto = fv["o"];
+                    if(fv["reference_to.o"]){
+                      rto = fv["reference_to.o"]
+                    }
+
+                    fv.object_label = (await this.$parent.$parent.getObject(rto, this.args.space_id)).label;
+                    this.values[field.name] = fv
+                  }
+
                 }
               }else if(field.type === 'datetime'){
                 this.values[field.name] = utilJs.formatTime(new Date(fv), '-', true)
               }
             }
-          });
+          }
 
           this.$apply();
 
@@ -715,13 +729,11 @@
               let new_fv = []
               for (let v of fv){
                 if(this.isTempFile(v)){
-                  console.log("本地", v)
                   const image = await this.uploadImage(v, k, record_id);
                   if(image){
                     new_fv.push(image._id)
                   }
                 }else{
-                  console.log("非本地", v)
                   new_fv.push(v)
                 }
               }
@@ -800,11 +812,19 @@
           }else if (_.isObject(v)) {
             value[k] = v._id
           }
+
+          if(_.isArray(field.reference_to)){
+            if(v._id){
+              value[k] = {o: v.object_name, ids: [v._id]}
+            }else{
+              value[k] = {o: v.object_name}
+            }
+          }
         }
 
         if(field.type === 'datetime'){
           if(value[k]){
-            value[k] = (new Date(value[k])).toISOString()
+            value[k] = (new Date(value[k].replace(/-/g,"/"))).toISOString()
           }
         }
       });
@@ -816,15 +836,20 @@
     }
 
     async getReferenceTo(file_name, reference_to) {
+
+      if(_.isArray(reference_to)){
+        return []
+      }
+
       let query = {
         $select: 'name'
       };
-      if (reference_to === 'users') {
+      if (reference_to === 'users' || reference_to === 'space_users') {
         reference_to = 'space_users'
         query.$select = 'name,user'
       }
 
-      const data = await this.$parent.$parent.query(reference_to, query)
+      const data = await this.$parent.$parent.query(reference_to, query, this.args.space_id)
       let options = []
       data.value.forEach(function (record) {
         if (reference_to === 'space_users') {
@@ -876,7 +901,7 @@
           await this.uploadImages(this.args.record_id);
           await this.uploadVideos(this.args.record_id);
           const value = this.transformValue();
-          await this.$parent.$parent.update(this.args.object_name, this.args.record_id, value);
+          await this.$parent.$parent.update(this.args.object_name, this.args.record_id, value, this.args.space_id);
           const pages = getCurrentPages();
           const prevPage = pages[pages.length - 1];
           if (prevPage.refresh) {
@@ -1024,7 +1049,7 @@
           cancelText: "取消",
         });
         if (result.confirm) {
-          await this.$parent.$parent.delete(this.args.object_name, this.args.record_id)
+          await this.$parent.$parent.delete(this.args.object_name, this.args.record_id, this.args.space_id)
           this.goBack("remove");
         }
       },
@@ -1054,14 +1079,14 @@
             const record_id = record.value[0]._id
             await this.uploadImages(record_id);
             const value = this.transformValue(formValues);
-            await this.$parent.$parent.update(this.args.object_name, record_id, value)
+            await this.$parent.$parent.update(this.args.object_name, record_id, value, this.args.space_id)
           }
 
           if (this.hasTempVideo()) {
             const record_id = record.value[0]._id
             await this.uploadVideos(record_id);
             const value = this.transformValue(formValues);
-            await this.$parent.$parent.update(this.args.object_name, record_id, value)
+            await this.$parent.$parent.update(this.args.object_name, record_id, value, this.args.space_id)
           }
 
         } else if (this.args.action === 'edit') {
@@ -1072,7 +1097,7 @@
           if(Object.keys(this.fields).indexOf('wx_form_id') > -1){
             value['wx_form_id'] = appId + ':'+ e.detail.formId
           }
-          await this.$parent.$parent.update(this.args.object_name, this.args.record_id, value)
+          await this.$parent.$parent.update(this.args.object_name, this.args.record_id, value, this.args.space_id)
         }
 
         this._changeValue = {}
@@ -1150,9 +1175,17 @@
         if (value.constructor === Object) {
           value = JSON.stringify(dataset.value)
         }
-        url = `${url}?key=${field.name}&title=${field.label}&value=${value}`;
+        url = `${url}?space_id=${this.args.space_id}&key=${field.name}&title=${field.label}&value=${value}`;
         if(field.multiple){
           url = `${url}&multiple=${field.multiple}`
+        }
+
+        if(field.type === 'textarea' && field.rows){
+          url = `${url}&rows=${field.rows}`
+        }
+
+        if(field.type === 'number' && field.scale > 0){
+          url = `${url}&scale=${field.scale}`
         }
 
         wepy.navigateTo({url: url});

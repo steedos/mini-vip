@@ -110,7 +110,7 @@
       const spaceId = this.space_id;
       const result = await this.$parent.get('vip_store', spaceId, spaceId);
       this.store_info = result;
-      const space = await this.$parent.get('spaces', this.space_id);
+      const space = await this.$parent.get('spaces', this.space_id, spaceId);
       this.space_info = space;
       let globalData = this.$parent.globalData;
       this.is_space_owner =
@@ -119,7 +119,7 @@
     }
 
     async onLoad(e) {
-      this.space_id = e.space_id || this.$parent.globalData.space_id;
+      this.space_id = e.space_id;
       await this.loadStoreInfo();
     }
 

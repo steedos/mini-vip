@@ -64,11 +64,13 @@ export default class MemberBenefits extends wepy.page {
     navigationBarTitleText: '会员权益'
   };
   async onLoad(e) {
-    this.category = await this.$parent.get('vip_category',e.category_id)
+    this.space_id = e.space_id;
+    this.category = await this.$parent.get('vip_category',e.category_id, this.space_id)
     this.$apply();
     console.log("=====333=",this.category)
   };
   data = {
+    space_id: '',
     category:{
     },
     // benefits: '',

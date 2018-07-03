@@ -167,11 +167,11 @@ page{
   <navigator wx:if="{{showHeader && event.space}}" class="event-header" url="../space/index?space_id={{space_id}}">
     <view class="weui-cell weui-cell_access">
       <view class="weui-cell__hd">
-        <image wx:if="{{avatar}}" class="image slds-icon slds-icon--small slds-m-right--x-small" src="{{util.formatImageUrl(avatar, baseUrl)}}"></image>
+        <image wx:if="{{event.space.avatar}}" class="image slds-icon slds-icon--small slds-m-right--x-small" src="{{util.formatImageUrl(event.space.avatar, baseUrl)}}" />
         <view wx:else class="slds-icon-standard-channel-programs slds-icon slds-icon--small slds-m-right--x-small"></view>
       </view>
       <view class="weui-cell__bd">
-        {{space_name}}
+        {{event.space.name}}
       </view>
     </view>
   </navigator>
@@ -285,20 +285,7 @@ export default class EventView extends wepy.page {
     await this.$parent.login();
     this.showHeader = e.showHeader ? true : false;
     if(e.space_id){
-      this.$parent.globalData.space_id = e.space_id;
       this.space_id = e.space_id;
-      const options = {
-        $filter: `_id eq '${e.space_id}'`,
-        $expand: 'space($select=name)',
-        $count: true,
-        $select: 'avatar,space'
-      }
-      const res = await this.$parent.query('vip_store', options, 'guest')
-
-      if (res.value && res.value[0]) {
-        this.space_name = res.value[0].space.name
-        this.avatar = res.value[0].avatar
-      }
     } 
     else{
       this.space_id = "guest";
@@ -329,11 +316,11 @@ export default class EventView extends wepy.page {
   async loadEvent(){
     const query = {
       $filter: `_id eq '${this.event_id}'`,
-      $expand: 'owner($select=profile,name)'
+      $expand: 'space($select=name,avatar),owner($select=profile,name)'
     };
     var event = await this.$parent.query("vip_event", query, this.space_id)
     this.event = event.value && event.value[0];
-    this.space_id = this.event && this.event.space;
+    this.space_id = this.event && this.event.space && this.event.space._id;
     this.space_id = this.space_id ? this.space_id : 'guest';
     this.$apply();
   };
@@ -379,9 +366,7 @@ export default class EventView extends wepy.page {
     event: null,
     attendees: [],
     baseUrl: baseUrl,
-    space_id: '',
-    space_name: '',
-    avatar: '',
+    space_id: null,
     is_loaded: false,
     editable: false,
     baseMaterialUrl: baseMaterialUrl,
@@ -392,21 +377,14 @@ export default class EventView extends wepy.page {
     util: util
   };
 
-  getBackUrlForCheckMobile(){
-    let to = `/${this.getWxPage().route}?respond=true`;
-    let pageOptions = this.getWxPage().options;
-    for(let k in pageOptions){
-      to += `&${k}=${pageOptions[k]}`;
-    };
-    return to;
-  }
-
   methods = {
     editEvent() {
       if(!this.editable){
         return
       }
-      let url = `/pages/record/edit?action=edit&object_name=vip_event&record_id=${this.event_id}&fields=name,start,location,alarms,accepted_count,pending_count,rejected_count,featured,cover,description`;
+      console.log("editEvent=================", this.space_id);
+      let url = `/pages/record/edit?action=edit&space_id=${this.space_id}&object_name=vip_event&record_id=${this.event_id}&fields=name,start,location,alarms,accepted_count,pending_count,rejected_count,featured,cover,description`;
+      console.log("editEvent==========url=======", url);
       pageRouter.navigateTo({
         url: url
       });

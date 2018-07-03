@@ -1,0 +1,509 @@
+<style lang="less">
+.address-box {
+  width: 100%;
+  box-sizing: border-box;
+  background: #fffced
+    url(http://yanxuan.nosdn.127.net/hxm/yanxuan-wap/p/20161201/style/img/icon-normal/address-bg-bd30f2bfeb.png)
+    0 0 repeat-x;
+  background-size: auto 10.5rpx;
+  margin-bottom: 20rpx;
+
+  .address-item {
+    padding: 32rpx 31.25rpx;
+    align-items: stretch;
+    display: flex;
+  }
+
+  .l {
+    width: 125rpx;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .name {
+    width: 100%;
+    line-height: 44rpx;
+    font-size: 29rpx;
+    color: #333;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    margin-bottom: 8rpx;
+  }
+
+  .default {
+    width: 62.5rpx;
+    text-align: center;
+    font-size: 20rpx;
+    color: #b4282d;
+    border-radius: 5rpx;
+    border: 1rpx solid #b4282d;
+    visibility: visible;
+    &.hide {
+      visibility: hidden;
+    }
+  }
+
+  .c {
+    flex: 1;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .mobile {
+    line-height: 44rpx;
+    margin-bottom: 8rpx;
+    font-size: 29rpx;
+    overflow: hidden;
+    color: #333;
+  }
+
+  .address {
+    font-size: 25rpx;
+    overflow: hidden;
+    color: rgb(158, 158, 158);
+  }
+
+  .m {
+    flex: 1;
+  }
+
+  .r {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+    width: 50rpx;
+    height: 50rpx;
+  }
+}
+
+.order-box {
+  background: #fff;
+  margin-bottom: 20rpx;
+
+  .order-item {
+    box-sizing: border-box;
+    padding: 32rpx 31.25rpx 32rpx 0;
+    margin-left: 31.25rpx;
+    width: auto;
+    height: auto;
+    overflow: hidden;
+    display: flex;
+    border-bottom: 1px solid #d9d9d9;
+
+    &:last-of-type {
+      border-bottom: none;
+    }
+
+    .l {
+      flex: 1;
+    }
+  }
+}
+
+.goods-items {
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+  background: #fff;
+
+  .item {
+    display: flex;
+    width: auto;
+    overflow: hidden;
+    padding: 0 31.25rpx;
+  }
+
+  .cart-goods {
+    flex: 1;
+    display: flex;
+    float: left;
+    border-bottom: 1px solid #d9d9d9;
+  }
+
+  .item:last-of-type {
+    .cart-goods {
+      border-bottom: none;
+    }
+  }
+
+  .img {
+    float: left;
+    height: 150rpx;
+    width: 150rpx;
+    background: #f4f4f4;
+    margin: 19.5rpx 18rpx 19.5rpx 0;
+  }
+
+  .info {
+    flex: 1;
+    float: left;
+    height: 150rpx;
+    margin: 19.5rpx 0 19.5rpx 0;
+  }
+
+  .t {
+    display: flex;
+    margin: 8rpx 0;
+    font-size: 30rpx;
+    color: #333;
+    overflow: hidden;
+  }
+
+  .name {
+    flex: 1;
+    color: #333;
+    overflow: hidden;
+  }
+
+  .attr {
+    margin-bottom: 17rpx;
+    height: 24rpx;
+    line-height: 24rpx;
+    font-size: 22rpx;
+    color: #666;
+    overflow: hidden;
+  }
+
+  .b {
+    display: flex;
+    font-size: 25rpx;
+    color: #333;
+  }
+
+  .price {
+    flex: 1;
+    line-height: 52rpx;
+  }
+}
+
+.order-total {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  height: 100rpx;
+  width: 100%;
+  display: flex;
+}
+
+.order-total .l {
+  flex: 1;
+  height: 100rpx;
+  line-height: 100rpx;
+  color: #b4282d;
+  background: #fff;
+  font-size: 33rpx;
+  padding-left: 31.25rpx;
+  border-top: 1rpx solid rgba(0, 0, 0, 0.2);
+  border-bottom: 1rpx solid rgba(0, 0, 0, 0.2);
+}
+
+.order-total .r {
+  width: 233rpx;
+  height: 100rpx;
+  background: #b4282d;
+  border: 1px solid #b4282d;
+  line-height: 100rpx;
+  text-align: center;
+  color: #fff;
+  font-size: 30rpx;
+}
+</style>
+<template>
+  <view class="page" wx:if="{{is_loaded}}">
+    <view class="address-box">
+			<view class="address-item" @tap="selectAddress" wx:if="{{checkedAddress._id}}">
+				<view class="l">
+					<view class="name">{{checkedAddress.name}}</view>
+					<view class="default {{checkedAddress.is_default ? 'show' : 'hide'}}">默认</view>
+				</view>
+				<view class="c">
+					<view class="mobile">{{checkedAddress.phone}}</view>
+					<view class="address">{{checkedAddress.address.address}}{{checkedAddress.door ? checkedAddress.door : ''}}</view>
+				</view>
+				<view class="r after-chevronright">
+				</view>
+			</view>
+
+      <view class="address-item address-empty" bindtap="selectAddress" wx:if="{{!checkedAddress._id}}">
+        <view class="m">
+          还没有收货地址，去添加
+        </view>
+        <view class="r after-chevronright">
+        </view>
+      </view>
+    </view>
+
+    <view class="order-box">
+      <view class="order-item">
+        <view class="l">
+          <text class="name">商品合计</text>
+        </view>
+        <view class="r">
+          <text class="txt">￥{{goodsTotalPrice}}</text>
+        </view>
+      </view>
+      <!-- <view class="order-item">
+        <view class="l">
+          <text class="name">运费</text>
+        </view>
+        <view class="r">
+          <text class="txt">￥{{freightPrice}}</text>
+        </view>
+      </view>
+      <view class="order-item no-border">
+        <view class="l">
+          <text class="name">优惠券</text>
+        </view>
+        <view class="r">
+          <text class="txt">-￥{{couponPrice}}</text>
+        </view>
+      </view> -->
+    </view>
+
+    <view class="goods-items">
+      <repeat for="{{checkedProductList}}" key="index" index="index" item="goods">
+        <view class="item">
+          <view class="cart-goods">
+            <image class="img" src="{{util.formatImageUrl(goods.avatar, baseUrl)}}" mode="aspectFill"></image>
+            <view class="info">
+              <view class="t">
+                <text class="name">{{goods.name}}</text>
+                <text class="num">x{{goods.count}}</text>
+              </view>
+              <view class="attr">{{goods.description}}</view>
+              <view class="b">
+                <text class="price">￥{{goods.default_price}}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </repeat>
+    </view>
+
+    <view class="order-total">
+      <view class="l">实付：￥{{goodsTotalPrice}}</view>
+      <view class="r" bindtap="submitOrder">去付款</view>
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import { connect, getStore } from 'wepy-redux';
+import util from '../../wxs/util.wxs';
+import { baseUrl } from '@/config';
+import pageRouter from '@/utils/pageRouter';
+import _ from 'underscore';
+import req from '@/network';
+
+const store = getStore();
+
+export default class Checkout extends wepy.page {
+  config = {
+    navigationBarTitleText: '填写订单',
+    backgroundColor: '#f4f4f4'
+  };
+
+  data = {
+    baseUrl: baseUrl,
+    is_loaded: false,
+    checkedProductList: [],
+    checkedAddress: {},
+    checkedCoupon: [],
+    couponList: [],
+    goodsTotalPrice: 0.0,
+    freightPrice: 0.0, // 快递费
+    couponPrice: 0.0, // 优惠券的价格
+    orderTotalPrice: 0.0, // 订单总价
+    actualPrice: 0.0, // 实际需要支付的总价
+    addressId: 0,
+    couponId: 0
+  };
+
+  wxs = {
+    util: util
+  };
+
+  getcheckedProductList() {
+    const cartList = store.getState().counter.cartList;
+    const checkedProductList = [];
+    cartList.forEach(p => {
+      p.checked ? checkedProductList.push(p) : checkedProductList;
+    });
+    return checkedProductList;
+  }
+
+  getgoodsTotalPrice(checkedProductList) {
+    let goodsTotalPrice = 0;
+    if (checkedProductList && checkedProductList.constructor === Array) {
+      checkedProductList.forEach(p => {
+        goodsTotalPrice += p.default_price * p.count;
+      });
+    }
+    return goodsTotalPrice.toFixed(2);
+  }
+
+  async onLoad(e) {
+    wepy.showLoading({
+      title: '加载中'
+    });
+
+    await this.$parent.login();
+
+    if (e.product) {
+      const product = JSON.parse(e.product);
+      this.checkedProductList = [product];
+      this.goodsTotalPrice = this.getgoodsTotalPrice(this.checkedProductList);
+    } else {
+      this.checkedProductList = this.getcheckedProductList();
+      this.goodsTotalPrice = this.getgoodsTotalPrice(this.checkedProductList);
+    }
+    this.$apply();
+  }
+
+  async onShow(e) {
+    await this.$parent.login();
+    const user_id = this.$parent.globalData.user._id;
+    const options = {
+      $filter: `owner eq '${user_id}'`
+    };
+    const result = await this.$parent.query('vip_address', options, 'guest');
+
+    if (result && result.value && result.value[0] && _.isEmpty(this.checkedAddress)) {
+      this.checkedAddress = result.value[0];
+      for (let address of result.value) {
+        if (address.is_default) {
+          this.checkedAddress = address;
+        }
+      }
+    }
+
+    this.is_loaded = true;
+    this.$apply();
+
+    wepy.hideLoading();
+  }
+
+  upDateAddress(address) {
+    if (address) {
+      this.checkedAddress = address;
+    }
+  }
+
+  computed = {};
+
+  methods = {
+    selectAddress() {
+      wepy.navigateTo({
+        url: '../address/list?is_choose=true'
+      });
+    },
+    async submitOrder() {
+      // const data = {
+      //   address: this.checkedAddress,
+      //   amount: this.goodsTotalPrice,
+      //   products: this.checkedProductList
+      // };
+      wx.showLoading({
+        title: '正在准备支付',
+        mask: true
+      });
+      var amount = parseFloat(parseFloat(this.goodsTotalPrice).toFixed(2));
+      var spaceId = this.checkedProductList[0].space;
+      var products = [];
+      this.checkedProductList.forEach(p => {
+        var tp = {};
+        Object.keys(p).forEach(k => {
+          if (k.indexOf('@odata.') < 0) {
+            tp[k] = p[k];
+          }
+          products.push(tp);
+        });
+      });
+
+      var address = {};
+      Object.keys(this.checkedAddress).forEach(k => {
+        if (k.indexOf('@odata.') < 0) {
+          address[k] = this.checkedAddress[k];
+        }
+      });
+      var newOrder = {
+        name: '商城购物',
+        amount: amount,
+        status: 'draft',
+        store: spaceId,
+        type: 'pay',
+        owner: this.$parent.globalData.user._id,
+        address: address,
+        products: products
+      };
+      this.$parent.insert('vip_order', newOrder, spaceId).then(o => {
+        console.log(o);
+        if (o.value) {
+          var data = {
+            // amount: amount,
+            amount: 0.01,
+            order_id: o.value[0]._id
+          };
+
+          req.post('/api/steedos/weixin/card/recharge', data).then(res => {
+            wx.hideLoading();
+            console.log('res: ', res);
+
+            if (res.paySign) {
+              wx.requestPayment({
+                timeStamp: res.timeStamp,
+                nonceStr: res.nonceStr,
+                package: res.package,
+                signType: 'MD5',
+                paySign: res.paySign,
+                success: function(msg) {
+                  console.log('success: ', msg);
+
+                },
+                fail: function(msg) {
+                  console.log('fail: ', msg);
+                },
+                complete: function(msg) {}
+              });
+            } else {
+              console.error(res);
+              wx.showModal({
+                content: '请求超时，请检查网络状况',
+                showCancel: false
+              });
+            }
+          });
+        } else if (o.error) {
+          console.error(o.error);
+        }
+      });
+
+    }
+  };
+
+  async getCheckoutInfo() {
+    let res = await util.request(api.CartCheckout, {
+      addressId: this.addressId,
+      couponId: this.couponId
+    });
+    if (res.errno === 0) {
+      console.log(res.data);
+      this.checkedGoodsList = res.data.checkedGoodsList;
+      this.checkedAddress = res.data.checkedAddress;
+      this.actualPrice = res.data.actualPrice;
+      this.checkedCoupon = res.data.checkedCoupon;
+      this.couponList = res.data.couponList;
+      this.couponPrice = res.data.couponPrice;
+      this.freightPrice = res.data.freightPrice;
+      this.goodsTotalPrice = res.data.goodsTotalPrice;
+      this.orderTotalPrice = res.data.orderTotalPrice;
+      this.$apply();
+    }
+    wepy.hideLoading();
+  }
+}
+</script>

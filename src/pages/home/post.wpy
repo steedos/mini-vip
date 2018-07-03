@@ -1,7 +1,3 @@
-<style lang="less">
-
-</style>
-
 <template>
 	<view class="page" wx:if="{{is_loaded}}">
     <view class="page__bd">
@@ -63,7 +59,7 @@
 		}
 
 		onShareAppMessage(res) {
-			if (res.from = "button") {
+			if (res.from === "button") {
 				const postName = res.target.dataset.postName;
 				const postId = res.target.dataset.postId;
 				const spaceId = res.target.dataset.postSpace;

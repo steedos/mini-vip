@@ -59,9 +59,7 @@ page {
       .empty-cover {
         position: relative;
         height: 210px;
-        background-color: #7f7f7f;
-        background-repeat: repeat-x;
-        background-image: linear-gradient(128deg, #565656, #555 50%, #343434);
+        background-image: url("https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/empty.png");
         display: flex;
         align-items: center;
         justify-content: center;
@@ -90,15 +88,15 @@ page {
         &::before {
           content: '';
           position: absolute;
-          top: 1px; 
+          top: 1px;
           bottom: 1px;
-          left: 1px; 
+          left: 1px;
           right: 1px;
           background: rgba(255,255,255,0.8);
           z-index: -1 ;
           border-radius: 0.25rem;
         }
-        
+
         .wrapper {
           position: relative;
           top: -50px;
@@ -153,7 +151,7 @@ page {
       background: #fff;
     }
 
-    
+
     .page__bd{
       .need_read{
         display:block;
@@ -185,11 +183,8 @@ page {
       <view class="header">
         <view wx:if="{{store_info.cover}}" class="cover-wrapper" @tap="uploadImage(true)" style="background-image: url({{util.formatImageUrl(store_info.cover, baseUrl)}})"></view>
         <view wx:else class="empty-cover" @tap="uploadImage(true)">
-          <view class="text" wx:if="{{is_space_owner}}">轻触设置封面</view>
+          <view class="text" wx:if="{{is_space_owner}}"></view>
         </view>
-        <!-- <view class="empty-cover" @tap="uploadImage(true)">
-          <view class="text" wx:if="{{is_space_owner}}">轻触设置封面</view>
-        </view> -->
         <view class="space-info">
           <view class="wrapper">
             <view class="bg-image"></view>
@@ -207,21 +202,37 @@ page {
       <view class="weui-cells">
         <view class="weui-grids">
           <repeat for="{{enabled_objects}}" key="index" index="index" item="object">
-            <block wx:if="{{object.name === 'support'}}">
-              <button open-type="contact" plain="true" class="weui-grid support" hover-class="weui-grid_active" wx:if="{{object}}">
-                <view class="slds-icon-{{object.icon}} weui-grid__icon slds-icon">
-                  <view class="need_read1"></view>
-                </view>
-                <view class="weui-grid__label">{{object.label}}</view>
-              </button>
+            <block wx:if="{{is_default_menu}}">
+              <block wx:if="{{object.name === 'support'}}">
+                <button open-type="contact" plain="true" class="weui-grid support" hover-class="weui-grid_active" wx:if="{{object}}">
+                  <view class="slds-icon-{{object.icon}} weui-grid__icon slds-icon">
+                    <view class="need_read1"></view>
+                  </view>
+                  <view class="weui-grid__label">{{object.label}}</view>
+                </button>
+              </block>
+              <block wx:else>
+                <navigator url="{{object.url}}" class="weui-grid" hover-class="weui-grid_active" wx:if="{{object}}">
+                  <view class="slds-icon-{{object.icon}} weui-grid__icon slds-icon">
+                    <view class="need_read1"></view>
+                  </view>
+                  <view class="weui-grid__label">{{object.label}}</view>
+                </navigator>
+              </block>
             </block>
             <block wx:else>
-              <navigator url="{{object.url}}" class="weui-grid" hover-class="weui-grid_active" wx:if="{{object}}">
-                <view class="slds-icon-{{object.icon}} weui-grid__icon slds-icon">
-                  <view class="need_read1"></view>
-                </view>
-                <view class="weui-grid__label">{{object.label}}</view>
-              </navigator>
+              <block wx:if="{{object.name === 'support'}}">
+                <button open-type="contact" plain="true" class="weui-grid support" hover-class="weui-grid_active" wx:if="{{object}}">
+                  <image wx:if="{{object.avatar}}" class="image weui-grid__icon slds-icon" src="{{util.formatImageUrl(object.avatar, baseUrl)}}"></image>
+                  <view class="weui-grid__label">{{object.name}}</view>
+                </button>
+              </block>
+              <block wx:else>
+                <navigator url="{{object.url}}" class="weui-grid" hover-class="weui-grid_active" wx:if="{{object}}">
+                  <image wx:if="{{object.avatar}}" class="image weui-grid__icon slds-icon" src="{{util.formatImageUrl(object.avatar, baseUrl)}}"></image>
+                  <view class="weui-grid__label">{{object.name}}</view>
+                </navigator>
+              </block>
             </block>
           </repeat>
         </view>
@@ -273,9 +284,9 @@ export default class Posts extends wepy.page {
       title: '加载中',
       mask: true
     });
-    this.space_id = e.space_id || this.$parent.globalData.space_id || scene;
+    console.log("onLoad==============space_index===================", e.space_id);
+    this.space_id = e.space_id || scene;
     await this.$parent.login(this.space_id);
-
     await this.loadCardInfo();
     this.type = e.type;
     await this.loadStoreInfo();
@@ -290,6 +301,7 @@ export default class Posts extends wepy.page {
     this.is_skip_allowed = true;
     this.posts = [];
     this.current_skip = 0;
+    await this.loadCardInfo();
     await this.loadStoreInfo();
     await this.loadPostList();
   }
@@ -351,7 +363,8 @@ export default class Posts extends wepy.page {
     is_space_admin: false,
     is_loaded: false,
     star_count: 0,
-    star_id: ''
+    star_id: '',
+    is_default_menu:false
   };
 
   wxs = {
@@ -380,7 +393,7 @@ export default class Posts extends wepy.page {
       $count: true,
       $select: 'is_actived,name,card_name,space'
     };
-    const card = await this.$parent.query('vip_card', options);
+    const card = await this.$parent.query('vip_card', options, this.space_id);
     if (card.value) {
       if (card.value[0] && card.value[0].is_actived) {
             this.card = card.value[0];
@@ -389,12 +402,13 @@ export default class Posts extends wepy.page {
             }`;
             const vip_category = await this.$parent.get(
               'vip_category',
-              this.card.card_name._id
+              this.card.card_name._id,
+              this.space_id
             );
             this.card.avatar = vip_category.avatar;
       }
     }
-    
+
   }
 
   async getStarCount() {
@@ -403,11 +417,32 @@ export default class Posts extends wepy.page {
     this.store_info.star_count = result.star_count || 0
     this.$apply()
   }
-
+  // async loadMenu() {
+  //   const options = {
+  //     $expand: 'space($select=name)',
+  //     $count: true,
+  //     $select:'name,avatar,related_to,sort_no,enabled'
+  //   };
+  //   const result = await this.$parent.query('vip_menu', options);
+  //   console.log("menu====================",result.value)
+  //   if (result.value) {
+  //     this.enabled_objects = result.value
+  //     this.enabled_objects.forEach(object => {
+  //       if(object.related_to == 'post_category'){
+  //         object['url'] = `../post/index${this.is_space_admin ? '?editable=true' : ''}?title=${space.name}`
+  //       }
+  //       if(object.related_to == 'vip_product_category'){
+  //         object['url'] = `../product/list?space_id=${this.space_id}`
+  //       }
+  //     });
+  //   }
+  //   this.$apply();
+  // }
   async loadStoreInfo() {
     const self = this
     const spaceId = this.space_id;
-    const space = await this.$parent.get('spaces', spaceId);
+    console.log("loadStoreInfo===================", spaceId);
+    const space = await this.$parent.get('spaces', spaceId, spaceId);
     const admins = space.admins
     const globalData = this.$parent.globalData;
     const userId = globalData.user._id
@@ -418,10 +453,10 @@ export default class Posts extends wepy.page {
       post: {
         label: '动态',
         icon: 'standard-news',
-        url: `../post/index${this.is_space_admin ? '?editable=true' : ''}?title=${space.name}`
+        url: `../post/index?space_id=${this.space_id}${this.is_space_admin ? '&editable=true' : ''}&title=${space.name}`
       },
       vip_product: {
-        label: '产品',
+        label: '商城',
         icon: 'standard-shipment',
         url: `../product/list?space_id=${this.space_id}`
       },
@@ -458,7 +493,7 @@ export default class Posts extends wepy.page {
       vip_wifi: {
         label: 'Wifi',
         icon: 'utility-wifi',
-        url: `../wifi?store=${this.space_id}`
+        url: `../wifi?space_id=${this.space_id}`
       },
       vip_card: {
         label: '会员',
@@ -474,17 +509,75 @@ export default class Posts extends wepy.page {
     }
 
     const result = await this.$parent.get('vip_store', spaceId, spaceId);
-    this.enabled_objects = []
-    if (result.enabled_objects && !_.isEmpty(result.enabled_objects)) {
-      _.each(result.enabled_objects, (o) => {
-        this.enabled_objects.push(objects_list[o])
-      })
-    } else {
-      this.enabled_objects = [
-        objects_list.post, objects_list.vip_event, objects_list.vip_product, 
-        objects_list.vip_card, objects_list.vip_store, objects_list.support
-      ] 
+    const options = {
+      $expand: 'space($select=name)',
+      $count: true,
+      $select:'name,avatar,related_to,sort_no,enabled'
+    };
+    const menu = await this.$parent.query('vip_menu', options,spaceId);
+    if (menu.value && menu.value.length) {
+      this.enabled_objects = menu.value
+      this.enabled_objects.forEach(object => {
+        if(object.related_to.o == 'post_category'){
+          if(object.related_to.ids){
+            object['url'] = `../post/index?&category_id=${object.related_to.ids[0]}&space_id=${this.space_id}${this.is_space_admin ? '&editable=true' : ''}&title=${space.name}`
+          }else{
+            object['url'] = `../post/index?space_id=${this.space_id}${this.is_space_admin ? '&editable=true' : ''}&title=${space.name}`
+          }
+        }
+        if(object.related_to.o == 'post'){
+          if(object.related_to.ids){
+            object['url'] = `../post/view?post_id=${object.related_to.ids[0]}&space_id=${spaceId}`
+          }else{
+            object['url'] = `../post/index?space_id=${this.space_id}${this.is_space_admin ? '&editable=true' : ''}&title=${space.name}`
+          }         
+        }
+        if(object.related_to.o == 'vip_product_category'){
+          if(object.related_to.ids) {
+            object['url'] = `../product/list?space_id=${this.space_id}`
+          }else{
+            object['url'] = `../product/list?space_id=${this.space_id}`
+          }
+        }
+        if(object.related_to.o == 'vip_product'){
+          if(object.related_to.ids){
+            object['url'] = `../product/view?record_id=${object.related_to.ids[0]}&space_id=${spaceId}`
+          }else{
+            object['url'] = `../product/list?space_id=${this.space_id}`
+          }
+        }
+        if(object.related_to.o == 'vip_store'){
+          object['url'] = `../store?store=${this.space_id}`
+        }
+        if(object.related_to.o == 'vip_event'){
+          if(object.related_to.ids){
+            object['url'] = `../event/view?space_id=${this.space_id}&event_id=${object.related_to.ids[0]}`
+          }else{
+            object['url'] = `../event/list?space_id=${this.space_id}`
+          }          
+        }
+      });
     }
+    else{
+      this.enabled_objects = [
+        objects_list.post, objects_list.vip_event, objects_list.vip_product,
+        objects_list.vip_card, objects_list.vip_store, objects_list.vip_wifi
+      ]
+      this.is_default_menu = true
+    }
+    console.log(this.is_default_menu)
+    this.$apply()
+    // this.enabled_objects = []
+    // if (result.enabled_objects && !_.isEmpty(result.enabled_objects)) {
+    //   _.each(result.enabled_objects, (o) => {
+    //     this.enabled_objects.push(objects_list[o])
+    //   })
+    // } else {
+    //   this.enabled_objects = [
+    //     objects_list.post, objects_list.vip_event, objects_list.vip_product,
+    //     objects_list.vip_card, objects_list.vip_store, objects_list.support
+    //   ]
+    // }
 
     if (!result.star_count) {
       result.star_count = 0
@@ -510,7 +603,7 @@ export default class Posts extends wepy.page {
     if (type) {
       options.$filter = `type eq '${type}'`;
     }
-    const result = await this.$parent.query('post', options);
+    const result = await this.$parent.query('post', options, this.space_id);
     if (result.value) {
       this.posts = this.posts.concat(result.value);
       this.current_skip = skip + result.value.length;

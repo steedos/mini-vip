@@ -5,10 +5,8 @@
   page{
     height: 100%;
     min-height: 100%;
-    background: #f4f4f4;
   }
   .container{
-    background: #f4f4f4;
     width: 100%;
     height: auto;
     min-height: 100%;
@@ -91,7 +89,8 @@
   .cart-view .item{
     display: flex;
     width: 100%;
-    overflow: hidden;
+    align-items: stretch;
+    position: relative;
     .check-img {
       height: 34rpx;
       width: 34rpx;
@@ -102,7 +101,8 @@
     align-content: center;
     align-items: center;
     width: 34rpx;
-    margin: 0 26rpx;
+    padding: 0 31.25rpx;
+    box-sizing: content-box;
     .check-img {
       background: url(http://nos.netease.com/mailpub/hxm/yanxuan-wap/p/20150730/style/img/icon-normal/checkbox-0e09baa37e.png) no-repeat;
       background-size: 34rpx;
@@ -113,6 +113,23 @@
     .check-img {
       background: url(http://nos.netease.com/mailpub/hxm/yanxuan-wap/p/20150730/style/img/icon-normal/checkbox-checked-822e54472a.png) no-repeat;
       background-size: 34rpx;
+    }
+  }
+
+  .cart-view .item {
+    transition: all 0.2s linear;
+    .delete {
+      position: absolute;
+      width: 60px;
+      background: #b4282d;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content:center;
+      height: 100%;
+      right: 0;
+      top: 0;
+      transform: translateX(60px);
     }
   }
 
@@ -131,7 +148,7 @@
 
   .cart-view .item .img{
     float: left;
-    height:150rpx;
+    height: 150rpx;
     width: 150rpx;
     background: #f4f4f4;
     margin: 19.5rpx 18rpx 19.5rpx 0;
@@ -140,8 +157,8 @@
   .cart-view .item .info{
 		flex: 1;
     float: left;
-    height:150rpx;
-    margin: 19.5rpx 26rpx 19.5rpx 0;
+    height: auto;
+    margin: 19.5rpx 31.25rpx 19.5rpx 0;
   }
 
   .cart-view .item .t{
@@ -170,6 +187,7 @@
     font-size: 22rpx;
     color: #666;
     overflow: hidden;
+    word-break: break-all;
   }
 
   .cart-view .item .b{
@@ -180,12 +198,12 @@
 
   .cart-view .item .price{
 		flex: 1;
-		line-height: 52rpx;
+		line-height: 57rpx;
   }
 	
   .cart-view .item .selnum{
     width: 235rpx;
-    height: 52rpx;
+    height: 57rpx;
     // border: 1rpx solid #686868;
 		display: flex;
 		
@@ -200,8 +218,8 @@
     width: 70rpx;
     height: 100%;
 		text-align: center;
-		height: 50rpx;
-		line-height: 50rpx;
+		height: 55rpx;
+		line-height: 55rpx;
 		border: 1rpx solid #686868;
 
 		&.disabled {
@@ -214,8 +232,9 @@
     flex: 1;
     height: 100%;
 		text-align: center;
-		height: 50rpx;
-    line-height: 50rpx;
+    height: 55rpx;
+    min-height: 55rpx;
+    line-height: 55rpx;
     border-top: 1rpx solid #686868;
     border-bottom: 1rpx solid #686868;
     float: left;
@@ -225,8 +244,8 @@
     width: 80rpx;
     height: 100%;
 		text-align: center;
-		height: 50rpx;
-		line-height: 50rpx;
+		height: 55rpx;
+		line-height: 55rpx;
 		border: 1rpx solid #686868;
   }
 
@@ -301,7 +320,7 @@
       display: flex;
       box-sizing: content-box;
       height: 100%;
-      padding-left: 26rpx;
+      padding-left: 31.25rpx;
       align-items: center;
       align-content: center;
       .check-img {
@@ -366,12 +385,12 @@
         <view class="group-item">
           <view class="goods">
 						<repeat for="{{cartList}}" key="index" index="index" item="goods">
-							<view class="item">
-								<view class="checkbox {{goods.checked ? 'checked' : ''}}" @tap="checkedItem" data-item-id="{{goods._id}}">
+							<view class="item" @tap="viewDetail" style="transform: translateX({{styleList[goods._id].offsetX}}px)" @touchstart="touchstart" @touchmove="touchmove" @touchend="touchend" data-item-id="{{goods._id}}" data-item-space="{{goods.space}}">
+                <view class="checkbox {{goods.checked ? 'checked' : ''}}" @tap.stop="checkedItem" data-item-id="{{goods._id}}">
                   <view class="check-img" data-item-id="{{goods._id}}"></view>
                 </view>
 								<view class="cart-goods">
-									<image class="img" src="{{util.formatImageUrl(goods.avatar, baseUrl)}}"></image>
+									<image class="img" src="{{util.formatImageUrl(goods.avatar, baseUrl)}}" mode="aspectFill"></image>
 									<view class="info">
 										<view class="t">
 											<text class="name">{{goods.name}}</text>
@@ -381,13 +400,16 @@
 										<view class="b">
 											<text class="price">￥{{goods.default_price}}</text>
 											<view class="selnum">
-												<view class="cut {{goods.count > 1 ? 'enabled' : 'disabled'}}" @tap="cutNumber" data-item-id="{{goods._id}}">-</view>
-												<input value="{{goods.count}}" class="number" disabled="true" type="number" />
-												<view class="add" @tap="addNumber" data-item-id="{{goods._id}}">+</view>
+												<view class="cut {{goods.count > 1 ? 'enabled' : 'disabled'}}" @tap.stop="cutNumber" data-item-id="{{goods._id}}">-</view>
+												<input value="{{goods.count}}" class="number" data-target="input" data-item-id="{{goods._id}}" type="number" bindblur="updateNumber"/>
+												<view class="add" @tap.stop="addNumber" data-item-id="{{goods._id}}">+</view>
 											</view>
 										</view>
 									</view>
 								</view>
+                <view class="delete" @tap.stop="delete" data-item-id="{{goods._id}}">
+                  删除
+                </view>
 							</view>
 						</repeat>
           </view>
@@ -400,8 +422,8 @@
         <view class="text">全选({{checkedProductCount}})</view>
         <view class="total">{{'￥'+checkedProductAmount}}</view>
         <!-- <view class="delete" @tap="editCart">{{!isEditCart ? '编辑' : '完成'}}</view> -->
-        <view class="checkout" @tap="deleteCart" wx:if="{{isEditCart}}">删除所选</view>
-        <view class="checkout" @tap="checkoutOrder" wx:if="{{!isEditCart}}">下单</view>
+        <!-- <view class="checkout" @tap="deleteCart" wx:if="{{isEditCart}}">删除所选</view> -->
+        <view class="checkout" @tap="checkoutOrder">下单</view>
       </view>
     </view>
   </view>
@@ -431,7 +453,7 @@
     data = {
 			baseUrl: baseUrl,
 			is_loaded: true,
-      cartGoods: [],
+      styleList: {},
       cartTotal: {
         'goodsCount': 0,
         'goodsAmount': 0.00,
@@ -453,6 +475,7 @@
 			// cartList是数组，需要clone，避免修改
 			const products = _.clone(this.cartList);
 			const newList = await this.getProductInfo(products);
+      this.styleList = this.initStyleList(newList);
 			store.dispatch({type: 'UPDATE_PRODUCT_INFO', payload: newList});
 			this.is_loaded = false;
 			this.$apply()
@@ -463,11 +486,19 @@
 			util: util
 		}
 
+    initStyleList(cartList) {
+      let styleList = {};
+      for (let p of cartList) {
+        styleList[p._id] = {positionX: 0, offsetX: 0}
+      }
+      return styleList
+    }
+
 		async getProductInfo (products) {
 			for (let p of products) {
 				const options = {
 					$filter: `_id eq '${p._id}'`,
-					$select: 'name,default_price,compared_price,description,covers,images,avatar,categories,tags,vendor,status'
+					$select: 'name,default_price,compared_price,description,covers,images,avatar,categories,tags,vendor,status,space'
 				};
 				let product_info = await this.$parent.query('vip_product', options, 'guest');
 				if (product_info && product_info.value && product_info.value[0]) {
@@ -514,55 +545,83 @@
       }
     }
     methods = {
-      checkedItem(e) {
-        const itemId = e.target.dataset.itemId;
-        store.dispatch({type: 'CHECK_PRODUCT', payload: itemId})
+      checkedItem(event) {
+        const itemId = event.target.dataset.itemId;
+        store.dispatch({type: 'CHECK_PRODUCT', payload: itemId});
       },
       checkedAll() {
-				const isCheckedAll = this.computed.isCheckedAll()
-				store.dispatch({type: 'CHECK_ALL_PRODUCT', payload: !isCheckedAll})
+				const isCheckedAll = this.computed.isCheckedAll();
+				store.dispatch({type: 'CHECK_ALL_PRODUCT', payload: !isCheckedAll});
       },
-      editCart: function () {
-        if (this.isEditCart) {
-          this.getCartList()
-          this.isEditCart = !this.isEditCart
-        } else {
-          // 编辑状态
-          let tmpCartList = this.cartGoods.map(function (v) {
-            v.checked = false
-            return v
-          })
-          this.editCartList = this.cartGoods
-          this.cartGoods = tmpCartList
-          this.isEditCart = !this.isEditCart
-          this.checkedAllStatus = this.isCheckedAll()
-          this.cartTotal.checkedGoodsCount = this.getCheckedGoodsCount()
-        }
+      cutNumber(event) {
+    		const itemId = event.target.dataset.itemId;
+        store.dispatch({type: 'DECREASE_PRODUCT', payload: itemId});
       },
-      cutNumber: function (event) {
-    		const itemId = event.target.dataset.itemId
-        store.dispatch({type: 'DECREASE_PRODUCT', payload: itemId})
+      addNumber(event) {
+				const itemId = event.target.dataset.itemId;
+        store.dispatch({type: 'ADD_PRODUCT', payload: {_id: itemId, count: 1}});
       },
-      addNumber: function (event) {
-				const itemId = event.target.dataset.itemId
-        store.dispatch({type: 'ADD_PRODUCT', payload: {_id: itemId, count: 1}})
+      updateNumber(event) {
+        const itemId = event.target.dataset.itemId;
+        const count = parseInt(event.detail.value);
+        store.dispatch({type: 'UPDATE_PRODUCT_COUNT', payload: {operation:'update', product: {_id: itemId, count: count}}})
       },
-      checkoutOrder: function () {
-        // 获取已选择的商品
-        var checkedGoods = this.cartGoods.filter(function (element, index, array) {
-          if (element.checked === true) {
-            return true
-          } else {
-            return false
-          }
-        })
-        if (checkedGoods.length <= 0) {
-          return false
-        }
+      checkoutOrder() {
         wepy.navigateTo({
-          url: '../shopping/checkout/checkout'
+          url: './checkout'
         })
       },
+      viewDetail(event) {
+        const itemId = event.currentTarget.dataset.itemId;
+        const spaceId = event.currentTarget.dataset.itemSpace;
+        const target = event.target.dataset.target;
+        if (!target) {
+          wepy.navigateTo({
+            url: `../product/view?record_id=${itemId}&space_id=${spaceId}`
+          })
+        }
+      },
+      touchstart(event) {
+        const itemId = event.currentTarget.dataset.itemId;
+        const positionX = event.touches[0].pageX;
+        this.styleList[itemId].positionX = positionX;
+        this.$apply();
+      },
+      touchmove(event) {
+        const itemId = event.currentTarget.dataset.itemId;
+        const newPositionX = event.touches[0].pageX;
+        const oldPositionX = this.styleList[itemId].positionX;
+        const oldOffsetX = this.styleList[itemId].offsetX;
+        const offsetX = newPositionX - oldPositionX;
+
+        if (offsetX < 0) {
+          if (oldOffsetX < 0 && oldOffsetX < offsetX) {
+            this.styleList[itemId].offsetX = -60 + offsetX;
+          } else {
+            this.styleList[itemId].offsetX = offsetX;
+          }
+        } else if (offsetX > 0) {
+          this.styleList[itemId].offsetX = 10;
+        }
+        this.$apply();
+      },
+      touchend(event) {
+        const itemId = event.currentTarget.dataset.itemId;
+        let offsetX = this.styleList[itemId].offsetX
+        if ((-60 < offsetX && offsetX < -30) || offsetX < -60) {
+          offsetX = -60;
+        } else {
+          offsetX = 0;
+        }
+        this.styleList[itemId].positionX = 0;
+        this.styleList[itemId].offsetX = offsetX;
+        this.$apply();
+      },
+      delete(event) {
+        const itemId = event.currentTarget.dataset.itemId;
+        console.log('delete', itemId)
+        store.dispatch({type: 'DELETE_PRODUT', payload: itemId});
+      }
     }
   }
 </script>

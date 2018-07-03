@@ -50,7 +50,7 @@ page {
   <view class="page" wx:if="{{is_loaded}}">
     <view class="page__bd">
       <scroll-view class="scroll-view_H" scroll-y="true">
-        <eventList :list.sync="events" :showHeader.sync="featured" />
+        <eventList :list.sync="events" :showHeader.sync="show_header" />
       </scroll-view>
     </view>
     <view class="tab-bar" wx:if="{{creatable}}">
@@ -73,7 +73,6 @@ export default class Events extends wepy.page {
   };
 
   async onLoad(e) {
-    this.featured = e.featured;
     this.space_id = e.space_id ? e.space_id : 'guest';
     if(e.title){
       this.title = e.title;
@@ -83,7 +82,7 @@ export default class Events extends wepy.page {
     }
     
     this.creatable = this.$parent.recordAllowCreate("vip_event", this.space_id);
-    await this.$parent.login(this.space_id);
+    await this.$parent.login();
     await this.loadData();
   }
 
@@ -104,10 +103,9 @@ export default class Events extends wepy.page {
   onShareAppMessage(res) {
     const space_id = this.space_id;
     const title = this.title;
-    const featured = this.featured;
     return {
       title: title,
-      path: `pages/event/list?space_id=${space_id}&featured=${featured}&title=${title}`
+      path: `pages/event/list?space_id=${space_id}&title=${title}`
     };
   }
 
@@ -143,7 +141,8 @@ export default class Events extends wepy.page {
     is_skip_allowed: true,
     is_loaded: false,
     creatable: false,
-    featured: false
+    show_header: false,
+    joined_events: []
   };
   
 	async loadEventList(){
@@ -154,17 +153,18 @@ export default class Events extends wepy.page {
     const options = {
       $expand: 'space($select=name,avatar)',
       $count: true,
-      $select: 'name,start,location,alarms,accepted_count,pending_count,rejected_count,featured,cover,space,owner',
+      $select: 'name,start,location,alarms,accepted_count,pending_count,rejected_count,cover,space,owner',
       $skip: skip,
       $top: DATA_LENGTH
     };
     let spaceId = this.space_id;
-    const featured = this.featured;
-    if(featured){
-      spaceId = "guest";
+    if(this.space_id == "guest"){
+      this.show_header = true;
+      let userId = this.$parent.globalData.user._id;
+      // options.$filter = `owner eq '${userId}'`;
       options.$filter = `featured eq true`;
     }
-    const result = await this.$parent.query("vip_event", options, spaceId);
+    const result = await this.$parent.query("vip_event", options, this.space_id);
     if(result.value){
       this.events = this.events.concat(result.value);
       this.current_skip = skip + result.value.length;
@@ -186,14 +186,13 @@ export default class Events extends wepy.page {
       start = new Date(start.getTime() + 1 * 60 * 60 * 1000);
       start.setMinutes(0);
       start.setSeconds(0);
-      start = utilJs.formatTime(start, '-', true);
+      start = utilJs.formatTime(start, "/", true);
       let values = {
         alarms: alarms,
         start: start
       };
       values = JSON.stringify(values);
-      console.log("createEvent=====values======", values);
-      console.log("createEvent=====this.space_id======", this.space_id);
+      console.log("createEvent=====values==1=2===", values);
       let url = `/pages/record/create?&space_id=${this.space_id}&object_name=vip_event&values=${values}`;
       pageRouter.navigateTo({
         url: url

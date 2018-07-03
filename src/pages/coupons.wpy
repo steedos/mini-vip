@@ -22,7 +22,8 @@
       navigationBarTitleText: '优惠券'
     };
     
-    async onLoad() {
+    async onLoad(e) {
+      this.space_id = e.space_id;
       this.loadCouponList();
     }
 
@@ -40,7 +41,7 @@
         $count: true,
         $select: 'name,quota,min_consumption,start_time,end_time,limit_count,enable_fission,fission_count'
       };
-      var coupons = await this.$parent.query("vip_coupon", options)
+      var coupons = await this.$parent.query("vip_coupon", options, this.space_id)
       this.coupons = coupons.value;
       console.log("loadCouponList", this.coupons);
       this.$apply();

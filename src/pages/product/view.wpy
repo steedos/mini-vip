@@ -1,15 +1,9 @@
 <style lang="less">
+@import '../../wemark/wemark.wxss';
 	.container {
     box-sizing: border-box;
     background-color: #f4f4f4;
     font-family: PingFangSC-Light,helvetica,'Heiti SC';
-  }
-
-  view,image,text,navigator{
-    box-sizing: border-box;
-    padding:0;
-    margin:0;
-
   }
 
   view,text{
@@ -17,8 +11,9 @@
     font-size: 29rpx;
     color: #333;
   }
-  .container{
-    margin-bottom: 100rpx;
+  .page {
+    margin-bottom: 200rpx;
+    position: relative;
   }
   .goodsimgs{
     width: 750rpx;
@@ -30,7 +25,7 @@
     height: 750rpx;
   }
   .service-policy{
-    width: 750rpx;
+    width: auto;
     height: 73rpx;
     background: #f4f4f4;
     padding: 0 31.25rpx;
@@ -51,37 +46,41 @@
   }
 
   .goods-info{
-    width: 750rpx;
-    height: 306rpx;
+    width: auto;
     overflow: hidden;
     background: #fff;
   }
 
   .goods-info .c{
     display: block;
-    width: 718.75rpx;
-    height: 100%;
+    width: auto;
     margin-left: 31.25rpx;
-    padding: 38rpx 31.25rpx 38rpx 0;
-    border-bottom: 1px solid #f4f4f4;
+    padding: 38rpx 31.25rpx 0 0;
   }
 
   .goods-info .c text{
     display: block;
     width: 687.5rpx;
-    text-align: center;
   }
 
+
   .goods-info .name{
-    height: 41rpx;
-    margin-bottom: 5.208rpx;
+    font-weight:bold;
+    margin-bottom: 20rpx;
     font-size: 41rpx;
     line-height: 41rpx;
+    max-height:34px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    display: -webkit-box!important;
+    -webkit-line-clamp:2;
+    -webkit-box-orient:vertical;
   }
 
   .goods-info .desc{
-    height: 43rpx;
-    margin-bottom: 41rpx;
+    margin-left: 38rpx;
+    margin-top: 5px;
+    margin-bottom: 10px;
     font-size: 24rpx;
     line-height: 36rpx;
     color: #999;
@@ -89,7 +88,8 @@
 
 
   .goods-info .price{
-    height: 35rpx;
+    display:inline!important;
+    margin-top:15px;
     font-size: 35rpx;
     line-height: 35rpx;
     color: #b4282d;
@@ -299,18 +299,18 @@
 
 
   .goods-attr{
-    width: 750rpx;
+    width: auto;
     height: auto;
     overflow: hidden;
-    padding: 0 31.25rpx 25rpx 31.25rpx;
+    padding: 0 31.25rpx 0rpx 31.25rpx;
     background: #fff;
   }
 
   .goods-attr .t{
-    width: 687.5rpx;
+    width: auto;
     height: 104rpx;
     line-height: 104rpx;
-    font-size: 38.5rpx;
+    font-size: 29rpx;
   }
 
   .goods-attr .item{
@@ -344,19 +344,20 @@
   }
 
   .detail{
-    width: 750rpx;
+    background-color: #fff;
+    width: auto;
     height: auto;
     overflow: hidden;
   }
 
   .detail image{
-    width: 750rpx;
+    width: auto;
     display: block;
   }
 
 
   .common-problem{
-    width: 750rpx;
+    width: auto;
     height: auto;
     overflow: hidden;
   }
@@ -364,7 +365,7 @@
   .common-problem .h{
     position: relative;
     height: 145.5rpx;
-    width: 750rpx;
+    width: auto;
     padding: 56.25rpx 0;
     background: #fff;
     text-align: center;
@@ -524,8 +525,8 @@
     position: fixed;
     left:0;
     bottom:0;
-    z-index: 10;
-    width: 750rpx;
+    z-index: 100;
+    width: 100%;
     height: 100rpx;
     display: flex;
     background: #fff;
@@ -609,48 +610,76 @@
     color: #fff;
   }
 
-  .attr-pop{
+  .pop-mask {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(16, 16, 16, 0.6);
+  }
+
+  .attr-pop {
+    position: fixed;
+    transform: translateY(101%);
+    bottom: 100rpx;
+    left: 0;
     width: 100%;
-    height: 100%;
+    height: auto;
     padding: 31.25rpx;
     background: #fff;
-  }
+    z-index:100;
+    transition: all .3s linear;
+    box-sizing: border-box;
+    &.show {
+      transform: translateY(0);
+    }
 
-  .attr-pop .img-info{
-    width: 687.5rpx;
-    height: 177rpx;
-    overflow: hidden;
-    margin-bottom: 41.5rpx;
-  }
+    .img-info {
+      width: 100%;
+      height: 177rpx;
+      overflow: hidden;
+      margin-bottom: 41.5rpx;
+    }
 
-  .attr-pop .img{
-    float: left;
-    height: 177rpx;
-    width: 177rpx;
-    background: #f4f4f4;
-    margin-right: 31.25rpx;
-  }
+    .close {
+      float: right;
+      padding:0 0 40rpx 40rpx;
+      .vip_close {
+        width: 30rpx;
+        height: 30rpx;
+      }
+    }
 
-  .attr-pop .info{
-    float: left;
-    height: 177rpx;
-    display: flex;
-    align-items: center;
-  }
+    .img {
+      float: left;
+      height: 177rpx;
+      width: 177rpx;
+      background: #f4f4f4;
+      margin-right: 31.25rpx;
+    }
 
-  .attr-pop .p{
-    font-size: 33rpx;
-    color: #333;
-    height: 33rpx;
-    line-height: 33rpx;
-    margin-bottom: 10rpx;
-  }
+    .info {
+      float: left;
+      height: 177rpx;
+      display: flex;
+      align-items: center;
+    }
 
-  .attr-pop .a{
-    font-size: 29rpx;
-    color: #333;
-    height: 40rpx;
-    line-height: 40rpx;
+    .p{
+      font-size: 33rpx;
+      color: #333;
+      height: 33rpx;
+      line-height: 33rpx;
+      margin-bottom: 10rpx;
+    }
+
+    .a{
+      font-size: 29rpx;
+      color: #333;
+      height: 40rpx;
+      line-height: 40rpx;
+    }
   }
 
   .spec-con{
@@ -660,7 +689,6 @@
   }
 
   .spec-con .name{
-    height: 32rpx;
     margin-bottom: 22rpx;
     font-size: 29rpx;
     color: #333;
@@ -695,40 +723,76 @@
     color: #b4282d;
   }
 
-  .number-item .selnum{
-    width: 322rpx;
-    height: 71rpx;
-    border: 1px solid #ccc;
+  .selnum{
+    width: 235rpx;
+    height: 57rpx;
+    // border: 1rpx solid #686868;
     display: flex;
+    padding-bottom: 16rpx;
+		
+		view, input {
+			display:flex;
+			justify-content:center;
+			align-items:center;
+		}
   }
 
-  .number-item .cut{
-    width: 93.75rpx;
+  .selnum .cut{
+    width: 70rpx;
     height: 100%;
-    text-align: center;
-    line-height: 65rpx;
+		text-align: center;
+		height: 55rpx;
+		line-height: 55rpx;
+		border: 1rpx solid #686868;
+
+		&.disabled {
+			border-color: #aaa;
+			border-right-color: #686868;
+		}
   }
 
-  .number-item .number{
+  .selnum .number{
     flex: 1;
     height: 100%;
-    text-align: center;
-    line-height: 68.75rpx;
-    border-left: 1px solid #ccc;
-    border-right: 1px solid #ccc;
+		text-align: center;
+    height: 55rpx;
+    min-height: 55rpx;
+    line-height: 55rpx;
+    border-top: 1rpx solid #686868;
+    border-bottom: 1rpx solid #686868;
     float: left;
   }
 
-  .number-item .add{
-    width: 93.75rpx;
+  .selnum .add{
+    width: 80rpx;
     height: 100%;
-    text-align: center;
-    line-height: 65rpx;
+		text-align: center;
+		height: 55rpx;
+		line-height: 55rpx;
+		border: 1rpx solid #686868;
+  }
+  .cost_price {
+    padding-left:16rpx;
+    display:inline;
+    color: #666666;
+    font-size: 24rpx;
+    text-decoration: line-through;
+    font-weight: 600;
+    overflow:hidden;
+  }
+  .flex-images-box{
+    margin:0px -15px;
+  }
+  .weui-article{
+    padding:0px 15px 20px 15px;
+  }
+  .weui-article__c{
+    padding:0 15px;
   }
 </style>
 <template>
-  <scroll-view class="container" scroll-y="true">
-    <view wx:if="{{!openAttr}}">
+  <view class="page">
+    <view>
       <swiper class="goodsimgs" indicator-dots="true" autoplay="true" interval="3000" duration="1000">
         <repeat for="{{product.covers}}" key="index" index="index" item="img">
           <swiper-item>
@@ -744,8 +808,9 @@
       <view class="goods-info">
         <view class="c">
           <text class="name">{{product.name}}</text>
-          <text class="desc">{{product.description}}</text>
+          <!-- <text class="page__desc">{{product.description}}</text> -->
           <text class="price">￥{{product.default_price}}</text>
+          <view class="cost_price" wx:if="{{product.compared_price && product.compared_price!=product.default_price}}">￥{{product.compared_price}}</view>
           <view class="brand" wx:if="{{brand.name}}">
             <navigator url="../brandDetail/brandDetail?id={{brand.brandId}}">
               <text>{{brand.name}}</text>
@@ -753,10 +818,10 @@
           </view>
         </view>
       </view>
-      <view class="section-nav section-attr" bindtap="switchAttrPop">
+      <!-- <view class="section-nav section-attr" bindtap="switchAttrPop">
         <view class="t">请选择规格数量</view>
         <image class="i" src="../../static/images/address_right.png" background-size="cover"></image>
-      </view>
+      </view> -->
       <view class="comments" wx:if="{{comment.count > 0}}">
         <view class="h">
           <navigator url="../comment/comment?valueId={{goods.id}}&typeId=0">
@@ -779,32 +844,48 @@
             <view class="imgs" wx:if="{{comment.data.pic_list.length > 0}}">
               <image class="img"  wx:for="{{comment.data.pic_list}}" wx:key="{{item.id}}" src="{{item.pic_url}}"></image>
             </view>
-            <!-- <view class="spec">白色 2件</view> -->
           </view>
         </view>
       </view>
-      <view class="goods-attr">
-        <view class="t">商品参数</view>
+      <!-- <view class="goods-attr">
         <view class="l">
           <view class="item" wx:for="{{attribute}}" wx:key="{{item.name}}">
             <text class="left">{{item.name}}</text>
             <text class="right">{{item.value}}</text>
           </view>
         </view>
-      </view>
+      </view> -->
 
       <view class="detail">
+        <!-- <import src="../../wemark/wemark.wxml"/>
+        <template class="desc" is="wemark" data="{{...wemark}}"></template>
         <repeat for="{{product.images}}" key="index" index="index" item="img">
           <image src="{{util.formatImageUrl(img, baseUrl)}}" mode="widthFix"></image>
-        </repeat>
+        </repeat> -->
+
+        <view class="weui-article body_color">
+          <view class="weui-article__section article-section">
+            <view class="weui-article__p article-p">
+              <import src="../../wemark/wemark.wxml"/>
+              <template class="desc" is="wemark" data="{{...wemark}}"></template>
+            </view>
+            <view class="weui-article__c" wx:if="{{withoutMarkdownImages && withoutMarkdownImages.length>1}}">
+              <view class="flex-images-box">
+                <repeat for="{{withoutMarkdownImages}}" key="index" index="index" item="item">
+                  <image src="{{util.formatImageUrl(item, baseUrl)}}" mode="widthFix" @tap="previewImage({{item}})" class="flex-image {{(index + 1)%3 > 0 ? 'flex-image-item' : 'flex-image-last'}}"/>
+                </repeat>
+              </view>
+            </view>
+          </view>
+        </view>
       </view>
 
 
       <view class="common-problem">
-        <view class="h">
+        <!-- <view class="h">
           <view class="line"></view>
           <text class="title">常见问题</text>
-        </view>
+        </view> -->
         <view class="b">
           <view class="item" wx:for="{{issueList}}" wx:key="{{item.id}}">
             <view class="question-box">
@@ -835,14 +916,18 @@
       </view>
 
     </view>
-    <view wx:if="{{openAttr}}" class="attr-pop">
+
+    <view class="pop-mask" wx:if="{{showPop}}" @tap="closePop"></view>
+    <view class="attr-pop {{showPop ? 'show' : ''}}">
       <view class="img-info">
-        <image class="img" src="http://ac-3yr0g9cz.clouddn.com/6e5176bd6545b72e130a.png"></image>
+        <image class="img" src="{{util.formatImageUrl(product.avatar, baseUrl)}}"></image>
         <view class="info">
           <view class="c">
-            <view class="p">价格：￥{{goods.retail_price}}</view>
-            <view class="a" wx:if="{{productList.length>0}}">已选择：{{checkedSpecText}}</view>
+            <view class="p">价格：￥{{product.default_price}}</view>
           </view>
+        </view>
+        <view class="close" @tap="closePop">
+          <view class="vip_close"></view>
         </view>
       </view>
       <view class="spec-con">
@@ -856,34 +941,35 @@
         <view class="number-item">
           <view class="name">数量</view>
           <view class="selnum">
-            <view class="cut" @tap="cutNumber">-</view>
-            <input value="{{number}}" class="number" disabled="true" type="number" />
+            <view class="cut {{count > 1 ? 'enabled' : 'disabled'}}" @tap="cutNumber">-</view>
+            <input value="{{count}}" class="number" disabled="true" type="number" />
             <view class="add" @tap="addNumber">+</view>
           </view>
         </view>
       </view>
     </view>
     <view class="bottom-btn">
-      <view class="l l-collect {{ openAttr ? 'back' : ''}}" @tap="closeAttrOrCollect">
+      <view class="l l-collect" @tap="enterProductIndex">
         <image class="icon" src="{{ collectBackImage }}"></image>
       </view>
-      <view class="l l-cart">
+      <view class="l l-cart" @tap="openCartPage">
         <view class="box">
           <text class="cart-count">{{getProductCount}}</text>
-          <image @tap="openCartPage" class="icon" src="/static/images/ic_menu_shoping_nor.png"></image>
+          <image class="icon" src="/static/images/ic_menu_shoping_nor.png"></image>
 
         </view>
       </view>
-      <view class="c">立即购买</view>
+      <view class="c" @tap="buyNow">立即购买</view>
       <view class="r" @tap="addProduct">加入购物车</view>
     </view>
-  </scroll-view>
+  </view>
 </template>
 
 <script>
   import wepy from 'wepy'
   import { baseUrl } from '@/config'
   import util from '../../wxs/util.wxs'
+  import wemark from '../../wemark/wemark'
   import { connect, getStore } from 'wepy-redux'
   import { ADD_PRODUCT } from '../../store/types/counter'
  
@@ -910,35 +996,38 @@
     data = {
       baseUrl: baseUrl,
       product: null,
-      id: 0,
-      goods: {},
-      gallery: [],
-      attribute: [],
-      issueList: [],
-      comment: [],
-      brand: {},
-      specificationList: [],
-      productList: [],
-      relatedGoods: [],
-      cartGoodsCount: 0,
-      userHasCollect: 0,
-      number: 1,
-      checkedSpecText: '请选择规格数量',
-      openAttr: false,
+      space_id: null,
+      showPop: false,
+      baseUrl: baseUrl,
+      count: 1,
       noCollectImage: '/static/images/icon_collect.png',
       hasCollectImage: '/static/images/icon_collect_checked.png',
-      collectBackImage: '/static/images/ic_menu_choice_nor.png'
+      collectBackImage: '/static/images/ic_menu_choice_nor.png',
+      wemark: {}
     }
 
     async onLoad (e) {
       console.log('e', e)
       const _id = e.record_id
+      const space_id = e.space_id
       const options = {
         $filter: `_id eq '${_id}'`,
-        $select: 'name,default_price,compared_price,description,covers,images,avatar,categories,tags,vendor,status'
+        $select: 'name,default_price,compared_price,description,covers,images,avatar,categories,tags,vendor,status,space'
       };
       const product = await this.$parent.query('vip_product', options, 'guest');
       this.product = product.value[0];
+      console.log("==================",this.product)
+
+      let productMd = this.product && this.product.description;
+      //支持标准的图片markdown，格式为："![图片描述](http://192.168.0.195:5000/api/files/images/s8589uhysxKk7CEnp)";
+      //如果传入imagePathPrefix，则可以进一步支持"![图片描述](s8589uhysxKk7CEnp)"
+      if(productMd){
+        wemark.parse(productMd, this, {
+          name: 'wemark',
+          imagePathPrefix: `${baseUrl}/api/files/images/`
+        });
+      }
+      this.space_id = space_id
       this.$apply();
     }
 
@@ -953,21 +1042,85 @@
           });
         }
         return cartProductCount
+      },
+      withoutMarkdownImages () {
+        // 从this.post.images中排除this.post.description的markdown语法中已有的图片
+        if(!this.product){
+          return []
+        }
+        let md = this.product.description;
+        if(md && md.length){
+          let mdImages = md.match(/\!\[.*?\]\((.+?)\)/gm);//找出所有格式为![...](...)的图片字符串
+          if(mdImages && mdImages.length){
+            let strMdImages = mdImages.join(",");
+            console.log("withoutMarkdownImages============================", strMdImages);
+            return this.product.images.filter((n)=>{
+              let tempReg = new RegExp(`\(.*?${n}.*?\)`);//匹配图片markdown字符串中的括号里面是否包含字符n
+              return !tempReg.test(strMdImages);
+            })
+          }
+          else{
+            return this.product.images;
+          }
+        }
+        else{
+          return this.product.images;
+        }
       }
     }
 
     methods = {
+      previewImage(image, event){
+        var baseUrl = this.baseUrl;
+        var current = `${baseUrl}/api/files/images/${image}`;
+        var urls = this.product.images.map((n)=>{
+          return  `${baseUrl}/api/files/images/${n}`;
+        });
+        wx.previewImage({
+          current: current,
+          urls: urls
+        });
+      },
       addProduct() {
         const _id = this.product._id
         if (_id) {
           store.dispatch({type: 'ADD_PRODUCT', payload: {_id: _id, count: 1}})
         }
       },
-      openCartPage: function () {
+      openCartPage() {
         wx.navigateTo({
           url: '../cart/index'
         })
       },
+      enterProductIndex() {
+        const space_id = this.space_id;
+        wx.navigateTo({
+          url: `./list?space_id=${space_id}`
+        })
+      },
+      buyNow() {
+        if (this.showPop) {
+          let product = this.product;
+          product.count = this.count;
+          product = JSON.stringify(product);
+          wx.navigateTo({
+            url: `../cart/checkout?product=${product}`
+          })
+        } else {
+          this.showPop = true;
+          this.$apply();
+        }
+      },
+      closePop() {
+        this.showPop = false;
+        this.$apply();
+      },
+        cutNumber: function () {
+        this.count = (this.count - 1 > 1) ? this.count - 1 : 1
+      },
+      addNumber: function () {
+        this.count ++
+      }
     }
     // methods = {
     //   switchAttrPop: function () {

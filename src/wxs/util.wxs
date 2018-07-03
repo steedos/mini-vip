@@ -311,6 +311,17 @@ function transformFieldValue(field, value){
       })
       return val.join(",");
     }else{
+      console.log('util value2222', JSON.stringify(value))
+      if(field.referenceToIsArray){
+        if(value.name && value.object_label){
+          return  value.name + '(' + value.object_label + ')'
+        }
+
+        if(value.object_label){
+          return  value.object_label
+        }
+      }
+
       return value.name
     }
   }else if(field.type === 'datetime'){

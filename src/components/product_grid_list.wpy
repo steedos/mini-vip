@@ -1,22 +1,31 @@
 <!--商品列表模块-->
 <template>
-  <scroll-view scroll-y="true" class="swiper-item-box">
-    <view class="shop_item">
-      <navigator class="list" wx:for="{{list}}" wx:key="item" url="/pages/product/view?record_id={{item._id}}&space_id={{item.space}}">
-        <view class="image_box">
-          <image src="{{util.formatImageUrl(item.avatar, baseUrl)}}"></image>
+  <block wx:if="{{list.length}}">
+    <view class="weui-cells_after-title">
+      <scroll-view scroll-y="true" class="swiper-item-box">
+        <view class="shop_item">
+          <navigator class="list" wx:for="{{list}}" wx:key="item" url="/pages/product/view?record_id={{item._id}}&space_id={{item.space}}">
+            <view class="image_box">
+              <image src="{{util.formatImageUrl(item.avatar, baseUrl)}}" mode="aspectFill"></image>
+            </view>
+            <view class="goods">
+              <view class="product_name" wx:if="{{showTitle}}">{{item.name}}</view>
+              <!-- <view class="sale_num">销量{{item.saleCount || 998}}件</view> -->
+              <view class="product_info">
+                <view class="price">￥{{item.default_price}}</view>
+                <view class="cost_price" wx:if="{{item.compared_price && item.compared_price!=item.default_price}}">￥{{item.compared_price}}</view>
+              </view>
+            </view>
+          </navigator>
         </view>
-        <view class="goods">
-          <view class="product_name" wx:if="{{showTitle}}">{{item.name}}</view>
-          <view class="product_info">
-            <view class="price">￥{{item.default_price}}</view>
-            <view class="cost_price" wx:if="{{item.compared_price}}">￥{{item.compared_price}}</view>
-            <view class="sale_num">销量{{item.saleCount || 998}}件</view>
-          </view>
-        </view>
-      </navigator>
+      </scroll-view>
     </view>
-  </scroll-view>
+  </block>
+  <block wx:else>
+    <view class="weui-loadmore weui-loadmore_line">
+      <view class="weui-loadmore__tips weui-loadmore__tips_in-line">暂无商品</view>
+    </view>
+  </block>
 </template>
 <script>
 import wepy from 'wepy'
@@ -63,7 +72,7 @@ export default class ProductGridList extends wepy.component {
 <style lang="less">
 .shop_item {
   padding: 0rpx 15rpx;
-  background: #f7f7f7;
+  background: #EFEEF3;
   display: flex;
   flex-wrap: wrap;
   padding-bottom: 30rpx;
@@ -74,7 +83,7 @@ export default class ProductGridList extends wepy.component {
 }
 
 .list {
-  background: #fff;
+  background: #EFEEF3;
   width: 355rpx;
   margin-top: 15rpx;
   .image_box {
@@ -84,8 +93,9 @@ export default class ProductGridList extends wepy.component {
     }
   }
   .product_name {
+    font-weight:bold; 
     color: #1a1a1a;
-    font-size: 28rpx;
+    font-size: 36rpx;
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 1;
@@ -102,24 +112,23 @@ export default class ProductGridList extends wepy.component {
     font-size: 24rpx;
     text-decoration: line-through;
     font-weight: 600;
+    overflow:hidden;
   }
   .sale_num {
     color: #666666;
     font-size: 22rpx;
+    margin-top: 8rpx;
   }
   .goods {
     padding: 15rpx 12rpx;
   }
   .product_info {
-    padding-top: 20rpx;
+    margin-top: 8rpx;
     display: flex;
-    align-items: flex-end;
+    align-items: center;
   }
   .cost_price {
-    padding-left: 20rpx;
-  }
-  .sale_num {
-    padding-left: 20rpx;
+    padding-left: 16rpx;
   }
 }
 

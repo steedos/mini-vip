@@ -1,11 +1,12 @@
 <template>
   <view class="text">
+    <view class="weui-toptips weui-toptips_warn" wx:if="{{showTopTips}}">{{message}}</view>
     <view class="page__bd">
       <view class="weui-cells">
         <view class="weui-cell weui-cell_input">
           <view class="weui-cell__bd">
             <input data-id="{{key}}" class="weui-input"
-              auto-focus="true" value="{{value}}" bindinput="textChange" type="number"/>
+              focus="true" value="{{value}}" bindinput="textChange" type="{{type}}"/>
           </view>
         </view>
       </view>
@@ -16,6 +17,7 @@
 
 <script>
   import wepy from 'wepy';
+  import _ from 'underscore'
 
   export default class Number extends wepy.page {
     config = {
@@ -24,7 +26,11 @@
 
     data = {
       key: '',
-      value: ''
+      value: '',
+      type: 'number',
+      showTopTips: false,
+      message: '',
+      scale: 0
     }
 
     setParentValue(key, value) {
@@ -38,20 +44,73 @@
         e = {}
       }
 
-      this.key = e.key
+      this.key = e.key;
 
       this.value = e.value || '';
+
+      if(e.scale > 0){
+        this.type = 'digit'
+        this.scale = e.scale
+      }
 
       if (e.title) {
         wx.setNavigationBarTitle({title: '编辑' + e.title});
       }
     }
 
+    getFillIn(length){
+      let rev = '';
+      for(let i = 0; i < length ; i ++){
+        rev += '0'
+      }
+      return rev
+    }
+
     methods = {
       textChange(e) {
         const key = e.target.dataset.id;
-        this.value = e.detail.value;
-        this.setParentValue(key, e.detail.value)
+
+        let value = e.detail.value;
+
+        if(this.scale > 0 && value){
+          const valueArr = (value+'').split('.');
+          let value_decimal = '';
+          let value_intger = valueArr[0];
+
+          if(valueArr.length > 1){
+            value_decimal = valueArr[1];
+          }
+
+          if(valueArr.length > 2){
+            this.message = '无效的数字';
+            this.showTopTips = true;
+            this.$apply();
+            return ;
+          }else if(valueArr.length > 1){
+            if(value_decimal.length > this.scale){
+              this.message = `小数位数最大为${this.scale}位`;
+              this.showTopTips = true;
+              this.$apply();
+              return ;
+            }else{
+              value_decimal = value_decimal + this.getFillIn(this.scale - value_decimal.length)
+            }
+            if(value_intger.length == 0){
+              value = '0.' + value_decimal
+            }else{
+              value = value_intger + '.' + value_decimal
+            }
+          }else{
+            value_decimal = this.getFillIn(this.scale)
+            if(value_intger.length == 0){
+              value = '0.' + value_decimal
+            }else{
+              value = value_intger + '.' + value_decimal
+            }
+          }
+        }
+
+        this.setParentValue(key, value)
       }
     }
   }

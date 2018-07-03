@@ -40,6 +40,7 @@
   import util from '../../wxs/util.wxs';
   import {baseUrl} from '@/config';
   import pageRouter from '@/utils/pageRouter'
+  import _ from 'underscore'
 
   export default class SpaceList extends wepy.page {
     config = {
@@ -65,40 +66,27 @@
     }
 
     async onLoad(e) {
+      await this.loadSpaces()
+    }
+
+    async loadSpaces() {
       wepy.showLoading({
         title: '加载中',
         mask: true
       });
-      await this.loadSpaces()
-      wepy.hideLoading();
-    }
-
-    async loadSpaces() {
       const options = {
         $count: true,
-        $select: 'name',
+        $select: 'name,avatar',
         $filter: `(admins eq '${this.$parent.globalData.user._id}')`
       };
-
-      const result = await this.$parent.query('spaces', options, 'common')
-      this.spaces = []
+      const result = await this.$parent.query('spaces', options, 'common');
       if(result && result.value){
-        for (let space of result.value) {
-          const url = `/api/odata/v4/${space._id}/vip_store/${space._id}`
-          const options = {
-            $filter: `_id eq '${space._id}'`,
-            $count: true,
-            $select: 'avatar'
-          }
-          const res = await this.$parent.query('vip_store', options, 'common')
-          if (res.value[0]) {
-            space.avatar = res.value[0].avatar
-          }
-          this.spaces.push(space)
-        }
+        this.spaces = result.value;
       }
-      this.is_loaded = true
-      this.$apply()
+
+      this.is_loaded = true;
+      this.$apply();
+      wepy.hideLoading();
     }
 
     methods = {

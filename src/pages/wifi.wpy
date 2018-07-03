@@ -24,6 +24,13 @@
       text-align:center;
     }
   }
+.vip_wifi_power, .vip_wifi_btn{
+  width: 100px;
+  height: 100px;
+  margin-left:auto;
+  margin-right:auto;
+  margin-top:100px;
+}
 </style>
 <template>
   <!-- <button type="default" @tap="toTestWifi"> 附近Wifi </button> -->
@@ -31,12 +38,12 @@
     <view class="group wifi-control">
       <view class="wifi-status">
         <block wx:if="{{icon=='power'}}">
-          <text class="icon slds-icon-power" style="color: #A7A7A7" @tap="toConnectWifi">
-          </text>
+          <view class="vip_wifi_power" @tap="toConnectWifi">
+          </view>
         </block>
         <block wx:elif="{{icon=='wifi'}}">
-          <text class="icon slds-icon-wifi" style="color: #3FAA41">
-          </text>
+          <view class="vip_wifi_btn">
+          </view>
         </block>
       </view>
       <view class="wifi-info">
@@ -80,7 +87,7 @@ export default class Wifi extends wepy.page {
     },
     wifiList:[],
     listTitle: '门店 WiFi 列表',
-    store_id: ''
+    space_id: ''
   };
 
   radioChange(e) {
@@ -103,19 +110,11 @@ export default class Wifi extends wepy.page {
   }
 
   async getWifiList(){
-    // 未传入 store_id，则使用space_id查询store
-    var store_id = "";
-    if(this.store_id){
-      store_id = this.store_id
-    }else{
-      store_id = this.$parent.globalData.space_id
-    }
-    console.log("store_id",store_id)
     const options = {
-              $filter: `store eq '${store_id}'`,
+              $filter: `space eq '${this.space_id}'`,
               $select: 'name,password'
             };
-    const wifis = await this.$parent.query("vip_wifi",options);
+    const wifis = await this.$parent.query("vip_wifi",options, this.space_id);
     console.log("wifis",wifis)
     if(wifis.value && wifis.value.length>0){
       this.wifiList = wifis.value;
@@ -131,8 +130,8 @@ export default class Wifi extends wepy.page {
       mask: true
     });
 
-    if (e.store_id) {
-      this.store_id = e.store_id;
+    if (e.space_id) {
+      this.space_id = e.space_id;
     }
     const _self = this;
     wx.startWifi({
