@@ -200,7 +200,7 @@ export default class ProductList extends wepy.page {
       $count: true,
       $select: 'name,sort_no'
     }
-    const result = await this.$parent.query('vip_product_category', options, 'guest');
+    const result = await this.$parent.query('vip_product_category', options, space_id);
     if (result && result.value && result.value[0]) {
       this.seleted_id = result.value[0]._id;
       this.categories = result.value;
