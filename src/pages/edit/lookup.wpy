@@ -1,7 +1,7 @@
 <template>
   <view class="page-edit-text">
     <view class="page__bd">
-      <view class="weui-cells">
+      <view class="weui-cells" wx:if="{{objects.length > 0}}">
         <view class="weui-cell weui-cell_select">
           <view class="weui-cell__bd">
             <picker bindchange="bindObjectCodeChange" value="{{objectCodeIndex}}" range="{{objects}}" range-key="label">
