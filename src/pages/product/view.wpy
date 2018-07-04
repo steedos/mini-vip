@@ -90,7 +90,6 @@
   .goods-info .price{
     font-weight: bold;
     display:inline!important;
-    margin-top:15px;
     font-size: 40rpx;
     line-height: 35rpx;
     color: #b4282d;
@@ -585,12 +584,14 @@
 
   .bottom-btn .l .icon{
     display: block;
-    height: 44rpx;
-    width: 44rpx;
+    height: 46rpx;
+    width: 46rpx;
   }
 
 
   .bottom-btn .c{
+    font-size: 36rpx;
+    font-weight: bold;
     float: left;
     height: 100rpx;
     line-height: 96rpx;
@@ -602,6 +603,8 @@
   }
 
   .bottom-btn .r{
+    font-size: 36rpx;
+    font-weight: bold;
     border:1px solid #b4282d;
     background: #b4282d;
     float: left;
