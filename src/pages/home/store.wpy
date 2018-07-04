@@ -145,6 +145,9 @@
 
 		onPullDownRefresh() {
 			this.refresh();
+			setTimeout(() => {
+				wx.stopPullDownRefresh();
+			}, 200);
 		}
 
 		onReachBottom() {
