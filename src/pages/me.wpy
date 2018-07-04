@@ -168,7 +168,7 @@ export default class Me extends wepy.page {
   onShow() {
     const user = this.$parent.globalData.user;
     if (user) {
-      this.name = user.name;
+      this.name = user.name || '未登录';
       this.mobile = user.mobile;
       this.$apply();
     }
