@@ -286,6 +286,7 @@ export default class Posts extends wepy.page {
     });
     console.log("onLoad==============space_index===================", e.space_id);
     this.space_id = e.space_id || scene;
+    this.$parent.saveRecentSites(this.space_id);
     await this.$parent.login(this.space_id);
     await this.loadCardInfo();
     this.type = e.type;

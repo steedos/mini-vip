@@ -240,6 +240,8 @@ export default class VIP extends wepy.app {
     req.appId(appId)
     req.baseUrl(baseUrl).interceptor(interceptor.request, interceptor.response);
 
+    this.saveRecentSites(options.space_id);
+
     pageRouter.setApp(this);
 
     pageRouter.pushEnter({
@@ -326,6 +328,22 @@ export default class VIP extends wepy.app {
       return true
     }else{
       return false
+    }
+  }
+
+  saveRecentSites(space_id) {
+    if (space_id) {
+      let recent_sites = wx.getStorageSync('recent_sites')
+      if (recent_sites) {
+        const index = recent_sites.indexOf(space_id);
+        if (index > -1) {
+          recent_sites.splice(index, 1);
+        }
+        recent_sites.push(space_id);
+      } else {
+        recent_sites = [space_id]
+      }
+      wx.setStorageSync('recent_sites', recent_sites);
     }
   }
 
