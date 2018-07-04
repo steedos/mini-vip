@@ -1010,20 +1010,21 @@
       noCollectImage: '/static/images/icon_collect.png',
       hasCollectImage: '/static/images/icon_collect_checked.png',
       collectBackImage: '/static/images/ic_menu_choice_nor.png',
-      wemark: {}
+      wemark: {},
+      share_way: null
     }
 
     async onLoad (e) {
       console.log('e', e)
-      const _id = e.record_id
-      const space_id = e.space_id
+      const _id = e.product_id;
+      const space_id = e.space_id;
+      this.share_way = e.share_way;
       const options = {
         $filter: `_id eq '${_id}'`,
         $select: 'name,default_price,compared_price,description,covers,images,avatar,categories,tags,vendor,status,space'
       };
       const product = await this.$parent.query('vip_product', options, 'guest');
       this.product = product.value[0];
-      console.log("==================",this.product)
 
       let productMd = this.product && this.product.description;
       //支持标准的图片markdown，格式为："![图片描述](http://192.168.0.195:5000/api/files/images/s8589uhysxKk7CEnp)";
@@ -1034,7 +1035,7 @@
           imagePathPrefix: `${baseUrl}/api/files/images/`
         });
       }
-      this.space_id = space_id
+      this.space_id = space_id;
       this.$apply();
     }
 
@@ -1074,6 +1075,15 @@
           return this.product.images;
         }
       }
+    }
+
+    // 分享
+    onShareAppMessage(res) {
+      const post_name = this.post.name;
+      return {
+        title: post_name,
+        path: `pages/product/view?space_id=${this.space_id}&product_id=${this.product._id}&share_way=weixin`
+      };
     }
 
     methods = {

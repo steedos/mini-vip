@@ -4,7 +4,7 @@
     <view class="weui-cells_after-title">
       <scroll-view scroll-y="true" class="swiper-item-box">
         <view class="shop_item">
-          <navigator class="list" wx:for="{{list}}" wx:key="item" url="/pages/product/view?record_id={{item._id}}&space_id={{item.space}}">
+          <navigator class="list" wx:for="{{list}}" wx:key="item" url="/pages/product/view?product_id={{item._id}}&space_id={{item.space}}">
             <view class="image_box">
               <image src="{{util.formatImageUrl(item.avatar, baseUrl)}}" mode="aspectFill"></image>
             </view>
