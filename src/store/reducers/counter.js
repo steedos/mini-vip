@@ -41,7 +41,7 @@ export default handleActions({
       }
     }
     if (!is_added) {
-      state.cartList.push(action.payload);
+      state.cartList.push({...action.payload, checked: true});
     }
     return {...state}
   },
