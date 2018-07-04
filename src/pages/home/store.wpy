@@ -9,15 +9,74 @@
     margin: 0 auto;
     padding-top: 15px;
     width: 60%;
-  }
+	}
+	.title {
+		padding: 10px 15px;
+		font-size: 17px;
+	}
+	.my-site {
+		margin-top: 20px;
+		background: #fff;
+		border-top: 1rpx solid #d9d9d9;
+		border-bottom: 1rpx solid #d9d9d9;
+		.weui-grids {
+			margin: 0;
+			white-space:nowrap;
+			overflow: visible;
+			border: none;
+			.weui-grid {
+				display: inline-block;
+				padding:10px 10px;
+				white-space:nowrap;
+				float: none;
+				background: #fff;
+				border: none;
+				&.weui-grid_active {
+					background-color: #ececec;
+				}
+				.weui-grid__icon {
+					border-radius:0.25rem;
+					overflow: hidden;
+					image {
+						width: 100%;
+						height: 100%;
+					}
+				}
+			}
+		}
+	}
 </style>
 
 <template>
 	<view class="page" wx:if="{{is_loaded}}">
     <view class="page__bd">
-			<block wx:if="{{stores.length}}">
+
+			<view class="my-site">
+        <view class="title">我的微站</view>
+        <scroll-view  scroll-x="true">
+          <view class="weui-grids">
+            <repeat for="{{my_spaces}}" key="index" index="index" item="space">
+              <navigator class="weui-grid" hover-class="weui-grid_active" url="/pages/admin/index?space_id={{space._id}}">
+                <view class="weui-grid__icon slds-icon" wx:if="{{space.avatar}}">
+                  <image mode="aspectFill" src="{{util.formatImageUrl(space.avatar, baseUrl)}}"></image>
+                </view>
+                <view wx:else class="weui-grid__icon slds-icon slds-icon-standard-channel-programs"/>
+                <view class="weui-grid__label">{{space.name}}</view>
+              </navigator>
+            </repeat>
+            
+            <navigator class="weui-grid" hover-class="weui-grid_active" url="/pages/space/register">
+              <view class="weui-grid__icon slds-icon vip_add"></view>
+              <view class="weui-grid__label">0元入驻</view>
+            </navigator>
+          </view>
+        </scroll-view>
+      </view>
+
+			<block wx:if="{{recent_spaces.length}}">
 				<view class="weui-cells">
-					<repeat for="{{stores}}" key="index" index="index" item="store">
+					<view class="title">最近查看</view>
+					<repeat for="{{recent_spaces}}" key="index" index="index" item="store">
 						<navigator url="/pages/space/index?space_id={{store._id}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
 							<view class="weui-cell__hd">
 								<image wx:if="{{store.avatar}}" class="image slds-icon slds-icon--small slds-m-right--x-small" src="{{util.formatImageUrl(store.avatar, baseUrl)}}"></image>
@@ -29,15 +88,15 @@
 					</repeat>
 				</view>
 			</block>
-			<block wx:else>
+			<!-- <block wx:else>
 				<view class="weui-loadmore weui-loadmore_line">
 					<view class="weui-loadmore__tips weui-loadmore__tips_in-line">暂无微站</view>
 				</view>
-			</block>
+			</block> -->
 
-			<view class="button-sp-area">
+			<!-- <view class="button-sp-area">
 				<button class="weui-btn" type="primary" plain="true" @tap="register" hover-class='button-hover'>0元入驻</button>
-			</view>
+			</view> -->
 		</view>
   </view>
 </template>
@@ -46,7 +105,8 @@
 	import wepy from 'wepy';
 	import { baseUrl } from '@/config';
 	import util from '../../wxs/util.wxs';
-  import pageRouter from '@/utils/pageRouter'
+	import pageRouter from '@/utils/pageRouter';
+	import _ from 'underscore'
 
   const DATA_LENGTH = 10;
   	export default class HomeStore extends wepy.page {
@@ -60,6 +120,8 @@
 			is_loaded: false,
 			current_skip: 0,
 			allow_load: true,
+			my_spaces: [],
+			recent_spaces: [],
 			stores: []
 		}
 
@@ -73,7 +135,9 @@
 				mask: true
 			});
 			await this.$parent.login();
-			await this.loadStore();
+			// await this.loadStore();
+			await this.loadMySpace();
+			await this.loadRecentSpace();
 			this.is_loaded = true;
 			this.$apply();
 			wepy.hideLoading();
@@ -87,11 +151,54 @@
 			this.loadStore();
 		}
 
-		refresh() {
+		async refresh() {
 			this.stores = [];
 			this.allow_load = true;
 			this.current_skip = 0;
-			this.loadStore();
+			// this.loadStore();
+			await this.loadMySpace();
+			await this.loadRecentSpace();
+		}
+
+		async loadRecentSpace() {
+			const recent_sites = wx.getStorageSync('recent_sites')
+			if (recent_sites && recent_sites.length) {
+				let query = recent_sites.map((_id) => {
+					return 	`_id eq '${_id}'`
+				})
+				query = query.join(' or ')
+				const options = {
+					$count: true,
+					$select: 'name,avatar',
+					$filter: `(${query})`
+				}
+				const result = await this.$parent.query('spaces', options, 'common');
+				let recent_spaces = []
+				if(result && result.value){
+					for (let _id of recent_sites) {
+						let r = _.filter(result.value, (space) => {
+							return space._id == _id
+						})
+						recent_spaces = recent_spaces.concat(r);
+						console.log('[recent_spaces]', recent_spaces)
+						this.recent_spaces = recent_spaces;
+					}
+				}
+				this.recent_spaces = recent_spaces.reverse();
+			}
+		}
+
+		async loadMySpace() {
+			const options = {
+        $count: true,
+        $select: 'name,avatar',
+        $filter: `(admins eq '${this.$parent.globalData.user._id}')`
+      };
+      const result = await this.$parent.query('spaces', options, 'common');
+      if(result && result.value){
+        this.my_spaces = result.value;
+      } 
+			this.$apply()
 		}
 
 		async loadStore() {
