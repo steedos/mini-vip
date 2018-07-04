@@ -100,7 +100,7 @@ export default class recordList extends wepy.mixin {
 
     if(searchValue){
       if(options.$filter){
-        options.$filter = options.$filter + `and (contains(${this.name_field},'${searchValue}'))`
+        options.$filter = options.$filter + ` and (contains(${this.name_field},'${searchValue}'))`
       }else{
         options.$filter = `(contains(${this.name_field},'${searchValue}'))`
       }
