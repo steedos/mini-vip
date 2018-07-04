@@ -967,7 +967,7 @@
         </view>
       </view>
       <view class="c" @tap="buyNow" hover-class='weui-grid_active'>立即购买</view>
-      <view class="r" @tap="addProduct" hover-class='button-hover'>加入购物车1</view>
+      <view class="r" @tap="addProduct" hover-class='button-hover'>加入购物车</view>
     </view>
   </view>
 </template>
