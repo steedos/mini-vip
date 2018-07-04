@@ -33,6 +33,7 @@ export default handleActions({
     if (cartList && cartList.constructor === Array) {
       for (let p of cartList) {
         if (p._id === payload._id) {
+          p.checked = true;
           is_added = true;
           p.count++;
           break;

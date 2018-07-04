@@ -90,7 +90,6 @@
   .goods-info .price{
     font-weight: bold;
     display:inline!important;
-    margin-top:15px;
     font-size: 40rpx;
     line-height: 35rpx;
     color: #b4282d;

@@ -407,6 +407,14 @@ export default class Checkout extends wepy.page {
       //   amount: this.goodsTotalPrice,
       //   products: this.checkedProductList
       // };
+      if (!this.checkedAddress._id) {
+        wx.showToast({
+          title: '请选择收货地址',
+          icon: 'none',
+          duration: 2000
+        })
+        return
+      }
       wx.showLoading({
         title: '正在准备支付',
         mask: true
