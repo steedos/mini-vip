@@ -420,8 +420,8 @@ export default class Checkout extends wepy.page {
           if (k.indexOf('@odata.') < 0) {
             tp[k] = p[k];
           }
-          products.push(tp);
         });
+        products.push(tp);
       });
 
       var address = {};
@@ -444,8 +444,7 @@ export default class Checkout extends wepy.page {
         console.log(o);
         if (o.value) {
           var data = {
-            // amount: amount,
-            amount: 0.01,
+            amount: amount,
             order_id: o.value[0]._id
           };
 
