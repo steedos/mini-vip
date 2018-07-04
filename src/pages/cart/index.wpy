@@ -167,21 +167,26 @@
     font-size: 30rpx;
     color: #333;
     overflow: hidden;
+    align-items:center;
   }
 
 
   .cart-view .item .name{
     flex: 1;
+    font-size: 15px;
     color: #333;
     overflow:hidden;
     text-overflow:ellipsis;
     display: -webkit-box!important;
     -webkit-line-clamp:2;
     -webkit-box-orient:vertical;
+    margin-bottom:5px;
   }
 
   .cart-view .item .num{
     float: right;
+    font-weight: bold;
+    padding-left: 10px;
   }
 
   .cart-view .item .attr{
@@ -202,7 +207,8 @@
 
   .cart-view .item .price{
 		flex: 1;
-		line-height: 57rpx;
+    line-height: 57rpx;
+    font-size: 17px;
   }
 	
   .cart-view .item .selnum{
@@ -219,38 +225,43 @@
   }
 
   .selnum .cut{
+    font-size: 15px;
     width: 70rpx;
     height: 100%;
 		text-align: center;
 		height: 55rpx;
-		line-height: 55rpx;
-		border: 1rpx solid #686868;
+    line-height: 55rpx;
+    color:#aaa;
+		border: 1rpx solid #aaa;
 
 		&.disabled {
 			border-color: #aaa;
-			border-right-color: #686868;
+			border-right-color: #aaa;
 		}
   }
 
   .selnum .number{
     flex: 1;
+    font-size: 15px;
     height: 100%;
 		text-align: center;
     height: 55rpx;
     min-height: 55rpx;
     line-height: 55rpx;
-    border-top: 1rpx solid #686868;
-    border-bottom: 1rpx solid #686868;
+    border-top: 1rpx solid #aaa;
+    border-bottom: 1rpx solid #aaa;
     float: left;
   }
 
   .selnum .add{
+    font-size: 15px;
     width: 80rpx;
     height: 100%;
 		text-align: center;
 		height: 55rpx;
-		line-height: 55rpx;
-		border: 1rpx solid #686868;
+    line-height: 55rpx;
+    color:#bbb;
+		border: 1rpx solid #aaa;
   }
 
 
@@ -319,7 +330,9 @@
     font-size: 30rpx;
     align-items: center;
     align-content: center;
-    
+    .text{
+      font-size: 17px;
+    } 
     .checkbox {
       display: flex;
       box-sizing: content-box;
@@ -351,9 +364,11 @@
   }
 
   .cart-bottom .total{
+    font-size: 17px;
+    color:#b4282d;
     flex: 1;
     text-align: right;
-    margin-right: 30rpx;
+    margin-right: 35rpx;
   }
 
   .cart-bottom .delete{
@@ -364,6 +379,7 @@
 
   .cart-bottom .checkout{
     height: 100%;
+    font-size: 17px;
     line-height: 100rpx;
     width: 210rpx;
     text-align: center;
@@ -401,7 +417,7 @@
 									<view class="info">
 										<view class="t">
 											<text class="name">{{goods.name}}</text>
-											<text class="num">x{{goods.count}}</text>
+											<!-- <text class="num">x{{goods.count}}</text> -->
 										</view>
 										<view class="b">
 											<text class="price">￥{{goods.default_price}}</text>
@@ -483,9 +499,9 @@
 			const newList = await this.getProductInfo(products);
       this.styleList = this.initStyleList(newList);
 			store.dispatch({type: 'UPDATE_PRODUCT_INFO', payload: newList});
-			this.is_loaded = false;
+      this.is_loaded = false;
 			this.$apply()
-			wepy.hideLoading();
+      wepy.hideLoading();
 		}
 
 		wxs = {
