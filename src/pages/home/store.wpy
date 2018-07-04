@@ -151,7 +151,7 @@
 			this.loadStore();
 		}
 
-		refresh() {
+		async refresh() {
 			this.stores = [];
 			this.allow_load = true;
 			this.current_skip = 0;
