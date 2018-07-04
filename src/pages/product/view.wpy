@@ -584,12 +584,14 @@
 
   .bottom-btn .l .icon{
     display: block;
-    height: 44rpx;
-    width: 44rpx;
+    height: 46rpx;
+    width: 46rpx;
   }
 
 
   .bottom-btn .c{
+    font-size: 36rpx;
+    font-weight: bold;
     float: left;
     height: 100rpx;
     line-height: 96rpx;
@@ -601,6 +603,8 @@
   }
 
   .bottom-btn .r{
+    font-size: 36rpx;
+    font-weight: bold;
     border:1px solid #b4282d;
     background: #b4282d;
     float: left;
@@ -1010,16 +1014,19 @@
       hasCollectImage: '/static/images/icon_collect_checked.png',
       collectBackImage: '/static/images/ic_menu_choice_nor.png',
       wemark: {},
-      share_way: null
+      share_way: null,
+      share_id: null,
+      product_id: null
     }
 
     async onLoad (e) {
-      console.log('e', e)
-      const _id = e.product_id;
+      console.log('===============onLoad======product===========', e)
+      this.product_id = e.product_id;
       const space_id = e.space_id;
+      this.share_id = e.share_id;
       this.share_way = e.share_way;
       const options = {
-        $filter: `_id eq '${_id}'`,
+        $filter: `_id eq '${this.product_id}'`,
         $select: 'name,default_price,compared_price,description,covers,images,avatar,categories,tags,vendor,status,space'
       };
       const product = await this.$parent.query('vip_product', options, 'guest');
@@ -1036,6 +1043,33 @@
       }
       this.space_id = space_id;
       this.$apply();
+    }
+
+    async respondShare() {
+      let userId = this.$parent.globalData.user._id;
+      let name = this.$parent.globalData.user.name;
+      const query_options = {
+        $filter: `share eq '${this.share_id}' and owner eq '${userId}'`,
+        $select: 'name'
+      };
+      let share_response = await this.$parent.query("vip_share_response", query_options, this.space_id);
+      let values = {
+        name: name,
+        share: this.share_id
+      };
+      if(share_response && share_response.value && share_response.value.length){
+        // 如果已经响应过，则需要修改其modified，以保证最后进来的能按modefied排序到最后一个
+        share_response = await this.$parent.update("vip_share_response", share_response.value[0]._id, values, this.space_id);
+      }
+      else{
+        share_response = await this.$parent.insert("vip_share_response", values, this.space_id);
+      }
+      if(!share_response){
+        wx.showToast({
+          title: "响应分享失败，请关闭后再重新打开",
+          icon: "none"
+        });
+      }
     }
 
     computed = {
@@ -1078,10 +1112,9 @@
 
     // 分享
     onShareAppMessage(res) {
-      const post_name = this.post.name;
       return {
-        title: post_name,
-        path: `pages/product/view?space_id=${this.space_id}&product_id=${this.product._id}&share_way=weixin`
+        title: this.product.name,
+        path: `pages/product/view?space_id=${this.space_id}&product_id=${this.product_id}`
       };
     }
 
