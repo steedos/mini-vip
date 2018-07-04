@@ -449,6 +449,7 @@ export default class Posts extends wepy.page {
     this.space_info = space;
     this.is_space_owner = space && userId == space.owner;
     this.is_space_admin = admins && admins.includes(userId);
+    this.enabled_objects = []
     const objects_list = {
       post: {
         label: '动态',
