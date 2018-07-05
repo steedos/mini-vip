@@ -49,6 +49,7 @@
     width: auto;
     overflow: hidden;
     background: #fff;
+    padding-bottom:16rpx;
   }
 
   .goods-info .c{
@@ -66,7 +67,7 @@
 
   .goods-info .name{
     font-weight:bold;
-    margin-bottom: 20rpx;
+    margin-bottom:32rpx;
     font-size: 36rpx;
     line-height: 52rpx;
     max-height:100rpx;
@@ -801,7 +802,7 @@
     display:inline!important;
     float:right;
     background:#ff9800;
-    padding:4rpx 22rpx;
+    padding:4rpx 30rpx;
     margin-top:-10rpx;
     color:#fff!important;
     border-bottom-left-radius:12px;
@@ -1056,10 +1057,14 @@
           imagePathPrefix: `${baseUrl}/api/files/images/`
         });
       }
+      this.respondShare();
       this.$apply();
     }
 
     async respondShare() {
+      if(!this.share_id){
+        return;
+      }
       let userId = this.$parent.globalData.user._id;
       let name = this.$parent.globalData.user.name;
       const query_options = {
@@ -1078,6 +1083,7 @@
       else{
         share_response = await this.$parent.insert("vip_share_response", values, this.space_id);
       }
+      console.log("===============respondShare============", share_response);
       if(!share_response){
         wx.showToast({
           title: "响应分享失败，请关闭后再重新打开",
