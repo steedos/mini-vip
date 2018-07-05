@@ -45,6 +45,12 @@
 			}
 		}
 	}
+	.live_chat {
+    line-height:inherit;
+		font-size:inherit;
+		background-color:transparent;
+		text-align:left;
+  }
 </style>
 
 <template>
@@ -88,6 +94,25 @@
 					</repeat>
 				</view>
 			</block>
+
+			<view class="weui-cells">
+					<view class="title">相关服务</view>	
+						<navigator url="" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+							<view class="weui-cell__hd">
+								<view class="slds-icon-standard-related-list weui-grid__icon slds-icon slds-icon--small slds-m-right--x-small"/>
+							</view>
+							<view class="weui-cell__bd">帮助</view>
+							<view class="weui-cell__ft weui-cell__ft_in-access"></view>
+						</navigator>
+						<button open-type="contact"  class="weui-cell weui-cell_access live_chat" hover-class="weui-cell_active">
+							<view class="weui-cell__hd">
+								<view class="slds-icon-standard-live-chat weui-grid__icon slds-icon slds-icon--small slds-m-right--x-small"/>
+							</view>
+							<view class="weui-cell__bd">联系客服</view>
+							<view class="weui-cell__ft weui-cell__ft_in-access"></view>
+						</button>
+				</view>
+
 			<!-- <block wx:else>
 				<view class="weui-loadmore weui-loadmore_line">
 					<view class="weui-loadmore__tips weui-loadmore__tips_in-line">暂无微站</view>
