@@ -12,7 +12,9 @@
 	}
 	.title {
 		padding: 10px 15px;
-		font-size: 17px;
+		font-size:27rpx;
+		color:#8D8D8F;
+
 	}
 	.my-site {
 		margin-top: 20px;
@@ -96,7 +98,6 @@
 			</block>
 
 			<view class="weui-cells">
-					<view class="title">相关服务</view>	
 						<navigator url="" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
 							<view class="weui-cell__hd">
 								<view class="slds-icon-standard-related-list weui-grid__icon slds-icon slds-icon--small slds-m-right--x-small"/>
