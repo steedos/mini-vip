@@ -1,5 +1,5 @@
 <style lang="less">
-@import '../../wemark/wemark.wxss';
+  @import '../../wemark/wemark.wxss';
 	.container {
     box-sizing: border-box;
     background-color: #f4f4f4;
@@ -799,6 +799,22 @@
   .button-hover{
     background-color:#e05c60!important;
   }
+  .btn-share{
+    display:inline!important;
+    float:right;
+    background:#ff9800;
+    padding:4rpx 22rpx;
+    margin-top:-10rpx;
+    color:#fff!important;
+    border-bottom-left-radius:12px;
+    border-top-left-radius:12px;
+    margin-right:-32rpx;
+    text{
+      display:inline!important;
+      color:#fff;
+    }
+
+  }
 </style>
 <template>
   <view class="page">
@@ -821,6 +837,9 @@
           <!-- <text class="page__desc">{{product.description}}</text> -->
           <text class="price">￥{{product.default_price}}</text>
           <view class="cost_price" wx:if="{{product.compared_price && product.compared_price!=product.default_price}}">￥{{product.compared_price}}</view>
+          <navigator class="btn-share" url="share?product_id={{product._id}}&space_id={{space_id}}&product_name={{product.name}}">
+            <text>分享有礼</text>
+          </navigator>
           <view class="brand" wx:if="{{brand.name}}">
             <navigator url="../brandDetail/brandDetail?id={{brand.brandId}}">
               <text>{{brand.name}}</text>
@@ -993,7 +1012,7 @@
     }
   })
 
-  export default class ProduceView extends wepy.page {
+  export default class ProductView extends wepy.page {
 		config = {
 			navigationBarTitleText: '商品详情',
 			enablePullDownRefresh: true
@@ -1014,7 +1033,6 @@
       hasCollectImage: '/static/images/icon_collect_checked.png',
       collectBackImage: '/static/images/ic_menu_choice_nor.png',
       wemark: {},
-      share_way: null,
       share_id: null,
       product_id: null
     }
@@ -1022,9 +1040,8 @@
     async onLoad (e) {
       console.log('===============onLoad======product===========', e)
       this.product_id = e.product_id;
-      const space_id = e.space_id;
+      this.space_id = e.space_id;
       this.share_id = e.share_id;
-      this.share_way = e.share_way;
       const options = {
         $filter: `_id eq '${this.product_id}'`,
         $select: 'name,default_price,compared_price,description,covers,images,avatar,categories,tags,vendor,status,space'
@@ -1041,7 +1058,6 @@
           imagePathPrefix: `${baseUrl}/api/files/images/`
         });
       }
-      this.space_id = space_id;
       this.$apply();
     }
 

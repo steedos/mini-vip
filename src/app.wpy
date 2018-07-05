@@ -178,6 +178,7 @@ export default class VIP extends wepy.app {
       'pages/space/invite_user',
       'pages/product/view',
       'pages/product/list',
+      'pages/product/share',
       'pages/cart/index',
       'pages/cart/checkout',
       'pages/address/list',

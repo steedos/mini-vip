@@ -1,0 +1,189 @@
+<style lang="less">
+  page{
+    height: 100%;
+  }
+  .page__bd{
+    padding-bottom: 80px;
+  }
+
+  .center-box{
+    position:absolute;
+    top: 200px;
+    left:0;
+    right: 0;
+    text-align: center;
+  }
+
+  .btn-share{
+    background:#ff9800;
+    border-radius:20px;
+    padding:15rpx 70rpx;
+    display:inline-block;
+    color:#9b3a00;
+    font-weight:bold;
+    font-size:45rpx;
+  }
+
+  .share-actions{
+    display:flex;
+    align-items:center;
+    justify-content:space-around;
+    .btn-share-wexin{
+      border: none;
+      margin: 0px;
+    }
+    .slds-icon{
+      background-position:center;
+      width:100%;
+    }
+  }
+
+  .pop-mask {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(16, 16, 16, 0.6);
+  }
+
+  .attr-pop {
+    position: fixed;
+    transform: translateY(101%);
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+    min-height: 200rpx;
+    padding: 31.25rpx;
+    background: #fff;
+    z-index:100;
+    transition: all .3s linear;
+    box-sizing: border-box;
+    .close {
+      float: right;
+      padding:0 0 40rpx 40rpx;
+      .vip_close {
+        width: 30rpx;
+        height: 30rpx;
+      }
+    }
+    &.show {
+      transform: translateY(0);
+    }
+  }
+</style>
+<template>
+<view class="page">
+  <view class="page__bd">
+  </view>
+  <view class="center-box">
+    <view class="btn-share" @tap="share">邀请好友赚好礼</view>
+  </view>
+  <view class="pop-mask" wx:if="{{showPop}}" @tap="closePop"></view>
+  <view class="attr-pop {{showPop ? 'show' : ''}}">
+    <view class="close" @tap="closePop">
+      <view class="vip_close"></view>
+    </view>
+    <view class="share-actions">
+      <button plain="true" open-type="share" class="btn-share-wexin">
+        <view class="vip_share-default slds-icon slds-icon--small slds-m-right--x-small"></view>
+        <view class="text">微信好友</view>
+      </button>
+      <view class="btn-share-friend-circle">
+        <view class="vip_comment-default slds-icon slds-icon--small slds-m-right--x-small"></view>
+        <view class="text">朋友圈</view>
+      </view>
+    </view>
+  </view>
+</view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import { baseUrl } from '@/config';
+  import util from '../../wxs/util.wxs';
+ 
+  export default class ProductShare extends wepy.page {
+		config = {
+			navigationBarTitleText: '分享有礼'
+    };
+
+    wxs = {
+      util: util
+    }
+
+    data = {
+      baseUrl: baseUrl,
+      space_id: null,
+      product_id: null,
+      product_name: null,
+      share_id: null,
+      showPop: false
+    }
+
+    async onLoad (e) {
+      console.log('===============onLoad======product========33===', e)
+      this.space_id = e.space_id;
+      this.product_id = e.product_id;
+      this.product_name = e.product_name;
+      this.$apply();
+    }
+
+    // 分享
+    onShareAppMessage(res) {
+      // imageUrl要使用即时动态生成的图片路径
+      const name = this.$parent.globalData.user.name;
+      let title = `${name}分享了${this.product_name}`;
+      let path = `pages/product/view?space_id=${this.space_id}&product_id=${this.product_id}`;
+      let imageUrl = ``;
+      if(this.share_id){
+        path += `&share_id=${this.share_id}`;
+      }
+      return {
+        title: title,
+        path: path,
+        imageUrl: imageUrl
+      };
+    }
+
+    methods = {
+      async share(){
+        wepy.showLoading({
+          title: '加载中',
+          mask: true
+        });
+        console.log("============share=======this.product_id==============", this.product_id);
+        const name = this.$parent.globalData.user.name;
+        let values = {
+          name: name,
+          related_to: {
+              "o" : "vip_product",
+              "ids" : [ this.product_id ]
+          },
+          way: 'weixin'
+        };
+        let vip_share = await this.$parent.insert("vip_share", values, this.space_id);
+        console.log("============share=======vip_share==============", vip_share);
+        if(vip_share && vip_share.value && vip_share.value.length){
+          this.share_id = vip_share.value[0]._id;
+        }
+        else{
+          console.log("============share=======error==============");
+          wx.showToast({
+            title: "响应分享失败，请重新操作一次",
+            icon: "none"
+          });
+          return;
+        }
+        wepy.hideLoading();
+        this.showPop = true;
+        this.$apply();
+      },
+      closePop() {
+        this.showPop = false;
+        this.$apply();
+      }
+    }
+  }
+</script>
