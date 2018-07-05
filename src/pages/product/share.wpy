@@ -6,13 +6,16 @@
     padding-bottom: 80px;
   }
 
-  .center-box{
-    position:absolute;
-    top: 200px;
-    left:0;
-    right: 0;
-    text-align: center;
-    display: none;
+  .gift-label{
+    text-align:center;
+    color:#666;
+    margin-bottom:20rpx;
+  }
+
+  .gift-value{
+    font-size:60rpx;
+    color:#ff9800;
+    text-align:center;
   }
 
   .btn-share{
@@ -98,7 +101,8 @@
 <template>
 <view class="page">
   <view class="page__hd">
-    {{product_gift}}
+    <view class="gift-label">每成功邀请一位新人成交，可获得</view>
+    <view class="gift-value">{{product_gift}}</view>
   </view>
   <view class="page__bd">
     <view class="share-actions">
@@ -111,9 +115,6 @@
         <view class="text">朋友圈</view>
       </view>
     </view>
-  </view>
-  <view class="center-box">
-    <view class="btn-share" @tap="share">邀请好友赚好礼</view>
   </view>
   <view class="pop-mask" wx:if="{{showPop}}" @tap="closePop"></view>
   <view class="attr-pop {{showPop ? 'show' : ''}}">
@@ -164,6 +165,18 @@
       this.product_id = e.product_id;
       this.product_name = e.product_name;
       this.product_gift = e.product_gift;
+      if(!this.product_id){
+        wx.showToast({
+          title: "参数错误，未传入要分享的商品",
+          icon: "none"
+        });
+      }
+      if(!this.product_gift){
+        wx.showToast({
+          title: "参数错误，没传入要分享的礼物",
+          icon: "none"
+        });
+      }
       this.$apply();
     }
 
