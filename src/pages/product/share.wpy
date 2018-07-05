@@ -196,8 +196,7 @@
         related_to: {
             "o" : "vip_product",
             "ids" : [ this.product_id ]
-        },
-        way: 'weixin'
+        }
       };
       let vip_share = await this.$parent.insert("vip_share", values, this.space_id);
       console.log("============share=======vip_share==============", vip_share);
