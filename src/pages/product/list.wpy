@@ -4,14 +4,14 @@
       display: block;
     }
     .page__bd {
-      padding-bottom: 50px;
+      padding-bottom: 100rpx;
     }
     .tab-bar {
       display: flex;
       position: fixed;
       z-index: 500;
       bottom: 0;
-      height: 50px;
+      height: 100rpx;
       width: 100%;
     background-color: #f7f7fa;
       justify-content: center;
@@ -42,7 +42,7 @@
     width: 100%;
     overflow: hidden;
     white-space: nowrap;
-      font-size: 13px;
+      font-size: 26rpx;
       color: #888888;
     }
 
@@ -51,11 +51,11 @@
     overflow: hidden;
     white-space: nowrap;
       flex: 1;
-    min-height: 24px;
+    min-height: 48rpx;
     }
 
   .date-field {
-      font-size: 13px;
+      font-size: 26rpx;
     color: #888888;
     }
 
@@ -70,15 +70,15 @@
 
   .weui-search-bar {
       border-bottom: 0px;
-      padding:8px 15rpx;
+      padding:16rpx 15rpx;
     }
 
   .avatar-field {
     border-radius: 0.15rem;
-      margin-right: 5px;
+      margin-right: 10rpx;
       vertical-align: middle;
-    width: 40px;
-      height: 40px;
+    width: 80rpx;
+      height: 80rpx;
     }
 
   .zan-tab {
@@ -118,13 +118,13 @@
   .zan-tab__title {
     display: inline-block;
     max-width: 100%;
-    height: 44px;
-    line-height: 44px;
+    height: 88rpx;
+    line-height: 88rpx;
     overflow: hidden;
     text-overflow: ellipsis;
     box-sizing: border-box;
     word-break: keep-all;
-    font-size: 14px;
+    font-size: 28rpx;
     color: #666;
   }
 
@@ -137,6 +137,10 @@
     // display: block;
     white-space: nowrap;
   }
+}
+
+page{
+  background-color: #fff;
 }
 </style>
 

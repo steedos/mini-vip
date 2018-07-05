@@ -65,6 +65,25 @@
     height: 40px;
   }
 
+
+  .record-container {
+    width: 100%;
+    transition: all 0.2s linear;
+    position: relative;
+    .delete {
+      position: absolute;
+      width: 60px;
+      background: #b4282d;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content:center;
+      height: 100%;
+      right: 0;
+      top: 0;
+      transform: translateX(60px);
+    }
+  }
 }
 
 </style>
@@ -78,22 +97,27 @@
       <block wx:if="{{record_list.length}}">
         <view class="weui-cells weui-cells_after-title">
           <repeat for="{{record_list}}" key="index" index="index" item="record">
-            <navigator url="{{url}}&record_id={{record._id}}&space_id={{record.space}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
-              <view class="weui-cell__hd" wx:if="{{avatar_field}}">
-                <image src="{{util.formatAvatarImageUrl(record[avatar_field], baseUrl)}}" class='avatar-field'></image>
-              </view>
-              <view class="weui-cell__bd item-body">
-                <view class="item-body-1">
-                  <view class="name-field">{{record[name_field]}}</view>
-                  <view class="date-field" wx:if="{{record[date_field]}}">{{util.formatDateMini(record[date_field])}}</view>
+            <view class="record-container" style="transform: translateX({{style_list[record._id].offsetX}}px)" @touchstart="touchstart" @touchmove="touchmove" @touchend="touchend" data-item-id="{{record._id}}">
+              <navigator url="{{url}}&record_id={{record._id}}&space_id={{record.space}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+                <view class="weui-cell__hd" wx:if="{{avatar_field}}">
+                  <image src="{{util.formatAvatarImageUrl(record[avatar_field], baseUrl)}}" class='avatar-field'></image>
                 </view>
+                <view class="weui-cell__bd item-body">
+                  <view class="item-body-1">
+                    <view class="name-field">{{record[name_field]}}</view>
+                    <view class="date-field" wx:if="{{record[date_field]}}">{{util.formatDateMini(record[date_field])}}</view>
+                  </view>
 
-                <view class="description-field" wx:if="{{record[description_field]}}">{{record[description_field]}}</view>
+                  <view class="description-field" wx:if="{{record[description_field]}}">{{record[description_field]}}</view>
+                </view>
+                <!--<view class="weui-cell__ft">-->
+                  <!--<view class="weui-cell__ft_in-access"></view>-->
+                <!--</view>-->
+              </navigator>
+              <view class="delete" @tap.stop="deleteRecord" wx:if="{{record.allow_delete}}"data-record-space="{{record.space}}"  data-allow-delete="{{record.allow_delete}}" data-record-id="{{record._id}}">
+                删除
               </view>
-              <!--<view class="weui-cell__ft">-->
-                <!--<view class="weui-cell__ft_in-access"></view>-->
-              <!--</view>-->
-            </navigator>
+            </view>
           </repeat>
         </view>
       </block>

@@ -202,7 +202,7 @@ page {
       <view class="weui-cells">
         <view class="weui-grids">
           <repeat for="{{enabled_objects}}" key="index" index="index" item="object">
-            <block wx:if="{{is_default_menu}}">
+            <block wx:if="{{object.is_default_menu}}">
               <block wx:if="{{object.name === 'support'}}">
                 <button open-type="contact" plain="true" class="weui-grid support" hover-class="weui-grid_active" wx:if="{{object}}">
                   <view class="slds-icon-{{object.icon}} weui-grid__icon slds-icon">
@@ -286,6 +286,7 @@ export default class Posts extends wepy.page {
     });
     console.log("onLoad==============space_index===================", e.space_id);
     this.space_id = e.space_id || scene;
+    this.$parent.saveRecentSites(this.space_id);
     await this.$parent.login(this.space_id);
     await this.loadCardInfo();
     this.type = e.type;
@@ -449,55 +450,66 @@ export default class Posts extends wepy.page {
     this.space_info = space;
     this.is_space_owner = space && userId == space.owner;
     this.is_space_admin = admins && admins.includes(userId);
+    this.enabled_objects = []
     const objects_list = {
       post: {
         label: '动态',
         icon: 'standard-news',
+        is_default_menu: true,
         url: `../post/index?space_id=${this.space_id}${this.is_space_admin ? '&editable=true' : ''}&title=${space.name}`
       },
       vip_product: {
         label: '商城',
         icon: 'standard-shipment',
+        is_default_menu: true,
         url: `../product/list?space_id=${this.space_id}`
       },
       vip_event: {
         label: '活动',
         icon: 'standard-event',
+        is_default_menu: true,
         url: `../event/list?space_id=${this.space_id}`
       },
       vip_team: {
         label: '团队',
         icon: 'standard-team-member',
+        is_default_menu: true,
         url: '../404'
       },
       vip_job: {
         label: '招聘',
         icon: 'standard-person-account',
+        is_default_menu: true,
         url: '../404'
       },
       vip_store: {
         label: '联系我们',
         icon: 'standard-contact',
+        is_default_menu: true,
         url: `../store?store=${this.space_id}`
       },
       support: {
         name: 'support',
         label: '在线客服',
+        is_default_menu: true,
         icon: 'standard-live-chat',
       },
       qrcode: {
         label: '二维码',
         icon: 'standard-product',
+        is_default_menu: true,
         url: `/pages/admin/qrcode?space_id=${this.space_id}`
       },
       vip_wifi: {
         label: 'Wifi',
         icon: 'utility-wifi',
+        is_default_menu: true,
         url: `../wifi?space_id=${this.space_id}`
       },
       vip_card: {
         label: '会员',
         icon: 'standard-opportunity',
+        is_default_menu: true,
         url: (function () {
           if (self.card._id) {
             return self.card.url
@@ -510,9 +522,11 @@ export default class Posts extends wepy.page {
 
     const result = await this.$parent.get('vip_store', spaceId, spaceId);
     const options = {
+      $filter: `enabled eq true`,
       $expand: 'space($select=name)',
       $count: true,
-      $select:'name,avatar,related_to,sort_no,enabled'
+      $select:'name,avatar,related_to,sort_no,enabled',
+      $orderby:'sort_no'
     };
     const menu = await this.$parent.query('vip_menu', options,spaceId);
     if (menu.value && menu.value.length) {
@@ -558,26 +572,12 @@ export default class Posts extends wepy.page {
         }
       });
     }
-    else{
-      this.enabled_objects = [
-        objects_list.post, objects_list.vip_event, objects_list.vip_product,
-        objects_list.vip_card, objects_list.vip_store, objects_list.vip_wifi
-      ]
-      this.is_default_menu = true
+    if (result.enabled_objects && !_.isEmpty(result.enabled_objects)) {
+      _.each(result.enabled_objects, (o) => {
+        this.enabled_objects.push(objects_list[o])
+      })
     }
-    console.log(this.is_default_menu)
     this.$apply()
-    // this.enabled_objects = []
-    // if (result.enabled_objects && !_.isEmpty(result.enabled_objects)) {
-    //   _.each(result.enabled_objects, (o) => {
-    //     this.enabled_objects.push(objects_list[o])
-    //   })
-    // } else {
-    //   this.enabled_objects = [
-    //     objects_list.post, objects_list.vip_event, objects_list.vip_product,
-    //     objects_list.vip_card, objects_list.vip_store, objects_list.support
-    //   ]
-    // }
 
     if (!result.star_count) {
       result.star_count = 0

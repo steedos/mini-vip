@@ -1,12 +1,14 @@
 import wepy from 'wepy'
 import { baseUrl } from '@/config';
 import pageRouter from '@/utils/pageRouter';
+import _ from 'underscore';
 
 const PAGESIZE = 15;
 
 export default class recordList extends wepy.mixin {
   data = {
     record_list: [],
+    style_list: {},
     object_name: '',
     space_id: '',
     baseUrl: baseUrl,
@@ -100,13 +102,13 @@ export default class recordList extends wepy.mixin {
 
     if(searchValue){
       if(options.$filter){
-        options.$filter = options.$filter + `and (contains(${this.name_field},'${searchValue}'))`
+        options.$filter = options.$filter + ` and (contains(${this.name_field},'${searchValue}'))`
       }else{
         options.$filter = `(contains(${this.name_field},'${searchValue}'))`
       }
     }
 
-    let keys = ['space'];
+    let keys = ['space','owner'];
     let expand = [];
 
     if(this.avatar_field){
@@ -207,6 +209,51 @@ export default class recordList extends wepy.mixin {
     addRecord() {
       this.addRecord()
     },
+    touchstart(event) {
+      const itemId = event.currentTarget.dataset.itemId;
+      const positionX = event.touches[0].pageX;
+      this.style_list[itemId].positionX = positionX;
+      this.$apply();
+    },
+    touchmove(event) {
+      const itemId = event.currentTarget.dataset.itemId;
+      const newPositionX = event.touches[0].pageX;
+      const oldPositionX = this.style_list[itemId].positionX;
+      const oldOffsetX = this.style_list[itemId].offsetX;
+      const offsetX = newPositionX - oldPositionX;
+
+      if (offsetX < 0) {
+        if (oldOffsetX < 0 && oldOffsetX < offsetX) {
+          this.style_list[itemId].offsetX = -60 + offsetX;
+        } else {
+          this.style_list[itemId].offsetX = offsetX;
+        }
+      } else if (offsetX > 0) {
+        this.style_list[itemId].offsetX = 10;
+      }
+      this.$apply();
+    },
+    touchend(event) {
+      const itemId = event.currentTarget.dataset.itemId;
+      let offsetX = this.style_list[itemId].offsetX
+      if ((-60 < offsetX && offsetX < -30) || offsetX < -60) {
+        offsetX = -60;
+      } else {
+        offsetX = 0;
+      }
+      this.style_list[itemId].positionX = 0;
+      this.style_list[itemId].offsetX = offsetX;
+      this.$apply();
+    },
+    async deleteRecord(event) {
+      const data = event.currentTarget.dataset
+      const object_name = this.object_name;
+      const recordId = data.recordId;
+      const allowDelete = data.allowDelete;
+      const spaceId = _.isObject(data.recordSpace) ? data.recordSpace._id : data.recordSpace;
+      await this.$parent.delete(object_name, recordId, spaceId);
+      await this.dataRefresh();
+    }
     // searchRecords(searchValue, evt){
     //   console.log('mixins searchRecords.....')
     //   this.searchRecords(searchValue, evt)
@@ -247,7 +294,6 @@ export default class recordList extends wepy.mixin {
     const queryOptions = this.getQueryOptions(searchValue);
 
     if (this.allow_load) {
-
       const result = await this.$parent.query(object_name, queryOptions, this.space_id);
       if (result.value) {
         let records = [];
@@ -255,6 +301,9 @@ export default class recordList extends wepy.mixin {
           if(this.avatar_field){
             record[this.avatar_field] = this.getFieldValue(this.avatar_field, record)
           }
+          const owner = _.isObject(record.owner) ? record.owner._id : record.owner
+          record.allow_delete = await this.$parent.recordAllowDelete(object_name, owner, record.space)
+          this.style_list[record._id] = {positionX: 0, offsetX: 0}
           records.push(record)
         }
         this.record_list = this.record_list.concat(records)

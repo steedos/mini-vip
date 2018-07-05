@@ -157,6 +157,7 @@ export default class VIP extends wepy.app {
       'pages/edit/text',
       'pages/edit/textarea',
       'pages/edit/lookup',
+      'pages/edit/lookup_child',
       'pages/edit/image',
       'pages/edit/number',
       'pages/edit/location',
@@ -173,9 +174,11 @@ export default class VIP extends wepy.app {
       'pages/404',
       'pages/record/view',
       'pages/record/create',
+      'pages/record/create_child',
       'pages/space/invite_user',
       'pages/product/view',
       'pages/product/list',
+      'pages/product/share',
       'pages/cart/index',
       'pages/cart/checkout',
       'pages/address/list',
@@ -237,6 +240,8 @@ export default class VIP extends wepy.app {
     console.log('onLaunch', options);
     req.appId(appId)
     req.baseUrl(baseUrl).interceptor(interceptor.request, interceptor.response);
+
+    this.saveRecentSites(options.space_id);
 
     pageRouter.setApp(this);
 
@@ -324,6 +329,22 @@ export default class VIP extends wepy.app {
       return true
     }else{
       return false
+    }
+  }
+
+  saveRecentSites(space_id) {
+    if (space_id) {
+      let recent_sites = wx.getStorageSync('recent_sites')
+      if (recent_sites) {
+        const index = recent_sites.indexOf(space_id);
+        if (index > -1) {
+          recent_sites.splice(index, 1);
+        }
+        recent_sites.push(space_id);
+      } else {
+        recent_sites = [space_id]
+      }
+      wx.setStorageSync('recent_sites', recent_sites);
     }
   }
 

@@ -29,8 +29,6 @@ page{
     margin-bottom:8px;
     font-size:18px;
   }
-  .event-field{
-  }
   .event-description{
     color: #888;
     margin-top: 8px;

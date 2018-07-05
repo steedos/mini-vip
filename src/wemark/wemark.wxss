@@ -4,7 +4,6 @@
 }
 .wemark_block_h1{
 	font-size:40rpx;
-	text-align: center;
 	margin-bottom:1em;
 }
 .wemark_block_h2{

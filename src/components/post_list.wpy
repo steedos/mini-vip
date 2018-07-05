@@ -74,7 +74,7 @@
     border-top: 1px solid #ededed;
     color: #888;
     align-items: center;
-
+    height:50px;
     .action {
       flex: 1;
       padding:0 30rpx;
@@ -151,7 +151,6 @@
           <view class="weui-cell weui-cell_access">
             <view class="weui-cell__bd">
               <view class="post-name">{{post.name}}</view>
-              <view class="post-summary">{{post.summary}}</view>
             </view>
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
           </view>
@@ -159,17 +158,23 @@
         <view class="post-footer ">
           <button plain="true" open-type="share" data-post-name="{{post.name}}" data-post-id="{{post._id}}" data-post-space="{{post.space._id}}" class="share action share-btn">
             <view class="vip_share-default slds-icon slds-icon--small slds-m-right--x-small"></view>
-            <view class="text">转发</view>
+            <block wx:if="{{post.forward_count}}">
+              <view class="text">{{post.forward_count}}</view>
+            </block>
           </button>
           <view class="comment action">
             <view class="comment-btn action" @tap="writeComment({{post._id}}, {{post.space._id}})">
               <view class="vip_comment-default slds-icon slds-icon--small slds-m-right--x-small"></view>
-              <view class="text">评论</view>
+              <block wx:if="{{post.comment_count}}">
+                <view class="text">{{post.comment_count}}</view>
+              </block>
             </view>
           </view>
           <view class="star action star-btn {{post.star_id ? 'is-stared' : ''}}" @tap="starPost({{post._id}}, {{post.space._id}}, {{index}})">
             <view class="vip_star-{{post.star_id ? 'blue' : 'default'}} slds-icon slds-icon--small slds-m-right--x-small"></view>
-            <view class="text">{{post.star_count || 0}}</view>
+            <block wx:if="{{post.star_count}}">
+                <view class="text">{{post.star_count}}</view>
+            </block>
           </view>
         </view>
       </view>
@@ -246,14 +251,15 @@ export default class PostList extends wepy.component {
     }
   }
 
-  async getStarCount(index) {
+  async getCount(index) {
     const post_id = this.list[index]._id
     const space_id = this.list[index].space._id
     const result = await this.$parent.$parent.get('post', post_id, space_id);
     this.list[index].star_count = result.star_count || 0
+    this.list[index].comment_count = result.comment_count || 0
+    this.list[index].forward_count = result.forward_count || 0
     this.$apply()
   }
-
   async onLoad() {}
 
   data = {
@@ -333,7 +339,7 @@ export default class PostList extends wepy.component {
           this.$apply()
         }
       }
-      await this.getStarCount(index)
+      await this.getCount(index)
     },
     writeComment(post_id, space_id) {
       wx.navigateTo({

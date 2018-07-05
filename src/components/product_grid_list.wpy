@@ -4,7 +4,7 @@
     <view class="weui-cells_after-title">
       <scroll-view scroll-y="true" class="swiper-item-box">
         <view class="shop_item">
-          <navigator class="list" wx:for="{{list}}" wx:key="item" url="/pages/product/view?record_id={{item._id}}&space_id={{item.space}}">
+          <navigator class="list" wx:for="{{list}}" wx:key="item" url="/pages/product/view?product_id={{item._id}}&space_id={{item.space}}">
             <view class="image_box">
               <image src="{{util.formatImageUrl(item.avatar, baseUrl)}}" mode="aspectFill"></image>
             </view>
@@ -72,46 +72,49 @@ export default class ProductGridList extends wepy.component {
 <style lang="less">
 .shop_item {
   padding: 0rpx 15rpx;
-  background: #EFEEF3;
   display: flex;
   flex-wrap: wrap;
   padding-bottom: 30rpx;
 }
 
 .list:nth-child(odd) {
-  margin-right: 10rpx;
+  margin-right: 24rpx;
+}
+.weui-loadmore__tips_in-line{
+  background-color:#fff;
 }
 
 .list {
-  background: #EFEEF3;
-  width: 355rpx;
+  width: 348rpx;
   margin-top: 15rpx;
+  margin-bottom:10rpx;
   .image_box {
     image {
       width: 100%;
-      height: 345rpx;
+      height: 348rpx;
       display: block;
     }
   }
   .product_name {
+    font-weight: fold;
     color: #1a1a1a;
-    font-size: 36rpx;
+    font-size: 34rpx;
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
     word-break: break-all;
+    max-height:46rpx;
   }
   .price {
-    color:#000;
-    font-size: 35rpx;
+    color:#b4282d;
+    font-size: 37rpx;
     font-weight: 600;
   }
   .cost_price {
-    color: #666666;
-    font-size: 24rpx;
+    color: #9b9b9b;
+    font-size: 26rpx;
     text-decoration: line-through;
-    font-weight: 600;
     overflow:hidden;
   }
   .sale_num {
@@ -125,6 +128,7 @@ export default class ProductGridList extends wepy.component {
   .product_info {
     display: flex;
     align-items: center;
+    margin-top:-2px;
   }
   .cost_price {
     padding-left: 16rpx;

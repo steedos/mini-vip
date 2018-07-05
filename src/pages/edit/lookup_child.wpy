@@ -67,9 +67,6 @@
         </radio-group>
       </view>
     </view>
-    <view class="tab-bar" wx:if="{{allowCreate}}">
-      <view class="slds-icon-action-new" @tap="addRecord"></view>
-    </view>
   </view>
 </template>
 
@@ -79,7 +76,7 @@
   import _ from 'underscore';
   import pageRouter from '@/utils/pageRouter';
 
-  export default class Lookup extends wepy.page {
+  export default class LookupChild extends wepy.page {
     config = {
       navigationBarTitleText: '选择'
     };
@@ -94,14 +91,11 @@
       objectCodeIndex: 0,
       allowCreate: false,
       field: {},
-      filters: '',
     };
 
     async refresh(action, record_id){
-      console.log('lookup ref', record_id)
       this.options = await this.getReferenceTo(this.objectCode);
       const fieldValue = this.getObjectFieldValue(this.key) || {};
-      console.log('fieldValue', fieldValue)
       if(!_.isEmpty(fieldValue)){
         if(this.multiple){
           fieldValue.forEach((v)=>{
@@ -151,7 +145,6 @@
     setParentValue(key, value){
       const pages = getCurrentPages();
       const prevPage = pages[pages.length - 2];
-      console.log('setParentValue', key, value)
       prevPage.changeValue(key, value)
 //      prevPage.data.$autoform$values[key] = value
 
@@ -173,25 +166,6 @@
       return prevPage.data.$autoform$values[key]
     }
 
-    transformFilterToDev(filters){
-      let query = [];
-      filters.forEach((filter)=>{
-        if(filter.length === 3){
-          let key = filter[0];
-          let operation = filter[1];
-          let value = filter[2];
-
-          if(operation === '='){
-            query.push(`(${key} eq '${value}')`)
-          }
-        }else{
-          throw new Error('无效的filter', filter)
-        }
-      })
-
-      return query.join(' and ')
-    }
-
     async getReferenceTo(reference_to) {
 
       wepy.showLoading({
@@ -209,10 +183,6 @@
       if (reference_to === 'users' || reference_to === 'space_users') {
         reference_to = 'space_users'
         query.$select = 'name,user'
-      }
-
-      if(this.filters){
-        query.$filter = this.transformFilterToDev(this.filters)
       }
 
       const data = await this.$parent.query(reference_to, query, this.space_id);
@@ -236,10 +206,6 @@
       this.key = e.key;
 
       const field = this.getObjectField(e.key);
-
-      this.filters = field.filters;
-
-      console.log('field', field);
 
       const fieldValue = this.getObjectFieldValue(e.key) || {};
 
@@ -280,7 +246,6 @@
       }else{
         this.objectCode = field.reference_to
         this.options = await this.getReferenceTo(this.objectCode);
-        console.log('fieldValue', fieldValue);
 
         if(!_.isEmpty(fieldValue)){
           if(this.multiple){
@@ -302,7 +267,6 @@
           }
         }
         const object = await this.$parent.getObject(field.reference_to, this.space_id);
-        console.log('object', object)
         this.allowCreate = object.allowCreate;
       }
 

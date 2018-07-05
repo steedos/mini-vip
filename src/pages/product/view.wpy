@@ -1,5 +1,5 @@
 <style lang="less">
-@import '../../wemark/wemark.wxss';
+  @import '../../wemark/wemark.wxss';
 	.container {
     box-sizing: border-box;
     background-color: #f4f4f4;
@@ -49,6 +49,7 @@
     width: auto;
     overflow: hidden;
     background: #fff;
+    padding-bottom:16rpx;
   }
 
   .goods-info .c{
@@ -66,10 +67,10 @@
 
   .goods-info .name{
     font-weight:bold;
-    margin-bottom: 20rpx;
-    font-size: 41rpx;
-    line-height: 41rpx;
-    max-height:34px;
+    margin-bottom:32rpx;
+    font-size: 36rpx;
+    line-height: 52rpx;
+    max-height:100rpx;
     overflow:hidden;
     text-overflow:ellipsis;
     display: -webkit-box!important;
@@ -88,9 +89,9 @@
 
 
   .goods-info .price{
+    font-weight: bold;
     display:inline!important;
-    margin-top:15px;
-    font-size: 35rpx;
+    font-size: 40rpx;
     line-height: 35rpx;
     color: #b4282d;
   }
@@ -104,12 +105,12 @@
   .goods-info .brand text{
     display: inline-block;
     width: auto;
-    padding: 2px 30rpx 2px 10.5rpx;
+    padding: 4rpx 30rpx 4rpx 10.5rpx;
     line-height: 35.5rpx;
     border: 1px solid #f48f18;
     font-size: 25rpx;
     color: #f48f18;
-    border-radius: 4px;
+    border-radius: 8rpx;
     background: url(http://nos.netease.com/mailpub/hxm/yanxuan-wap/p/20150730/style/img/icon-normal/detailTagArrow-18bee52dab.png) 95% center no-repeat;
     background-size: 10.75rpx 18.75rpx;
   }
@@ -522,6 +523,7 @@
   }
 
   .bottom-btn{
+    
     position: fixed;
     left:0;
     bottom:0;
@@ -583,12 +585,13 @@
 
   .bottom-btn .l .icon{
     display: block;
-    height: 44rpx;
-    width: 44rpx;
+    height: 46rpx;
+    width: 46rpx;
   }
 
 
   .bottom-btn .c{
+    font-size: 32rpx;
     float: left;
     height: 100rpx;
     line-height: 96rpx;
@@ -600,6 +603,7 @@
   }
 
   .bottom-btn .r{
+    font-size: 32rpx;
     border:1px solid #b4282d;
     background: #b4282d;
     float: left;
@@ -774,25 +778,46 @@
   .cost_price {
     padding-left:16rpx;
     display:inline;
-    color: #666666;
+    color: #9b9b9b;
     font-size: 24rpx;
     text-decoration: line-through;
-    font-weight: 600;
     overflow:hidden;
   }
   .flex-images-box{
-    margin:0px -15px;
+    margin:0px -30rpx;
   }
   .weui-article{
-    padding:0px 15px 20px 15px;
+    padding:0 30rpx 40rpx 30rpx;
   }
   .weui-article__c{
-    padding:0 15px;
+    padding:0 30rpx;
+  }
+  .page_body{
+    padding-bottom:100rpx;
+  }
+  .button-hover{
+    background-color:#e05c60!important;
+  }
+  .btn-share{
+    display:inline!important;
+    float:right;
+    background:#ff9800;
+    padding:4rpx 30rpx;
+    margin-top:-10rpx;
+    color:#fff!important;
+    border-bottom-left-radius:12px;
+    border-top-left-radius:12px;
+    margin-right:-32rpx;
+    text{
+      display:inline!important;
+      color:#fff;
+    }
+
   }
 </style>
 <template>
   <view class="page">
-    <view>
+    <view class="page_body">
       <swiper class="goodsimgs" indicator-dots="true" autoplay="true" interval="3000" duration="1000">
         <repeat for="{{product.covers}}" key="index" index="index" item="img">
           <swiper-item>
@@ -811,6 +836,9 @@
           <!-- <text class="page__desc">{{product.description}}</text> -->
           <text class="price">￥{{product.default_price}}</text>
           <view class="cost_price" wx:if="{{product.compared_price && product.compared_price!=product.default_price}}">￥{{product.compared_price}}</view>
+          <navigator class="btn-share" url="share?product_id={{product._id}}&space_id={{space_id}}&product_name={{product.name}}">
+            <text>分享有礼</text>
+          </navigator>
           <view class="brand" wx:if="{{brand.name}}">
             <navigator url="../brandDetail/brandDetail?id={{brand.brandId}}">
               <text>{{brand.name}}</text>
@@ -949,18 +977,18 @@
       </view>
     </view>
     <view class="bottom-btn">
-      <view class="l l-collect" @tap="enterProductIndex">
+      <view class="l l-collect" hover-class='weui-grid_active' @tap="enterProductIndex">
         <image class="icon" src="{{ collectBackImage }}"></image>
       </view>
-      <view class="l l-cart" @tap="openCartPage">
+      <view class="l l-cart" @tap="openCartPage" hover-class='weui-grid_active'>
         <view class="box">
           <text class="cart-count">{{getProductCount}}</text>
           <image class="icon" src="/static/images/ic_menu_shoping_nor.png"></image>
 
         </view>
       </view>
-      <view class="c" @tap="buyNow">立即购买</view>
-      <view class="r" @tap="addProduct">加入购物车</view>
+      <view class="c" @tap="buyNow" hover-class='weui-grid_active'>立即购买</view>
+      <view class="r" @tap="addProduct" hover-class='button-hover'>加入购物车</view>
     </view>
   </view>
 </template>
@@ -983,7 +1011,7 @@
     }
   })
 
-  export default class ProduceView extends wepy.page {
+  export default class ProductView extends wepy.page {
 		config = {
 			navigationBarTitleText: '商品详情',
 			enablePullDownRefresh: true
@@ -1003,20 +1031,22 @@
       noCollectImage: '/static/images/icon_collect.png',
       hasCollectImage: '/static/images/icon_collect_checked.png',
       collectBackImage: '/static/images/ic_menu_choice_nor.png',
-      wemark: {}
+      wemark: {},
+      share_id: null,
+      product_id: null
     }
 
     async onLoad (e) {
-      console.log('e', e)
-      const _id = e.record_id
-      const space_id = e.space_id
+      console.log('===============onLoad======product===========', e)
+      this.product_id = e.product_id;
+      this.space_id = e.space_id;
+      this.share_id = e.share_id;
       const options = {
-        $filter: `_id eq '${_id}'`,
+        $filter: `_id eq '${this.product_id}'`,
         $select: 'name,default_price,compared_price,description,covers,images,avatar,categories,tags,vendor,status,space'
       };
       const product = await this.$parent.query('vip_product', options, 'guest');
       this.product = product.value[0];
-      console.log("==================",this.product)
 
       let productMd = this.product && this.product.description;
       //支持标准的图片markdown，格式为："![图片描述](http://192.168.0.195:5000/api/files/images/s8589uhysxKk7CEnp)";
@@ -1027,8 +1057,39 @@
           imagePathPrefix: `${baseUrl}/api/files/images/`
         });
       }
-      this.space_id = space_id
+      this.respondShare();
       this.$apply();
+    }
+
+    async respondShare() {
+      if(!this.share_id){
+        return;
+      }
+      let userId = this.$parent.globalData.user._id;
+      let name = this.$parent.globalData.user.name;
+      const query_options = {
+        $filter: `share eq '${this.share_id}' and owner eq '${userId}'`,
+        $select: 'name'
+      };
+      let share_response = await this.$parent.query("vip_share_response", query_options, this.space_id);
+      let values = {
+        name: name,
+        share: this.share_id
+      };
+      if(share_response && share_response.value && share_response.value.length){
+        // 如果已经响应过，则需要修改其modified，以保证最后进来的能按modefied排序到最后一个
+        share_response = await this.$parent.update("vip_share_response", share_response.value[0]._id, values, this.space_id);
+      }
+      else{
+        share_response = await this.$parent.insert("vip_share_response", values, this.space_id);
+      }
+      console.log("===============respondShare============", share_response);
+      if(!share_response){
+        wx.showToast({
+          title: "响应分享失败，请关闭后再重新打开",
+          icon: "none"
+        });
+      }
     }
 
     computed = {
@@ -1067,6 +1128,14 @@
           return this.product.images;
         }
       }
+    }
+
+    // 分享
+    onShareAppMessage(res) {
+      return {
+        title: this.product.name,
+        path: `pages/product/view?space_id=${this.space_id}&product_id=${this.product_id}`
+      };
     }
 
     methods = {
