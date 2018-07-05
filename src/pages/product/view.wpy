@@ -68,8 +68,8 @@
     font-weight:bold;
     margin-bottom: 20rpx;
     font-size: 45rpx;
-    line-height: 45rpx;
-    max-height:87rpx;
+    line-height: 52rpx;
+    max-height:100rpx;
     overflow:hidden;
     text-overflow:ellipsis;
     display: -webkit-box!important;
@@ -104,12 +104,12 @@
   .goods-info .brand text{
     display: inline-block;
     width: auto;
-    padding: 2px 30rpx 2px 10.5rpx;
+    padding: 4rpx 30rpx 4rpx 10.5rpx;
     line-height: 35.5rpx;
     border: 1px solid #f48f18;
     font-size: 25rpx;
     color: #f48f18;
-    border-radius: 4px;
+    border-radius: 8rpx;
     background: url(http://nos.netease.com/mailpub/hxm/yanxuan-wap/p/20150730/style/img/icon-normal/detailTagArrow-18bee52dab.png) 95% center no-repeat;
     background-size: 10.75rpx 18.75rpx;
   }
@@ -785,16 +785,16 @@
     overflow:hidden;
   }
   .flex-images-box{
-    margin:0px -15px;
+    margin:0px -30rpx;
   }
   .weui-article{
-    padding:0px 15px 20px 15px;
+    padding:0 30rpx 40rpx 30rpx;
   }
   .weui-article__c{
-    padding:0 15px;
+    padding:0 30rpx;
   }
   .page_body{
-    padding-bottom:50px;
+    padding-bottom:100rpx;
   }
   .button-hover{
     background-color:#e05c60!important;

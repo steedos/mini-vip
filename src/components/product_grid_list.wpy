@@ -97,12 +97,13 @@ export default class ProductGridList extends wepy.component {
   .product_name {
     font-weight: fold;
     color: #1a1a1a;
-    font-size: 17px;
+    font-size: 34rpx;
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
     word-break: break-all;
+    max-height:46rpx;
   }
   .price {
     color:#b4282d;
