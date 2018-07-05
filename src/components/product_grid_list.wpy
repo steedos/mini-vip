@@ -72,7 +72,6 @@ export default class ProductGridList extends wepy.component {
 <style lang="less">
 .shop_item {
   padding: 0rpx 15rpx;
-  background: #EFEEF3;
   display: flex;
   flex-wrap: wrap;
   padding-bottom: 30rpx;
@@ -81,9 +80,11 @@ export default class ProductGridList extends wepy.component {
 .list:nth-child(odd) {
   margin-right: 24rpx;
 }
+.weui-loadmore__tips_in-line{
+  background-color:#fff;
+}
 
 .list {
-  background: #EFEEF3;
   width: 348rpx;
   margin-top: 15rpx;
   margin-bottom:10rpx;
