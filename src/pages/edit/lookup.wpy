@@ -94,6 +94,7 @@
       objectCodeIndex: 0,
       allowCreate: false,
       field: {},
+      filters: '',
     };
 
     async refresh(action, record_id){
@@ -172,6 +173,25 @@
       return prevPage.data.$autoform$values[key]
     }
 
+    transformFilterToDev(filters){
+      let query = [];
+      filters.forEach((filter)=>{
+        if(filter.length === 3){
+          let key = filter[0];
+          let operation = filter[1];
+          let value = filter[2];
+
+          if(operation === '='){
+            query.push(`(${key} eq '${value}')`)
+          }
+        }else{
+          throw new Error('无效的filter', filter)
+        }
+      })
+
+      return query.join(' and ')
+    }
+
     async getReferenceTo(reference_to) {
 
       wepy.showLoading({
@@ -189,6 +209,10 @@
       if (reference_to === 'users' || reference_to === 'space_users') {
         reference_to = 'space_users'
         query.$select = 'name,user'
+      }
+
+      if(this.filters){
+        query.$filter = this.transformFilterToDev(this.filters)
       }
 
       const data = await this.$parent.query(reference_to, query, this.space_id);
@@ -212,6 +236,8 @@
       this.key = e.key;
 
       const field = this.getObjectField(e.key);
+
+      this.filters = field.filters;
 
       console.log('field', field);
 

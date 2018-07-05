@@ -12,7 +12,7 @@
     padding: 32rpx 31.25rpx;
     align-items: stretch;
     display: flex;
-    font-size: 15px;
+    font-size: 30rpx;
   }
 
   .l {
@@ -24,7 +24,7 @@
   .name {
     width: 100%;
     line-height: 44rpx;
-    font-size: 29rpx;
+    font-size: 34rpx;
     color: #333;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -49,18 +49,19 @@
     flex: 1;
     height: 100%;
     overflow: hidden;
+    margin-left: 20rpx;
   }
 
   .mobile {
     line-height: 44rpx;
     margin-bottom: 8rpx;
-    font-size: 29rpx;
+    font-size: 32rpx;
     overflow: hidden;
     color: #333;
   }
 
   .address {
-    font-size: 25rpx;
+    font-size: 30rpx;
     overflow: hidden;
     color: rgb(158, 158, 158);
   }
@@ -174,7 +175,7 @@
 
   .b {
     display: flex;
-    font-size: 14px;
+    font-size: 28rpx;
     color: #333;
   }
 
@@ -194,6 +195,17 @@
   display: flex;
 }
 
+.order-total .t {
+  height: 100rpx;
+  line-height: 100rpx;
+  background: #fff;
+  font-weight: bold;
+  font-size: 34rpx;
+  padding-left: 31.25rpx;
+  border-top: 1rpx solid rgba(0, 0, 0, 0.2);
+  border-bottom: 1rpx solid rgba(0, 0, 0, 0.2);
+}
+
 .order-total .l {
   flex: 1;
   height: 100rpx;
@@ -201,8 +213,7 @@
   color: #b4282d;
   background: #fff;
   font-weight: bold;
-  font-size: 17px;
-  padding-left: 31.25rpx;
+  font-size: 34rpx;
   border-top: 1rpx solid rgba(0, 0, 0, 0.2);
   border-bottom: 1rpx solid rgba(0, 0, 0, 0.2);
 }
@@ -215,7 +226,7 @@
   line-height: 100rpx;
   text-align: center;
   color: #fff;
-  font-size: 17px;
+  font-size: 34rpx;
 }
 </style>
 <template>
@@ -290,7 +301,8 @@
     </view>
 
     <view class="order-total">
-      <view class="l">实付：￥{{goodsTotalPrice}}</view>
+      <view class="t">实付：</view>
+      <view class="l">￥{{goodsTotalPrice}}</view>
       <view class="r" bindtap="submitOrder">去付款</view>
     </view>
   </view>
