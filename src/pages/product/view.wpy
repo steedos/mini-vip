@@ -537,7 +537,7 @@
   .bottom-btn .l{
     float: left;
     height: 100rpx;
-    width: 162rpx;
+    width: 130rpx;
     border: 1px solid #f4f4f4;
     display: flex;
     align-items: center;
