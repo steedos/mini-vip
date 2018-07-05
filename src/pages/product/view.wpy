@@ -67,7 +67,7 @@
   .goods-info .name{
     font-weight:bold;
     margin-bottom: 20rpx;
-    font-size: 45rpx;
+    font-size: 36rpx;
     line-height: 52rpx;
     max-height:100rpx;
     overflow:hidden;
@@ -590,8 +590,7 @@
 
 
   .bottom-btn .c{
-    font-size: 36rpx;
-    font-weight: bold;
+    font-size: 32rpx;
     float: left;
     height: 100rpx;
     line-height: 96rpx;
@@ -603,8 +602,7 @@
   }
 
   .bottom-btn .r{
-    font-size: 36rpx;
-    font-weight: bold;
+    font-size: 32rpx;
     border:1px solid #b4282d;
     background: #b4282d;
     float: left;
