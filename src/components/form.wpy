@@ -506,7 +506,7 @@
           if (object_name && record_id && action != 'create') {
             var keys = ['owner'];
             _.forEach(this.fields, (v, k)=> {
-              if (!v.hidden && !v.omit) {
+              if (!v.hidden && !v.omit && k.indexOf('.') < 0) {
                 keys.push(k)
               }
             });

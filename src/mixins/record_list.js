@@ -193,6 +193,8 @@ export default class recordList extends wepy.mixin {
     this.allowCreate = object.allowCreate;
     if(e.allow_create === 'true'){
       this.allowCreate = true
+    } else if (e.allow_create === 'false'){
+      this.allowCreate = false
     }
     this.searchPlaceholder = '搜索' + object.label;
 

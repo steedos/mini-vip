@@ -99,6 +99,15 @@
           </view>
           <view class="weui-cell__ft weui-cell__ft_in-access"></view>
         </navigator>
+        <navigator url="./record/list?space_id=guest&object_name=vip_order&allow_create=false" class="weui-cell weui-cell_access">
+          <view class="weui-cell__hd">
+            <view class="slds-icon-standard-orders  slds-icon slds-icon--small slds-m-right--x-small"/>
+          </view>
+          <view class="weui-cell__bd">
+            <view>订单</view>
+          </view>
+          <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+        </navigator>
       </view>
     </view>
 

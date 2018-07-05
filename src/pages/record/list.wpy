@@ -67,9 +67,11 @@
 
 
   .record-container {
-    width: 100%;
     transition: all 0.2s linear;
     position: relative;
+    .record {
+      width: 100%;
+    }
     .delete {
       position: absolute;
       width: 60px;
@@ -97,8 +99,8 @@
       <block wx:if="{{record_list.length}}">
         <view class="weui-cells weui-cells_after-title">
           <repeat for="{{record_list}}" key="index" index="index" item="record">
-            <view class="record-container" style="transform: translateX({{style_list[record._id].offsetX}}px)" @touchstart="touchstart" @touchmove="touchmove" @touchend="touchend" data-item-id="{{record._id}}">
-              <navigator url="{{url}}&record_id={{record._id}}&space_id={{record.space}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+            <view class="record-container weui-cell weui-cell_access" style="transform: translateX({{style_list[record._id].offsetX}}px)" @touchstart="touchstart" @touchmove="touchmove" @touchend="touchend" data-item-id="{{record._id}}" hover-class="weui-cell_active">
+              <navigator url="{{url}}&record_id={{record._id}}&space_id={{record.space}}" class="record">
                 <view class="weui-cell__hd" wx:if="{{avatar_field}}">
                   <image src="{{util.formatAvatarImageUrl(record[avatar_field], baseUrl)}}" class='avatar-field'></image>
                 </view>
