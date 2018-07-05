@@ -836,7 +836,7 @@
           <!-- <text class="page__desc">{{product.description}}</text> -->
           <text class="price">￥{{product.default_price}}</text>
           <view class="cost_price" wx:if="{{product.compared_price && product.compared_price!=product.default_price}}">￥{{product.compared_price}}</view>
-          <navigator class="btn-share" url="share?product_id={{product._id}}&space_id={{space_id}}&product_name={{product.name}}">
+          <navigator wx:if="{{product.gift}}" class="btn-share" url="share?product_id={{product._id}}&space_id={{space_id}}&product_name={{product.name}}&product_gift={{product.gift}}">
             <text>分享有礼</text>
           </navigator>
           <view class="brand" wx:if="{{brand.name}}">
@@ -1043,7 +1043,7 @@
       this.share_id = e.share_id;
       const options = {
         $filter: `_id eq '${this.product_id}'`,
-        $select: 'name,default_price,compared_price,description,covers,images,avatar,categories,tags,vendor,status,space'
+        $select: 'name,default_price,compared_price,description,covers,images,avatar,categories,tags,vendor,status,space,gift'
       };
       const product = await this.$parent.query('vip_product', options, 'guest');
       this.product = product.value[0];

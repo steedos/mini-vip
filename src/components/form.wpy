@@ -868,7 +868,7 @@
         if (field.required) {
           if (!this.values[field.name]) {
             this.showTopTips = true
-            this.message = `请填写${field.label}`
+            this.message = `请设置${field.label}`
             return false
           }
         }

@@ -114,7 +114,7 @@
                   <!--<view class="weui-cell__ft_in-access"></view>-->
                 <!--</view>-->
               </navigator>
-              <view class="delete" @tap.stop="deleteRecord" wx:if="{{record.allow_delete}}"data-record-space="{{record.space}}"  data-allow-delete="{{record.allow_delete}}" data-record-id="{{record._id}}">
+              <view class="delete" @tap.stop="deleteRecord" wx:if="{{record.allow_delete}}" data-record-space="{{record.space}}"  data-allow-delete="{{record.allow_delete}}" data-record-id="{{record._id}}">
                 删除
               </view>
             </view>
