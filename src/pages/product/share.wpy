@@ -99,7 +99,7 @@
   }
 </style>
 <template>
-<view class="page">
+<view class="page" wx:if="{{is_loaded}}">
   <view class="page__hd">
     <view class="gift-label">每成功邀请一位新人成交，可获得</view>
     <view class="gift-value">{{product_gift}}</view>
@@ -155,6 +155,7 @@
       product_id: null,
       product_name: null,
       product_gift: null,
+      is_loaded: false,
       share_id: null,
       showPop: false
     }
@@ -177,7 +178,40 @@
           icon: "none"
         });
       }
+      wepy.showLoading({
+        title: '加载中',
+        mask: true
+      });
+      await this.addShare();
+      this.is_loaded = true;
       this.$apply();
+      wepy.hideLoading();
+    }
+
+    async addShare(){
+      console.log("============share=======this.product_id==============", this.product_id);
+      const name = this.$parent.globalData.user.name;
+      let values = {
+        name: name,
+        related_to: {
+            "o" : "vip_product",
+            "ids" : [ this.product_id ]
+        },
+        way: 'weixin'
+      };
+      let vip_share = await this.$parent.insert("vip_share", values, this.space_id);
+      console.log("============share=======vip_share==============", vip_share);
+      if(vip_share && vip_share.value && vip_share.value.length){
+        this.share_id = vip_share.value[0]._id;
+      }
+      else{
+        console.log("============share=======error==============");
+        wx.showToast({
+          title: "响应分享失败，请返回重新操作一次",
+          icon: "none"
+        });
+        return;
+      }
     }
 
     // 分享
@@ -198,34 +232,12 @@
     }
 
     methods = {
-      async share(){
+      async shareToFriendCircle(){
         wepy.showLoading({
           title: '加载中',
           mask: true
         });
-        console.log("============share=======this.product_id==============", this.product_id);
-        const name = this.$parent.globalData.user.name;
-        let values = {
-          name: name,
-          related_to: {
-              "o" : "vip_product",
-              "ids" : [ this.product_id ]
-          },
-          way: 'weixin'
-        };
-        let vip_share = await this.$parent.insert("vip_share", values, this.space_id);
-        console.log("============share=======vip_share==============", vip_share);
-        if(vip_share && vip_share.value && vip_share.value.length){
-          this.share_id = vip_share.value[0]._id;
-        }
-        else{
-          console.log("============share=======error==============");
-          wx.showToast({
-            title: "响应分享失败，请重新操作一次",
-            icon: "none"
-          });
-          return;
-        }
+        // 这里写生成图片并显示在pop框中的逻辑
         wepy.hideLoading();
         this.showPop = true;
         this.$apply();
