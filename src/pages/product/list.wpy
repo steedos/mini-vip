@@ -138,6 +138,10 @@
     white-space: nowrap;
   }
 }
+
+page{
+  background-color: #fff;
+}
 </style>
 
 <template>
