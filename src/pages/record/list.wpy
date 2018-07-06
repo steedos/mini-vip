@@ -1,5 +1,6 @@
 <style lang="less">
 .record-list {
+  overflow: hidden;
   .image {
     display: block;
   }
@@ -145,7 +146,7 @@ import recordList from '../../mixins/record_list';
 export default class RecordList extends wepy.page {
   config = {
     navigationBarTitleText: '',
-    enablePullDownRefresh: true
+    enablePullDownRefresh: true,
   };
 
   components = {

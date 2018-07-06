@@ -182,6 +182,7 @@ export default class VIP extends wepy.app {
       'pages/cart/index',
       'pages/cart/checkout',
       'pages/address/list',
+      'pages/order/list',
     ],
     tabBar: {
       color: '#666',
