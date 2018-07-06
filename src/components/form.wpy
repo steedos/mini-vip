@@ -816,9 +816,9 @@
 
           if(_.isArray(field.reference_to)){
             if(v._id){
-              value[k] = {o: v.object_name, ids: [v._id]}
+              value[k] = {o: v.object_name || v['reference_to.o'], ids: [v._id]}
             }else{
-              value[k] = {o: v.object_name}
+              value[k] = {o: v.object_name || v.o}
             }
           }
         }
