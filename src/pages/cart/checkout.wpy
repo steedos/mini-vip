@@ -458,7 +458,7 @@ export default class Checkout extends wepy.page {
       });
       var newOrder = {
         name: '商城购物',
-        amount: 0.01,
+        amount: amount,
         status: 'draft',
         store: spaceId,
         type: 'pay',
