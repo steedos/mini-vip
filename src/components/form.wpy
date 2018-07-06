@@ -412,7 +412,8 @@
             }
             groupItem.fields[key] = field;
             groupItem._groupText = field.group;
-            groupItem._cellsClass = 'weui-cells_after-title'
+            groupItem._cellsClass = 'weui-cells_after-title';
+            groupItem._helpText = field.inlineHelpText || '';
 
           }else if(field.inlineHelpText){
             groupItem.fields[key] = field;
