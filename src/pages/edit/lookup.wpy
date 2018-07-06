@@ -241,7 +241,6 @@
       let options = [];
       data.value.forEach(function (record) {
         let option = {label: record.name};
-        console.log('record---->', record)
         if (reference_to === 'space_users') {
           option.value = record.user._id
           if(record.user.profile){

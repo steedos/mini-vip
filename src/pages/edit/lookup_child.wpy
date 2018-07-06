@@ -26,6 +26,14 @@
         transform: scaleY(0.5);
       }
     }
+
+    .avatar-field {
+      border-radius: 0.15rem;
+      margin-right: 5px;
+      vertical-align: middle;
+      width: 40px;
+      height: 40px;
+    }
   }
 </style>
 
@@ -47,6 +55,9 @@
           <repeat for="{{options}}" key="index" index="index" item="option">
             <label class="weui-cell weui-check__label">
               <checkbox class="weui-check" value="{{option.value}}" checked="{{option.checked}}" />
+              <view class="weui-cell__hd" wx:if="{{showAvatar}}">
+                <image src="{{util.formatAvatarImageUrl(option.avatar, baseUrl)}}" class='avatar-field'></image>
+              </view>
               <view class="weui-cell__bd">{{option.label}}</view>
               <view class="weui-cell__ft weui-cell__ft_in-radio" wx:if="{{option.checked}}">
                 <icon class="weui-icon-radio" type="success_no_circle" size="16"></icon>
@@ -58,6 +69,9 @@
           <repeat for="{{options}}" key="index" index="index" item="option">
             <label class="weui-cell weui-check__label">
               <radio class="weui-check" value="{{option.value}}" checked="{{option.checked}}"/>
+              <view class="weui-cell__hd" wx:if="{{showAvatar}}">
+                <image src="{{util.formatAvatarImageUrl(option.avatar, baseUrl)}}" class='avatar-field'></image>
+              </view>
               <view class="weui-cell__bd">{{option.label}}</view>
               <view class="weui-cell__ft weui-cell__ft_in-radio" wx:if="{{option.checked}}">
                 <icon class="weui-icon-radio" type="success_no_circle" size="16"></icon>
@@ -75,6 +89,7 @@
   import wepy from 'wepy';
   import _ from 'underscore';
   import pageRouter from '@/utils/pageRouter';
+  import util from '../../wxs/util.wxs';
 
   export default class LookupChild extends wepy.page {
     config = {
@@ -91,6 +106,11 @@
       objectCodeIndex: 0,
       allowCreate: false,
       field: {},
+      showAvatar: false,
+    };
+
+    wxs = {
+      util: util
     };
 
     async refresh(action, record_id){
@@ -181,18 +201,25 @@
         $select: 'name'
       };
       if (reference_to === 'users' || reference_to === 'space_users') {
-        reference_to = 'space_users'
-        query.$select = 'name,user'
+        this.showAvatar = true;
+        reference_to = 'space_users';
+        query.$select = 'name,user';
+        query.$expand = 'user($select=profile)'
       }
 
       const data = await this.$parent.query(reference_to, query, this.space_id);
       let options = []
       data.value.forEach(function (record) {
+        let option = {label: record.name};
         if (reference_to === 'space_users') {
-          options.push({label: record.name, value: record.user});
+          option.value = record.user._id
+          if(record.user.profile){
+            option.avatar = record.user.profile.avatar
+          }
         } else {
-          options.push({label: record.name, value: record._id});
+          option.value = record._id
         }
+        options.push(option);
       });
       wepy.hideLoading();
       return options
