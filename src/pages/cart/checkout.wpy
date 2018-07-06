@@ -369,9 +369,18 @@ export default class Checkout extends wepy.page {
       title: '加载中'
     });
 
+    console.log(e)
     await this.$parent.login();
 
-    if (e.product) {
+    if (e.object_name == 'vip_order' && e.record_id && e.space_id) {
+      const order = await this.$parent.get('vip_order', e.record_id, e.space_id);
+      if (order) {
+        console.log('[order]', order)
+        this.checkedAddress = order.address;
+        this.checkedProductList = order.products;
+        this.goodsTotalPrice = order.amount;
+      }
+    } else if (e.product) {
       const product = JSON.parse(e.product);
       this.checkedProductList = [product];
       this.goodsTotalPrice = this.getgoodsTotalPrice(this.checkedProductList);
