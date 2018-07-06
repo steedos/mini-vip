@@ -38,6 +38,7 @@
     align-items:center;
     justify-content: center;
     height:300rpx;
+    margin-top:100rpx;
     .btn-action{
       width:280rpx;
       height:300rpx;
@@ -75,6 +76,7 @@
   }
   .share-list{
     text-align: center;
+    margin-top:-30rpx;
     .share-list-header{
       .share-list-title{
         font-size:40rpx;
@@ -96,10 +98,11 @@
       .response-item{
         display: inline;
         margin:10rpx;
+        white-space:nowrap;
         image{
           display: block;
-          width:80rpx;
-          height:80rpx;
+          width:100rpx;
+          height:100rpx;
           margin:0 auto;
           border-radius:100%;
         }
@@ -108,7 +111,7 @@
           margin-top:-4px;
           background:rgba(200, 200, 200, 0.6);
           border-radius:10px;
-          font-size:32rpx;
+          font-size:30rpx;
           padding:2rpx 20rpx;
         }
       }
@@ -158,16 +161,6 @@
     <view class="gift-value">{{product_gift}}</view>
   </view>
   <view class="page__bd">
-    <view class="share-actions">
-      <button plain="true" open-type="share" class="btn-share-wexin btn-action">
-        <view class="vip_wechat slds-icon slds-icon--small slds-m-right--x-small"></view>
-        <view class="text">微信好友</view>
-      </button>
-      <view class="btn-share-friend-circle btn-action">
-        <view class="vip_wechat_moments slds-icon slds-icon--small slds-m-right--x-small"></view>
-        <view class="text">朋友圈</view>
-      </view>
-    </view>
     <view class="share-list">
       <view class="share-list-header">
         <view class="share-list-title">
@@ -188,6 +181,16 @@
             </repeat>
           </view>
         </scroll-view>
+      </view>
+    </view>
+    <view class="share-actions">
+      <button plain="true" open-type="share" class="btn-share-wexin btn-action">
+        <view class="vip_wechat slds-icon slds-icon--small slds-m-right--x-small"></view>
+        <view class="text">微信好友</view>
+      </button>
+      <view class="btn-share-friend-circle btn-action">
+        <view class="vip_wechat_moments slds-icon slds-icon--small slds-m-right--x-small"></view>
+        <view class="text">朋友圈</view>
       </view>
     </view>
   </view>
