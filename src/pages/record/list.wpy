@@ -71,6 +71,7 @@
     position: relative;
     .record {
       width: 100%;
+      display: flex;
     }
     .delete {
       position: absolute;
