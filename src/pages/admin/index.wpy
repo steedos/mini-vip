@@ -99,7 +99,7 @@ export default class AdminIndex extends wepy.page {
         {title: '活动', icon:'standard-event', url: `../record/list?space_id=${this.space_id}&object_name=vip_event`}
       ],
       [
-        {title: '商品', icon:'standard-shipment', url: `../record/list?space_id=${this.space_id}&object_name=vip_product`},
+        {title: '商品', icon:'standard-shipment', url: `../record/list?space_id=${this.space_id}&object_name=vip_product&avatar_field=avatar&price_field=default_price`},
         {title:'分类',icon:'standard-product-item', url:`../record/list?space_id=${this.space_id}&object_name=vip_product_category`},
         {title: '订单', icon:'standard-orders', url:`../record/list?space_id=${this.space_id}&object_name=vip_order`}
       ],
