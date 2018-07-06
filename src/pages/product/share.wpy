@@ -83,7 +83,7 @@
         color: #666;
       }
       .share-list-sum{
-        font-size:36rpx;
+        font-size:32rpx;
         color: #999;
       }
     }
@@ -175,7 +175,7 @@
           <view class="responses-box">
             <repeat for="{{responses}}" key="index" index="index" item="response">
               <view class="response-item">
-                <image class="image" src="{{response.owner.profile.avatar}}">
+                <image class="image" src="{{response.owner.profile.avatar}}"/>
                 <view class="response-name">{{response.name}}</view>
               </view>
             </repeat>
