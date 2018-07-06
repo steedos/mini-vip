@@ -122,6 +122,7 @@ setStore(store)
 export default class VIP extends wepy.app {
   config = {
     pages: [
+      'pages/home/store',
       'pages/index',
       'pages/apps',
       'pages/me',
@@ -168,7 +169,6 @@ export default class VIP extends wepy.app {
       'pages/star/space',
       'pages/consuming_records',
       'pages/home/post',
-      'pages/home/store',
       'pages/phone_number_login',
       'pages/empty_page',
       'pages/404',
