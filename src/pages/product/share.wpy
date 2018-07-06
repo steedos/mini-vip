@@ -1,6 +1,10 @@
 <style lang="less">
   page{
     height: 100%;
+    background:#fff;
+  }
+  .page__hd{
+    padding: 40px 0px;
   }
   .page__bd{
     padding-bottom: 80px;
@@ -10,6 +14,7 @@
     text-align:center;
     color:#666;
     margin-bottom:20rpx;
+    font-size:40rpx;
   }
 
   .gift-value{
@@ -31,8 +36,8 @@
   .share-actions{
     display:flex;
     align-items:center;
-    justify-content:space-around;
-    height:400rpx;
+    justify-content: center;
+    height:300rpx;
     .btn-action{
       width:280rpx;
       height:300rpx;
@@ -40,6 +45,7 @@
         width:100%;
         text-align:center;
         color:#333;
+        font-size:40rpx;
       }
     }
     .btn-share-wexin{
@@ -56,11 +62,58 @@
       border-radius:100%;
       margin:0 auto;
     }
-    .btn-share-friend-circle{
+    .btn-share-wexin{
       .text{
-        margin-top:24rpx;
+        margin-top:-4rpx;
       }
     }
+    .btn-share-friend-circle{
+      .text{
+        margin-top:16rpx;
+      }
+    }
+  }
+  .share-list{
+    text-align: center;
+    .share-list-header{
+      .share-list-title{
+        font-size:40rpx;
+        color: #666;
+      }
+      .share-list-sum{
+        font-size:36rpx;
+        color: #999;
+      }
+    }
+    .share-list-body{
+      background:rgba(120, 120, 80, 0.1);
+      border-radius:6px;
+      margin:20rpx 40rpx;
+      padding:20rpx;
+      .responses-box{
+        display: flex;
+      }
+      .response-item{
+        display: inline;
+        margin:10rpx;
+        image{
+          display: block;
+          width:80rpx;
+          height:80rpx;
+          margin:0 auto;
+          border-radius:100%;
+        }
+        .response-name{
+          color: #fff;
+          margin-top:-4px;
+          background:rgba(200, 200, 200, 0.6);
+          border-radius:10px;
+          font-size:32rpx;
+          padding:2rpx 20rpx;
+        }
+      }
+    }
+
   }
 
   .pop-mask {
@@ -115,6 +168,28 @@
         <view class="text">朋友圈</view>
       </view>
     </view>
+    <view class="share-list">
+      <view class="share-list-header">
+        <view class="share-list-title">
+          我的邀请记录
+        </view>
+        <view class="share-list-sum">
+          共邀请了{{responses.length}}位好友，获得0份奖励
+        </view>
+      </view>
+      <view class="share-list-body">
+        <scroll-view class="scroll-view_H" scroll-x="true">
+          <view class="responses-box">
+            <repeat for="{{responses}}" key="index" index="index" item="response">
+              <view class="response-item">
+                <image class="image" src="{{response.owner.profile.avatar}}">
+                <view class="response-name">{{response.name}}</view>
+              </view>
+            </repeat>
+          </view>
+        </scroll-view>
+      </view>
+    </view>
   </view>
   <view class="pop-mask" wx:if="{{showPop}}" @tap="closePop"></view>
   <view class="attr-pop {{showPop ? 'show' : ''}}">
@@ -157,7 +232,8 @@
       product_gift: null,
       is_loaded: false,
       share_id: null,
-      showPop: false
+      showPop: false,
+      responses: []
     }
 
     async onLoad (e) {
@@ -171,18 +247,21 @@
           title: "参数错误，未传入要分享的商品",
           icon: "none"
         });
+        return;
       }
       if(!this.product_gift){
         wx.showToast({
           title: "参数错误，没传入要分享的礼物",
           icon: "none"
         });
+        return;
       }
       wepy.showLoading({
         title: '加载中',
         mask: true
       });
       await this.addShare();
+      await this.loadShareResponse();
       this.is_loaded = true;
       this.$apply();
       wepy.hideLoading();
@@ -212,6 +291,25 @@
         return;
       }
     }
+  
+    async loadShareResponse(){
+      const options = {
+        $expand: 'owner($select=profile)',
+        $select: 'name,owner',
+        $filter: `share eq ${this.share_id}`
+      };
+      const result = await this.$parent.query("vip_share_response", options, this.space_id);
+      if(result.value){
+        this.responses = result.value;
+      }
+      else{
+        wx.showToast({
+          title: "获取响应记录失败",
+          icon: "none"
+        });
+      }
+      this.$apply();
+    };
 
     // 分享
     onShareAppMessage(res) {
