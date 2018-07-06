@@ -1,5 +1,5 @@
 <style lang="less">
-.record-list{
+.record-list {
   .image {
     display: block;
   }
@@ -13,64 +13,64 @@
     bottom: 0;
     height: 50px;
     width: 100%;
-    background-color: #F7F7FA;
+    background-color: #f7f7fa;
     justify-content: center;
     align-items: center;
   }
 
-  .item-body{
+  .item-body {
     width: 55%;
   }
 
-  .description-field{
-    text-overflow:ellipsis;
-    width:100%;
-    overflow:hidden;
-    white-space:nowrap;
+  .description-field {
+    text-overflow: ellipsis;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
     font-size: 13px;
     color: #888888;
   }
 
-  .name-field{
-    text-overflow:ellipsis;
-    overflow:hidden;
-    white-space:nowrap;
+  .name-field {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
     flex: 1;
-    min-height:24px;
+    min-height: 24px;
   }
 
-  .date-field{
+  .date-field {
     font-size: 13px;
-    color:#888888;
+    color: #888888;
   }
 
-  .item-body-1{
-    display:flex;
-    align-items:center;
+  .item-body-1 {
+    display: flex;
+    align-items: center;
   }
 
-  .page__hd{
+  .page__hd {
     padding: 0px;
   }
 
-  .weui-search-bar{
+  .weui-search-bar {
     border-bottom: 0px;
   }
 
-  .avatar-field{
-    border-radius:0.15rem;
+  .avatar-field {
+    border-radius: 0.15rem;
     margin-right: 5px;
     vertical-align: middle;
-    width:40px;
+    width: 40px;
     height: 40px;
   }
-
 
   .record-container {
     transition: all 0.2s linear;
     position: relative;
     .record {
       width: 100%;
+      display: flex;
     }
     .delete {
       position: absolute;
@@ -79,7 +79,7 @@
       color: #fff;
       display: flex;
       align-items: center;
-      justify-content:center;
+      justify-content: center;
       height: 100%;
       right: 0;
       top: 0;
@@ -87,7 +87,6 @@
     }
   }
 }
-
 </style>
 
 <template>
@@ -99,8 +98,8 @@
       <block wx:if="{{record_list.length}}">
         <view class="weui-cells weui-cells_after-title">
           <repeat for="{{record_list}}" key="index" index="index" item="record">
-            <view class="record-container weui-cell weui-cell_access" style="transform: translateX({{style_list[record._id].offsetX}}px)" @touchstart="touchstart" @touchmove="touchmove" @touchend="touchend" data-item-id="{{record._id}}" hover-class="weui-cell_active">
-              <navigator url="{{url}}&record_id={{record._id}}&space_id={{record.space}}" class="record">
+            <navigator url="{{url}}&record_id={{record._id}}&space_id={{record.space}}" class="record-container weui-cell weui-cell_access" style="transform: translateX({{style_list[record._id].offsetX}}px)" @touchstart="touchstart" @touchmove="touchmove" @touchend="touchend" data-item-id="{{record._id}}" hover-class="weui-cell_active">
+              <view class="record">
                 <view class="weui-cell__hd" wx:if="{{avatar_field}}">
                   <image src="{{util.formatAvatarImageUrl(record[avatar_field], baseUrl)}}" class='avatar-field'></image>
                 </view>
@@ -116,11 +115,11 @@
                 <!--<view class="weui-cell__ft">-->
                   <!--<view class="weui-cell__ft_in-access"></view>-->
                 <!--</view>-->
-              </navigator>
+              </view>
               <view class="delete" @tap.stop="deleteRecord" wx:if="{{record.allow_delete}}" data-record-space="{{record.space}}"  data-allow-delete="{{record.allow_delete}}" data-record-id="{{record._id}}">
                 删除
               </view>
-            </view>
+            </navigator>
           </repeat>
         </view>
       </block>
@@ -150,7 +149,7 @@ export default class RecordList extends wepy.page {
   };
 
   components = {
-    searchbar: searchbar,
+    searchbar: searchbar
   };
 
   wxs = {
@@ -159,13 +158,13 @@ export default class RecordList extends wepy.page {
 
   mixins = [recordList];
 
-  refresh(){
-    this.dataRefresh()
+  refresh() {
+    this.dataRefresh();
   }
 
   methods = {
-    searchRecords(searchValue, evt){
-      this.searchRecords(searchValue, evt)
+    searchRecords(searchValue, evt) {
+      this.searchRecords(searchValue, evt);
     }
   };
 }
