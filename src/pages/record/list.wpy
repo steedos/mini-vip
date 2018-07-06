@@ -107,6 +107,7 @@
                   <view class="item-body-1">
                     <view class="name-field">{{record[name_field]}}</view>
                     <view class="date-field" wx:if="{{record[date_field]}}">{{util.formatDateMini(record[date_field])}}</view>
+                    <view class="price-field" wx:if="{{record[price_field]}}">￥{{record[price_field]}}</view>
                   </view>
 
                   <view class="description-field" wx:if="{{record[description_field]}}">{{record[description_field]}}</view>

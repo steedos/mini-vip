@@ -866,9 +866,9 @@
       for (let field_name in fields) {
         let field = fields[field_name]
         if (field.required) {
-          if (!this.values[field.name]) {
+          if (!this.values[field.name]  || (field.multiple && _.isEmpty(this.values[field.name]))) {
             this.showTopTips = true
-            this.message = `请设置${field.label}`
+            this.message = `请设置${field.label}`;
             return false
           }
         }
