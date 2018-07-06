@@ -26,11 +26,28 @@
         transform: scaleY(0.5);
       }
     }
+
+    .avatar-field {
+      border-radius: 0.15rem;
+      margin-right: 5px;
+      vertical-align: middle;
+      width: 40px;
+      height: 40px;
+    }
+
+    .page__hd {
+      padding: 0px;
+    }
   }
 </style>
 
 <template>
   <view class="page-edit-lookup">
+
+    <view class="page__hd">
+      <searchbar :placeholder.sync="searchPlaceholder" @confirm.user="searchRecords" />
+    </view>
+
     <view class="page__bd">
       <view class="weui-cells" wx:if="{{objects.length > 0}}">
         <view class="weui-cell weui-cell_select">
@@ -42,11 +59,14 @@
         </view>
       </view>
 
-      <view class="weui-cells">
+      <view class="weui-cells" wx:if="{{options.length > 0}}">
         <checkbox-group bindchange="selectChange" data-id="{{key}}" wx:if="{{multiple}}">
           <repeat for="{{options}}" key="index" index="index" item="option">
             <label class="weui-cell weui-check__label">
               <checkbox class="weui-check" value="{{option.value}}" checked="{{option.checked}}" />
+              <view class="weui-cell__hd" wx:if="{{showAvatar}}">
+                <image src="{{util.formatAvatarImageUrl(option.avatar, baseUrl)}}" class='avatar-field'></image>
+              </view>
               <view class="weui-cell__bd">{{option.label}}</view>
               <view class="weui-cell__ft weui-cell__ft_in-radio" wx:if="{{option.checked}}">
                 <icon class="weui-icon-radio" type="success_no_circle" size="16"></icon>
@@ -58,6 +78,9 @@
           <repeat for="{{options}}" key="index" index="index" item="option">
             <label class="weui-cell weui-check__label">
               <radio class="weui-check" value="{{option.value}}" checked="{{option.checked}}"/>
+              <view class="weui-cell__hd" wx:if="{{showAvatar}}">
+                <image src="{{util.formatAvatarImageUrl(option.avatar, baseUrl)}}" class='avatar-field'></image>
+              </view>
               <view class="weui-cell__bd">{{option.label}}</view>
               <view class="weui-cell__ft weui-cell__ft_in-radio" wx:if="{{option.checked}}">
                 <icon class="weui-icon-radio" type="success_no_circle" size="16"></icon>
@@ -65,6 +88,9 @@
             </label>
           </repeat>
         </radio-group>
+      </view>
+      <view class="weui-loadmore weui-loadmore_line" wx:else>
+        <view class="weui-loadmore__tips weui-loadmore__tips_in-line">暂无记录</view>
       </view>
     </view>
     <view class="tab-bar" wx:if="{{allowCreate}}">
@@ -78,10 +104,16 @@
   import wepy from 'wepy';
   import _ from 'underscore';
   import pageRouter from '@/utils/pageRouter';
+  import util from '../../wxs/util.wxs';
+  import searchbar from '../../components/searchbar';
 
   export default class Lookup extends wepy.page {
     config = {
       navigationBarTitleText: '选择'
+    };
+
+    components = {
+      searchbar: searchbar
     };
 
     data = {
@@ -95,6 +127,11 @@
       allowCreate: false,
       field: {},
       filters: '',
+      showAvatar: false,
+    };
+
+    wxs = {
+      util: util
     };
 
     async refresh(action, record_id){
@@ -192,7 +229,7 @@
       return query.join(' and ')
     }
 
-    async getReferenceTo(reference_to) {
+    async getReferenceTo(reference_to, searchValue) {
 
       wepy.showLoading({
         title: '正在保存',
@@ -207,22 +244,37 @@
         $select: 'name'
       };
       if (reference_to === 'users' || reference_to === 'space_users') {
-        reference_to = 'space_users'
-        query.$select = 'name,user'
+        this.showAvatar = true;
+        reference_to = 'space_users';
+        query.$select = 'name,user';
+        query.$expand = 'user($select=profile)'
+      }
+      if(searchValue){
+        if(this.filters){
+          query.$filter = this.transformFilterToDev(this.filters) + ` and (contains(name,'${searchValue}'))`
+        }else{
+          query.$filter = `(contains(name,'${searchValue}'))`
+        }
+      }else{
+        if(this.filters){
+          query.$filter = this.transformFilterToDev(this.filters)
+        }
       }
 
-      if(this.filters){
-        query.$filter = this.transformFilterToDev(this.filters)
-      }
 
       const data = await this.$parent.query(reference_to, query, this.space_id);
-      let options = []
+      let options = [];
       data.value.forEach(function (record) {
+        let option = {label: record.name};
         if (reference_to === 'space_users') {
-          options.push({label: record.name, value: record.user});
+          option.value = record.user._id
+          if(record.user.profile){
+            option.avatar = record.user.profile.avatar
+          }
         } else {
-          options.push({label: record.name, value: record._id});
+          option.value = record._id
         }
+        options.push(option);
       });
       wepy.hideLoading();
       return options
@@ -238,8 +290,6 @@
       const field = this.getObjectField(e.key);
 
       this.filters = field.filters;
-
-      console.log('field', field);
 
       const fieldValue = this.getObjectFieldValue(e.key) || {};
 
@@ -372,6 +422,10 @@
         wepy.navigateTo({
           url: `/pages/record/create_child?object_name=${this.objectCode}&space_id=${this.space_id}`
         })
+      },
+      searchRecords: async function(searchValue, evt) {
+        this.options = await this.getReferenceTo(this.objectCode, searchValue);
+        this.$apply();
       }
     }
   }

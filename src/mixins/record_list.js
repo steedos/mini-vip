@@ -17,6 +17,7 @@ export default class recordList extends wepy.mixin {
     is_loaded: false,
     avatar_field: '',
     name_field: '',
+    price_field:'',
     description_field: '',
     date_field: '',
     searchPlaceholder: '搜索',
@@ -136,7 +137,9 @@ export default class recordList extends wepy.mixin {
     if(this.date_field){
       keys.push(this.date_field);
     }
-
+    if(this.price_field){
+      keys.push(this.price_field);
+    }
     if (expand.length > 0) {
       options.$expand = expand.join(',')
     }
@@ -181,7 +184,7 @@ export default class recordList extends wepy.mixin {
     this.name_field = e.name_field || 'name';
     this.description_field = e.description_field;
     this.date_field = e.date_field;
-
+    this.price_field = e.price_field;
     this.url = this.getRecordUrl(e);
 
     this.add_url = this.getAddUrl(e);
@@ -193,6 +196,8 @@ export default class recordList extends wepy.mixin {
     this.allowCreate = object.allowCreate;
     if(e.allow_create === 'true'){
       this.allowCreate = true
+    } else if (e.allow_create === 'false'){
+      this.allowCreate = false
     }
     this.searchPlaceholder = '搜索' + object.label;
 
@@ -287,12 +292,10 @@ export default class recordList extends wepy.mixin {
       title: '加载中',
       mask: true
     });
-
     const skip = this.current_skip;
     const object_name = this.object_name;
 
     const queryOptions = this.getQueryOptions(searchValue);
-
     if (this.allow_load) {
       const result = await this.$parent.query(object_name, queryOptions, this.space_id);
       if (result.value) {
@@ -304,7 +307,7 @@ export default class recordList extends wepy.mixin {
           const owner = _.isObject(record.owner) ? record.owner._id : record.owner
           record.allow_delete = await this.$parent.recordAllowDelete(object_name, owner, record.space)
           this.style_list[record._id] = {positionX: 0, offsetX: 0}
-          records.push(record)
+          records.push(record          )
         }
         this.record_list = this.record_list.concat(records)
       }

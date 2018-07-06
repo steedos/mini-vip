@@ -16,7 +16,7 @@
           <view class="weui-cell">
             <view class="weui-cell__bd">
               <textarea data-id="{{key}}" class="weui-textarea" name="{{key}}"
-                auto-height="true" auto-focus="true" value="{{value}}" maxlength="-1" style="min-height: {{(rows || 2) * 1.1}}em"/>
+                auto-height="true" auto-focus="true" value="{{value}}" maxlength="-1" style="min-height: {{(rows || 3) * 1.4}}em"/>
             </view>
           </view>
         </view>
@@ -40,7 +40,7 @@
     data = {
       key: '',
       value: '',
-      rows: 2
+      rows: 3
     }
 
     setParentValue(key, value) {
@@ -58,7 +58,7 @@
 
       this.value = e.value || ''
 
-      this.rows = e.rows || 2
+      this.rows = e.rows || 3
 
       if (e.title) {
         wx.setNavigationBarTitle({title: '编辑' + e.title});

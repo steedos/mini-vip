@@ -1,0 +1,138 @@
+<style lang="less" scoped>
+.order-list {
+	.title {
+		padding: 20rpx 24rpx;
+		&::after {
+			left: 24rpx;
+		}
+	}
+
+  .item {
+    display: flex;
+    width: 100%;
+		height: auto;
+    overflow: hidden;
+		flex-direction:column;
+		background: #fff;
+		margin-top: 20rpx;
+  }
+
+  .cart-goods {
+    flex: 1;
+    display: flex;
+		float: left;
+		padding: 20rpx 24rpx;
+		// border-bottom: 1px solid #d9d9d9;
+		.goods-box {
+			display: flex;
+			flex: 1;
+			overflow:hidden;
+			.img {
+				float: left;
+				height: 150rpx;
+				width: 150rpx;
+				min-width: 150rpx;
+				background: #f4f4f4;
+				margin-right: 20rpx;
+				// margin: 19.5rpx 18rpx 19.5rpx 0;
+			}
+			.info {
+				margin-left: 20rpx;
+				display: flex;
+				align-items: center;
+				.text {
+					overflow:hidden;
+					text-overflow:ellipsis;
+					display:-webkit-box !important;
+					-webkit-line-clamp:2;
+					-webkit-box-orient:vertical;
+				}
+			}
+		}
+	}
+	
+	.status {
+		display: flex;
+		align-items: center;
+		margin-left: 40rpx;
+		.text {
+			text-align: center;
+		}
+	}
+
+  .item:last-of-type {
+    .cart-goods {
+      border-bottom: none;
+    }
+  }
+}
+</style>
+<template>
+	<view class="page order-list">
+		<repeat for="{{record_list}}" key="index" index="index" item="record">
+			<navigator class="item" url="/pages/cart/checkout?record_id={{record._id}}&object_name=vip_order&space_id={{record.space}}">
+				<view class="title border-bottom-1px">
+					<view>订单编号: {{record.name}}</view>
+				</view>
+				<view class="cart-goods">
+					<view wx:if="{{record.products.length == 1}}" class="goods-box">
+						<image class="img" src="{{util.formatImageUrl(record.products[0].avatar, baseUrl)}}" mode="aspectFill"></image>
+						<view class="info">
+							<view class="text">{{record.products[0].name}}</view>
+						</view>
+					</view>
+					<view wx:if="{{record.products.length > 1}}" class="goods-box">
+						<repeat for="{{record.products}}" index="index" key="index" item="product">
+							<image wx:if="{{index < 3}}" class="img" src="{{util.formatImageUrl(product.avatar, baseUrl)}}" mode="aspectFill"></image>
+						</repeat>
+					</view> 
+					<repeat for="{{options}}" index="index" key="index" item="option">
+						<view class="status" wx:if="{{option.value == record.status}}">
+							<view>
+								<view class="text">{{option.label}}</view>
+								<view class="text">￥{{record.amount}}</view>
+							</view>
+						</view>
+					</repeat>
+				</view>
+			</navigator>
+		</repeat>
+	</view>
+</template>
+<script>
+import wepy from 'wepy';
+import { baseUrl } from '@/config';
+import util from '../../wxs/util.wxs';
+import searchbar from '../../components/searchbar';
+import recordList from '../../mixins/record_list';
+
+export default class orderList extends wepy.page {
+	config = {
+    navigationBarTitleText: '',
+    backgroundColor: '#f4f4f4'
+  };
+
+	data = {
+		baseUrl: baseUrl,
+		fields: ['name', 'products', 'store', 'owner', 'amount', 'status', 'space'],
+		options: [
+			{label:'购物车',value:'draft'},
+			{label:'待付款',value:'pending'},
+			{label:'待发货',value:'paid'},
+			{label:'待收货',value:'delivered'},
+			{label:'已完成',value:'completed'},
+			{label:'已取消',value:'canceled'}
+		]
+	}
+
+	onLoad(e) {
+		
+	}
+
+	wxs = {
+		util: util
+	}
+
+	mixins = [recordList];
+}
+</script>

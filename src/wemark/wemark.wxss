@@ -88,7 +88,6 @@
 }
 .wemark_inline_strong{
 	font-weight: bold;
-	padding:0 5px;
 	word-wrap:break-word;
 }
 .wemark_inline_em{

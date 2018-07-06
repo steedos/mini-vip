@@ -537,7 +537,7 @@
   .bottom-btn .l{
     float: left;
     height: 100rpx;
-    width: 162rpx;
+    width: 130rpx;
     border: 1px solid #f4f4f4;
     display: flex;
     align-items: center;
@@ -1068,7 +1068,7 @@
       let userId = this.$parent.globalData.user._id;
       let name = this.$parent.globalData.user.name;
       const query_options = {
-        $filter: `share eq '${this.share_id}' and owner eq '${userId}'`,
+        $filter: `share eq ${this.share_id} and owner eq ${userId}`,
         $select: 'name'
       };
       let share_response = await this.$parent.query("vip_share_response", query_options, this.space_id);
@@ -1077,10 +1077,12 @@
         share: this.share_id
       };
       if(share_response && share_response.value && share_response.value.length){
+        console.log("===============respondShare============update");
         // 如果已经响应过，则需要修改其modified，以保证最后进来的能按modefied排序到最后一个
         share_response = await this.$parent.update("vip_share_response", share_response.value[0]._id, values, this.space_id);
       }
       else{
+        console.log("===============respondShare============insert");
         share_response = await this.$parent.insert("vip_share_response", values, this.space_id);
       }
       console.log("===============respondShare============", share_response);

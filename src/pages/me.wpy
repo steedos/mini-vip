@@ -99,6 +99,15 @@
           </view>
           <view class="weui-cell__ft weui-cell__ft_in-access"></view>
         </navigator>
+        <navigator url="./order/list?space_id=guest&object_name=vip_order&allow_create=false&role=owner&filter=(owner eq '{{userId}}')&url=/pages/cart/checkout" class="weui-cell weui-cell_access">
+          <view class="weui-cell__hd">
+            <view class="slds-icon-standard-orders  slds-icon slds-icon--small slds-m-right--x-small"/>
+          </view>
+          <view class="weui-cell__bd">
+            <view>订单</view>
+          </view>
+          <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+        </navigator>
       </view>
     </view>
 
@@ -153,7 +162,8 @@ export default class Me extends wepy.page {
     name: '',
     mobile: '',
     isAuthUserInfo: false,
-    userInfo: null
+    userInfo: null,
+    userId: null
   };
 
   async onLoad() {
@@ -162,6 +172,7 @@ export default class Me extends wepy.page {
       this.isAuthUserInfo = true
       this.userInfo = this.$parent.globalData.userInfo
     }
+    this.userId = this.$parent.globalData.user._id
     this.$apply()
   }
 

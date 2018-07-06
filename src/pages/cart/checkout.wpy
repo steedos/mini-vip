@@ -110,6 +110,7 @@
   height: auto;
   overflow: hidden;
   background: #fff;
+  margin-bottom: 20rpx;
 
   .item {
     display: flex;
@@ -228,36 +229,82 @@
   color: #fff;
   font-size: 34rpx;
 }
+
+.order-time {
+  padding:32rpx 31.25rpx;
+  background: #fff;
+  margin-bottom:20rpx;
+}
+
+.user-info {
+  background: #fff;
+  margin-bottom: 20rpx;
+  .address {
+    padding: 32rpx 31.25rpx 32rpx 0;
+    border-bottom: 1rpx solid rgba(0, 0, 0, 0.2);
+    margin-left: 31.25rpx;
+    .info {
+      display: flex;
+      .name {
+        margin-right: 40rpx;
+      }
+    }
+  }
+  .pay {
+    padding: 32rpx 31.25rpx 32rpx 0;
+    margin-left: 31.25rpx;
+    .info {
+      display: flex;
+      .title {
+        min-width: 80px;
+      }
+      .price {
+        color: #b4282d;
+      }
+    }
+  }
+} 
 </style>
 <template>
   <view class="page" wx:if="{{is_loaded}}">
-    <view class="address-box">
-			<view class="address-item" @tap="selectAddress" wx:if="{{checkedAddress._id}}">
-				<view class="l">
-					<view class="name">{{checkedAddress.name}}</view>
-					<view class="default {{checkedAddress.is_default ? 'show' : 'hide'}}">默认</view>
-				</view>
-				<view class="c">
-					<view class="mobile">{{checkedAddress.phone}}</view>
-					<view class="address">{{checkedAddress.address.address}}{{checkedAddress.door ? checkedAddress.door : ''}}</view>
-				</view>
-				<view class="r after-chevronright">
-				</view>
-			</view>
-
-      <view class="address-item address-empty" bindtap="selectAddress" wx:if="{{!checkedAddress._id}}">
-        <view class="m">
-          还没有收货地址，去添加
+    <block wx:if="{{is_readonly}}">
+      <view class="order-time">
+        <view class="text">
+          下单时间: {{util.formatDate(order.created, '-')}}
         </view>
-        <view class="r after-chevronright">
+        <view class="text">
         </view>
       </view>
-    </view>
+    </block>
+    <block wx:else>
+      <view class="address-box" wx:if="{{!is_readonly}}">
+        <view class="address-item" @tap="selectAddress" wx:if="{{checkedAddress._id}}">
+          <view class="l">
+            <view class="name">{{checkedAddress.name}}</view>
+            <view class="default {{checkedAddress.is_default ? 'show' : 'hide'}}">默认</view>
+          </view>
+          <view class="c">
+            <view class="mobile">{{checkedAddress.phone}}</view>
+            <view class="address">{{checkedAddress.address.address}}{{checkedAddress.door ? checkedAddress.door : ''}}</view>
+          </view>
+          <view class="r after-chevronright">
+          </view>
+        </view>
+
+        <view class="address-item address-empty" bindtap="selectAddress" wx:if="{{!checkedAddress._id}}">
+          <view class="m">
+            还没有收货地址，去添加
+          </view>
+          <view class="r after-chevronright">
+          </view>
+        </view>
+      </view>
+    </block>
 
     <view class="order-box">
       <view class="order-item">
         <view class="l">
-          <text class="name">商品合计</text>
+          <text class="name">金额合计</text>
         </view>
         <view class="r">
           <text class="txt">￥{{goodsTotalPrice}}</text>
@@ -283,7 +330,7 @@
 
     <view class="goods-items">
       <repeat for="{{checkedProductList}}" key="index" index="index" item="goods">
-        <view class="item">
+        <navigator class="item" url="/pages/product/view?product_id={{goods._id}}&space_id={{goods.space || order.space}}">
           <view class="cart-goods">
             <image class="img" src="{{util.formatImageUrl(goods.avatar, baseUrl)}}" mode="aspectFill"></image>
             <view class="info">
@@ -296,11 +343,31 @@
               </view>
             </view>
           </view>
-        </view>
+        </navigator>
       </repeat>
     </view>
 
-    <view class="order-total">
+    <view class="user-info" wx:if="{{is_readonly}}">
+      <view class="address">
+        <view class="info">
+          <view class="name">{{checkedAddress.name}}</view>
+          <view>{{checkedAddress.phone}}</view>
+        </view>
+        <view>{{checkedAddress.address.address}}{{checkedAddress.door ? checkedAddress.door : ''}}</view>
+      </view>
+      <view class="pay">
+        <view class="info">
+          <view class="title">支付方式:</view>
+          <view class="res">微信</view>
+        </view>
+        <view class="info">
+          <view class="title">实付:</view>
+          <view class="price">￥{{goodsTotalPrice}}</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="order-total" wx:if="{{!is_readonly}}">
       <view class="t">实付：</view>
       <view class="l">￥{{goodsTotalPrice}}</view>
       <view class="r" bindtap="submitOrder">去付款</view>
@@ -321,13 +388,15 @@ const store = getStore();
 
 export default class Checkout extends wepy.page {
   config = {
-    navigationBarTitleText: '填写订单',
+    navigationBarTitleText: '',
     backgroundColor: '#f4f4f4'
   };
 
   data = {
     baseUrl: baseUrl,
+    is_readonly: false,
     is_loaded: false,
+    order: {},
     checkedProductList: [],
     checkedAddress: {},
     checkedCoupon: [],
@@ -369,13 +438,27 @@ export default class Checkout extends wepy.page {
       title: '加载中'
     });
 
+    console.log(e)
     await this.$parent.login();
 
-    if (e.product) {
+    if (e.object_name == 'vip_order' && e.record_id && e.space_id) {
+      const order = await this.$parent.get('vip_order', e.record_id, e.space_id);
+      if (order) {
+        console.log('[order]', order)
+        wx.setNavigationBarTitle({title: '订单详情'})
+        this.order = order;
+        this.checkedAddress = order.address;
+        this.checkedProductList = order.products;
+        this.goodsTotalPrice = order.amount;
+        this.is_readonly = true;
+      }
+    } else if (e.product) {
       const product = JSON.parse(e.product);
+      wx.setNavigationBarTitle({title: '填写订单'})
       this.checkedProductList = [product];
       this.goodsTotalPrice = this.getgoodsTotalPrice(this.checkedProductList);
     } else {
+      wx.setNavigationBarTitle({title: '填写订单'})
       this.checkedProductList = this.getcheckedProductList();
       this.goodsTotalPrice = this.getgoodsTotalPrice(this.checkedProductList);
     }

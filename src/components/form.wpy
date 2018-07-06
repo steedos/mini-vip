@@ -275,7 +275,7 @@
                       <block wx:if="{{item.is_wide}}">
                         <view class="weui-cell__bd">
                           <block wx:if="{{!(item.readonly || !_record_allowEdit || args.action === 'read')}}">
-                            <textarea style="min-height: {{(item.rows || 2) * 1.1}}em" class="weui-textarea" name="{{item.name}}" data-id="{{item.name}}" placeholder="{{item.label}}" value="{{util.transformFieldValue(item, values[item.name])}}" auto-height="true" bindinput="textChange" maxlength="-1"/>
+                            <textarea style="min-height: {{(item.rows || 3) * 1.4}}em" class="weui-textarea" name="{{item.name}}" data-id="{{item.name}}" placeholder="{{item.label}}" value="{{util.transformFieldValue(item, values[item.name])}}" auto-height="true" bindinput="textChange" maxlength="-1"/>
                           </block>
                           <block wx:else>
                             <view class="weui-cell__ft wide-cell">{{util.transformFieldValue(item, values[item.name]) || item.label}}</view>
@@ -412,7 +412,8 @@
             }
             groupItem.fields[key] = field;
             groupItem._groupText = field.group;
-            groupItem._cellsClass = 'weui-cells_after-title'
+            groupItem._cellsClass = 'weui-cells_after-title';
+            groupItem._helpText = field.inlineHelpText || '';
 
           }else if(field.inlineHelpText){
             groupItem.fields[key] = field;
@@ -506,7 +507,7 @@
           if (object_name && record_id && action != 'create') {
             var keys = ['owner'];
             _.forEach(this.fields, (v, k)=> {
-              if (!v.hidden && !v.omit) {
+              if (!v.hidden && !v.omit && k.indexOf('.') < 0) {
                 keys.push(k)
               }
             });
@@ -815,9 +816,9 @@
 
           if(_.isArray(field.reference_to)){
             if(v._id){
-              value[k] = {o: v.object_name, ids: [v._id]}
+              value[k] = {o: v.object_name || v['reference_to.o'], ids: [v._id]}
             }else{
-              value[k] = {o: v.object_name}
+              value[k] = {o: v.object_name || v.o}
             }
           }
         }
@@ -866,9 +867,9 @@
       for (let field_name in fields) {
         let field = fields[field_name]
         if (field.required) {
-          if (!this.values[field.name]) {
+          if (!this.values[field.name]  || (field.multiple && _.isEmpty(this.values[field.name]))) {
             this.showTopTips = true
-            this.message = `请设置${field.label}`
+            this.message = `请设置${field.label}`;
             return false
           }
         }
