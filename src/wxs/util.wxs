@@ -16,13 +16,21 @@ function formatEventStatus(status) {
 }
 
 // 日期格式化
-function formatDate(value) {
+function formatDate(value, joiner) {
+  if (!value) {
+    return '';
+  }
   if (typeof value == "string") {
     value = getDate(value);
   }
-  var year = value.getFullYear() + '年';
-  var month = (value.getMonth() + 1) + '月';
-  var date = value.getDate() + '日';
+  var year = value.getFullYear() + (joiner || '年');
+  var month = (value.getMonth() + 1) + (joiner || '月');
+  if (joiner) {
+    var date = value.getDate() + ' ';
+  } else {
+    var date = value.getDate() + '日';  
+  }
+  console.log('[date]', date)
 
   var hours = value.getHours();
   var minutes = value.getMinutes();
@@ -32,6 +40,10 @@ function formatDate(value) {
     minutes_str = '0' + minutes;
   } else {
     minutes_str = minutes;
+  }
+
+  if (joiner) {
+    return year + month + date + hours + ':' + minutes_str;
   }
 
   var hours_str = '';
@@ -47,7 +59,7 @@ function formatDate(value) {
 
 // 日期格式化
 function formatDateMini(value) {
-  console.log('formatDateMini');
+  console.log('formatDateMini', value);
   var now = getDate()
   if (typeof value == "string") {
     value = getDate(value);
