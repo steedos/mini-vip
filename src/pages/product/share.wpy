@@ -116,7 +116,9 @@
         }
       }
     }
-
+    .weui-loadmore__tips_in-line{
+      background: #fff;
+    }
   }
 
   .pop-mask {
@@ -170,18 +172,25 @@
           共邀请了{{responses.length}}位好友，获得0份奖励
         </view>
       </view>
-      <view class="share-list-body">
-        <scroll-view class="scroll-view_H" scroll-x="true">
-          <view class="responses-box">
-            <repeat for="{{responses}}" key="index" index="index" item="response">
-              <view class="response-item">
-                <image class="image" src="{{response.owner.profile.avatar}}"/>
-                <view class="response-name">{{response.name}}</view>
-              </view>
-            </repeat>
-          </view>
-        </scroll-view>
-      </view>
+      <block wx:if="{{responses.length}}">
+        <view class="share-list-body">
+          <scroll-view class="scroll-view_H" scroll-x="true">
+            <view class="responses-box">
+              <repeat for="{{responses}}" key="index" index="index" item="response">
+                <view class="response-item">
+                  <image class="image" src="{{response.owner.profile.avatar}}"/>
+                  <view class="response-name">{{response.name}}</view>
+                </view>
+              </repeat>
+            </view>
+          </scroll-view>
+        </view>
+      </block>
+      <block wx:else>
+        <view class="weui-loadmore weui-loadmore_line">
+          <view class="weui-loadmore__tips weui-loadmore__tips_in-line">还没有邀请到好友</view>
+        </view>
+      </block>
     </view>
     <view class="share-actions">
       <button plain="true" open-type="share" class="btn-share-wexin btn-action">
