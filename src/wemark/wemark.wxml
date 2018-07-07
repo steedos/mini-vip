@@ -9,6 +9,9 @@
 				<image mode="widthFix" class="wemark_inline_image" src="{{renderInline.src}}"/>
 				<view class="wemark_inline_image_alt" wx:if="{{renderInline.alt}}">{{renderInline.alt}}</view>
 			</view>
+			<navigator class="wemark_navigator" url="{{renderInline.url}}" wx:if="{{renderInline.type === 'link'}}">
+				<view class="wemark_navigator_text">{{renderInline.content}}</view>
+			</navigator>
 		</block>
 		<block wx:if="{{!renderBlock.isArray}}">
 			<view wx:if="{{renderBlock.type === 'code'}}">{{renderBlock.content}}</view>

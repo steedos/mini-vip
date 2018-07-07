@@ -153,3 +153,7 @@
 .wemark_inline_text{
 	word-wrap:break-word;
 }
+.wemark_navigator{
+	display:inline-block;
+	color:#00a3f5;
+}

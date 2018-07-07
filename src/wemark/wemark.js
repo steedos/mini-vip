@@ -30,7 +30,8 @@ function parse(md, page, options){
 	// 获取inline内容
 	var getInlineContent = function(inlineToken){
 		var ret = [];
-		var env;
+		var tempType;
+		var tempUrl;
 
 		if(inlineToken.type === 'htmlblock'){
 			// 匹配video
@@ -57,21 +58,25 @@ function parse(md, page, options){
 			inlineToken.children && inlineToken.children.forEach(function(token, index){
 				if(['text', 'code'].indexOf(token.type) > -1){
 					ret.push({
-						type: env || token.type,
-						content: token.content
+						type: tempType || token.type,
+						content: token.content,
+						url: tempUrl
 					});
-					env = '';
+					tempType = '';
 				}
 				else if(['softbreak', 'hardbreak'].indexOf(token.type) > -1){ 
 					ret.push({ type: 'text', content: '\r\n\r\n' }); 
-					env = ''; 
+					tempType = ''; 
 				}
 				else if(token.type === 'del_open'){
-					env = 'deleted';
+					tempType = 'deleted';
 				}else if(token.type === 'strong_open'){
-					env = 'strong';
+					tempType = 'strong';
 				}else if(token.type === 'em_open'){
-					env = 'em';
+					tempType = 'em';
+				} else if (token.type === 'link_open') {
+					tempType = 'link';
+					tempUrl = token.href;
 				}else if(token.type === 'image'){
 					var imageSrc = token.src;
 					// 配置了imagePathPrefix则加上前缀
