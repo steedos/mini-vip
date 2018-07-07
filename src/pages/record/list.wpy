@@ -20,6 +20,7 @@
 
   .item-body {
     width: 55%;
+    height: 100%;
   }
 
   .description-field {
@@ -71,6 +72,7 @@
     .record {
       width: 100%;
       display: flex;
+      align-items: center;
     }
     .delete {
       position: absolute;
