@@ -132,12 +132,15 @@
   margin: 30px -15px;
 }
 .wemark_image_wrapper .wemark_inline_image {
+	width:100%;
+	height:auto;
   display: block;
 }
 .wemark_image_wrapper .wemark_inline_image_alt {
-  padding: 15px 20px;
+  padding: 10px 20px;
 	background: #f1f4f6;
 	color: #9a9a9a;
+	font-size:0.9em;
 }
 .wemark_inline_code{
 	background:#f0f0f0;
