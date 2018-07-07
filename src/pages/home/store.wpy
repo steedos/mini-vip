@@ -156,6 +156,10 @@
 		}
 
 		async onLoad() {
+			
+		}
+
+		async onShow() {
 			wepy.showLoading({
 				title: '加载中',
 				mask: true
