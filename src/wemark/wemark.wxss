@@ -129,7 +129,8 @@
 	word-wrap:break-word;
 }
 .wemark_image_wrapper {
-  margin: 30px -15px;
+	margin:0 -15px;
+	padding:15px 0;
 }
 .wemark_image_wrapper .wemark_inline_image {
 	width:100%;
@@ -137,7 +138,7 @@
   display: block;
 }
 .wemark_image_wrapper .wemark_inline_image_alt {
-  padding: 10px 20px;
+  padding: 5px 15px;
 	background: #f1f4f6;
 	color: #9a9a9a;
 	font-size:0.9em;
