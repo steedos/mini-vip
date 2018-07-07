@@ -12,9 +12,11 @@
 	}
 	.title {
 		padding: 10px 15px;
-		font-size:27rpx;
+		font-size:13px;
 		color:#8D8D8F;
-
+	}
+	.page_bd_title{
+		border-bottom:1rpx solid #d9d9d9;
 	}
 	.my-site {
 		margin-top: 20px;
@@ -60,7 +62,7 @@
     <view class="page__bd">
 
 			<view class="my-site">
-        <view class="title">我的微站</view>
+        <view class="title page_bd_title">我的微站</view>
         <scroll-view  scroll-x="true">
           <view class="weui-grids">
             <repeat for="{{my_spaces}}" key="index" index="index" item="space">
