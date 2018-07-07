@@ -116,6 +116,7 @@
 .wemark_inline_strong{
 	font-weight: bold;
 	word-wrap:break-word;
+	color: black;
 }
 .wemark_inline_em{
 	font-style: italic;
