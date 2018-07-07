@@ -88,7 +88,7 @@
 				<view class="title">
 					<view class="text">{{post.name}}</view>
 				</view>
-				<view class="img-container" wx:if="{{post.images}}">
+				<view class="img-container" wx:if="{{post.images && post.images.length}}">
 					<image mode="aspectFill" src="{{util.formatImageUrl(post.images[0], baseUrl)}}"></image>
 				</view>
 			</navigator>
