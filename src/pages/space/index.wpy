@@ -172,7 +172,7 @@ page {
       line-height: inherit;
     }
     .post-list-wrapper{
-      margin-top: 8px;
+      margin-top: 30rpx;
     }
   }
 }

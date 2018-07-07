@@ -2,17 +2,33 @@
 .post {
 	padding:30rpx;
 	background:#fff;
+	position: relative;
 	&.weui-grid_active {
 		background: #ececec;
 	}
 	&::after {
+		content: " ";
+    position: absolute;
+		bottom: -1px;
 		left: 30rpx;
 		right: 30rpx;
+    height: 1px;
+    border-top: 1rpx solid #d9d9d9;
+	}
+	&.border-top::before {
+		content: " ";
+    position: absolute;
+		top: 0px;
+		left: 0;
+		right: 0;
+    height: 1px;
+    border-top: 1rpx solid #d9d9d9;
 	}
 	&:nth-of-type(3n+0) {
 		margin-bottom: 30rpx;
 		&::after {
-			display: none;
+			left: 0;
+			right: 0
 		}
 	}
 	.title {
@@ -26,27 +42,29 @@
 			-webkit-box-orient:vertical;
 		}
 	}
-	.image-container {
-		margin-left: 16rpx;
+	.img-container {
 		image {
 			display: block;
 		}
 	}
 }
 .post:last-of-type::after {
-	display: none;
+	left: 0;
+	right: 0;
 }
 .post-normal {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
 	.title {
-		flex: 1;
+		flex: 2;
 		font-size: 15px;
 	}
 	.img-container {
+		margin-left: 10rpx;
+		flex: 1;
 		image {
-			width: 100rpx;
+			width: 100%;
 			height: 100rpx;
 		}
 	}
@@ -66,26 +84,14 @@
 <template>
 	<block wx:if="{{list.length}}">
 		<repeat for="{{list}}" key="index" index="index" item="post">
-			<block wx:if="{{post.featured}}">
-				<navigator class="post-featured post border-bottom-1px" hover-class="weui-grid_active" url="../post/view?post_id={{post._id}}&space_id={{post.space._id}}">
-					<view class="title">
-						<view class="text">{{post.name}}</view>
-					</view>
-					<view class="img-container" wx:if="{{post.images}}">
-						<image mode="aspectFill" src="{{util.formatImageUrl(post.images[0], baseUrl)}}"></image>
-					</view>
-				</navigator>
-			</block>
-			<block wx:else>
-				<navigator class="post-normal post border-bottom-1px" hover-class="weui-grid_active" url="../post/view?post_id={{post._id}}&space_id={{post.space._id}}">
-					<view class="title">
-						<view class="text">{{post.name}}</view>
-					</view>
-					<view class="img-container" wx:if="{{post.images}}">
-						<image mode="aspectFill" src="{{util.formatImageUrl(post.images[0], baseUrl)}}"></image>
-					</view>
-				</navigator>
-			</block>
+			<navigator class="{{post.featured || index % 3 == 0 ? 'post-featured' : 'post-normal'}} post {{index % 3 == 0 ? 'border-top' : ''}}" hover-class="weui-grid_active" url="../post/view?post_id={{post._id}}&space_id={{post.space._id}}">
+				<view class="title">
+					<view class="text">{{post.name}}</view>
+				</view>
+				<view class="img-container" wx:if="{{post.images}}">
+					<image mode="aspectFill" src="{{util.formatImageUrl(post.images[0], baseUrl)}}"></image>
+				</view>
+			</navigator>
 		</repeat>
 	</block>
 	<block wx:else>
