@@ -131,7 +131,23 @@ export default class simplePostList extends wepy.component {
     baseUrl: baseUrl,
     previousVideoId: null,
     currentVideoContext: null
-  };
+	};
+	
+	methods = {
+		play(videoId){
+      this.currentVideoContext = wepy.createVideoContext(videoId);
+      if(this.previousVideoId && this.previousVideoId != videoId){
+        let videoContext = wepy.createVideoContext(this.previousVideoId);
+        videoContext.pause();
+      }
+      this.previousVideoId = videoId;
+    },
+    onParentHide(page){
+      if(this.currentVideoContext){
+        this.currentVideoContext.pause()
+      }     
+    },
+	}
 }
 </script>
 
