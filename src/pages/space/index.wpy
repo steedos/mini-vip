@@ -288,7 +288,7 @@ export default class Posts extends wepy.page {
     this.space_id = e.space_id || scene;
     this.$parent.saveRecentSites(this.space_id);
     await this.$parent.login(this.space_id);
-    await this.loadCardInfo();
+    // await this.loadCardInfo();
     this.type = e.type;
     await this.loadStoreInfo();
     await this.loadPostList();
@@ -302,7 +302,7 @@ export default class Posts extends wepy.page {
     this.is_skip_allowed = true;
     this.posts = [];
     this.current_skip = 0;
-    await this.loadCardInfo();
+    // await this.loadCardInfo();
     await this.loadStoreInfo();
     await this.loadPostList();
   }
