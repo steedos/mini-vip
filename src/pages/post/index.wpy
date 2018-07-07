@@ -275,9 +275,10 @@ export default class Posts extends wepy.page {
     var skip = this.current_skip;
     var options = {}
     options = {
+      $orderby: 'created desc',
       $expand: 'owner($select=name),space($select=name)',
       $count: true,
-      $select: 'name,summary,description,comment_count,enable_comment,images,video,audio,type,mini_type,space,star_count,owner',
+      $select: 'name,summary,description,comment_count,enable_comment,images,video,audio,type,mini_type,space,star_count,owner,created',
       $skip: skip,
       $top: DATA_LENGTH
     };

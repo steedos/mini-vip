@@ -137,17 +137,17 @@
         </navigator>
         <view class="post-cover">
           <block wx:if="{{post.video}}">
-            <block wx:if="{{post.images}}">
+            <block wx:if="{{post.images && post.images.length}}">
               <image class="image {{showHeader ? 'no-radius' : ''}}" mode="aspectFill" src="{{util.formatImageUrl(post.images[0], baseUrl)}}" @tap="previewImage({{post.images}})" @error="loadImageError({{index}})" />
             </block>
           </block>
           <block wx:else>
-            <block wx:if="{{post.images}}">
+            <block wx:if="{{post.images && post.images.length}}">
               <image class="image {{showHeader ? 'no-radius' : ''}}" mode="aspectFill" src="{{util.formatImageUrl(post.images[0], baseUrl)}}" @tap="previewImage({{post.images}})" @error="loadImageError({{index}})" />
             </block>
           </block>
         </view>
-        <view class="post-body weui-cells {{post.images ? '' : 'is-cover-empty'}}" @tap="goDetail({{post._id}}, {{post.space._id}})">
+        <view class="post-body weui-cells {{post.images && post.images.length ? '' : 'is-cover-empty'}}" @tap="goDetail({{post._id}}, {{post.space._id}})">
           <view class="weui-cell weui-cell_access">
             <view class="weui-cell__bd">
               <view class="post-name">{{post.name}}</view>

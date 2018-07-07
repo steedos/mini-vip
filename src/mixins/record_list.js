@@ -217,6 +217,7 @@ export default class recordList extends wepy.mixin {
     touchstart(event) {
       const itemId = event.currentTarget.dataset.itemId;
       const positionX = event.touches[0].pageX;
+      this.style_list[itemId] = {}
       this.style_list[itemId].positionX = positionX;
       this.$apply();
     },
@@ -226,6 +227,10 @@ export default class recordList extends wepy.mixin {
       const oldPositionX = this.style_list[itemId].positionX;
       const oldOffsetX = this.style_list[itemId].offsetX;
       const offsetX = newPositionX - oldPositionX;
+
+      let new_style_list = {};
+      new_style_list[itemId] = this.style_list[itemId];
+      this.style_list = new_style_list;
 
       if (offsetX < 0) {
         if (oldOffsetX < 0 && oldOffsetX < offsetX) {

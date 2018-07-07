@@ -275,7 +275,7 @@
                       <block wx:if="{{item.is_wide}}">
                         <view class="weui-cell__bd">
                           <block wx:if="{{!(item.readonly || !_record_allowEdit || args.action === 'read')}}">
-                            <textarea style="min-height: {{(item.rows || 2) * 1.1}}em" class="weui-textarea" name="{{item.name}}" data-id="{{item.name}}" placeholder="{{item.label}}" value="{{util.transformFieldValue(item, values[item.name])}}" auto-height="true" bindinput="textChange" maxlength="-1"/>
+                            <textarea style="min-height: {{(item.rows || 3) * 1.4}}em" class="weui-textarea" name="{{item.name}}" data-id="{{item.name}}" placeholder="{{item.label}}" value="{{util.transformFieldValue(item, values[item.name])}}" auto-height="true" bindinput="textChange" maxlength="-1"/>
                           </block>
                           <block wx:else>
                             <view class="weui-cell__ft wide-cell">{{util.transformFieldValue(item, values[item.name]) || item.label}}</view>
@@ -412,7 +412,8 @@
             }
             groupItem.fields[key] = field;
             groupItem._groupText = field.group;
-            groupItem._cellsClass = 'weui-cells_after-title'
+            groupItem._cellsClass = 'weui-cells_after-title';
+            groupItem._helpText = field.inlineHelpText || '';
 
           }else if(field.inlineHelpText){
             groupItem.fields[key] = field;
@@ -501,6 +502,12 @@
           if(action === 'create'){
             this._record_allowEdit = true;
             this.values = _.clone(defaultValues);
+
+            _.forEach(this.fields, (f)=>{
+              if(!f.readonly && !f.omit && _.has(f, 'defaultValue') && !_.has(this.values, f.name)){
+                this.values[f.name] = f.defaultValue
+              }
+            })
           }
 
           if (object_name && record_id && action != 'create') {
@@ -815,9 +822,9 @@
 
           if(_.isArray(field.reference_to)){
             if(v._id){
-              value[k] = {o: v.object_name, ids: [v._id]}
+              value[k] = {o: v.object_name || v['reference_to.o'], ids: [v._id]}
             }else{
-              value[k] = {o: v.object_name}
+              value[k] = {o: v.object_name || v.o}
             }
           }
         }

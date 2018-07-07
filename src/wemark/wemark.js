@@ -63,7 +63,7 @@ function parse(md, page, options){
 					env = '';
 				}
 				else if(['softbreak', 'hardbreak'].indexOf(token.type) > -1){ 
-					ret.push({ type: 'text', content: '\r\n' }); 
+					ret.push({ type: 'text', content: '\r\n\r\n' }); 
 					env = ''; 
 				}
 				else if(token.type === 'del_open'){
@@ -80,7 +80,8 @@ function parse(md, page, options){
 					}
 					ret.push({
 						type: token.type,
-						src: imageSrc
+						src: imageSrc,
+						alt: token.alt
 					});
 				}
 			});
