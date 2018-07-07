@@ -141,6 +141,7 @@
 	background: #f1f4f6;
 	color: #9a9a9a;
 	font-size:0.9em;
+	text-align: center;
 }
 .wemark_inline_code{
 	background:#f0f0f0;
