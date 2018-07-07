@@ -191,7 +191,7 @@ export default class VIP extends wepy.app {
       borderStyle: 'black',
       list: [
       {
-        pagePath: 'pages/index',
+        pagePath: 'pages/home/store',
         selectedIconPath: './images/tabbars/home_pressed.png',
         iconPath: './images/tabbars/home.png',
         text: '首页',
