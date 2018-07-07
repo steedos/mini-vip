@@ -80,7 +80,8 @@ function parse(md, page, options){
 					}
 					ret.push({
 						type: token.type,
-						src: imageSrc
+						src: imageSrc,
+						alt: token.alt
 					});
 				}
 			});
