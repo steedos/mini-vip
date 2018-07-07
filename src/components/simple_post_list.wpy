@@ -1,0 +1,137 @@
+<style lang="less" scoped>
+.post {
+	padding:30rpx;
+	background:#fff;
+	&.weui-grid_active {
+		background: #ececec;
+	}
+	&::after {
+		left: 30rpx;
+		right: 30rpx;
+	}
+	&:nth-of-type(3n+0) {
+		margin-bottom: 30rpx;
+		&::after {
+			display: none;
+		}
+	}
+	.title {
+		display: flex;
+		align-items: center;
+		.text {
+			overflow:hidden;
+			text-overflow:ellipsis;
+			display:-webkit-box !important;
+			-webkit-line-clamp:2;
+			-webkit-box-orient:vertical;
+		}
+	}
+	.image-container {
+		margin-left: 16rpx;
+		image {
+			display: block;
+		}
+	}
+}
+.post:last-of-type::after {
+	display: none;
+}
+.post-normal {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	.title {
+		flex: 1;
+		font-size: 15px;
+	}
+	.img-container {
+		image {
+			width: 100rpx;
+			height: 100rpx;
+		}
+	}
+}
+
+.post-featured {
+	.img-container {
+		padding-top: 30rpx;
+		image {
+			width: 100%;
+			height: 300rpx;
+		}
+	}
+}
+</style>
+
+<template>
+	<block wx:if="{{list.length}}">
+		<repeat for="{{list}}" key="index" index="index" item="post">
+			<block wx:if="{{post.featured}}">
+				<navigator class="post-featured post border-bottom-1px" hover-class="weui-grid_active" url="../post/view?post_id={{post._id}}&space_id={{post.space._id}}">
+					<view class="title">
+						<view class="text">{{post.name}}</view>
+					</view>
+					<view class="img-container" wx:if="{{post.images}}">
+						<image mode="aspectFill" src="{{util.formatImageUrl(post.images[0], baseUrl)}}"></image>
+					</view>
+				</navigator>
+			</block>
+			<block wx:else>
+				<navigator class="post-normal post border-bottom-1px" hover-class="weui-grid_active" url="../post/view?post_id={{post._id}}&space_id={{post.space._id}}">
+					<view class="title">
+						<view class="text">{{post.name}}</view>
+					</view>
+					<view class="img-container" wx:if="{{post.images}}">
+						<image mode="aspectFill" src="{{util.formatImageUrl(post.images[0], baseUrl)}}"></image>
+					</view>
+				</navigator>
+			</block>
+		</repeat>
+	</block>
+	<block wx:else>
+		<view class="weui-loadmore weui-loadmore_line">
+      <view class="weui-loadmore__tips weui-loadmore__tips_in-line">暂无动态</view>
+    </view>
+	</block>
+</template>
+
+<script>
+import wepy from 'wepy';
+import { baseUrl } from '@/config';
+import req from '@/network';
+import { serverAPI } from '@/server';
+import { demoSpaceId,demoStoreId } from '@/config'
+import util from '../wxs/util.wxs'
+
+export default class simplePostList extends wepy.component {
+	props = {
+    isHeaderShow: {
+      type: Boolean,
+      default: false
+    },
+    list: {
+      type: Array,
+      default: []
+    },
+    editable: {
+      type: Boolean,
+      default: false
+    },
+    showHeader: {
+      type: Boolean,
+      default: false
+    }
+	}
+
+	wxs = {
+		util: util
+	}
+	
+	data = {
+    baseUrl: baseUrl,
+    previousVideoId: null,
+    currentVideoContext: null
+  };
+}
+</script>
+

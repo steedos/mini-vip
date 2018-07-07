@@ -262,7 +262,7 @@ page {
 import wepy from 'wepy';
 import { baseUrl } from '@/config';
 import { baseMaterialUrl } from '@/config';
-import postList from '../../components/post_list';
+import postList from '../../components/simple_post_list';
 import req from '@/network';
 import util from '../../wxs/util.wxs';
 import _ from 'underscore'
@@ -595,7 +595,7 @@ export default class Posts extends wepy.page {
       $expand: 'space($select=name),owner($select=name)',
       $count: true,
       $select:
-        'name,summary,description,comment_count,enable_comment,images,video,audio,type,mini_type,space,star_count,owner',
+        'name,summary,description,comment_count,enable_comment,images,video,audio,type,mini_type,space,star_count,owner,featured',
       $skip: skip,
       $top: DATA_LENGTH
     };
