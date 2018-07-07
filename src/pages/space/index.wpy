@@ -251,9 +251,7 @@ page {
     </view>
     <view class="page__bd">
       <view class="post-list-wrapper">
-        <scroll-view class="scroll-view_H" scroll-y="true">
-          <postList :list.sync="posts" />
-        </scroll-view>
+        <postList :list.sync="posts" />
       </view>
     </view>
   </view>
