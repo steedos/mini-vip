@@ -136,9 +136,7 @@ page {
       </block>
     </block>
     <view class="page__bd">
-      <scroll-view class="scroll-view_H" scroll-y="true">
-        <postList :list.sync="posts" :editable.sync="editable" />
-      </scroll-view>
+      <postList :list.sync="posts" :editable.sync="editable" />
     </view>
     <view class="tab-bar" wx:if="{{editable}}">
       <view class="slds-icon-action-new" @tap="createPost"></view>
@@ -148,7 +146,7 @@ page {
 <script>
 import wepy from 'wepy';
 import { baseUrl } from '@/config';
-import postList from '../../components/post_list';
+import postList from '../../components/simple_post_list';
 import util from '../../wxs/util.wxs';
 import pageRouter from '@/utils/pageRouter';
 import req from '@/network';
