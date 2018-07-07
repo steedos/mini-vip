@@ -172,7 +172,7 @@ page {
       line-height: inherit;
     }
     .post-list-wrapper{
-      margin-top: 8px;
+      margin-top: 30rpx;
     }
   }
 }
@@ -251,9 +251,7 @@ page {
     </view>
     <view class="page__bd">
       <view class="post-list-wrapper">
-        <scroll-view class="scroll-view_H" scroll-y="true">
-          <postList :list.sync="posts" />
-        </scroll-view>
+        <postList :list.sync="posts" />
       </view>
     </view>
   </view>
@@ -262,7 +260,7 @@ page {
 import wepy from 'wepy';
 import { baseUrl } from '@/config';
 import { baseMaterialUrl } from '@/config';
-import postList from '../../components/post_list';
+import postList from '../../components/simple_post_list';
 import req from '@/network';
 import util from '../../wxs/util.wxs';
 import _ from 'underscore'
@@ -288,7 +286,7 @@ export default class Posts extends wepy.page {
     this.space_id = e.space_id || scene;
     this.$parent.saveRecentSites(this.space_id);
     await this.$parent.login(this.space_id);
-    await this.loadCardInfo();
+    // await this.loadCardInfo();
     this.type = e.type;
     await this.loadStoreInfo();
     await this.loadPostList();
@@ -302,7 +300,7 @@ export default class Posts extends wepy.page {
     this.is_skip_allowed = true;
     this.posts = [];
     this.current_skip = 0;
-    await this.loadCardInfo();
+    // await this.loadCardInfo();
     await this.loadStoreInfo();
     await this.loadPostList();
   }
@@ -592,10 +590,11 @@ export default class Posts extends wepy.page {
     }
     const skip = this.current_skip;
     const options = {
+      $orderby: 'created desc',
       $expand: 'space($select=name),owner($select=name)',
       $count: true,
       $select:
-        'name,summary,description,comment_count,enable_comment,images,video,audio,type,mini_type,space,star_count,owner',
+        'name,summary,description,comment_count,enable_comment,images,video,audio,type,mini_type,space,star_count,owner,featured,created',
       $skip: skip,
       $top: DATA_LENGTH
     };

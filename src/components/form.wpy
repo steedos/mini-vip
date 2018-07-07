@@ -502,6 +502,12 @@
           if(action === 'create'){
             this._record_allowEdit = true;
             this.values = _.clone(defaultValues);
+
+            _.forEach(this.fields, (f)=>{
+              if(!f.readonly && !f.omit && _.has(f, 'defaultValue') && !_.has(this.values, f.name)){
+                this.values[f.name] = f.defaultValue
+              }
+            })
           }
 
           if (object_name && record_id && action != 'create') {

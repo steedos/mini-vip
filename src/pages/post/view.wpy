@@ -421,7 +421,7 @@ export default class PostView extends wepy.page {
   computed = {
     withoutMarkdownImages () {
       // 从this.post.images中排除this.post.description的markdown语法中已有的图片
-      if(!this.post){
+      if(!this.post || !this.post.images || !this.post.images.length){
         return []
       }
       let md = this.post.description;

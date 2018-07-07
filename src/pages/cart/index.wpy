@@ -609,6 +609,7 @@
       touchstart(event) {
         const itemId = event.currentTarget.dataset.itemId;
         const positionX = event.touches[0].pageX;
+        this.styleList[itemId] = {}
         this.styleList[itemId].positionX = positionX;
         this.$apply();
       },
@@ -618,6 +619,10 @@
         const oldPositionX = this.styleList[itemId].positionX;
         const oldOffsetX = this.styleList[itemId].offsetX;
         const offsetX = newPositionX - oldPositionX;
+
+        let newStyleList = {};
+        newStyleList[itemId] = this.styleList[itemId];
+        this.styleList = newStyleList;
 
         if (offsetX < 0) {
           if (oldOffsetX < 0 && oldOffsetX < offsetX) {

@@ -34,6 +34,7 @@
 				min-width: 150rpx;
 				background: #f4f4f4;
 				margin-right: 20rpx;
+				border-radius:0.25rem;
 				// margin: 19.5rpx 18rpx 19.5rpx 0;
 			}
 			.info {
