@@ -169,7 +169,7 @@
           我的邀请记录
         </view>
         <view class="share-list-sum">
-          共邀请了{{responses.length}}位好友，获得0份奖励
+          共邀请到了{{responses.length}}位好友，获得0份奖励
         </view>
       </view>
       <block wx:if="{{responses.length}}">
@@ -281,26 +281,36 @@
 
     async addShare(){
       console.log("============share=======this.product_id==============", this.product_id);
+      const userId = this.$parent.globalData.user._id;
       const name = this.$parent.globalData.user.name;
+      console.log("===============addShare============", userId, name);
+      const query_options = {
+        $filter: `product eq '${this.product_id}' and owner eq '${userId}'`,
+        $select: 'name'
+      };
+      let share = await this.$parent.query("vip_share", query_options, this.space_id);
       let values = {
         name: name,
-        related_to: {
-            "o" : "vip_product",
-            "ids" : [ this.product_id ]
-        }
+        product: this.product_id
       };
-      let vip_share = await this.$parent.insert("vip_share", values, this.space_id);
-      console.log("============share=======vip_share==============", vip_share);
-      if(vip_share && vip_share.value && vip_share.value.length){
-        this.share_id = vip_share.value[0]._id;
+      if(share && share.value && share.value.length){
+        console.log("===============addShare============update");
+        // 只是修改其modified，记住其最后一次分享时间
+        await this.$parent.update("vip_share", share.value[0]._id, values, this.space_id);
+      }
+      else{
+        console.log("===============addShare============insert");
+        share = await this.$parent.insert("vip_share", values, this.space_id);
+      }
+      if(share && share.value && share.value.length){
+        this.share_id = share.value[0]._id;
       }
       else{
         console.log("============share=======error==============");
         wx.showToast({
-          title: "响应分享失败，请返回重新操作一次",
+          title: "分享失败，请重新操作一次",
           icon: "none"
         });
-        return;
       }
     }
   
