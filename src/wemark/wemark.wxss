@@ -127,9 +127,16 @@
 	padding:0 5px;
 	word-wrap:break-word;
 }
-.wemark_inline_image{
-	width:100%;
-	height:auto;
+.wemark_image_wrapper {
+  margin: 30px -15px;
+}
+.wemark_image_wrapper .wemark_inline_image {
+  display: block;
+}
+.wemark_image_wrapper .wemark_inline_image_alt {
+  padding: 15px 20px;
+	background: #f1f4f6;
+	color: #9a9a9a;
 }
 .wemark_inline_code{
 	background:#f0f0f0;
@@ -138,4 +145,5 @@
 }
 .wemark_inline_text{
 	word-wrap:break-word;
+	color: #666;
 }
