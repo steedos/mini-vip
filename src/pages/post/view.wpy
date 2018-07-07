@@ -59,6 +59,15 @@ page {
   background-color: #F7F7FA;
   align-items: center;
 
+  &.special-tab {
+    .star-btn {
+      justify-content: center;
+    }
+    .more-action-btn {
+      justify-content: flex-end;
+    }
+  }
+
   .action {
     flex: 1;
     padding:0 30rpx;
@@ -251,7 +260,7 @@ video{
         </repeat>
       </view>
   </view>
-  <view class="tab-bar border-top-1px">
+  <view class="tab-bar border-top-1px {{isSpaceAdmin ? 'special-tab' : ''}}">
     <button plain="true" open-type="share" data-post-name="{{post.name}}" data-post-id="{{post._id}}" data-post-space="{{post.space}}" class="share action share-btn">
       <view class="vip_share-default slds-icon slds-icon--small slds-m-right--x-small"></view>
       <view class="text">转发</view>
@@ -263,6 +272,10 @@ video{
     <view class="star action star-btn {{star_id ? 'is-stared' : ''}}" @tap="starPost">
       <view class="vip_star-{{star_id ? 'blue' : 'default'}} slds-icon slds-icon--small slds-m-right--x-small"></view>
       <view class="text">{{post.star_count || 0}}</view>
+    </view>
+    <view class="more-action-btn action" @tap="moreAction" wx:if="{{isSpaceAdmin}}">
+      <view class="vip_more slds-icon slds-icon--small slds-m-right--x-small"></view>
+      <view class="text">更多</view>
     </view>
   </view>
 </view>
@@ -277,6 +290,26 @@ export default class PostView extends wepy.page {
   config = {
     navigationBarTitleText: '',
     enablePullDownRefresh: true
+  };
+  
+  data = {
+    post_id: null,
+    indicatorDots: true,
+    autoplay: true,
+    interval: 5000,
+    duration: 1000,
+    post: null,
+    baseUrl: baseUrl,
+    space_id: '',
+    space_name: '',
+    avatar: '',
+    is_loaded: false,
+    editable: false,
+    star_id: '',
+    value: '',
+    post_comments: [],
+    isSpaceAdmin: false,
+    wemark: {}
   };
 
   async onLoad(e) {
@@ -309,6 +342,8 @@ export default class PostView extends wepy.page {
       await this.isPostStar();
       await this.loadPostComments()
     }
+
+    this.isSpaceAdmin = this.$parent.isSpaceAdmin(this.space_id);
 
     this.is_loaded = true
     this.$apply()
@@ -398,25 +433,6 @@ export default class PostView extends wepy.page {
   onPullDownRefresh() {
     this.refresh();
   }
-
-  data = {
-    post_id: null,
-    indicatorDots: true,
-    autoplay: true,
-    interval: 5000,
-    duration: 1000,
-    post: null,
-    baseUrl: baseUrl,
-    space_id: '',
-    space_name: '',
-    avatar: '',
-    is_loaded: false,
-    editable: false,
-    star_id: '',
-    value: '',
-    post_comments: [],
-    wemark: {}
-  };
 
   computed = {
     withoutMarkdownImages () {
@@ -508,6 +524,37 @@ export default class PostView extends wepy.page {
       wx.navigateTo({
         url: `../comment/index?space_id=${this.space_id}&object_name=post_comments&key_name=post_id&_id=${this.post_id}`
       })
+    },
+    async moreAction() {
+      const res = await wepy.showActionSheet({itemList: ['编辑', '删除']});
+      console.log(res)
+      switch (res.tapIndex) {
+        case 0:
+          if (this.isSpaceAdmin) {
+            let url = `/pages/record/edit?space_id=${this.space_id}&action=edit&object_name=post&record_id=${this.post_id}&fields=name,summary,description,images,video,type`;
+            wepy.navigateTo({
+              url: url
+            });
+          }
+          break;
+        case 1:
+          if (this.isSpaceAdmin) {
+            await this.$parent.delete('post', this.post_id, this.space_id);
+            const pages = getCurrentPages();
+            const prevPage = pages[pages.length - 2];
+            await prevPage.refresh();
+            wx.showToast({
+              title: '删除成功',
+              icon: 'success',
+              duration: 2000
+            })
+            setTimeout(() => {
+              wx.navigateBack();
+            }, 100);
+          }
+        default:
+          break;
+      }
     }
   };
 }
