@@ -1108,7 +1108,7 @@
       },
       withoutMarkdownImages () {
         // 从this.post.images中排除this.post.description的markdown语法中已有的图片
-        if(!this.product){
+        if(!this.product || !this.product.images || !this.product.images.length){
           return []
         }
         let md = this.product.description;

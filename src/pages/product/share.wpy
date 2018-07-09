@@ -88,7 +88,7 @@
       }
     }
     .share-list-body{
-      background:rgba(120, 120, 80, 0.1);
+      background: rgba(30, 30, 30, 0.1);
       border-radius:6px;
       margin:20rpx 40rpx;
       padding:20rpx;
