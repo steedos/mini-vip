@@ -588,7 +588,7 @@ export default class Checkout extends wepy.page {
         amount: amount,
         order_id: orderId
       };
-
+      var that = this;
       req.post('/api/steedos/weixin/card/recharge', data).then(res => {
         wx.hideLoading();
         console.log('res: ', res);
@@ -602,6 +602,8 @@ export default class Checkout extends wepy.page {
             paySign: res.paySign,
             success: function(msg) {
               console.log('success: ', msg);
+              that.status = 'paid';
+              that.$apply();
             },
             fail: function(msg) {
               console.log('fail: ', msg);
