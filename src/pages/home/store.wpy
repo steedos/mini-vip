@@ -158,7 +158,13 @@
 		}
 
 		async onLoad() {
-			
+		}
+		// 分享
+		onShareAppMessage(res) {
+			return {
+				title: "微站",
+				path: `pages/home/store`
+			};
 		}
 
 		async onShow() {
