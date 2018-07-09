@@ -52,7 +52,6 @@ function parse(md, page, options){
 		// reg = /http(s?):\/\/(?<space_id>\w+)\.hotoa\.com(\/(?<object_name>\w+))?(\/(?<record_id>\w+))?/;
 		// 不支持上述的分组命名来捕获匹配，只能用下面的分组索引的方式来解决
 		reg = /http(?:s?):\/\/(\w+)\.hotoa\.com(?:\/(\w+))?(?:\/(\w+))?/;
-		console.log(url.match(reg));
 		//该正则匹配的数组结果为['匹配的完整url','space_id','object_name','record_id']
 		var matchs = url.match(reg);
 		var space_id = matchs[1];
@@ -131,7 +130,8 @@ function parse(md, page, options){
 						imageSrc = options.imagePathPrefix + imageSrc;
 					}
 					ret.push({
-						type: token.type,
+						type: tempType || token.type,
+						url: tempUrl,
 						src: imageSrc,
 						alt: token.alt
 					});

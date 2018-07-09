@@ -129,9 +129,8 @@
 	word-wrap:break-word;
 }
 .wemark_image_wrapper {
-  margin:-15px;
-  /* margin:0 -15px;
-	padding:15px 0; */
+  margin:0 -15px;
+	padding:15px 0;
 }
 .wemark_image_wrapper .wemark_inline_image {
 	width:100%;
@@ -156,4 +155,14 @@
 .wemark_navigator{
 	display:inline-block;
 	color:#00a3f5;
+}
+.wemark_navigator.wemark_image_navigator {
+	display: block;
+}
+.wemark_navigator.wemark_image_navigator .wemark_image_wrapper {
+	margin: 0px;
+	padding: 0px;
+}
+.wemark_navigator.wemark_image_navigator .wemark_image_wrapper .wemark_inline_image_alt {
+  color:#00a3f5;
 }
