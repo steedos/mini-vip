@@ -27,6 +27,51 @@ function parse(md, page, options){
 	var orderNum = [0, 0];
 	var tmp;
 
+	// 转换PC站点URL为小程序Path，如果无法转换则返回空
+	// 如果以'/pages/'开头，则直接返回url
+	// 如果格式为：http://{space_id}.hotoa.com/{object_name}/{record_id}，则转换成对应小程序路径
+	// 小程序路径规则：
+	// 如果object_name为空，返回工作区主页=/pages/space/index?space_id={space_id}
+	// 如果record_id为空，object_name不为空，返回object主页（显示object列表）=/pages/{object_name}/index?space_id={space_id}
+	// 如果record_id不为空，返回record页=/pages/{object_name}/view?space_id={space_id}&{object_name}_id={record_id}
+	var convertPath = function(url){
+		var path = "";
+		if(!url){
+			return path;
+		}
+
+		var reg = /^\/pages\//;
+		if (reg.test(url)) {
+		  return url;
+		}
+
+		reg = /^http(s?):\/\/\w+\.hotoa\.com/;
+		if(!reg.test(url)){
+			return path;
+		}
+		// reg = /http(s?):\/\/(?<space_id>\w+)\.hotoa\.com(\/(?<object_name>\w+))?(\/(?<record_id>\w+))?/;
+		// 不支持上述的分组命名来捕获匹配，只能用下面的分组索引的方式来解决
+		reg = /http(?:s?):\/\/(\w+)\.hotoa\.com(?:\/(\w+))?(?:\/(\w+))?/;
+		console.log(url.match(reg));
+		//该正则匹配的数组结果为['匹配的完整url','space_id','object_name','record_id']
+		var matchs = url.match(reg);
+		var space_id = matchs[1];
+		var object_name = matchs[2];
+		var record_id = matchs[3];
+		if (object_name) {
+			if (record_id) {
+				path = "/pages/" + object_name + "/view?space_id=" + space_id + "&" + object_name + "_id=" + record_id;
+			}
+			else{
+				path = "/pages/" + object_name + "/index?space_id=" + space_id;
+			}
+		}
+		else{
+			path = "/pages/space/index?space_id=" + space_id;
+		}
+		return path;
+	}
+
 	// 获取inline内容
 	var getInlineContent = function(inlineToken){
 		var ret = [];
@@ -75,8 +120,10 @@ function parse(md, page, options){
 				}else if(token.type === 'em_open'){
 					tempType = 'em';
 				} else if (token.type === 'link_open') {
-					tempType = 'link';
-					tempUrl = token.href;
+					tempUrl = convertPath(token.href);
+					if (tempUrl){
+						tempType = 'link';
+					}
 				}else if(token.type === 'image'){
 					var imageSrc = token.src;
 					// 配置了imagePathPrefix则加上前缀
