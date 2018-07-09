@@ -130,7 +130,6 @@
 }
 .wemark_image_wrapper {
   margin:0 -15px;
-	padding:15px 0;
 }
 .wemark_image_wrapper .wemark_inline_image {
 	width:100%;
