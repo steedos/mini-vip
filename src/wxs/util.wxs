@@ -28,7 +28,7 @@ function formatDate(value, joiner) {
   if (joiner) {
     var date = value.getDate() + ' ';
   } else {
-    var date = value.getDate() + '日';  
+    var date = value.getDate() + '日';
   }
   console.log('[date]', date)
 
@@ -290,6 +290,17 @@ function getEmptyImageUrl(type) {
   return url;
 }
 
+function showRequired(action, field, value) {
+  if(action === 'edit' || action === 'create'){
+    if(!value || value.length < 1){
+      if(field.required){
+        return true
+      }
+    }
+  }
+  return false
+}
+
 function transformFieldValue(field, value){
   if(!value){
     return "";
@@ -393,5 +404,6 @@ module.exports = {
   formatVideoUrl: formatVideoUrl,
   getEmptyImageUrl:getEmptyImageUrl,
   transformFieldValue: transformFieldValue,
-  formatDateMini: formatDateMini
+  formatDateMini: formatDateMini,
+  showRequired: showRequired
 }
