@@ -107,7 +107,7 @@
 							<view class="weui-cell__bd">帮助</view>
 							<view class="weui-cell__ft weui-cell__ft_in-access"></view>
 						</navigator>
-						<button open-type="contact"  class="weui-cell weui-cell_access live_chat" hover-class="weui-cell_active">
+						<button open-type="contact" plain="true" class="weui-cell weui-cell_access live_chat" hover-class="weui-cell_active">
 							<view class="weui-cell__hd">
 								<view class="slds-icon-standard-live-chat weui-grid__icon slds-icon slds-icon--small slds-m-right--x-small"/>
 							</view>
