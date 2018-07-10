@@ -332,7 +332,7 @@
     align-items: center;
     align-content: center;
     .text{
-      font-size: 17px;
+      font-size: 32rpx;
     } 
     .checkbox {
       display: flex;
@@ -365,7 +365,8 @@
   }
 
   .cart-bottom .total{
-    font-size: 17px;
+    font-size: 34rpx;
+    font-weight: bold;
     color:#b4282d;
     flex: 1;
     text-align: right;
@@ -380,7 +381,7 @@
 
   .cart-bottom .checkout{
     height: 100%;
-    font-size: 17px;
+    font-size: 32rpx;
     line-height: 100rpx;
     width: 210rpx;
     text-align: center;

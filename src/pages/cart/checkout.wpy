@@ -145,7 +145,7 @@
     float: left;
     height: 150rpx;
     margin: 19.5rpx 0 19.5rpx 0;
-    align-items:center;
+    align-items: center;
   }
 
   .t {
@@ -162,15 +162,15 @@
     overflow: hidden;
     font-size: 15px;
     line-height: 46rpx;
-    max-height:87rpx;
-    text-overflow:ellipsis;
-    display: -webkit-box!important;
-    -webkit-line-clamp:2;
-    -webkit-box-orient:vertical;
+    max-height: 87rpx;
+    text-overflow: ellipsis;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
     margin-right: 15px;
   }
 
-  .num{
+  .num {
     font-size: 14px;
   }
 
@@ -230,9 +230,9 @@
 }
 
 .order-time {
-  padding:32rpx 31.25rpx;
+  padding: 32rpx 31.25rpx;
   background: #fff;
-  margin-bottom:20rpx;
+  margin-bottom: 20rpx;
 }
 
 .user-info {
@@ -262,7 +262,7 @@
       }
     }
   }
-} 
+}
 </style>
 <template>
   <view class="page" wx:if="{{is_loaded}}">
@@ -371,6 +371,22 @@
       <view class="l">￥{{goodsTotalPrice}}</view>
       <view class="r" bindtap="submitOrder">去付款</view>
     </view>
+    <view wx:else>
+      <view class="weui-btn-area" wx:if="{{status == 'pending' && isOrderOwner}}">
+        <button class="weui-btn" type="primary" @tap="submitOrder">微信支付</button>
+        <button class="weui-btn" type="default" @tap="updateOrderStatus('canceled')">取消订单</button>
+      </view>
+      <view class="order-total" wx:elif="{{status == 'paid' && isSpaceAdmin}}">
+        <view class="t"></view>
+        <view class="l"></view>
+        <view class="r" bindtap="updateOrderStatus('delivered')">确认发货</view>
+      </view>
+      <view class="order-total" wx:elif="{{status == 'delivered' && isOrderOwner}}">
+        <view class="t"></view>
+        <view class="l"></view>
+        <view class="r" bindtap="updateOrderStatus('completed')">确认收货</view>
+      </view>
+    </view>
   </view>
 </template>
 
@@ -406,7 +422,10 @@ export default class Checkout extends wepy.page {
     orderTotalPrice: 0.0, // 订单总价
     actualPrice: 0.0, // 实际需要支付的总价
     addressId: 0,
-    couponId: 0
+    couponId: 0,
+    status: '',
+    isSpaceAdmin: false,
+    isOrderOwner: false
   };
 
   wxs = {
@@ -437,27 +456,30 @@ export default class Checkout extends wepy.page {
       title: '加载中'
     });
 
-    console.log(e)
+    console.log(e);
     await this.$parent.login();
 
     if (e.object_name == 'vip_order' && e.record_id && e.space_id) {
       const order = await this.$parent.get('vip_order', e.record_id, e.space_id);
       if (order) {
-        console.log('[order]', order)
-        wx.setNavigationBarTitle({title: '订单详情'})
+        console.log('[order]', order);
+        wx.setNavigationBarTitle({ title: '订单详情' });
         this.order = order;
         this.checkedAddress = order.address;
         this.checkedProductList = order.products;
         this.goodsTotalPrice = order.amount;
+        this.status = order.status;
         this.is_readonly = true;
+        this.isSpaceAdmin = this.$parent.isSpaceAdmin(order.space);
+        this.isOrderOwner = (order.owner == this.$parent.globalData.user._id);
       }
     } else if (e.product) {
       const product = JSON.parse(e.product);
-      wx.setNavigationBarTitle({title: '填写订单'})
+      wx.setNavigationBarTitle({ title: '填写订单' });
       this.checkedProductList = [product];
       this.goodsTotalPrice = this.getgoodsTotalPrice(this.checkedProductList);
     } else {
-      wx.setNavigationBarTitle({title: '填写订单'})
+      wx.setNavigationBarTitle({ title: '填写订单' });
       this.checkedProductList = this.getcheckedProductList();
       this.goodsTotalPrice = this.getgoodsTotalPrice(this.checkedProductList);
     }
@@ -512,83 +534,110 @@ export default class Checkout extends wepy.page {
           title: '请选择收货地址',
           icon: 'none',
           duration: 2000
-        })
-        return
+        });
+        return;
       }
       wx.showLoading({
         title: '正在准备支付',
         mask: true
       });
       var amount = parseFloat(parseFloat(this.goodsTotalPrice).toFixed(2));
-      var spaceId = this.checkedProductList[0].space;
-      var products = [];
-      this.checkedProductList.forEach(p => {
-        var tp = {};
-        Object.keys(p).forEach(k => {
-          if (k.indexOf('@odata.') < 0) {
-            tp[k] = p[k];
-          }
-        });
-        products.push(tp);
-      });
-
-      var address = {};
-      Object.keys(this.checkedAddress).forEach(k => {
-        if (k.indexOf('@odata.') < 0) {
-          address[k] = this.checkedAddress[k];
-        }
-      });
-      var newOrder = {
-        name: '商城购物',
-        amount: amount,
-        status: 'draft',
-        store: spaceId,
-        type: 'pay',
-        owner: this.$parent.globalData.user._id,
-        address: address,
-        products: products
-      };
-      this.$parent.insert('vip_order', newOrder, spaceId).then(o => {
-        console.log(o);
-        if (o.value) {
-          var data = {
-            amount: amount,
-            order_id: o.value[0]._id
-          };
-
-          req.post('/api/steedos/weixin/card/recharge', data).then(res => {
-            wx.hideLoading();
-            console.log('res: ', res);
-
-            if (res.paySign) {
-              wx.requestPayment({
-                timeStamp: res.timeStamp,
-                nonceStr: res.nonceStr,
-                package: res.package,
-                signType: 'MD5',
-                paySign: res.paySign,
-                success: function(msg) {
-                  console.log('success: ', msg);
-
-                },
-                fail: function(msg) {
-                  console.log('fail: ', msg);
-                },
-                complete: function(msg) {}
-              });
-            } else {
-              console.error(res);
-              wx.showModal({
-                content: '请求超时，请检查网络状况',
-                showCancel: false
-              });
+      var orderId = '';
+      if (this.order) {
+        orderId = this.order._id;
+      } else {
+        var spaceId = this.checkedProductList[0].space;
+        var products = [];
+        this.checkedProductList.forEach(p => {
+          var tp = {};
+          Object.keys(p).forEach(k => {
+            if (k.indexOf('@odata.') < 0) {
+              tp[k] = p[k];
             }
           });
+          products.push(tp);
+        });
+
+        var address = {};
+        Object.keys(this.checkedAddress).forEach(k => {
+          if (k.indexOf('@odata.') < 0) {
+            address[k] = this.checkedAddress[k];
+          }
+        });
+        var newOrder = {
+          name: '商城购物',
+          amount: amount,
+          status: 'draft',
+          store: spaceId,
+          type: 'pay',
+          owner: this.$parent.globalData.user._id,
+          address: address,
+          products: products
+        };
+        var o = await this.$parent.insert('vip_order', newOrder, spaceId);
+        if (o.value) {
+          orderId = o.value[0]._id;
         } else if (o.error) {
           console.error(o.error);
+          return;
+        }
+      }
+
+      var data = {
+        amount: amount,
+        order_id: orderId
+      };
+      var that = this;
+      req.post('/api/steedos/weixin/card/recharge', data).then(res => {
+        wx.hideLoading();
+        console.log('res: ', res);
+
+        if (res.paySign) {
+          wx.requestPayment({
+            timeStamp: res.timeStamp,
+            nonceStr: res.nonceStr,
+            package: res.package,
+            signType: 'MD5',
+            paySign: res.paySign,
+            success: function(msg) {
+              console.log('success: ', msg);
+              that.status = 'paid';
+              that.$apply();
+            },
+            fail: function(msg) {
+              console.log('fail: ', msg);
+            },
+            complete: function(msg) {}
+          });
+        } else {
+          console.error(res);
+          wx.showModal({
+            content: '请求超时，请检查网络状况',
+            showCancel: false
+          });
         }
       });
-
+    },
+    async updateOrderStatus(status) {
+      wx.showLoading({
+        title: '加载中',
+        mask: true
+      });
+      var result = await this.$parent.update('vip_order', this.order._id, {status: status}, this.order.space);
+      wx.hideLoading();
+      if (result.error) {
+        console.error(result);
+        wx.showToast({
+          title: '出错啦!',
+          icon: 'none'
+        })
+      } else {
+        this.status = status;
+        this.$apply();
+        wx.showToast({
+          icon: 'success'
+        })
+      }
     }
   };
 
