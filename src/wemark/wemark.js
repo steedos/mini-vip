@@ -160,10 +160,19 @@ function parse(md, page, options){
 			var content = getInlineContent(tokens[index+1]);
 
 			// 处理ol前的数字
-			if(env[env.length - 1] === 'li' && env[env.length - 2] === 'ol'){
+			if (env[env.length - 1] === 'li' && env[env.length - 2] === 'ol') {
 				content.unshift({
 					type:'text',
-					content:orderNum[listLevel - 1] + '. '
+					content:orderNum[listLevel - 1] + '.'
+				});
+			}
+
+			// 处理ul前的前缀符号
+			if (env[env.length - 1] === 'li' && env[env.length - 2] === 'ul') {
+				var preStr = listLevel > 1 ? "◦" : "•";
+				content.unshift({
+					type: 'text',
+					content: preStr
 				});
 			}
 
