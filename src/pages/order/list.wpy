@@ -51,7 +51,7 @@
 			}
 		}
 	}
-	
+
 	.status {
 		display: flex;
 		align-items: center;
@@ -73,7 +73,7 @@
 		<repeat for="{{record_list}}" key="index" index="index" item="record">
 			<navigator class="item" url="/pages/cart/checkout?record_id={{record._id}}&object_name=vip_order&space_id={{record.space}}">
 				<view class="title border-bottom-1px">
-					<view>订单编号: {{record.name}}</view>
+					<view>订单编号: {{record.out_trade_no}}</view>
 				</view>
 				<view class="cart-goods">
 					<view wx:if="{{record.products.length == 1}}" class="goods-box">
@@ -86,7 +86,7 @@
 						<repeat for="{{record.products}}" index="index" key="index" item="product">
 							<image wx:if="{{index < 3}}" class="img" src="{{util.formatImageUrl(product.avatar, baseUrl)}}" mode="aspectFill"></image>
 						</repeat>
-					</view> 
+					</view>
 					<repeat for="{{options}}" index="index" key="index" item="option">
 						<view class="status" wx:if="{{option.value == record.status}}">
 							<view>
@@ -115,7 +115,7 @@ export default class orderList extends wepy.page {
 
 	data = {
 		baseUrl: baseUrl,
-		fields: ['name', 'products', 'store', 'owner', 'amount', 'status', 'space'],
+		fields: ['name', 'products', 'store', 'owner', 'amount', 'status', 'space', 'out_trade_no'],
 		options: [
 			{label:'购物车',value:'draft'},
 			{label:'待付款',value:'pending'},
@@ -127,7 +127,7 @@ export default class orderList extends wepy.page {
 	}
 
 	onLoad(e) {
-		
+
 	}
 
 	wxs = {

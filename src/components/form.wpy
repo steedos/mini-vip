@@ -1170,6 +1170,9 @@
           case 'datetime':
             url = '/pages/edit/datetime';
             break;
+          case 'markdown':
+            url = '/pages/edit/textarea';
+            break;
           case 'lookup':
             if(this.args.create_child){
               url = '/pages/edit/lookup_child';
