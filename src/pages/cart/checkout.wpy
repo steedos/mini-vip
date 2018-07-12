@@ -543,7 +543,7 @@ export default class Checkout extends wepy.page {
       });
       var amount = parseFloat(parseFloat(this.goodsTotalPrice).toFixed(2));
       var orderId = '';
-      if (this.order) {
+      if (this.order && this.order._id) {
         orderId = this.order._id;
       } else {
         var spaceId = this.checkedProductList[0].space;
