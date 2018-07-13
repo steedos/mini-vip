@@ -120,7 +120,7 @@
 				<view class="title">
 					<view class="text">{{post.name}}</view>
 					<view class="normal-info">
-						<view class="info">{{util.formatDate(post.created, '-')}}</view>
+						<view class="info" wx:if="{{post.categories}}">{{post.categories[0].name}}</view>
 						<view class="info" wx:if="{{post.comment_count}}">{{post.comment_count}}评论</view>
 						<view class="info" wx:if="{{post.star_count}}">{{post.star_count}}赞</view>
 					</view>
@@ -129,7 +129,7 @@
 					<image mode="aspectFill" src="{{util.formatImageUrl(post.images[0], baseUrl)}}"></image>
 				</view>
 				<view class="featured-info">
-					<view class="info">{{util.formatDate(post.created, '-')}}</view>
+					<view class="info" wx:if="{{post.categories}}">{{post.categories[0].name}}</view>
 					<view class="info" wx:if="{{post.comment_count}}">{{post.comment_count}}评论</view>
 					<view class="info" wx:if="{{post.star_count}}">{{post.star_count}}赞</view>
 				</view>
