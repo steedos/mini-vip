@@ -1067,14 +1067,20 @@
       }
       let userId = this.$parent.globalData.user._id;
       let name = this.$parent.globalData.user.name;
+      let share = await this.$parent.get("vip_share", this.share_id, this.space_id, {$select: 'owner'});
+      if(share.owner == userId){
+        // 分享的发起人不可以响应分享拿礼物
+        return;
+      }
       const query_options = {
-        $filter: `share eq ${this.share_id} and owner eq ${userId}`,
+        $filter: `share eq '${this.share_id}' and owner eq '${userId}'`,
         $select: 'name'
       };
       let share_response = await this.$parent.query("vip_share_response", query_options, this.space_id);
       let values = {
         name: name,
-        share: this.share_id
+        share: this.share_id,
+        product: this.product_id
       };
       if(share_response && share_response.value && share_response.value.length){
         console.log("===============respondShare============update");

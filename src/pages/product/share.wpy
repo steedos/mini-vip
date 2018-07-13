@@ -38,7 +38,7 @@
     align-items:center;
     justify-content: center;
     height:300rpx;
-    margin-top:100rpx;
+    margin-bottom:80rpx;
     .btn-action{
       width:280rpx;
       height:300rpx;
@@ -163,6 +163,16 @@
     <view class="gift-value">{{product_gift}}</view>
   </view>
   <view class="page__bd">
+    <view class="share-actions">
+      <button plain="true" open-type="share" class="btn-share-wexin btn-action">
+        <view class="vip_wechat slds-icon slds-icon--small slds-m-right--x-small"></view>
+        <view class="text">微信好友</view>
+      </button>
+      <view class="btn-share-friend-circle btn-action">
+        <view class="vip_wechat_moments slds-icon slds-icon--small slds-m-right--x-small"></view>
+        <view class="text">朋友圈</view>
+      </view>
+    </view>
     <view class="share-list">
       <view class="share-list-header">
         <view class="share-list-title">
@@ -191,16 +201,6 @@
           <view class="weui-loadmore__tips weui-loadmore__tips_in-line">还没有邀请到好友</view>
         </view>
       </block>
-    </view>
-    <view class="share-actions">
-      <button plain="true" open-type="share" class="btn-share-wexin btn-action">
-        <view class="vip_wechat slds-icon slds-icon--small slds-m-right--x-small"></view>
-        <view class="text">微信好友</view>
-      </button>
-      <view class="btn-share-friend-circle btn-action">
-        <view class="vip_wechat_moments slds-icon slds-icon--small slds-m-right--x-small"></view>
-        <view class="text">朋友圈</view>
-      </view>
     </view>
   </view>
   <view class="pop-mask" wx:if="{{showPop}}" @tap="closePop"></view>

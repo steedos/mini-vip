@@ -76,9 +76,10 @@
 			if (this.allow_load) {
 				const options = {
 					$filter: 'featured eq true',
+					$orderby: 'featured desc,created desc',
 					$expand: 'owner($select=name),space($select=name,avatar)',
 					$count: true,
-					$select: 'name,summary,description,comment_count,enable_comment,images,video,audio,type,mini_type,space,star_count,owner',
+					$select: 'name,summary,description,comment_count,enable_comment,images,video,categories,featured,type,mini_type,space,star_count,owner',
 					$skip: skip,
 					$top: DATA_LENGTH
 				}
