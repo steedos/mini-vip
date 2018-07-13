@@ -1074,7 +1074,8 @@
       let share_response = await this.$parent.query("vip_share_response", query_options, this.space_id);
       let values = {
         name: name,
-        share: this.share_id
+        share: this.share_id,
+        product: this.product_id
       };
       if(share_response && share_response.value && share_response.value.length){
         console.log("===============respondShare============update");
