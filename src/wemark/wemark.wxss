@@ -61,7 +61,7 @@
 	padding: 1em;
 	font-size:17px;
 	background:#f1f4f6;
-  border-radius: 5px;
+  	border-radius: 5px;
 }
 .wemark_block_ul_li_p, .wemark_block_ol_li_p {
 	margin-left: 10px;
@@ -94,7 +94,7 @@
 }
 .wemark_block_code{
 	padding:10px;
-	font-size:28rpx;
+	font-size:17px;
 	line-height: 1.5em;
 	border:1px solid #f0f0f0;
 	white-space: pre;
@@ -174,4 +174,12 @@
 }
 .wemark_navigator.wemark_image_navigator .wemark_image_wrapper .wemark_inline_image_alt {
   color:#00a3f5;
+}
+.wemark_block_blockquote_p .wemark_image_wrapper:first-child{
+	margin: -15px!important;
+}
+
+.wemark_block_blockquote_p .wemark_image_wrapper:first-child .wemark_inline_image{
+	border-top-left-radius:5px;
+	border-top-right-radius: 5px; 
 }
