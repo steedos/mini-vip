@@ -459,6 +459,7 @@ export default class VIP extends wepy.app {
     let current_customer = my_customers.find((customer)=>{
       return customer.space == e.space_id
     });
+    console.log("=============current_customer==================", current_customer);
     if(!current_customer){
       let values = {
         name: name,
@@ -471,7 +472,8 @@ export default class VIP extends wepy.app {
         values.share = e.share_id;
       }
       console.log("===============respondShare============values", values);
-      await this.insert("vip_customers", values, e.space_id);
+      let customer = await this.insert("vip_customers", values, e.space_id);
+      this.globalData.my_customers.push(customer);
     }
   }
 
