@@ -10,6 +10,8 @@
 ### 微信扫码访问小程序
 ![界面效果图](docs/images/qrcode.jpg)
 
+### 动态界面
+华炎微站的后台管理界面，均根据服务端配置的数据模型自动生成，当服务端的数据模型发生变更时，无需修改小程序端的代码。
 
 # 服务端
 
@@ -48,3 +50,5 @@ Creator智能开发平台从业务蓝图、界面元素、数据关系三个维�
 - 项目源码：https://github.com/steedos/creator/
 - 使用说明：https://www.steedos.com/cn/help/creator/
 
+### 扫码加入华炎微站开发群
+![开发群](docs/images/qrcode_me.jpg)
