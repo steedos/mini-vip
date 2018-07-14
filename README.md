@@ -1,7 +1,8 @@
-# 华炎微站、微商城
+# 华炎微站、微商城小程序
 
 华炎微站是华炎公司最新发布的的自助式微站解决方案，帮助用户0成本搭建移动互联网时代的移动信息门户和电子商务平台。
 
+华炎微站的小程序端和服务端的源码都是完全公开的。并已经服务于多个大型项目。
 
 ### 界面效果图
 ![界面效果图](docs/images/ui1.jpg)
@@ -12,7 +13,7 @@
 
 # 服务端
 
-华炎微站服务端基于Creator快速开发平台构建。可通过一下地址访问数据模型设计。
+华炎微站服务端基于Creator快速开发平台构建。可通过以下地址访问数据模型设计。
 
 ### 商户
 - [商户](https://github.com/steedos/creator/blob/master/packages/steedos-creator/models/space.coffee)
@@ -46,4 +47,4 @@
 Creator智能开发平台从业务蓝图、界面元素、数据关系三个维度，对用户需求进行建模，再根据设计好的业务模型自动生成手机、电脑、平板三合一管理信息管理系统。
 - 项目源码：https://github.com/steedos/creator/
 - 使用说明：https://www.steedos.com/cn/help/creator/
-项目合作，请咨询 400-820-1612
+
