@@ -6,11 +6,6 @@
     font-family: PingFangSC-Light,helvetica,'Heiti SC';
   }
 
-  view,text{
-    font-family: PingFangSC-Light,helvetica,'Heiti SC';
-    font-size: 29rpx;
-    color: #333;
-  }
   .page {
     margin-bottom: 200rpx;
     position: relative;
@@ -68,7 +63,7 @@
   .goods-info .name{
     font-weight:bold;
     margin-bottom:32rpx;
-    font-size: 36rpx;
+    font-size: 19px;
     line-height: 52rpx;
     max-height:100rpx;
     overflow:hidden;
@@ -897,7 +892,7 @@
               <import src="../../wemark/wemark.wxml"/>
               <template class="desc" is="wemark" data="{{...wemark}}"></template>
             </view>
-            <view class="weui-article__c" wx:if="{{withoutMarkdownImages && withoutMarkdownImages.length>1}}">
+            <view class="weui-article__c" wx:if="{{withoutMarkdownImages}}">
               <view class="flex-images-box">
                 <repeat for="{{withoutMarkdownImages}}" key="index" index="index" item="item">
                   <image src="{{util.formatImageUrl(item, baseUrl)}}" mode="widthFix" @tap="previewImage({{item}})" class="flex-image {{(index + 1)%3 > 0 ? 'flex-image-item' : 'flex-image-last'}}"/>
@@ -1113,7 +1108,7 @@
         return cartProductCount
       },
       withoutMarkdownImages () {
-        // 从this.post.images中排除this.post.description的markdown语法中已有的图片
+        // 从this.post.images中排除this.product.description的markdown语法中已有的图片
         if(!this.product || !this.product.images || !this.product.images.length){
           return []
         }
