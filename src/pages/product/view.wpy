@@ -831,7 +831,7 @@
           <!-- <text class="page__desc">{{product.description}}</text> -->
           <text class="price">￥{{product.default_price}}</text>
           <view class="cost_price" wx:if="{{product.compared_price && product.compared_price!=product.default_price}}">￥{{product.compared_price}}</view>
-          <navigator wx:if="{{product.gift}}" class="btn-share" url="share?product_id={{product._id}}&space_id={{space_id}}&product_name={{product.name}}&product_gift={{product.gift}}">
+          <navigator wx:if="{{vip_store.cash_back_enabled}}" class="btn-share" url="/pages/share?type=product&product_id={{product._id}}&space_id={{space_id}}&percentage={{vip_store.cash_back_percentage}}&period={{vip_store.cash_back_period}}&title={{product.name}}">
             <text>分享有礼</text>
           </navigator>
           <view class="brand" wx:if="{{brand.name}}">
@@ -1028,11 +1028,13 @@
       collectBackImage: '/static/images/ic_menu_choice_nor.png',
       wemark: {},
       share_id: null,
-      product_id: null
+      product_id: null,
+      vip_store: null,
     }
 
     async onLoad (e) {
       console.log('===============onLoad======product===========', e)
+      await this.$parent.login(e);
       this.product_id = e.product_id;
       this.space_id = e.space_id;
       this.share_id = e.share_id;
@@ -1052,8 +1054,12 @@
           imagePathPrefix: `${baseUrl}/api/files/images/`
         });
       }
-      this.respondShare();
+      await this.loadStore();
       this.$apply();
+    }
+
+    async loadStore() {
+      this.vip_store = await this.$parent.get("vip_store", this.space_id, this.space_id, {$select: 'cash_back_enabled,cash_back_percentage,cash_back_period'});
     }
 
     async respondShare() {
@@ -1062,16 +1068,16 @@
       }
       let userId = this.$parent.globalData.user._id;
       let name = this.$parent.globalData.user.name;
-      let share = await this.$parent.get("vip_share", this.share_id, this.space_id, {$select: 'owner'});
-      if(share.owner == userId){
-        // 分享的发起人不可以响应分享拿礼物
-        return;
-      }
+      // let share = await this.$parent.get("vip_share", this.share_id, this.space_id, {$select: 'owner'});
+      // if(share.owner == userId){
+      //   // 分享的发起人不可以响应分享拿礼物
+      //   return;
+      // }
       const query_options = {
-        $filter: `share eq '${this.share_id}' and owner eq '${userId}'`,
+        $filter: `owner eq '${userId}'`,
         $select: 'name'
       };
-      let share_response = await this.$parent.query("vip_share_response", query_options, this.space_id);
+      let vip_customers = await this.$parent.query("vip_customers", query_options, this.space_id);
       let values = {
         name: name,
         share: this.share_id,

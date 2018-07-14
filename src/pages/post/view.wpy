@@ -314,6 +314,7 @@ export default class PostView extends wepy.page {
 
   async onLoad(e) {
     console.log("==post/view=====onLoad================", e);
+    await this.$parent.login(e);
     this.editable = e.editable;
     wepy.showLoading({
       title: '加载中',
@@ -321,8 +322,6 @@ export default class PostView extends wepy.page {
     });
     this.space_id = e.space_id;
     if(e.space_id){
-      await this.$parent.login(e.space_id);
-
       const options = {
         $filter: `_id eq '${e.space_id}'`,
         $expand: 'space($select=name)',
