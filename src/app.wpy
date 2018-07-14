@@ -127,6 +127,7 @@ setStore(store)
 export default class VIP extends wepy.app {
   config = {
     pages: [
+//      'pages/tabbar_index',
       'pages/home/store',
       'pages/index',
       'pages/apps',
@@ -188,6 +189,7 @@ export default class VIP extends wepy.app {
       'pages/cart/checkout',
       'pages/address/list',
       'pages/order/list',
+      'pages/share',
     ],
     tabBar: {
       color: '#666',
@@ -354,7 +356,7 @@ export default class VIP extends wepy.app {
     }
   }
 
-  async login() {
+  async login(e) {
     const self = this
     let globalData = self.globalData
     let needs_login = false
@@ -419,6 +421,9 @@ export default class VIP extends wepy.app {
       globalData.user.sex = res.sex
       globalData.user.birthdate = res.birthdate
       globalData.my_spaces = res.my_spaces
+      globalData.my_customers = res.my_customers
+      console.log("===============login============globalData.my_customers", globalData.my_customers);
+
 
       req.header(header)
 
@@ -439,6 +444,34 @@ export default class VIP extends wepy.app {
         'X-Auth-Token': globalData.user.auth_token,
       }
       req.header(header)
+    }
+    await this.respondShare(e);
+  }
+
+  async respondShare(e) {
+    if(!e || !e.space_id){
+      return;
+    }
+    let userId = this.globalData.user._id;
+    let name = this.globalData.user.name;
+    let mobile = this.globalData.user.mobile;
+    let my_customers = this.globalData.my_customers;
+    let current_customer = my_customers.find((customer)=>{
+      return customer.space == e.space_id
+    });
+    if(!current_customer){
+      let values = {
+        name: name,
+        space: e.space_id,
+        mobile: mobile
+      };
+      // 其他cash_back_percentage/cash_back_period等字段通过vip_customers的befor.insert增加
+      if(e.share_id){
+        values.from = e.share_from;
+        values.share = e.share_id;
+      }
+      console.log("===============respondShare============values", values);
+      await this.insert("vip_customers", values, e.space_id);
     }
   }
 

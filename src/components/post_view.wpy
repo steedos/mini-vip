@@ -1,0 +1,572 @@
+<style lang="less">
+  @import '../wemark/wemark.wxss';
+  page {
+    background-color:#F0EFF5;
+  }
+
+  .body_color{
+    background-color:#fff;
+  }
+  .page__bd {
+    padding-bottom: 65px;
+  }
+  .page {
+    display:flex;
+    flex-direction:column;
+    position:absolute;
+    top:0;
+    bottom:0;
+    left: 0;
+    right: 0;
+
+    .body {
+      flex: 1;
+      overflow: auto;
+    }
+  }
+  .weui-article__h1 {
+    font-size: 22px;
+    font-weight: bold;
+  }
+  .weui-article__c {
+    margin-bottom: 10px;
+  }
+
+  .weui-article {
+    border-bottom:1px solid #dadada;
+    font-size:17px;
+    color: #353535;
+  }
+
+  .article-section {
+    margin: 0;
+    .article-p {
+      padding:0 0 0.8em;
+      margin: 0;
+    }
+  }
+
+  .tab-bar {
+    font-size: 15px;
+    color: #888;
+    display: flex;
+    position: fixed;
+    box-sizing: border-box;
+    z-index: 500;
+    bottom: 0;
+    height: auto;
+    width: 100%;
+    background-color: #F7F7FA;
+    align-items: center;
+
+    &.special-tab {
+      .star-btn {
+        justify-content: center;
+      }
+      .more-action-btn {
+        justify-content: flex-end;
+      }
+    }
+
+    .action {
+      flex: 1;
+      padding:0 30rpx;
+      font-size:15px;
+      line-height:inherit;
+      width:auto;
+      height:auto;
+      border:none;
+      line-height:50px;
+      display: flex;
+      align-items: center;
+
+      .slds-icon {
+        width: 1rem;
+        height: 1rem;
+        margin-right: 0.25rem;
+      }
+    }
+    .slds-icon {
+      display: inline-block;
+    }
+    .share-btn {
+      justify-content: flex-start;
+    }
+    .comment-btn {
+      justify-content: center;
+    }
+    .star-btn {
+      justify-content: flex-end;
+
+      &.is-stared {
+        color: #018cc6;
+      }
+    }
+    .text {
+      display: inline-block;
+    }
+  }
+
+  .image {
+    display: block;
+    width:30px;
+    height:30px;
+    border-radius:4px;
+
+  }
+  .cover{
+    width: 100%;
+    height:480rpx;
+  }
+  .flex-images-box{
+    display: flex;
+    flex-flow: row wrap;
+    align-content: flex-start;
+    .flex-image{
+      flex:0 0 32%;
+      height:160rpx;
+      margin:0 2% 2% 0;
+      &.flex-image-last{
+        margin-right: 0;
+      }
+    }
+  }
+  .slide-image{
+    width: 100%;
+    height:480rpx;
+  }
+  video{
+    width:100%;
+  }
+  image{
+    display: block;
+  }
+  video{
+    display: block;
+  }
+  .comment-area {
+    border-top:1px solid #dadada;
+    margin-top:6px;
+    .comment-title {
+      padding: 5px 15px;
+      border-bottom:1px solid #dadada;
+    }
+    .comment-container {
+      padding: 5px 15px;
+      display: flex;
+      border-bottom:1px solid #dadada;
+
+      .avatar-container {
+        width: 30px;
+        margin-top:10px;
+        .avatar {
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
+        }
+      }
+      .detail-container {
+        flex: 1;
+        margin-left: 10px;
+        padding-bottom: 10px;
+
+        .user-name {
+          height: 30px;
+          line-height: 30px;
+          font-size: 13px;
+          color: #333;
+        }
+        .comment-time{
+          font-size: 11px;
+          color: #929292;
+          margin-bottom: 2px;
+        }
+        .comment-detail {
+          line-height: 20px;
+          color: #5d5d5d;
+          word-wrap: break-word;
+          word-break: normal;
+        }
+      }
+    }
+  }
+  .weui-cell__bd{
+    .space_name{
+      height: 30px;
+      line-height: 30px;
+      font-size: 13px;
+      color: #333;
+    }
+    .post-time{
+      font-size: 11px;
+      color: #929292;
+      margin-bottom: 2px;
+    }
+  }
+</style>
+<template>
+  <view class="page border-top-1px" wx:if="{{is_loaded}}">
+    <view class="page__bd">
+      <navigator class="post-header body_color" url="../space/index?space_id={{space_id}}">
+        <view class="weui-cell weui-cell_access">
+          <view class="weui-cell__hd">
+            <image wx:if="{{avatar}}" class="image slds-icon slds-icon--small slds-m-right--x-small" src="{{util.formatImageUrl(avatar, baseUrl)}}"></image>
+            <view wx:else class="slds-icon-standard-channel-programs slds-icon slds-icon--small slds-m-right--x-small"></view>
+          </view>
+          <view class="weui-cell__bd">
+            <view class="space-name">{{space_name}}</view>
+            <view class="post-time">{{util.formatDate(post.created)}}</view>
+          </view>
+        </view>
+      </navigator>
+      <block wx:if="{{post.video}}">
+        <video src="{{post.video_url}}" objectFit="contain" class="cover"  direction= '90' custom-cache="{{false}}"></video>
+      </block>
+      <block wx:elif="{{withoutMarkdownImages && withoutMarkdownImages.length == 1}}">
+        <image src="{{util.formatImageUrl(withoutMarkdownImages[0], baseUrl)}}" mode="aspectFill" @tap="previewImage({{item}})" class="cover"/>
+      </block>
+      <view class="weui-article body_color">
+        <view class="weui-article__section article-section">
+          <view class="weui-article__c" wx:if="{{withoutMarkdownImages && withoutMarkdownImages.length>1}}">
+            <view class="flex-images-box">
+              <repeat for="{{withoutMarkdownImages}}" key="index" index="index" item="item">
+                <image src="{{util.formatImageUrl(item, baseUrl)}}" mode="aspectFill" @tap="previewImage({{item}})" class="flex-image {{(index + 1)%3 > 0 ? 'flex-image-item' : 'flex-image-last'}}"/>
+              </repeat>
+            </view>
+          </view>
+          <view class="weui-article__h1">{{post.name}}</view>
+          <view class="weui-article__p article-p">
+            <!-- <text space="emsp">{{post.description}}</text> -->
+            <import src="../wemark/wemark.wxml"/>
+            <template is="wemark" data="{{...wemark}}"></template>
+          </view>
+        </view>
+      </view>
+      <view class="comment-area body_color">
+        <view class="comment-title">
+          评论({{post_comments.length}})
+        </view>
+        <repeat for="{{post_comments}}" key="index" index="index" item="comment">
+          <view class="comment-container">
+            <view class="avatar-container">
+              <image class="avatar" mode="aspectFill" src="{{comment.owner.profile.avatar}}"></image>
+            </view>
+            <view class="detail-container">
+              <view class="user-name">{{comment.owner.name}}</view>
+              <view class="comment-time">{{util.formatDate(comment.created)}}</view>
+              <view class="comment-detail">{{comment.name}}</view>
+            </view>
+          </view>
+        </repeat>
+      </view>
+    </view>
+    <view class="tab-bar border-top-1px {{isSpaceAdmin ? 'special-tab' : ''}}">
+      <button plain="true" open-type="share" data-post-name="{{post.name}}" data-post-id="{{post._id}}" data-post-space="{{post.space}}" class="share action share-btn">
+        <view class="vip_share-default slds-icon slds-icon--small slds-m-right--x-small"></view>
+        <view class="text">转发</view>
+      </button>
+      <view class="comment-btn action" @tap="writeComment">
+        <view class="vip_comment-default slds-icon slds-icon--small slds-m-right--x-small"></view>
+        <view class="text">评论</view>
+      </view>
+      <view class="star action star-btn {{star_id ? 'is-stared' : ''}}" @tap="starPost">
+        <view class="vip_star-{{star_id ? 'blue' : 'default'}} slds-icon slds-icon--small slds-m-right--x-small"></view>
+        <view class="text">{{post.star_count || 0}}</view>
+      </view>
+      <view class="more-action-btn action" @tap="moreAction" wx:if="{{isSpaceAdmin}}">
+        <view class="vip_more slds-icon slds-icon--small slds-m-right--x-small"></view>
+        <view class="text">更多</view>
+      </view>
+    </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy';
+  import req from '@/network';
+  import { baseUrl } from '@/config';
+  import util from '../wxs/util.wxs';
+  import wemark from '../wemark/wemark';
+  export default class PostView extends wepy.component {
+    data = {
+      post_id: null,
+      indicatorDots: true,
+      autoplay: true,
+      interval: 5000,
+      duration: 1000,
+      post: null,
+      baseUrl: baseUrl,
+      space_id: '',
+      space_name: '',
+      avatar: '',
+      is_loaded: false,
+      editable: false,
+      star_id: '',
+      value: '',
+      post_comments: [],
+      isSpaceAdmin: false,
+      wemark: {}
+    };
+
+    props = {
+      args: {
+        type: Object
+      }
+    };
+
+    watch = {
+      args: async function (newValue, oldValue) {
+        const e = newValue;
+        console.log("==post/view=====onLoad================", e);
+        this.editable = e.editable;
+        wepy.showLoading({
+          title: '加载中',
+          mask: true
+        });
+        this.space_id = e.space_id;
+        if(e.space_id){
+          await this.$parent.$parent.login(e.space_id);
+
+          const options = {
+            $filter: `_id eq '${e.space_id}'`,
+            $expand: 'space($select=name)',
+            $count: true,
+            $select: 'avatar,space'
+          }
+          const res = await this.$parent.$parent.query('vip_store', options, 'guest')
+
+          if (res.value[0]) {
+            this.space_name = res.value[0].space.name
+            this.avatar = res.value[0].avatar
+          }
+        }
+        if(e.record_id){
+          this.post_id = e.record_id;
+          await this.loadPost();
+          await this.isPostStar();
+          await this.loadPostComments()
+        }
+
+        this.isSpaceAdmin = this.$parent.$parent.isSpaceAdmin(this.space_id);
+
+        this.is_loaded = true
+
+        console.log('this.is_loaded', this.is_loaded);
+
+        this.$apply()
+        wepy.hideLoading();
+      }
+    }
+
+    async onLoad(e) {
+
+    }
+
+    async onShow() {
+      this.loadPostComments();
+    }
+
+    async refresh(action) {
+      if(action == "remove"){
+        this.goBackAfterRemove();
+        return;
+      }
+      await this.loadPost();
+      await this.loadPostComments();
+      wepy.stopPullDownRefresh();
+    }
+
+    async loadPostComments() {
+      const post_id = this.post_id;
+      const options = {
+        $filter: `post_id eq '${post_id}'`,
+        $count: true,
+        $expand: 'owner($select=profile,name)'
+      };
+      const result = await this.$parent.$parent.query('post_comments', options, 'guest');
+      if (result && result.value) {
+        this.post_comments = result.value;
+        this.$apply()
+      }
+    }
+
+    async loadPost(){
+      var post = await this.$parent.$parent.get("post", this.post_id, this.space_id)
+      this.post = post;
+      this.space_id = post.space;
+      let postMd = this.post && this.post.description;
+      //支持标准的图片markdown，格式为："![图片描述](http://192.168.0.195:5000/api/files/images/s8589uhysxKk7CEnp)";
+      //如果传入imagePathPrefix，则可以进一步支持"![图片描述](s8589uhysxKk7CEnp)"
+      if(postMd){
+        wemark.parse(postMd, this, {
+          name: 'wemark',
+          imagePathPrefix: `${baseUrl}/api/files/images/`
+        });
+      }
+      this.$apply();
+    };
+
+    async isPostStar() {
+      const user = this.$parent.$parent.globalData.user._id;
+      const post_id = this.post_id;
+      const space_id = this.space_id;
+      const options = {
+        $filter: `user eq '${user}' and star_post eq '${post_id}'`
+      };
+      const result = await this.$parent.$parent.query('user_star', options, space_id);
+      if (result && result.value && result.value[0]) {
+        console.log('isSpaceStar..............')
+        this.star_id = result.value[0]._id;
+        this.$apply();
+      }
+    }
+
+    goBackAfterRemove() {
+      const pages = getCurrentPages();
+      const prevPage = pages[pages.length - 3];
+      if (prevPage.refresh) {
+        prevPage.refresh()
+      }
+      wepy.navigateBack({
+        delta: 1
+      })
+    }
+
+    // 分享
+    onShareAppMessage(res) {
+      const post_name = this.post.name
+      return {
+        title: post_name,
+        path: `pages/post/view?space_id=${this.space_id}&post_id=${this.post._id}`
+      };
+    }
+
+    // 上拉刷新
+    onPullDownRefresh() {
+      this.refresh();
+    }
+
+    computed = {
+      withoutMarkdownImages () {
+        // 从this.post.images中排除this.post.description的markdown语法中已有的图片
+        if(!this.post || !this.post.images || !this.post.images.length){
+          return []
+        }
+        let md = this.post.description;
+        if(md && md.length){
+          let mdImages = md.match(/\!\[.*?\]\((.+?)\)/gm);//找出所有格式为![...](...)的图片字符串
+          if(mdImages && mdImages.length){
+            let strMdImages = mdImages.join(",");
+            console.log("withoutMarkdownImages============================", strMdImages);
+            return this.post.images.filter((n)=>{
+              let tempReg = new RegExp(`\(.*?${n}.*?\)`);//匹配图片markdown字符串中的括号里面是否包含字符n
+              return !tempReg.test(strMdImages);
+            })
+          }
+          else{
+            return this.post.images;
+          }
+        }
+        else{
+          return this.post.images;
+        }
+      }
+    };
+
+    wxs = {
+      util: util
+    };
+
+    methods = {
+      previewImage(image, event){
+        var baseUrl = this.baseUrl;
+        var current = `${baseUrl}/api/files/images/${image}`;
+        var urls = this.post.images.map((n)=>{
+          return  `${baseUrl}/api/files/images/${n}`;
+        });
+        wx.previewImage({
+          current: current,
+          urls: urls
+        });
+      },
+      editPost() {
+        let url = `/pages/record/edit?space_id=${this.space_id}&action=edit&object_name=post&record_id=${this.post_id}&fields=name,summary,description,images,video,type`;
+        wepy.navigateTo({
+          url: url
+        });
+      },
+      async starPost() {
+        const space_id = this.space_id;
+        const post_id = this.post_id;
+        const user = this.$parent.$parent.globalData.user._id;
+        const data = {
+          user: user,
+          star_post: post_id,
+          owner: user
+        }
+        if (this.star_id) {
+          await this.$parent.$parent.delete('user_star', this.star_id, space_id);
+          this.star_id = ''
+        } else {
+          const result = await this.$parent.$parent.insert('user_star', data, space_id)
+          if (result.value && result.value.length) {
+            this.star_id = result.value[0]._id;
+          }
+        }
+        const post = await this.$parent.$parent.get('post', this.post._id, this.post.space);
+        this.post = post;
+        this.$apply()
+      },
+      async submitComment(e) {
+        const comment = e.detail.value.comment;
+        const space_id = this.space_id;
+        if (comment) {
+          const data = {
+            name: comment,
+            post_id: this.post_id
+          }
+          await this.$parent.$parent.insert('post_comments', data, space_id);
+          await this.loadPostComments();
+          this.setData({
+            value : ''
+          });
+        }
+      },
+      writeComment() {
+        wx.navigateTo({
+          url: `../comment/index?space_id=${this.space_id}&object_name=post_comments&key_name=post_id&_id=${this.post_id}`
+        })
+      },
+      async moreAction() {
+        const res = await wepy.showActionSheet({itemList: ['编辑', '删除']});
+        console.log(res)
+        switch (res.tapIndex) {
+          case 0:
+            if (this.isSpaceAdmin) {
+              let url = `/pages/record/edit?space_id=${this.space_id}&action=edit&object_name=post&record_id=${this.post_id}&fields=name,summary,description,images,video,type`;
+              wepy.navigateTo({
+                url: url
+              });
+            }
+            break;
+          case 1:
+            if (this.isSpaceAdmin) {
+              await this.$parent.$parent.delete('post', this.post_id, this.space_id);
+              const pages = getCurrentPages();
+              const prevPage = pages[pages.length - 2];
+              await prevPage.refresh();
+              wx.showToast({
+                title: '删除成功',
+                icon: 'success',
+                duration: 2000
+              })
+              setTimeout(() => {
+                wx.navigateBack();
+              }, 100);
+            }
+          default:
+            break;
+        }
+      }
+    };
+  }
+</script>
