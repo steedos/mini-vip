@@ -127,6 +127,7 @@ setStore(store)
 export default class VIP extends wepy.app {
   config = {
     pages: [
+//      'pages/tabbar_index',
       'pages/home/store',
       'pages/index',
       'pages/apps',
