@@ -1,0 +1,151 @@
+<style lang="less">
+  .icon{
+    width:54rpx;
+    height: 54rpx;
+  }
+
+  .tabBar{
+    width:100%;
+    position: fixed;
+    bottom:0;
+    padding:10rpx;
+    margin-left:-4rpx;
+    background:#F7F7FA;
+    font-size:20rpx;
+    color:#8A8A8A;
+    box-shadow: 6rpx 6rpx 6rpx 6rpx #aaa;
+    z-index: 999;
+  }
+
+  .tabBar-item{
+    float:left;
+    width:25%;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  /*当前字体颜色*/
+  .tabBartext{
+    color:red;
+  }
+
+  .tab-bar_name{
+    font-size: 40rpx;
+  }
+
+  .tabbar-index {
+    .page{
+      margin-bottom: 35px
+    }
+  }
+
+</style>
+
+<template>
+  <view class="page tabbar-index">
+    <view class="page__bd">
+      object_name is {{args.object_name}}
+      <block wx:if="{{args.object_name === 'post'}}">
+        <post_view :args.sync='args'></post_view>
+      </block>
+      <block wx:elif="{{args.object_name === 'post_list'}}">
+        <post_list></post_list>
+      </block>
+      <block wx:else>
+        wx:else{{args.object_name}}
+      </block>
+    </view>
+    <view class="tabBar">
+      <block wx:for="{{tabBar}}" wx:for-item="item" wx:key="tabBar">
+        <view class="tabBar-item" @tap="navigator" data-object="{{item.object_name}}" data-space="{{item.space_id}}" data-record="{{item.record_id}}" data-page="{{item.pagePath}}">
+          <!--<view><image class="icon" src='{{item.iconPath}}'></image></view>-->
+          <view class="tab-bar_name {{item.current== 1 ? 'tabBartext' :''}}">{{item.text}}</view>
+        </view>
+      </block>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import _ from 'underscore'
+  import post_view from '../components/post_view';
+  import post_list from '../components/post_list';
+
+  export default class BIndex extends wepy.page {
+
+    config = {
+      navigationBarTitleText: '首页',
+      enablePullDownRefresh: true
+    };
+
+    components = {
+      post_view: post_view,
+      post_list: post_list
+    };
+
+    onPullDownRefresh() {
+      console.log('onPullDownRefresh........................')
+    }
+
+    data = {
+      object_name: '',
+      tabBar: [],
+      args: {}
+    }
+
+    onLoad(e){
+      this.tabBar = [
+        { "current":0,
+          "object_name": 'post',
+          "space_id": "2C33qQpFoEsFtwCFW",
+          "record_id": 'akG7xetcWGhxuQ2kq',
+          "iconPath": "/imgs/home.png",
+          "selectedIconPath": "/imgs/home_on.png",
+          "text": "POST"
+        },
+        { "current":0,
+          "object_name": 'post',
+          "space_id": "2C33qQpFoEsFtwCFW",
+          "record_id": 'RcRrrM44bbYWZuuhE',
+          "iconPath": "/imgs/home.png",
+          "selectedIconPath": "/imgs/home_on.png",
+          "text": "POST2"
+        },
+        {
+          "current": 0,
+          "object_name": 'post_list',
+          "space_id": "2C33qQpFoEsFtwCFW",
+          "iconPath": "/imgs/message.png",
+          "selectedIconPath": "/imgs/message_on.png",
+          "text": "POST List"
+
+        },
+        {
+          "current": 0,
+          "space_id": "2C33qQpFoEsFtwCFW",
+          "pagePath": "/pages/space/index",
+          "iconPath": "/imgs/buy.png",
+          "selectedIconPath": "/imgs/buy_on.png",
+          "text": "商城"
+        }
+      ];
+
+      this.$apply()
+    }
+
+    methods = {
+      navigator(e) {
+        if(e.currentTarget.dataset.page){
+          wx.navigateTo({url: e.currentTarget.dataset.page + '?space_id=' + e.currentTarget.dataset.space});
+        }else{
+          this.args.object_name = e.currentTarget.dataset.object;
+          this.args.space_id = e.currentTarget.dataset.space;
+          this.args.record_id = e.currentTarget.dataset.record;
+          wx.setNavigationBarTitle({title: this.args.object_name + `(${this.args.record_id})`})
+          this.$apply();
+        }
+      }
+    }
+  }
+</script>
