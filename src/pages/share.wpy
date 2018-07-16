@@ -52,48 +52,6 @@
     font-weight:bold;
     font-size:45rpx;
   }
-
-  .share-actions{
-    display:flex;
-    align-items:center;
-    justify-content: center;
-    height:300rpx;
-    margin-bottom:80rpx;
-    .btn-action{
-      width:280rpx;
-      height:300rpx;
-      .text{
-        width:100%;
-        text-align:center;
-        color:#333;
-        font-size:40rpx;
-      }
-    }
-    .btn-share-wexin{
-      border: none;
-      margin: 0px;
-    }
-    .slds-icon{
-      background-position:center;
-      width:100rpx;
-      height:100rpx;
-      padding:20rpx;
-      background-color:#3ca134;
-      background-size:80rpx;
-      border-radius:100%;
-      margin:0 auto;
-    }
-    .btn-share-wexin{
-      .text{
-        margin-top:-4rpx;
-      }
-    }
-    .btn-share-friend-circle{
-      .text{
-        margin-top:16rpx;
-      }
-    }
-  }
   .share-list{
     text-align: center;
     margin-top:-30rpx;
@@ -175,6 +133,56 @@
       transform: translateY(0);
     }
   }
+  .tab-bar {
+    font-size: 15px;
+    display: flex;
+    position: fixed;
+    box-sizing: border-box;
+    z-index: 500;
+    bottom: 0;
+    height: auto;
+    width: 100%;
+    background-color: #fff;
+    color: #6d6d78;
+    align-items: center;
+
+    .btn {
+      flex-direction:column;
+      flex: 1;
+      padding:0 30rpx;
+      font-size:15px;
+      line-height:inherit;
+      width:auto;
+      height:auto;
+      border: none!important;
+      line-height:50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .slds-icon {
+        width: 1rem;
+        height: 1rem;
+        margin-right: 0.25rem;
+        background-color:#3ca134;
+        border-radius:50%;
+        padding:8px;
+        background-size:20px;
+        background-position:center;
+      }
+    }
+    .slds-icon {
+      display: inline-block;
+      margin-bottom:-13px;
+      margin-top:8px;
+    }
+    .text {
+      display: inline-block;
+      color: #6d6d78;
+      font-size:11px;
+      margin-bottom:-12px;
+    }
+  }
 </style>
 <template>
 <view class="page" wx:if="{{is_loaded}}">
@@ -219,15 +227,15 @@
         </view>
       </block>
     </view>
-    <view class="share-actions">
-      <button plain="true" open-type="share" class="btn-share-wexin btn-action">
-        <view class="vip_wechat slds-icon slds-icon--small slds-m-right--x-small"></view>
-        <view class="text">微信好友</view>
-      </button>
-      <view class="btn-share-friend-circle btn-action">
-        <view class="vip_wechat_moments slds-icon slds-icon--small slds-m-right--x-small"></view>
-        <view class="text">朋友圈</view>
-      </view>
+  </view>
+  <view class="tab-bar border-top-1px">
+    <button open-type="share" class="btn btn-share-wexin" type="default" plain="{{true}}">
+      <view class="vip_wechat slds-icon slds-icon--small slds-m-right--x-small"></view>
+      <view class="text">微信好友</view>
+    </button>
+    <view class="btn btn-share-friend-circle" @tap="shareToFriendCircle">
+      <view class="vip_wechat_moments slds-icon slds-icon--small slds-m-right--x-small"></view>
+      <view class="text">朋友圈</view>
     </view>
   </view>
   <view class="pop-mask" wx:if="{{showPop}}" @tap="closePop"></view>
