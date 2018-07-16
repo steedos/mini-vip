@@ -14,13 +14,33 @@
     text-align:center;
     color:#666;
     margin-bottom:20rpx;
-    font-size:40rpx;
+    font-size:17px;
   }
 
   .gift-value{
-    font-size:60rpx;
+    font-size:25px;
     color:#ff9800;
     text-align:center;
+  }
+  .gift-period{
+    text-align:center;
+    color:#666;
+    font-size:17px;
+    margin-top:10rpx;
+  }
+
+  .share-store{
+    margin-bottom:100rpx;
+    .share-title{
+      margin-bottom:10rpx;
+      font-size: 17px;
+      text-align: center;
+      color:#666;
+    }
+    image{
+      display: block;
+      height: 580rpx;
+    }
   }
 
   .btn-share{
@@ -83,7 +103,7 @@
         color: #666;
       }
       .share-list-sum{
-        font-size:32rpx;
+        font-size:17px;
         color: #999;
       }
     }
@@ -159,19 +179,16 @@
 <template>
 <view class="page" wx:if="{{is_loaded}}">
   <view class="page__hd">
-    <view class="gift-label">每成功邀请一位新人成交，可获得他</view>
-    <view class="gift-value">未来{{period}}天内每笔交易{{percentage * 100}}%的返利</view>
+    <view class="gift-label">您邀请的用户在本商城成交，您可获得</view>
+    <view class="gift-value">每笔交易{{vip_store.cash_back_percentage * 100}}%的现金返现</view>
+    <view class="gift-period">有效期 {{vip_store.cash_back_period}} 天</view>
   </view>
   <view class="page__bd">
-    <view class="share-actions">
-      <button plain="true" open-type="share" class="btn-share-wexin btn-action">
-        <view class="vip_wechat slds-icon slds-icon--small slds-m-right--x-small"></view>
-        <view class="text">微信好友</view>
-      </button>
-      <view class="btn-share-friend-circle btn-action">
-        <view class="vip_wechat_moments slds-icon slds-icon--small slds-m-right--x-small"></view>
-        <view class="text">朋友圈</view>
+    <view class="share-store">
+      <view class="share-title">
+        {{vip_store.name}}
       </view>
+      <image src="{{util.formatImageUrl(vip_store.cover, baseUrl)}}" mode="widthFix" />
     </view>
     <view class="share-list">
       <view class="share-list-header">
@@ -202,6 +219,16 @@
         </view>
       </block>
     </view>
+    <view class="share-actions">
+      <button plain="true" open-type="share" class="btn-share-wexin btn-action">
+        <view class="vip_wechat slds-icon slds-icon--small slds-m-right--x-small"></view>
+        <view class="text">微信好友</view>
+      </button>
+      <view class="btn-share-friend-circle btn-action">
+        <view class="vip_wechat_moments slds-icon slds-icon--small slds-m-right--x-small"></view>
+        <view class="text">朋友圈</view>
+      </view>
+    </view>
   </view>
   <view class="pop-mask" wx:if="{{showPop}}" @tap="closePop"></view>
   <view class="attr-pop {{showPop ? 'show' : ''}}">
@@ -229,7 +256,7 @@
  
   export default class ProductShare extends wepy.page {
 		config = {
-			navigationBarTitleText: '分享有礼'
+			navigationBarTitleText: '分享返现'
     };
 
     wxs = {
@@ -241,9 +268,7 @@
       space_id: null,
       type: null,
       product_id: null,
-      percentage: null,
-      period: null,
-      title: null,
+      vip_store: null,
       is_loaded: false,
       share_id: null,
       showPop: false,
@@ -255,9 +280,6 @@
       this.space_id = e.space_id;
       this.type = e.type;
       this.product_id = e.product_id;
-      this.percentage = e.percentage;
-      this.period = e.period;
-      this.title = e.title;
       if(this.type == "product" && !this.product_id){
         wx.showToast({
           title: "参数错误，未传入要分享的商品",
@@ -272,9 +294,9 @@
         });
         return;
       }
-      if(!this.type || !this.percentage  || !this.period){
+      if(!this.type || !this.space_id){
         wx.showToast({
-          title: "参数错误，没传入分享类型，返现比例，返现有效期",
+          title: "参数错误，没传入商城ID及分享类型",
           icon: "none"
         });
         return;
@@ -283,11 +305,19 @@
         title: '加载中',
         mask: true
       });
+      await this.loadStore();
       await this.addShare();
       // await this.loadShareResponse();
       this.is_loaded = true;
       this.$apply();
       wepy.hideLoading();
+    }
+
+    async loadStore() {
+      let query_options =  {
+        $select: 'name,cover,cash_back_enabled,cash_back_percentage,cash_back_period'
+      }
+      this.vip_store = await this.$parent.get("vip_store", this.space_id, this.space_id, query_options);
     }
 
     async addShare(){

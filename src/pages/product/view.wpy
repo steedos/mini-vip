@@ -831,8 +831,8 @@
           <!-- <text class="page__desc">{{product.description}}</text> -->
           <text class="price">￥{{product.default_price}}</text>
           <view class="cost_price" wx:if="{{product.compared_price && product.compared_price!=product.default_price}}">￥{{product.compared_price}}</view>
-          <navigator wx:if="{{vip_store.cash_back_enabled}}" class="btn-share" url="/pages/share?type=product&product_id={{product._id}}&space_id={{space_id}}&percentage={{vip_store.cash_back_percentage}}&period={{vip_store.cash_back_period}}&title={{product.name}}">
-            <text>分享有礼</text>
+          <navigator wx:if="{{vip_store.cash_back_enabled}}" class="btn-share" url="/pages/share?type=product&product_id={{product._id}}&space_id={{space_id}}">
+            <text>分享返现</text>
           </navigator>
           <view class="brand" wx:if="{{brand.name}}">
             <navigator url="../brandDetail/brandDetail?id={{brand.brandId}}">
@@ -1059,7 +1059,7 @@
     }
 
     async loadStore() {
-      this.vip_store = await this.$parent.get("vip_store", this.space_id, this.space_id, {$select: 'cash_back_enabled,cash_back_percentage,cash_back_period'});
+      this.vip_store = await this.$parent.get("vip_store", this.space_id, this.space_id, {$select: 'cash_back_enabled'});
     }
 
     async respondShare() {
