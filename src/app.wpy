@@ -449,6 +449,7 @@ export default class VIP extends wepy.app {
   }
 
   async respondShare(e) {
+    console.log("===============respondShare==========globalData=====", this.globalData);
     if(!e || !e.space_id){
       return;
     }
@@ -473,7 +474,9 @@ export default class VIP extends wepy.app {
       }
       console.log("===============respondShare============values", values);
       let customer = await this.insert("vip_customers", values, e.space_id);
-      this.globalData.my_customers.push(customer);
+      if(customer && customer.value && customer.value.length){
+        this.globalData.my_customers.push(customer.value[0]);
+      }
     }
   }
 
