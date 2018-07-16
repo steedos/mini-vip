@@ -175,7 +175,7 @@ export default class Posts extends wepy.page {
       this.type = e.type;
     }
     this.space_id = e.space_id;
-    await this.$parent.login(this.space_id);
+    await this.$parent.login(e);
     await this.loadData(e.category_id);
     if(e.category_id){     
       this.seleted_id =  _.findIndex(this.categories,{'_id':e.category_id})

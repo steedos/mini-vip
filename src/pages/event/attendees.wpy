@@ -77,7 +77,7 @@ export default class EventAttendees extends wepy.page {
       mask: true
     });
 
-    await this.$parent.login();
+    await this.$parent.login(e);
     if(e.space_id){
       this.$parent.globalData.space_id = e.space_id;
       this.space_id = e.space_id;

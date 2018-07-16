@@ -244,7 +244,7 @@
         mask: true
       });
 
-      await this.$parent.login(this.space_id);
+      await this.$parent.login(e);
       this.space_id = e.space_id;
       this.store_id = e.store_id;
       this.introducer = e.introducer;

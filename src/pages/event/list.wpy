@@ -82,7 +82,7 @@ export default class Events extends wepy.page {
     }
     
     this.creatable = this.$parent.recordAllowCreate("vip_event", this.space_id);
-    await this.$parent.login();
+    await this.$parent.login(e);
     await this.loadData();
   }
 

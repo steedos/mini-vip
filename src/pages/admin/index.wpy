@@ -86,8 +86,8 @@ export default class AdminIndex extends wepy.page {
       title: '加载中',
       mask: true
     });
+    await this.$parent.login(e);
     this.space_id = e.space_id;
-    await this.$parent.login(this.space_id);
     await this.loadStoreInfo();
     this.is_space_owner = this.$parent.isSpaceOwner(this.space_id, this.$parent.globalData.user._id);
 

@@ -457,7 +457,7 @@ export default class Checkout extends wepy.page {
     });
 
     console.log(e);
-    await this.$parent.login();
+    await this.$parent.login(e);
 
     if (e.object_name == 'vip_order' && e.record_id && e.space_id) {
       const order = await this.$parent.get('vip_order', e.record_id, e.space_id);
@@ -487,7 +487,7 @@ export default class Checkout extends wepy.page {
   }
 
   async onShow(e) {
-    await this.$parent.login();
+    await this.$parent.login(e);
     const user_id = this.$parent.globalData.user._id;
     const options = {
       $filter: `owner eq '${user_id}'`
