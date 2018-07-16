@@ -204,7 +204,7 @@
           我的邀请记录
         </view>
         <view class="share-list-sum">
-          共邀请到了{{responses.length}}位好友，获得0份奖励
+          共邀请到了{{responses.length}}位好友，获得{{cash_back_total}}元返现
         </view>
       </view>
       <block wx:if="{{responses.length}}">
@@ -280,7 +280,8 @@
       is_loaded: false,
       share_id: null,
       showPop: false,
-      responses: []
+      responses: [],
+      cash_back_total: 0
     }
 
     async onLoad (e) {
@@ -377,12 +378,16 @@
       const userId = this.$parent.globalData.user._id;
       const options = {
         $expand: 'owner($select=profile)',
-        $select: 'name,balance,owner',
-        $filter: `from eq ${userId} and space eq ${this.space_id}`
+        $select: 'name,cash_back_total,owner',
+        $filter: `from eq '${userId}' and space eq '${this.space_id}'`
       };
       const result = await this.$parent.query("vip_customers", options, this.space_id);
       if(result.value){
         this.responses = result.value;
+        this.cash_back_total = 0;
+        this.responses.forEach((n)=>{
+          this.cash_back_total += n.cash_back_total ? n.cash_back_total : 0;
+        });
       }
       else{
         wx.showToast({
