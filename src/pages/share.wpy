@@ -284,7 +284,6 @@
     }
 
     async onLoad (e) {
-      console.log('===============onLoad======product========77===', e)
       this.space_id = e.space_id;
       this.type = e.type;
       this.product_id = e.product_id;
@@ -315,7 +314,7 @@
       });
       await this.loadStore();
       await this.addShare();
-      // await this.loadShareResponse();
+      await this.loadShareResponse();
       this.is_loaded = true;
       this.$apply();
       wepy.hideLoading();
@@ -375,12 +374,13 @@
     }
   
     async loadShareResponse(){
+      const userId = this.$parent.globalData.user._id;
       const options = {
         $expand: 'owner($select=profile)',
-        $select: 'name,owner',
-        $filter: `share eq ${this.share_id}`
+        $select: 'name,balance,owner',
+        $filter: `from eq ${userId} and space eq ${this.space_id}`
       };
-      const result = await this.$parent.query("vip_share_response", options, this.space_id);
+      const result = await this.$parent.query("vip_customers", options, this.space_id);
       if(result.value){
         this.responses = result.value;
       }
@@ -397,7 +397,7 @@
     onShareAppMessage(res) {
       // imageUrl要使用即时动态生成的图片路径
       const name = this.$parent.globalData.user.name;
-      let title = `${name}分享了${this.title}`;
+      let title = `${name}分享了${this.vip_store.name}`;
       let path = `pages/product/view?space_id=${this.space_id}`;
       if(this.type == "product"){
         path += `&product_id=${this.product_id}`
