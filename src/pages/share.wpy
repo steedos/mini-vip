@@ -425,14 +425,19 @@
 
     methods = {
       async shareToFriendCircle(){
-        wepy.showLoading({
-          title: '加载中',
-          mask: true
+        wx.showToast({
+          title: "敬请期待",
+          icon: "none"
         });
-        // 这里写生成图片并显示在pop框中的逻辑
-        wepy.hideLoading();
-        this.showPop = true;
-        this.$apply();
+
+        // wepy.showLoading({
+        //   title: '加载中',
+        //   mask: true
+        // });
+        // // 这里写生成图片并显示在pop框中的逻辑
+        // wepy.hideLoading();
+        // this.showPop = true;
+        // this.$apply();
       },
       closePop() {
         this.showPop = false;
