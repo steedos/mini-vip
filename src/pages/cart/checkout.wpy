@@ -474,7 +474,14 @@ export default class Checkout extends wepy.page {
         this.isOrderOwner = (order.owner == this.$parent.globalData.user._id);
       }
     } else if (e.product) {
-      const product = JSON.parse(e.product);
+      const _id = JSON.parse(e.product)._id
+      const options = {
+        $filter: `_id eq '${_id}'`,
+        $select: 'name,default_price,compared_price,description,covers,images,avatar,categories,tags,vendor,status,space,gift'
+      }
+      let product = await this.$parent.query('vip_product', options, 'guest')
+      product = product.value[0]
+      product.count = e.product.count
       wx.setNavigationBarTitle({ title: '填写订单' });
       this.checkedProductList = [product];
       this.goodsTotalPrice = this.getgoodsTotalPrice(this.checkedProductList);

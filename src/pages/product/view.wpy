@@ -1178,7 +1178,9 @@
       },
       buyNow() {
         if (this.showPop) {
-          let product = this.product;
+          let product = {};
+          product._id = this.product._id
+          product.space = this.product.space
           product.count = this.count;
           product = JSON.stringify(product);
           wx.navigateTo({
