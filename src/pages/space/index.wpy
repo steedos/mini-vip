@@ -251,7 +251,12 @@ page {
     </view>
     <view class="page__bd">
       <view class="post-list-wrapper">
-        <postList :list.sync="posts" />
+        <block wx:if="{{portlet_list.length > 0}}">
+          <postList :portletList.sync="portlet_list" :spaceId.sync="space_id"/>
+        </block>
+        <block wx:else>
+          <postList wx:else :list.sync="posts" />
+        </block>
       </view>
     </view>
   </view>
@@ -289,8 +294,14 @@ export default class Posts extends wepy.page {
     // await this.loadCardInfo();
     this.type = e.type;
     await this.loadStoreInfo();
-    await this.loadPostList();
     await this.isSpaceStar();
+    // await this.getPortlet();
+    // await this.laodPortletList();
+    // await this.loadPostList();
+    await this.loadList();
+
+    console.log('[this.loadList]', this.portlet_list, this.posts)
+
     this.is_loaded = true;
     this.$apply();
     wepy.hideLoading();
@@ -302,7 +313,7 @@ export default class Posts extends wepy.page {
     this.current_skip = 0;
     // await this.loadCardInfo();
     await this.loadStoreInfo();
-    await this.loadPostList();
+    await this.loadList();
   }
 
   components = {
@@ -330,7 +341,7 @@ export default class Posts extends wepy.page {
     }
   }
 
-  // 下拉刷新
+  // 上拉刷新
   onPullDownRefresh() {
     this.refresh();
     setTimeout(() => {
@@ -338,9 +349,9 @@ export default class Posts extends wepy.page {
     }, 200);
   }
 
-  // 上拉加载
+  // 下拉加载
   onReachBottom() {
-    this.loadPostList();
+    this.loadList();
     console.log('onReachBottom');
   }
 
@@ -363,7 +374,9 @@ export default class Posts extends wepy.page {
     is_loaded: false,
     star_count: 0,
     star_id: '',
-    is_default_menu:false
+    is_default_menu:false,
+    portlet: [],
+    portlet_list: [],
   };
 
   wxs = {
@@ -581,6 +594,67 @@ export default class Posts extends wepy.page {
       result.star_count = 0
     }
     this.store_info = result;
+    this.$apply();
+  }
+
+  async loadList() {
+    await this.getPortlet();
+    if (this.portlet && this.portlet.length) {
+      await this.laodPortletList();
+    } else {
+      await this.loadPostList();
+    }
+  }
+
+  async getPortlet() {
+    const options = {
+      $orderby: 'sort_no asc',
+      $filter: 'enabled eq true',
+      $select: 'name,related_to'
+    }
+    const result = await this.$parent.query('vip_portlet', options, this.space_id);
+    if (result && result.value && result.value[0]) {
+      this.portlet = result.value;
+    }
+    console.log('[getPortlet]', this.portlet)
+    this.$apply();
+  }
+
+  async laodPortletList() {
+    const space_id = this.space_id
+    let portletList = []
+    if (this.portlet && this.portlet.length) {
+      for (let p of this.portlet) {
+        let object_name = '';
+        let options = {};
+        if (p.related_to.o == 'vip_product_category') {
+          object_name = 'vip_product';
+          options = {
+            $expand: 'space($select=name),owner($select=name),categories($select=name)',
+            $select: 'name,summary,description,comment_count,enable_comment,images,video,categories,type,mini_type,space,star_count,owner,featured,created',
+            $top: 3,
+            $count: true
+          }
+        } else if (p.related_to.o == 'post_category') {
+          object_name = 'post';
+          options = {
+            $expand: 'space($select=name),owner($select=name),categories($select=name)',
+            $orderby: 'featured desc,created desc',
+            $select: 'name,default_price,compared_price,description,covers,images,avatar,categories,tags,vendor,status,space,gift',
+            $top: 3,
+            $count: true
+          }
+        }
+        if (p.related_to.ids && p.related_to.ids[0]) {
+          options['$filter'] = `(categories eq '${p.related_to.ids[0]}')`
+        }
+        const result = await this.$parent.query(object_name, options, 'common');
+        if (result && result.value && result.value.length) {
+          portletList.push({object_name: object_name, space: space_id, name: p.name, list: result.value, total: result['@odata.count']})
+        }
+      }
+    }
+    this.portlet_list = portletList;
     this.$apply();
   }
 

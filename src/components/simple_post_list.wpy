@@ -1,5 +1,5 @@
 <style lang="less" scoped>
-.post {
+.post.list {
 	padding:30rpx;
 	background:#fff;
 	position: relative;
@@ -85,13 +85,16 @@
 }
 
 .post-featured {
+	display: block !important;
+	position: relative;
 	.title {
-		align-items: center;
+		width: 100%;
 		.text {
 			font-size: 17px;
 		}
 	}
 	.img-container {
+		flex: 1;
 		padding-top: 30rpx;
 		image {
 			width: 100%;
@@ -116,7 +119,7 @@
 <template>
 	<block wx:if="{{list.length}}">
 		<repeat for="{{list}}" key="index" index="index" item="post">
-			<navigator class="{{post.featured || index % 3 == 0 ? 'post-featured' : 'post-normal'}} post {{index % 3 == 0 ? 'border-top' : ''}}" hover-class="weui-grid_active" url="../post/view?post_id={{post._id}}&space_id={{post.space._id}}">
+			<navigator class="{{post.featured || index % 3 == 0 ? 'post-featured' : 'post-normal'}} post list {{index % 3 == 0 ? 'border-top' : ''}}" hover-class="weui-grid_active" url="../post/view?post_id={{post._id}}&space_id={{post.space._id}}">
 				<view class="title">
 					<view class="text">{{post.name}}</view>
 					<view class="normal-info">
@@ -134,6 +137,41 @@
 					<view class="info" wx:if="{{post.star_count}}">{{post.star_count}}赞</view>
 				</view>
 			</navigator>
+		</repeat>
+	</block>
+	<block wx:elif="{{portletList.length}}">
+		<repeat for="{{portletList}}" key="index" index="index" item="portlet">
+			<view class="weui-panel weui-panel_access portlet">
+				<view class="weui-panel__hd">{{portlet.name}}</view>
+				<view class="weui-panel__bd">
+					<repeat for="{{portlet.list}}" key="index" index="index" item="post">
+						<navigator class="{{post.featured || index % 3 == 0 ? 'post-featured' : 'post-normal'}} post weui-media-box weui-media-box_appmsg" hover-class="weui-cell_active" url="../post/view?post_id={{post._id}}&space_id={{post.space._id}}">
+							<view class="title">
+								<view class="text">{{post.name}}</view>
+								<view class="normal-info">
+									<view class="info" wx:if="{{post.categories}}">{{post.categories[0].name}}</view>
+									<view class="info" wx:if="{{post.comment_count}}">{{post.comment_count}}评论</view>
+									<view class="info" wx:if="{{post.star_count}}">{{post.star_count}}赞</view>
+								</view>
+							</view>
+							<view class="img-container" wx:if="{{post.images && post.images.length}}">
+								<image mode="aspectFill" src="{{util.formatImageUrl(post.images[0], baseUrl)}}"></image>
+							</view>
+							<view class="featured-info">
+								<view class="info" >{{post.categories[0].name}}</view>
+								<view class="info" >{{post.comment_count}}评论</view>
+								<view class="info" >{{post.star_count}}赞</view>
+							</view>
+						</navigator>
+					</repeat>
+				</view>
+				<view class="weui-panel__ft" wx:if="{{portlet.total > 3}}" @tap="viewMore({{portlet.object_name}})">
+					<view class="weui-cell weui-cell_access weui-cell_link">
+						<view class="weui-cell__bd">查看更多</view>
+						<view class="weui-cell__ft weui-cell__ft_in-access"></view>
+					</view>
+				</view>
+			</view>
 		</repeat>
 	</block>
 	<block wx:else>
@@ -160,7 +198,15 @@ export default class simplePostList extends wepy.component {
     list: {
       type: Array,
       default: []
-    },
+		},
+		portletList: {
+			type: Array,
+			default: []
+		},
+		spaceId: {
+			type: String,
+			default: ''
+		},
     editable: {
       type: Boolean,
       default: false
@@ -178,7 +224,7 @@ export default class simplePostList extends wepy.component {
 	data = {
     baseUrl: baseUrl,
     previousVideoId: null,
-    currentVideoContext: null
+		currentVideoContext: null
 	};
 	
 	methods = {
@@ -194,7 +240,18 @@ export default class simplePostList extends wepy.component {
       if(this.currentVideoContext){
         this.currentVideoContext.pause()
       }     
-    },
+		},
+		viewMore(object_name){
+			if (object_name == 'vip_product') {
+				wx.navigateTo({
+					url: `/pages/product/list?space_id=${this.spaceId}`
+				})
+			} else if (object_name == 'post') {
+				wx.navigateTo({
+					url: `/post/index?space_id=${this.spaceId}`
+				})
+			}
+		}
 	}
 }
 </script>
