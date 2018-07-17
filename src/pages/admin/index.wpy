@@ -113,7 +113,8 @@ export default class AdminIndex extends wepy.page {
         {title: '二维码', icon:'standard-product', url: `qrcode?space_id=${this.space_id}`}
       ],
       [
-        {title: '菜单', icon:'standard-apps', url: `../record/list?space_id=${this.space_id}&object_name=vip_menu`}
+        {title: '菜单', icon:'standard-apps', url: `../record/list?space_id=${this.space_id}&object_name=vip_menu`},
+        {title: '主页模块', icon:'lead_list', url: `../record/list?space_id=${this.space_id}&object_name=vip_portlet`}
       ]
 
     ];
