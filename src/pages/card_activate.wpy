@@ -139,7 +139,7 @@ export default class cardActivate extends wepy.page {
   };
 
   async getCategory(category_id) {
-    return this.$parent.get('vip_category', category_id, this.space_id);
+    return this.$parent.get('vip_card_rule', category_id, this.space_id);
   }
 
   async onLoad(e) {
@@ -162,7 +162,7 @@ export default class cardActivate extends wepy.page {
       const data = {
         $select: 'name,price'
       };
-      var category = await this.$parent.query('vip_category', data, this.space_id);
+      var category = await this.$parent.query('vip_card_rule', data, this.space_id);
       console.log('category=====', category);
       if (!category.value[0]) {
         await this.addVipCard();

@@ -215,7 +215,7 @@ export default class Card extends wepy.page {
 
   async getCategoryInfo(category_id) {
     const self = this;
-    const result = await self.$parent.get('vip_category', category_id, this.space_id);
+    const result = await self.$parent.get('vip_card_rule', category_id, this.space_id);
     console.log("result",result)
     this.avatar = result.avatar || '';
     this.cover = result.cover || '';
