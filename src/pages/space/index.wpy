@@ -399,12 +399,12 @@ export default class Posts extends wepy.page {
             this.card.url = `../card?card_id=${this.card._id}&space_id=${
               this.space_id
             }`;
-            const vip_category = await this.$parent.get(
-              'vip_category',
+            const vip_card_rule = await this.$parent.get(
+              'vip_card_rule',
               this.card.card_name._id,
               this.space_id
             );
-            this.card.avatar = vip_category.avatar;
+            this.card.avatar = vip_card_rule.avatar;
       }
     }
 

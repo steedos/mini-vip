@@ -189,7 +189,7 @@ export default class CardSelect extends wepy.page {
       $filter: `space eq '${space_id}'`,
       $select: 'name,summary,avatar,cover,price'
     };
-    return this.$parent.query('vip_category', data, space_id);
+    return this.$parent.query('vip_card_rule', data, space_id);
   }
 
   onShow(){

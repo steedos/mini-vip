@@ -65,7 +65,7 @@ export default class MemberBenefits extends wepy.page {
   };
   async onLoad(e) {
     this.space_id = e.space_id;
-    this.category = await this.$parent.get('vip_category',e.category_id, this.space_id)
+    this.category = await this.$parent.get('vip_card_rule',e.category_id, this.space_id)
     this.$apply();
     console.log("=====333=",this.category)
   };

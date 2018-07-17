@@ -104,7 +104,7 @@ export default class AdminIndex extends wepy.page {
         {title: '订单', icon:'standard-orders', url:`../order/list?space_id=${this.space_id}&object_name=vip_order&allow_create=false&role=admin&url=/pages/cart/checkout`}
       ],
       [
-        {title: '卡项', icon:'standard-work-type', url: `../record/list?space_id=${this.space_id}&object_name=vip_category`},
+        {title: '卡项', icon:'standard-work-type', url: `../record/list?space_id=${this.space_id}&object_name=vip_card_rule`},
         {title: '会员卡', icon:'standard-scan-card', url: `../record/list?space_id=${this.space_id}&object_name=vip_card`},
       ],
       [
