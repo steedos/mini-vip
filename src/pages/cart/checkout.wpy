@@ -642,7 +642,8 @@ export default class Checkout extends wepy.page {
         this.status = status;
         this.$apply();
         wx.showToast({
-          icon: 'success'
+          icon: 'success',
+          title: '成功'
         })
       }
     }
