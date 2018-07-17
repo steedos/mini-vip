@@ -623,7 +623,14 @@ export default class Checkout extends wepy.page {
         title: '加载中',
         mask: true
       });
-      var result = await this.$parent.update('vip_order', this.order._id, {status: status}, this.order.space);
+      if (status == 'completed') {
+        var result = await this.$parent.invokeMethod('vip_order', this.order._id, {}, this.order.space, 'confirmReceipt');
+      } else if (status == 'canceled') {
+        var result = await this.$parent.invokeMethod('vip_order', this.order._id, {}, this.order.space, 'cancelOrder');
+      } else {
+        var result = await this.$parent.update('vip_order', this.order._id, {status: status}, this.order.space);
+      }
+
       wx.hideLoading();
       if (result.error) {
         console.error(result);

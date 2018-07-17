@@ -606,6 +606,15 @@ export default class VIP extends wepy.app {
     return result
   }
 
+  async invokeMethod(object_name, _id, data, space_id, methodName) {
+    const url = '/api/odata/v4/' + space_id + '/' + object_name + '/'+ _id + '/' + methodName;
+    const result = await req.post(url, data).catch((err)=>{
+      console.log("error...",err.data)
+      return false
+    })
+    return result
+  }
+
   async removeRecord(object_name, _id, space_id, list, owner) {
     space_id = space_id ? space_id : 'guest';
     let allow = await this.recordAllowDelete(object_name, owner, space_id);
