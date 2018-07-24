@@ -425,7 +425,8 @@ export default class Checkout extends wepy.page {
     couponId: 0,
     status: '',
     isSpaceAdmin: false,
-    isOrderOwner: false
+    isOrderOwner: false,
+    space_id: null,
   };
 
   wxs = {
@@ -433,19 +434,25 @@ export default class Checkout extends wepy.page {
   };
 
   getcheckedProductList() {
+    const self = this;
     const cartList = store.getState().counter.cartList;
     const checkedProductList = [];
     cartList.forEach(p => {
-      p.checked ? checkedProductList.push(p) : checkedProductList;
+      if (p.checked && p.space == self.space_id) {
+        checkedProductList.push(p)
+      }
     });
     return checkedProductList;
   }
 
   getgoodsTotalPrice(checkedProductList) {
+    const self = this;
     let goodsTotalPrice = 0;
     if (checkedProductList && checkedProductList.constructor === Array) {
       checkedProductList.forEach(p => {
-        goodsTotalPrice += p.default_price * p.count;
+        if (p.space == self.space_id) {
+          goodsTotalPrice += p.default_price * p.count;
+        }
       });
     }
     return goodsTotalPrice.toFixed(2);
@@ -458,6 +465,11 @@ export default class Checkout extends wepy.page {
 
     console.log(e);
     await this.$parent.login(e);
+
+    if (e.space_id) {
+      this.space_id = e.space_id;
+      this.$apply();
+    }
 
     if (e.object_name == 'vip_order' && e.record_id && e.space_id) {
       const order = await this.$parent.get('vip_order', e.record_id, e.space_id);
@@ -474,20 +486,24 @@ export default class Checkout extends wepy.page {
         this.isOrderOwner = (order.owner == this.$parent.globalData.user._id);
       }
     } else if (e.product) {
-      const _id = JSON.parse(e.product)._id
+      const e_product = JSON.parse(e.product);
+      const _id = e_product._id;
       const options = {
         $filter: `_id eq '${_id}'`,
         $select: 'name,default_price,compared_price,description,covers,images,avatar,categories,tags,vendor,status,space,gift'
       }
-      let product = await this.$parent.query('vip_product', options, 'guest')
-      product = product.value[0]
-      product.count = e.product.count
+      let product = await this.$parent.query('vip_product', options, 'guest');
+      product = product.value[0];
+      product.count = e_product.count;
       wx.setNavigationBarTitle({ title: '填写订单' });
       this.checkedProductList = [product];
       this.goodsTotalPrice = this.getgoodsTotalPrice(this.checkedProductList);
     } else {
       wx.setNavigationBarTitle({ title: '填写订单' });
       this.checkedProductList = this.getcheckedProductList();
+
+      console.log('[this.checkedProductList]', this.checkedProductList)
+
       this.goodsTotalPrice = this.getgoodsTotalPrice(this.checkedProductList);
     }
     this.$apply();
@@ -536,6 +552,7 @@ export default class Checkout extends wepy.page {
       //   amount: this.goodsTotalPrice,
       //   products: this.checkedProductList
       // };
+      const self = this
       if (!this.checkedAddress._id) {
         wx.showToast({
           title: '请选择收货地址',
@@ -556,13 +573,15 @@ export default class Checkout extends wepy.page {
         var spaceId = this.checkedProductList[0].space;
         var products = [];
         this.checkedProductList.forEach(p => {
-          var tp = {};
-          Object.keys(p).forEach(k => {
-            if (k.indexOf('@odata.') < 0) {
-              tp[k] = p[k];
-            }
-          });
-          products.push(tp);
+          if (p.space == self.space_id) {
+            var tp = {};
+            Object.keys(p).forEach(k => {
+              if (k.indexOf('@odata.') < 0) {
+                tp[k] = p[k];
+              }
+            });
+            products.push(tp);
+          }
         });
 
         var address = {};
@@ -596,7 +615,7 @@ export default class Checkout extends wepy.page {
       };
       var that = this;
       req.post('/api/steedos/weixin/card/recharge', data).then(res => {
-        wx.hideLoading();
+        // wx.hideLoading();
         console.log('res: ', res);
 
         if (res.paySign) {
@@ -607,17 +626,28 @@ export default class Checkout extends wepy.page {
             signType: 'MD5',
             paySign: res.paySign,
             success: function(msg) {
+              wx.hideLoading();
+              wx.showToast({
+                icon: 'success',
+                title: '支付成功'
+              });
               console.log('success: ', msg);
               that.status = 'paid';
               that.$apply();
             },
             fail: function(msg) {
+              wx.hideLoading();
+              wx.showToast({
+                icon: 'none',
+                title: '支付失败'
+              })
               console.log('fail: ', msg);
             },
             complete: function(msg) {}
           });
         } else {
           console.error(res);
+          wx.hideLoading();
           wx.showModal({
             content: '请求超时，请检查网络状况',
             showCancel: false

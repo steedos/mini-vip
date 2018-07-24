@@ -1,5 +1,6 @@
 <style lang="less" scoped>
 .order-list {
+	padding-bottom: 120rpx;
 	.title {
 		padding: 20rpx 24rpx;
 		&::after {
@@ -65,6 +66,69 @@
     .cart-goods {
       border-bottom: none;
     }
+	}
+	.tab-bar {
+    display: flex;
+    position: fixed;
+    z-index: 500;
+    bottom: 0;
+    height: 100rpx;
+    width: 100%;
+    padding: 10rpx 15rpx;
+    box-sizing: border-box;
+    background-color: #f7f7fa;
+
+    &::before {
+      content: ' ';
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0;
+      height: 1px;
+      border-top: 1px solid #c0bfc4;
+      color: #c0bfc4;
+      -webkit-transform-origin: 0 0;
+      transform-origin: 0 0;
+      -webkit-transform: scaleY(0.5);
+      transform: scaleY(0.5);
+    }
+
+    .action {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+      justify-content: space-between;
+      .slds-icon {
+        width: 44rpx;
+        height: 44rpx;
+        margin: 0 auto;
+        position: relative;
+      }
+      .cart-count {
+        height: 28rpx;
+        width: 28rpx;
+        z-index: 10;
+        position: absolute;
+        top: -4rpx;
+        right: -10rpx;
+        background: #b4282d;
+        text-align: center;
+        font-size: 18rpx;
+        color: #fff;
+        line-height: 28rpx;
+        border-radius: 50%;
+      }
+
+      .text {
+        font-size: 24rpx;
+      }
+
+      .ion {
+        width: 100%;
+        height: 100%;
+      }
+    }
   }
 }
 </style>
@@ -98,19 +162,50 @@
 				</view>
 			</navigator>
 		</repeat>
+		<view class="tab-bar" wx:if="{{space_id}}">
+      <view class="comment-btn action" @tap="viewProduct">
+        <view class="slds-icon slds-icon--small slds-m-right--x-small">
+          <image class="ion" src="/static/images/ic_menu_sort_nor.png"></image>
+        </view>
+        <view class="text">分类</view>
+      </view>
+      <view class="cart-btn action" @tap="checkout">
+        <view class="slds-icon slds-icon--small slds-m-right--x-small">
+          <text class="cart-count" wx:if="{{getProductCount}}">{{getProductCount}}</text>
+          <image class="ion" src="/static/images/ic_menu_shoping_nor.png"></image>
+        </view>
+        <view class="text">购物车</view>
+      </view>
+      <view class="my-btn action">
+        <view class="slds-icon slds-icon--small slds-m-right--x-small">
+          <image class="ion" src="/static/images/ic_menu_me_nor.png"></image>
+        </view>
+        <view class="text">我的</view>
+      </view>
+    </view>
 	</view>
 </template>
 <script>
 import wepy from 'wepy';
 import { baseUrl } from '@/config';
 import util from '../../wxs/util.wxs';
+import { connect, getStore } from 'wepy-redux';
 import searchbar from '../../components/searchbar';
 import recordList from '../../mixins/record_list';
+
+const store = getStore()
+
+@connect({
+  cartList(state) {
+    return state.counter.cartList;
+  }
+})
 
 export default class orderList extends wepy.page {
 	config = {
     navigationBarTitleText: '',
-    backgroundColor: '#f4f4f4'
+		backgroundColor: '#f4f4f4',
+		enablePullDownRefresh: true
   };
 
 	data = {
@@ -129,6 +224,31 @@ export default class orderList extends wepy.page {
 	onLoad(e) {
 
 	}
+
+	methods = {
+		viewProduct()  {
+			wepy.navigateTo({ url: `/pages/product/list?space_id=${this.space_id}` });
+		},
+		checkout() {
+      wepy.navigateTo({ url: `/pages/cart/index?space_id=${this.space_id}` });
+    },
+	}
+
+	computed = {
+    getProductCount() {
+      const cartList = this.cartList;
+      console.log('getProductCount....', cartList)
+      let cartProductCount = 0;
+      if (cartList && cartList.constructor === Array) {
+        cartList.forEach(p => {
+          if (p.space == this.space_id) {
+            cartProductCount += p.count
+          }
+        });
+      }
+      return cartProductCount
+    },
+  };
 
 	wxs = {
 		util: util

@@ -399,17 +399,17 @@
       <view class="item">48小时快速退款</view>
       <view class="item">满88元免邮费</view>
     </view>
-    <view class="no-cart" wx:if="{{cartList.length <= 0}}">
+    <view class="no-cart" wx:if="{{product_list.length <= 0}}">
       <view class="c">
         <image src="http://nos.netease.com/mailpub/hxm/yanxuan-wap/p/20150730/style/img/icon-normal/noCart-a8fe3f12e5.png" />
         <text>去添加点什么吧</text>
       </view>
     </view>
-    <view class="cart-view" wx:if="{{cartList.length > 0}}">
+    <view class="cart-view" wx:if="{{product_list.length > 0}}">
       <view class="list">
         <view class="group-item">
           <view class="goods">
-						<repeat for="{{cartList}}" key="index" index="index" item="goods">
+						<repeat for="{{product_list}}" key="index" index="index" item="goods">
 							<view class="item" @tap="viewDetail" style="transform: translateX({{styleList[goods._id].offsetX}}px)" @touchstart="touchstart" @touchmove="touchmove" @touchend="touchend" data-item-id="{{goods._id}}" data-item-space="{{goods.space}}">
                 <view class="checkbox {{goods.checked ? 'checked' : ''}}" @tap.stop="checkedItem" data-item-id="{{goods._id}}">
                   <view class="check-img" data-item-id="{{goods._id}}"></view>
@@ -486,20 +486,31 @@
       },
       isEditCart: false,
       checkedAllStatus: true,
-      editCartList: []
+      editCartList: [],
+      space_id: null,
+      product_list: []
 		}
 		
-    async onLoad() {
+    async onLoad(e) {
 			wepy.showLoading({
 				title: '加载中',
 				mask: true
 			});
-			await this.$parent.login()
+      await this.$parent.login()
 			const store = getStore()
 			// cartList是数组，需要clone，避免修改
-			const products = _.clone(this.cartList);
-			const newList = await this.getProductInfo(products);
+      const products = _.clone(this.cartList);
+      let productList = []
+      this.space_id = e.space_id;
+      for (let p of this.cartList) {
+        if (p.space == this.space_id) {
+          productList.push(p);
+        }
+      }
+      // this.product_list = productList
+      const newList = await this.getProductInfo(productList);
       this.styleList = this.initStyleList(newList);
+      console.log('[styleList]', this.styleList)
 			store.dispatch({type: 'UPDATE_PRODUCT_INFO', payload: newList});
       this.is_loaded = false;
 			this.$apply()
@@ -548,24 +559,37 @@
         })
       },
       checkedProductCount() {
+        const self = this
         const cartList = store.getState().counter.cartList;
         let checkedProductCount = 0;
         if (cartList && cartList.constructor === Array) {
           cartList.forEach(p => {
-            p.checked ? checkedProductCount += p.count : checkedProductCount
+            p.checked && p.space == self.space_id ? checkedProductCount += p.count : checkedProductCount
           });
         }
         return checkedProductCount
       },
       checkedProductAmount() {
+        const self = this
         const cartList = store.getState().counter.cartList;
         let checkedProductAmount = 0.00;
         if (cartList && cartList.constructor === Array) {
           cartList.forEach(p => {
-            p.checked ? checkedProductAmount += (p.default_price * p.count) : checkedProductAmount
+            p.checked && p.space == self.space_id ? checkedProductAmount += (p.default_price * p.count) : checkedProductAmount
           });
         }
         return checkedProductAmount.toFixed(2)
+      },
+      product_list() {
+        const cartList = store.getState().counter.cartList;
+        const self = this;
+        let productList = [];
+        for (let p of cartList) {
+          if (p.space == self.space_id) {
+            productList.push(p);
+          }
+        }
+        return productList;
       }
     }
     methods = {
@@ -593,7 +617,7 @@
       checkoutOrder() {
         if (this.checkedProductCount) {
           wepy.navigateTo({
-            url: './checkout'
+            url: `./checkout?space_id=${this.space_id}`
           })
         }
       },

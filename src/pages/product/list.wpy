@@ -1,85 +1,122 @@
 <style lang="less">
 .product-list {
-    .image {
-      display: block;
-    }
-    .page__bd {
-      padding-bottom: 100rpx;
-    }
-    .tab-bar {
-      display: flex;
-      position: fixed;
-      z-index: 500;
-      bottom: 0;
-      height: 100rpx;
-      width: 100%;
+  .image {
+    display: block;
+  }
+  .page__bd {
+    padding-bottom: 100rpx;
+  }
+  .tab-bar {
+    display: flex;
+    position: fixed;
+    z-index: 500;
+    bottom: 0;
+    height: 100rpx;
+    width: 100%;
+    padding: 10rpx 15rpx;
+    box-sizing: border-box;
     background-color: #f7f7fa;
-      justify-content: center;
-      align-items: center;
 
-      &::before {
+    &::before {
       content: ' ';
-        position: absolute;
-        left: 0;
-        top: 0;
-        right: 0;
-        height: 1px;
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0;
+      height: 1px;
       border-top: 1px solid #c0bfc4;
       color: #c0bfc4;
-        -webkit-transform-origin: 0 0;
-        transform-origin: 0 0;
-        -webkit-transform: scaleY(0.5);
-        transform: scaleY(0.5);
-      }
+      -webkit-transform-origin: 0 0;
+      transform-origin: 0 0;
+      -webkit-transform: scaleY(0.5);
+      transform: scaleY(0.5);
     }
 
-  .item-body {
-      width: 55%;
+    .action {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+      justify-content: space-between;
+      .slds-icon {
+        width: 44rpx;
+        height: 44rpx;
+        margin: 0 auto;
+        position: relative;
+      }
+      .cart-count {
+        height: 28rpx;
+        width: 28rpx;
+        z-index: 10;
+        position: absolute;
+        top: -4rpx;
+        right: -10rpx;
+        background: #b4282d;
+        text-align: center;
+        font-size: 18rpx;
+        color: #fff;
+        line-height: 28rpx;
+        border-radius: 50%;
+      }
+
+      .text {
+        font-size: 24rpx;
+      }
+
+      .ion {
+        width: 100%;
+        height: 100%;
+      }
     }
+  }
+
+  .item-body {
+    width: 55%;
+  }
 
   .description-field {
     text-overflow: ellipsis;
     width: 100%;
     overflow: hidden;
     white-space: nowrap;
-      font-size: 26rpx;
-      color: #888888;
-    }
+    font-size: 26rpx;
+    color: #888888;
+  }
 
   .name-field {
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
-      flex: 1;
+    flex: 1;
     min-height: 48rpx;
-    }
+  }
 
   .date-field {
-      font-size: 26rpx;
+    font-size: 26rpx;
     color: #888888;
-    }
+  }
 
   .item-body-1 {
     display: flex;
     align-items: center;
-    }
+  }
 
   .page__hd {
-      padding: 0px;
-    }
+    padding: 0px;
+  }
 
   .weui-search-bar {
-      border-bottom: 0px;
-      padding:16rpx 15rpx;
-    }
+    border-bottom: 0px;
+    padding: 16rpx 15rpx;
+  }
 
   .avatar-field {
     border-radius: 0.15rem;
-      margin-right: 10rpx;
-      vertical-align: middle;
+    margin-right: 10rpx;
+    vertical-align: middle;
     width: 80rpx;
-      height: 80rpx;
-    }
+    height: 80rpx;
+  }
 
   .zan-tab {
     scroll-view {
@@ -139,7 +176,7 @@
   }
 }
 
-page{
+page {
   background-color: #fff;
 }
 </style>
@@ -163,9 +200,27 @@ page{
     <view class="page__bd">
       <productGridList :list.sync="record_list"></productGridList>
     </view>
-    <!--<view class="tab-bar" wx:if="{{allowCreate}}">-->
-      <!--<view class="slds-icon-action-new" @tap="addRecord"></view>-->
-    <!--</view>-->
+    <view class="tab-bar">
+      <view class="comment-btn action">
+        <view class="slds-icon slds-icon--small slds-m-right--x-small">
+          <image class="ion" src="/static/images/ic_menu_sort_nor.png"></image>
+        </view>
+        <view class="text">分类</view>
+      </view>
+      <view class="cart-btn action" @tap="checkout">
+        <view class="slds-icon slds-icon--small slds-m-right--x-small">
+          <text class="cart-count" wx:if="{{getProductCount}}">{{getProductCount}}</text>
+          <image class="ion" src="/static/images/ic_menu_shoping_nor.png"></image>
+        </view>
+        <view class="text">购物车</view>
+      </view>
+      <view class="my-btn action" @tap="viewOrder">
+        <view class="slds-icon slds-icon--small slds-m-right--x-small">
+          <image class="ion" src="/static/images/ic_menu_me_nor.png"></image>
+        </view>
+        <view class="text">我的</view>
+      </view>
+    </view>
   </view>
 </template>
 
@@ -173,9 +228,18 @@ page{
 import wepy from 'wepy';
 import { baseUrl } from '@/config';
 import util from '../../wxs/util.wxs';
+import { connect, getStore } from 'wepy-redux';
 import searchbar from '../../components/searchbar';
 import recordList from '../../mixins/record_list';
 import productGridList from '@/components/product_grid_list';
+
+const store = getStore()
+
+@connect({
+  cartList(state) {
+    return state.counter.cartList;
+  }
+})
 
 export default class ProductList extends wepy.page {
   config = {
@@ -188,7 +252,14 @@ export default class ProductList extends wepy.page {
     categories: [],
     filter: '',
     object_name: 'vip_product',
-    fields: ['name', 'default_price', 'compared_price', 'avatar', 'vendor', 'categories'],
+    fields: [
+      'name',
+      'default_price',
+      'compared_price',
+      'avatar',
+      'vendor',
+      'categories'
+    ],
     seleted_id: ''
   };
 
@@ -196,15 +267,19 @@ export default class ProductList extends wepy.page {
     this.$apply();
   }
 
-  async getQueryFilter(e){
+  async getQueryFilter(e) {
     const space_id = e.space_id;
     const options = {
       $orderby: 'sort_no',
       $filter: `space eq '${space_id}'`,
       $count: true,
       $select: 'name,sort_no'
-    }
-    const result = await this.$parent.query('vip_product_category', options, space_id);
+    };
+    const result = await this.$parent.query(
+      'vip_product_category',
+      options,
+      space_id
+    );
     if (result && result.value && result.value[0]) {
       this.seleted_id = result.value[0]._id;
       this.categories = result.value;
@@ -235,11 +310,30 @@ export default class ProductList extends wepy.page {
       await this.dataRefresh();
       this.$apply();
       // console.log('[changeCategory]', category_id)
+    },
+    checkout() {
+      wepy.navigateTo({ url: `/pages/cart/index?space_id=${this.space_id}` });
+    },
+    viewOrder() {
+      const user = this.$parent.globalData.user._id
+      wepy.navigateTo({ url: `/pages/order/list?space_id=${this.space_id}&object_name=vip_order&allow_create=false&filter=(owner eq '${user}')&url=/pages/cart/checkout` })
     }
   };
 
   computed = {
-    
-  }
+    getProductCount() {
+      const cartList = this.cartList;
+      console.log('getProductCount....', cartList)
+      let cartProductCount = 0;
+      if (cartList && cartList.constructor === Array) {
+        cartList.forEach(p => {
+          if (p.space == this.space_id) {
+            cartProductCount += p.count
+          }
+        });
+      }
+      return cartProductCount
+    },
+  };
 }
 </script>
