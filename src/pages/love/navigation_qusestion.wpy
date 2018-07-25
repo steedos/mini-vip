@@ -1,0 +1,58 @@
+<style lang="less">
+page{
+  background-color: #4C7BD9;
+}
+.page{
+  color:#fff;
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 50%;
+  margin-left: 5%;
+  margin-right: 5%;
+  text-align: center;
+}
+text{
+  display: block;
+}
+.page-btn{
+  margin-top: 100px;
+  margin-left: 50px;
+  margin-right: 50px;
+}
+button[type=primary]{
+  background-color: #00D280;
+}
+</style>
+<template>
+  <view class="page">
+      <view class="page-bd">
+        <text>完成以下题目</text>
+        <text>获得更准确的用户匹配</text>
+      </view>
+      <button class="page-btn" type="primary" size="default" form-type="submit" hover-class="other-button-hover" @tap="nextStep">继续</button>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import req from '@/network';
+
+export default class store extends wepy.page {
+  config = {
+    navigationBarTitleText: '	'
+  };
+
+  async onLoad(e) {
+    console.log("store========================onLoad===========");
+    
+  }
+
+  methods = {
+    nextStep() {
+      console.log("***************************")
+      let url = '/pages/space/list';
+      wepy.navigateTo({url: url});
+    }
+  };
+}
+</script>
