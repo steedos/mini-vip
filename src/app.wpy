@@ -128,6 +128,7 @@ export default class VIP extends wepy.app {
   config = {
     pages: [
 //      'pages/tabbar_index',
+      'pages/love/index',
       'pages/home/store',
       'pages/index',
       'pages/apps',
@@ -202,7 +203,7 @@ export default class VIP extends wepy.app {
       borderStyle: 'black',
       list: [
       {
-        pagePath: 'pages/home/store',
+        pagePath: 'pages/love/index',
         selectedIconPath: './images/tabbars/home_pressed.png',
         iconPath: './images/tabbars/home.png',
         text: '首页',

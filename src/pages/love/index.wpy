@@ -1,0 +1,40 @@
+<style lang="less" scoped>
+</style>
+
+<template>
+  <view class="page">
+    <view class="page__hd">
+      <view class="gift-label">AI交友首页</view>
+    </view>
+    <view class="page__bd">
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import { baseUrl } from '@/config';
+import { loveSpaceId } from '@/config';
+
+export default class LoveIndex extends wepy.page {
+  config = {
+    navigationBarTitleText: 'AI交友'
+  };
+
+  data = {
+    baseUrl: baseUrl,
+    space_id: null,
+  };
+
+  async onLoad (e) {
+    this.space_id = e.space_id || loveSpaceId;
+    console.log("this.space_id============", this.space_id);
+    if(!this.space_id){
+      console.log("this.space_id===========33=");
+      wepy.reLaunch({url: `/pages/home/store`});
+    }
+  }
+
+  methods = {};
+}
+</script>
