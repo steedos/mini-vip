@@ -1,4 +1,14 @@
-<style lang="less" scoped>
+<style lang="less">
+  .btn-join{
+    background:#E8B866;
+    border-radius:30px;
+    padding:2px;
+    font-weight:bold;
+    font-size:40rpx;
+    margin:auto;
+    width:500rpx;
+    color:#FFFCEC;
+  }
 </style>
 
 <template>
@@ -7,6 +17,7 @@
       <view class="gift-label">AI交友首页</view>
     </view>
     <view class="page__bd">
+      <button class=" btn-join" @tap="join">立即加入</button>
     </view>
   </view>
 </template>
@@ -35,6 +46,10 @@ export default class LoveIndex extends wepy.page {
     }
   }
 
-  methods = {};
+  methods = {
+    join(){
+      wepy.navigateTo({url: `/pages/love/invite_code?space_id=${this.space_id}`});
+    }
+  };
 }
 </script>
