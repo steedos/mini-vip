@@ -191,7 +191,9 @@ export default class VIP extends wepy.app {
       'pages/order/list',
       'pages/share',
       'pages/love/questionnaire_list',
-      'pages/love/invite_code'
+      'pages/love/invite_code',
+      'pages/love/invite_code_success',
+      'pages/love/invite_code_fail'
     ],
     tabBar: {
       color: '#666',
@@ -301,6 +303,13 @@ export default class VIP extends wepy.app {
       page: '/pages/record/create',
       script: function (to) {
         return this.checkMobile(to)
+      }
+    });
+
+    pageRouter.pushEnter({
+      page: '/pages/love/questionnaire_list',
+      script: function (to) {
+        return this.checkMobile()
       }
     });
   }

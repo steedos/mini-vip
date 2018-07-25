@@ -21,12 +21,11 @@
                 </view>
             </view>
         </view>
-        <view class="weui-cells__tips">如没有邀请码,请直接点击跳过</view>
+        <view class="weui-cells__tips">需要邀请码激活您的账户</view>
       </view>
 
       <view class="page__bd_spacing">
           <button class="weui-btn" type="primary" @tap="confirm">确定</button>
-          <button class="weui-btn" type="default" @tap="skip">跳过</button>
       </view>
     </view>
   </view>
@@ -41,19 +40,21 @@ export default class InviteCode extends wepy.page {
     enablePullDownRefresh: true
   };
 
-  data = {};
+  data = {
+    space_id: ''
+  };
+
+  async onLoad(e) {
+    console.log('===============onLoad======InviteCode===========', e);
+    await this.$parent.login(e);
+    this.space_id = e.space_id;
+    this.$apply();
+  }
 
   methods = {
     confirm() {
-      wx.showModal({
-        content: '确定',
-        showCancel: false
-      });
-    },
-    skip() {
-      wx.showModal({
-        content: '跳过',
-        showCancel: false
+      wx.navigateTo({
+        url: '/pages/love/invite_code_success'
       });
     }
   };
