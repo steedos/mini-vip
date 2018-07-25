@@ -1,20 +1,85 @@
 <style lang="less">
+  page{
+    background: #fff;
+  }
+  .page__hd{
+    padding: 20px;
+    margin-top:-100px;
+  }
   .btn-join{
     background:#E8B866;
     border-radius:30px;
     padding:2px;
-    font-weight:bold;
     font-size:40rpx;
     margin:auto;
     width:500rpx;
     color:#FFFCEC;
   }
+  .top-bar{
+    height:20px;
+    background:#353535;
+    border-bottom-left-radius:1000px;
+    padding-bottom:100px;
+    border-bottom-right-radius:1000px;
+    height:100px;
+    border-radius:100%;
+    margin-top:-100px;
+  }
+  .card {
+    background-color: #FD3B5F;
+    background-image:-webkit-linear-gradient(315deg, #FD3B5F, #FB644E 50%, #FB6E36);
+    background-image:linear-gradient(135deg, #FD3B5F, #FB644E 50%, #FB6E36);
+    height: 360rpx;
+    margin-top: 20rpx;
+    margin-bottom: 30rpx;
+    margin-left: 20rpx;
+    margin-right: 20rpx;
+    border-radius: 20rpx;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+            flex-direction: column;
+    position: relative;
+    margin-bottom: 0px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    .card-header{
+      margin:20px;
+      color:#fff;
+    }
+    .card-footer{
+      position:absolute;
+      bottom:20px;
+      left:20px;
+      color:#fff;
+
+      .muted{
+        margin-left:20px;
+        font-size:0.8em;
+        color:#ED2047;
+      }
+    }
+  }
 </style>
 
 <template>
   <view class="page">
+    <view class="top-bar"></view>
     <view class="page__hd">
-      <view class="gift-label">AI交友首页</view>
+      <view class="card">
+        <view class="card-header">
+          <view class="card-name">
+            <text>新恋爱主义开创者</text>
+          </view>
+        </view>
+        <view class="card-footer">
+          <text>限时 免费</text>
+          <text class="muted">原价￥200</text>
+        </view>
+      </view>
     </view>
     <view class="page__bd">
       <button class=" btn-join" @tap="join">立即加入</button>
