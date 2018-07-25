@@ -13,18 +13,10 @@
         </view>
         <view class="weui-msg__opr-area">
             <view class="weui-btn-area">
-                <button class="weui-btn" type="primary" @tap="confirm">推荐操作</button>
-                <button class="weui-btn" type="default">辅助操作</button>
+                <button class="weui-btn" type="primary" @tap="confirm">问卷调查</button>
             </view>
         </view>
-        <view class="weui-msg__extra-area">
-            <view class="weui-footer">
-                <view class="weui-footer__links">
-                    <navigator url="" class="weui-footer__link">底部链接文本</navigator>
-                </view>
-                <view class="weui-footer__text">Copyright © 2008-2016 weui.io</view>
-            </view>
-        </view>
+
     </view>
 </view>
 </template>
@@ -35,8 +27,7 @@ import pageRouter from '@/utils/pageRouter';
 
 export default class InviteCodeSuccess extends wepy.page {
   config = {
-    navigationBarTitleText: '邀请成功',
-    enablePullDownRefresh: true
+    navigationBarTitleText: '邀请码'
   };
 
   data = {
