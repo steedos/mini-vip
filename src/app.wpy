@@ -129,6 +129,7 @@ export default class VIP extends wepy.app {
     pages: [
 //      'pages/tabbar_index',
       'pages/love/index',
+      'pages/love/shake',
       'pages/home/store',
       'pages/index',
       'pages/apps',
@@ -207,6 +208,12 @@ export default class VIP extends wepy.app {
         selectedIconPath: './images/tabbars/home_pressed.png',
         iconPath: './images/tabbars/home.png',
         text: '首页',
+      },
+      {
+        pagePath: 'pages/love/shake',
+        selectedIconPath: './images/tabbars/topic_pressed.png',
+        iconPath: './images/tabbars/topic.png',
+        text: '摇一摇',
       },
       {
         pagePath: 'pages/me',
