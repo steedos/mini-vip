@@ -1,9 +1,34 @@
 <style lang="less" scoped>
+.top_spacing {
+  margin-top: 20px;
+}
+.bottom_spacing {
+  margin-bottom: 20px;
+}
 </style>
 
 <template>
   <view class="page">
-    InviteCode
+    <view class="page__bd">
+      <view class="top_spacing bottom_spacing">
+        <view class="weui-cells weui-cells_after-title">
+            <view class="weui-cell weui-cell_input">
+                <view class="weui-cell__hd">
+                    <view class="weui-label">邀请码</view>
+                </view>
+                <view class="weui-cell__bd">
+                    <input class="weui-input" placeholder="请输入邀请码"/>
+                </view>
+            </view>
+        </view>
+        <view class="weui-cells__tips">如没有邀请码,请直接点击跳过</view>
+      </view>
+
+      <view class="page__bd_spacing">
+          <button class="weui-btn" type="primary" @tap="confirm">确定</button>
+          <button class="weui-btn" type="default" @tap="skip">跳过</button>
+      </view>
+    </view>
   </view>
 </template>
 
@@ -18,7 +43,20 @@ export default class InviteCode extends wepy.page {
 
   data = {};
 
-  methods = {};
+  methods = {
+    confirm() {
+      wx.showModal({
+        content: '确定',
+        showCancel: false
+      });
+    },
+    skip() {
+      wx.showModal({
+        content: '跳过',
+        showCancel: false
+      });
+    }
+  };
 
   computed = {};
 }
