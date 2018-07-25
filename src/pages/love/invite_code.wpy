@@ -1,0 +1,25 @@
+<style lang="less" scoped>
+</style>
+
+<template>
+  <view class="page">
+    InviteCode
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+
+export default class InviteCode extends wepy.page {
+  config = {
+    navigationBarTitleText: '邀请码',
+    enablePullDownRefresh: true
+  };
+
+  data = {};
+
+  methods = {};
+
+  computed = {};
+}
+</script>
