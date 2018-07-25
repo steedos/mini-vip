@@ -1,0 +1,25 @@
+<style lang="less" scoped>
+</style>
+
+<template>
+  <view class="page">
+    Questionnaire List
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+
+export default class QuestionnaireList extends wepy.page {
+  config = {
+    navigationBarTitleText: '问卷列表',
+    enablePullDownRefresh: true
+  };
+
+  data = {};
+
+  methods = {};
+
+  computed = {};
+}
+</script>
