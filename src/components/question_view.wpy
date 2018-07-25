@@ -1,0 +1,419 @@
+<style lang="less">
+  /*page{*/
+    /*background-color: #ebebeb;*/
+  /*}*/
+
+  .question{
+
+    @height: 40px;
+    @radius: 4px;
+    width: 100%;
+
+    @meBackground: rgba(2, 20, 255, 0.79);
+
+    @otherBackground: #FFFFFF;
+
+    .name{
+      padding-left:15px;
+      padding-right:15px;
+      padding-top: 20px;
+    }
+
+    .weui-footer__text{
+      font-size: 14px;
+    }
+
+    .avatar{
+      width:@height;
+      height:@height;
+      border-radius:20px;
+    }
+
+    .me-answer{
+      .answer-text{
+        margin-right: 15px;
+        position: relative;
+        max-width: 75%;
+        .label{
+          min-width: 50px;
+          text-align: center;
+          line-height: @height;
+          padding-left: 10px;
+          padding-right: 15px;
+          color: #FFFFFF;
+          background-color: @meBackground;
+          border-radius: @radius;
+          text-overflow:ellipsis;
+          white-space:nowrap;
+          overflow:hidden;
+        }
+
+        .trianglel{
+          position: absolute;
+          right: -25px;
+          top: 25px;
+          width:0;
+          height:0;
+          border-top:10px solid transparent;
+          border-right:10px solid transparent;
+          border-left:15px solid @meBackground;
+          z-index: 999;
+        }
+      }
+    }
+
+    .question-section-me{
+      position: absolute;
+      bottom: 20%;
+      width:100%;
+
+      .me{
+        line-height: @height;
+        padding-right: 10px;
+      }
+
+      .user-me{
+        margin-bottom:15px;
+      }
+
+      .question-body{
+        position: relative;
+        margin-bottom: 15px;
+        padding-left:15px;
+        padding-right:15px;
+        .weui-cells{
+          background-color: @meBackground;
+          color: #FFFFFF;
+          border-radius: @radius;
+        }
+
+        .weui-cell_link{
+          color: #e1e1e1;
+        }
+
+        .triangleb{
+          position: absolute;
+          right: 30px;
+          top: -9px;
+          width:0;
+          height:0;
+          border-right:10px solid transparent;
+          border-bottom:10px solid @meBackground;
+          border-left:10px solid transparent;
+          z-index: 999;
+        }
+      }
+    }
+
+    .question-section-other{
+
+      position: absolute;
+      bottom: 20%;
+      width:100%;
+
+      .other{
+        line-height: @height;
+        padding-left: 10px;
+      }
+
+      .user-other{
+        margin-bottom:15px;
+      }
+
+      .question-body{
+        position: relative;
+        margin-bottom: 15px;
+        padding-left:15px;
+        padding-right:15px;
+        .weui-cells{
+          background-color: @otherBackground;
+          /*color: #FFFFFF;*/
+          border-radius: @radius;
+        }
+
+        .weui-cell_link{
+          color: #e1e1e1;
+        }
+
+        .triangleb{
+          position: absolute;
+          left: 25px;
+          top: -9px;
+          width:0;
+          height:0;
+          border-right:10px solid transparent;
+          border-bottom:10px solid @otherBackground;
+          border-left:10px solid transparent;
+          z-index: 999;
+        }
+      }
+
+      .important{
+        .weui-check__hd_in-checkbox{
+          display: inline-block;
+        }
+      }
+
+      .weui-footer{
+        position: absolute;
+        width: 100%;
+        height: 45px;
+        bottom: -30px;
+        .weui-footer__text{
+          padding-top: 10px;
+        }
+      }
+    }
+
+    .submit{
+      width: 100%;
+      position: absolute;
+      bottom: 0px;
+      border-radius: 0px;
+    }
+  }
+
+</style>
+
+<template>
+  <view class="page question">
+    <view class="name">
+      <view class="page__title">{{question.label}}</view>
+      <!--<view class="page__desc"></view>-->
+    </view>
+
+    <view class="me-answer" wx:if="{{!showQuestionMe}}" @tap="clickMeAnswer">
+      <view class="weui-cell__ft weui-cells__title weui-flex">
+        <view class="weui-flex__item"></view>
+        <view class="answer-text">
+          <view class="label">{{answer.me.label}}</view>
+          <view class="trianglel"></view>
+        </view>
+        <image class="avatar" src="https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLdPnqaKu1jtYB3xbJHAia4uUMX3ibxxqZJYZzGEJ0RleibCA3icNJLM6KKOqsFcmebgoLd0ib21Z7RVbw/132"></image>
+      </view>
+    </view>
+
+    <view class="question-section-me" wx:else>
+      <view class="weui-cell__ft weui-cells__title weui-flex user-me">
+        <view class="weui-flex__item me">YOU</view>
+        <image class="avatar" src="https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLdPnqaKu1jtYB3xbJHAia4uUMX3ibxxqZJYZzGEJ0RleibCA3icNJLM6KKOqsFcmebgoLd0ib21Z7RVbw/132"></image>
+      </view>
+      <view class="question-body">
+        <view class="triangleb"></view>
+        <view class="weui-cells weui-cells_after-title">
+          <radio-group bindchange="radioChange">
+            <repeat for="{{question.options}}" key="index" index="index" item="option">
+              <label class="weui-cell" @tap="clickMeAnswerItem">
+                <radio class="weui-check" value="{{option.value}}" checked="{{option.value === answer.me.value}}"/>
+                <view class="weui-cell__bd">{{option.label}}</view>
+                <view class="weui-cell__ft weui-cell__ft_in-radio">
+                  <icon class="weui-icon-checkbox_circle" type="circle" size="23" wx:if="{{option.value != answer.me.value}}"></icon>
+                  <icon class="weui-icon-checkbox_success" type="success" size="23" wx:if="{{option.value === answer.me.value}}"></icon>
+                </view>
+              </label>
+            </repeat>
+          </radio-group>
+          <view class="weui-cell weui-cell_link" wx:if="{{question.options.length > 5}}">
+            <view class="weui-cell__bd">添加更多</view>
+          </view>
+        </view>
+      </view>
+      <view class="weui-footer">
+        <view class="weui-footer__text">跳过</view>
+      </view>
+    </view>
+
+
+    <view class="question-section-other" wx:if="{{!showQuestionMe}}">
+      <view class="weui-cells__title weui-flex user-other">
+        <image class="avatar" src="https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/avatar.png"></image>
+        <view class="weui-flex__item other">中意的人</view>
+      </view>
+      <view class="question-body">
+        <view class="triangleb"></view>
+        <view class="weui-cells weui-cells_after-title">
+          <checkbox-group bindchange="checkboxChange">
+            <repeat for="{{question.options}}" key="index" index="index" item="option">
+              <label class="weui-cell">
+                <checkbox class="weui-check" value="{{option.value}}" checked="{{wxsLib.includes(answer.other, option.value)}}"/>
+                <view class="weui-cell__bd">{{option.label}}</view>
+                <view class="weui-cell__ft weui-check__hd_in-checkbox">
+                  <icon class="weui-icon-checkbox_circle" type="circle" size="23" wx:if="{{!wxsLib.includes(answer.other, option.value)}}"></icon>
+                  <icon class="weui-icon-checkbox_success" type="success" size="23" wx:if="{{wxsLib.includes(answer.other, option.value)}}"></icon>
+                </view>
+              </label>
+            </repeat>
+          </checkbox-group>
+          <view class="weui-cell weui-cell_link" wx:if="{{question.options.length > 5}}">
+            <view class="weui-cell__bd">添加更多</view>
+          </view>
+        </view>
+      </view>
+
+      <view class="weui-footer important" @tap="importantClick" wx:if="{{question.options.length != answer.other.length}}">
+        <view class="weui-footer__text">
+          对我很重要
+          <view class="weui-check__hd_in-checkbox">
+            <icon class="weui-icon-checkbox_circle" type="circle" size="23" wx:if="{{!answer.important}}"></icon>
+            <icon class="weui-icon-checkbox_success" type="success" size="23" wx:if="{{answer.important}}"></icon>
+          </view>
+        </view>
+      </view>
+      <view class="weui-footer" wx:else>
+        <view class="weui-footer__text">
+          <view>你选择了每一个答案</view>
+          <view>问题将被标记为无关紧要</view>
+        </view>
+      </view>
+    </view>
+
+    <button class="weui-btn submit" type="primary" @tap="submit" wx:if="{{answer.other.length > 0}}">提交</button>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import wxsLib from '../wxs/lib.wxs'
+  import _ from 'underscore'
+  export default class QuestionView extends wepy.component {
+
+    wxs = {
+      wxsLib: wxsLib,
+    };
+
+    props = {
+      args: {
+        type: Object
+      }
+    };
+
+    async onLoad(e){
+      if(this.$parent.$parent.globalData.my_spaces.length < 1){
+        throw new Error('当前用户不属于任何Space')
+      }
+      const spaceId = this.$parent.$parent.globalData.my_spaces[0]._id; //TODO 处理spaceId 问题
+      const object = JSON.parse(JSON.stringify(await this.$parent.$parent.getObject('love_answer', spaceId)));
+      console.log('object', object)
+      this.questions = this.getQuestions(object.fields);
+      this.question = this.questions[this.questionIndex];
+      console.log('this.questionKeys', this.questionKeys);
+      console.log('this.question', this.question);
+      this.$apply()
+    }
+
+    /*
+    [
+      {
+        label: '',
+        name: '',
+        type: ''
+        options: []
+        showOtherQuesion: true/false
+        showImportant: true/false
+      }
+    ]
+    */
+    getQuestions(fields){
+      const OTHER = '_o';
+      const IMPORTANT = '_i';
+      let questions = [];
+      const keys = _.keys(fields);
+      _.forEach(keys, (key)=>{
+        let field = fields[key];
+        if(key.slice(-OTHER.length) != OTHER && key.slice(-IMPORTANT.length) != IMPORTANT){
+
+          let question = {};
+
+          question.label = field.label || field.name;
+
+          question.name = field.name;
+
+          question.type = field.type;
+
+          if(field.options){
+            question.options = field.options;
+          }
+
+          question.showOtherQuesion = _.include(keys, key + OTHER);
+
+          question.showImportant = _.include(keys, key + IMPORTANT);
+
+          questions.push(question)
+        }
+      });
+      return questions;
+    }
+
+//    getQuestion(field){
+//      if(field.type === ''){}
+//    }
+
+    data = {
+      questionIndex: 0,
+      question: {
+        name: 'Are you OK ?',
+        options: [
+          {label: 'YES', value: '0'},
+          {label: 'NO', value: '1'},
+          {label: 'hen qi guai shuo bu shang lai, hen qi guai shuo bu shang lai, hen qi guai shuo bu shang lai', value: '2'}
+        ]
+      },
+      answer: {
+        me: '',
+        other: '',
+        important: false
+      },
+      showQuestionMe: true
+    };
+
+    nextQuestion(){
+      this.questionIndex += 1;
+      this.question = this.questions[this.questionIndex];
+
+      this.answer = {
+        me: '',
+        other: '',
+        important: false
+      };
+
+      this.showQuestionMe = true;
+
+      console.log('this.question', this.question);
+      this.$apply()
+    }
+
+    methods = {
+      radioChange: function (e) {
+        this.showQuestionMe = false;
+        const radioItems = this.question.options;
+        for (let i = 0, len = radioItems.length; i < len; ++i) {
+          if(radioItems[i].value === e.detail.value){
+            this.answer.me = radioItems[i]
+          }
+        }
+        this.$apply();
+      },
+      clickMeAnswerItem: function () {
+        this.showQuestionMe = false;
+        this.$apply()
+      },
+      checkboxChange: function (e) {
+        this.answer.other = e.detail.value;
+        this.$apply();
+      },
+      importantClick: function (e) {
+        this.answer.important = !this.answer.important;
+        this.$apply();
+      },
+      submit: function () {
+        console.log('submit answer is ', this.answer);
+        this.nextQuestion();
+      },
+      clickMeAnswer: function (e) {
+        this.showQuestionMe = true;
+        this.answer.other = [];
+        this.$apply();
+      }
+    }
+  }
+</script>

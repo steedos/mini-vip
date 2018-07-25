@@ -1,0 +1,16 @@
+<style lang="less">
+  .body{
+
+  }
+</style>
+
+<template>
+
+</template>
+
+<script>
+  import wepy from 'wepy'
+  export default class Papers extends wepy.component {
+
+  }
+</script>

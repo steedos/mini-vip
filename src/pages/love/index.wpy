@@ -19,6 +19,10 @@
     <view class="page__bd">
       <button class=" btn-join" @tap="join">立即加入</button>
     </view>
+
+    <view>
+      <navigator url="/pages/love/papers_view" class="btn-join" style="text-align: center;padding: 10px">💗爱的抉择💗</navigator>
+    </view>
   </view>
 </template>
 
@@ -40,6 +44,9 @@ export default class LoveIndex extends wepy.page {
   async onLoad (e) {
     this.space_id = e.space_id || loveSpaceId;
     console.log("this.space_id============", this.space_id);
+
+    await this.$parent.login();
+
     if(!this.space_id){
       console.log("this.space_id===========33=");
       wepy.reLaunch({url: `/pages/home/store`});

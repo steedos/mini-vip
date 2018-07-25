@@ -1,0 +1,45 @@
+<style lang="less">
+  .userinfo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .userinfo-avatar {
+    width: 80rpx;
+    height: 80rpx;
+    border-radius: 50%;
+  }
+
+  .userinfo-nickname {
+    color: #aaa;
+  }
+
+  /*.page{*/
+    /*background-color: #FFFFFF;*/
+  /*}*/
+</style>
+<template>
+  <questionView></questionView>
+</template>
+
+<script>
+  import wepy from 'wepy'
+
+  import QuestionView from '@/components/question_view' // alias example
+
+  export default class PapersView extends wepy.page {
+    config = {
+      navigationBarTitleText: '💗爱的抉择💗'
+    };
+
+    components = {
+      questionView: QuestionView
+    };
+
+
+    data = {
+
+    };
+  }
+</script>

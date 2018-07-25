@@ -1,0 +1,13 @@
+
+function includes(arr, item) {
+  if(arr){
+    return arr.indexOf(item) > -1
+  }
+  return false;
+}
+
+
+
+module.exports = {
+  includes: includes
+};
