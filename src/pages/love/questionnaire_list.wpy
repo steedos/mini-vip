@@ -1,9 +1,140 @@
 <style lang="less" scoped>
+  .questionnaire-list {
+    .header {
+      height: 180rpx;
+      width: 100%;
+      .cover-wrapper {
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        box-shadow: 0px 1rpx 8rpx 0px rgba(0,0,0,0.16);
+      }
+    }
+    .user-container {
+      width: auto;
+      margin: -30rpx 30rpx 0;
+      padding: 0 30rpx 30rpx;
+      height: auto;
+      background: #ffffff;
+      position: relative;
+      border-radius: 0.25rem;
+      &::after {
+        content: '';
+        position: absolute;
+        height: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: transparent;
+        box-shadow: 0px 0px 18px 4px rgba(115, 115, 115, 0.11);
+        z-index: -1;
+      }
+      .top-bar {
+        display: flex;
+        .avatar-container {
+          width: 150rpx;
+          height: 150rpx;
+          border-radius: 50%;
+          border: 4rpx solid #ffffff;
+          overflow: hidden;
+          position: absolute;
+          left: 30rpx;
+          top: -60rpx;
+          .avatar {
+            width: 100%;
+            height: 100%;
+          }
+        }
+        .user-info {
+          flex: 1;
+          margin-top: 10rpx;
+          margin-left: 210rpx;
+          .name {
+            font-size: 32rpx;
+            font-weight: bold;
+          }
+          .sign {
+            font-size: 24rpx;
+            color: #b2b2b2;
+          }
+        }
+      }
+      .hr {
+        margin: 30rpx 0;
+        width: auto;
+        height: 1rpx;
+        border-top: 1rpx solid #c0bfc4;
+      }
+      .about-me {
+        display: flex;
+        .row {
+          flex: 1;
+          align-items: center;
+          justify-content: center;
+          display: flex;
+          flex-direction: column;
+          .label {
+            font-size: 24rpx;
+            color: #b2b2b2;
+          }
+          .value {
+            font-size: 32rpx;
+            font-weight: bold;
+          }
+        }
+      }
+      .modify {
+        margin-top: 30rpx;
+        padding: 10rpx 0;
+        border-radius: 40rpx;
+        text-align: center;
+        font-size: 28rpx;
+        font-weight: bold;
+        color: #ffffff;
+        background: #14B9C8;
+      }
+    }
+  }
 </style>
 
 <template>
-  <view class="page">
-    Questionnaire List
+  <view class="page questionnaire-list">
+    <view class="header">
+      <view class="cover-wrapper" style="background-image: url({{userInfo.avatarUrl}})"></view>
+    </view>
+
+    <view class="user-container">
+      <view class="top-bar">
+        <view class="avatar-container">
+          <image class="avatar" mode="aspectFill" src="{{userInfo.avatarUrl}}"/>
+        </view>
+        <view class="user-info">
+          <view class="name">{{name}}</view>
+          <view class="sign">Nice to meet you!</view>
+        </view>
+      </view>
+      <view class="hr"></view>
+      <view class="about-me">
+        <repeat for="{{options}}" key="index" index="index" item="opt">
+          <view class="row">
+            <view class="value">{{opt.value}}</view>
+            <view class="label">{{opt.label}}</view>
+          </view>
+        </repeat>
+      </view>
+      <view class="modify">修改资料</view>
+    </view>
+
+    <view class="weui-cells">
+      <repeat for="{{questionnaire}}" key="index" index="index" item="naire">
+        <navigator class="weui-cell weui-cell_access">
+          <view class="weui-cell__bd">
+            <view>{{naire.label}}</view>
+          </view>
+          <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+        </navigator>
+      </repeat>
+    </view>
   </view>
 </template>
 
@@ -16,7 +147,35 @@ export default class QuestionnaireList extends wepy.page {
     enablePullDownRefresh: true
   };
 
-  data = {};
+  data = {
+    name: '',
+    userInfo: null,
+    options: [{
+      label: '年龄', value: '23'
+    }, {
+      label: '身高', value: '187'
+    }, {
+      label: '体重', value: '80'
+    }],
+    questionnaire: [{
+      label: '我的资料'
+    }, {
+      label: '我喜欢的'
+    }, {
+      label: '恋爱小测试'
+    }]
+  };
+
+  async onLoad() {
+    await this.$parent.login()
+    const setting = await wepy.getSetting();
+    const user = this.$parent.globalData.user;
+    if (setting.authSetting['scope.userInfo']) {
+      this.userInfo = this.$parent.globalData.userInfo;
+    }
+    this.name = user.name;
+    this.$apply();
+  }
 
   methods = {};
 
