@@ -196,7 +196,8 @@ export default class VIP extends wepy.app {
       'pages/love/invite_code',
       'pages/love/invite_code_success',
       'pages/love/invite_code_fail',
-      'pages/love/papers_view'
+      'pages/love/papers_view',
+      'pages/love/navigation_qusestion',
     ],
     tabBar: {
       color: '#666',

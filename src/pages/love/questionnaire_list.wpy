@@ -49,6 +49,7 @@
           flex: 1;
           margin-top: 10rpx;
           margin-left: 210rpx;
+          overflow:hidden;
           .name {
             font-size: 32rpx;
             font-weight: bold;
@@ -56,6 +57,10 @@
           .sign {
             font-size: 24rpx;
             color: #b2b2b2;
+            text-overflow: ellipsis;
+            white-space:nowrap;
+            overflow:hidden;
+            width: 100%;
           }
         }
       }
