@@ -2,8 +2,12 @@
   page{
     background: #fff;
   }
+  .page{
+    background: #fff;
+  }
   .page__hd{
-    padding: 20px;
+    padding:40rpx;
+    margin-top:-200rpx;
   }
   .btn-join{
     background:#E8B866;
@@ -14,20 +18,26 @@
     width:500rpx;
     color:#FFFCEC;
   }
-  .top-bar{
-    background:#353535;
-    height:400px;
-    border-radius:100%;
-    width:600px;
-    position:absolute;
-    left:50%;
-    margin-left:-300px;
-    top:-320px;
+  .top-bar-wrapper{
+    position:relative;
+    width:100%;
+    height:200rpx;
+    overflow:hidden;
+    .top-bar{
+      background:#353535;
+      height:800rpx;
+      border-radius:100%;
+      width:1200rpx;
+      position:absolute;
+      left:50%;
+      margin-left:-600rpx;
+      top:-610rpx;
+    }
   }
   .card {
-    background-color: #FD3B5F;
-    background-image:-webkit-linear-gradient(315deg, #FD3B5F, #FB644E 50%, #FB6E36);
-    background-image:linear-gradient(135deg, #FD3B5F, #FB644E 50%, #FB6E36);
+    background-color: #FD436A;
+    background-image:-webkit-linear-gradient(135deg, #FD436A, #FB644E 50%, #FF773B);
+    background-image:linear-gradient(135deg, #FD436A, #FB644E 50%, #FF773B);
     height: 360rpx;
     margin-top: 20rpx;
     margin-bottom: 30rpx;
@@ -85,7 +95,9 @@
 
 <template>
   <view class="page">
-    <view class="top-bar"></view>
+    <view class="top-bar-wrapper">
+      <view class="top-bar"></view>
+    </view>
     <view class="page__hd">
       <view class="card">
         <view class="card-header">
