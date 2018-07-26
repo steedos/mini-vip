@@ -44,9 +44,9 @@
       <view class="love-licence"></view>
     </view>
 
-    <view>
-      <navigator url="/pages/love/papers_view" class="btn-join" style="text-align: center;padding: 10px; margin-top:150px">💗爱的抉择💗</navigator>
-    </view>
+    <!--<view>-->
+      <!--<navigator url="/pages/love/papers_view" class="btn-join" style="text-align: center;padding: 10px; margin-top:150px">💗爱的抉择💗</navigator>-->
+    <!--</view>-->
   </view>
 </template>
 
