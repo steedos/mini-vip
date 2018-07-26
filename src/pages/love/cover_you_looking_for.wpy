@@ -54,8 +54,8 @@ export default class CoverYouLookingFor extends wepy.page {
 
   methods = {
     next() {
-      wx.navigateTo({
-        url: `/pages/love/invite_code?space_id=${this.space_id}`
+      wx.switchTab({
+        url: '/pages/love/questionnaire_list'
       });
     }
   };
