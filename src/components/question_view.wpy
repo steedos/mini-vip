@@ -209,6 +209,16 @@
     transition: all .3s;
     -webkit-transition: all .3s;
   }
+
+  .question-section-me .weui-cell:before {
+    border-top: 1rpx solid #749AE5;
+    left: 0px;
+  }
+
+  .question-section-other .weui-cell:before {
+    border-top: 1rpx solid #EBEDF2;
+    left: 0px;
+  }
 </style>
 
 <template>
