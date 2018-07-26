@@ -5,6 +5,9 @@
 .bottom_spacing {
   margin-bottom: 20px;
 }
+.background {
+  background:#4D7BD9;
+}
 </style>
 
 <template>
@@ -26,7 +29,7 @@
       </view>
 
       <view class="page__bd_spacing">
-          <button class="weui-btn" type="primary" @tap="confirm">确定</button>
+          <button class="weui-btn background" type="primary" @tap="confirm">确定</button>
           <button class="weui-btn" type="default" @tap="cancel">跳过</button>
       </view>
     </view>
