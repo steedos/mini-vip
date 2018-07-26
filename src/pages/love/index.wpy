@@ -39,9 +39,9 @@
       <view class="love-title">告别刷脸时代，寻找志趣相投的有缘人</view>
     </view>
     <view class="page__bd">
-      <view class="love-summary">无颜是一套人工智能匹配算法，根据您的喜好和对方的喜好，每周为您推荐一位有缘人。</view>
+      <view class="love-summary">无颜是一套人工智能匹配算法，根据您的喜好和对方喜好，每周为您推荐一位有缘人。</view>
       <button class="btn-join" @tap="join">立即加入</button>
-      <view class="love-licence">点击加入表示您同意我们的条款及隐私政策</view>
+      <view class="love-licence"></view>
     </view>
 
     <view>
