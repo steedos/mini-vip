@@ -682,8 +682,6 @@
 
           this.questionKeys = _.keys(this.questions);
 
-          console.log('this.questionKeys22222222222222222', this.questionKeys);
-
           this.pendingQuesionKeys = _.difference(this.questionKeys, _.keys(this.questionsAnswer));
 
           //如果所有问题都已回答，则跳转第一个问题
@@ -808,8 +806,9 @@
 
       if(this.pendingQuesionKeys.length === 0){
         this.question = this.questions[_.last(this.questionKeys)];
-      }else{
-        this.question = this.questions[this.pendingQuesionKeys[0]];
+      }
+
+      if(!init){
         this.pendingQuesionKeys = this.pendingQuesionKeys.splice(1, this.pendingQuesionKeys.length);
       }
 
