@@ -39,14 +39,11 @@
       <view class="love-title">告别刷脸时代，寻找志趣相投的有缘人</view>
     </view>
     <view class="page__bd">
-      <view class="love-summary">无颜是一套人工智能匹配算法，根据您的喜好和对方喜好，每周为您推荐一位相互匹配值最高的有缘人。</view>
-      <button class="btn-join" @tap="join">立即加入</button>
+      <view class="love-summary">“无颜”是一位聪明又勤快的智能机器人，每周他都会根据您的喜好和对方喜好，执行海量的数据计算，从茫茫人海中为您挑选一位“相互匹配”值最高的有缘人，互换微信号码。</view>
+      <button class="btn-join" @tap="join">我想试试</button>
       <view class="love-licence"></view>
     </view>
 
-    <view>
-      <navigator url="/pages/love/papers_view" class="btn-join" style="text-align: center;padding: 10px; margin-top:150px">💗爱的抉择💗</navigator>
-    </view>
   </view>
 </template>
 
