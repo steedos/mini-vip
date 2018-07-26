@@ -1,0 +1,66 @@
+<style lang="less">
+page {
+  background: #353535;
+}
+.page__hd {
+  padding: 40rpx;
+  .love-title {
+    margin-top: 40rpx;
+    color: #fff;
+    font-size: 65rpx;
+    font-weight: bold;
+  }
+}
+.page__bd {
+  padding: 40rpx;
+  .love-summary {
+    color: #fff;
+    font-size: 45rpx;
+    margin-bottom: 100rpx;
+  }
+}
+.btn-join {
+  background: #4d7bd9;
+  padding: 6px;
+  color: #fff;
+  font-weight: bold;
+  margin: 30rpx 0;
+}
+</style>
+
+<template>
+  <view class="page">
+    <view class="page__hd">
+      <view class="love-title">回答问题</view>
+    </view>
+    <view class="page__bd">
+      <view class="love-summary">然后我们才能为你寻找最匹配的人</view>
+      <button class="btn-join" @tap="next">继续</button>
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import { loveSpaceId } from '@/config';
+
+export default class CoverAnswerQuestions extends wepy.page {
+  config = {
+    navigationBarTitleText: '回答问题'
+  };
+
+  data = {};
+
+  async onLoad(e) {
+    this.space_id = e.space_id || loveSpaceId;
+  }
+
+  methods = {
+    next() {
+      wx.navigateTo({
+        url: `/pages/love/papers_view?object_name=love_answer&space_id=${this.space_id}`
+      });
+    }
+  };
+}
+</script>

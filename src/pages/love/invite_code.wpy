@@ -123,8 +123,8 @@ export default class InviteCode extends wepy.page {
       }
     },
     cancel() {
-      wx.switchTab({
-        url: '/pages/love/questionnaire_list'
+      wx.navigateTo({
+        url: '/pages/love/cover_about_yourself'
       });
     }
   };
