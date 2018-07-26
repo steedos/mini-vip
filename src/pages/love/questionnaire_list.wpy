@@ -148,7 +148,7 @@ import wepy from 'wepy';
 
 export default class QuestionnaireList extends wepy.page {
   config = {
-    navigationBarTitleText: '问卷列表',
+    navigationBarTitleText: '你的',
     enablePullDownRefresh: true
   };
 

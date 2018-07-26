@@ -218,10 +218,10 @@ export default class VIP extends wepy.app {
         text: '摇一摇',
       },
       {
-        pagePath: 'pages/me',
+        pagePath: 'pages/love/questionnaire_list',
         selectedIconPath: './images/tabbars/me_pressed.png',
         iconPath: './images/tabbars/me.png',
-        text: '我的',
+        text: '你的',
       }]
     },
     window: {
