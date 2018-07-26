@@ -401,7 +401,7 @@
     <view class="question-section-other" wx:if="{{!showQuestionMe}}">
       <view class="weui-cells__title weui-flex user-other">
         <image class="avatar" src="https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/avatar.png"></image>
-        <view class="weui-flex__item other">你的恋人</view>
+        <view class="weui-flex__item other">你的心上人</view>
       </view>
       <view class="question-body">
         <block wx:if="{{question.options_all.length > 4}}">
