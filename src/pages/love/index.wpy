@@ -124,6 +124,7 @@
 import wepy from 'wepy';
 import { baseUrl } from '@/config';
 import { loveSpaceId } from '@/config';
+import pageRouter from '@/utils/pageRouter'
 
 export default class LoveIndex extends wepy.page {
   config = {
@@ -151,7 +152,7 @@ export default class LoveIndex extends wepy.page {
 
   methods = {
     join(){
-      wepy.navigateTo({url: `/pages/love/invite_code?space_id=${this.space_id}`});
+      pageRouter.navigateTo({url: `/pages/love/invite_code?space_id=${this.space_id}`});
     }
   };
 }
