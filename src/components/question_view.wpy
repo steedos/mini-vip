@@ -171,11 +171,35 @@
       bottom: 0px;
       border-radius: 0px;
     }
+
   }
 
+  .question-progress {
+    position: relative;
+    height: 3px;
+    border-radius: 0px;
+    background-color: #e2e2e2;
+  }
+
+  .question-progress-bar {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0;
+    max-width: 100%;
+    height: 3px;
+    border-radius: 0px;
+    text-align: right;
+    background-color: #5FB878;
+    transition: all .3s;
+    -webkit-transition: all .3s;
+  }
 </style>
 
 <template>
+  <view class="question-progress">
+    <view class="question-progress-bar" style="width: {{progress}};"></view>
+  </view>
   <view class="page question">
     <view class="name">
       <view class="page__title">{{question.label}}</view>
@@ -213,7 +237,7 @@
               </label>
             </repeat>
           </radio-group>
-          <view class="weui-cell weui-cell_link" wx:if="{{question.options.length > 5}}">
+          <view class="weui-cell" wx:if="{{question.options_all.length > 4}}">
             <view class="weui-cell__bd">添加更多</view>
           </view>
         </view>
@@ -244,7 +268,7 @@
               </label>
             </repeat>
           </checkbox-group>
-          <view class="weui-cell weui-cell_link" wx:if="{{question.options.length > 5}}">
+          <view class="weui-cell" wx:if="{{question.options_all.length > 5}}">
             <view class="weui-cell__bd">添加更多</view>
           </view>
         </view>
@@ -275,12 +299,23 @@
   import wepy from 'wepy'
   import wxsLib from '../wxs/lib.wxs'
   import _ from 'underscore'
+
+  const OTHER = '_o';
+  const IMPORTANT = '_i';
+
   export default class QuestionView extends wepy.component {
 
     wxs = {
       wxsLib: wxsLib,
     };
 
+    /*
+     args: {
+      object_name: '',
+      space_id: '',
+      answered_url: '',
+     }
+    */
     props = {
       args: {
         type: Object
@@ -292,10 +327,45 @@
         throw new Error('当前用户不属于任何Space')
       }
       const spaceId = this.$parent.$parent.globalData.my_spaces[0]._id; //TODO 处理spaceId 问题
-      const object = JSON.parse(JSON.stringify(await this.$parent.$parent.getObject('love_answer', spaceId)));
+      this.space_id = spaceId;
+      //获取问题清单
+      const object = JSON.parse(JSON.stringify(await this.$parent.$parent.getObject(this.object_name, spaceId)));
       console.log('object', object)
       this.questions = this.getQuestions(object.fields);
-      this.question = this.questions[this.questionIndex];
+
+      this.questionKeys = _.keys(this.questions);
+
+      console.log('this.questionKeys', this.questionKeys);
+
+      //获取用户答案
+      let query_options = {
+        $filter: `owner eq '${this.$parent.$parent.globalData.user._id}'`
+      };
+
+      let result = await this.$parent.$parent.query(this.object_name, query_options, spaceId);
+
+      if(result.value.length === 0){
+        result = await this.$parent.$parent.insert(this.object_name, {
+          owner: this.$parent.$parent.globalData.user._id
+        }, spaceId);
+      }
+
+      this.questionsAnswer = result.value[0];
+
+      this.pendingQuesionKeys = _.difference(this.questionKeys, _.keys(this.questionsAnswer));
+
+      if(this.pendingQuesionKeys.length === 0){
+        this.question = this.questions[_.last(this.questionKeys)];
+      }else{
+        this.question = this.questions[this.pendingQuesionKeys[0]];
+      }
+
+      this.progress = this.getProgress();
+
+      console.log('this.pendingQuesionKeys', this.pendingQuesionKeys);
+
+      console.log('result', this.questionsAnswer);
+
       console.log('this.questionKeys', this.questionKeys);
       console.log('this.question', this.question);
       this.$apply()
@@ -314,9 +384,7 @@
     ]
     */
     getQuestions(fields){
-      const OTHER = '_o';
-      const IMPORTANT = '_i';
-      let questions = [];
+      let questions = {};
       const keys = _.keys(fields);
       _.forEach(keys, (key)=>{
         let field = fields[key];
@@ -331,14 +399,15 @@
           question.type = field.type;
 
           if(field.options){
-            question.options = field.options;
+            question.options = field.options.slice(0,4);
+            question.options_all = field.options;
           }
 
           question.showOtherQuesion = _.include(keys, key + OTHER);
 
           question.showImportant = _.include(keys, key + IMPORTANT);
 
-          questions.push(question)
+          questions[key] = question;
         }
       });
       return questions;
@@ -349,9 +418,12 @@
 //    }
 
     data = {
+      object_name: 'love_answer',
+      questionKeys: [],
+      pendingQuesionKeys: [],
       questionIndex: 0,
       question: {
-        name: 'Are you OK ?',
+        label: 'Are you OK ?',
         options: [
           {label: 'YES', value: '0'},
           {label: 'NO', value: '1'},
@@ -363,21 +435,32 @@
         other: '',
         important: false
       },
-      showQuestionMe: true
+      showQuestionMe: true,
+      progress: '0%',
+      questionsAnswer: {}
     };
 
+    getProgress(){
+      return (1 - this.pendingQuesionKeys.length / this.questionKeys.length) * 100 + '%';
+    }
+
     nextQuestion(){
-      this.questionIndex += 1;
-      this.question = this.questions[this.questionIndex];
 
-      this.answer = {
-        me: '',
-        other: '',
-        important: false
-      };
+      this.pendingQuesionKeys = this.pendingQuesionKeys.splice(1, this.pendingQuesionKeys.length);
+      this.progress = this.getProgress();
 
-      this.showQuestionMe = true;
+      if(this.pendingQuesionKeys.length === 0){
+        console.log('已经回答所有问题');
 
+      }else{
+        this.question = this.questions[this.pendingQuesionKeys[0]];
+        this.answer = {
+          me: '',
+          other: '',
+          important: false
+        };
+        this.showQuestionMe = true;
+      }
       console.log('this.question', this.question);
       this.$apply()
     }
@@ -405,8 +488,33 @@
         this.answer.important = !this.answer.important;
         this.$apply();
       },
-      submit: function () {
+      submit: async function () {
         console.log('submit answer is ', this.answer);
+        let qa = {};
+        const q = this.question;
+        const answer = this.answer;
+        const questionsAnswer = this.questionsAnswer;
+
+        const record_id = questionsAnswer._id;
+
+        if(q.showOtherQuesion){
+          qa[q.name + OTHER] = answer.other
+        }
+
+        if(q.showImportant){
+          qa[q.name + IMPORTANT] = answer.important;
+
+          if(answer.other.length === q.options_all.length){
+            qa[q.name + IMPORTANT] = false;
+          }
+        }
+
+        qa[q.name] = answer.me.value;
+
+        console.log('qa', qa);
+
+        await this.$parent.$parent.update(this.object_name, record_id, qa, this.space_id);
+
         this.nextQuestion();
       },
       clickMeAnswer: function (e) {
