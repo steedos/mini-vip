@@ -62,6 +62,25 @@
       }
     }
   }
+  .love-introduce{
+    text-align:center;
+    margin:20px;
+    .love-introduce-icon{
+      .slds-icon{
+        margin:auto;
+      }
+    }
+    .love-introduce-title{
+      font-size:18px;
+      margin-top:10px;
+      font-family:幼圆;
+      font-weight:bold;
+    }
+    .love-introduce-summary{
+      font-size:16px;
+      color:#777;
+    }
+  }
 </style>
 
 <template>
@@ -71,7 +90,7 @@
       <view class="card">
         <view class="card-header">
           <view class="card-name">
-            <text>新恋爱主义开创者</text>
+            <text>无颜交友主义开创者</text>
           </view>
         </view>
         <view class="card-footer">
@@ -81,6 +100,17 @@
       </view>
     </view>
     <view class="page__bd">
+      <view class="love-introduce">
+        <view class="love-introduce-icon">
+          <view class="slds-icon-standard-skill-entity slds-icon"/>
+        </view>
+        <view class="love-introduce-title">
+          无颜交友主义
+        </view>
+        <view class="love-introduce-summary">
+          提倡无颜交友，告别刷脸时代
+        </view>
+      </view>
       <button class=" btn-join" @tap="join">立即加入</button>
     </view>
 
@@ -97,7 +127,7 @@ import { loveSpaceId } from '@/config';
 
 export default class LoveIndex extends wepy.page {
   config = {
-    navigationBarTitleText: 'AI交友'
+    navigationBarTitleText: '无颜'
   };
 
   data = {
@@ -112,8 +142,10 @@ export default class LoveIndex extends wepy.page {
     await this.$parent.login();
 
     if(!this.space_id){
-      console.log("this.space_id===========33=");
-      wepy.reLaunch({url: `/pages/home/store`});
+      wx.showToast({
+        title: "未配置工作区ID",
+        icon: "none"
+      });
     }
   }
 
