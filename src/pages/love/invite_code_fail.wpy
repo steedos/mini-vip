@@ -1,4 +1,7 @@
 <style lang="less" scoped>
+.background {
+  background:#4D7BD9;
+}
 </style>
 
 <template>
@@ -13,7 +16,7 @@
         </view>
         <view class="weui-msg__opr-area">
             <view class="weui-btn-area">
-                <button class="weui-btn" type="primary" @tap="confirm">返回</button>
+                <button class="weui-btn background" type="primary" @tap="confirm">返回</button>
             </view>
         </view>
 

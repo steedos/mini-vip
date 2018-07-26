@@ -234,7 +234,7 @@ export default class VIP extends wepy.app {
   }
 
   globalData = {
-    title: "会员服务台",
+    title: "无颜",
     userInfo: null,
     space: null,
     spaceInfo: null,
