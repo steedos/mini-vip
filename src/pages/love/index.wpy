@@ -1,155 +1,53 @@
 <style lang="less">
   page{
-    background: #fff;
-  }
-  .page{
-    background: #fff;
+    background: #4FC5CF;
   }
   .page__hd{
     padding:40rpx;
-    margin-top:-200rpx;
-  }
-  .btn-join{
-    background:#E8B866;
-    border-radius:30px;
-    padding:2px;
-    font-size:40rpx;
-    margin:auto;
-    width:500rpx;
-    color:#FFFCEC;
-  }
-  .top-bar-wrapper{
-    position:relative;
-    width:100%;
-    height:200rpx;
-    overflow:hidden;
-    .top-bar{
-      background:#353535;
-      height:800rpx;
-      border-radius:100%;
-      width:1200rpx;
-      position:absolute;
-      left:50%;
-      margin-left:-600rpx;
-      top:-610rpx;
-    }
-  }
-  .card {
-    background-color: #FD436A;
-    background-image:-webkit-linear-gradient(135deg, #FD436A, #FB644E 50%, #FF773B);
-    background-image:linear-gradient(135deg, #FD436A, #FB644E 50%, #FF773B);
-    height: 360rpx;
-    margin-top: 20rpx;
-    margin-bottom: 30rpx;
-    margin-left: 20rpx;
-    margin-right: 20rpx;
-    border-radius: 20rpx;
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: flex;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    -webkit-flex-direction: column;
-            flex-direction: column;
-    position: relative;
-    margin-bottom: 0px;
-    background-repeat: no-repeat;
-    background-size: cover;
-    .card-header{
-      margin:20px;
+    .love-title{
+      margin-top:80rpx;
       color:#fff;
-    }
-    .card-footer{
-      position:absolute;
-      bottom:20px;
-      left:20px;
-      color:#fff;
-
-      .muted{
-        margin-left:20px;
-        font-size:0.8em;
-        color:#ED2047;
-      }
-    }
-  }
-  .love-introduce{
-    text-align:center;
-    margin:20px;
-    .love-introduce-icon{
-      .slds-icon{
-        margin:auto;
-      }
-    }
-    .love-introduce-title{
-      font-size:18px;
-      margin-top:10px;
-      font-family:幼圆;
+      font-size:50rpx;
+      font-family:黑体;
       font-weight:bold;
     }
-    .love-introduce-summary{
-      font-size:14px;
-      color:#777;
+  }
+  .page__bd{
+    padding:40rpx;
+    .love-summary{
+      color:#fff;
+      font-size:40rpx;
+      font-family:幼圆;
+      margin-bottom:260rpx;
     }
+  }
+  .btn-join{
+    background:#4D7BD9;
+    padding:6px;
+    color:#fff;
+    font-weight:bold;
+    margin:30rpx 0;
+  }
+  .love-licence{
+    color:#fff;
+    font-size:32rpx;
+    text-align:center;
   }
 </style>
 
 <template>
   <view class="page">
-    <view class="top-bar-wrapper">
-      <view class="top-bar"></view>
-    </view>
     <view class="page__hd">
-      <view class="card">
-        <view class="card-header">
-          <view class="card-name">
-            <text>无颜交友主义开创者</text>
-          </view>
-        </view>
-        <view class="card-footer">
-          <text>限时 免费</text>
-          <text class="muted">原价￥200</text>
-        </view>
-      </view>
+      <view class="love-title">告别各种尬聊，为您匹配志趣相投的有缘人</view>
     </view>
     <view class="page__bd">
-      <view class="love-introduce">
-        <view class="love-introduce-icon">
-          <view class="slds-icon-standard-skill-entity slds-icon"/>
-        </view>
-        <view class="love-introduce-title">
-          无颜交友主义
-        </view>
-        <view class="love-introduce-summary">
-          提倡无颜交友，告别刷脸时代
-        </view>
-      </view>
-      <view class="love-introduce">
-        <view class="love-introduce-icon">
-          <view class="slds-icon-standard-social slds-icon"/>
-        </view>
-        <view class="love-introduce-title">
-          AI精准匹配
-        </view>
-        <view class="love-introduce-summary">
-          人工智能自动精准匹配，告别红娘低效模式
-        </view>
-      </view>
-      <view class="love-introduce">
-        <view class="love-introduce-icon">
-          <view class="slds-icon-standard-solution slds-icon"/>
-        </view>
-        <view class="love-introduce-title">
-          每周只匹配一次
-        </view>
-        <view class="love-introduce-summary">
-          每周只推荐一位好友，提高交友效率
-        </view>
-      </view>
-      <button class=" btn-join" @tap="join">立即加入</button>
+      <view class="love-summary">无颜是一套人工智能匹配算法，根据你的喜好和对方的喜好，每周为您推荐匹配度最高的有缘人。</view>
+      <button class="btn-join" @tap="join">立即加入</button>
+      <view class="love-licence">点击加入表示您同意我们的条款及隐私政策</view>
     </view>
 
     <view>
-      <navigator url="/pages/love/papers_view" class="btn-join" style="text-align: center;padding: 10px">💗爱的抉择💗</navigator>
+      <navigator url="/pages/love/papers_view" class="btn-join" style="text-align: center;padding: 10px; margin-top:150px">💗爱的抉择💗</navigator>
     </view>
   </view>
 </template>
