@@ -332,179 +332,181 @@
 </style>
 
 <template>
-  <view class="question-progress">
-    <view class="question-progress-bar" style="width: {{progress}};"></view>
-  </view>
-  <view class="page question">
-    <view class="name">
-      <view class="page__title">{{question.label}}</view>
-      <!--<view class="page__desc"></view>-->
+  <view class="page">
+    <view class="question-progress">
+      <view class="question-progress-bar" style="width: {{progress}};"></view>
     </view>
-
-    <view class="me-answer" wx:if="{{!showQuestionMe}}" @tap="clickMeAnswer">
-      <view class="weui-cell__ft weui-cells__title weui-flex">
-        <view class="weui-flex__item"></view>
-        <view class="answer-text">
-          <view class="label">{{answer.me.label}}</view>
-          <view class="trianglel"></view>
-        </view>
-        <image class="avatar" src="https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLdPnqaKu1jtYB3xbJHAia4uUMX3ibxxqZJYZzGEJ0RleibCA3icNJLM6KKOqsFcmebgoLd0ib21Z7RVbw/132"></image>
-      </view>
-    </view>
-
-    <view class="question-section-me" wx:else>
-      <view class="weui-cell__ft weui-cells__title weui-flex user-me">
-        <view class="weui-flex__item me">你</view>
-        <image class="avatar" src="https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLdPnqaKu1jtYB3xbJHAia4uUMX3ibxxqZJYZzGEJ0RleibCA3icNJLM6KKOqsFcmebgoLd0ib21Z7RVbw/132"></image>
-      </view>
-      <view class="question-body">
-        <block wx:if="{{question.options_all.length > 4}}">
-          <view class="big-select">
-            <view class="triangleb"></view>
-            <radio-group bindchange="radioChange" class="weui-flex">
-              <repeat for="{{question.options_all}}" key="index" index="index" item="option">
-                <label class="weui-flex__item" @tap="clickMeAnswerItem">
-                  <radio class="weui-check" value="{{option.value}}" checked="{{option.value === answer.me.value}}"/>
-                  <view class="placeholder">{{option.label}}</view>
-                </label>
-              </repeat>
-            </radio-group>
-          </view>
-        </block>
-        <block wx:else>
-          <view class="triangleb"></view>
-          <view class="weui-cells weui-cells_after-title">
-            <radio-group bindchange="radioChange">
-              <repeat for="{{question.options}}" key="index" index="index" item="option">
-                <label class="weui-cell" @tap="clickMeAnswerItem">
-                  <radio class="weui-check" value="{{option.value}}" checked="{{option.value === answer.me.value}}"/>
-                  <view class="weui-cell__bd">{{option.label}}</view>
-                  <view class="weui-cell__ft weui-cell__ft_in-radio">
-                    <icon class="weui-icon-checkbox_circle" type="circle" size="23" wx:if="{{option.value != answer.me.value}}"></icon>
-                    <icon class="weui-icon-checkbox_success" type="success" size="23" wx:if="{{option.value === answer.me.value}}"></icon>
-                  </view>
-                </label>
-              </repeat>
-            </radio-group>
-            <view class="weui-cell more" wx:if="{{question.options_all.length > 4}}" @tap="clickMore">
-              <view class="weui-cell__bd">更多...</view>
-            </view>
-          </view>
-        </block>
-      </view>
-      <view class="weui-footer" wx:if="{{!question.required}}" @tap="goNext">
-        <view class="weui-footer__text">跳过</view>
-      </view>
-    </view>
-
-
-    <view class="question-section-other" wx:if="{{!showQuestionMe}}">
-      <view class="weui-cells__title weui-flex user-other">
-        <image class="avatar" src="https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/avatar.png"></image>
-        <view class="weui-flex__item other">你的心上人</view>
-      </view>
-      <view class="question-body">
-        <block wx:if="{{question.options_all.length > 4}}">
-          <view class="big-select">
-            <view class="triangleb"></view>
-            <checkbox-group bindchange="checkboxChange" class="weui-flex">
-              <repeat for="{{question.options_all}}" key="index" index="index" item="option">
-                <label class="weui-flex__item">
-                  <checkbox class="weui-check" value="{{option.value}}" checked="{{wxsLib.includes(answer.other, option.value)}}"/>
-                  <view wx:if="{{wxsLib.includes(answer.other, option.value)}}" class="placeholder selected">{{option.label}}</view>
-                  <view wx:else class="placeholder">{{option.label}}</view>
-                </label>
-              </repeat>
-            </checkbox-group>
-          </view>
-        </block>
-        <block wx:else>
-          <view class="triangleb"></view>
-          <view class="weui-cells weui-cells_after-title">
-            <checkbox-group bindchange="checkboxChange">
-              <repeat for="{{question.options}}" key="index" index="index" item="option">
-                <label class="weui-cell">
-                  <checkbox class="weui-check" value="{{option.value}}" checked="{{wxsLib.includes(answer.other, option.value)}}"/>
-                  <view class="weui-cell__bd">{{option.label}}</view>
-                  <view class="weui-cell__ft weui-check__hd_in-checkbox">
-                    <icon class="weui-icon-checkbox_circle" type="circle" size="23" wx:if="{{!wxsLib.includes(answer.other, option.value)}}"></icon>
-                    <icon class="weui-icon-checkbox_success" type="success" size="23" wx:if="{{wxsLib.includes(answer.other, option.value)}}"></icon>
-                  </view>
-                </label>
-              </repeat>
-            </checkbox-group>
-            <view class="weui-cell more" wx:if="{{question.options_all.length > 4}}" @tap="clickMore">
-              <view class="weui-cell__bd">更多...</view>
-            </view>
-          </view>
-        </block>
-      </view>
-
-      <view class="weui-footer important" @tap="importantClick" wx:if="{{question.options_all.length != answer.other.length}}">
-        <view class="weui-footer__text">
-          这对我很重要
-          <view class="weui-check__hd_in-checkbox">
-            <icon class="weui-icon-checkbox_circle" type="circle" size="23" wx:if="{{!answer.important}}"></icon>
-            <icon class="weui-icon-checkbox_success" type="success" size="23" wx:if="{{answer.important}}"></icon>
-          </view>
-        </view>
-      </view>
-      <view class="weui-footer" wx:else>
-        <view class="weui-footer__text">
-          <view>你选择了每一个答案</view>
-          <view>此问题将被标记为无关紧要</view>
-        </view>
-      </view>
-    </view>
-
-    <button class="weui-btn submit" type="primary" @tap="submit" wx:if="{{answer.other.length > 0}}">提交</button>
-
-
-    <view class="big-bang-select big-select" wx:if="{{showBigSelect}}">
+    <view class="page question">
       <view class="name">
         <view class="page__title">{{question.label}}</view>
+        <!--<view class="page__desc"></view>-->
       </view>
-      <icon type="clear" size="20" color="red" class="clear" @tap="closeBigSelect"/>
-      <block wx:if="{{showQuestionMe}}">
-        <radio-group bindchange="radioChange" class="weui-flex">
-          <repeat for="{{question.options_all}}" key="index" index="index" item="option">
-            <label class="weui-flex__item" @tap="clickMeAnswerItem">
-              <radio class="weui-check" value="{{option.value}}" checked="{{option.value === answer.me.value}}"/>
-              <view class="placeholder">{{option.label}}</view>
-            </label>
-          </repeat>
-        </radio-group>
-      </block>
-      <block wx:else>
-        <checkbox-group bindchange="checkboxChange" class="weui-flex">
-          <repeat for="{{question.options_all}}" key="index" index="index" item="option">
-            <label class="weui-flex__item">
-              <checkbox class="weui-check" value="{{option.value}}" checked="{{wxsLib.includes(answer.other, option.value)}}"/>
-              <view wx:if="{{wxsLib.includes(answer.other, option.value)}}" class="placeholder selected">{{option.label}}</view>
-              <view wx:else class="placeholder">{{option.label}}</view>
-            </label>
-          </repeat>
-        </checkbox-group>
-        <view class="weui-flex">
-          <view class="weui-flex__item">
-            <view class="weui-footer important" @tap="importantClick" wx:if="{{question.options_all.length != answer.other.length}}">
-              <view class="weui-footer__text">
-                这对我很重要
-                <view class="weui-check__hd_in-checkbox">
-                  <icon color="#FFFFFF" class="weui-icon-checkbox_circle" type="circle" size="23" wx:if="{{!answer.important}}"></icon>
-                  <icon color="#FFFFFF" class="weui-icon-checkbox_success" type="success" size="23" wx:if="{{answer.important}}"></icon>
+
+      <view class="me-answer" wx:if="{{!showQuestionMe}}" @tap="clickMeAnswer">
+        <view class="weui-cell__ft weui-cells__title weui-flex">
+          <view class="weui-flex__item"></view>
+          <view class="answer-text">
+            <view class="label">{{answer.me.label}}</view>
+            <view class="trianglel"></view>
+          </view>
+          <image class="avatar" src="https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLdPnqaKu1jtYB3xbJHAia4uUMX3ibxxqZJYZzGEJ0RleibCA3icNJLM6KKOqsFcmebgoLd0ib21Z7RVbw/132"></image>
+        </view>
+      </view>
+
+      <view class="question-section-me" wx:else>
+        <view class="weui-cell__ft weui-cells__title weui-flex user-me">
+          <view class="weui-flex__item me">你</view>
+          <image class="avatar" src="https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLdPnqaKu1jtYB3xbJHAia4uUMX3ibxxqZJYZzGEJ0RleibCA3icNJLM6KKOqsFcmebgoLd0ib21Z7RVbw/132"></image>
+        </view>
+        <view class="question-body">
+          <block wx:if="{{question.options_all.length > 4}}">
+            <view class="big-select">
+              <view class="triangleb"></view>
+              <radio-group bindchange="radioChange" class="weui-flex">
+                <repeat for="{{question.options_all}}" key="index" index="index" item="option">
+                  <label class="weui-flex__item" @tap="clickMeAnswerItem">
+                    <radio class="weui-check" value="{{option.value}}" checked="{{option.value === answer.me.value}}"/>
+                    <view class="placeholder">{{option.label}}</view>
+                  </label>
+                </repeat>
+              </radio-group>
+            </view>
+          </block>
+          <block wx:else>
+            <view class="triangleb"></view>
+            <view class="weui-cells weui-cells_after-title">
+              <radio-group bindchange="radioChange">
+                <repeat for="{{question.options}}" key="index" index="index" item="option">
+                  <label class="weui-cell" @tap="clickMeAnswerItem">
+                    <radio class="weui-check" value="{{option.value}}" checked="{{option.value === answer.me.value}}"/>
+                    <view class="weui-cell__bd">{{option.label}}</view>
+                    <view class="weui-cell__ft weui-cell__ft_in-radio">
+                      <icon class="weui-icon-checkbox_circle" type="circle" size="23" wx:if="{{option.value != answer.me.value}}"></icon>
+                      <icon class="weui-icon-checkbox_success" type="success" size="23" wx:if="{{option.value === answer.me.value}}"></icon>
+                    </view>
+                  </label>
+                </repeat>
+              </radio-group>
+              <view class="weui-cell more" wx:if="{{question.options_all.length > 4}}" @tap="clickMore">
+                <view class="weui-cell__bd">更多...</view>
+              </view>
+            </view>
+          </block>
+        </view>
+        <view class="weui-footer" wx:if="{{!question.required}}" @tap="goNext">
+          <view class="weui-footer__text">跳过</view>
+        </view>
+      </view>
+
+
+      <view class="question-section-other" wx:if="{{!showQuestionMe}}">
+        <view class="weui-cells__title weui-flex user-other">
+          <image class="avatar" src="https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/avatar.png"></image>
+          <view class="weui-flex__item other">你的心上人</view>
+        </view>
+        <view class="question-body">
+          <block wx:if="{{question.options_all.length > 4}}">
+            <view class="big-select">
+              <view class="triangleb"></view>
+              <checkbox-group bindchange="checkboxChange" class="weui-flex">
+                <repeat for="{{question.options_all}}" key="index" index="index" item="option">
+                  <label class="weui-flex__item">
+                    <checkbox class="weui-check" value="{{option.value}}" checked="{{wxsLib.includes(answer.other, option.value)}}"/>
+                    <view wx:if="{{wxsLib.includes(answer.other, option.value)}}" class="placeholder selected">{{option.label}}</view>
+                    <view wx:else class="placeholder">{{option.label}}</view>
+                  </label>
+                </repeat>
+              </checkbox-group>
+            </view>
+          </block>
+          <block wx:else>
+            <view class="triangleb"></view>
+            <view class="weui-cells weui-cells_after-title">
+              <checkbox-group bindchange="checkboxChange">
+                <repeat for="{{question.options}}" key="index" index="index" item="option">
+                  <label class="weui-cell">
+                    <checkbox class="weui-check" value="{{option.value}}" checked="{{wxsLib.includes(answer.other, option.value)}}"/>
+                    <view class="weui-cell__bd">{{option.label}}</view>
+                    <view class="weui-cell__ft weui-check__hd_in-checkbox">
+                      <icon class="weui-icon-checkbox_circle" type="circle" size="23" wx:if="{{!wxsLib.includes(answer.other, option.value)}}"></icon>
+                      <icon class="weui-icon-checkbox_success" type="success" size="23" wx:if="{{wxsLib.includes(answer.other, option.value)}}"></icon>
+                    </view>
+                  </label>
+                </repeat>
+              </checkbox-group>
+              <view class="weui-cell more" wx:if="{{question.options_all.length > 4}}" @tap="clickMore">
+                <view class="weui-cell__bd">更多...</view>
+              </view>
+            </view>
+          </block>
+        </view>
+
+        <view class="weui-footer important" @tap="importantClick" wx:if="{{question.options_all.length != answer.other.length}}">
+          <view class="weui-footer__text">
+            这对我很重要
+            <view class="weui-check__hd_in-checkbox">
+              <icon class="weui-icon-checkbox_circle" type="circle" size="23" wx:if="{{!answer.important}}"></icon>
+              <icon class="weui-icon-checkbox_success" type="success" size="23" wx:if="{{answer.important}}"></icon>
+            </view>
+          </view>
+        </view>
+        <view class="weui-footer" wx:else>
+          <view class="weui-footer__text">
+            <view>你选择了每一个答案</view>
+            <view>此问题将被标记为无关紧要</view>
+          </view>
+        </view>
+      </view>
+
+      <button class="weui-btn submit" type="primary" @tap="submit" wx:if="{{answer.other.length > 0}}">提交</button>
+
+
+      <view class="big-bang-select big-select" wx:if="{{showBigSelect}}">
+        <view class="name">
+          <view class="page__title">{{question.label}}</view>
+        </view>
+        <icon type="clear" size="20" color="red" class="clear" @tap="closeBigSelect"/>
+        <block wx:if="{{showQuestionMe}}">
+          <radio-group bindchange="radioChange" class="weui-flex">
+            <repeat for="{{question.options_all}}" key="index" index="index" item="option">
+              <label class="weui-flex__item" @tap="clickMeAnswerItem">
+                <radio class="weui-check" value="{{option.value}}" checked="{{option.value === answer.me.value}}"/>
+                <view class="placeholder">{{option.label}}</view>
+              </label>
+            </repeat>
+          </radio-group>
+        </block>
+        <block wx:else>
+          <checkbox-group bindchange="checkboxChange" class="weui-flex">
+            <repeat for="{{question.options_all}}" key="index" index="index" item="option">
+              <label class="weui-flex__item">
+                <checkbox class="weui-check" value="{{option.value}}" checked="{{wxsLib.includes(answer.other, option.value)}}"/>
+                <view wx:if="{{wxsLib.includes(answer.other, option.value)}}" class="placeholder selected">{{option.label}}</view>
+                <view wx:else class="placeholder">{{option.label}}</view>
+              </label>
+            </repeat>
+          </checkbox-group>
+          <view class="weui-flex">
+            <view class="weui-flex__item">
+              <view class="weui-footer important" @tap="importantClick" wx:if="{{question.options_all.length != answer.other.length}}">
+                <view class="weui-footer__text">
+                  这对我很重要
+                  <view class="weui-check__hd_in-checkbox">
+                    <icon color="#FFFFFF" class="weui-icon-checkbox_circle" type="circle" size="23" wx:if="{{!answer.important}}"></icon>
+                    <icon color="#FFFFFF" class="weui-icon-checkbox_success" type="success" size="23" wx:if="{{answer.important}}"></icon>
+                  </view>
+                </view>
+              </view>
+              <view class="weui-footer" wx:else>
+                <view class="weui-footer__text">
+                  <view>你选择了每一个答案</view>
+                  <view>此问题将被标记为无关紧要</view>
                 </view>
               </view>
             </view>
-            <view class="weui-footer" wx:else>
-              <view class="weui-footer__text">
-                <view>你选择了每一个答案</view>
-                <view>此问题将被标记为无关紧要</view>
-              </view>
-            </view>
           </view>
-        </view>
-      </block>
+        </block>
+      </view>
     </view>
   </view>
 </template>
