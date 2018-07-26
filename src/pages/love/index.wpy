@@ -2,8 +2,12 @@
   page{
     background: #fff;
   }
+  .page{
+    background: #fff;
+  }
   .page__hd{
-    padding: 20px;
+    padding:40rpx;
+    margin-top:-200rpx;
   }
   .btn-join{
     background:#E8B866;
@@ -14,20 +18,26 @@
     width:500rpx;
     color:#FFFCEC;
   }
-  .top-bar{
-    background:#353535;
-    height:400px;
-    border-radius:100%;
-    width:600px;
-    position:absolute;
-    left:50%;
-    margin-left:-300px;
-    top:-320px;
+  .top-bar-wrapper{
+    position:relative;
+    width:100%;
+    height:200rpx;
+    overflow:hidden;
+    .top-bar{
+      background:#353535;
+      height:800rpx;
+      border-radius:100%;
+      width:1200rpx;
+      position:absolute;
+      left:50%;
+      margin-left:-600rpx;
+      top:-610rpx;
+    }
   }
   .card {
-    background-color: #FD3B5F;
-    background-image:-webkit-linear-gradient(315deg, #FD3B5F, #FB644E 50%, #FB6E36);
-    background-image:linear-gradient(135deg, #FD3B5F, #FB644E 50%, #FB6E36);
+    background-color: #FD436A;
+    background-image:-webkit-linear-gradient(135deg, #FD436A, #FB644E 50%, #FF773B);
+    background-image:linear-gradient(135deg, #FD436A, #FB644E 50%, #FF773B);
     height: 360rpx;
     margin-top: 20rpx;
     margin-bottom: 30rpx;
@@ -77,7 +87,7 @@
       font-weight:bold;
     }
     .love-introduce-summary{
-      font-size:16px;
+      font-size:14px;
       color:#777;
     }
   }
@@ -85,7 +95,9 @@
 
 <template>
   <view class="page">
-    <view class="top-bar"></view>
+    <view class="top-bar-wrapper">
+      <view class="top-bar"></view>
+    </view>
     <view class="page__hd">
       <view class="card">
         <view class="card-header">
@@ -109,6 +121,28 @@
         </view>
         <view class="love-introduce-summary">
           提倡无颜交友，告别刷脸时代
+        </view>
+      </view>
+      <view class="love-introduce">
+        <view class="love-introduce-icon">
+          <view class="slds-icon-standard-social slds-icon"/>
+        </view>
+        <view class="love-introduce-title">
+          AI精准匹配
+        </view>
+        <view class="love-introduce-summary">
+          人工智能自动精准匹配，告别红娘低效模式
+        </view>
+      </view>
+      <view class="love-introduce">
+        <view class="love-introduce-icon">
+          <view class="slds-icon-standard-solution slds-icon"/>
+        </view>
+        <view class="love-introduce-title">
+          每周只匹配一次
+        </view>
+        <view class="love-introduce-summary">
+          每周只推荐一位好友，提高交友效率
         </view>
       </view>
       <button class=" btn-join" @tap="join">立即加入</button>
