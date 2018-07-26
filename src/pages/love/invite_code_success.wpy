@@ -23,7 +23,6 @@
 
 <script>
 import wepy from 'wepy';
-import pageRouter from '@/utils/pageRouter';
 
 export default class InviteCodeSuccess extends wepy.page {
   config = {
@@ -40,7 +39,7 @@ export default class InviteCodeSuccess extends wepy.page {
 
   methods = {
     confirm() {
-      pageRouter.navigateTo({
+      wx.switchTab({
         url: '/pages/love/questionnaire_list'
       });
     }

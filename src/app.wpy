@@ -218,7 +218,7 @@ export default class VIP extends wepy.app {
         text: '摇一摇',
       },
       {
-        pagePath: 'pages/me',
+        pagePath: 'pages/love/questionnaire_list',
         selectedIconPath: './images/tabbars/me_pressed.png',
         iconPath: './images/tabbars/me.png',
         text: '我的',
@@ -317,7 +317,7 @@ export default class VIP extends wepy.app {
     });
 
     pageRouter.pushEnter({
-      page: '/pages/love/questionnaire_list',
+      page: '/pages/love/invite_code',
       script: function (to) {
         return this.checkMobile()
       }

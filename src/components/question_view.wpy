@@ -219,7 +219,7 @@
 
     <view class="question-section-me" wx:else>
       <view class="weui-cell__ft weui-cells__title weui-flex user-me">
-        <view class="weui-flex__item me">YOU</view>
+        <view class="weui-flex__item me">你</view>
         <image class="avatar" src="https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLdPnqaKu1jtYB3xbJHAia4uUMX3ibxxqZJYZzGEJ0RleibCA3icNJLM6KKOqsFcmebgoLd0ib21Z7RVbw/132"></image>
       </view>
       <view class="question-body">
@@ -251,7 +251,7 @@
     <view class="question-section-other" wx:if="{{!showQuestionMe}}">
       <view class="weui-cells__title weui-flex user-other">
         <image class="avatar" src="https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/avatar.png"></image>
-        <view class="weui-flex__item other">中意的人</view>
+        <view class="weui-flex__item other">你的恋人</view>
       </view>
       <view class="question-body">
         <view class="triangleb"></view>
@@ -276,7 +276,7 @@
 
       <view class="weui-footer important" @tap="importantClick" wx:if="{{question.options.length != answer.other.length}}">
         <view class="weui-footer__text">
-          对我很重要
+          这对我很重要
           <view class="weui-check__hd_in-checkbox">
             <icon class="weui-icon-checkbox_circle" type="circle" size="23" wx:if="{{!answer.important}}"></icon>
             <icon class="weui-icon-checkbox_success" type="success" size="23" wx:if="{{answer.important}}"></icon>
@@ -286,7 +286,7 @@
       <view class="weui-footer" wx:else>
         <view class="weui-footer__text">
           <view>你选择了每一个答案</view>
-          <view>问题将被标记为无关紧要</view>
+          <view>此问题将被标记为无关紧要</view>
         </view>
       </view>
     </view>

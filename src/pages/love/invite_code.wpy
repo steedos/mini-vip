@@ -22,11 +22,12 @@
                 </view>
             </view>
         </view>
-        <view class="weui-cells__tips">需要邀请码激活您的账户</view>
+        <view class="weui-cells__tips">如果没有邀请码，请直接点击跳过</view>
       </view>
 
       <view class="page__bd_spacing">
           <button class="weui-btn" type="primary" @tap="confirm">确定</button>
+          <button class="weui-btn" type="default" @tap="cancel">跳过</button>
       </view>
     </view>
   </view>
@@ -37,8 +38,7 @@ import wepy from 'wepy';
 
 export default class InviteCode extends wepy.page {
   config = {
-    navigationBarTitleText: '邀请码',
-    enablePullDownRefresh: true
+    navigationBarTitleText: '邀请码'
   };
 
   data = {
@@ -95,17 +95,18 @@ export default class InviteCode extends wepy.page {
         return customer.space == spaceId;
       });
 
-      if (result.value && result.value.length && (new Date() < new Date(result.value[0].expired)) && current_customer) {
-        this.$parent
-          .update(
-            'vip_customers',
-            current_customer._id,
-            { invite_code: code },
-            spaceId
-          )
-          .then(res => {
-            console.log('==============: ', res);
-          });
+      if (
+        result.value &&
+        result.value.length &&
+        new Date() < new Date(result.value[0].expired) &&
+        current_customer
+      ) {
+        await this.$parent.update(
+          'vip_customers',
+          current_customer._id,
+          { invite_code: code },
+          spaceId
+        );
 
         wx.hideLoading();
         wx.navigateTo({
@@ -117,6 +118,11 @@ export default class InviteCode extends wepy.page {
           url: '/pages/love/invite_code_fail'
         });
       }
+    },
+    cancel() {
+      wx.switchTab({
+        url: '/pages/love/questionnaire_list'
+      });
     }
   };
 
