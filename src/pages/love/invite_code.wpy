@@ -113,7 +113,7 @@ export default class InviteCode extends wepy.page {
 
         wx.hideLoading();
         wx.navigateTo({
-          url: '/pages/love/invite_code_success'
+          url: `/pages/love/invite_code_success?space_id=${spaceId}`
         });
       } else {
         wx.hideLoading();
@@ -124,7 +124,7 @@ export default class InviteCode extends wepy.page {
     },
     cancel() {
       wx.navigateTo({
-        url: '/pages/love/cover_about_yourself'
+        url: `/pages/love/cover_about_yourself?space_id=${this.space_id}`
       });
     }
   };
