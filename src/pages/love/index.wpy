@@ -43,7 +43,6 @@
       <button class="btn-join" @tap="join">我想试试</button>
       <view class="love-licence"></view>
     </view>
-
   </view>
 </template>
 
