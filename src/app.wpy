@@ -317,7 +317,7 @@ export default class VIP extends wepy.app {
     });
 
     pageRouter.pushEnter({
-      page: '/pages/love/questionnaire_list',
+      page: '/pages/love/invite_code',
       script: function (to) {
         return this.checkMobile()
       }
