@@ -11,7 +11,7 @@
     @height: 40px;
     @radius: 4px;
 
-    @bigSelectBGColor: rgba(0, 213, 198, 1);
+    @bigSelectBGColor: #4C7BD9;
 
     @mainBackground: #4C7BD9;
 
@@ -20,7 +20,7 @@
     @otherBackground: #FFFFFF;
 
     .name{
-      padding-top:50px;
+      padding-top:40px;
       padding-left:20px;
       padding-right:45px;
 
@@ -172,7 +172,6 @@
       }
 
       .question-section-other{
-
         position: absolute;
         bottom: 20%;
         width:100%;
@@ -374,6 +373,16 @@
       }
     }
   }
+
+  .question-section-me .weui-cell:before {
+    border-top: 1rpx solid #749AE5;
+    left: 0px;
+  }
+
+  .question-section-other .weui-cell:before {
+    border-top: 1rpx solid #EBEDF2;
+    left: 0px;
+  }
 </style>
 
 <template>
@@ -448,7 +457,7 @@
       <view class="question-section-other" wx:if="{{!showQuestionMe}}">
         <view class="weui-cells__title weui-flex user-other">
           <image class="avatar" src="https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/avatar.png"></image>
-          <view class="weui-flex__item other">你的恋人</view>
+          <view class="weui-flex__item other">你的心上人</view>
         </view>
         <view class="question-body">
           <block wx:if="{{question.options_all.length > 4}}">
@@ -505,7 +514,6 @@
       </view>
 
       <button class="weui-btn submit" type="primary" @tap="submit" wx:if="{{answer.other.length > 0}}">{{bottonText}}</button>
-
 
       <view class="big-bang-select big-select" wx:if="{{showBigSelect}}">
         <view class="name">

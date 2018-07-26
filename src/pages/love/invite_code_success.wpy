@@ -1,6 +1,6 @@
 <style lang="less" scoped>
 .background {
-  background:#4D7BD9;
+  background: #4d7bd9;
 }
 </style>
 
@@ -16,7 +16,7 @@
         </view>
         <view class="weui-msg__opr-area">
             <view class="weui-btn-area">
-                <button class="weui-btn background" type="primary" @tap="confirm">问卷调查</button>
+                <button class="weui-btn background" type="primary" @tap="confirm">下一步</button>
             </view>
         </view>
 
@@ -32,18 +32,14 @@ export default class InviteCodeSuccess extends wepy.page {
     navigationBarTitleText: '邀请码'
   };
 
-  data = {
-    space_id: ''
-  };
+  data = {};
 
-  async onLoad(e) {
-    console.log('===============onLoad======InviteCodeSuccess===========', e);
-  }
+  async onLoad(e) {}
 
   methods = {
     confirm() {
-      wx.switchTab({
-        url: '/pages/love/questionnaire_list'
+      wx.navigateTo({
+        url: '/pages/love/cover_about_yourself'
       });
     }
   };
