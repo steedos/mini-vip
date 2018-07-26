@@ -74,6 +74,29 @@ export default class LoveIndex extends wepy.page {
         icon: "none"
       });
     }
+    let spaceId = this.space_id;
+    let my_customers = this.$parent.globalData.my_customers;
+    let current_customer = my_customers.find(customer => {
+      return customer.space == spaceId;
+    });
+
+    if (current_customer && current_customer.questionnaire_progess) {
+      switch(current_customer.questionnaire_progess) {
+        case 1:
+          wx.navigateTo({url: `/pages/love/cover_about_yourself?space_id=${spaceId}`});
+          break;
+        case 2:
+          wx.navigateTo({url: `/pages/love/cover_you_looking_for?space_id=${spaceId}`});
+          break;
+        case 3:
+          wx.navigateTo({url: `/pages/love/cover_answer_questions?space_id=${spaceId}`});
+          break;
+        case 4:
+          wx.switchTab({url: `/pages/love/shake`});
+          break;
+      }
+
+    }
   }
 
   methods = {
