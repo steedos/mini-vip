@@ -1,14 +1,13 @@
 <style lang="less">
   page{
-    background: #4FC5CF;
+    background: #353535;
   }
   .page__hd{
     padding:40rpx;
     .love-title{
-      margin-top:80rpx;
+      margin-top:40rpx;
       color:#fff;
-      font-size:50rpx;
-      font-family:黑体;
+      font-size:65rpx;
       font-weight:bold;
     }
   }
@@ -16,9 +15,8 @@
     padding:40rpx;
     .love-summary{
       color:#fff;
-      font-size:40rpx;
-      font-family:幼圆;
-      margin-bottom:260rpx;
+      font-size:45rpx;
+      margin-bottom:100rpx;
     }
   }
   .btn-join{
@@ -38,10 +36,10 @@
 <template>
   <view class="page">
     <view class="page__hd">
-      <view class="love-title">告别各种尬聊，为您匹配志趣相投的有缘人</view>
+      <view class="love-title">告别刷脸时代，寻找志趣相投的有缘人</view>
     </view>
     <view class="page__bd">
-      <view class="love-summary">无颜是一套人工智能匹配算法，根据你的喜好和对方的喜好，每周为您推荐匹配度最高的有缘人。</view>
+      <view class="love-summary">无颜是一套人工智能匹配算法，根据您的喜好和对方的喜好，每周为您推荐一位有缘人。</view>
       <button class="btn-join" @tap="join">立即加入</button>
       <view class="love-licence">点击加入表示您同意我们的条款及隐私政策</view>
     </view>
