@@ -221,7 +221,7 @@ export default class VIP extends wepy.app {
         pagePath: 'pages/love/questionnaire_list',
         selectedIconPath: './images/tabbars/me_pressed.png',
         iconPath: './images/tabbars/me.png',
-        text: '你的',
+        text: '我的',
       }]
     },
     window: {
@@ -234,7 +234,7 @@ export default class VIP extends wepy.app {
   }
 
   globalData = {
-    title: "会员服务台",
+    title: "无颜",
     userInfo: null,
     space: null,
     spaceInfo: null,
