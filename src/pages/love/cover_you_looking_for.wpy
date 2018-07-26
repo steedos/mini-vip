@@ -1,0 +1,63 @@
+<style lang="less">
+page {
+  background: #353535;
+}
+.page__hd {
+  padding: 40rpx;
+  .love-title {
+    margin-top: 40rpx;
+    color: #fff;
+    font-size: 65rpx;
+    font-weight: bold;
+  }
+}
+.page__bd {
+  padding: 40rpx;
+  .love-summary {
+    color: #fff;
+    font-size: 45rpx;
+    margin-bottom: 100rpx;
+  }
+}
+.btn-join {
+  background: #4d7bd9;
+  padding: 6px;
+  color: #fff;
+  font-weight: bold;
+  margin: 30rpx 0;
+}
+</style>
+
+<template>
+  <view class="page">
+    <view class="page__hd">
+      <view class="love-title">你在寻找谁？</view>
+    </view>
+    <view class="page__bd">
+      <view class="love-summary">为了遇见对的人，告诉我们你的要求</view>
+      <button class="btn-join" @tap="next">下一步</button>
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+
+export default class CoverYouLookingFor extends wepy.page {
+  config = {
+    navigationBarTitleText: '理想伴侣'
+  };
+
+  data = {};
+
+  async onLoad(e) {}
+
+  methods = {
+    next() {
+      wx.navigateTo({
+        url: `/pages/love/invite_code?space_id=${this.space_id}`
+      });
+    }
+  };
+}
+</script>
