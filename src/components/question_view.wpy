@@ -242,7 +242,7 @@
           </view>
         </view>
       </view>
-      <view class="weui-footer">
+      <view class="weui-footer" wx:if="{{!question.required}}" @tap="goNext">
         <view class="weui-footer__text">跳过</view>
       </view>
     </view>
@@ -376,9 +376,10 @@
       {
         label: '',
         name: '',
-        type: ''
-        options: []
-        showOtherQuesion: true/false
+        type: '',
+        required: true/false,
+        options: [],
+        showOtherQuesion: true/false,
         showImportant: true/false
       }
     ]
@@ -397,6 +398,8 @@
           question.name = field.name;
 
           question.type = field.type;
+
+          question.required = field.required || false;
 
           if(field.options){
             question.options = field.options.slice(0,4);
@@ -521,6 +524,9 @@
         this.showQuestionMe = true;
         this.answer.other = [];
         this.$apply();
+      },
+      goNext: function () {
+        this.nextQuestion()
       }
     }
   }
