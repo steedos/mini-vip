@@ -1,13 +1,96 @@
 <style lang="less" scoped>
+.page-shake {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  .top {
+    position: absolute;
+    top: 0;
+    bottom: 50%;
+    left: 0;
+    right: 0;
+    overflow: hidden;
+    transition: all 1s linear;
+    .top-shake-container {
+      position: relative;
+      bottom:-160rpx;
+      width: 100%;
+      height: 100%;
+      background: url(https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/shake.png);
+      background-size: 30%;
+      background-repeat:no-repeat;
+      background-position: bottom center;
+    }
+  }
+  .bottom {
+    position: absolute;
+    top: 50%;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow: hidden;
+    .bottom-shake-container {
+      position: relative;
+      top:-134rpx;
+      width: 100%;
+      height: 100%;
+      background: url(https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/shake.png);
+      background-size: 30%;
+      background-repeat:no-repeat;
+      background-position: top center;
+    }
+  }
+  .result {
+    position: absolute;
+    bottom: 100rpx;
+    background: #fff;
+    left: 60rpx;
+    right: 60rpx;
+    padding: 30rpx;
+    border-radius: 0.25rem;
+    display: flex;
+    flex-direction: row;
+    .avatar-container {
+      width: 120rpx;
+      height: 120rpx;
+      margin-right: 30rpx;
+      .avatar {
+        width: 100%;
+        height: 100%;
+      }
+    }
+    .fail-info {
+      flex: 1;
+      text-align: center;
+    }
+  }
+}
 </style>
 
 <template>
-  <view class="page">
-    <view class="page__hd">
-      <view class="gift-label">摇一摇</view>
+  <view class="page page-shake">
+    <view class="top" animation="{{topAnimationData}}">
+      <view class="top-shake-container"></view>
     </view>
-    <view class="page__bd">
+    <view class="bottom" animation="{{bottomAnimationData}}">
+      <view class="bottom-shake-container">
+      </view>
     </view>
+    <block wx:if="{{matching}}">
+      <view class="result">
+        <view class="avatar-container">
+          <image class="avatar" mode="aspectFill" src="https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/avatar.png"></image>
+        </view>
+        <view class="name">{{matching.BName}}</view>
+      </view>
+    </block>
+    <block wx:if="{{noMatching}}">
+      <view class="result">
+        <view class="fail-info">TAT 这次没有匹配到呢 再摇一次吧</view>
+      </view>
+    </block>
   </view>
 </template>
 
@@ -24,10 +107,137 @@ export default class LoveShake extends wepy.page {
   data = {
     baseUrl: baseUrl,
     space_id: null,
+    loading: '没在加载',
+    loveSpaceId: loveSpaceId,
+    topAnimationData: {},
+    bottomAnimationData: {},
+    text: '还没摇',
+    matching: null,
+    noMatching: false,
+    shakeData: {
+      x: 0,
+      y: 0,
+      z: 0
+    },
+    isLoading: false
   };
+
+  getDelFlag(current_x, old_x) {
+    return (Math.abs(current_x - old_x) >= 0.5);
+  }
+
+  setTopAnimation() {
+    let animation = wx.createAnimation({
+      duration: 400,
+      timingFunction: 'ease',
+    });
+
+    animation.translateY(-70).step();
+    animation.translateY(0).step({delay: 10});
+    this.topAnimationData = animation.export();
+    this.$apply();
+    wx.stopAccelerometer();
+  }
+  
+  setBottomAnimation() {
+    let animation = wx.createAnimation({
+      duration: 400,
+      timingFunction: 'ease',
+    });
+
+    animation.translateY(70).step();
+    animation.translateY(0).step({delay: 10});
+    this.bottomAnimationData = animation.export();
+    this.$apply();
+  }
+
+  clearAnimation() {
+    this.topAnimationData = {};
+    this.bottomAnimationData = {};
+    this.$apply();
+    this.shakeData = {
+      x: 0,
+      y: 0,
+      z: 0
+    };
+    setTimeout(() => {
+      wx.startAccelerometer({
+        interval: 'normal'
+      });
+    }, 900);
+  }
 
   async onLoad (e) {
     this.space_id = e.space_id || loveSpaceId;
+    this.$apply();
+  }
+
+  async onShow () {
+    wx.startAccelerometer({
+      interval: 'normal'
+    });
+    const self = this;
+    wx.onAccelerometerChange(res => {
+      var x = res.x.toFixed(4);
+      var y = res.y.toFixed(4);
+      var z = res.z.toFixed(4);
+      var flagX = self.getDelFlag(x, self.shakeData.x);
+      var flagY = self.getDelFlag(y, self.shakeData.y);
+      var flagZ = self.getDelFlag(z, self.shakeData.z);
+
+      console.log(x, self.shakeData.x, flagX)
+      // console.log(y, self.shakeData.y, flagY)
+      // console.log(z, self.shakeData.z, flagZ)
+
+      self.shakeData = {
+        x: x,
+        y: y,
+        z: z
+      }
+
+      if (flagX) {
+        if (!self.isLoading) {
+          self.text = '正在摇';
+          self.matching = null;
+          self.noMatching = false;
+          self.isLoading = true;
+          self.setTopAnimation();
+          self.setBottomAnimation();
+          self.$apply();
+          const options = {
+            $filter: `userA eq 'ootievH6oBKzMsxPz'`,
+            $select: 'owner,userA,scoreA_B,scoreB_A,score,space'
+          }
+          self.$parent.query('love_result', options, self.space_id).then( res => {
+            if (res && res.value && res.value[0] && res.value[0].score && res.value[0].score[0]) {
+              setTimeout(() => {
+                self.matching = res.value[0].score[0];
+                self.noMatching = false;
+                self.$apply();
+              }, 400);
+            } else {
+              setTimeout(() => {
+                console.log('===============noMatching', self.noMatching)
+                self.noMatching = true;
+                self.$apply();
+              }, 400);
+            }
+            self.clearAnimation();
+            self.isLoading = false;
+            self.loading = '加载完了'
+            self.$apply();
+            console.log(res)
+          })
+        } else {
+          self.loading = '加载数据';
+          self.$apply();
+        }
+      }
+    })
+  };
+
+  onHide() {
+    wx.stopAccelerometer();
   }
 
   methods = {};
