@@ -10,8 +10,6 @@
 
     @height: 40px;
     @radius: 4px;
-    width: 100%;
-
 
     @bigSelectBGColor: rgba(0, 213, 198, 1);
 
@@ -33,198 +31,6 @@
         font-size:20px;
         color:#2A2F35;
       }
-    }
-
-    .weui-footer__text{
-      font-size: 14px;
-    }
-
-    .avatar{
-      width:@height;
-      height:@height;
-      border-radius:20px;
-    }
-
-    .me-answer{
-      .answer-text{
-        margin-right: 15px;
-        position: relative;
-        max-width: 75%;
-        .label{
-          min-width: 50px;
-          text-align: center;
-          line-height: @height;
-          padding-left: 10px;
-          padding-right: 15px;
-          color: #FFFFFF;
-          background-color: @meBackground;
-          border-radius: @radius;
-          text-overflow:ellipsis;
-          white-space:nowrap;
-          overflow:hidden;
-        }
-
-        .trianglel{
-          position: absolute;
-          right: -25px;
-          top: 25px;
-          width:0;
-          height:0;
-          border-top:10px solid transparent;
-          border-right:10px solid transparent;
-          border-left:15px solid @meBackground;
-          z-index: 999;
-        }
-      }
-    }
-
-    .more{
-      text-align: center;
-    }
-
-    .question-section-me{
-      position: absolute;
-      bottom: 15%;
-      width:100%;
-
-      .me{
-        line-height: @height;
-        padding-right: 15px;
-        color:#2A2F35;
-        font-size: 17px;
-      }
-
-      .user-me{
-        margin-bottom:15px;
-        padding:0 40rpx;
-        padding-right:26px;
-      }
-
-      .question-body{
-        position: relative;
-        margin-bottom: 25px;
-        padding:0 40rpx;
-        .weui-cells{
-          background-color: @meBackground;
-          color: #FFFFFF;
-          border-radius: @radius;
-        }
-
-        .weui-cell_link{
-          color: #e1e1e1;
-        }
-
-        .triangleb{
-          position: absolute;
-          right: 37px;
-          top: -9px;
-          width:0;
-          height:0;
-          border-right:10px solid transparent;
-          border-bottom:10px solid @meBackground;
-          border-left:10px solid transparent;
-          z-index: 999;
-        }
-      }
-
-      .big-select{
-        border-radius:4px;
-        background-color: @meBackground;
-        .triangleb,.triangleb{
-          border-bottom:10px solid @meBackground !important;
-        }
-
-        .selected{
-          background-color:@meBackground;
-          color: #FFFFFF;
-        }
-      }
-    }
-
-    .question-section-other{
-
-      position: absolute;
-      bottom: 20%;
-      width:100%;
-
-      .other{
-        line-height: @height;
-        padding-left: 10px;
-      }
-
-      .user-other{
-        margin-bottom:15px;
-      }
-
-      .question-body{
-        position: relative;
-        margin-bottom: 15px;
-        padding-left:15px;
-        padding-right:15px;
-        .weui-cells{
-          background-color: @otherBackground;
-          /*color: #FFFFFF;*/
-          border-radius: @radius;
-        }
-
-        .weui-cell_link{
-          color: #e1e1e1;
-        }
-
-        .triangleb{
-          position: absolute;
-          left: 25px;
-          top: -9px;
-          width:0;
-          height:0;
-          border-right:10px solid transparent;
-          border-bottom:10px solid @otherBackground;
-          border-left:10px solid transparent;
-          z-index: 999;
-        }
-      }
-
-      .big-select{
-        border-radius:4px;
-        background-color: @otherBackground;
-        .triangleb,.triangleb{
-          border-bottom:10px solid @otherBackground !important;
-        }
-
-        .placeholder{
-          background-color: #999FAA;
-          color: @otherBackground;
-        }
-
-        .selected{
-          background-color:@meBackground;
-          color: #FFFFFF;
-        }
-      }
-
-      .important{
-        .weui-check__hd_in-checkbox{
-          display: inline-block;
-        }
-      }
-
-      .weui-footer{
-        position: absolute;
-        width: 100%;
-        height: 45px;
-        bottom: -30px;
-        color:#999FAA!important;
-        .weui-footer__text{
-          padding-top: 10px;
-        }
-      }
-    }
-
-    .submit{
-      width: 100%;
-      position: absolute;
-      bottom: 0px;
-      border-radius: 0px;
     }
 
     .weui-flex{
@@ -256,241 +62,539 @@
       }
     }
 
-    .big-bang-select{
-      margin-left:10px;
-      margin-right:10px;
-      position: absolute;
-      padding-top:30px;
-      bottom: 10%;
-      top: 25px;
-      z-index: 1999;
-      /*min-height: 55%;*/
+    .question-have-other{
+      width: 100%;
 
-      .name{
-        padding-bottom: 15px;
-        padding-top: 0px;
-        .page__title{
-          text-align: center;
+      .weui-footer__text{
+        font-size: 14px;
+      }
+
+      .avatar{
+        width:@height;
+        height:@height;
+        border-radius:20px;
+      }
+
+      .me-answer{
+        .answer-text{
+          margin-right: 15px;
+          position: relative;
+          max-width: 75%;
+          .label{
+            min-width: 50px;
+            text-align: center;
+            line-height: @height;
+            padding-left: 10px;
+            padding-right: 15px;
+            color: #FFFFFF;
+            background-color: @meBackground;
+            border-radius: @radius;
+            text-overflow:ellipsis;
+            white-space:nowrap;
+            overflow:hidden;
+          }
+
+          .trianglel{
+            position: absolute;
+            right: -25px;
+            top: 25px;
+            width:0;
+            height:0;
+            border-top:10px solid transparent;
+            border-right:10px solid transparent;
+            border-left:15px solid @meBackground;
+            z-index: 999;
+          }
         }
       }
 
-      .clear{
+      .more{
+        text-align: center;
+      }
+
+      .question-section-me{
         position: absolute;
-        right: -5px;
-        top: -5px;
-      }
+        bottom: 15%;
+        width:100%;
 
-      .weui-footer{
-        color: #FFFFFF;
-        .weui-check__hd_in-checkbox{
-          padding-top:10px;
-          display: inline-block;
+        .me{
+          line-height: @height;
+          padding-right: 15px;
+          color:#2A2F35;
+          font-size: 17px;
         }
 
-        icon{
+        .user-me{
+          margin-bottom:15px;
+          padding:0 40rpx;
+          padding-right:26px;
+        }
+
+        .question-body{
+          position: relative;
+          margin-bottom: 25px;
+          padding:0 40rpx;
+          .weui-cells{
+            background-color: @meBackground;
+            color: #FFFFFF;
+            border-radius: @radius;
+          }
+
+          .weui-cell_link{
+            color: #e1e1e1;
+          }
+
+          .triangleb{
+            position: absolute;
+            right: 37px;
+            top: -9px;
+            width:0;
+            height:0;
+            border-right:10px solid transparent;
+            border-bottom:10px solid @meBackground;
+            border-left:10px solid transparent;
+            z-index: 999;
+          }
+        }
+
+        .big-select{
+          border-radius:4px;
+          background-color: @meBackground;
+          .triangleb,.triangleb{
+            border-bottom:10px solid @meBackground !important;
+          }
+
+          .selected{
+            background-color:@meBackground;
+            color: #FFFFFF;
+          }
+        }
+      }
+
+      .question-section-other{
+
+        position: absolute;
+        bottom: 20%;
+        width:100%;
+
+        .other{
+          line-height: @height;
+          padding-left: 10px;
+        }
+
+        .user-other{
+          margin-bottom:15px;
+        }
+
+        .question-body{
+          position: relative;
+          margin-bottom: 15px;
+          padding-left:15px;
+          padding-right:15px;
+          .weui-cells{
+            background-color: @otherBackground;
+            /*color: #FFFFFF;*/
+            border-radius: @radius;
+          }
+
+          .weui-cell_link{
+            color: #e1e1e1;
+          }
+
+          .triangleb{
+            position: absolute;
+            left: 25px;
+            top: -9px;
+            width:0;
+            height:0;
+            border-right:10px solid transparent;
+            border-bottom:10px solid @otherBackground;
+            border-left:10px solid transparent;
+            z-index: 999;
+          }
+        }
+
+        .big-select{
+          border-radius:4px;
+          background-color: @otherBackground;
+          .triangleb,.triangleb{
+            border-bottom:10px solid @otherBackground !important;
+          }
+
+          .placeholder{
+            background-color: #999FAA;
+            color: @otherBackground;
+          }
+
+          .selected{
+            background-color:@meBackground;
+            color: #FFFFFF;
+          }
+        }
+
+        .important{
+          .weui-check__hd_in-checkbox{
+            display: inline-block;
+          }
+        }
+
+        .weui-footer{
+          position: absolute;
+          width: 100%;
+          height: 45px;
+          bottom: -30px;
+          color:#999FAA!important;
+          .weui-footer__text{
+            padding-top: 10px;
+          }
+        }
+      }
+
+      .submit{
+        width: 100%;
+        position: absolute;
+        bottom: 0px;
+        border-radius: 0px;
+      }
+
+
+
+      .big-bang-select{
+        margin-left:10px;
+        margin-right:10px;
+        position: absolute;
+        padding-top:30px;
+        bottom: 10%;
+        top: 25px;
+        z-index: 1999;
+        /*min-height: 55%;*/
+
+        .name{
+          padding-bottom: 15px;
+          padding-top: 0px;
+          .page__title{
+            text-align: center;
+          }
+        }
+
+        .clear{
+          position: absolute;
+          right: -5px;
+          top: -5px;
+        }
+
+        .weui-footer{
           color: #FFFFFF;
+          .weui-check__hd_in-checkbox{
+            padding-top:10px;
+            display: inline-block;
+          }
+
+          icon{
+            color: #FFFFFF;
+          }
         }
       }
+
     }
 
-  }
+    .question-progress {
+      position: relative;
+      height: 3px;
+      border-radius: 0px;
+      background-color: #e2e2e2;
+    }
 
-  .question-progress {
-    position: relative;
-    height: 3px;
-    border-radius: 0px;
-    background-color: #e2e2e2;
-  }
+    .question-progress-bar {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 0;
+      max-width: 100%;
+      height: 3px;
+      border-radius: 0px;
+      text-align: right;
+      background-color: #5FB878;
+      transition: all .3s;
+      -webkit-transition: all .3s;
+    }
 
-  .question-progress-bar {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 0;
-    max-width: 100%;
-    height: 3px;
-    border-radius: 0px;
-    text-align: right;
-    background-color: #5FB878;
-    transition: all .3s;
-    -webkit-transition: all .3s;
+    .question-only-me{
+
+      @inputHeight: 56px;
+
+      .shadow{
+        box-shadow: 0px 1px 1px 1px rgba(7, 2, 1, 0.09);
+      }
+
+      .question-body{
+        margin:0 40rpx;
+
+        padding-top: 30%;
+
+        .weui-input{
+          height: @inputHeight;
+          line-height: @inputHeight;
+          background-color: #fff;
+          color: #2a2f35;
+          box-sizing: border-box;
+          border: 0px;
+          padding-left: 13px;
+          border-radius: @radius;
+        }
+
+        .weui-textarea{
+          height: 8.8em;
+          padding: 10px;
+          background-color: #fff;
+          width: auto;
+        }
+      }
+
+      .big-select{
+
+        background-color: inherit;
+
+        .selected{
+          background-color:@mainBackground;
+          color: #FFFFFF;
+        }
+
+        .placeholder{
+          height: @inputHeight;
+          line-height: @inputHeight;
+        }
+      }
+
+      .submit{
+        width: 100%;
+        position: absolute;
+        bottom: 0px;
+        border-radius: 0px;
+      }
+    }
   }
 </style>
 
 <template>
-  <view class="question-progress">
-    <view class="question-progress-bar" style="width: {{progress}};"></view>
-  </view>
-  <view class="page question">
-    <view class="name">
-      <view class="page__title">{{question.label}}</view>
-      <!--<view class="page__desc"></view>-->
+  <view class="question">
+    <view class="question-progress">
+      <view class="question-progress-bar" style="width: {{progress}};"></view>
     </view>
-
-    <view class="me-answer" wx:if="{{!showQuestionMe}}" @tap="clickMeAnswer">
-      <view class="weui-cell__ft weui-cells__title weui-flex">
-        <view class="weui-flex__item"></view>
-        <view class="answer-text">
-          <view class="label">{{answer.me.label}}</view>
-          <view class="trianglel"></view>
-        </view>
-        <image class="avatar" src="https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLdPnqaKu1jtYB3xbJHAia4uUMX3ibxxqZJYZzGEJ0RleibCA3icNJLM6KKOqsFcmebgoLd0ib21Z7RVbw/132"></image>
-      </view>
-    </view>
-
-    <view class="question-section-me" wx:else>
-      <view class="weui-cell__ft weui-cells__title weui-flex user-me">
-        <view class="weui-flex__item me">你</view>
-        <image class="avatar" src="https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLdPnqaKu1jtYB3xbJHAia4uUMX3ibxxqZJYZzGEJ0RleibCA3icNJLM6KKOqsFcmebgoLd0ib21Z7RVbw/132"></image>
-      </view>
-      <view class="question-body">
-        <block wx:if="{{question.options_all.length > 4}}">
-          <view class="big-select">
-            <view class="triangleb"></view>
-            <radio-group bindchange="radioChange" class="weui-flex">
-              <repeat for="{{question.options_all}}" key="index" index="index" item="option">
-                <label class="weui-flex__item" @tap="clickMeAnswerItem">
-                  <radio class="weui-check" value="{{option.value}}" checked="{{option.value === answer.me.value}}"/>
-                  <view class="placeholder">{{option.label}}</view>
-                </label>
-              </repeat>
-            </radio-group>
-          </view>
-        </block>
-        <block wx:else>
-          <view class="triangleb"></view>
-          <view class="weui-cells weui-cells_after-title">
-            <radio-group bindchange="radioChange">
-              <repeat for="{{question.options}}" key="index" index="index" item="option">
-                <label class="weui-cell" @tap="clickMeAnswerItem">
-                  <radio class="weui-check" value="{{option.value}}" checked="{{option.value === answer.me.value}}"/>
-                  <view class="weui-cell__bd">{{option.label}}</view>
-                  <view class="weui-cell__ft weui-cell__ft_in-radio">
-                    <icon class="weui-icon-checkbox_circle" type="circle" size="23" wx:if="{{option.value != answer.me.value}}"></icon>
-                    <icon class="weui-icon-checkbox_success" type="success" size="23" wx:if="{{option.value === answer.me.value}}"></icon>
-                  </view>
-                </label>
-              </repeat>
-            </radio-group>
-            <view class="weui-cell more" wx:if="{{question.options_all.length > 4}}" @tap="clickMore">
-              <view class="weui-cell__bd">更多...</view>
-            </view>
-          </view>
-        </block>
-      </view>
-      <view class="weui-footer" wx:if="{{!question.required}}" @tap="goNext">
-        <view class="weui-footer__text">跳过</view>
-      </view>
-    </view>
-
-
-    <view class="question-section-other" wx:if="{{!showQuestionMe}}">
-      <view class="weui-cells__title weui-flex user-other">
-        <image class="avatar" src="https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/avatar.png"></image>
-        <view class="weui-flex__item other">你的恋人</view>
-      </view>
-      <view class="question-body">
-        <block wx:if="{{question.options_all.length > 4}}">
-          <view class="big-select">
-            <view class="triangleb"></view>
-            <checkbox-group bindchange="checkboxChange" class="weui-flex">
-              <repeat for="{{question.options_all}}" key="index" index="index" item="option">
-                <label class="weui-flex__item">
-                  <checkbox class="weui-check" value="{{option.value}}" checked="{{wxsLib.includes(answer.other, option.value)}}"/>
-                  <view wx:if="{{wxsLib.includes(answer.other, option.value)}}" class="placeholder selected">{{option.label}}</view>
-                  <view wx:else class="placeholder">{{option.label}}</view>
-                </label>
-              </repeat>
-            </checkbox-group>
-          </view>
-        </block>
-        <block wx:else>
-          <view class="triangleb"></view>
-          <view class="weui-cells weui-cells_after-title">
-            <checkbox-group bindchange="checkboxChange">
-              <repeat for="{{question.options}}" key="index" index="index" item="option">
-                <label class="weui-cell">
-                  <checkbox class="weui-check" value="{{option.value}}" checked="{{wxsLib.includes(answer.other, option.value)}}"/>
-                  <view class="weui-cell__bd">{{option.label}}</view>
-                  <view class="weui-cell__ft weui-check__hd_in-checkbox">
-                    <icon class="weui-icon-checkbox_circle" type="circle" size="23" wx:if="{{!wxsLib.includes(answer.other, option.value)}}"></icon>
-                    <icon class="weui-icon-checkbox_success" type="success" size="23" wx:if="{{wxsLib.includes(answer.other, option.value)}}"></icon>
-                  </view>
-                </label>
-              </repeat>
-            </checkbox-group>
-            <view class="weui-cell more" wx:if="{{question.options_all.length > 4}}" @tap="clickMore">
-              <view class="weui-cell__bd">更多...</view>
-            </view>
-          </view>
-        </block>
-      </view>
-
-      <view class="weui-footer important" @tap="importantClick" wx:if="{{question.options_all.length != answer.other.length}}">
-        <view class="weui-footer__text">
-          这对我很重要
-          <view class="weui-check__hd_in-checkbox">
-            <icon class="weui-icon-checkbox_circle" type="circle" size="23" wx:if="{{!answer.important}}"></icon>
-            <icon class="weui-icon-checkbox_success" type="success" size="23" wx:if="{{answer.important}}"></icon>
-          </view>
-        </view>
-      </view>
-      <view class="weui-footer" wx:else>
-        <view class="weui-footer__text">
-          <view>你选择了每一个答案</view>
-          <view>此问题将被标记为无关紧要</view>
-        </view>
-      </view>
-    </view>
-
-    <button class="weui-btn submit" type="primary" @tap="submit" wx:if="{{answer.other.length > 0}}">提交</button>
-
-
-    <view class="big-bang-select big-select" wx:if="{{showBigSelect}}">
+    <view class="weui-toptips weui-toptips_warn" wx:if="{{showError}}">{{fieldErrorMSG}}</view>
+    <view class="page question-have-other" wx:if="{{question.showOtherQuesion}}">
       <view class="name">
         <view class="page__title">{{question.label}}</view>
+        <!--<view class="page__desc"></view>-->
       </view>
-      <icon type="clear" size="20" color="red" class="clear" @tap="closeBigSelect"/>
-      <block wx:if="{{showQuestionMe}}">
-        <radio-group bindchange="radioChange" class="weui-flex">
-          <repeat for="{{question.options_all}}" key="index" index="index" item="option">
-            <label class="weui-flex__item" @tap="clickMeAnswerItem">
-              <radio class="weui-check" value="{{option.value}}" checked="{{option.value === answer.me.value}}"/>
-              <view class="placeholder">{{option.label}}</view>
-            </label>
-          </repeat>
-        </radio-group>
-      </block>
-      <block wx:else>
-        <checkbox-group bindchange="checkboxChange" class="weui-flex">
-          <repeat for="{{question.options_all}}" key="index" index="index" item="option">
-            <label class="weui-flex__item">
-              <checkbox class="weui-check" value="{{option.value}}" checked="{{wxsLib.includes(answer.other, option.value)}}"/>
-              <view wx:if="{{wxsLib.includes(answer.other, option.value)}}" class="placeholder selected">{{option.label}}</view>
-              <view wx:else class="placeholder">{{option.label}}</view>
-            </label>
-          </repeat>
-        </checkbox-group>
-        <view class="weui-flex">
-          <view class="weui-flex__item">
-            <view class="weui-footer important" @tap="importantClick" wx:if="{{question.options_all.length != answer.other.length}}">
-              <view class="weui-footer__text">
-                这对我很重要
-                <view class="weui-check__hd_in-checkbox">
-                  <icon color="#FFFFFF" class="weui-icon-checkbox_circle" type="circle" size="23" wx:if="{{!answer.important}}"></icon>
-                  <icon color="#FFFFFF" class="weui-icon-checkbox_success" type="success" size="23" wx:if="{{answer.important}}"></icon>
+
+      <view class="me-answer" wx:if="{{!showQuestionMe}}" @tap="clickMeAnswer">
+        <view class="weui-cell__ft weui-cells__title weui-flex">
+          <view class="weui-flex__item"></view>
+          <view class="answer-text">
+            <view class="label">{{answer.me.label}}</view>
+            <view class="trianglel"></view>
+          </view>
+          <image class="avatar" src="https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLdPnqaKu1jtYB3xbJHAia4uUMX3ibxxqZJYZzGEJ0RleibCA3icNJLM6KKOqsFcmebgoLd0ib21Z7RVbw/132"></image>
+        </view>
+      </view>
+
+      <view class="question-section-me" wx:else>
+        <view class="weui-cell__ft weui-cells__title weui-flex user-me">
+          <view class="weui-flex__item me">你</view>
+          <image class="avatar" src="https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLdPnqaKu1jtYB3xbJHAia4uUMX3ibxxqZJYZzGEJ0RleibCA3icNJLM6KKOqsFcmebgoLd0ib21Z7RVbw/132"></image>
+        </view>
+        <view class="question-body">
+          <block wx:if="{{question.options_all.length > 4}}">
+            <view class="big-select">
+              <view class="triangleb"></view>
+              <radio-group bindchange="radioChange" class="weui-flex">
+                <repeat for="{{question.options_all}}" key="index" index="index" item="option">
+                  <label class="weui-flex__item" @tap="clickMeAnswerItem">
+                    <radio class="weui-check" value="{{option.value}}" checked="{{option.value === answer.me.value}}"/>
+                    <view class="placeholder">{{option.label}}</view>
+                  </label>
+                </repeat>
+              </radio-group>
+            </view>
+          </block>
+          <block wx:else>
+            <view class="triangleb"></view>
+            <view class="weui-cells weui-cells_after-title">
+              <radio-group bindchange="radioChange">
+                <repeat for="{{question.options}}" key="index" index="index" item="option">
+                  <label class="weui-cell" @tap="clickMeAnswerItem">
+                    <radio class="weui-check" value="{{option.value}}" checked="{{option.value === answer.me.value}}"/>
+                    <view class="weui-cell__bd">{{option.label}}</view>
+                    <view class="weui-cell__ft weui-cell__ft_in-radio">
+                      <icon class="weui-icon-checkbox_circle" type="circle" size="23" wx:if="{{option.value != answer.me.value}}"></icon>
+                      <icon class="weui-icon-checkbox_success" type="success" size="23" wx:if="{{option.value === answer.me.value}}"></icon>
+                    </view>
+                  </label>
+                </repeat>
+              </radio-group>
+              <view class="weui-cell more" wx:if="{{question.options_all.length > 4}}" @tap="clickMore">
+                <view class="weui-cell__bd">更多...</view>
+              </view>
+            </view>
+          </block>
+        </view>
+        <view class="weui-footer" wx:if="{{!question.required}}" @tap="goNext">
+          <view class="weui-footer__text">跳过</view>
+        </view>
+      </view>
+
+
+      <view class="question-section-other" wx:if="{{!showQuestionMe}}">
+        <view class="weui-cells__title weui-flex user-other">
+          <image class="avatar" src="https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/avatar.png"></image>
+          <view class="weui-flex__item other">你的恋人</view>
+        </view>
+        <view class="question-body">
+          <block wx:if="{{question.options_all.length > 4}}">
+            <view class="big-select">
+              <view class="triangleb"></view>
+              <checkbox-group bindchange="checkboxChange" class="weui-flex">
+                <repeat for="{{question.options_all}}" key="index" index="index" item="option">
+                  <label class="weui-flex__item">
+                    <checkbox class="weui-check" value="{{option.value}}" checked="{{wxsLib.includes(answer.other, option.value)}}"/>
+                    <view wx:if="{{wxsLib.includes(answer.other, option.value)}}" class="placeholder selected">{{option.label}}</view>
+                    <view wx:else class="placeholder">{{option.label}}</view>
+                  </label>
+                </repeat>
+              </checkbox-group>
+            </view>
+          </block>
+          <block wx:else>
+            <view class="triangleb"></view>
+            <view class="weui-cells weui-cells_after-title">
+              <checkbox-group bindchange="checkboxChange">
+                <repeat for="{{question.options}}" key="index" index="index" item="option">
+                  <label class="weui-cell">
+                    <checkbox class="weui-check" value="{{option.value}}" checked="{{wxsLib.includes(answer.other, option.value)}}"/>
+                    <view class="weui-cell__bd">{{option.label}}</view>
+                    <view class="weui-cell__ft weui-check__hd_in-checkbox">
+                      <icon class="weui-icon-checkbox_circle" type="circle" size="23" wx:if="{{!wxsLib.includes(answer.other, option.value)}}"></icon>
+                      <icon class="weui-icon-checkbox_success" type="success" size="23" wx:if="{{wxsLib.includes(answer.other, option.value)}}"></icon>
+                    </view>
+                  </label>
+                </repeat>
+              </checkbox-group>
+              <view class="weui-cell more" wx:if="{{question.options_all.length > 4}}" @tap="clickMore">
+                <view class="weui-cell__bd">更多...</view>
+              </view>
+            </view>
+          </block>
+        </view>
+
+        <view class="weui-footer important" @tap="importantClick" wx:if="{{question.options_all.length != answer.other.length}}">
+          <view class="weui-footer__text">
+            这对我很重要
+            <view class="weui-check__hd_in-checkbox">
+              <icon class="weui-icon-checkbox_circle" type="circle" size="23" wx:if="{{!answer.important}}"></icon>
+              <icon class="weui-icon-checkbox_success" type="success" size="23" wx:if="{{answer.important}}"></icon>
+            </view>
+          </view>
+        </view>
+        <view class="weui-footer" wx:else>
+          <view class="weui-footer__text">
+            <view>你选择了每一个答案</view>
+            <view>此问题将被标记为无关紧要</view>
+          </view>
+        </view>
+      </view>
+
+      <button class="weui-btn submit" type="primary" @tap="submit" wx:if="{{answer.other.length > 0}}">{{bottonText}}</button>
+
+
+      <view class="big-bang-select big-select" wx:if="{{showBigSelect}}">
+        <view class="name">
+          <view class="page__title">{{question.label}}</view>
+        </view>
+        <icon type="clear" size="20" color="red" class="clear" @tap="closeBigSelect"/>
+        <block wx:if="{{showQuestionMe}}">
+          <radio-group bindchange="radioChange" class="weui-flex">
+            <repeat for="{{question.options_all}}" key="index" index="index" item="option">
+              <label class="weui-flex__item" @tap="clickMeAnswerItem">
+                <radio class="weui-check" value="{{option.value}}" checked="{{option.value === answer.me.value}}"/>
+                <view class="placeholder">{{option.label}}</view>
+              </label>
+            </repeat>
+          </radio-group>
+        </block>
+        <block wx:else>
+          <checkbox-group bindchange="checkboxChange" class="weui-flex">
+            <repeat for="{{question.options_all}}" key="index" index="index" item="option">
+              <label class="weui-flex__item">
+                <checkbox class="weui-check" value="{{option.value}}" checked="{{wxsLib.includes(answer.other, option.value)}}"/>
+                <view wx:if="{{wxsLib.includes(answer.other, option.value)}}" class="placeholder selected">{{option.label}}</view>
+                <view wx:else class="placeholder">{{option.label}}</view>
+              </label>
+            </repeat>
+          </checkbox-group>
+          <view class="weui-flex">
+            <view class="weui-flex__item">
+              <view class="weui-footer important" @tap="importantClick" wx:if="{{question.options_all.length != answer.other.length}}">
+                <view class="weui-footer__text">
+                  这对我很重要
+                  <view class="weui-check__hd_in-checkbox">
+                    <icon color="#FFFFFF" class="weui-icon-checkbox_circle" type="circle" size="23" wx:if="{{!answer.important}}"></icon>
+                    <icon color="#FFFFFF" class="weui-icon-checkbox_success" type="success" size="23" wx:if="{{answer.important}}"></icon>
+                  </view>
+                </view>
+              </view>
+              <view class="weui-footer" wx:else>
+                <view class="weui-footer__text">
+                  <view>你选择了每一个答案</view>
+                  <view>此问题将被标记为无关紧要</view>
                 </view>
               </view>
             </view>
-            <view class="weui-footer" wx:else>
-              <view class="weui-footer__text">
-                <view>你选择了每一个答案</view>
-                <view>此问题将被标记为无关紧要</view>
-              </view>
-            </view>
           </view>
+        </block>
+      </view>
+    </view>
+    <view class="page question-only-me" wx:else>
+      <form bindsubmit="submitFieldForm" data-key="{{question.name}}">
+        <view class="name">
+          <view class="page__title">{{question.label}}</view>
+          <!--<view class="page__desc"></view>-->
         </view>
-      </block>
+
+        <view class="question-body">
+          <block wx:if="{{question.type === 'text'}}">
+            <input class="weui-input shadow" placeholder="请输入文本" name="{{question.name}}" value="{{question.value}}"/>
+          </block>
+          <block wx:elif="{{question.type === 'select'}}">
+            <view class="big-select">
+              <radio-group bindchange="radioChange" class="weui-flex" name="{{question.name}}" value="{{question.value}}">
+                <repeat for="{{question.options_all}}" key="index" index="index" item="option">
+                  <label class="weui-flex__item">
+                    <radio class="weui-check" value="{{option.value}}" checked="{{option.value === question.value}}"/>
+                    <view wx:if="{{option.value === question.value}}" class="placeholder shadow selected">{{option.label}}</view>
+                    <view wx:else class="placeholder shadow">{{option.label}}</view>
+                  </label>
+                </repeat>
+              </radio-group>
+            </view>
+          </block>
+          <block wx:elif="{{question.type === 'date'}}">
+            <picker mode="date" value="{{question.value}}" name="{{question.name}}" bindchange="bindDateChange">
+              <view class="weui-input shadow">{{util.formatDate(question.value, '', 'date')}}</view>
+            </picker>
+          </block>
+          <block wx:elif="{{question.type === 'textarea'}}">
+            <textarea class="weui-textarea shadow" maxlength="-1" placeholder="请输入文本" value="{{question.value}}" name="{{question.name}}" />
+          </block>
+          <block wx:elif="{{question.type === 'number'}}">
+            <input class="weui-input shadow" type="scale" wx:if="{{question.scale > 0}}" placeholder="请输入文本" name="{{question.name}}" value="{{question.value}}"/>
+            <input class="weui-input shadow" type="number" wx:else placeholder="请输入文本" name="{{question.name}}" value="{{question.value}}"/>
+          </block>
+        </view>
+
+        <button class="weui-btn submit" type="primary" form-type="submit" hover-class='button-hover'>{{bottonText}}</button>
+
+      </form>
     </view>
   </view>
 </template>
@@ -499,6 +603,8 @@
   import wepy from 'wepy'
   import wxsLib from '../wxs/lib.wxs'
   import _ from 'underscore'
+  import pageRouter from '@/utils/pageRouter'
+  import util from '../wxs/util.wxs'
 
   const OTHER = '_o';
   const IMPORTANT = '_i';
@@ -507,6 +613,7 @@
 
     wxs = {
       wxsLib: wxsLib,
+      util: util
     };
 
     /*
@@ -522,53 +629,72 @@
       }
     };
 
+    watch = {
+      args: async function (newValue, oldValue) {
+        if (!_.isEmpty(newValue)) {
+          console.log('newValue', newValue);
+          if(!newValue.space_id){
+            throw new Error('缺少参数 space_id');
+          }
+
+          if(!newValue.object_name){
+            throw new Error('缺少参数 object_name');
+          }
+
+          const spaceId = newValue.space_id;
+
+          this.object_name = newValue.object_name;
+
+          this.space_id = spaceId;
+
+          this.answered_url = newValue.answered_url;
+
+          this.globalRequired = newValue.required || false;
+
+          //获取问题清单
+          const object = JSON.parse(JSON.stringify(await this.$parent.$parent.getObject(this.object_name, spaceId)));
+          console.log('object', object);
+
+          //获取用户答案
+          let query_options = {
+            $filter: `owner eq '${this.$parent.$parent.globalData.user._id}'`
+          };
+
+          let result = await this.$parent.$parent.query(this.object_name, query_options, spaceId);
+
+          if(result.value.length === 0){
+            result = await this.$parent.$parent.insert(this.object_name, {
+              owner: this.$parent.$parent.globalData.user._id
+            }, spaceId);
+          }
+
+          this.questionsAnswer = result.value[0];
+
+          this.questions = this.getQuestions(object.fields);
+
+          this.questionKeys = _.keys(this.questions);
+
+          console.log('this.questionKeys22222222222222222', this.questionKeys);
+
+          this.pendingQuesionKeys = _.difference(this.questionKeys, _.keys(this.questionsAnswer));
+
+          //如果所有问题都已回答，则跳转第一个问题
+          if(this.pendingQuesionKeys.length === 0){
+            this.pendingQuesionKeys = _.clone(this.questionKeys);
+          }
+
+          this.nextQuestion(true);
+
+          this.progress = this.getProgress();
+
+          this.$apply()
+
+        }
+      }
+    };
+
     async onLoad(e){
-      if(this.$parent.$parent.globalData.my_spaces.length < 1){
-        throw new Error('当前用户不属于任何Space')
-      }
-      const spaceId = this.$parent.$parent.globalData.my_spaces[0]._id; //TODO 处理spaceId 问题
-      this.space_id = spaceId;
-      //获取问题清单
-      const object = JSON.parse(JSON.stringify(await this.$parent.$parent.getObject(this.object_name, spaceId)));
-      console.log('object', object)
-      this.questions = this.getQuestions(object.fields);
 
-      this.questionKeys = _.keys(this.questions);
-
-      console.log('this.questionKeys', this.questionKeys);
-
-      //获取用户答案
-      let query_options = {
-        $filter: `owner eq '${this.$parent.$parent.globalData.user._id}'`
-      };
-
-      let result = await this.$parent.$parent.query(this.object_name, query_options, spaceId);
-
-      if(result.value.length === 0){
-        result = await this.$parent.$parent.insert(this.object_name, {
-          owner: this.$parent.$parent.globalData.user._id
-        }, spaceId);
-      }
-
-      this.questionsAnswer = result.value[0];
-
-      this.pendingQuesionKeys = _.difference(this.questionKeys, _.keys(this.questionsAnswer));
-
-      if(this.pendingQuesionKeys.length === 0){
-        this.question = this.questions[_.last(this.questionKeys)];
-      }else{
-        this.question = this.questions[this.pendingQuesionKeys[0]];
-      }
-
-      this.progress = this.getProgress();
-
-      console.log('this.pendingQuesionKeys', this.pendingQuesionKeys);
-
-      console.log('result', this.questionsAnswer);
-
-      console.log('this.questionKeys', this.questionKeys);
-      console.log('this.question', this.question);
-      this.$apply()
     }
 
     /*
@@ -578,6 +704,7 @@
         name: '',
         type: '',
         required: true/false,
+        scale: number,
         options: [],
         showOtherQuesion: true/false,
         showImportant: true/false
@@ -599,6 +726,8 @@
 
           question.type = field.type;
 
+          question.scale = field.scale || 0;
+
           question.required = field.required || false;
 
           if(field.options){
@@ -609,6 +738,8 @@
           question.showOtherQuesion = _.include(keys, key + OTHER);
 
           question.showImportant = _.include(keys, key + IMPORTANT);
+
+          question.value = this.questionsAnswer[key];
 
           questions[key] = question;
         }
@@ -642,19 +773,51 @@
       progress: '0%',
       questionsAnswer: {},
       showBigSelect: false,
+      submitDisabled: false,
+      bottonText: '提交',
+      fieldErrorMSG: '',
+      showError: false,
     };
 
     getProgress(){
+      console.log('this.pendingQuesionKeys', this.pendingQuesionKeys);
+      console.log('this.questionKeys', this.questionKeys);
       return (1 - this.pendingQuesionKeys.length / this.questionKeys.length) * 100 + '%';
     }
 
-    nextQuestion(){
+    goBack() {
+      const pages = getCurrentPages();
+      const prevPage = pages[pages.length - 2];
+      wepy.navigateBack({
+        delta: 1
+      })
+    }
 
-      this.pendingQuesionKeys = this.pendingQuesionKeys.splice(1, this.pendingQuesionKeys.length);
+    nextQuestion(init){
+
+      this.showError = false;
+      this.fieldErrorMSG = '';
+
+      if(this.pendingQuesionKeys.length === 0){
+        this.question = this.questions[_.last(this.questionKeys)];
+      }else{
+        this.question = this.questions[this.pendingQuesionKeys[0]];
+        this.pendingQuesionKeys = this.pendingQuesionKeys.splice(1, this.pendingQuesionKeys.length);
+      }
+
       this.progress = this.getProgress();
 
       if(this.pendingQuesionKeys.length === 0){
         console.log('已经回答所有问题');
+
+        if(!init){
+          if(this.answered_url){
+            pageRouter.navigateTo({url: this.answered_url})
+          }else{
+            wx.showToast({title: '已完成',icon: 'success'})
+            setTimeout(this.goBack, 500)
+          }
+        }
 
       }else{
         this.question = this.questions[this.pendingQuesionKeys[0]];
@@ -665,6 +828,15 @@
         };
         this.showQuestionMe = true;
       }
+
+      if(!this.showOtherQuesion){
+        this.bottonText = '下一步';
+      }
+
+      if(this.pendingQuesionKeys.length < 2){
+        this.bottonText = '完成';
+      }
+
       console.log('this.question', this.question);
       this.$apply()
     }
@@ -676,8 +848,9 @@
         const radioItems = this.question.options_all;
         for (let i = 0, len = radioItems.length; i < len; ++i) {
           if(radioItems[i].value === e.detail.value){
-            console.log('radioItems[i]', radioItems[i])
-            this.answer.me = radioItems[i]
+            console.log('radioItems[i]', radioItems[i]);
+            this.answer.me = radioItems[i];
+            this.question.value = this.answer.me.value;
           }
         }
 
@@ -699,14 +872,13 @@
         this.answer.important = !this.answer.important;
         this.$apply();
       },
-      submit: async function () {
+      submit: async function (e) {
         console.log('submit answer is ', this.answer);
         let qa = {};
         const q = this.question;
         const answer = this.answer;
-        const questionsAnswer = this.questionsAnswer;
 
-        const record_id = questionsAnswer._id;
+        const record_id = this.questionsAnswer._id;
 
         if(q.showOtherQuesion){
           qa[q.name + OTHER] = answer.other
@@ -743,6 +915,41 @@
       clickMore: function () {
         this.showBigSelect = true;
         this.$apply();
+      },
+      bindDateChange: function (e) {
+        this.question.value = e.detail.value
+      },
+      submitFieldForm: async function (e) {
+        const formValues = e.detail.value;
+        const key = this.question.name;
+        const fieldValue = formValues[key];
+        const record_id = this.questionsAnswer._id;
+
+        let values = {};
+
+        values[key] = fieldValue;
+
+
+        if(this.globalRequired && !fieldValue){
+          this.showError = true;
+          this.fieldErrorMSG = `请填写${this.question.label}!`;
+          return ;
+        }
+
+
+        console.log('submitFieldForm e', e);
+
+        console.log('this.question', this.question);
+
+        console.log('values', values)
+
+        console.log('key', key)
+
+        console.log('fieldValue', fieldValue)
+
+        await this.$parent.$parent.update(this.object_name, record_id, values, this.space_id);
+
+        this.nextQuestion();
       }
     }
   }

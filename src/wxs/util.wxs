@@ -16,7 +16,7 @@ function formatEventStatus(status) {
 }
 
 // 日期格式化
-function formatDate(value, joiner) {
+function formatDate(value, joiner, type) {
   if (!value) {
     return '';
   }
@@ -31,6 +31,10 @@ function formatDate(value, joiner) {
     var date = value.getDate() + '日';
   }
   console.log('[date]', date)
+
+  if(type === 'date'){
+    return year + month + date
+  }
 
   var hours = value.getHours();
   var minutes = value.getMinutes();

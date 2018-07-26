@@ -20,7 +20,7 @@
   /*}*/
 </style>
 <template>
-  <questionView></questionView>
+  <questionView :args.sync='args'></questionView>
 </template>
 
 <script>
@@ -30,7 +30,7 @@
 
   export default class PapersView extends wepy.page {
     config = {
-      navigationBarTitleText: '💗爱的抉择💗'
+      navigationBarTitleText: ''
     };
 
     components = {
@@ -39,7 +39,33 @@
 
 
     data = {
-
+      args: {}
     };
+
+    async onLoad(e){
+      console.log("record view", e)
+      let args = {};
+
+      if(e && e.object_name){
+        args.object_name = e.object_name
+      }else{
+        throw new Error("缺少参数：object_name")
+      }
+
+      if(e && e.title){
+        args.title = e.title
+      }
+
+      if(e && e.space_id){
+        args.space_id = e.space_id
+      }
+
+      if(e && e.required){
+        args.required = true;
+      }
+
+      this.args = args;
+      this.$apply()
+    }
   }
 </script>
