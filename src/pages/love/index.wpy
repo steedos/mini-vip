@@ -7,7 +7,7 @@
     .love-title{
       margin-top:80rpx;
       color:#fff;
-      font-size:50rpx;
+      font-size:54rpx;
       font-family:黑体;
       font-weight:bold;
     }
