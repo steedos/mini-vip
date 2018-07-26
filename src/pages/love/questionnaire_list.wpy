@@ -132,7 +132,7 @@
 
     <view class="weui-cells">
       <repeat for="{{questionnaire}}" key="index" index="index" item="naire">
-        <navigator class="weui-cell weui-cell_access">
+        <navigator class="weui-cell weui-cell_access" url="{{naire.url}}">
           <view class="weui-cell__bd">
             <view>{{naire.label}}</view>
           </view>
@@ -145,6 +145,7 @@
 
 <script>
 import wepy from 'wepy';
+import { loveSpaceId } from '../../config/index.js';
 
 export default class QuestionnaireList extends wepy.page {
   config = {
@@ -167,7 +168,7 @@ export default class QuestionnaireList extends wepy.page {
     }, {
       label: '我喜欢的'
     }, {
-      label: '恋爱小测试'
+      label: '恋爱小测试', url: `/pages/love/papers_view?object_name=love_answer&space_id=${loveSpaceId}`
     }]
   };
 
