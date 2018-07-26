@@ -13,7 +13,7 @@
     width: 100%;
 
 
-    @bigSelectBGColor: rgba(0, 213, 198, 1);
+    @bigSelectBGColor: #4C7BD9;
 
     @mainBackground: rgba(2, 20, 255, 0.79);
 
@@ -22,7 +22,7 @@
     @otherBackground: #FFFFFF;
 
     .name{
-      padding-top:50px;
+      padding-top:40px;
       padding-left:20px;
       padding-right:45px;
 
@@ -131,23 +131,27 @@
     .question-section-other{
 
       position: absolute;
-      bottom: 20%;
+      bottom: 19%;
       width:100%;
 
       .other{
         line-height: @height;
-        padding-left: 10px;
+        padding-left: 15px;
+        color:#2A2F35;
+        font-size: 17px;
+
       }
 
       .user-other{
         margin-bottom:15px;
+        padding:0 40rpx;
+        padding-left:15px;
       }
 
       .question-body{
         position: relative;
-        margin-bottom: 15px;
-        padding-left:15px;
-        padding-right:15px;
+        margin-bottom: 25px;
+        padding:0 40rpx;
         .weui-cells{
           background-color: @otherBackground;
           /*color: #FFFFFF;*/
