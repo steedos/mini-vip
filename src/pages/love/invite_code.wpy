@@ -120,7 +120,7 @@ export default class InviteCode extends wepy.page {
       }
     },
     cancel() {
-      wx.navigateTo({
+      wx.switchTab({
         url: '/pages/love/questionnaire_list'
       });
     }

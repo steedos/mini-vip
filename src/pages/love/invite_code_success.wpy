@@ -39,7 +39,7 @@ export default class InviteCodeSuccess extends wepy.page {
 
   methods = {
     confirm() {
-      wx.navigateTo({
+      wx.switchTab({
         url: '/pages/love/questionnaire_list'
       });
     }
