@@ -77,7 +77,7 @@
       font-weight:bold;
     }
     .love-introduce-summary{
-      font-size:16px;
+      font-size:14px;
       color:#777;
     }
   }
@@ -109,6 +109,28 @@
         </view>
         <view class="love-introduce-summary">
           提倡无颜交友，告别刷脸时代
+        </view>
+      </view>
+      <view class="love-introduce">
+        <view class="love-introduce-icon">
+          <view class="slds-icon-standard-social slds-icon"/>
+        </view>
+        <view class="love-introduce-title">
+          AI精准匹配
+        </view>
+        <view class="love-introduce-summary">
+          人工智能自动精准匹配，告别红娘低效模式
+        </view>
+      </view>
+      <view class="love-introduce">
+        <view class="love-introduce-icon">
+          <view class="slds-icon-standard-solution slds-icon"/>
+        </view>
+        <view class="love-introduce-title">
+          每周只匹配一次
+        </view>
+        <view class="love-introduce-summary">
+          每周只推荐一位好友，提高交友效率
         </view>
       </view>
       <button class=" btn-join" @tap="join">立即加入</button>
