@@ -2,6 +2,9 @@
   /*page{*/
     /*background-color: #ebebeb;*/
   /*}*/
+  page{
+    background-color: #F3F5F9;
+  }
 
   .question{
 
@@ -9,14 +12,22 @@
     @radius: 4px;
     width: 100%;
 
-    @meBackground: rgba(2, 20, 255, 0.79);
+    @meBackground:#4C7BD9;
 
     @otherBackground: #FFFFFF;
 
     .name{
-      padding-left:15px;
-      padding-right:15px;
-      padding-top: 20px;
+      padding-top:50px;
+      padding-left:20px;
+      padding-right:45px;
+
+      .page__title{
+        max-height:80px;
+        overflow:hidden;
+        line-height:26px; 
+        font-size:20px;
+        color:#2A2F35;
+      }
     }
 
     .weui-footer__text{
@@ -64,23 +75,26 @@
 
     .question-section-me{
       position: absolute;
-      bottom: 20%;
+      bottom: 15%;
       width:100%;
 
       .me{
         line-height: @height;
-        padding-right: 10px;
+        padding-right: 15px;
+        color:#2A2F35;
+        font-size: 17px;
       }
 
       .user-me{
         margin-bottom:15px;
+        padding:0 40rpx;
+        padding-right:26px;
       }
 
       .question-body{
         position: relative;
-        margin-bottom: 15px;
-        padding-left:15px;
-        padding-right:15px;
+        margin-bottom: 25px;
+        padding:0 40rpx;
         .weui-cells{
           background-color: @meBackground;
           color: #FFFFFF;
@@ -93,7 +107,7 @@
 
         .triangleb{
           position: absolute;
-          right: 30px;
+          right: 37px;
           top: -9px;
           width:0;
           height:0;
@@ -159,6 +173,7 @@
         width: 100%;
         height: 45px;
         bottom: -30px;
+        color:#999FAA!important;
         .weui-footer__text{
           padding-top: 10px;
         }
