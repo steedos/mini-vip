@@ -586,7 +586,7 @@
             <block wx:if="{{question.range}}">
               <view class="select-picker weui-flex">
                 <view class="weui-flex__item">
-                  <picker bindchange="bindSelectPickerMinChange" value="{{index}}" range="{{question.options_all}}" range-key="label" name="{{question.name}}">
+                  <picker bindchange="bindSelectPickerMinChange" value="{{question.value_min_index}}" range="{{question.options_all}}" range-key="label" name="{{question.name}}">
                     <view class="weui-input shadow" name="{{question.name}}">
                       {{question.value.min.label}}
                     </view>
@@ -594,7 +594,7 @@
                 </view>
                 <view class="range-joiner"> — </view>
                 <view class="weui-flex__item">
-                  <picker bindchange="bindSelectPickerMaxChange" value="{{index}}" range="{{question.options_all}}" range-key="label" name="{{question.name}}_max">
+                  <picker bindchange="bindSelectPickerMaxChange" value="{{question.value_max_index}}" range="{{question.options_all}}" range-key="label" name="{{question.name}}_max">
                     <view class="weui-input shadow">
                       {{question.value.max.label}}
                     </view>
@@ -795,7 +795,24 @@
             question.range_value = this.questionsAnswer[key + RANGE];
           }
 
-          question.value = this.questionsAnswer[key];
+          if(question.range && question.type === 'select'){
+            question.value = {
+              min: _.find(question.options_all, (o, i)=>{
+                if(o.value === this.questionsAnswer[key]){
+                  question.value_min_index = i;
+                  return true;
+                }
+              }),
+              max: _.find(question.options_all, (o, i)=>{
+                if(o.value === this.questionsAnswer[key + RANGE]){
+                  question.value_max_index = i;
+                  return true;
+                }
+              }),
+            }
+          }else{
+            question.value = this.questionsAnswer[key];
+          }
 
           questions[key] = question;
         }
@@ -977,7 +994,11 @@
         let values = {};
 
         if(question.range && question.type === 'select'){
-          values[key] = question.options[fieldValue].value;
+          if(fieldValue || _.isNumber(fieldValue)){
+            values[key] = question.options[fieldValue].value;
+          }else{
+            values[key] = '';
+          }
         }else{
           values[key] = fieldValue;
         }
@@ -991,7 +1012,12 @@
 
         if(question.range){
           if(question.type === 'select'){
-            values[key + RANGE] = question.options[formValues[key + RANGE]].value;
+            if(formValues[key + RANGE] || _.isNumber(formValues[key + RANGE])){
+              values[key + RANGE] = question.options[formValues[key + RANGE]].value;
+            }else{
+              values[key + RANGE] = '';
+            }
+
           }else{
             values[key + RANGE] = formValues[key + RANGE];
           }
@@ -1022,6 +1048,7 @@
         if(!_.isObject(this.question.value)){
           this.question.value = {}
         }
+        this.question.value_min_index = e.detail.value
         this.question.value.min = this.question.options[e.detail.value]
       },
       bindSelectPickerMaxChange: function (e) {
@@ -1029,6 +1056,7 @@
         if(!_.isObject(this.question.value)){
           this.question.value = {}
         }
+        this.question.value_max_index = e.detail.value
         this.question.value.max = this.question.options[e.detail.value]
       }
     }
