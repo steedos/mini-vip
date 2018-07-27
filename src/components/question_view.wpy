@@ -326,6 +326,12 @@
         box-shadow: 0px 1px 1px 1px rgba(7, 2, 1, 0.09);
       }
 
+      .range-joiner{
+        height: @inputHeight;
+        line-height: @inputHeight;
+        padding-left: 10px;
+        padding-right: 10px;
+      }
 
 
       .question-body{
@@ -573,7 +579,7 @@
 
         <view class="question-body">
           <block wx:if="{{question.type === 'text'}}">
-            <input class="weui-input shadow" placeholder="请输入文本" name="{{question.name}}" value="{{question.value}}"/>
+            <input class="weui-input shadow" placeholder="" name="{{question.name}}" value="{{question.value}}"/>
           </block>
           <block wx:elif="{{question.type === 'select'}}">
             <view class="big-select">
@@ -594,16 +600,18 @@
             </picker>
           </block>
           <block wx:elif="{{question.type === 'textarea'}}">
-            <textarea class="weui-textarea shadow" maxlength="-1" placeholder="请输入文本" value="{{question.value}}" name="{{question.name}}" />
+            <textarea class="weui-textarea shadow" maxlength="-1" placeholder="" value="{{question.value}}" name="{{question.name}}" />
           </block>
           <block wx:elif="{{question.type === 'number'}}">
-            <input class="weui-input shadow" type="scale" wx:if="{{question.scale > 0}}" placeholder="请输入文本" name="{{question.name}}" value="{{question.value}}"/>
-            <input class="weui-input shadow" type="number" wx:else placeholder="请输入文本" name="{{question.name}}" value="{{question.value}}"/>
-            <block wx:if="{{question.range}}">
-              -
-              <input class="weui-input shadow" type="scale" wx:if="{{question.scale > 0}}" placeholder="请输入文本" name="{{question.name}}_max" value="{{question.value}}"/>
-              <input class="weui-input shadow" type="number" wx:else placeholder="请输入文本" name="{{question.name}}_max" value="{{question.value}}"/>
-            </block>
+            <view class="weui-flex">
+              <input class="weui-input weui-flex__item shadow" type="scale" wx:if="{{question.scale > 0}}" placeholder="" name="{{question.name}}" value="{{question.value}}"/>
+              <input class="weui-input weui-flex__item shadow" type="number" wx:else placeholder="" name="{{question.name}}" value="{{question.value}}"/>
+              <block wx:if="{{question.range}}">
+                <view class="range-joiner"> — </view>
+                <input class="weui-input weui-flex__item shadow" type="scale" wx:if="{{question.scale > 0}}" placeholder="" name="{{question.name}}_max" value="{{question.range_value}}"/>
+                <input class="weui-input weui-flex__item shadow" type="number" wx:else placeholder="" name="{{question.name}}_max" value="{{question.range_value}}"/>
+              </block>
+            </view>
           </block>
         </view>
 
@@ -752,6 +760,10 @@
           question.showImportant = _.include(keys, key + IMPORTANT);
 
           question.range = _.include(keys, key + RANGE);
+
+          if(question.range){
+            question.range_value = this.questionsAnswer[key + RANGE];
+          }
 
           question.value = this.questionsAnswer[key];
 
@@ -929,7 +941,8 @@
       },
       submitFieldForm: async function (e) {
         const formValues = e.detail.value;
-        const key = this.question.name;
+        const question = this.question
+        const key = question.name;
         const fieldValue = formValues[key];
         const record_id = this.questionsAnswer._id;
 
@@ -942,6 +955,16 @@
           this.showError = true;
           this.fieldErrorMSG = `请填写${this.question.label}!`;
           return ;
+        }
+
+        if(question.range){
+          values[key + RANGE] = formValues[key + RANGE];
+
+          if(this.globalRequired && !values[key + RANGE]){
+            this.showError = true;
+            this.fieldErrorMSG = `请填写${this.question.label}!`;
+            return ;
+          }
         }
 
 
