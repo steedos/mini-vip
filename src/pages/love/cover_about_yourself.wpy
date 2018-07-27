@@ -78,8 +78,9 @@ export default class CoverAboutYourself extends wepy.page {
 
   methods = {
     next() {
-      wx.switchTab({
-        url: '/pages/love/questionnaire_list'
+      const answeredUrl = encodeURIComponent(`/pages/love/cover_you_looking_for?space_id=${this.space_id}`);
+      wx.navigateTo({
+        url: `/pages/love/papers_view?object_name=love_about_me&space_id=${this.space_id}&required=true&answered_url=${answeredUrl}`
       });
     }
   };
