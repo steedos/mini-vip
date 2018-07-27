@@ -99,6 +99,15 @@ export default class LoveIndex extends wepy.page {
     }
   }
 
+  // 分享
+  onShareAppMessage(res) {
+    return {
+      title: "告别刷脸时代，寻找志趣相投的有缘人",
+      path: `pages/love/index?space_id=${this.space_id}`
+    };
+  }
+
+
   methods = {
     join(){
       pageRouter.navigateTo({url: `/pages/love/invite_code?space_id=${this.space_id}`});
