@@ -40,6 +40,7 @@
     image{
       display: block;
       height: 580rpx;
+      margin:auto;
     }
   }
 
@@ -61,7 +62,7 @@
         color: #666;
       }
       .share-list-sum{
-        font-size:17px;
+        font-size:16px;
         color: #999;
       }
     }

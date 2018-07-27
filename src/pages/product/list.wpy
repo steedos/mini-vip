@@ -187,7 +187,7 @@ page {
       <scroll-view  scroll-x="true">
         <view style="display: flex">
         <repeat for="{{categories}}" key="index" index="index" item="item">
-          <view class="zan-tab__item {{item._id == seleted_id ? 'zan-tab__item--selected' : ''}}"   @tap="changeCategory({{item._id}})" style="flex:1; white-space: nowrap;padding: 0 10px; text-align:center" > 
+          <view class="zan-tab__item {{item._id == seleted_id ? 'zan-tab__item--selected' : ''}}"   @tap="changeCategory({{item._id}},{{item.name}},{{index}})" style="flex:1; white-space: nowrap;padding: 0 10px; text-align:center" > 
             <view class="zan-tab__title">{{ item.name }}</view>
           </view>
         </repeat>
@@ -232,7 +232,7 @@ import { connect, getStore } from 'wepy-redux';
 import searchbar from '../../components/searchbar';
 import recordList from '../../mixins/record_list';
 import productGridList from '@/components/product_grid_list';
-
+import _ from 'underscore'
 const store = getStore()
 
 @connect({
@@ -260,30 +260,41 @@ export default class ProductList extends wepy.page {
       'vendor',
       'categories'
     ],
-    seleted_id: ''
+    seleted_id: 0,
   };
 
   async onLoad(e) {
+    if(e.category_name){
+      wx.setNavigationBarTitle({title:e.category_name})
+    }
     this.$apply();
   }
 
   async getQueryFilter(e) {
     const space_id = e.space_id;
-    const options = {
+    if(e.categories && e.category_id ){
+      this.categories = JSON.parse(e.categories)
+      this.seleted_id = e.category_id
+      this.filter = `(categories eq '${this.seleted_id}')`;
+    }else{
+      const options = {
       $orderby: 'sort_no',
-      $filter: `space eq '${space_id}'`,
+      $filter: `space eq '${space_id}' and parent eq '全部'`,
       $count: true,
       $select: 'name,sort_no'
     };
-    const result = await this.$parent.query(
-      'vip_product_category',
-      options,
-      space_id
-    );
-    if (result && result.value && result.value[0]) {
-      this.seleted_id = result.value[0]._id;
-      this.categories = result.value;
-      this.filter = `(categories eq '${this.seleted_id}')`;
+      const result = await this.$parent.query(
+        'vip_product_category',
+        options,
+        space_id
+      );
+      if (result && result.value && result.value[0]) {
+        // this.seleted_id = result.value[0]._id;
+        this.categories = _.union([{_id:0,name:'全部'}],result.value)
+        if (this.seleted_id != 0) {
+          this.filter = `(categories eq '${this.seleted_id}')`;
+        }
+      }
     }
     this.$apply();
     return this.filter;
@@ -304,10 +315,31 @@ export default class ProductList extends wepy.page {
     searchRecords(searchValue, evt) {
       this.searchRecords(searchValue, evt);
     },
-    async changeCategory(category_id) {
+    async changeCategory(category_id,category_name,index) {
       this.seleted_id = category_id;
-      this.filter = `(categories eq '${category_id}')`;
+      if (this.seleted_id != 0) {
+        this.filter = `(categories eq '${category_id}')`;
+      }else {
+        this.filter = ''
+      }
       await this.dataRefresh();
+      const options = {
+        $orderby: 'sort_no',
+        $filter: `parent eq '${category_id}'`,
+        $count: true,
+        $select: 'name,sort_no'
+      };
+      const result = await this.$parent.query(
+        'vip_product_category',
+        options,
+        this.space_id
+      );
+      if (result && result.value && result.value[0] && index) {
+        const categories_obj = _.union([{_id:category_id,name:category_name}],result.value)
+        const categories = JSON.stringify(categories_obj)
+        wepy.navigateTo({ url: `/pages/product/list?space_id=${this.space_id}&categories=${categories}&category_id=${category_id}&category_name=${category_name}` });
+      }
+
       this.$apply();
       // console.log('[changeCategory]', category_id)
     },
