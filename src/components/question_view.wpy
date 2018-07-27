@@ -693,7 +693,7 @@
 
           this.answered_url = newValue.answered_url;
 
-          this.answered_url_type = newValue || 'navigateTo';
+          this.answered_url_type = newValue.answered_url_type || 'navigateTo';
 
           this.globalRequired = newValue.required || false;
 
