@@ -793,6 +793,8 @@
 
           question.required = field.required || false;
 
+          question.defaultValue = field.defaultValue;
+
           if(field.options){
             question.options = field.options.slice(0,4);
             question.options_all = field.options;
@@ -804,9 +806,18 @@
 
           question.range = _.include(keys, key + RANGE);
 
+          if(question.defaultValue && !_.has(this.questionsAnswer, key)){
+            this.questionsAnswer[key] = question.defaultValue;
+          }
+
           if(question.range){
+            if(fields[key + RANGE].defaultValue && !_.has(this.questionsAnswer, key + RANGE)){
+              this.questionsAnswer[key + RANGE] = fields[key + RANGE].defaultValue;
+            }
             question.range_value = this.questionsAnswer[key + RANGE];
           }
+
+
 
           if(question.range && question.type === 'select'){
             question.value = {
@@ -1049,6 +1060,12 @@
           if(this.globalRequired && !values[key + RANGE]){
             this.showError = true;
             this.fieldErrorMSG = `请填写${this.question.label}!`;
+            return ;
+          }
+
+          if(Number(values[key]) > Number(values[key + RANGE])){
+            this.showError = true;
+            this.fieldErrorMSG = `第二个值不能小于第一个值!`;
             return ;
           }
         }
