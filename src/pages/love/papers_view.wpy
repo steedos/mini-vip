@@ -68,7 +68,7 @@
       }
 
       if(e && e.answered_url){
-        args.answered_url = e.answered_url;
+        args.answered_url = decodeURIComponent(e.answered_url);
       }
 
       this.args = args;
