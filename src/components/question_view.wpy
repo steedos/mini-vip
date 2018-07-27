@@ -913,17 +913,24 @@
       }else{
         this.question = this.questions[this.pendingQuesionKeys[0]];
         const q_name = this.question.name;
+        console.log('this.questionsAnswer', this.questionsAnswer)
+        console.log('[q_name + OTHER]', q_name + OTHER)
+        console.log('this.questionsAnswer[q_name + OTHER]', this.questionsAnswer[q_name + OTHER]);
+        let o_value = this.questionsAnswer[q_name + OTHER] || [];
+
+        let answer_other = _.pluck(_.filter(this.question.options_all, (o, i)=>{
+          if(_.include(o_value,o.value)){
+            return true;
+          }
+        }), 'value');
+
         this.answer = {
           me: _.find(this.question.options_all, (o, i)=>{
             if(o.value === this.questionsAnswer[q_name]){
               return true;
             }
           }),
-          other: _.filter(this.question.options_all, (o, i)=>{
-            if(o.value === this.questionsAnswer[q_name + OTHER]){
-              return true;
-            }
-          }),
+          other: answer_other,
           important: this.questionsAnswer[q_name + IMPORTANT]
         };
         this.showQuestionMe = true;
