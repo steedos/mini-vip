@@ -678,6 +678,11 @@
           const object = JSON.parse(JSON.stringify(await this.$parent.$parent.getObject(this.object_name, spaceId)));
           console.log('object', object);
 
+          const pages = getCurrentPages();
+          const prevPage = pages[pages.length - 1];
+
+          prevPage.changeNavigationBarTitleText(object.label);
+
           //获取用户答案
           let query_options = {
             $filter: `owner eq '${this.$parent.$parent.globalData.user._id}'`
@@ -806,8 +811,6 @@
     }
 
     goBack() {
-      const pages = getCurrentPages();
-      const prevPage = pages[pages.length - 2];
       wepy.navigateBack({
         delta: 1
       })

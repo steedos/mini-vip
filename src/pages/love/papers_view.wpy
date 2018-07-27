@@ -37,6 +37,9 @@
       questionView: QuestionView
     };
 
+    changeNavigationBarTitleText(title){
+      wx.setNavigationBarTitle({title:title})
+    }
 
     data = {
       args: {}
