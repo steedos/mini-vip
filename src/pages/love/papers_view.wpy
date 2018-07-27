@@ -75,6 +75,10 @@
         args.answered_url_type = e.answered_url_type
       }
 
+      if(e && e.keep_progress){
+        args.keep_progress = e.keep_progress;
+      }
+
       this.args = args;
       this.$apply()
     }

@@ -666,6 +666,7 @@
       space_id: '',
       answered_url: '',
       answered_url_type: navigateTo / redirectTo / switchTab / reLaunch ；默认值navigateTo
+      keep_progress: '', 如果有此参数，则直接显示到用户未回答的问题
      }
     */
     props = {
@@ -686,6 +687,14 @@
             throw new Error('缺少参数 object_name');
           }
 
+          await this.$parent.$parent.login()
+          const setting = await wepy.getSetting();
+          const user = this.$parent.$parent.globalData.user;
+          if (setting.authSetting['scope.userInfo']) {
+            this.userInfo = this.$parent.$parent.globalData.userInfo;
+          }
+
+
           const spaceId = newValue.space_id;
 
           this.object_name = newValue.object_name;
@@ -697,6 +706,10 @@
           this.answered_url_type = newValue.answered_url_type || 'navigateTo';
 
           this.globalRequired = newValue.required || false;
+
+          if(newValue.keep_progress){
+            this.keep_progress = true;
+          }
 
           //获取问题清单
           const object = JSON.parse(JSON.stringify(await this.$parent.$parent.getObject(this.object_name, spaceId)));
@@ -729,7 +742,7 @@
           this.pendingQuesionKeys = _.difference(this.questionKeys, _.keys(this.questionsAnswer));
 
           //如果所有问题都已回答，则跳转第一个问题
-          if(this.pendingQuesionKeys.length === 0){
+          if(this.pendingQuesionKeys.length === 0|| !this.keep_progress){
             this.pendingQuesionKeys = _.clone(this.questionKeys);
           }
 
@@ -744,14 +757,7 @@
     };
 
     async onLoad(e){
-      await this.$parent.$parent.login()
-      const setting = await wepy.getSetting();
-      const user = this.$parent.$parent.globalData.user;
-      if (setting.authSetting['scope.userInfo']) {
-        this.userInfo = this.$parent.$parent.globalData.userInfo;
-      }
 
-      this.$apply()
     }
 
     /*
@@ -851,6 +857,7 @@
       bottonText: '提交',
       fieldErrorMSG: '',
       showError: false,
+      keep_progress: false,
     };
 
     getProgress(){
