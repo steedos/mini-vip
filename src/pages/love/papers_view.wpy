@@ -64,6 +64,10 @@
         args.required = true;
       }
 
+      if(e && e.answered_url){
+        args.answered_url = e.answered_url;
+      }
+
       this.args = args;
       this.$apply()
     }
