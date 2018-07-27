@@ -583,17 +583,38 @@
             <input class="weui-input shadow" placeholder="" name="{{question.name}}" value="{{question.value}}"/>
           </block>
           <block wx:elif="{{question.type === 'select'}}">
-            <view class="big-select">
-              <radio-group bindchange="radioChange" class="weui-flex" name="{{question.name}}" value="{{question.value}}">
-                <repeat for="{{question.options_all}}" key="index" index="index" item="option">
-                  <label class="weui-flex__item">
-                    <radio class="weui-check" value="{{option.value}}" checked="{{option.value === question.value}}"/>
-                    <view wx:if="{{option.value === question.value}}" class="placeholder shadow selected">{{option.label}}</view>
-                    <view wx:else class="placeholder shadow">{{option.label}}</view>
-                  </label>
-                </repeat>
-              </radio-group>
-            </view>
+            <block wx:if="{{question.range}}">
+              <view class="select-picker weui-flex">
+                <view class="weui-flex__item">
+                  <picker bindchange="bindSelectPickerMinChange" value="{{index}}" range="{{question.options_all}}" range-key="label" name="{{question.name}}">
+                    <view class="weui-input shadow" name="{{question.name}}">
+                      {{question.value.min.label}}
+                    </view>
+                  </picker>
+                </view>
+                <view class="range-joiner"> — </view>
+                <view class="weui-flex__item">
+                  <picker bindchange="bindSelectPickerMaxChange" value="{{index}}" range="{{question.options_all}}" range-key="label" name="{{question.name}}_max">
+                    <view class="weui-input shadow">
+                      {{question.value.max.label}}
+                    </view>
+                  </picker>
+                </view>
+              </view>
+            </block>
+            <block wx:else>
+              <view class="big-select">
+                <radio-group bindchange="radioChange" class="weui-flex" name="{{question.name}}" value="{{question.value}}">
+                  <repeat for="{{question.options_all}}" key="index" index="index" item="option">
+                    <label class="weui-flex__item">
+                      <radio class="weui-check" value="{{option.value}}" checked="{{option.value === question.value}}"/>
+                      <view wx:if="{{option.value === question.value}}" class="placeholder shadow selected">{{option.label}}</view>
+                      <view wx:else class="placeholder shadow">{{option.label}}</view>
+                    </label>
+                  </repeat>
+                </radio-group>
+              </view>
+            </block>
           </block>
           <block wx:elif="{{question.type === 'date'}}">
             <picker mode="date" value="{{question.value}}" name="{{question.name}}" bindchange="bindDateChange">
@@ -671,6 +692,8 @@
           this.space_id = spaceId;
 
           this.answered_url = newValue.answered_url;
+
+          this.answered_url_type = newValue || 'navigateTo';
 
           this.globalRequired = newValue.required || false;
 
@@ -836,9 +859,9 @@
 
         if(!init){
           if(this.answered_url){
-            pageRouter.navigateTo({url: this.answered_url})
+            pageRouter[this.answered_url_type]({url: this.answered_url})
           }else{
-            wx.showToast({title: '已完成',icon: 'success'})
+            wx.showToast({title: '已完成',icon: 'success'});
             setTimeout(this.goBack, 500)
           }
         }
@@ -952,7 +975,11 @@
 
         let values = {};
 
-        values[key] = fieldValue;
+        if(question.range && question.type === 'select'){
+          values[key] = question.options[fieldValue].value;
+        }else{
+          values[key] = fieldValue;
+        }
 
 
         if(this.globalRequired && !fieldValue){
@@ -962,7 +989,11 @@
         }
 
         if(question.range){
-          values[key + RANGE] = formValues[key + RANGE];
+          if(question.type === 'select'){
+            values[key + RANGE] = question.options[formValues[key + RANGE]].value;
+          }else{
+            values[key + RANGE] = formValues[key + RANGE];
+          }
 
           if(this.globalRequired && !values[key + RANGE]){
             this.showError = true;
@@ -984,6 +1015,20 @@
         await this.$parent.$parent.update(this.object_name, record_id, values, this.space_id);
 
         this.nextQuestion();
+      },
+      bindSelectPickerMinChange: function (e) {
+        console.log('bindSelectPickerMinChange', e);
+        if(!_.isObject(this.question.value)){
+          this.question.value = {}
+        }
+        this.question.value.min = this.question.options[e.detail.value]
+      },
+      bindSelectPickerMaxChange: function (e) {
+        console.log('bindSelectPickerMinChange', e);
+        if(!_.isObject(this.question.value)){
+          this.question.value = {}
+        }
+        this.question.value.max = this.question.options[e.detail.value]
       }
     }
   }
