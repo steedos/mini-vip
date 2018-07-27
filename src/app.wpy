@@ -694,6 +694,11 @@ export default class VIP extends wepy.app {
       return this.globalData.objects[key];
     }
     const object = await this.get('objects', object_name, space_id);
+
+    if(_.isEmpty(object)){
+      return {}
+    }
+
     this.globalData.objects[key] = object;
     return object;
   }

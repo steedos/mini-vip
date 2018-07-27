@@ -967,7 +967,6 @@
           }
         }
 
-
         console.log('submitFieldForm e', e);
 
         console.log('this.question', this.question);
