@@ -665,6 +665,7 @@
       object_name: '',
       space_id: '',
       answered_url: '',
+      answered_url_type: navigateTo / redirectTo / switchTab / reLaunch ；默认值navigateTo
      }
     */
     props = {
