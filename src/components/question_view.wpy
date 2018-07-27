@@ -413,14 +413,14 @@
             <view class="label">{{answer.me.label}}</view>
             <view class="trianglel"></view>
           </view>
-          <image class="avatar" src="https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLdPnqaKu1jtYB3xbJHAia4uUMX3ibxxqZJYZzGEJ0RleibCA3icNJLM6KKOqsFcmebgoLd0ib21Z7RVbw/132"></image>
+          <image class="avatar" src="{{userInfo.avatarUrl}}"></image>
         </view>
       </view>
 
       <view class="question-section-me" wx:else>
         <view class="weui-cell__ft weui-cells__title weui-flex user-me">
           <view class="weui-flex__item me">你</view>
-          <image class="avatar" src="https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLdPnqaKu1jtYB3xbJHAia4uUMX3ibxxqZJYZzGEJ0RleibCA3icNJLM6KKOqsFcmebgoLd0ib21Z7RVbw/132"></image>
+          <image class="avatar" src="{{userInfo.avatarUrl}}"></image>
         </view>
         <view class="question-body">
           <block wx:if="{{question.options_all.length > 4}}">
@@ -744,7 +744,14 @@
     };
 
     async onLoad(e){
+      await this.$parent.$parent.login()
+      const setting = await wepy.getSetting();
+      const user = this.$parent.$parent.globalData.user;
+      if (setting.authSetting['scope.userInfo']) {
+        this.userInfo = this.$parent.$parent.globalData.userInfo;
+      }
 
+      this.$apply()
     }
 
     /*
@@ -825,6 +832,7 @@
 //    }
 
     data = {
+      userInfo: null,
       object_name: 'love_answer',
       questionKeys: [],
       pendingQuesionKeys: [],
@@ -886,10 +894,19 @@
 
       }else{
         this.question = this.questions[this.pendingQuesionKeys[0]];
+        const q_name = this.question.name;
         this.answer = {
-          me: '',
-          other: '',
-          important: false
+          me: _.find(this.question.options_all, (o, i)=>{
+            if(o.value === this.questionsAnswer[q_name]){
+              return true;
+            }
+          }),
+          other: _.filter(this.question.options_all, (o, i)=>{
+            if(o.value === this.questionsAnswer[q_name + OTHER]){
+              return true;
+            }
+          }),
+          important: this.questionsAnswer[q_name + IMPORTANT]
         };
         this.showQuestionMe = true;
       }
@@ -901,7 +918,7 @@
       if(this.pendingQuesionKeys.length < 2){
         this.bottonText = '完成';
       }
-
+      console.log('this.answer', this.answer);
       console.log('this.question', this.question);
       this.$apply()
     }
