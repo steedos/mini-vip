@@ -68,7 +68,11 @@
       }
 
       if(e && e.answered_url){
-        args.answered_url = e.answered_url;
+        args.answered_url = decodeURIComponent(e.answered_url);
+      }
+
+      if(e && e.answered_url_type){
+        args.answered_url_type = e.answered_url_type
       }
 
       this.args = args;
