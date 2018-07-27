@@ -397,6 +397,13 @@ function transformFieldValue(field, value){
   return value
 }
 
+function includes(arr, item) {
+  if(arr){
+    return arr.indexOf(item) > -1
+  }
+  return false;
+}
+
 
 module.exports = {
   formatDate: formatDate,
@@ -409,5 +416,6 @@ module.exports = {
   getEmptyImageUrl:getEmptyImageUrl,
   transformFieldValue: transformFieldValue,
   formatDateMini: formatDateMini,
-  showRequired: showRequired
+  showRequired: showRequired,
+  includes: includes
 }
