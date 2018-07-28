@@ -470,8 +470,10 @@ export default class VIP extends wepy.app {
       };
       // 其他cash_back_percentage/cash_back_period等字段通过vip_customers的befor.insert增加
       if(e.share_id){
-        values.from = e.share_from;
         values.share = e.share_id;
+      }
+      else if(e.share_from){
+        values.from = e.share_from;
       }
       console.log("===============respondShare============values", values);
       let customer = await this.insert("vip_customers", values, e.space_id);
