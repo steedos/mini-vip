@@ -429,7 +429,7 @@
     <view class="page question-have-other" wx:if="{{question.showOtherQuesion}}">
       <view class="name">
         <view class="page__title">{{question.label}}</view>
-        <view class="page__desc">{{answeredQuesionKeys.length}}</view>
+        <!--<view class="page__desc"></view>-->
       </view>
 
       <view class="me-answer" wx:if="{{!showQuestionMe}}" @tap="clickMeAnswer">
