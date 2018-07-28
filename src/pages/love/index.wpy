@@ -49,6 +49,7 @@
 <script>
 import wepy from 'wepy';
 import { baseUrl } from '@/config';
+import { baseMaterialUrl } from '@/config';
 import { loveSpaceId } from '@/config';
 import pageRouter from '@/utils/pageRouter'
 
@@ -59,6 +60,7 @@ export default class LoveIndex extends wepy.page {
 
   data = {
     baseUrl: baseUrl,
+    baseMaterialUrl: baseMaterialUrl,
     space_id: null,
   };
 
@@ -108,7 +110,8 @@ export default class LoveIndex extends wepy.page {
     const userId = this.$parent.globalData.user._id;
     return {
       title: "告别刷脸时代，寻找志趣相投的有缘人",
-      path: `pages/love/index?space_id=${this.space_id}&share_from=${userId}`
+      path: `pages/love/index?space_id=${this.space_id}&share_from=${userId}`,
+      imageUrl: `${baseMaterialUrl}love_share.jpg`
     };
   }
 
