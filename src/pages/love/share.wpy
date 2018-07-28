@@ -1,0 +1,344 @@
+<style lang="less">
+  page{
+    height: 100%;
+    background:#fff;
+  }
+  .page__hd{
+    padding: 40px 0px;
+  }
+  .page__bd{
+    padding-bottom: 80px;
+  }
+
+  .gift-label{
+    text-align:center;
+    color:#666;
+    margin-bottom:20rpx;
+    font-size:17px;
+  }
+
+  .gift-value{
+    font-size:25px;
+    color:#ff9800;
+    text-align:center;
+  }
+  .gift-period{
+    text-align:center;
+    color:#666;
+    font-size:17px;
+    margin-top:10rpx;
+  }
+
+  .share-store{
+    margin-bottom:100rpx;
+    .share-title{
+      margin-bottom:10rpx;
+      font-size: 17px;
+      text-align: center;
+      color:#666;
+    }
+    image{
+      display: block;
+      height: 580rpx;
+      margin:auto;
+    }
+  }
+
+  .btn-share{
+    background:#ff9800;
+    border-radius:20px;
+    padding:15rpx 70rpx;
+    display:inline-block;
+    color:#9b3a00;
+    font-weight:bold;
+    font-size:45rpx;
+  }
+  .share-list{
+    text-align: center;
+    margin-top:-30rpx;
+    .share-list-header{
+      .share-list-title{
+        font-size:40rpx;
+        color: #666;
+      }
+      .share-list-sum{
+        font-size:16px;
+        color: #999;
+      }
+    }
+    .share-list-body{
+      background: rgba(30, 30, 30, 0.1);
+      border-radius:6px;
+      margin:20rpx 40rpx;
+      padding:20rpx;
+      .responses-box{
+        display: flex;
+      }
+      .response-item{
+        display: inline;
+        margin:10rpx;
+        white-space:nowrap;
+        image{
+          display: block;
+          width:100rpx;
+          height:100rpx;
+          margin:0 auto;
+          border-radius:100%;
+        }
+        .response-name{
+          color: #fff;
+          margin-top:-4px;
+          background:rgba(200, 200, 200, 0.6);
+          border-radius:10px;
+          font-size:30rpx;
+          padding:2rpx 20rpx;
+        }
+      }
+    }
+    .weui-loadmore__tips_in-line{
+      background: #fff;
+    }
+  }
+
+  .pop-mask {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(16, 16, 16, 0.6);
+  }
+
+  .attr-pop {
+    position: fixed;
+    transform: translateY(101%);
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+    min-height: 200rpx;
+    padding: 31.25rpx;
+    background: #fff;
+    z-index:100;
+    transition: all .3s linear;
+    box-sizing: border-box;
+    .close {
+      float: right;
+      padding:0 0 40rpx 40rpx;
+      .vip_close {
+        width: 30rpx;
+        height: 30rpx;
+      }
+    }
+    &.show {
+      transform: translateY(0);
+    }
+  }
+  .tab-bar {
+    font-size: 15px;
+    display: flex;
+    position: fixed;
+    box-sizing: border-box;
+    z-index: 500;
+    bottom: 0;
+    height: auto;
+    width: 100%;
+    background-color: #fff;
+    color: #6d6d78;
+    align-items: center;
+
+    .btn {
+      flex-direction:column;
+      flex: 1;
+      padding:0 30rpx;
+      font-size:15px;
+      line-height:inherit;
+      width:auto;
+      height:auto;
+      border: none!important;
+      line-height:50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .slds-icon {
+        width: 1rem;
+        height: 1rem;
+        margin-right: 0px!important;
+        background-color:#3ca134;
+        border-radius:50%;
+        padding:8px;
+        background-size:20px;
+        background-position:center;
+      }
+    }
+    .slds-icon {
+      display: inline-block;
+      margin-bottom:-13px;
+      margin-top:8px;
+    }
+    .text {
+      display: inline-block;
+      color: #6d6d78;
+      font-size:11px;
+      margin-bottom:-12px;
+    }
+  }
+</style>
+<template>
+<view class="page" wx:if="{{is_loaded}}">
+  <view class="page__hd">
+    <view class="gift-label">邀请更多的好友加入无颜，您可获得</view>
+    <view class="gift-value">更宽广的好友匹配范围，更精准的匹配度以及更高的推荐成功率</view>
+  </view>
+  <view class="page__bd">
+  </view>
+  <view class="tab-bar border-top-1px">
+    <button open-type="share" class="btn btn-share-wexin" type="default" plain="{{true}}">
+      <view class="vip_wechat slds-icon slds-icon--small slds-m-right--x-small"></view>
+      <view class="text">微信好友</view>
+    </button>
+    <view class="btn btn-share-friend-circle" @tap="shareToFriendCircle">
+      <view class="vip_wechat_moments slds-icon slds-icon--small slds-m-right--x-small"></view>
+      <view class="text">朋友圈</view>
+    </view>
+  </view>
+  <view class="pop-mask" wx:if="{{showPop}}" @tap="closePop"></view>
+  <view class="attr-pop {{showPop ? 'show' : ''}}">
+    <view class="close" @tap="closePop">
+      <view class="vip_close"></view>
+    </view>
+    <view class="share-actions">
+      <button plain="true" open-type="share" class="btn-share-wexin">
+        <view class="vip_share-default slds-icon slds-icon--small slds-m-right--x-small"></view>
+        <view class="text">微信好友</view>
+      </button>
+      <view class="btn-share-friend-circle">
+        <view class="vip_comment-default slds-icon slds-icon--small slds-m-right--x-small"></view>
+        <view class="text">朋友圈</view>
+      </view>
+    </view>
+  </view>
+</view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import { baseUrl } from '@/config';
+  import { baseMaterialUrl } from '@/config';
+  import util from '../../wxs/util.wxs';
+ 
+  export default class LoveShare extends wepy.page {
+		config = {
+			navigationBarTitleText: '转发无礼'
+    };
+
+    wxs = {
+      util: util
+    }
+
+    data = {
+      baseUrl: baseUrl,
+      baseMaterialUrl: baseMaterialUrl,
+      space_id: null,
+      is_loaded: false,
+      share_id: null,
+      showPop: false,
+      responses: [],
+      cash_back_total: 0
+    }
+
+    async onLoad (e) {
+      this.space_id = e.space_id;
+      if(!this.space_id){
+        wx.showToast({
+          title: "参数错误，没有传入平台微站ID",
+          icon: "none"
+        });
+        return;
+      }
+      wepy.showLoading({
+        title: '加载中',
+        mask: true
+      });
+      await this.addShare();
+      this.is_loaded = true;
+      this.$apply();
+      wepy.hideLoading();
+    }
+
+    async addShare(){
+      const userId = this.$parent.globalData.user._id;
+      const name = this.$parent.globalData.user.name;
+      console.log("===============addShare============", userId, name);
+      const query_options = {
+        $select: 'name'
+      };
+      query_options.$filter = `other eq 'love' and owner eq '${userId}'`;
+      let share = await this.$parent.query("vip_share", query_options, this.space_id);
+      let values = {
+        name: name,
+        other: 'love'
+      };
+      if(share && share.value && share.value.length){
+        console.log("===============addShare============update");
+        // 只是修改其modified，记住其最后一次分享时间
+        await this.$parent.update("vip_share", share.value[0]._id, values, this.space_id);
+      }
+      else{
+        console.log("===============addShare============insert");
+        share = await this.$parent.insert("vip_share", values, this.space_id);
+      }
+      if(share && share.value && share.value.length){
+        this.share_id = share.value[0]._id;
+      }
+      else{
+        console.log("============share=======error==============");
+        wx.showToast({
+          title: "分享失败，请重新操作一次",
+          icon: "none"
+        });
+      }
+    }
+
+    // 分享
+    onShareAppMessage(res) {
+      const name = this.$parent.globalData.user.name;
+      let title = this.$parent.globalData.title;
+      let path = `pages/love/index?space_id=${this.space_id}`
+      let imageUrl = `${baseMaterialUrl}love_share.jpg`;
+      if(this.share_id){
+        const userId = this.$parent.globalData.user._id;
+        path += `&share_id=${this.share_id}`;
+        path += `&share_from=${userId}`;
+      }
+      return {
+        title: title,
+        path: path,
+        imageUrl: imageUrl
+      };
+    }
+
+    methods = {
+      async shareToFriendCircle(){
+        wx.showToast({
+          title: "敬请期待",
+          icon: "none"
+        });
+
+        // wepy.showLoading({
+        //   title: '加载中',
+        //   mask: true
+        // });
+        // // 这里写生成图片并显示在pop框中的逻辑
+        // wepy.hideLoading();
+        // this.showPop = true;
+        // this.$apply();
+      },
+      closePop() {
+        this.showPop = false;
+        this.$apply();
+      }
+    }
+  }
+</script>

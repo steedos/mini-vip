@@ -86,6 +86,15 @@
         </navigator>
       </repeat>
     </view>
+
+    <view class="weui-cells">
+      <navigator class="weui-cell weui-cell_access" url="share?space_id={{space_id}}">
+        <view class="weui-cell__bd">
+          <view>转发无礼</view>
+        </view>
+        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+      </navigator>
+    </view>
   </view>
 </template>
 
@@ -100,6 +109,7 @@ export default class QuestionnaireList extends wepy.page {
   };
 
   data = {
+    space_id: null,
     name: '',
     userInfo: null,
     is_loaded: false,
@@ -120,7 +130,21 @@ export default class QuestionnaireList extends wepy.page {
     }]
   };
 
-  async onLoad() {
+  async onLoad(e) {
+    if(!e.space_id){
+      // 保证一进入就新建space对应的vip_customers记录
+      e.space_id = loveSpaceId;
+    }
+    this.space_id = e.space_id;
+    console.log("this.space_id============", this.space_id);
+    await this.$parent.login(e);
+    if(!this.space_id){
+      wx.showToast({
+        title: "未配置工作区ID",
+        icon: "none"
+      });
+    }
+
     wx.showLoading();
     await this.$parent.login();
     const setting = await wepy.getSetting();

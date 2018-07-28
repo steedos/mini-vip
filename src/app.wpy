@@ -130,6 +130,7 @@ export default class VIP extends wepy.app {
 //      'pages/tabbar_index',
       'pages/love/index',
       'pages/love/shake',
+      'pages/love/share',
       'pages/home/store',
       'pages/index',
       'pages/apps',
