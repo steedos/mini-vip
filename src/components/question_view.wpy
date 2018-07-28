@@ -62,6 +62,11 @@
       }
     }
 
+    .jump-question{
+      margin-left: 20%;
+      margin-right: 20%;
+    }
+
     .question-have-other{
       width: 100%;
 
@@ -110,6 +115,10 @@
 
       .more{
         text-align: center;
+      }
+
+      .shadow{
+        box-shadow: 0px 1px 1px 1px rgba(7, 2, 1, 0.09);
       }
 
       .question-section-me{
@@ -256,8 +265,6 @@
         border-radius: 0px;
       }
 
-
-
       .big-bang-select{
         margin-left:10px;
         margin-right:10px;
@@ -322,10 +329,6 @@
 
       @inputHeight: 56px;
 
-      .shadow{
-        box-shadow: 0px 1px 1px 1px rgba(7, 2, 1, 0.09);
-      }
-
       .range-joiner{
         height: @inputHeight;
         line-height: @inputHeight;
@@ -381,10 +384,32 @@
         border-radius: 0px;
       }
     }
+
+    .question-back{
+      position: absolute;
+      bottom: 60px;
+      left: 15px;
+      /*border-radius: 23px;*/
+      /*background-color: red;*/
+      /*width: 46px;*/
+      /*height: 46px;*/
+      /*line-height: 46px;*/
+      box-shadow: 0px 1px 2px 2px rgba(7, 2, 1, 0.09);
+      z-index: 1999;
+    }
   }
 
   .question-section-me .weui-cell:before {
     border-top: 1rpx solid #749AE5;
+    left: 0px;
+  }
+
+  .question-section-me .weui-cells:after {
+    border-bottom: 0px;
+    left: 0px;
+  }
+  .question-section-me .weui-cells:before {
+    border-top: 0px;
     left: 0px;
   }
 
@@ -399,11 +424,12 @@
     <view class="question-progress">
       <view class="question-progress-bar" style="width: {{progress}};"></view>
     </view>
+    <view class="slds-icon-action-back slds-icon--small slds-m-right--x-small question-back" @tap.stop="questionBack" wx:if="{{answeredQuesionKeys.length > 0}}"/>
     <view class="weui-toptips weui-toptips_warn" wx:if="{{showError}}">{{fieldErrorMSG}}</view>
     <view class="page question-have-other" wx:if="{{question.showOtherQuesion}}">
       <view class="name">
         <view class="page__title">{{question.label}}</view>
-        <!--<view class="page__desc"></view>-->
+        <view class="page__desc">{{answeredQuesionKeys.length}}</view>
       </view>
 
       <view class="me-answer" wx:if="{{!showQuestionMe}}" @tap="clickMeAnswer">
@@ -438,7 +464,7 @@
           </block>
           <block wx:else>
             <view class="triangleb"></view>
-            <view class="weui-cells weui-cells_after-title">
+            <view class="weui-cells weui-cells_after-title shadow">
               <radio-group bindchange="radioChange">
                 <repeat for="{{question.options}}" key="index" index="index" item="option">
                   <label class="weui-cell" @tap="clickMeAnswerItem">
@@ -457,7 +483,7 @@
             </view>
           </block>
         </view>
-        <view class="weui-footer" wx:if="{{!question.required}}" @tap="goNext">
+        <view class="weui-footer jump-question" wx:if="{{!question.required}}" @tap="goNext">
           <view class="weui-footer__text">跳过</view>
         </view>
       </view>
@@ -580,7 +606,7 @@
 
         <view class="question-body">
           <block wx:if="{{question.type === 'text'}}">
-            <input class="weui-input shadow" placeholder="" name="{{question.name}}" value="{{question.value}}"/>
+            <input class="weui-input shadow" placeholder="" name="{{question.name}}" value="{{questionsAnswer[question.name]}}"/>
           </block>
           <block wx:elif="{{question.type === 'select'}}">
             <block wx:if="{{question.range}}">
@@ -604,11 +630,11 @@
             </block>
             <block wx:else>
               <view class="big-select">
-                <radio-group bindchange="radioChange" class="weui-flex" name="{{question.name}}" value="{{question.value}}">
+                <radio-group bindchange="radioChange" class="weui-flex" name="{{question.name}}" value="{{questionsAnswer[question.name]}}">
                   <repeat for="{{question.options_all}}" key="index" index="index" item="option">
                     <label class="weui-flex__item">
-                      <radio class="weui-check" value="{{option.value}}" checked="{{option.value === question.value}}"/>
-                      <view wx:if="{{option.value === question.value}}" class="placeholder shadow selected">{{option.label}}</view>
+                      <radio class="weui-check" value="{{option.value}}" checked="{{option.value === questionsAnswer[question.name]}}"/>
+                      <view wx:if="{{option.value === questionsAnswer[question.name]}}" class="placeholder shadow selected">{{option.label}}</view>
                       <view wx:else class="placeholder shadow">{{option.label}}</view>
                     </label>
                   </repeat>
@@ -617,21 +643,21 @@
             </block>
           </block>
           <block wx:elif="{{question.type === 'date'}}">
-            <picker mode="date" value="{{question.value}}" name="{{question.name}}" bindchange="bindDateChange">
-              <view class="weui-input shadow">{{util.formatDate(question.value, '', 'date')}}</view>
+            <picker mode="date" value="{{questionsAnswer[question.name]}}" name="{{question.name}}" bindchange="bindDateChange">
+              <view class="weui-input shadow">{{util.formatDate(questionsAnswer[question.name], '', 'date')}}</view>
             </picker>
           </block>
           <block wx:elif="{{question.type === 'textarea'}}">
-            <textarea class="weui-textarea shadow" maxlength="-1" placeholder="" value="{{question.value}}" name="{{question.name}}" />
+            <textarea class="weui-textarea shadow" maxlength="-1" placeholder="" value="{{questionsAnswer[question.name]}}" name="{{question.name}}" />
           </block>
           <block wx:elif="{{question.type === 'number'}}">
             <view class="weui-flex">
-              <input class="weui-input weui-flex__item shadow" type="scale" wx:if="{{question.scale > 0}}" placeholder="" name="{{question.name}}" value="{{question.value}}"/>
-              <input class="weui-input weui-flex__item shadow" type="number" wx:else placeholder="" name="{{question.name}}" value="{{question.value}}"/>
+              <input class="weui-input weui-flex__item shadow" type="scale" wx:if="{{question.scale > 0}}" placeholder="" name="{{question.name}}" value="{{questionsAnswer[question.name]}}"/>
+              <input class="weui-input weui-flex__item shadow" type="number" wx:else placeholder="" name="{{question.name}}" value="{{questionsAnswer[question.name]}}"/>
               <block wx:if="{{question.range}}">
                 <view class="range-joiner"> — </view>
-                <input class="weui-input weui-flex__item shadow" type="scale" wx:if="{{question.scale > 0}}" placeholder="" name="{{question.name}}_max" value="{{question.range_value}}"/>
-                <input class="weui-input weui-flex__item shadow" type="number" wx:else placeholder="" name="{{question.name}}_max" value="{{question.range_value}}"/>
+                <input class="weui-input weui-flex__item shadow" type="scale" wx:if="{{question.scale > 0}}" placeholder="" name="{{question.name}}_max" value="{{questionsAnswer[question.name + '_max']}}"/>
+                <input class="weui-input weui-flex__item shadow" type="number" wx:else placeholder="" name="{{question.name}}_max" value="{{questionsAnswer[question.name + '_max']}}"/>
               </block>
             </view>
           </block>
@@ -733,7 +759,7 @@
             }, spaceId);
           }
 
-          this.questionsAnswer = result.value[0];
+          this.questionsAnswer = result.value[0] || {};
 
           this.questions = this.getQuestions(object.fields);
 
@@ -745,6 +771,10 @@
           if(this.pendingQuesionKeys.length === 0|| !this.keep_progress){
             this.pendingQuesionKeys = _.clone(this.questionKeys);
           }
+
+          this.answeredQuesionKeys = _.difference(this.questionKeys, this.pendingQuesionKeys);
+
+          console.log('this.answeredQuesionKeys ', this.answeredQuesionKeys )
 
           this.nextQuestion(true);
 
@@ -853,6 +883,7 @@
       object_name: 'love_answer',
       questionKeys: [],
       pendingQuesionKeys: [],
+      answeredQuesionKeys: [],
       questionIndex: 0,
       question: {},
       answer: {
@@ -894,7 +925,10 @@
 
       if(!init){
         this.pendingQuesionKeys = this.pendingQuesionKeys.splice(1, this.pendingQuesionKeys.length);
+        this.answeredQuesionKeys = _.difference(this.questionKeys, this.pendingQuesionKeys);
       }
+
+      console.log('this.answeredQuesionKeys 222', this.answeredQuesionKeys )
 
       this.progress = this.getProgress();
 
@@ -948,6 +982,12 @@
       this.$apply()
     }
 
+    async updateAnswer(answer){
+      const record_id = this.questionsAnswer._id;
+      _.extend(this.questionsAnswer, answer);
+      await this.$parent.$parent.update(this.object_name, record_id, answer, this.space_id);
+    }
+
     methods = {
       radioChange: function (e) {
         console.log('radioChange', e);
@@ -958,6 +998,7 @@
             console.log('radioItems[i]', radioItems[i]);
             this.answer.me = radioItems[i];
             this.question.value = this.answer.me.value;
+            this.questionsAnswer[this.question.name] = this.answer.me.value;
           }
         }
 
@@ -985,8 +1026,6 @@
         const q = this.question;
         const answer = this.answer;
 
-        const record_id = this.questionsAnswer._id;
-
         if(q.showOtherQuesion){
           qa[q.name + OTHER] = answer.other
         }
@@ -1003,7 +1042,7 @@
 
         console.log('qa', qa);
 
-        await this.$parent.$parent.update(this.object_name, record_id, qa, this.space_id);
+        await this.updateAnswer(qa);
 
         this.nextQuestion();
       },
@@ -1024,14 +1063,14 @@
         this.$apply();
       },
       bindDateChange: function (e) {
-        this.question.value = e.detail.value
+        this.question.value = e.detail.value;
+        this.questionsAnswer[this.question.name] = e.detail.value;
       },
       submitFieldForm: async function (e) {
         const formValues = e.detail.value;
         const question = this.question
         const key = question.name;
         const fieldValue = formValues[key];
-        const record_id = this.questionsAnswer._id;
 
         let values = {};
 
@@ -1087,7 +1126,7 @@
 
         console.log('fieldValue', fieldValue)
 
-        await this.$parent.$parent.update(this.object_name, record_id, values, this.space_id);
+        await this.updateAnswer(values);
 
         this.nextQuestion();
       },
@@ -1106,6 +1145,15 @@
         }
         this.question.value_max_index = e.detail.value
         this.question.value.max = this.question.options[e.detail.value]
+      },
+      questionBack: function () {
+        console.log('questionBack,,,,,,');
+        if(this.answeredQuesionKeys.length > 0){
+          const lastKey = _.last(this.answeredQuesionKeys);
+          this.pendingQuesionKeys.unshift(lastKey);
+          this.answeredQuesionKeys = _.initial(this.answeredQuesionKeys);
+          this.nextQuestion(true)
+        }
       }
     }
   }
