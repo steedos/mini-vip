@@ -43,7 +43,7 @@
     min-height: 200rpx;
     padding: 31.25rpx;
     background: #fff;
-    z-index:100;
+    z-index:1000;
     transition: all .3s linear;
     box-sizing: border-box;
     .close {
@@ -108,6 +108,15 @@
       margin-bottom:-12px;
     }
   }
+  .share-friend-circle-box{
+    .share-friend-circle-title{
+      text-align:center;
+      color:#777;
+    }
+    .image{
+      width: 100%;
+    }
+  }
 </style>
 <template>
 <view class="page" wx:if="{{is_loaded}}">
@@ -134,8 +143,8 @@
     </view>
     <view class="share-friend-circle-box">
       <view class="share-friend-circle-title">保存图片分享到朋友圏</view>
-      <image class="image" mode="aspectFill" src="https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/avatar.png"></image>
-      <button plain="true" class="btn-save-image">
+      <image class="image" mode="widthFix" src="{{friend_circle_image_url}}"/>
+      <button type="primary" class="btn-save-image">
         保存图片
       </button>
     </view>
@@ -167,7 +176,8 @@
       share_id: null,
       showPop: false,
       responses: [],
-      cash_back_total: 0
+      cash_back_total: 0,
+      friend_circle_image_url: ''
     }
 
     async onLoad (e) {
@@ -259,6 +269,8 @@
         //   title: '加载中',
         //   mask: true
         // });
+        // let imageUrl = `${baseMaterialUrl}love_share.jpg`;
+        // this.friend_circle_image_url = imageUrl;
         // // 这里写生成图片并显示在pop框中的逻辑
         // wepy.hideLoading();
         // this.showPop = true;
