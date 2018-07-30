@@ -8,8 +8,8 @@
 		"newFeature": true
 	},
 	"compileType": "miniprogram",
-	"appid": "wx89eb02efdb4ddaaf",
-	"projectname": "mini-vip",
+	"appid": "wx033a2ed30bf98cc2",
+	"projectname": "mini-vip-love",
 	"miniprogramRoot": "./dist",
 	"condition": {}
 }
