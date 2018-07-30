@@ -65,6 +65,10 @@ export default class LoveIndex extends wepy.page {
   };
 
   async onLoad (e) {
+    wepy.showLoading({
+      title: '加载中',
+      mask: true
+    });
     if(!e.space_id){
       // 保证一进入就新建space对应的vip_customers记录
       e.space_id = loveSpaceId;
@@ -104,6 +108,7 @@ export default class LoveIndex extends wepy.page {
 
     }
     this.$apply();
+    wepy.hideLoading();
   }
 
   // 分享
