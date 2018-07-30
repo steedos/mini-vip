@@ -112,32 +112,14 @@ export default class LoveIndex extends wepy.page {
       switch(current_customer.questionnaire_progess) {
         case 1:
           wx.setNavigationBarTitle({title: '无颜'});
-          await this.$parent.update(
-            'vip_customers',
-            current_customer._id,
-            { questionnaire_progess: 1 },
-            spaceId
-          );
           self.load_page = 'cover_about_yourself';
           break;
         case 2:
           wx.setNavigationBarTitle({title: '理想伴侣'});
-          await this.$parent.update(
-            'vip_customers',
-            current_customer._id,
-            { questionnaire_progess: 2 },
-            spaceId
-          );
           self.load_page = 'cover_you_looking_for';
           break;
         case 3:
           wx.setNavigationBarTitle({title: '回答问题'});
-          await this.$parent.update(
-            'vip_customers',
-            current_customer._id,
-            { questionnaire_progess: 3 },
-            spaceId
-          );
           self.load_page = 'cover_answer_questions';
           break;
         case 4:
