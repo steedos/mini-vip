@@ -342,6 +342,7 @@
         margin:0 40rpx;
 
         padding-top: 30%;
+        padding-bottom: 40rpx;
 
         .weui-input{
           height: @inputHeight;
@@ -424,7 +425,7 @@
     <view class="question-progress">
       <view class="question-progress-bar" style="width: {{progress}};"></view>
     </view>
-    <view class="slds-icon-action-back slds-icon--small slds-m-right--x-small question-back" @tap.stop="questionBack" wx:if="{{answeredQuesionKeys.length > 0}}"/>
+    <view class="slds-icon-action-back slds-icon--small slds-m-right--x-small question-back" @tap.stop="questionBack" wx:if="{{false && answeredQuesionKeys.length > 0}}"/>
     <view class="weui-toptips weui-toptips_warn" wx:if="{{showError}}">{{fieldErrorMSG}}</view>
     <view class="page question-have-other" wx:if="{{question.showOtherQuesion}}">
       <view class="name">
@@ -483,8 +484,8 @@
             </view>
           </block>
         </view>
-        <view class="weui-footer jump-question" wx:if="{{!question.required}}" @tap="goNext">
-          <view class="weui-footer__text">跳过</view>
+        <view class="weui-footer jump-question weui-flex" wx:if="{{!question.required}}">
+          <view class="weui-footer__text weui-flex__item" @tap.stop="questionBack" wx:if="{{answeredQuesionKeys.length > 0}}">上一题</view> <view class="weui-footer__text weui-flex__item" @tap="goNext">跳过此题</view>
         </view>
       </view>
 
@@ -671,6 +672,10 @@
           </block>
         </view>
 
+        <view class="weui-footer jump-question weui-flex">
+          <view class="weui-footer__text weui-flex__item" @tap.stop="questionBack" wx:if="{{answeredQuesionKeys.length > 0}}">上一题</view> <view class="weui-footer__text weui-flex__item" @tap="goNext" wx:if="{{!globalRequired && !question.required}}">跳过此题</view>
+        </view>
+
         <button class="weui-btn submit" type="primary" form-type="submit" hover-class='button-hover'>{{bottonText}}</button>
 
       </form>
@@ -824,7 +829,7 @@
       const keys = _.keys(fields);
       _.forEach(keys, (key)=>{
         let field = fields[key];
-        if(key.slice(-OTHER.length) != OTHER && key.slice(-IMPORTANT.length) != IMPORTANT && key.slice(-RANGE.length) != RANGE){
+        if(key.slice(-OTHER.length) != OTHER && key.slice(-IMPORTANT.length) != IMPORTANT && key.slice(-RANGE.length) != RANGE && !field.hidden && !field.omit){
 
           let question = {};
 
@@ -915,6 +920,7 @@
       fieldErrorMSG: '',
       showError: false,
       keep_progress: false,
+      globalRequired: false,
     };
 
     getProgress(){
