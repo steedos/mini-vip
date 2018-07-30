@@ -201,7 +201,8 @@ export default class VIP extends wepy.app {
       'pages/love/navigation_qusestion',
       'pages/love/cover_about_yourself',
       'pages/love/cover_you_looking_for',
-      'pages/love/cover_answer_questions'
+      'pages/love/cover_answer_questions',
+      'pages/edit/city_select'
     ],
     tabBar: {
       color: '#666',

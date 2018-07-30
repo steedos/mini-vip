@@ -661,6 +661,14 @@
               </block>
             </view>
           </block>
+
+          <block wx:elif="{{question.type === 'selectCity'}}">
+            <navigator class="weui-input weui-flex__item shadow" url="/pages/edit/city_select?key={{question.name}}" >
+              <input name="{{question.name}}" value="{{questionsAnswer[question.name]}}" type="text" style="display: none"/>
+              {{questionsAnswer[question.name] || '请选择城市'}}
+            </navigator>
+            <!--<citySelect class="weui-input weui-flex__item shadow"></citySelect>-->
+          </block>
         </view>
 
         <button class="weui-btn submit" type="primary" form-type="submit" hover-class='button-hover'>{{bottonText}}</button>
@@ -675,6 +683,7 @@
   import _ from 'underscore'
   import pageRouter from '@/utils/pageRouter'
   import util from '../wxs/util.wxs'
+  import citySelect from '@/components/city_select'
 
   const OTHER = '_o';
   const IMPORTANT = '_i';
@@ -684,6 +693,10 @@
 
     wxs = {
       util: util
+    };
+
+    components = {
+      citySelect: citySelect
     };
 
     /*
@@ -704,7 +717,6 @@
     watch = {
       args: async function (newValue, oldValue) {
         if (!_.isEmpty(newValue)) {
-          console.log('newValue', newValue);
           if(!newValue.space_id){
             throw new Error('缺少参数 space_id');
           }
@@ -739,7 +751,6 @@
 
           //获取问题清单
           const object = JSON.parse(JSON.stringify(await this.$parent.$parent.getObject(this.object_name, spaceId)));
-          console.log('object', object);
 
           const pages = getCurrentPages();
           const prevPage = pages[pages.length - 1];
@@ -774,8 +785,6 @@
 
           this.answeredQuesionKeys = _.difference(this.questionKeys, this.pendingQuesionKeys);
 
-          console.log('this.answeredQuesionKeys ', this.answeredQuesionKeys )
-
           this.nextQuestion(true);
 
           this.progress = this.getProgress();
@@ -785,6 +794,12 @@
         }
       }
     };
+
+
+    changeCity(key, value, item){
+      this.questionsAnswer[key] = value;
+      this.$apply();
+    }
 
     async onLoad(e){
 
@@ -903,8 +918,8 @@
     };
 
     getProgress(){
-      console.log('this.pendingQuesionKeys', this.pendingQuesionKeys);
-      console.log('this.questionKeys', this.questionKeys);
+//      console.log('this.pendingQuesionKeys', this.pendingQuesionKeys);
+//      console.log('this.questionKeys', this.questionKeys);
       return (1 - this.pendingQuesionKeys.length / this.questionKeys.length) * 100 + '%';
     }
 
@@ -928,8 +943,6 @@
         this.answeredQuesionKeys = _.difference(this.questionKeys, this.pendingQuesionKeys);
       }
 
-      console.log('this.answeredQuesionKeys 222', this.answeredQuesionKeys )
-
       this.progress = this.getProgress();
 
       if(this.pendingQuesionKeys.length === 0){
@@ -947,9 +960,9 @@
       }else{
         this.question = this.questions[this.pendingQuesionKeys[0]];
         const q_name = this.question.name;
-        console.log('this.questionsAnswer', this.questionsAnswer)
-        console.log('[q_name + OTHER]', q_name + OTHER)
-        console.log('this.questionsAnswer[q_name + OTHER]', this.questionsAnswer[q_name + OTHER]);
+//        console.log('this.questionsAnswer', this.questionsAnswer)
+//        console.log('[q_name + OTHER]', q_name + OTHER)
+//        console.log('this.questionsAnswer[q_name + OTHER]', this.questionsAnswer[q_name + OTHER]);
         let o_value = this.questionsAnswer[q_name + OTHER] || [];
 
         let answer_other = _.pluck(_.filter(this.question.options_all, (o, i)=>{
@@ -977,8 +990,8 @@
       if(this.pendingQuesionKeys.length < 2){
         this.bottonText = '完成';
       }
-      console.log('this.answer', this.answer);
-      console.log('this.question', this.question);
+//      console.log('this.answer', this.answer);
+//      console.log('this.question', this.question);
       this.$apply()
     }
 
@@ -990,19 +1003,15 @@
 
     methods = {
       radioChange: function (e) {
-        console.log('radioChange', e);
         this.showQuestionMe = false;
         const radioItems = this.question.options_all;
         for (let i = 0, len = radioItems.length; i < len; ++i) {
           if(radioItems[i].value === e.detail.value){
-            console.log('radioItems[i]', radioItems[i]);
             this.answer.me = radioItems[i];
             this.question.value = this.answer.me.value;
             this.questionsAnswer[this.question.name] = this.answer.me.value;
           }
         }
-
-        console.log('this.answer.me', this.answer.me);
 
         this.showBigSelect = false;
 
@@ -1021,7 +1030,6 @@
         this.$apply();
       },
       submit: async function (e) {
-        console.log('submit answer is ', this.answer);
         let qa = {};
         const q = this.question;
         const answer = this.answer;
@@ -1039,8 +1047,6 @@
         }
 
         qa[q.name] = answer.me.value;
-
-        console.log('qa', qa);
 
         await this.updateAnswer(qa);
 
@@ -1116,15 +1122,15 @@
           }
         }
 
-        console.log('submitFieldForm e', e);
-
-        console.log('this.question', this.question);
-
-        console.log('values', values)
-
-        console.log('key', key)
-
-        console.log('fieldValue', fieldValue)
+//        console.log('submitFieldForm e', e);
+//
+//        console.log('this.question', this.question);
+//
+//        console.log('values', values)
+//
+//        console.log('key', key)
+//
+//        console.log('fieldValue', fieldValue)
 
         await this.updateAnswer(values);
 
