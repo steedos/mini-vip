@@ -1,0 +1,63 @@
+<style lang="less">
+  page{
+    height: 100%;
+    background:#fff;
+  }
+  .page__hd{
+    padding: 40px 0px;
+    padding-left:5%;
+    padding-right:5%;
+  }
+  .page__bd{
+    padding-bottom: 80px;
+    padding-left:5%;
+    padding-right:5%;
+  }
+
+  .head-value{
+    font-size:22px;
+    color:#ff9800;
+    text-align:center;
+    margin-top:40px;
+  }
+  .btn-continue{
+    background:#4D7BD9;
+    padding:6px;
+    color:#fff;
+    font-weight:bold;
+    margin:30rpx 0;
+  }
+</style>
+<template>
+<view class="page">
+  <view class="page__hd">
+    <view class="head-value">
+        感谢您填写了宝贵的资料，准确的信息可获得更精准的匹配。
+    </view>
+    <view class="head-value">
+        “无颜”正在努力匹配您的有缘人。
+    </view>
+  </view>
+  <view class="page__bd">
+      <button class="btn-continue">确定</button>
+  </view>
+</view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import util from '../wxs/util.wxs';
+ 
+  export default class PapersSummary extends wepy.page {
+	config = {
+		navigationBarTitleText: '资料完成'
+    };
+    wxs = {
+      util: util
+    }
+    data = {
+    }
+    async onLoad (e) {
+    }
+  }
+</script>
