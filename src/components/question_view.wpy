@@ -67,6 +67,10 @@
       margin-right: 20%;
     }
 
+    .shadow{
+      box-shadow: 0px 1px 1px 1px rgba(7, 2, 1, 0.09);
+    }
+
     .question-have-other{
       width: 100%;
 
@@ -115,10 +119,6 @@
 
       .more{
         text-align: center;
-      }
-
-      .shadow{
-        box-shadow: 0px 1px 1px 1px rgba(7, 2, 1, 0.09);
       }
 
       .question-section-me{
