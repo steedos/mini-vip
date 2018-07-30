@@ -496,7 +496,7 @@
             </view>
           </block>
         </view>
-        <view class="weui-footer jump-question weui-flex" wx:if="{{!question.required}}">
+        <view class="weui-footer jump-question weui-flex" wx:if="{{!question.required && !loading}}">
           <view class="weui-footer__text weui-flex__item" @tap.stop="questionBack" wx:if="{{answeredQuesionKeys.length > 0}}">上一题</view> <view class="weui-footer__text weui-flex__item" @tap="goNext">跳过此题</view>
         </view>
       </view>
@@ -684,7 +684,7 @@
           </block>
         </view>
 
-        <view class="weui-footer jump-question weui-flex">
+        <view class="weui-footer jump-question weui-flex" wx:if="{{!loading}}">
           <view class="weui-footer__text weui-flex__item" @tap.stop="questionBack" wx:if="{{answeredQuesionKeys.length > 0}}">上一题</view> <view class="weui-footer__text weui-flex__item" @tap="goNext" wx:if="{{!globalRequired && !question.required}}">跳过此题</view>
         </view>
 
@@ -806,6 +806,8 @@
 
           this.progress = this.getProgress();
 
+          this.loading = false;
+
           this.$apply()
 
         }
@@ -911,6 +913,7 @@
 //    }
 
     data = {
+      loading: true,
       userInfo: null,
       object_name: 'love_answer',
       questionKeys: [],
