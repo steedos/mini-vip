@@ -46,8 +46,8 @@
 
 <script>
 import wepy from 'wepy';
-import util from '../wxs/util.wxs';
- 
+import util from '../../wxs/util.wxs';
+
   export default class PapersSummary extends wepy.page {
 	config = {
 		navigationBarTitleText: '资料完成'
