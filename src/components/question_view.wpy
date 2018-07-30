@@ -398,32 +398,37 @@
       box-shadow: 0px 1px 2px 2px rgba(7, 2, 1, 0.09);
       z-index: 1999;
     }
-  }
 
-  .question-section-me .weui-cell:before {
-    border-top: 1rpx solid #749AE5;
-    left: 0px;
-  }
 
-  .question-section-me .weui-cells:after {
-    border-bottom: 0px;
-    left: 0px;
-  }
-  .question-section-me .weui-cells:before {
-    border-top: 0px;
-    left: 0px;
-  }
+    .switch-view{
+      text-align: center;
+    }
 
-  .question-section-other .weui-cell:before {
-    border-top: 1rpx solid #EBEDF2;
-    left: 0px;
-  }
-  button[type=primary] {
-    background-color:#4d7bd9;
-  }
+    .question-section-me .weui-cell:before {
+      border-top: 1rpx solid #749AE5;
+      left: 0px;
+    }
 
-  .button-hover{
-    background-color: #4e76c5!important;
+    .question-section-me .weui-cells:after {
+      border-bottom: 0px;
+      left: 0px;
+    }
+    .question-section-me .weui-cells:before {
+      border-top: 0px;
+      left: 0px;
+    }
+
+    .question-section-other .weui-cell:before {
+      border-top: 1rpx solid #EBEDF2;
+      left: 0px;
+    }
+    button[type=primary] {
+      background-color:#4d7bd9;
+    }
+
+    .button-hover{
+      background-color: #4e76c5!important;
+    }
   }
 
 </style>
@@ -686,6 +691,12 @@
               {{questionsAnswer[question.name] || '请选择城市'}}
             </navigator>
             <!--<citySelect class="weui-input weui-flex__item shadow"></citySelect>-->
+          </block>
+
+          <block wx:elif="{{question.type === 'boolean'}}">
+            <view class="switch-view weui-flex__item">
+              <switch name="{{question.name}}" bindchange="{{switchChange}}" checked="{{questionsAnswer[question.name]}}"></switch>
+            </view>
           </block>
         </view>
 
@@ -1198,6 +1209,9 @@
           this.answeredQuesionKeys = _.initial(this.answeredQuesionKeys);
           this.nextQuestion(true)
         }
+      },
+      switchChange: function (e) {
+
       }
     }
   }
