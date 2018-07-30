@@ -425,6 +425,10 @@
     background-color: #4e76c5!important;
   }
 
+  .question-progress-bar{
+    background-color:#4d7bd9!important;
+  }
+
 </style>
 
 <template>
