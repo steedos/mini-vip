@@ -34,14 +34,27 @@
 </style>
 
 <template>
-  <view class="page">
-    <view class="page__hd">
-      <view class="love-title">告别刷脸时代，寻找志趣相投的有缘人</view>
-    </view>
-    <view class="page__bd">
-      <view class="love-summary">“无颜”是一位聪明又勤快的智能机器人，每周他都会根据您的喜好和对方喜好，执行海量的数据计算，找到与您“相互匹配”值最高的有缘人，并互发微信。</view>
-      <button class="btn-join" @tap="join">我想试试</button>
-      <view class="love-licence"></view>
+  <view wx:if="{{is_loaded}}">
+    <view class="page">
+      <block wx:if="{{load_page == 'index'}}">
+        <view class="page__hd">
+          <view class="love-title">告别刷脸时代，寻找志趣相投的有缘人</view>
+        </view>
+        <view class="page__bd">
+          <view class="love-summary">“无颜”是一位聪明又勤快的智能机器人，每周他都会根据您的喜好和对方喜好，执行海量的数据计算，找到与您“相互匹配”值最高的有缘人，并互发微信。</view>
+          <button class="btn-join" @tap="join">我想试试</button>
+          <view class="love-licence"></view>
+        </view>
+      </block>
+      <block wx:elif="{{load_page == 'cover_about_yourself'}}">
+        <ComponentCoverYourself :spaceId.sync="space_id" />
+      </block>
+      <block wx:elif="{{load_page == 'cover_you_looking_for'}}">
+        <ComponentLookingFor :spaceId.sync="space_id" />
+      </block>
+      <block wx:elif="{{load_page == 'cover_answer_questions'}}">
+        <ComponentQuestions :spaceId.sync="space_id" />
+      </block>
     </view>
   </view>
 </template>
@@ -51,20 +64,27 @@ import wepy from 'wepy';
 import { baseUrl } from '@/config';
 import { baseMaterialUrl } from '@/config';
 import { loveSpaceId } from '@/config';
-import pageRouter from '@/utils/pageRouter'
+import pageRouter from '@/utils/pageRouter';
+import ComponentCoverYourself from '@/components/cover_about_yourself';
+import ComponentQuestions from '@/components/cover_answer_questions';
+import ComponentLookingFor from '@/components/cover_answer_questions';
 
 export default class LoveIndex extends wepy.page {
   config = {
-    navigationBarTitleText: '无颜'
+    navigationBarTitleText: ''
   };
 
   data = {
     baseUrl: baseUrl,
     baseMaterialUrl: baseMaterialUrl,
     space_id: null,
+    load_page: '',
+    is_loaded: false
   };
 
   async onLoad (e) {
+    wx.showLoading();
+    const self = this;
     if(!e.space_id){
       // 保证一进入就新建space对应的vip_customers记录
       e.space_id = loveSpaceId;
@@ -86,24 +106,51 @@ export default class LoveIndex extends wepy.page {
       return customer.space == spaceId;
     });
 
+    console.log('[current_customer]', current_customer)
+
     if (current_customer && current_customer.questionnaire_progess) {
       switch(current_customer.questionnaire_progess) {
         case 1:
-          wx.navigateTo({url: `/pages/love/cover_about_yourself?space_id=${spaceId}`});
+          wx.setNavigationBarTitle({title: '无颜'});
+          await this.$parent.update(
+            'vip_customers',
+            current_customer._id,
+            { questionnaire_progess: 1 },
+            spaceId
+          );
+          self.load_page = 'cover_about_yourself';
           break;
         case 2:
-          wx.navigateTo({url: `/pages/love/cover_you_looking_for?space_id=${spaceId}`});
+          wx.setNavigationBarTitle({title: '理想伴侣'});
+          await this.$parent.update(
+            'vip_customers',
+            current_customer._id,
+            { questionnaire_progess: 2 },
+            spaceId
+          );
+          self.load_page = 'cover_you_looking_for';
           break;
         case 3:
-          wx.navigateTo({url: `/pages/love/cover_answer_questions?space_id=${spaceId}`});
+          wx.setNavigationBarTitle({title: '回答问题'});
+          await this.$parent.update(
+            'vip_customers',
+            current_customer._id,
+            { questionnaire_progess: 3 },
+            spaceId
+          );
+          self.load_page = 'cover_answer_questions';
           break;
         case 4:
           wx.switchTab({url: `/pages/love/shake`});
           break;
       }
-
+    } else {
+      this.load_page = 'index';
+      wx.setNavigationBarTitle({title: '无颜'});
     }
+    this.is_loaded = true;
     this.$apply();
+    wx.hideLoading();
   }
 
   // 分享
@@ -117,11 +164,16 @@ export default class LoveIndex extends wepy.page {
     };
   }
 
-
   methods = {
     join(){
       pageRouter.navigateTo({url: `/pages/love/invite_code?space_id=${this.space_id}`});
     }
+  };
+
+  components = {
+    ComponentCoverYourself: ComponentCoverYourself,
+    ComponentQuestions: ComponentQuestions,
+    ComponentLookingFor: ComponentLookingFor
   };
 }
 </script>

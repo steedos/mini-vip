@@ -29,19 +29,12 @@ page {
 </style>
 
 <template>
-  <view class="page">
-    <view class="page__hd">
-      <view class="love-title">回答问题</view>
-    </view>
-    <view class="page__bd">
-      <view class="love-summary">然后我们才能为你寻找最匹配的人</view>
-      <button class="btn-join" @tap="next">继续</button>
-    </view>
-  </view>
+  <ComponentQuestions :spaceId.sync="space_id" />
 </template>
 
 <script>
 import wepy from 'wepy';
+import ComponentQuestions from '@/components/cover_answer_questions';
 
 export default class CoverAnswerQuestions extends wepy.page {
   config = {
@@ -76,13 +69,9 @@ export default class CoverAnswerQuestions extends wepy.page {
     }
   }
 
-  methods = {
-    next() {
-      const answeredUrl = encodeURIComponent(`/pages/love/shake?space_id=${this.space_id}`);
-      wx.navigateTo({
-        url: `/pages/love/papers_view?object_name=love_answer&space_id=${this.space_id}&answered_url=${answeredUrl}&answered_url_type=switchTab`
-      });
-    }
+  components = {
+    ComponentQuestions: ComponentQuestions
   };
+
 }
 </script>
