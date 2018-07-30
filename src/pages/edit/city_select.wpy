@@ -85,7 +85,7 @@
   import req from '@/network'
   import {txMapsKey} from '@/config'
 
-  const hotCode = ['110100', '310000', '440100', '440300', '330100', '320100']
+  const hotCode = ['110100', '310000', '310100', '440100', '440300', '330100', '320100']
 
   export default class CitySelect extends wepy.page {
     config = {
