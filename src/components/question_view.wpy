@@ -398,32 +398,37 @@
       box-shadow: 0px 1px 2px 2px rgba(7, 2, 1, 0.09);
       z-index: 1999;
     }
-  }
 
-  .question-section-me .weui-cell:before {
-    border-top: 1rpx solid #749AE5;
-    left: 0px;
-  }
 
-  .question-section-me .weui-cells:after {
-    border-bottom: 0px;
-    left: 0px;
-  }
-  .question-section-me .weui-cells:before {
-    border-top: 0px;
-    left: 0px;
-  }
+    .switch-view{
+      text-align: center;
+    }
 
-  .question-section-other .weui-cell:before {
-    border-top: 1rpx solid #EBEDF2;
-    left: 0px;
-  }
-  button[type=primary] {
-    background-color:#4d7bd9;
-  }
+    .question-section-me .weui-cell:before {
+      border-top: 1rpx solid #749AE5;
+      left: 0px;
+    }
 
-  .button-hover{
-    background-color: #4e76c5!important;
+    .question-section-me .weui-cells:after {
+      border-bottom: 0px;
+      left: 0px;
+    }
+    .question-section-me .weui-cells:before {
+      border-top: 0px;
+      left: 0px;
+    }
+
+    .question-section-other .weui-cell:before {
+      border-top: 1rpx solid #EBEDF2;
+      left: 0px;
+    }
+    button[type=primary] {
+      background-color:#4d7bd9;
+    }
+
+    .button-hover{
+      background-color: #4e76c5!important;
+    }
   }
 
 </style>
@@ -639,15 +644,24 @@
             </block>
             <block wx:else>
               <view class="big-select">
-                <radio-group bindchange="radioChange" class="weui-flex" name="{{question.name}}" value="{{questionsAnswer[question.name]}}">
-                  <repeat for="{{question.options_all}}" key="index" index="index" item="option">
-                    <label class="weui-flex__item">
-                      <radio class="weui-check" value="{{option.value}}" checked="{{option.value === questionsAnswer[question.name]}}"/>
-                      <view wx:if="{{option.value === questionsAnswer[question.name]}}" class="placeholder shadow selected">{{option.label}}</view>
-                      <view wx:else class="placeholder shadow">{{option.label}}</view>
-                    </label>
-                  </repeat>
-                </radio-group>
+                <block wx:if="{{question.options_all.length < 10}}">
+                  <radio-group bindchange="radioChange" class="weui-flex" name="{{question.name}}" value="{{questionsAnswer[question.name]}}">
+                    <repeat for="{{question.options_all}}" key="index" index="index" item="option">
+                      <label class="weui-flex__item">
+                        <radio class="weui-check" value="{{option.value}}" checked="{{option.value === questionsAnswer[question.name]}}"/>
+                        <view wx:if="{{option.value === questionsAnswer[question.name]}}" class="placeholder shadow selected">{{option.label}}</view>
+                        <view wx:else class="placeholder shadow">{{option.label}}</view>
+                      </label>
+                    </repeat>
+                  </radio-group>
+                </block>
+                <block wx:else>
+                  <picker bindchange="bindSelectPickerChange" value="{{question.value_index}}" range="{{question.options_all}}" range-key="label" name="{{question.name}}">
+                    <view class="weui-input shadow" name="{{question.name}}">
+                      {{question.value.label}}
+                    </view>
+                  </picker>
+                </block>
               </view>
             </block>
           </block>
@@ -677,6 +691,12 @@
               {{questionsAnswer[question.name] || '请选择城市'}}
             </navigator>
             <!--<citySelect class="weui-input weui-flex__item shadow"></citySelect>-->
+          </block>
+
+          <block wx:elif="{{question.type === 'boolean'}}">
+            <view class="switch-view weui-flex__item">
+              <switch name="{{question.name}}" bindchange="{{switchChange}}" checked="{{questionsAnswer[question.name]}}"></switch>
+            </view>
           </block>
         </view>
 
@@ -894,6 +914,13 @@
                 }
               }),
             }
+          }else if(question.type === 'select' && question.options_all.length >= 10){
+            question.value =  _.find(question.options_all, (o, i)=>{
+              if(o.value === this.questionsAnswer[key]){
+                question.value_index = i;
+                return true;
+              }
+            })
           }else{
             question.value = this.questionsAnswer[key];
           }
@@ -1097,9 +1124,9 @@
 
         let values = {};
 
-        if(question.range && question.type === 'select'){
+        if(question.type === 'select' && (question.options_all.length >= 10 || question.range)){
           if(fieldValue || _.isNumber(fieldValue)){
-            values[key] = question.options[fieldValue].value;
+            values[key] = question.options_all[fieldValue].value;
           }else{
             values[key] = '';
           }
@@ -1159,7 +1186,12 @@
           this.question.value = {}
         }
         this.question.value_min_index = e.detail.value
-        this.question.value.min = this.question.options[e.detail.value]
+        this.question.value.min = this.question.options_all[e.detail.value]
+      },
+      bindSelectPickerChange: function (e) {
+        console.log('bindSelectPickerChange', e);
+        this.question.value_index = e.detail.value
+        this.question.value = this.question.options_all[e.detail.value]
       },
       bindSelectPickerMaxChange: function (e) {
         console.log('bindSelectPickerMinChange', e);
@@ -1167,7 +1199,7 @@
           this.question.value = {}
         }
         this.question.value_max_index = e.detail.value
-        this.question.value.max = this.question.options[e.detail.value]
+        this.question.value.max = this.question.options_all[e.detail.value]
       },
       questionBack: function () {
         console.log('questionBack,,,,,,');
@@ -1177,6 +1209,9 @@
           this.answeredQuesionKeys = _.initial(this.answeredQuesionKeys);
           this.nextQuestion(true)
         }
+      },
+      switchChange: function (e) {
+
       }
     }
   }

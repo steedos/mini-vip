@@ -36,24 +36,37 @@
     <view class="answer-summary">
       “无颜”正在努力匹配您的有缘人，匹配成功后，我们将短信通知到您，尽情期待。
     </view>
-      <button class="btn-continue">确定</button>
+      <button class="btn-continue" @tap="continue">确定</button>
   </view>
 </view>
 </template>
 
 <script>
 import wepy from 'wepy';
+import { baseUrl } from '@/config';
+import { baseMaterialUrl } from '@/config';
+import { loveSpaceId } from '@/config';
+import pageRouter from '@/utils/pageRouter';
 import util from '../../wxs/util.wxs';
-  export default class PapersSummary extends wepy.page {
+export default class PapersSummary extends wepy.page {
 	config = {
 		navigationBarTitleText: '资料完成'
-    };
-    wxs = {
-      util: util
-    }
-    data = {
-    }
-    async onLoad (e) {
+  };
+
+  wxs = {
+    util: util
+  }
+
+  data = {
+  }
+
+  async onLoad (e) {
+  }
+
+  methods = {
+    continue(){
+      pageRouter['switchTab']({url: `/pages/love/shake?space_id=${this.space_id}`})
     }
   }
+};
 </script>

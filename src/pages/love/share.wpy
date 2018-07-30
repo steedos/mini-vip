@@ -1,27 +1,19 @@
 <style lang="less">
   page{
     height: 100%;
-    background:#fff;
+    background:#353535;
   }
   .page__hd{
-    padding: 40px 0px;
+    padding:40rpx;
+    color:#fff;
+    font-size:65rpx;
+    font-weight:bold;
   }
   .page__bd{
+    padding:40rpx;
+    color:#fff;
+    font-size:45rpx;
     padding-bottom: 80px;
-  }
-
-  .gift-label{
-    text-align:center;
-    color:#666;
-    margin-bottom:20rpx;
-    font-size:34rpx;
-  }
-
-  .gift-value{
-    font-size:44rpx;
-    color:#ff9800;
-    text-align:center;
-    margin-top:40px;
   }
 
   .pop-mask {
@@ -121,10 +113,10 @@
 <template>
 <view class="page" wx:if="{{is_loaded}}">
   <view class="page__hd">
-    <view class="gift-label">邀请更多的好友加入无颜，您可获得</view>
-    <view class="gift-value">优先匹配资格及更高的推荐成功率</view>
+    拯救单身狗
   </view>
   <view class="page__bd">
+    转发“无颜”这位聪明又勤快的智能机器人给身边的朋友，让它每周推荐与他“相互匹配”值最高的有缘人给他吧。
   </view>
   <view class="tab-bar border-top-1px">
     <button open-type="share" class="btn btn-share-wexin" type="default" plain="{{true}}">
