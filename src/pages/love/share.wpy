@@ -136,7 +136,7 @@
     <view class="share-friend-circle-box">
       <view class="share-friend-circle-title">保存图片分享到朋友圏</view>
       <image class="image" mode="widthFix" src="{{friend_circle_image_url}}"/>
-      <button type="primary" class="btn-save-image">
+      <button type="primary" class="btn-save-image" @tap="saveImageToPhotosAlbum">
         保存图片
       </button>
     </view>
@@ -271,6 +271,18 @@
       closePop() {
         this.showPop = false;
         this.$apply();
+      },
+      saveImageToPhotosAlbum(){
+        let imageUrl = `${baseMaterialUrl}love_share.jpg`;
+        wepy.saveImageToPhotosAlbum({
+          filePath: imageUrl,
+          success(res){
+            console.log("======success=============");
+          },
+          fail(res){
+            console.log("======fail=============");
+          }
+        });
       }
     }
   }
