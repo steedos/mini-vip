@@ -67,7 +67,7 @@ import { loveSpaceId } from '@/config';
 import pageRouter from '@/utils/pageRouter';
 import ComponentCoverYourself from '@/components/cover_about_yourself';
 import ComponentQuestions from '@/components/cover_answer_questions';
-import ComponentLookingFor from '@/components/cover_answer_questions';
+import ComponentLookingFor from '@/components/cover_you_looking_for';
 
 export default class LoveIndex extends wepy.page {
   config = {
@@ -100,10 +100,14 @@ export default class LoveIndex extends wepy.page {
       return;
     }
 
+    let index = 0;
     let spaceId = this.space_id;
     let my_customers = this.$parent.globalData.my_customers;
-    let current_customer = my_customers.find(customer => {
-      return customer.space == spaceId;
+    let current_customer = my_customers.find((customer, i) => {
+      if (customer.space == spaceId) {
+        index = i;
+        return customer
+      }
     });
 
     console.log('[current_customer]', current_customer)
