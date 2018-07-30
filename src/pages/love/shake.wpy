@@ -5,6 +5,7 @@
   bottom: 0;
   right: 0;
   left: 0;
+  background:#353535;
   .top {
     position: absolute;
     top: 0;
@@ -14,14 +15,14 @@
     overflow: hidden;
     transition: all 1s linear;
     z-index: 10;
-    background:#efeef3;
+    background:#353535;
     .top-shake-container {
       position: relative;
-      bottom: -160rpx;
+      bottom: -135rpx;
       width: 100%;
       height: 100%;
-      background: url(https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/shake.png);
-      background-size: 30%;
+      background: url(https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/shake.png );
+      background-size: 40%;
       background-repeat: no-repeat;
       background-position: bottom center;
     }
@@ -34,14 +35,14 @@
     right: 0;
     overflow: hidden;
     z-index: 10;
-    background:#efeef3;
+    background:#353535;
     .bottom-shake-container {
       position: relative;
-      top: -134rpx;
+      top: -173rpx;
       width: 100%;
       height: 100%;
       background: url(https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/shake.png);
-      background-size: 30%;
+      background-size: 40%;
       background-repeat: no-repeat;
       background-position: top center;
     }
@@ -65,7 +66,10 @@
   .result {
     position: absolute;
     bottom: 100rpx;
-    background: #fff;
+    background: #46494f;
+    color: #a1a1a1;
+    border:1px solid #191919;
+    z-index:100;
     left: 60rpx;
     right: 60rpx;
     padding: 30rpx;
@@ -151,12 +155,12 @@ export default class LoveShake extends wepy.page {
 
   setTopAnimation() {
     let animation = wx.createAnimation({
-      duration: 400,
+      duration: 500,
       timingFunction: 'ease',
     });
 
     animation.translateY(-70).step();
-    animation.translateY(0).step({delay: 10});
+    animation.translateY(0).step({delay: 100});
     this.topAnimationData = animation.export();
     this.$apply();
     wx.stopAccelerometer();
@@ -164,12 +168,12 @@ export default class LoveShake extends wepy.page {
 
   setBottomAnimation() {
     let animation = wx.createAnimation({
-      duration: 400,
+      duration: 500,
       timingFunction: 'ease',
     });
 
     animation.translateY(70).step();
-    animation.translateY(0).step({delay: 10});
+    animation.translateY(0).step({delay: 100});
     this.bottomAnimationData = animation.export();
     this.$apply();
   }
@@ -187,7 +191,7 @@ export default class LoveShake extends wepy.page {
       wx.startAccelerometer({
         interval: 'normal'
       });
-    }, 900);
+    }, 1100);
   }
 
   async onLoad (e) {
@@ -244,8 +248,14 @@ export default class LoveShake extends wepy.page {
         z: z
       }
 
+      const user_id = this.$parent.globalData.user._id;
+
       if (flagX) {
         if (!self.isLoading) {
+          const user_id = self.$parent.globalData.user._id;
+          wx.playBackgroundAudio({
+            dataUrl: 'https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/摇一摇.mp3'
+          })
           self.text = '正在摇';
           self.matching = null;
           self.noMatching = false;
@@ -254,22 +264,27 @@ export default class LoveShake extends wepy.page {
           self.setBottomAnimation();
           self.$apply();
           const options = {
-            $filter: `userA eq 'ootievH6oBKzMsxPz'`,
+            $filter: `userA eq '${user_id}'`,
             $select: 'owner,userA,scoreA_B,scoreB_A,score,space'
           }
           self.$parent.query('love_result', options, self.space_id).then( res => {
             if (res && res.value && res.value[0] && res.value[0].score && res.value[0].score[0]) {
               setTimeout(() => {
+                wx.playBackgroundAudio({
+                  dataUrl: 'https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/成功匹配.mp3'
+                })
+              }, 1100);
+              setTimeout(() => {
                 self.matching = res.value[0].score[0];
                 self.noMatching = false;
                 self.$apply();
-              }, 400);
+              }, 1800);
             } else {
               setTimeout(() => {
                 console.log('===============noMatching', self.noMatching)
                 self.noMatching = true;
                 self.$apply();
-              }, 400);
+              }, 1100);
             }
             self.clearAnimation();
             self.isLoading = false;
