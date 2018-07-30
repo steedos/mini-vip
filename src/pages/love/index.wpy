@@ -77,6 +77,7 @@ export default class LoveIndex extends wepy.page {
         title: "未配置工作区ID",
         icon: "none"
       });
+      return;
     }
 
     let spaceId = this.space_id;

@@ -207,6 +207,7 @@ export default class LoveShake extends wepy.page {
         title: "未配置工作区ID",
         icon: "none"
       });
+      return;
     }
 
     const spaceId = this.space_id;

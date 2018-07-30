@@ -474,6 +474,7 @@ export default class VIP extends wepy.app {
   }
 
   async respondShare(e) {
+    console.log("===============respondShare==========e=====", e);
     console.log("===============respondShare==========globalData=====", this.globalData);
     if(!e || !e.space_id){
       return;
@@ -496,7 +497,7 @@ export default class VIP extends wepy.app {
       if(e.share_id){
         values.share = e.share_id;
       }
-      else if(e.share_from){
+      if(e.share_from){
         values.from = e.share_from;
       }
       console.log("===============respondShare============values", values);
