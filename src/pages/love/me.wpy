@@ -124,10 +124,16 @@ export default class QuestionnaireList extends wepy.page {
     }],
     questionnaire: [{
       label: '我的资料', url: `/pages/love/papers_view?object_name=love_about_me&space_id=${loveSpaceId}&required=true`
-    }, {
+    },{
+      label: '兴趣爱好', url: `/pages/love/papers_view?object_name=love_hobby&space_id=${loveSpaceId}`
+    },{
+      label: '教育经历', url: `/pages/love/papers_view?object_name=love_educational_experience&space_id=${loveSpaceId}`
+    },{
+      label: '工作经历', url: `/pages/love/papers_view?object_name=love_work_experience&space_id=${loveSpaceId}`
+    },{
       label: '我喜欢的', url: `/pages/love/papers_view?object_name=love_looking_for&space_id=${loveSpaceId}`
-    }, {
-      label: '恋爱小测试', url: `/pages/love/papers_view?object_name=love_answer&space_id=${loveSpaceId}`
+    },{
+      label: '交友匹配', url: `/pages/love/papers_view?object_name=love_answer&space_id=${loveSpaceId}`
     }]
   };
 
