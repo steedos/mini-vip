@@ -131,7 +131,7 @@ export default class QuestionnaireList extends wepy.page {
       label: '体重', value: '80'
     }],
     questionnaire:[{
-      label: '我的资料', url: `/pages/love/papers_view?object_name=love_about_me&space_id=${loveSpaceId}&required=true`
+      label: '关于我', url: `/pages/love/papers_view?object_name=love_about_me&space_id=${loveSpaceId}&required=true`
     },{
       label: '我喜欢的', url: `/pages/love/papers_view?object_name=love_looking_for&space_id=${loveSpaceId}`
     },{
