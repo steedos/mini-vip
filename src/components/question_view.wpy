@@ -67,6 +67,10 @@
       margin-right: 20%;
     }
 
+    .shadow{
+      box-shadow: 0px 1px 1px 1px rgba(7, 2, 1, 0.09);
+    }
+
     .question-have-other{
       width: 100%;
 
@@ -115,10 +119,6 @@
 
       .more{
         text-align: center;
-      }
-
-      .shadow{
-        box-shadow: 0px 1px 1px 1px rgba(7, 2, 1, 0.09);
       }
 
       .question-section-me{
@@ -342,6 +342,7 @@
         margin:0 40rpx;
 
         padding-top: 30%;
+        padding-bottom: 40rpx;
 
         .weui-input{
           height: @inputHeight;
@@ -417,6 +418,14 @@
     border-top: 1rpx solid #EBEDF2;
     left: 0px;
   }
+  button[type=primary] {
+    background-color:#4d7bd9;
+  }
+
+  .button-hover{
+    background-color: #4e76c5!important;
+  }
+
 </style>
 
 <template>
@@ -424,7 +433,7 @@
     <view class="question-progress">
       <view class="question-progress-bar" style="width: {{progress}};"></view>
     </view>
-    <view class="slds-icon-action-back slds-icon--small slds-m-right--x-small question-back" @tap.stop="questionBack" wx:if="{{answeredQuesionKeys.length > 0}}"/>
+    <view class="slds-icon-action-back slds-icon--small slds-m-right--x-small question-back" @tap.stop="questionBack" wx:if="{{false && answeredQuesionKeys.length > 0}}"/>
     <view class="weui-toptips weui-toptips_warn" wx:if="{{showError}}">{{fieldErrorMSG}}</view>
     <view class="page question-have-other" wx:if="{{question.showOtherQuesion}}">
       <view class="name">
@@ -483,8 +492,8 @@
             </view>
           </block>
         </view>
-        <view class="weui-footer jump-question" wx:if="{{!question.required}}" @tap="goNext">
-          <view class="weui-footer__text">跳过</view>
+        <view class="weui-footer jump-question weui-flex" wx:if="{{!question.required && !loading}}">
+          <view class="weui-footer__text weui-flex__item" @tap.stop="questionBack" wx:if="{{answeredQuesionKeys.length > 0}}">上一题</view> <view class="weui-footer__text weui-flex__item" @tap="goNext">跳过此题</view>
         </view>
       </view>
 
@@ -671,6 +680,10 @@
           </block>
         </view>
 
+        <view class="weui-footer jump-question weui-flex" wx:if="{{!loading}}">
+          <view class="weui-footer__text weui-flex__item" @tap.stop="questionBack" wx:if="{{answeredQuesionKeys.length > 0}}">上一题</view> <view class="weui-footer__text weui-flex__item" @tap="goNext" wx:if="{{!globalRequired && !question.required}}">跳过此题</view>
+        </view>
+
         <button class="weui-btn submit" type="primary" form-type="submit" hover-class='button-hover'>{{bottonText}}</button>
 
       </form>
@@ -789,6 +802,8 @@
 
           this.progress = this.getProgress();
 
+          this.loading = false;
+
           this.$apply()
 
         }
@@ -824,7 +839,7 @@
       const keys = _.keys(fields);
       _.forEach(keys, (key)=>{
         let field = fields[key];
-        if(key.slice(-OTHER.length) != OTHER && key.slice(-IMPORTANT.length) != IMPORTANT && key.slice(-RANGE.length) != RANGE){
+        if(key.slice(-OTHER.length) != OTHER && key.slice(-IMPORTANT.length) != IMPORTANT && key.slice(-RANGE.length) != RANGE && !field.hidden && !field.omit){
 
           let question = {};
 
@@ -894,6 +909,7 @@
 //    }
 
     data = {
+      loading: true,
       userInfo: null,
       object_name: 'love_answer',
       questionKeys: [],
@@ -915,6 +931,7 @@
       fieldErrorMSG: '',
       showError: false,
       keep_progress: false,
+      globalRequired: false,
     };
 
     getProgress(){

@@ -99,6 +99,9 @@
 
     async onLoad(e){
       this.from = decodeURIComponent(e.from);
+      if (e.to) {
+        this.to = decodeURIComponent(e.to);
+      }
 
       const res = await wepy.getSetting();
 
@@ -202,9 +205,14 @@
         console.log('phoneLogin', data)
 
 //        wepy.redirectTo({url: this.from})
-        wx.navigateBack({
-          delta: 1
-        })
+        if (this.to) {
+          wepy.redirectTo({url: this.to})
+        } else {
+          wx.navigateBack({
+            delta: 1
+          })
+        }
+
       }
     }
   }
