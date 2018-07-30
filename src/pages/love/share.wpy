@@ -18,86 +18,10 @@
   }
 
   .gift-value{
-    font-size:25px;
+    font-size:22px;
     color:#ff9800;
     text-align:center;
-  }
-  .gift-period{
-    text-align:center;
-    color:#666;
-    font-size:17px;
-    margin-top:10rpx;
-  }
-
-  .share-store{
-    margin-bottom:100rpx;
-    .share-title{
-      margin-bottom:10rpx;
-      font-size: 17px;
-      text-align: center;
-      color:#666;
-    }
-    image{
-      display: block;
-      height: 580rpx;
-      margin:auto;
-    }
-  }
-
-  .btn-share{
-    background:#ff9800;
-    border-radius:20px;
-    padding:15rpx 70rpx;
-    display:inline-block;
-    color:#9b3a00;
-    font-weight:bold;
-    font-size:45rpx;
-  }
-  .share-list{
-    text-align: center;
-    margin-top:-30rpx;
-    .share-list-header{
-      .share-list-title{
-        font-size:40rpx;
-        color: #666;
-      }
-      .share-list-sum{
-        font-size:16px;
-        color: #999;
-      }
-    }
-    .share-list-body{
-      background: rgba(30, 30, 30, 0.1);
-      border-radius:6px;
-      margin:20rpx 40rpx;
-      padding:20rpx;
-      .responses-box{
-        display: flex;
-      }
-      .response-item{
-        display: inline;
-        margin:10rpx;
-        white-space:nowrap;
-        image{
-          display: block;
-          width:100rpx;
-          height:100rpx;
-          margin:0 auto;
-          border-radius:100%;
-        }
-        .response-name{
-          color: #fff;
-          margin-top:-4px;
-          background:rgba(200, 200, 200, 0.6);
-          border-radius:10px;
-          font-size:30rpx;
-          padding:2rpx 20rpx;
-        }
-      }
-    }
-    .weui-loadmore__tips_in-line{
-      background: #fff;
-    }
+    margin-top:40px;
   }
 
   .pop-mask {
@@ -189,7 +113,7 @@
 <view class="page" wx:if="{{is_loaded}}">
   <view class="page__hd">
     <view class="gift-label">邀请更多的好友加入无颜，您可获得</view>
-    <view class="gift-value">更宽广的好友匹配范围，更精准的匹配度以及更高的推荐成功率</view>
+    <view class="gift-value">优先匹配资格及更高的推荐成功率</view>
   </view>
   <view class="page__bd">
   </view>
