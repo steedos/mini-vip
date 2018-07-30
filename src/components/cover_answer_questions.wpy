@@ -54,9 +54,14 @@ export default class ComponentQuestions extends wepy.component {
 
   methods = {
     next() {
-      const answeredUrl = encodeURIComponent(`/pages/love/shake?space_id=${this.spaceId}`);
+      // const answeredUrl = encodeURIComponent(`/pages/love/shake?space_id=${this.spaceId}`);
+      // wx.navigateTo({
+      //   url: `/pages/love/papers_view?object_name=love_answer&space_id=${this.spaceId}&answered_url=${answeredUrl}&answered_url_type=switchTab`
+      // });
+
+      const answeredUrl = encodeURIComponent(`/pages/love/papers_summary?space_id=${this.spaceId}`);
       wx.navigateTo({
-        url: `/pages/love/papers_view?object_name=love_answer&space_id=${this.spaceId}&answered_url=${answeredUrl}&answered_url_type=switchTab`
+        url: `/pages/love/papers_view?object_name=love_answer&space_id=${this.spaceId}&answered_url=${answeredUrl}`
       });
     }
   };
