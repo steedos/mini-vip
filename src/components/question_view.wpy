@@ -639,15 +639,24 @@
             </block>
             <block wx:else>
               <view class="big-select">
-                <radio-group bindchange="radioChange" class="weui-flex" name="{{question.name}}" value="{{questionsAnswer[question.name]}}">
-                  <repeat for="{{question.options_all}}" key="index" index="index" item="option">
-                    <label class="weui-flex__item">
-                      <radio class="weui-check" value="{{option.value}}" checked="{{option.value === questionsAnswer[question.name]}}"/>
-                      <view wx:if="{{option.value === questionsAnswer[question.name]}}" class="placeholder shadow selected">{{option.label}}</view>
-                      <view wx:else class="placeholder shadow">{{option.label}}</view>
-                    </label>
-                  </repeat>
-                </radio-group>
+                <block wx:if="{{question.options_all.length < 10}}">
+                  <radio-group bindchange="radioChange" class="weui-flex" name="{{question.name}}" value="{{questionsAnswer[question.name]}}">
+                    <repeat for="{{question.options_all}}" key="index" index="index" item="option">
+                      <label class="weui-flex__item">
+                        <radio class="weui-check" value="{{option.value}}" checked="{{option.value === questionsAnswer[question.name]}}"/>
+                        <view wx:if="{{option.value === questionsAnswer[question.name]}}" class="placeholder shadow selected">{{option.label}}</view>
+                        <view wx:else class="placeholder shadow">{{option.label}}</view>
+                      </label>
+                    </repeat>
+                  </radio-group>
+                </block>
+                <block wx:else>
+                  <picker bindchange="bindSelectPickerChange" value="{{question.value_index}}" range="{{question.options_all}}" range-key="label" name="{{question.name}}">
+                    <view class="weui-input shadow" name="{{question.name}}">
+                      {{question.value.label}}
+                    </view>
+                  </picker>
+                </block>
               </view>
             </block>
           </block>
@@ -894,6 +903,13 @@
                 }
               }),
             }
+          }else if(question.type === 'select' && question.options_all.length >= 10){
+            question.value =  _.find(question.options_all, (o, i)=>{
+              if(o.value === this.questionsAnswer[key]){
+                question.value_index = i;
+                return true;
+              }
+            })
           }else{
             question.value = this.questionsAnswer[key];
           }
@@ -1097,9 +1113,9 @@
 
         let values = {};
 
-        if(question.range && question.type === 'select'){
+        if(question.type === 'select' && (question.options_all.length >= 10 || question.range)){
           if(fieldValue || _.isNumber(fieldValue)){
-            values[key] = question.options[fieldValue].value;
+            values[key] = question.options_all[fieldValue].value;
           }else{
             values[key] = '';
           }
@@ -1159,7 +1175,12 @@
           this.question.value = {}
         }
         this.question.value_min_index = e.detail.value
-        this.question.value.min = this.question.options[e.detail.value]
+        this.question.value.min = this.question.options_all[e.detail.value]
+      },
+      bindSelectPickerChange: function (e) {
+        console.log('bindSelectPickerChange', e);
+        this.question.value_index = e.detail.value
+        this.question.value = this.question.options_all[e.detail.value]
       },
       bindSelectPickerMaxChange: function (e) {
         console.log('bindSelectPickerMinChange', e);
@@ -1167,7 +1188,7 @@
           this.question.value = {}
         }
         this.question.value_max_index = e.detail.value
-        this.question.value.max = this.question.options[e.detail.value]
+        this.question.value.max = this.question.options_all[e.detail.value]
       },
       questionBack: function () {
         console.log('questionBack,,,,,,');
