@@ -1,24 +1,23 @@
 <style lang="less">
   page{
-    height: 100%;
-    background:#fff;
+    background: #353535;
   }
   .page__hd{
-    padding: 40px 0px;
-    padding-left:5%;
-    padding-right:5%;
+    padding:40rpx;
+    .love-title{
+      margin-top:40rpx;
+      color:#fff;
+      font-size:65rpx;
+      font-weight:bold;
+    }
   }
   .page__bd{
-    padding-bottom: 80px;
-    padding-left:5%;
-    padding-right:5%;
-  }
-
-  .head-value{
-    font-size:22px;
-    color:#ff9800;
-    text-align:center;
-    margin-top:40px;
+    padding:40rpx;
+    .answer-summary{
+      color:#fff;
+      font-size:45rpx;
+      margin-bottom:100rpx;
+    }
   }
   .btn-continue{
     background:#4D7BD9;
@@ -31,14 +30,12 @@
 <template>
 <view class="page">
   <view class="page__hd">
-    <view class="head-value">
-        感谢您填写了宝贵的资料，准确的信息可获得更精准的匹配。
-    </view>
-    <view class="head-value">
-        “无颜”正在努力匹配您的有缘人。
-    </view>
+    <view class="love-title">众里寻他千百度</view>
   </view>
   <view class="page__bd">
+    <view class="answer-summary">
+      “无颜”正在努力匹配您的有缘人，匹配成功后，我们将短信通知到您，尽情期待。
+    </view>
       <button class="btn-continue">确定</button>
   </view>
 </view>
