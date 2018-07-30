@@ -227,6 +227,7 @@
   import { baseUrl } from '@/config';
   import { baseMaterialUrl } from '@/config';
   import util from '../../wxs/util.wxs';
+  import { loveSpaceId } from '@/config';
  
   export default class LoveShare extends wepy.page {
 		config = {
@@ -249,10 +250,17 @@
     }
 
     async onLoad (e) {
+      console.log("onLoad=======share==e===", e);
+      if(!e.space_id){
+        // 保证一进入就新建space对应的vip_customers记录
+        e.space_id = loveSpaceId;
+      }
       this.space_id = e.space_id;
+      console.log("this.space_id============", this.space_id);
+      await this.$parent.login(e);
       if(!this.space_id){
         wx.showToast({
-          title: "参数错误，没有传入平台微站ID",
+          title: "未配置工作区ID",
           icon: "none"
         });
         return;
@@ -305,7 +313,7 @@
     onShareAppMessage(res) {
       const name = this.$parent.globalData.user.name;
       let title = this.$parent.globalData.title;
-      let path = `pages/love/index?space_id=${this.space_id}`
+      let path = `pages/love/index?space_id=${this.space_id}`;
       let imageUrl = `${baseMaterialUrl}love_share.jpg`;
       if(this.share_id){
         const userId = this.$parent.globalData.user._id;

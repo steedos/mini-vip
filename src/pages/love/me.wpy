@@ -101,6 +101,7 @@
 <script>
 import wepy from 'wepy';
 import { loveSpaceId } from '../../config/index.js';
+import req from '@/network';
 
 export default class QuestionnaireList extends wepy.page {
   config = {
@@ -190,9 +191,7 @@ export default class QuestionnaireList extends wepy.page {
         this.$apply();
 
         const url = '/mini/vip/user';
-        req.put(url, {name: name, sex: sex, avatar: avatar}).then((res) => {
-          pageRouter.navigateTo({ url: '/pages/me_profile' });
-        })
+        req.put(url, {name: name, sex: sex, avatar: avatar})
       }
     }
   };
