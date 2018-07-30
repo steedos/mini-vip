@@ -324,7 +324,7 @@ export default class VIP extends wepy.app {
     pageRouter.pushEnter({
       page: '/pages/love/invite_code',
       script: function (to) {
-        return this.checkMobile()
+        return this.checkMobile(to)
       }
     });
   }
@@ -348,11 +348,14 @@ export default class VIP extends wepy.app {
     })
   }
 
-  checkMobile(){
+  checkMobile(to){
     if(this.globalData.user && this.globalData.user.mobile){
       return true
     }else{
       let url = '/pages/phone_number_login';
+      if (to) {
+        url = url + '?to=' + encodeURIComponent(to);
+      }
       wepy.navigateTo({url: url});
       return false
     }
