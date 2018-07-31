@@ -34,7 +34,7 @@ page {
       <view class="love-title">说说你的情况</view>
     </view>
     <view class="page__bd">
-      <view class="love-summary">然后我们才能为你匹配喜欢你的人</view>
+      <view class="love-summary">用你的初始数据求得最优策略</view>
       <button class="btn-join" @tap="next">下一步</button>
     </view>
   </view>

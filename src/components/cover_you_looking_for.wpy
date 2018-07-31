@@ -31,10 +31,10 @@ page {
 <template>
   <view class="page">
     <view class="page__hd">
-      <view class="love-title">你在寻找谁？</view>
+      <view class="love-title">确认过眼神</view>
     </view>
     <view class="page__bd">
-      <view class="love-summary">为了遇见对的人，告诉我们你的要求</view>
+      <view class="love-summary">你想要遇见怎样对的人</view>
       <button class="btn-join" @tap="next">下一步</button>
     </view>
   </view>
