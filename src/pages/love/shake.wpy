@@ -231,6 +231,7 @@ export default class LoveShake extends wepy.page {
         spaceId
       );
     }
+
     this.$apply();
   }
 
@@ -239,6 +240,15 @@ export default class LoveShake extends wepy.page {
       interval: 'normal'
     });
     const self = this;
+
+    const shakeAudioContext = wx.createInnerAudioContext();
+    shakeAudioContext.obeyMuteSwitch = false;
+    shakeAudioContext.src = 'https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/摇一摇.mp3';
+
+    const successAudioContext = wx.createInnerAudioContext();
+    successAudioContext.obeyMuteSwitch = false;
+    successAudioContext.src = 'https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/成功匹配.mp3'
+
     wx.onAccelerometerChange(res => {
       var x = res.x.toFixed(4);
       var y = res.y.toFixed(4);
@@ -262,9 +272,7 @@ export default class LoveShake extends wepy.page {
       if (flagX) {
         if (!self.isLoading) {
           const user_id = self.$parent.globalData.user._id;
-          wx.playBackgroundAudio({
-            dataUrl: 'https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/摇一摇.mp3'
-          })
+          shakeAudioContext.play();
           self.text = '正在摇';
           self.matching = null;
           self.noMatching = false;
@@ -279,15 +287,13 @@ export default class LoveShake extends wepy.page {
           self.$parent.query('love_result', options, self.space_id).then( res => {
             if (res && res.value && res.value[0] && res.value[0].score && res.value[0].score[0]) {
               setTimeout(() => {
-                wx.playBackgroundAudio({
-                  dataUrl: 'https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/成功匹配.mp3'
-                })
+                successAudioContext.play();
               }, 1100);
               setTimeout(() => {
                 self.matching = res.value[0].score[0];
                 self.noMatching = false;
                 self.$apply();
-              }, 1800);
+              }, 1400);
             } else {
               setTimeout(() => {
                 console.log('===============noMatching', self.noMatching)

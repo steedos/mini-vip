@@ -101,7 +101,7 @@
     <view class="weui-cells">
       <navigator class="weui-cell weui-cell_access" url="/pages/space/index?space_id={{space_id}}">
         <view class="weui-cell__bd">
-          <view>关于</view>
+          <view>关于无颜</view>
         </view>
         <view class="weui-cell__ft weui-cell__ft_in-access"></view>
       </navigator>
