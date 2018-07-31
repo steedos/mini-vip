@@ -1167,6 +1167,9 @@
           case 'textarea':
             url = '/pages/edit/textarea';
             break;
+          case 'date':
+            url = '/pages/edit/date';
+            break;
           case 'datetime':
             url = '/pages/edit/datetime';
             break;

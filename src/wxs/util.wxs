@@ -393,6 +393,8 @@ function transformFieldValue(field, value){
     }
 
     return year + month + date + ' ' + hours_str + ':' + minutes
+  }else if(field.type === 'date'){
+    return formatDate(value, '', 'date')
   }
   return value
 }

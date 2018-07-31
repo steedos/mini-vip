@@ -12,7 +12,7 @@
         <view class="weui-cell weui-cell_input">
           <view class="weui-cell__bd">
             <picker mode="date" bindchange="bindDateChange" value="{{value}}">
-              <view class="weui-input">{{value}}</view>
+              <view class="weui-input">{{util.formatDate(value, '', 'date')}}</view>
             </picker>
           </view>
           <view class="weui-cell__ft" wx:if="{{value}}">
@@ -28,15 +28,20 @@
 import wepy from 'wepy';
 import req from '@/network';
 import { serverAPI } from '@/server';
+import util from '../../wxs/util.wxs'
 
 export default class Date extends wepy.page {
   config = {
     navigationBarTitleText: '编辑'
   };
 
+  wxs = {
+    util: util,
+  };
+
   onLoad(e) {
     console.log(e)
-    this.text = "编辑"+e.text;
+    this.text = "编辑" + (e.text || e.title);
     this.value = e.value;
     this.key = e.key;
     wx.setNavigationBarTitle({title:this.text})
