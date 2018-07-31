@@ -140,9 +140,9 @@ export default class QuestionnaireList extends wepy.page {
     other_questionnaire: [{
       label: '兴趣爱好', url: `/pages/love/papers_view?object_name=love_hobby&space_id=${loveSpaceId}`
     },{
-      label: '教育经历', url: `/pages/love/papers_view?object_name=love_educational_experience&space_id=${loveSpaceId}`
+      label: '教育经历', url: `../record/list?space_id=${loveSpaceId}&object_name=love_educational_experience`
     },{
-      label: '工作经历', url: `/pages/love/papers_view?object_name=love_work_experience&space_id=${loveSpaceId}`
+      label: '工作经历', url: `../record/list?space_id=${loveSpaceId}&object_name=love_work_experience`
     }]
   };
 
