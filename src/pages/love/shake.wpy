@@ -243,10 +243,12 @@ export default class LoveShake extends wepy.page {
 
     const shakeAudioContext = wx.createInnerAudioContext();
     shakeAudioContext.obeyMuteSwitch = false;
+    shakeAudioContext.autoPlay = true;
     shakeAudioContext.src = 'https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/摇一摇.mp3';
 
     const successAudioContext = wx.createInnerAudioContext();
     successAudioContext.obeyMuteSwitch = false;
+    shakeAudioContext.autoPlay = true;
     successAudioContext.src = 'https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/成功匹配.mp3'
 
     wx.onAccelerometerChange(res => {
