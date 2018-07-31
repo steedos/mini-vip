@@ -3,7 +3,7 @@
     /*background-color: #ebebeb;*/
   /*}*/
   page{
-    background-color: #F3F5F9;
+    background-color: #efeef4;
   }
 
   .question{
