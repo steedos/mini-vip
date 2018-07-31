@@ -113,7 +113,7 @@
     </block>
     <block wx:if="{{noMatching}}">
       <view class="result">
-        <view class="fail-info">TAT 这次没有匹配到呢 再摇一次吧</view>
+        <view class="fail-info">本周有缘人已与你擦肩而过，请静待下周的邂逅。</view>
       </view>
     </block>
   </view>
