@@ -117,7 +117,7 @@ import req from '@/network';
 export default class QuestionnaireList extends wepy.page {
   config = {
     navigationBarTitleText: '我的',
-    enablePullDownRefresh: true
+    enablePullDownRefresh: false
   };
 
   data = {
