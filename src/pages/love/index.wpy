@@ -47,6 +47,21 @@
       background-repeat: no-repeat;
     }
   }
+
+  .about-me-container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align:center;
+    .about-me {
+      padding:20px 30px;
+      color:#ccc;
+      display:inline-block;
+      margin-bottom:6px;
+      font-size:14px;
+    }
+  }
 </style>
 
 <template>
@@ -71,6 +86,9 @@
       <block wx:elif="{{load_page == 'cover_answer_questions'}}">
         <ComponentQuestions :spaceId.sync="space_id" />
       </block>
+    </view>
+    <view class="about-me-container" wx:if="{{load_page == 'index'}}">
+      <view class="about-me" @tap="goAbout">关于无颜</view>
     </view>
   </view>
 </template>
@@ -128,28 +146,30 @@ export default class LoveIndex extends wepy.page {
 
     console.log('[current_customer]', current_customer)
 
-    if (current_customer && current_customer.questionnaire_progess) {
-      switch(current_customer.questionnaire_progess) {
-        case 1:
-          wx.setNavigationBarTitle({title: '无颜'});
-          self.load_page = 'cover_about_yourself';
-          break;
-        case 2:
-          wx.setNavigationBarTitle({title: '理想伴侣'});
-          self.load_page = 'cover_you_looking_for';
-          break;
-        case 3:
-          wx.setNavigationBarTitle({title: '爱之匹配'});
-          self.load_page = 'cover_answer_questions';
-          break;
-        case 4:
-          wx.switchTab({url: `/pages/love/shake`});
-          break;
-      }
-    } else {
-      this.load_page = 'index';
-      wx.setNavigationBarTitle({title: '无颜'});
-    }
+    // if (current_customer && current_customer.questionnaire_progess) {
+    //   switch(current_customer.questionnaire_progess) {
+    //     case 1:
+    //       wx.setNavigationBarTitle({title: '无颜'});
+    //       self.load_page = 'cover_about_yourself';
+    //       break;
+    //     case 2:
+    //       wx.setNavigationBarTitle({title: '理想伴侣'});
+    //       self.load_page = 'cover_you_looking_for';
+    //       break;
+    //     case 3:
+    //       wx.setNavigationBarTitle({title: '爱之匹配'});
+    //       self.load_page = 'cover_answer_questions';
+    //       break;
+    //     case 4:
+    //       wx.switchTab({url: `/pages/love/shake`});
+    //       break;
+    //   }
+    // } else {
+    //   this.load_page = 'index';
+    //   wx.setNavigationBarTitle({title: '无颜'});
+    // }
+
+    this.load_page = 'index';
     this.is_loaded = true;
     this.$apply();
     wx.hideLoading();
@@ -169,6 +189,9 @@ export default class LoveIndex extends wepy.page {
   methods = {
     join(){
       pageRouter.navigateTo({url: `/pages/love/invite_code?space_id=${this.space_id}`});
+    },
+    goAbout(){
+      wx.navigateTo({url: `/pages/space/index?space_id=${this.space_id}`})
     }
   };
 
