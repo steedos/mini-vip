@@ -1184,7 +1184,7 @@
         if(question.range){
           if(question.type === 'select'){
             if(formValues[key + RANGE] || _.isNumber(formValues[key + RANGE])){
-              values[key + RANGE] = question.options[formValues[key + RANGE]].value;
+              values[key + RANGE] = question.options_all[formValues[key + RANGE]].value;
             }else{
               values[key + RANGE] = '';
             }
