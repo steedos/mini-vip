@@ -243,6 +243,7 @@
         .important{
           .weui-check__hd_in-checkbox{
             display: inline-block;
+            vertical-align: middle;
           }
         }
 
@@ -429,6 +430,28 @@
     .button-hover{
       background-color: #4e76c5!important;
     }
+
+    .check-icon {
+      width:18px;
+      height:18px;
+      border:1px solid #CECCD5;
+      border-radius:0.25rem;
+      font-size: 0;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+    }
+
+    .check-icon-circle {
+      width:18px;
+      height:18px;
+      border:1px solid #fff;
+      border-radius:50%;
+      font-size: 0;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+    }
   }
 
 </style>
@@ -486,7 +509,10 @@
                     <view class="weui-cell__bd">{{option.label}}</view>
                     <view class="weui-cell__ft weui-cell__ft_in-radio">
                       <icon class="weui-icon-checkbox_circle" type="circle" size="23" wx:if="{{option.value != answer.me.value}}"></icon>
-                      <icon class="weui-icon-checkbox_success" type="success" size="23" wx:if="{{option.value === answer.me.value}}"></icon>
+                      <view class="check-icon-circle weui-icon-checkbox_circle" wx:if="{{option.value === answer.me.value}}">
+                        <icon type="success_no_circle" size="16" color="#fff"></icon>
+                      </view>
+                      <!-- <icon class="weui-icon-checkbox_success" color="#fff" type="success_no_circle" size="23" wx:if="{{option.value === answer.me.value}}"></icon> -->
                     </view>
                   </label>
                 </repeat>
@@ -532,8 +558,12 @@
                     <checkbox class="weui-check" value="{{option.value}}" checked="{{util.includes(answer.other, option.value)}}"/>
                     <view class="weui-cell__bd">{{option.label}}</view>
                     <view class="weui-cell__ft weui-check__hd_in-checkbox">
-                      <icon class="weui-icon-checkbox_circle" type="circle" size="23" wx:if="{{!util.includes(answer.other, option.value)}}"></icon>
-                      <icon class="weui-icon-checkbox_success" type="success" size="23" wx:if="{{util.includes(answer.other, option.value)}}"></icon>
+                      <view class="weui-icon-checkbox_circle check-icon" wx:if="{{!util.includes(answer.other, option.value)}}"></view>
+                      <view class="weui-icon-checkbox_success check-icon" wx:if="{{util.includes(answer.other, option.value)}}">
+                        <icon type="success_no_circle" size="16" color="#4d7bd9"></icon>
+                      </view>
+                      <!-- <icon class="weui-icon-checkbox_circle" type="circle" size="23" wx:if="{{!util.includes(answer.other, option.value)}}"></icon> -->
+                      <!-- <icon class="weui-icon-checkbox_success" type="success" size="23" wx:if="{{util.includes(answer.other, option.value)}}"></icon> -->
                     </view>
                   </label>
                 </repeat>
@@ -549,8 +579,10 @@
           <view class="weui-footer__text">
             这对我很重要
             <view class="weui-check__hd_in-checkbox">
-              <icon class="weui-icon-checkbox_circle" type="circle" size="23" wx:if="{{!answer.important}}"></icon>
-              <icon class="weui-icon-checkbox_success" type="success" size="23" wx:if="{{answer.important}}"></icon>
+              <view class="weui-icon-checkbox_circle check-icon" wx:if="{{!answer.important}}"></view>
+              <view class="weui-icon-checkbox_success check-icon" wx:if="{{answer.important}}">
+                <icon type="success_no_circle" size="16" color="#4d7bd9"></icon>
+              </view>
             </view>
           </view>
         </view>
@@ -595,8 +627,10 @@
                 <view class="weui-footer__text">
                   这对我很重要
                   <view class="weui-check__hd_in-checkbox">
-                    <icon color="#FFFFFF" class="weui-icon-checkbox_circle" type="circle" size="23" wx:if="{{!answer.important}}"></icon>
-                    <icon color="#FFFFFF" class="weui-icon-checkbox_success" type="success" size="23" wx:if="{{answer.important}}"></icon>
+                    <view class="weui-icon-checkbox_circle check-icon" wx:if="{{!answer.important}}"></view>
+                    <view class="weui-icon-checkbox_success check-icon" wx:if="{{answer.important}}">
+                      <icon type="success_no_circle" size="16" color="#4d7bd9"></icon>
+                    </view>
                   </view>
                 </view>
               </view>
