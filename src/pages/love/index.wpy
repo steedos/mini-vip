@@ -146,30 +146,28 @@ export default class LoveIndex extends wepy.page {
 
     console.log('[current_customer]', current_customer)
 
-    // if (current_customer && current_customer.questionnaire_progess) {
-    //   switch(current_customer.questionnaire_progess) {
-    //     case 1:
-    //       wx.setNavigationBarTitle({title: '无颜'});
-    //       self.load_page = 'cover_about_yourself';
-    //       break;
-    //     case 2:
-    //       wx.setNavigationBarTitle({title: '理想伴侣'});
-    //       self.load_page = 'cover_you_looking_for';
-    //       break;
-    //     case 3:
-    //       wx.setNavigationBarTitle({title: '爱之匹配'});
-    //       self.load_page = 'cover_answer_questions';
-    //       break;
-    //     case 4:
-    //       wx.switchTab({url: `/pages/love/shake`});
-    //       break;
-    //   }
-    // } else {
-    //   this.load_page = 'index';
-    //   wx.setNavigationBarTitle({title: '无颜'});
-    // }
-
-    this.load_page = 'index';
+    if (current_customer && current_customer.questionnaire_progess) {
+      switch(current_customer.questionnaire_progess) {
+        case 1:
+          wx.setNavigationBarTitle({title: '无颜'});
+          self.load_page = 'cover_about_yourself';
+          break;
+        case 2:
+          wx.setNavigationBarTitle({title: '理想伴侣'});
+          self.load_page = 'cover_you_looking_for';
+          break;
+        case 3:
+          wx.setNavigationBarTitle({title: '爱之匹配'});
+          self.load_page = 'cover_answer_questions';
+          break;
+        case 4:
+          wx.switchTab({url: `/pages/love/shake`});
+          break;
+      }
+    } else {
+      this.load_page = 'index';
+      wx.setNavigationBarTitle({title: '无颜'});
+    }
     this.is_loaded = true;
     this.$apply();
     wx.hideLoading();
