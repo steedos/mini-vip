@@ -232,17 +232,21 @@
       }
     }
 
-    // 分享
-    onShareAppMessage(res) {
-      const name = this.$parent.globalData.user.name;
-      let title = this.$parent.globalData.title;
+    getSharePath(){
       let path = `pages/love/index?space_id=${this.space_id}`;
-      let imageUrl = `${baseMaterialUrl}love_share.jpg`;
       if(this.share_id){
         const userId = this.$parent.globalData.user._id;
         path += `&share_id=${this.share_id}`;
         path += `&share_from=${userId}`;
       }
+      return path;
+    }
+
+    // 分享
+    onShareAppMessage(res) {
+      let title = this.$parent.globalData.title;
+      let path = this.getSharePath();
+      let imageUrl = `${baseMaterialUrl}love_share.jpg`;
       return {
         title: title,
         path: path,
@@ -252,37 +256,48 @@
 
     methods = {
       async shareToFriendCircle(){
-        wx.showToast({
-          title: "敬请期待",
-          icon: "none"
+        wepy.showLoading({
+          title: '加载中',
+          mask: true
         });
-
-        // wepy.showLoading({
-        //   title: '加载中',
-        //   mask: true
-        // });
-        // let imageUrl = `${baseMaterialUrl}love_share.jpg`;
-        // this.friend_circle_image_url = imageUrl;
-        // // 这里写生成图片并显示在pop框中的逻辑
-        // wepy.hideLoading();
-        // this.showPop = true;
-        // this.$apply();
+        let imageUrl = `https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/love_share_qr.jpg`;
+        this.friend_circle_image_url = imageUrl;
+        // 这里写生成图片并显示在pop框中的逻辑
+        wepy.hideLoading();
+        this.showPop = true;
+        this.$apply();
       },
       closePop() {
         this.showPop = false;
         this.$apply();
       },
-      saveImageToPhotosAlbum(){
-        let imageUrl = `${baseMaterialUrl}love_share.jpg`;
-        wepy.saveImageToPhotosAlbum({
-          filePath: imageUrl,
-          success(res){
-            console.log("======success=============");
-          },
-          fail(res){
-            console.log("======fail=============");
-          }
+      async saveImageToPhotosAlbum(){
+        wepy.showLoading({
+          title: '下载中',
+          mask: true
         });
+        let imageUrl = this.friend_circle_image_url;
+        const imgRes = await wepy.downloadFile({
+          url: imageUrl
+        });
+        wepy.hideLoading();
+        const saveRes = await wepy.saveImageToPhotosAlbum({
+          filePath: imgRes.tempFilePath
+        }).catch((err)=>{
+          return false;
+        });
+        if(saveRes){
+          wepy.showToast({
+            title: "已保存至相册",
+            icon: "none"
+          });
+        }
+        else{
+          wepy.showToast({
+            title: "保存失败",
+            icon: "none"
+          });
+        }
       }
     }
   }
