@@ -99,6 +99,12 @@
       </repeat>
     </view>
     <view class="weui-cells">
+      <navigator class="weui-cell weui-cell_access" url="/pages/space/index?space_id={{space_id}}">
+        <view class="weui-cell__bd">
+          <view>关于</view>
+        </view>
+        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+      </navigator>
       <navigator class="weui-cell weui-cell_access" url="share?space_id={{space_id}}">
         <view class="weui-cell__bd">
           <view>转发无礼</view>
