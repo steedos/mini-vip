@@ -139,6 +139,11 @@
           padding-right:26px;
         }
 
+
+        .placeholder{
+          background-color: #e1e1e1;
+        }
+
         .question-body{
           position: relative;
           margin-bottom: 25px;
@@ -174,8 +179,8 @@
           }
 
           .selected{
-            background-color:@meBackground;
-            color: #FFFFFF;
+            background-color:#FFFFFF;
+            color: @meBackground;
           }
         }
       }
@@ -493,7 +498,8 @@
                 <repeat for="{{question.options_all}}" key="index" index="index" item="option">
                   <label class="weui-flex__item" @tap="clickMeAnswerItem">
                     <radio class="weui-check" value="{{option.value}}" checked="{{option.value === answer.me.value}}"/>
-                    <view class="placeholder">{{option.label}}</view>
+                    <view wx:if="{{option.value === answer.me.value}}" class="placeholder selected">{{option.label}}</view>
+                    <view wx:else class="placeholder">{{option.label}}</view>
                   </label>
                 </repeat>
               </radio-group>
