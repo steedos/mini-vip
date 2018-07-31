@@ -73,15 +73,6 @@
       </block>
     </view>
   </view>
-  <view wx:else>
-    <view class="loading-container">
-      <view class="loading"></view>
-    </view>
-  </view>
-
-  <!-- <view class="loading-container">
-      <view class="loading"></view>
-    </view> -->
 </template>
 
 <script>
@@ -96,7 +87,6 @@ import ComponentLookingFor from '@/components/cover_you_looking_for';
 
 export default class LoveIndex extends wepy.page {
   config = {
-    navigationBarBackgroundColor: '#66ceff',
     navigationBarTitleText: ''
   };
 
@@ -109,7 +99,7 @@ export default class LoveIndex extends wepy.page {
   };
 
   async onLoad (e) {
-    // wx.showLoading();
+    wx.showLoading();
     const self = this;
     if(!e.space_id){
       // 保证一进入就新建space对应的vip_customers记录
@@ -161,12 +151,8 @@ export default class LoveIndex extends wepy.page {
       wx.setNavigationBarTitle({title: '无颜'});
     }
     this.is_loaded = true;
-    wx.setNavigationBarColor({
-      frontColor: '#ffffff',
-      backgroundColor: '#353535',
-    })
     this.$apply();
-    // wx.hideLoading();
+    wx.hideLoading();
   }
 
   // 分享
