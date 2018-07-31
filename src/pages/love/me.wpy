@@ -147,6 +147,7 @@ export default class QuestionnaireList extends wepy.page {
   };
 
   async onLoad(e) {
+    wx.showLoading();
     if(!e.space_id){
       // 保证一进入就新建space对应的vip_customers记录
       e.space_id = loveSpaceId;
@@ -161,8 +162,6 @@ export default class QuestionnaireList extends wepy.page {
       });
     }
 
-    wx.showLoading();
-    await this.$parent.login();
     const setting = await wepy.getSetting();
     const user = this.$parent.globalData.user;
     if (user) {
