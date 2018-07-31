@@ -1,4 +1,7 @@
 <style lang="less" scoped>
+  .page{
+    padding-bottom: 20px!important;
+  }
   .questionnaire-list {
     .image {
       width: 100%;
