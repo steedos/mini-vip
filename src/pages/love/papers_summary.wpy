@@ -34,9 +34,12 @@
   </view>
   <view class="page__bd">
     <view class="answer-summary">
-      “无颜”正在努力匹配您的有缘人，匹配成功后，我们将短信通知到您，尽情期待。
+      “无颜”正在努力匹配您的有缘人，匹配成功后，我们将短信通知到您。
     </view>
-      <button class="btn-continue" @tap="continue">确定</button>
+    <view class="answer-summary">
+      想知道你们的兴趣爱好是否相同？试试补充其他资料，让你的匹配更加精准。
+    </view>
+    <button class="btn-continue" @tap="continue">确定</button>
   </view>
 </view>
 </template>
@@ -65,7 +68,7 @@ export default class PapersSummary extends wepy.page {
 
   methods = {
     continue(){
-      pageRouter['switchTab']({url: `/pages/love/shake?space_id=${this.space_id}`})
+      pageRouter.reLaunch({url: `/pages/love/me?space_id=${this.space_id}`})
     }
   }
 };
