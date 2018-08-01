@@ -162,7 +162,7 @@
  
   export default class LoveShare extends wepy.page {
 		config = {
-			navigationBarTitleText: '转发无礼'
+			navigationBarTitleText: '拯救单身狗'
     };
 
     wxs = {
