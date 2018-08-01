@@ -736,7 +736,12 @@
           <block wx:elif="{{question.type === 'selectCity'}}">
             <navigator class="weui-input weui-flex__item shadow" url="/pages/edit/city_select?key={{question.name}}" >
               <input name="{{question.name}}" value="{{questionsAnswer[question.name]}}" type="text" style="display: none"/>
-              {{questionsAnswer[question.name] || '请选择城市'}}
+              <block wx:if="{{questionsAnswer[question.name]}}">
+                {{questionsAnswer[question.name]}}
+              </block>
+              <block wx:else>
+                <view style="color:#999">请选择城市</view>
+              </block>
             </navigator>
             <!--<citySelect class="weui-input weui-flex__item shadow"></citySelect>-->
           </block>
