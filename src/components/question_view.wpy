@@ -1068,7 +1068,7 @@
       }
 
       if(!this.showOtherQuesion){
-        this.bottonText = '下一步';
+        this.bottonText = '下一题';
       }
 
       if(this.pendingQuesionKeys.length < 2){
