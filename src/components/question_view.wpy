@@ -94,7 +94,7 @@
             text-align: center;
             line-height: @height;
             padding-left: 10px;
-            padding-right: 15px;
+            padding-right: 10px;
             color: #FFFFFF;
             background-color: @meBackground;
             border-radius: @radius;
@@ -457,6 +457,11 @@
       justify-content:center;
       align-items:center;
     }
+
+    .edit{
+      margin-top: 0px;
+      text-align: center;
+    }
   }
 
 </style>
@@ -480,6 +485,9 @@
           <view class="answer-text">
             <view class="label">{{answer.me.label}}</view>
             <view class="trianglel"></view>
+            <view class="weui-cells__title edit">
+              编辑
+            </view>
           </view>
           <image class="avatar" src="{{userInfo.avatarUrl}}"></image>
         </view>
