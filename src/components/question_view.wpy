@@ -545,7 +545,7 @@
 
       <view class="question-section-other" wx:if="{{!showQuestionMe}}">
         <view class="weui-cells__title weui-flex user-other">
-          <image class="avatar" src="https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/avatar.png"></image>
+          <image class="avatar" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg"></image>
           <view class="weui-flex__item other">我喜欢的</view>
         </view>
         <view class="question-body">
