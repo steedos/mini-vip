@@ -65,6 +65,7 @@
     .jump-question{
       margin-left: 20%;
       margin-right: 20%;
+      color: #888;
     }
 
     .shadow{
@@ -94,7 +95,7 @@
             text-align: center;
             line-height: @height;
             padding-left: 10px;
-            padding-right: 15px;
+            padding-right: 10px;
             color: #FFFFFF;
             background-color: @meBackground;
             border-radius: @radius;
@@ -193,6 +194,7 @@
         .other{
           line-height: @height;
           padding-left: 10px;
+          color: #888;
         }
 
         .user-other{
@@ -257,9 +259,11 @@
           width: 100%;
           height: 45px;
           bottom: -30px;
-          color:#999FAA!important;
+          color:#888;
           .weui-footer__text{
             padding-top: 10px;
+            color:#888!important;
+            
           }
         }
       }
@@ -457,6 +461,12 @@
       justify-content:center;
       align-items:center;
     }
+
+    .edit{
+      margin-top: 0px;
+      text-align: center;
+      color: #888;
+    }
   }
 
 </style>
@@ -480,6 +490,9 @@
           <view class="answer-text">
             <view class="label">{{answer.me.label}}</view>
             <view class="trianglel"></view>
+            <view class="weui-cells__title edit">
+              编辑
+            </view>
           </view>
           <image class="avatar" src="{{userInfo.avatarUrl}}"></image>
         </view>
@@ -537,7 +550,7 @@
 
       <view class="question-section-other" wx:if="{{!showQuestionMe}}">
         <view class="weui-cells__title weui-flex user-other">
-          <image class="avatar" src="https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/avatar.png"></image>
+          <image class="avatar" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg"></image>
           <view class="weui-flex__item other">我喜欢的</view>
         </view>
         <view class="question-body">
@@ -728,7 +741,12 @@
           <block wx:elif="{{question.type === 'selectCity'}}">
             <navigator class="weui-input weui-flex__item shadow" url="/pages/edit/city_select?key={{question.name}}" >
               <input name="{{question.name}}" value="{{questionsAnswer[question.name]}}" type="text" style="display: none"/>
-              {{questionsAnswer[question.name] || '请选择城市'}}
+              <block wx:if="{{questionsAnswer[question.name]}}">
+                {{questionsAnswer[question.name]}}
+              </block>
+              <block wx:else>
+                <view style="color:#999">请选择城市</view>
+              </block>
             </navigator>
             <!--<citySelect class="weui-input weui-flex__item shadow"></citySelect>-->
           </block>
