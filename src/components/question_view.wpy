@@ -1248,6 +1248,10 @@
           this.pendingQuesionKeys.unshift(lastKey);
           this.answeredQuesionKeys = _.initial(this.answeredQuesionKeys);
           this.nextQuestion(true)
+
+          this.showQuestionMe = false;
+
+          this.$apply();
         }
       },
       switchChange: function (e) {
