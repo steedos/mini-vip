@@ -6,6 +6,14 @@
   right: 0;
   left: 0;
   background:#353535;
+  // .bg {
+  //   width: 100%;
+  //   height: 100%;
+  //   background: url(https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/loading1.gif);
+  //   background-position: center center;
+  //   background-repeat: no-repeat;
+  //   background-size: 120%;
+  // }
   .top {
     position: absolute;
     top: 0;
@@ -95,6 +103,7 @@
 
 <template>
   <view class="page page-shake">
+    <!-- <view class="bg"></view> -->
     <view class="border top-border" animation="{{topAnimationData}}"></view>
     <view class="border bottom-border" animation="{{bottomAnimationData}}"></view>
     <view class="top" animation="{{topAnimationData}}">
@@ -125,6 +134,10 @@ import { baseUrl } from '@/config';
 import { baseMaterialUrl } from '@/config';
 import { loveSpaceId } from '@/config';
 
+const X_THRESHOLD = 0.55;
+const Y_THRESHOLD = 0.18;
+const Z_THRESHOLD = 0.18;
+
 export default class LoveShake extends wepy.page {
   config = {
     navigationBarTitleText: '摇一摇'
@@ -150,7 +163,7 @@ export default class LoveShake extends wepy.page {
   };
 
   getDelFlag(current_x, old_x) {
-    return (Math.abs(current_x - old_x) >= 0.5);
+    return Math.abs(current_x - old_x);
   }
 
   setTopAnimation() {
@@ -242,16 +255,16 @@ export default class LoveShake extends wepy.page {
     const self = this;
 
     const shakeAudioContext = wx.createInnerAudioContext();
-    shakeAudioContext.obeyMuteSwitch = false;
-    shakeAudioContext.autoplay = true;
-    shakeAudioContext.stop();
-    shakeAudioContext.src = 'https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/摇一摇.mp3';
+    // shakeAudioContext.obeyMuteSwitch = true;
+    // shakeAudioContext.autoplay = true;
+    // shakeAudioContext.stop();
+    shakeAudioContext.src = 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/shake.mp3';
 
     const successAudioContext = wx.createInnerAudioContext();
-    successAudioContext.obeyMuteSwitch = false;
-    successAudioContext.autoplay = true;
-    successAudioContext.stop();
-    successAudioContext.src = 'https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/成功匹配.mp3'
+    // successAudioContext.obeyMuteSwitch = true;
+    // successAudioContext.autoplay = true;
+    // successAudioContext.stop();
+    successAudioContext.src = 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/success.mp3'
 
     wx.onAccelerometerChange(res => {
       var x = res.x.toFixed(4);
@@ -261,10 +274,6 @@ export default class LoveShake extends wepy.page {
       var flagY = self.getDelFlag(y, self.shakeData.y);
       var flagZ = self.getDelFlag(z, self.shakeData.z);
 
-      console.log(x, self.shakeData.x, flagX)
-      // console.log(y, self.shakeData.y, flagY)
-      // console.log(z, self.shakeData.z, flagZ)
-
       self.shakeData = {
         x: x,
         y: y,
@@ -273,7 +282,7 @@ export default class LoveShake extends wepy.page {
 
       const user_id = this.$parent.globalData.user._id;
 
-      if (flagX) {
+      if (flagX >= X_THRESHOLD && flagY >= Y_THRESHOLD && flagZ >= Z_THRESHOLD) {
         if (!self.isLoading) {
           const user_id = self.$parent.globalData.user._id;
           shakeAudioContext.play();
