@@ -84,6 +84,9 @@
           <view class="weui-cell__bd">
             <view>{{naire.label}}</view>
           </view>
+          <view wx:if="{{progress[naire.object_name]}}" class="weui-cell__ft" style="padding-right: 13px">
+            <icon type="success_no_circle" size="14"></icon>
+          </view>
           <view class="weui-cell__ft weui-cell__ft_in-access"></view>
         </navigator>
       </repeat>
@@ -107,7 +110,7 @@
       </navigator>
       <navigator class="weui-cell weui-cell_access" url="share?space_id={{space_id}}">
         <view class="weui-cell__bd">
-          <view>转发无礼</view>
+          <view>拯救单身狗</view>
         </view>
         <view class="weui-cell__ft weui-cell__ft_in-access"></view>
       </navigator>
@@ -140,11 +143,17 @@ export default class QuestionnaireList extends wepy.page {
       label: '体重', value: '80'
     }],
     questionnaire:[{
-      label: '关于我', url: `/pages/love/papers_view?object_name=love_about_me&space_id=${loveSpaceId}&required=true`
+      label: '关于我', 
+      url: `/pages/love/papers_view?object_name=love_about_me&space_id=${loveSpaceId}&required=true`,
+      object_name: 'love_about_me'
     },{
-      label: '我喜欢的', url: `/pages/love/papers_view?object_name=love_looking_for&space_id=${loveSpaceId}`
+      label: '我喜欢的',
+      url: `/pages/love/papers_view?object_name=love_looking_for&space_id=${loveSpaceId}`,
+      object_name: 'love_looking_for'
     },{
-      label: '交友问答', url: `/pages/love/papers_view?object_name=love_answer&space_id=${loveSpaceId}`
+      label: '交友问答',
+      url: `/pages/love/papers_view?object_name=love_answer&space_id=${loveSpaceId}`,
+      object_name: 'love_answer'
     }],
     other_questionnaire: [{
       label: '兴趣爱好', url: `/pages/love/papers_view?object_name=love_hobby&space_id=${loveSpaceId}`
@@ -152,8 +161,29 @@ export default class QuestionnaireList extends wepy.page {
       label: '教育经历', url: `../record/list?space_id=${loveSpaceId}&object_name=love_educational_experience`
     },{
       label: '工作经历', url: `../record/list?space_id=${loveSpaceId}&object_name=love_work_experience`
-    }]
+    }],
+    progress: {}
   };
+
+  async getProgress(object_name) {
+    const object = await this.$parent.getObject(object_name);
+    const user_id = this.$parent.globalData.user._id;
+    const space_id = this.space_id;
+    const fields = Object.keys(object.fields);
+    const options = {
+      $filter: `owner eq '${user_id}'`,
+    }
+    const res = await this.$parent.query(object_name, options, space_id);
+    if (res && res.value && res.value[0]) {
+      const result = res.value[0];
+      return fields.every(key =>{
+        // 对'是否重要类型字段进行过滤, eg:astrological_i'
+        return result[key] != undefined || /^\w+(_i)$/.test(key)
+      })
+    } else {
+      return false;
+    }
+  }
 
   async onLoad(e) {
     wx.showLoading();
@@ -186,13 +216,28 @@ export default class QuestionnaireList extends wepy.page {
     wx.hideLoading();
   }
 
-  onShow() {
+  async onShow() {
+    wx.showLoading();
     const user = this.$parent.globalData.user;
     if (user) {
       this.name = user.name || '未登录';
       this.mobile = user.mobile;
       this.$apply();
     }
+    
+    const progress_love_about_me = await this.getProgress('love_about_me');
+    const progress_love_looking_for = await this.getProgress('love_looking_for');
+    const progress_love_answer = await this.getProgress('love_answer');
+
+    this.progress = {
+      love_about_me: progress_love_about_me,
+      love_looking_for: progress_love_looking_for,
+      love_answer: progress_love_answer
+    }
+
+    this.$apply()
+    wx.hideLoading();
+    // console.log('[progress]', progress_love_about_me, progress_love_looking_for, progress_love_answer)
   }
 
   methods = {
