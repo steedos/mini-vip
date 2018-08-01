@@ -147,7 +147,7 @@ export default class QuestionnaireList extends wepy.page {
       url: `/pages/love/papers_view?object_name=love_about_me&space_id=${loveSpaceId}&required=true`,
       object_name: 'love_about_me'
     },{
-      label: '我喜欢的',
+      label: '理想伴侣',
       url: `/pages/love/papers_view?object_name=love_looking_for&space_id=${loveSpaceId}`,
       object_name: 'love_looking_for'
     },{

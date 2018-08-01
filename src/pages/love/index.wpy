@@ -157,7 +157,7 @@ export default class LoveIndex extends wepy.page {
           self.load_page = 'cover_you_looking_for';
           break;
         case 3:
-          wx.setNavigationBarTitle({title: '爱之匹配'});
+          wx.setNavigationBarTitle({title: '交友问答'});
           self.load_page = 'cover_answer_questions';
           break;
         case 4:

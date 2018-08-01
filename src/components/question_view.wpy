@@ -551,7 +551,7 @@
       <view class="question-section-other" wx:if="{{!showQuestionMe}}">
         <view class="weui-cells__title weui-flex user-other">
           <image class="avatar" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg"></image>
-          <view class="weui-flex__item other">我喜欢的</view>
+          <view class="weui-flex__item other">理想伴侣</view>
         </view>
         <view class="question-body">
           <block wx:if="{{question.options_all.length > 4}}">

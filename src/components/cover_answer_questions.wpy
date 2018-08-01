@@ -31,11 +31,13 @@ page {
 <template>
   <view class="page">
     <view class="page__hd">
-      <view class="love-title">爱之匹配</view>
+      <view class="love-title">交友问答</view>
     </view>
     <view class="page__bd">
-      <view class="love-summary">打磨出一半的自己，去寻找适合的另一半</view>
-      <button class="btn-join" @tap="next">继续</button>
+      <view class="love-summary">
+        请耐心回答问卷，“无颜”的双向匹配算法将为你找到更适合的人。
+      </view>
+      <button class="btn-join" @tap="next">下一步</button>
     </view>
   </view>
 </template>
