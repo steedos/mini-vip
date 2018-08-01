@@ -143,7 +143,7 @@
     </view>
     <view class="share-friend-circle-box">
       <view class="share-friend-circle-title">保存图片分享到朋友圏</view>
-      <image class="image" mode="widthFix" src="{{friend_circle_image_url}}"/>
+      <image class="image" mode="widthFix" src="{{friend_circle_image_url}}" @load="friendCircleImageLoaded" @error="friendCircleImageLoadFailed"/>
       <button type="primary" class="btn-save-image" @tap="saveImageToPhotosAlbum">
         保存图片
       </button>
@@ -264,9 +264,6 @@
     }
 
     async generateFriendCircleImage() {
-      if(this.friend_circle_image_url){
-        return;
-      }
       let path = this.getSharePath();
       console.log("path========================", path);
       path = "pages/love/index";
@@ -330,19 +327,45 @@
           destHeight:height,
           canvasId: 'myCanvas',
           fileType: 'jpeg'
+        }).catch((err)=>{
+          return false;
         });
         console.log("res.tempFilePath================", res.tempFilePath);
-        self.friend_circle_image_url = res.tempFilePath
-        self.$apply()
+        if(res){
+          self.friend_circle_image_url = res.tempFilePath;
+          self.$apply();
+        }
+        else{
+          wepy.showToast({
+            title: "生成图片失败，请再试一次",
+            icon: "none"
+          });
+        }
       });
       this.$apply();
     }
 
     methods = {
       async shareToFriendCircle(){
-        await this.generateFriendCircleImage();
+        if(this.friend_circle_image_url){
+          this.showPop = true;
+          this.$apply();
+        }else{
+          await this.generateFriendCircleImage();
+        }
+      },
+      friendCircleImageLoaded(){
+        console.log("==========friendCircleImageLoaded====1======");
         this.showPop = true;
         this.$apply();
+      },
+      friendCircleImageLoadFailed(){
+        console.log("==========friendCircleImageLoadFailed======2====");
+        this.friend_circle_image_url = "";
+        wepy.showToast({
+          title: "图片加载失败，请再试一次",
+          icon: "none"
+        });
       },
       closePop() {
         this.showPop = false;
