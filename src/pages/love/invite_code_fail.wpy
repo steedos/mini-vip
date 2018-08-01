@@ -12,7 +12,7 @@
         </view>
         <view class="weui-msg__text-area">
             <view class="weui-msg__title">操作失败</view>
-            <view class="weui-msg__desc">激活码不存在或者已经过期</view>
+            <view class="weui-msg__desc">邀请码不存在或者已经过期</view>
         </view>
         <view class="weui-msg__opr-area">
             <view class="weui-btn-area">
