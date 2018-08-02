@@ -1186,7 +1186,7 @@
           product.count = this.count;
           product = JSON.stringify(product);
           wx.navigateTo({
-            url: `../cart/checkout?product=${product}`
+            url: `../cart/checkout?product=${product}&space_id=${this.space_id}`
           })
         } else {
           this.showPop = true;
