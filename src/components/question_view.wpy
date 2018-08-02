@@ -727,7 +727,7 @@
             </block>
           </block>
           <block wx:elif="{{question.type === 'date'}}">
-            <picker mode="date" value="{{questionsAnswer[question.name]}}" name="{{question.name}}" bindchange="bindDateChange">
+            <picker mode="date" value="{{question.value}}" name="{{question.name}}" bindchange="bindDateChange">
               <view class="weui-input shadow">{{util.formatDate(questionsAnswer[question.name], '', 'date')}}</view>
             </picker>
           </block>
@@ -787,6 +787,8 @@
   const OTHER = '_o';
   const IMPORTANT = '_i';
   const RANGE = '_max';
+
+  const utilJs = require('../utils/util.js');
 
   export default class QuestionView extends wepy.component {
 
@@ -987,7 +989,14 @@
               }
             })
           }else{
-            question.value = this.questionsAnswer[key];
+            if(question.type === 'date'){
+              if(this.questionsAnswer[key]){
+                question.value = utilJs.formatDate(new Date(this.questionsAnswer[key]), '-');
+              }
+            }else{
+              question.value = this.questionsAnswer[key];
+            }
+
           }
 
           questions[key] = question;
