@@ -125,7 +125,7 @@
     <view class="border bottom-border" animation="{{bottomAnimationData}}"></view>
     <block wx:if="{{noMatching}}">
       <view class="result">
-        <view class="fail-info">千万人之中，两个人相遇的概率是0.00053，本周有缘人已与你擦肩而过，请期待下周的匹配。</view>
+        <view class="fail-info">茫茫人海中，相爱的概率只有0.00053。本周有缘人与你擦肩而过，请期待下周的邂逅。</view>
       </view>
     </block>
     <view class="top" animation="{{topAnimationData}}">
