@@ -1,31 +1,19 @@
 <style lang="less">
   page{
+    height: 100%;
+  }
+  .page.love{
     background-color: #fff;
+    height: 100%;
   }
-  button[type=primary][plain] {
-    color:#fff;
-    background-color:#1aad19;
-    position:absolute;
-    bottom:25%;
-    width:580rpx;
-    left:50%;
-    margin-left:-290rpx;
-
-  }
-  .container-title{
-    padding-bottom:10px;
-    font-size:20px;
-    font-weight:bold;
-  }
-
   .phone-login{
     .user-avatar{
-      width:90px;
-      height:90px;
+      width:60px;
+      height:60px;
       border-radius:3px;
       overflow:hidden;
       position:relative;
-      margin: 140rpx auto 0 auto;
+      margin: 12px 10px 0 14px;
     }
 
     .user-phone{
@@ -44,10 +32,32 @@
       color: #808080;
     }
   }
+  .other{
+    button[type=primary][plain] {
+      color:#fff;
+      background-color:#1aad19;
+      position:absolute;
+      bottom:25%;
+      width:580rpx;
+      left:50%;
+      margin-left:-290rpx;
+
+    }
+    .container-title{
+      padding-bottom:10px;
+      font-size:20px;
+      font-weight:bold;
+    }
+    .user-avatar{
+      width:90px;
+      height:90px;
+      margin: 140rpx auto 0 auto;
+    }
+  }
 </style>
 
 <template>
-  <view class="page phone-login">
+  <view class="page phone-login {{phoneLoginShowNickName ? '' : 'love'}}">
     <view class="weui-toptips weui-toptips_warn" wx:if="{{showTopTips}}">{{message}}</view>
     <view class="page__hd"></view>
     <view class="page__bd page__bd_spacing">
@@ -91,7 +101,7 @@
         </view>
       </block>
       <block wx:else>
-        <view class="container">
+        <view class="container other">
           <view class="weui-media-box__hd weui-media-box__hd_in-appmsg user-avatar">
             <image class="weui-media-box__thumb avatar" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/noface144.png"></image>
           </view>
