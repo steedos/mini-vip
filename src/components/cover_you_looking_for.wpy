@@ -16,7 +16,12 @@ page {
   .love-summary {
     color: #fff;
     font-size: 45rpx;
-    margin-bottom: 100rpx;
+    margin-bottom: 50rpx;
+  }
+  .love-attention{
+    color: #999;
+    font-size:15px;
+    margin-bottom:50rpx;
   }
 }
 .btn-join {
@@ -31,14 +36,14 @@ page {
 <template>
   <view class="page">
     <view class="page__hd">
-      <view class="love-title">遇见对的人</view>
+      <view class="love-title">只遇见对的人</view>
     </view>
     <view class="page__bd">
       <view class="love-summary">
-        请告诉我们你心目中的Ta，
-        “无颜”将为你匹配最符合要求的人。
+        请填写你的筛选条件，
+        “无颜”只会为你匹配符合要求的人。
         </view>
-      <view>以下内容所有人无法查看</view>
+      <view  class="love-attention">你的筛选条件所有人均无法查看</view>
 
       <button class="btn-join" @tap="next">下一步</button>
     </view>

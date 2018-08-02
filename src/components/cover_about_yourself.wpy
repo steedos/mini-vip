@@ -16,7 +16,12 @@ page {
   .love-summary {
     color: #fff;
     font-size: 45rpx;
-    margin-bottom: 100rpx;
+    margin-bottom: 50rpx;
+  }
+  .love-attention{
+    color: #999;
+    font-size:15px;
+    margin-bottom:50rpx;
   }
 }
 .btn-join {
@@ -35,7 +40,7 @@ page {
     </view>
     <view class="page__bd">
       <view class="love-summary">请填写你的真实资料，“无颜”才能为你匹配到更喜欢你的人。</view>
-      <view>以下内容只有匹配对象可见</view>
+      <view class="love-attention">匹配成功后，对方可以看到你的资料。</view>
       <button class="btn-join" @tap="next">下一步</button>
     </view>
   </view>

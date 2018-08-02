@@ -1,4 +1,4 @@
-<style lang="less">
+  <style lang="less">
 page {
   background: #353535;
 }
@@ -16,7 +16,12 @@ page {
   .love-summary {
     color: #fff;
     font-size: 45rpx;
-    margin-bottom: 100rpx;
+    margin-bottom: 50rpx;
+  }
+  .love-attention{
+    color: #999;
+    font-size:15px;
+    margin-bottom:50rpx;
   }
 }
 .btn-join {
@@ -35,8 +40,9 @@ page {
     </view>
     <view class="page__bd">
       <view class="love-summary">
-        请耐心回答问卷，“无颜”的双向匹配算法将为你找到更适合的人。
+        请填写以下交友问卷，“无颜”将根据你的回答为你找到匹配度最高的人。
       </view>
+      <view  class="love-attention">你回答的越认真，“无颜”匹配的越精准。</view>
       <button class="btn-join" @tap="next">下一步</button>
     </view>
   </view>
