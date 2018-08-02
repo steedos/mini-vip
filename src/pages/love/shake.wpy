@@ -73,13 +73,30 @@
 
   .result {
     position: absolute;
-    bottom: 100rpx;
+    top: 80rpx;
+    color: #a1a1a1;
+    z-index:100;
+    left: 30rpx;
+    right: 30rpx;
+    padding: 30rpx;
+    border-radius: 0.25rem;
+    display: flex;
+    flex-direction: row;
+    .fail-info {
+      flex: 1;
+      text-align: center;
+    }
+  }
+
+  .tips, .success-result {
+    position: absolute;
+    bottom: 80rpx;
     background: #46494f;
     color: #a1a1a1;
     border:1px solid #191919;
     z-index:100;
-    left: 60rpx;
-    right: 60rpx;
+    left: 30rpx;
+    right: 30rpx;
     padding: 30rpx;
     border-radius: 0.25rem;
     display: flex;
@@ -93,7 +110,7 @@
         height: 100%;
       }
     }
-    .fail-info {
+    .tips-info {
       flex: 1;
       text-align: center;
     }
@@ -106,6 +123,11 @@
     <!-- <view class="bg"></view> -->
     <view class="border top-border" animation="{{topAnimationData}}"></view>
     <view class="border bottom-border" animation="{{bottomAnimationData}}"></view>
+    <block wx:if="{{noMatching}}">
+      <view class="result">
+        <view class="fail-info">千万人之中，两个人相遇的概率是0.00053，本周有缘人已与你擦肩而过，请期待下周的匹配。</view>
+      </view>
+    </block>
     <view class="top" animation="{{topAnimationData}}">
       <view class="top-shake-container"></view>
     </view>
@@ -113,7 +135,7 @@
       <view class="bottom-shake-container"></view>
     </view>
     <block wx:if="{{matching}}">
-      <view class="result">
+      <view class="success-result">
         <view class="avatar-container">
           <image class="avatar" mode="aspectFill" src="https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/avatar.png"></image>
         </view>
@@ -121,8 +143,8 @@
       </view>
     </block>
     <block wx:if="{{noMatching}}">
-      <view class="result">
-        <view class="fail-info">本周有缘人已与你擦肩而过，请静待下周的邂逅。</view>
+      <view class="tips">
+        <view class="tips-info">{{tips[tipsIndex % 3]}}</view>
       </view>
     </block>
   </view>
@@ -159,7 +181,13 @@ export default class LoveShake extends wepy.page {
       y: 0,
       z: 0
     },
-    isLoading: false
+    isLoading: false,
+    tips: [
+      '你与有缘人的距离，也许只隔了一个共同好友，让更多的朋友加入“无颜”吧。',
+      '你习惯向左走，我习惯向右走，却始终不曾相遇。邀请更多好友匹配，也许缘分就在你的身边。',
+      '我们生活在同一个城市，但从不认识彼此。邀请更多朋友加入“无颜”交友吧。'
+    ],
+    tipsIndex: 0
   };
 
   getDelFlag(current_x, old_x) {
@@ -310,6 +338,7 @@ export default class LoveShake extends wepy.page {
             } else {
               setTimeout(() => {
                 console.log('===============noMatching', self.noMatching)
+                self.tipsIndex = self.tipsIndex + 1;
                 self.noMatching = true;
                 self.$apply();
               }, 1100);
