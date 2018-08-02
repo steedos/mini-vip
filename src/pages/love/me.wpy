@@ -152,9 +152,13 @@ export default class QuestionnaireList extends wepy.page {
       url: `/pages/love/papers_view?object_name=love_looking_for&space_id=${loveSpaceId}`,
       object_name: 'love_looking_for'
     },{
-      label: '问答匹配',
+      label: '问答匹配 (百合卷)',
       url: `/pages/love/papers_view?object_name=love_answer&space_id=${loveSpaceId}`,
       object_name: 'love_answer'
+    },{
+      label: '问答匹配 (玫瑰卷)',
+      url: `/pages/love/papers_view?object_name=love_answer2&space_id=${loveSpaceId}`,
+      object_name: 'love_answer2'
     }],
     other_questionnaire: [{
       label: '兴趣爱好匹配', url: `/pages/love/papers_view?object_name=love_hobby&space_id=${loveSpaceId}`
