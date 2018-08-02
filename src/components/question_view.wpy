@@ -1048,7 +1048,7 @@
     }
 
     nextQuestion(init){
-      this.submitDisabled = false;
+      this.submitDisabled = true;
       this.$apply();
 
       this.showError = false;
