@@ -41,7 +41,7 @@
         </view>
       </view>
       <view class="weui-cells">
-        <view class="weui-cell weui-cell_input">
+        <view class="weui-cell weui-cell_input" wx:if="{{phoneLoginShowNickName}}">
           <view class="weui-cell__hd">
             <view class="weui-label">名称</view>
           </view>
@@ -79,6 +79,7 @@
 <script>
   import wepy from 'wepy';
   import req from '@/network';
+  import { phoneLoginShowNickName, phoneLoginShowNickName2 } from '@/config'
 
   export default class phoneNumberLogin extends wepy.page {
 
@@ -94,10 +95,14 @@
       nickName: '',
       avatarUrl: '',
       gender:'',
-      canIUse: wx.canIUse('button.open-type.getUserInfo')
+      canIUse: wx.canIUse('button.open-type.getUserInfo'),
+      phoneLoginShowNickName: false
     };
 
     async onLoad(e){
+
+      this.phoneLoginShowNickName = phoneLoginShowNickName;
+
       this.from = decodeURIComponent(e.from);
       if (e.to) {
         this.to = decodeURIComponent(e.to);
@@ -167,11 +172,12 @@
         this.$apply();
       },
       async phoneLogin(){
-
-        if(!this.nickName){
-          this.showTopTips = true;
-          this.message = '请填写名称';
-          return;
+        if(this.phoneLoginShowNickName){
+          if(!this.nickName){
+            this.showTopTips = true;
+            this.message = '请填写名称';
+            return;
+          }
         }
 
         if(!this.phoneNumber){

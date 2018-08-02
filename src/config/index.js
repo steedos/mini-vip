@@ -8,3 +8,4 @@ export const appId = 'wx033a2ed30bf98cc2';
 export const baseMaterialUrl = 'https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/';
 export const loveSpaceId = 'Lnre96ro35Wf9b3gA';
 export const txMapsKey = 'GJOBZ-YSX66-K3SSM-E3MJM-IWPRV-BFFIO';
+export const phoneLoginShowNickName = false;

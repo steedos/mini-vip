@@ -58,7 +58,7 @@
       <block wx:if="{{isAuthUserInfo}}">
         <view class="weui-media-box weui-media-box_appmsg">
           <view class="weui-media-box__hd weui-media-box__hd_in-appmsg" style="width: 50px; height: 50px; line-height: 50px;">
-            <image class="image" mode="aspectFill" wx:if="{{isAuthUserInfo}}" src="{{userInfo.avatarUrl}}"></image>
+            <image class="image" mode="aspectFill" wx:if="{{isAuthUserInfo}}" src="{{avatar || userInfo.avatarUrl}}"></image>
           </view>
           <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
             <view class="weui-media-box__title">
@@ -132,6 +132,7 @@ export default class QuestionnaireList extends wepy.page {
   data = {
     space_id: null,
     name: '',
+    avatar: '',
     userInfo: null,
     is_loaded: false,
     isAuthUserInfo: false,
@@ -143,7 +144,7 @@ export default class QuestionnaireList extends wepy.page {
       label: '体重', value: '80'
     }],
     questionnaire:[{
-      label: '关于我', 
+      label: '关于我',
       url: `/pages/love/papers_view?object_name=love_about_me&space_id=${loveSpaceId}&required=true`,
       object_name: 'love_about_me'
     },{
@@ -204,7 +205,9 @@ export default class QuestionnaireList extends wepy.page {
     const setting = await wepy.getSetting();
     const user = this.$parent.globalData.user;
     if (user) {
-      this.name = user.name || '未登录'
+      this.isAuthUserInfo = true;
+      this.name = user.name || '未命名';
+      this.avatar = user.avatar || 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg';
     };
     if (setting.authSetting['scope.userInfo']) {
       this.isAuthUserInfo = true;
@@ -224,7 +227,7 @@ export default class QuestionnaireList extends wepy.page {
       this.mobile = user.mobile;
       this.$apply();
     }
-    
+
     const progress_love_about_me = await this.getProgress('love_about_me');
     const progress_love_looking_for = await this.getProgress('love_looking_for');
     const progress_love_answer = await this.getProgress('love_answer');

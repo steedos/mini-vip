@@ -444,6 +444,7 @@ export default class VIP extends wepy.app {
       globalData.user.mobile = res.mobile
       globalData.user.sex = res.sex
       globalData.user.birthdate = res.birthdate
+      globalData.user.avatar = res.avatar
       globalData.my_spaces = res.my_spaces
       globalData.my_customers = res.my_customers
       console.log("===============login============globalData.my_customers", globalData.my_customers);

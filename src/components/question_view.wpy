@@ -494,14 +494,14 @@
               编辑
             </view>
           </view>
-          <image class="avatar" src="{{userInfo.avatarUrl}}"></image>
+          <image class="avatar" src="{{me_avatar}}"></image>
         </view>
       </view>
 
       <view class="question-section-me" wx:else>
         <view class="weui-cell__ft weui-cells__title weui-flex user-me">
           <view class="weui-flex__item me">你</view>
-          <image class="avatar" src="{{userInfo.avatarUrl}}"></image>
+          <image class="avatar" src="{{me_avatar}}"></image>
         </view>
         <view class="question-body">
           <block wx:if="{{question.options_all.length > 4}}">
@@ -819,10 +819,7 @@
           await this.$parent.$parent.login()
           const setting = await wepy.getSetting();
           const user = this.$parent.$parent.globalData.user;
-          if (setting.authSetting['scope.userInfo']) {
-            this.userInfo = this.$parent.$parent.globalData.userInfo;
-          }
-
+          this.me_avatar = user.avatar || 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg';
 
           const spaceId = newValue.space_id;
 
@@ -997,7 +994,7 @@
 
     data = {
       loading: true,
-      userInfo: null,
+      me_avatar: '',
       object_name: 'love_answer',
       questionKeys: [],
       pendingQuesionKeys: [],
