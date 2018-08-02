@@ -143,7 +143,7 @@
       </view>
     </block>
     <block wx:if="{{noMatching}}">
-      <view class="tips">
+      <view class="tips" @tap="share">
         <view class="tips-info">{{tips[tipsIndex % 3]}}</view>
       </view>
     </block>
@@ -372,6 +372,12 @@ export default class LoveShake extends wepy.page {
     };
   }
 
-  methods = {};
+  methods = {
+    share() {
+      wx.navigateTo({
+        url: `/pages/love/share?space_id=${this.space_id}`
+      })
+    }
+  };
 }
 </script>
