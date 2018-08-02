@@ -263,7 +263,7 @@
           .weui-footer__text{
             padding-top: 10px;
             color:#888!important;
-            
+
           }
         }
       }
@@ -861,6 +861,8 @@
             }, spaceId);
           }
 
+//          this.values = JSON.parse(JSON.stringify(result.value[0] || {}));
+
           this.questionsAnswer = result.value[0] || {};
 
           this.questions = this.getQuestions(object.fields);
@@ -1080,7 +1082,7 @@
             }
           }),
           other: answer_other,
-          important: this.questionsAnswer[q_name + IMPORTANT]
+          important: this.questionsAnswer[q_name + IMPORTANT] === 2
         };
         this.showQuestionMe = true;
       }
@@ -1141,10 +1143,13 @@
         }
 
         if(q.showImportant){
-          qa[q.name + IMPORTANT] = answer.important;
-
+          if(answer.important){
+            qa[q.name + IMPORTANT] = 2;
+          }else{
+            qa[q.name + IMPORTANT] = 1;
+          }
           if(answer.other.length === q.options_all.length){
-            qa[q.name + IMPORTANT] = false;
+            qa[q.name + IMPORTANT] = 0;
           }
         }
 
@@ -1159,7 +1164,15 @@
         this.answer.other = [];
         this.$apply();
       },
-      goNext: function () {
+      goNext: async function () {
+        const q = this.question;
+        const questionsAnswer = this.questionsAnswer;
+        if(q.showImportant && !questionsAnswer[q.name]){
+          const o = {};
+          o[q.name + IMPORTANT] = -1;
+          await this.updateAnswer(o);
+        }
+
         this.nextQuestion()
       },
       closeBigSelect: function () {
