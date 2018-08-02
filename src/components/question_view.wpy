@@ -621,7 +621,7 @@
         </view>
       </view>
 
-      <button class="weui-btn submit" type="primary" @tap="submit" wx:if="{{answer.other.length > 0}}">{{bottonText}}</button>
+      <button class="weui-btn submit" type="primary" @tap="submit" wx:if="{{answer.other.length > 0}}" disabled="{{submitDisabled}}">{{bottonText}}</button>
 
       <view class="big-bang-select big-select" wx:if="{{showBigSelect}}">
         <view class="name">
@@ -770,7 +770,7 @@
           <view class="weui-footer__text weui-flex__item" @tap.stop="questionBack" wx:if="{{answeredQuesionKeys.length > 0}}">上一题</view> <view class="weui-footer__text weui-flex__item" @tap="goNext" wx:if="{{!globalRequired && !question.required}}">跳过此题</view>
         </view>
 
-        <button class="weui-btn submit" type="primary" form-type="submit" hover-class='button-hover'>{{bottonText}}</button>
+        <button class="weui-btn submit" type="primary" form-type="submit" hover-class='button-hover' disabled="{{submitDisabled}}">{{bottonText}}</button>
 
       </form>
     </view>
@@ -1027,7 +1027,7 @@
       progress: '0%',
       questionsAnswer: {},
       showBigSelect: false,
-      submitDisabled: false,
+      submitDisabled: true,
       bottonText: '提交',
       fieldErrorMSG: '',
       showError: false,
@@ -1115,6 +1115,9 @@
       }
 //      console.log('this.answer', this.answer);
 //      console.log('this.question', this.question);
+
+      this.submitDisabled = false;
+
       this.$apply()
     }
 
