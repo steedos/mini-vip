@@ -1084,7 +1084,12 @@
           other: answer_other,
           important: this.questionsAnswer[q_name + IMPORTANT] === 2
         };
-        this.showQuestionMe = true;
+        if(this.answer.me){
+          this.showQuestionMe = false;
+        }else{
+          this.showQuestionMe = true;
+        }
+
       }
 
       if(!this.showOtherQuesion){
@@ -1278,11 +1283,7 @@
           const lastKey = _.last(this.answeredQuesionKeys);
           this.pendingQuesionKeys.unshift(lastKey);
           this.answeredQuesionKeys = _.initial(this.answeredQuesionKeys);
-          this.nextQuestion(true)
-
-          this.showQuestionMe = false;
-
-          this.$apply();
+          this.nextQuestion(true);
         }
       },
       switchChange: function (e) {
