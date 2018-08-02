@@ -1,15 +1,31 @@
 <style lang="less">
+  page{
+    background-color: #fff;
+  }
+  button[type=primary][plain] {
+    color:#fff;
+    background-color:#1aad19;
+    position:absolute;
+    bottom:25%;
+    width:580rpx;
+    left:50%;
+    margin-left:-290rpx;
+
+  }
+  .container-title{
+    padding-bottom:10px;
+    font-size:20px;
+    font-weight:bold;
+  }
+
   .phone-login{
     .user-avatar{
-      width:60px;
-      height:60px;
+      width:90px;
+      height:90px;
       border-radius:3px;
       overflow:hidden;
       position:relative;
-      margin:12px 10px 0 14px;
-    }
-    .user-name{
-
+      margin: 140rpx auto 0 auto;
     }
 
     .user-phone{
@@ -79,9 +95,9 @@
           <view class="weui-media-box__hd weui-media-box__hd_in-appmsg user-avatar">
             <image class="weui-media-box__thumb avatar" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/noface144.png"></image>
           </view>
-          <view style="padding-top: 10px; padding-bottom: 10px">无颜</view>
+          <view class="container-title">无颜</view>
           <view class="user-phone" style="margin-top: 0px">
-            <button class="weui-btn" type="primary" plain="true" open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumberAndLogin">授权并登录</button>
+            <button class="weui-btn" type="primary" plain="true" open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumberAndLogin">使用微信账户登录</button>
           </view>
         </view>
       </block>
@@ -97,7 +113,7 @@
   export default class phoneNumberLogin extends wepy.page {
 
     config = {
-      navigationBarTitleText: '账户登录',
+      navigationBarTitleText: '登录',
     };
 
     data = {
