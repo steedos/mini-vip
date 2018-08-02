@@ -276,11 +276,27 @@
         }
       }
 
-      .submit{
-        width: 100%;
+      .love_question_button{
+        width: 50px;
         position: absolute;
         bottom: 0px;
+        left: 0px;
         border-radius: 0px;
+        height:50px;
+        z-index: 100;
+        .love_question_back {
+          margin: 10px;
+
+        }
+      }
+
+      .submit{
+        left: 0px;
+        position: absolute;
+        bottom: 0px;
+        right: 0px;
+        border-radius: 0px;
+        height:50px;
       }
 
       .big-bang-select{
@@ -551,7 +567,7 @@
           </block>
         </view>
         <view class="weui-footer jump-question weui-flex" wx:if="{{!question.required && !loading}}">
-          <view class="weui-footer__text weui-flex__item" @tap.stop="questionBack" wx:if="{{answeredQuesionKeys.length > 0}}">上一题</view> <view class="weui-footer__text weui-flex__item" @tap="goNext">跳过此题</view>
+          <view class="weui-footer__text weui-flex__item" @tap="goNext">跳过此题</view>
         </view>
       </view>
 
@@ -620,7 +636,9 @@
           </view>
         </view>
       </view>
-
+      <view  class="love_question_button" @tap.stop="questionBack"  wx:if="{{answeredQuesionKeys.length > 0}}">
+        <view class="love_question_back slds-icon slds-icon--small slds-m-right--x-small"></view>
+      </view>  
       <button class="weui-btn submit" type="primary" @tap="submit" wx:if="{{answer.other.length > 0}}" disabled="{{submitDisabled}}">{{bottonText}}</button>
 
       <view class="big-bang-select big-select" wx:if="{{showBigSelect}}">
@@ -767,7 +785,7 @@
         </view>
 
         <view class="weui-footer jump-question weui-flex" wx:if="{{!loading}}">
-          <view class="weui-footer__text weui-flex__item" @tap.stop="questionBack" wx:if="{{answeredQuesionKeys.length > 0}}">上一题</view> <view class="weui-footer__text weui-flex__item" @tap="goNext" wx:if="{{!globalRequired && !question.required}}">跳过此题</view>
+          <view class="weui-footer__text weui-flex__item" @tap="goNext" wx:if="{{!globalRequired && !question.required}}">跳过此题</view>
         </view>
 
         <button class="weui-btn submit" type="primary" form-type="submit" hover-class='button-hover' disabled="{{submitDisabled}}">{{bottonText}}</button>
