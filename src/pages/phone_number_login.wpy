@@ -118,7 +118,7 @@
 <script>
   import wepy from 'wepy';
   import req from '@/network';
-  import { phoneLoginShowNickName, phoneLoginShowNickName2 } from '@/config'
+  import { phoneLoginShowNickName} from '@/config'
 
   export default class phoneNumberLogin extends wepy.page {
 
