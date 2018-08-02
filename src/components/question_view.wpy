@@ -19,6 +19,14 @@
 
     @otherBackground: #FFFFFF;
 
+    .big-select{
+      .weui-flex{
+        .weui-flex__item{
+          flex: 1 1 auto;
+        }
+      }
+    }
+
     .name{
       padding-top:40px;
       padding-left:20px;
@@ -351,7 +359,7 @@
       .question-body{
         margin:0 40rpx;
 
-        padding-top: 30%;
+        padding-top: 20%;
         padding-bottom: 40rpx;
 
         .weui-input{
