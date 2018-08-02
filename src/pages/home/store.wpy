@@ -74,11 +74,11 @@
                 <view class="weui-grid__label">{{space.name}}</view>
               </navigator>
             </repeat>
-            
-            <navigator class="weui-grid" hover-class="weui-grid_active" url="/pages/space/register">
+
+            <view class="weui-grid" hover-class="weui-grid_active" url="/pages/space/register" @tap="register">
               <view class="weui-grid__icon slds-icon vip_add"></view>
               <view class="weui-grid__label">0元入驻</view>
-            </navigator>
+            </view>
           </view>
         </scroll-view>
       </view>
@@ -238,7 +238,7 @@
       const result = await this.$parent.query('spaces', options, 'common');
       if(result && result.value){
         this.my_spaces = result.value;
-      } 
+      }
 			this.$apply()
 		}
 
