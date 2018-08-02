@@ -252,8 +252,7 @@ export default class cardActivate extends wepy.page {
       status: 'draft',
       store: this.store_id,
       card: this.card_id,
-      type: 'recharge',
-      store: this.space_id
+      card_rule: this.category_id
     };
     var order = await this.$parent.insert('vip_order', data, this.space_id);
     if (order) {
