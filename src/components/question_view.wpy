@@ -1048,6 +1048,8 @@
     }
 
     nextQuestion(init){
+      this.submitDisabled = false;
+      this.$apply();
 
       this.showError = false;
       this.fieldErrorMSG = '';
