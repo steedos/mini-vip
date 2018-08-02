@@ -102,15 +102,15 @@
       </repeat>
     </view>
     <view class="weui-cells">
-      <navigator class="weui-cell weui-cell_access" url="/pages/space/index?space_id={{space_id}}">
-        <view class="weui-cell__bd">
-          <view>关于无颜</view>
-        </view>
-        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-      </navigator>
       <navigator class="weui-cell weui-cell_access" url="share?space_id={{space_id}}">
         <view class="weui-cell__bd">
           <view>拯救单身狗</view>
+        </view>
+        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+      </navigator>
+      <navigator class="weui-cell weui-cell_access" url="/pages/space/index?space_id={{space_id}}">
+        <view class="weui-cell__bd">
+          <view>关于无颜</view>
         </view>
         <view class="weui-cell__ft weui-cell__ft_in-access"></view>
       </navigator>
@@ -148,20 +148,20 @@ export default class QuestionnaireList extends wepy.page {
       url: `/pages/love/papers_view?object_name=love_about_me&space_id=${loveSpaceId}&required=true`,
       object_name: 'love_about_me'
     },{
-      label: '理想伴侣',
+      label: '筛选条件',
       url: `/pages/love/papers_view?object_name=love_looking_for&space_id=${loveSpaceId}`,
       object_name: 'love_looking_for'
     },{
-      label: '交友问答',
+      label: '问答匹配',
       url: `/pages/love/papers_view?object_name=love_answer&space_id=${loveSpaceId}`,
       object_name: 'love_answer'
     }],
     other_questionnaire: [{
-      label: '兴趣爱好', url: `/pages/love/papers_view?object_name=love_hobby&space_id=${loveSpaceId}`
+      label: '兴趣爱好匹配', url: `/pages/love/papers_view?object_name=love_hobby&space_id=${loveSpaceId}`
     },{
-      label: '教育经历', url: `../record/list?space_id=${loveSpaceId}&object_name=love_educational_experience`
+      label: '校友匹配', url: `../record/list?space_id=${loveSpaceId}&object_name=love_educational_experience`
     },{
-      label: '工作经历', url: `../record/list?space_id=${loveSpaceId}&object_name=love_work_experience`
+      label: '工作经历匹配', url: `../record/list?space_id=${loveSpaceId}&object_name=love_work_experience`
     }],
     progress: {}
   };
