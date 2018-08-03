@@ -788,7 +788,7 @@
           <view class="weui-footer__text weui-flex__item" @tap="goNext" wx:if="{{!globalRequired && !question.required}}">跳过此题</view>
         </view>
 
-        <button class="weui-btn submit" type="primary" form-type="submit" hover-class='button-hover' disabled="{{submitDisabled}}">{{bottonText}}</button>
+        <button class="weui-btn submit" type="primary" @tap="storeProgress" form-type="submit" hover-class='button-hover' disabled="{{submitDisabled}}">{{bottonText}}</button>
 
       </form>
     </view>
@@ -1084,7 +1084,16 @@
       this.progress = this.getProgress();
 
       if(this.pendingQuesionKeys.length === 0){
-        console.log('已经回答所有问题');
+        console.log('已经回答所有问题', this.object_name);
+        const naire = this.object_name;
+        let finishedNaire = wx.getStorageSync('finishedNaire');
+        if (_.isArray(finishedNaire)) {
+          finishedNaire.push(naire);
+        } else {
+          finishedNaire = [naire];
+        }
+        finishedNaire = _.uniq(finishedNaire);
+        wx.setStorageSync("finishedNaire", finishedNaire);
 
         if(!init){
           if(this.answered_url){
