@@ -56,7 +56,7 @@ export default class CoverYouLookingFor extends wepy.page {
     next() {
       const answeredUrl = encodeURIComponent(`/pages/love/cover_answer_questions?space_id=${this.space_id}`);
       wx.navigateTo({
-        url: `/pages/love/papers_view?object_name=love_looking_for&space_id=${this.space_id}&required=true&answered_url=${answeredUrl}`
+        url: `/pages/love/papers_view?object_name=love_looking_for&space_id=${this.space_id}&required=true&answered_url=${answeredUrl}&answered_url_type=reLaunch`
       });
     }
   };

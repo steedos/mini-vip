@@ -1122,6 +1122,8 @@
 
         if(!init){
           if(this.answered_url){
+            console.log('this.answered_url', this.answered_url);
+            console.log('this.answered_url_type', this.answered_url_type)
             pageRouter[this.answered_url_type]({url: this.answered_url})
           }else{
             wx.showToast({title: '已完成',icon: 'success'});
