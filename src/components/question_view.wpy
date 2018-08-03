@@ -285,8 +285,10 @@
         height:50px;
         z-index: 100;
         .love_question_back {
-          margin-left:10px;
-          margin-top:13px;
+          height:30px;
+          width:30px;
+          margin-top:10px;
+          margin-left:5px;
         }
       }
 
@@ -593,7 +595,7 @@
       <view class="question-section-other" wx:if="{{!showQuestionMe}}">
         <view class="weui-cells__title weui-flex user-other">
           <image class="avatar" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg"></image>
-          <view class="weui-flex__item other">理想伴侣</view>
+          <view class="weui-flex__item other">你的理想伴侣</view>
         </view>
         <view class="question-body">
           <block wx:if="{{question.options_all.length > 4}}">
@@ -1107,7 +1109,16 @@
       this.progress = this.getProgress();
 
       if(this.pendingQuesionKeys.length === 0){
-        console.log('已经回答所有问题');
+        console.log('已经回答所有问题', this.object_name);
+        const naire = this.object_name;
+        let finishedNaire = wx.getStorageSync('finishedNaire');
+        if (_.isArray(finishedNaire)) {
+          finishedNaire.push(naire);
+        } else {
+          finishedNaire = [naire];
+        }
+        finishedNaire = _.uniq(finishedNaire);
+        wx.setStorageSync("finishedNaire", finishedNaire);
 
         if(!init){
           if(this.answered_url){
