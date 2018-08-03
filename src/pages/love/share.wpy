@@ -127,40 +127,55 @@
   .btn-save-image{
     width: 77%;
   }
+  .btn-share-again{
+    margin-top:60rpx
+  }
 </style>
 <template>
 <view class="page" wx:if="{{is_loaded}}">
-  <view class="page__hd">
-    拯救单身狗
-  </view>
-  <view class="page__bd">
-    转发“无颜”这位聪明又勤快的智能机器人给身边的朋友，让它每周推荐与他“相互匹配”值最高的有缘人给他吧。
-    {{errMsg}}
-  </view>
-  <view class="tab-bar border-top-1px">
-    <button open-type="share" class="btn btn-share-wexin" type="default" plain="{{true}}">
-      <view class="vip_wechat slds-icon slds-icon--small slds-m-right--x-small"></view>
-      <view class="text">微信好友</view>
-    </button>
-    <view class="btn btn-share-friend-circle" @tap="shareToFriendCircle">
-      <view class="vip_wechat_moments slds-icon slds-icon--small slds-m-right--x-small"></view>
-      <view class="text">朋友圈</view>
+  <block wx:if="{{share_failed}}">
+    <view class="page__hd">
+      分享失败
     </view>
-  </view>
-  <view class="pop-mask" wx:if="{{showPop}}" @tap="closePop"></view>
-  <view class="attr-pop {{showPop ? 'show' : ''}}">
-    <view class="close" @tap="closePop">
-      <view class="vip_close"></view>
-    </view>
-    <view class="share-friend-circle-box">
-      <view class="share-friend-circle-title">保存图片后分享到朋友圏</view>
-      <image class="image" mode="widthFix" src="{{friend_circle_image_url}}" @load="friendCircleImageLoaded" @error="friendCircleImageLoadFailed"/>
-      <button type="primary" class="btn-save-image" @tap="saveImageToPhotosAlbum">
-        保存图片
+    <view class="page__bd">
+      请检查您的设备网络连接是否正常。
+      <button type="primary" class="btn-share-again" @tap="tryShareAgain">
+        再试一次
       </button>
     </view>
-  </view>
-  <canvas canvas-id="myCanvas" class="canvas"/>
+  </block>
+  <block wx:else>
+    <view class="page__hd">
+      拯救单身狗
+    </view>
+    <view class="page__bd">
+      转发“无颜”这位聪明又勤快的智能机器人给身边的朋友，让它每周推荐与他“相互匹配”值最高的有缘人给他吧。
+    </view>
+    <view class="tab-bar border-top-1px">
+      <button open-type="share" class="btn btn-share-wexin" type="default" plain="{{true}}">
+        <view class="vip_wechat slds-icon slds-icon--small slds-m-right--x-small"></view>
+        <view class="text">微信好友</view>
+      </button>
+      <view class="btn btn-share-friend-circle" @tap="shareToFriendCircle">
+        <view class="vip_wechat_moments slds-icon slds-icon--small slds-m-right--x-small"></view>
+        <view class="text">朋友圈</view>
+      </view>
+    </view>
+    <view class="pop-mask" wx:if="{{showPop}}" @tap="closePop"></view>
+    <view class="attr-pop {{showPop ? 'show' : ''}}">
+      <view class="close" @tap="closePop">
+        <view class="vip_close"></view>
+      </view>
+      <view class="share-friend-circle-box">
+        <view class="share-friend-circle-title">保存图片后分享到朋友圏</view>
+        <image class="image" mode="widthFix" src="{{friend_circle_image_url}}" @load="friendCircleImageLoaded" @error="friendCircleImageLoadFailed"/>
+        <button type="primary" class="btn-save-image" @tap="saveImageToPhotosAlbum">
+          保存图片
+        </button>
+      </view>
+    </view>
+    <canvas canvas-id="myCanvas" class="canvas"/>
+  </block>
 </view>
 </template>
 
@@ -185,6 +200,7 @@
       baseMaterialUrl: baseMaterialUrl,
       space_id: null,
       is_loaded: false,
+      share_failed: false,
       share_id: null,
       showPop: false,
       responses: [],
@@ -243,13 +259,15 @@
       }
       if(share && share.value && share.value.length){
         this.share_id = share.value[0]._id;
+        this.share_failed = false;
       }
       else{
         console.log("============share=======error==============");
         wx.showToast({
-          title: "分享失败，请重新操作一次",
+          title: "分享失败",
           icon: "none"
         });
+        this.share_failed = true;
       }
     }
 
@@ -386,6 +404,15 @@
       closePop() {
         this.showPop = false;
         this.$apply();
+      },
+      async tryShareAgain(){
+        wepy.showLoading({
+          title: '加载中',
+          mask: true
+        });
+        await this.addShare();
+        this.$apply();
+        wepy.hideLoading();
       },
       async saveImageToPhotosAlbum(){
         let imageUrl = this.friend_circle_image_url;
