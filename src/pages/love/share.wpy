@@ -112,8 +112,8 @@
   .page{
     height: 100%;
     .canvas {
-      width: 100%;
-      height: 100%;
+      width: 750px;
+      height: 1037px;
       top:-10000px;
     }
   }
@@ -297,12 +297,12 @@
       console.log('res.tempFilePath....',codeImgRes.tempFilePath)
       const self = this
       const ctx = wepy.createCanvasContext('myCanvas')
-      const width = wepy.getSystemInfoSync().windowWidth
+      const width = 750;
+      const height = 1037;
       // const radius = width * 105/430
       // const avatar_x = width/2 - radius/1.414
       // const avatar_y = avatar_x
       // const avatar_width = radius*1.414
-      const height = width * 1037/750;
       console.log("=======imgRes.tempFilePath=====1===", imgRes.tempFilePath);
       ctx.drawImage(imgRes.tempFilePath, 0, 0, width, height)
       // ctx.arc(width/2, width/2, radius, 0, 2 * Math.PI)
