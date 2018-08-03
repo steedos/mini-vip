@@ -188,7 +188,7 @@
 <template>
 <view class="page" wx:if="{{is_loaded}}">
   <view class="page__hd">
-    <view class="gift-label">您邀请的用户在本商城成交，您可获得</view>
+    <view class="gift-label">你邀请的用户在本商城成交，你可获得</view>
     <view class="gift-value">每笔交易{{vip_store.cash_back_percentage * 100}}%的现金返现</view>
     <view class="gift-period">有效期 {{vip_store.cash_back_period}} 天</view>
   </view>

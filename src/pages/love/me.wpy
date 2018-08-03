@@ -64,6 +64,9 @@
             <view class="weui-media-box__title">
               {{name}}
             </view>
+            <view wx:if="{{is_member}}" class="weui-media-box__desc" style="margin-top: 6rpx;">
+              VIP会员
+            </view>
           </view>
         </view>
       </block>
@@ -81,6 +84,9 @@
     <view class="weui-cells">
       <repeat for="{{questionnaire}}" key="index" index="index" item="naire">
         <navigator class="weui-cell weui-cell_access" url="{{naire.url}}">
+          <view class="weui-cell__hd">
+            <view class="slds-icon-standard-orders  slds-icon slds-icon--small slds-m-right--x-small"/>
+          </view>
           <view class="weui-cell__bd">
             <view>{{naire.label}}</view>
           </view>
@@ -93,7 +99,7 @@
     </view>
     <view class="weui-cells">
       <repeat for="{{other_questionnaire}}" key="index" index="index" item="other_naire">
-        <navigator class="weui-cell weui-cell_access" url="{{other_naire.url}}">
+        <navigator class="weui-cell weui-cell_access" url="{{other_naire.url}}&filter=(owner eq '{{userId}}')">
           <view class="weui-cell__bd">
             <view>{{other_naire.label}}</view>
           </view>
@@ -135,7 +141,9 @@ export default class QuestionnaireList extends wepy.page {
     avatar: '',
     userInfo: null,
     is_loaded: false,
+    is_member: false,
     isAuthUserInfo: false,
+    userId: '',
     options: [{
       label: '年龄', value: '23'
     }, {
@@ -152,20 +160,26 @@ export default class QuestionnaireList extends wepy.page {
       url: `/pages/love/papers_view?object_name=love_looking_for&space_id=${loveSpaceId}`,
       object_name: 'love_looking_for'
     },{
-      label: '问答匹配 (百合卷)',
+      label: '问答匹配 (玫瑰卷)',
       url: `/pages/love/papers_view?object_name=love_answer&space_id=${loveSpaceId}`,
       object_name: 'love_answer'
     },{
-      label: '问答匹配 (玫瑰卷)',
+      label: '问答匹配 (蔷薇卷)',
       url: `/pages/love/papers_view?object_name=love_answer2&space_id=${loveSpaceId}`,
       object_name: 'love_answer2'
+    },{
+      label: '兴趣爱好匹配',
+      object_name: 'love_hobby',
+      url: `/pages/love/papers_view?object_name=love_hobby&space_id=${loveSpaceId}`
     }],
     other_questionnaire: [{
-      label: '兴趣爱好匹配', url: `/pages/love/papers_view?object_name=love_hobby&space_id=${loveSpaceId}`
+      label: '校友匹配',
+      object_name: 'love_educational_experience', 
+      url: `../record/list?space_id=${loveSpaceId}&object_name=love_educational_experience`
     },{
-      label: '校友匹配', url: `../record/list?space_id=${loveSpaceId}&object_name=love_educational_experience`
-    },{
-      label: '工作经历匹配', url: `../record/list?space_id=${loveSpaceId}&object_name=love_work_experience`
+      label: '工作经历匹配', 
+      object_name: 'love_work_experience', 
+      url: `../record/list?space_id=${loveSpaceId}&object_name=love_work_experience`
     }],
     progress: {}
   };
@@ -209,8 +223,7 @@ export default class QuestionnaireList extends wepy.page {
     const setting = await wepy.getSetting();
     const user = this.$parent.globalData.user;
     if (user) {
-      this.isAuthUserInfo = true;
-      this.name = user.name || '未命名';
+      this.name = user.name || '未登录';
       this.avatar = user.avatar || 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg';
     };
     if (setting.authSetting['scope.userInfo']) {
@@ -226,23 +239,31 @@ export default class QuestionnaireList extends wepy.page {
   async onShow() {
     wx.showLoading({mask: true});
     const user = this.$parent.globalData.user;
+    const spaceId = this.space_id;
+    const userId = user._id;
     if (user) {
       this.name = user.name || '未登录';
       this.mobile = user.mobile;
       this.$apply();
     }
 
-    const progress_love_about_me = await this.getProgress('love_about_me');
-    const progress_love_looking_for = await this.getProgress('love_looking_for');
-    const progress_love_answer = await this.getProgress('love_answer');
-
-    this.progress = {
-      love_about_me: progress_love_about_me,
-      love_looking_for: progress_love_looking_for,
-      love_answer: progress_love_answer
+    const finishedNaire = wx.getStorageSync('finishedNaire');
+    for (let naire of finishedNaire) {
+      this.progress[naire] = true;
     }
 
-    this.$apply()
+    const options = {
+      $filter: `owner eq '${userId}'`,
+      $select: 'is_member'
+    }
+
+    const customer = await this.$parent.query('vip_customers', options, spaceId);
+
+    if (customer && customer.value && customer.value[0]) {
+      this.is_member = customer.value[0].is_member;
+    }
+
+    this.$apply();
     wx.hideLoading();
     // console.log('[progress]', progress_love_about_me, progress_love_looking_for, progress_love_answer)
   }
