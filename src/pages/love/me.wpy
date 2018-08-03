@@ -64,6 +64,9 @@
             <view class="weui-media-box__title">
               {{name}}
             </view>
+            <view wx:if="{{is_member}}" class="weui-media-box__desc">
+              vip会员
+            </view>
           </view>
         </view>
       </block>
@@ -135,6 +138,7 @@ export default class QuestionnaireList extends wepy.page {
     avatar: '',
     userInfo: null,
     is_loaded: false,
+    is_member: false,
     isAuthUserInfo: false,
     userId: '',
     options: [{
@@ -216,7 +220,6 @@ export default class QuestionnaireList extends wepy.page {
     const setting = await wepy.getSetting();
     const user = this.$parent.globalData.user;
     if (user) {
-      this.isAuthUserInfo = true;
       this.name = user.name || '未命名';
       this.avatar = user.avatar || 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg';
     };
@@ -233,6 +236,8 @@ export default class QuestionnaireList extends wepy.page {
   async onShow() {
     wx.showLoading({mask: true});
     const user = this.$parent.globalData.user;
+    const spaceId = this.space_id;
+    const userId = user._id;
     if (user) {
       this.name = user.name || '未登录';
       this.mobile = user.mobile;
@@ -244,7 +249,18 @@ export default class QuestionnaireList extends wepy.page {
       this.progress[naire] = true;
     }
 
-    this.$apply()
+    const options = {
+      $filter: `owner eq '${userId}'`,
+      $select: 'is_member'
+    }
+
+    const customer = await this.$parent.query('vip_customers', options, spaceId);
+
+    if (customer && customer.value && customer.value[0]) {
+      this.is_member = customer.value[0].is_member;
+    }
+
+    this.$apply();
     wx.hideLoading();
     // console.log('[progress]', progress_love_about_me, progress_love_looking_for, progress_love_answer)
   }

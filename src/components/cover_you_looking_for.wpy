@@ -43,7 +43,7 @@ page {
         请填写你的筛选条件，
         “无颜”只会为你匹配符合要求的人。
         </view>
-      <view  class="love-attention">你的筛选条件所有人均无法查看</view>
+      <view  class="love-attention">你的筛选条件，其他人都不会看到。</view>
 
       <button class="btn-join" @tap="next">下一步</button>
     </view>
