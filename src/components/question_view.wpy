@@ -1292,7 +1292,10 @@
 
         if(this.globalRequired && !fieldValue){
           this.showError = true;
-          const errorMsg = this.question.label.substr(0, this.question.label.length - 1);
+          if (this.question.label.indexOf('？')>0){
+          var errorMsg = this.question.label.substr(0, this.question.label.length - 1);}else{
+            errorMsg = this.question.label
+          }
           this.fieldErrorMSG = `请填写${errorMsg}。`;
           return wx.hideLoading();
         }
