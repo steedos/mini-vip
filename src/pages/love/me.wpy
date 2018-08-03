@@ -84,6 +84,9 @@
     <view class="weui-cells">
       <repeat for="{{questionnaire}}" key="index" index="index" item="naire">
         <navigator class="weui-cell weui-cell_access" url="{{naire.url}}">
+          <view class="weui-cell__hd">
+            <view class="slds-icon-standard-orders  slds-icon slds-icon--small slds-m-right--x-small"/>
+          </view>
           <view class="weui-cell__bd">
             <view>{{naire.label}}</view>
           </view>
@@ -220,7 +223,7 @@ export default class QuestionnaireList extends wepy.page {
     const setting = await wepy.getSetting();
     const user = this.$parent.globalData.user;
     if (user) {
-      this.name = user.name || '未命名';
+      this.name = user.name || '未登录';
       this.avatar = user.avatar || 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg';
     };
     if (setting.authSetting['scope.userInfo']) {
