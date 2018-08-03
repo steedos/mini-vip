@@ -1178,6 +1178,10 @@
     async updateAnswer(answer){
       const record_id = this.questionsAnswer._id;
       _.extend(this.questionsAnswer, answer);
+      if (this.object_name === 'love_about_me' && this.question.name === 'name') {
+        this.$parent.$parent.globalData.user.name = answer.name;
+        this.$apply();
+      }
       await this.$parent.$parent.update(this.object_name, record_id, answer, this.space_id);
     }
 
