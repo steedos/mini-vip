@@ -1122,8 +1122,6 @@
 
         if(!init){
           if(this.answered_url){
-            console.log('this.answered_url', this.answered_url);
-            console.log('this.answered_url_type', this.answered_url_type)
             pageRouter[this.answered_url_type]({url: this.answered_url})
           }else{
             wx.showToast({title: '已完成',icon: 'success'});
@@ -1290,7 +1288,8 @@
 
         if(this.globalRequired && !fieldValue){
           this.showError = true;
-          this.fieldErrorMSG = `请填写${this.question.label}!`;
+          const errorMsg = this.question.label.substr(0, this.question.label.length - 1);
+          this.fieldErrorMSG = `请填写${errorMsg}。`;
           return wx.hideLoading();
         }
 
@@ -1308,13 +1307,20 @@
 
           if(this.globalRequired && !values[key + RANGE]){
             this.showError = true;
-            this.fieldErrorMSG = `请填写${this.question.label}!`;
+            const errorMsg = this.question.label.substr(0, this.question.label.length - 1);
+            this.fieldErrorMSG = `请填写${errorMsg}`;
             return wx.hideLoading();
           }
 
           if(Number(values[key]) > Number(values[key + RANGE])){
             this.showError = true;
-            this.fieldErrorMSG = `第二个值不能小于第一个值!`;
+            if(this.question.label.indexOf('年龄')){
+              this.fieldErrorMSG = `请填写合理的年龄范围。`;
+            } else if (this.question.label.indexOf('身高')){
+              this.fieldErrorMSG = `请填写合理的身高范围。`;
+            }else{
+              this.fieldErrorMSG = `请填写合理的范围。`;
+            }           
             return wx.hideLoading();
           }
         }
