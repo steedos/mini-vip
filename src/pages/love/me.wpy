@@ -64,8 +64,8 @@
             <view class="weui-media-box__title">
               {{name}}
             </view>
-            <view wx:if="{{is_member}}" class="weui-media-box__desc">
-              vip会员
+            <view wx:if="{{is_member}}" class="weui-media-box__desc" style="margin-top: 6rpx;">
+              VIP会员
             </view>
           </view>
         </view>
