@@ -117,7 +117,7 @@ export default class LoveIndex extends wepy.page {
   };
 
   async onLoad (e) {
-    wx.showLoading();
+    wx.showLoading({mask: true});
     const self = this;
     if(!e.space_id){
       // 保证一进入就新建space对应的vip_customers记录

@@ -861,6 +861,7 @@
           if(!newValue.object_name){
             throw new Error('缺少参数 object_name');
           }
+          wx.showLoading({mask: true});
 
           await this.$parent.$parent.login()
           const setting = await wepy.getSetting();
@@ -927,8 +928,8 @@
 
           this.loading = false;
 
-          this.$apply()
-
+          this.$apply();
+          wx.hideLoading();
         }
       }
     };
@@ -1194,6 +1195,7 @@
         this.$apply();
       },
       submit: async function (e) {
+        wx.showLoading({mask: true});
         let qa = {};
         const q = this.question;
         const answer = this.answer;
@@ -1218,6 +1220,8 @@
         await this.updateAnswer(qa);
 
         this.nextQuestion();
+
+        wx.hideLoading();
       },
       clickMeAnswer: function (e) {
         this.showQuestionMe = true;
@@ -1248,8 +1252,9 @@
         this.questionsAnswer[this.question.name] = e.detail.value;
       },
       submitFieldForm: async function (e) {
+        wx.showLoading({mask: true});
         const formValues = e.detail.value;
-        const question = this.question
+        const question = this.question;
         const key = question.name;
         const fieldValue = formValues[key];
 
@@ -1269,7 +1274,7 @@
         if(this.globalRequired && !fieldValue){
           this.showError = true;
           this.fieldErrorMSG = `请填写${this.question.label}!`;
-          return ;
+          return wx.hideLoading();
         }
 
         if(question.range){
@@ -1287,13 +1292,13 @@
           if(this.globalRequired && !values[key + RANGE]){
             this.showError = true;
             this.fieldErrorMSG = `请填写${this.question.label}!`;
-            return ;
+            return wx.hideLoading();
           }
 
           if(Number(values[key]) > Number(values[key + RANGE])){
             this.showError = true;
             this.fieldErrorMSG = `第二个值不能小于第一个值!`;
-            return ;
+            return wx.hideLoading();
           }
         }
 
@@ -1310,6 +1315,8 @@
         await this.updateAnswer(values);
 
         this.nextQuestion();
+
+        wx.hideLoading();
       },
       bindSelectPickerMinChange: function (e) {
         console.log('bindSelectPickerMinChange', e);
