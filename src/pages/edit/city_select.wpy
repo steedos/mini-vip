@@ -1,5 +1,5 @@
 <template>
-  <view class="main">
+  <view class="main city-select">
     <!-- 搜索框 -->
     <view class="search-bar">
       <input type="text"
@@ -35,7 +35,10 @@
       <view id="top"
             class="city-letter">当前定位城市：
       </view>
-      <view wx:if="{{locationFail}}"
+      <view wx:if="{{showOpenSetting}}" class="city-item">
+        <button open-type="openSetting" class="weui-btn city-select-open-settings" plain="true" bindopensetting="openSetting">定位失败，请点击授权</button>
+      </view>
+      <view wx:elif="{{locationFail}}"
             class="city-item">定位失败
       </view>
       <view wx:else
@@ -104,7 +107,8 @@
       timer: null,
       showSearch: false,
       searchResult: [],
-      key: ''
+      key: '',
+      showOpenSetting: false
     };
 
     setParentValue(key, value, item){
@@ -183,8 +187,22 @@
         })
 
         this.setParentValue(this.key, this.location)
-      }
-    }
+      },
+      openSetting: async function(e){
+        self = this;
+        if(e.detail.authSetting["scope.userLocation"]){
+          this.showOpenSetting = false;
+          const location = await this.getLocation();
+          const ret = await this.getCityNameFromTX(location.latitude, location.longitude)
+          this.location = ret;
+          this.locationFail = false;
+          this.showOpenSetting = false;
+          self.$apply();
+        }
+      },
+    };
+
+
 
     async onLoad(e) {
       this.citys = this.getLetterCity()
@@ -192,7 +210,13 @@
       this.key = e.key;
       wx.showLoading({
         title: '加载中'
-      })
+      });
+
+      const setting = await wepy.getSetting()
+      if(setting.authSetting["scope.userLocation"] === false){
+        this.showOpenSetting = true;
+      }
+
       try {
         const location = await this.getLocation()
         const ret = await this.getCityNameFromTX(location.latitude, location.longitude)
@@ -200,7 +224,8 @@
         this.$apply()
       } catch (error) {
         console.log('error', error)
-        this.locationFail = true
+        this.locationFail = true;
+        this.showOpenSetting = true;
         this.$apply()
       } finally {
         wx.hideLoading()
@@ -267,6 +292,21 @@
   }
 </script>
 <style lang="less">
+
+  .city-select{
+    .city-select-open-settings{
+      padding-left:0px;
+      text-align:left;
+      display:inherit;
+      font-size: 14px;
+      border-radius: 0px;
+      width: auto;
+      height: 50px;
+      line-height: 50px;
+      border: none
+    }
+  }
+
   .main {
     height: 100vh;
     width: 100vw;
