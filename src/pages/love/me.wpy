@@ -198,7 +198,7 @@ export default class QuestionnaireList extends wepy.page {
   }
 
   async onLoad(e) {
-    wx.showLoading();
+    wx.showLoading({mask: true});
     if(!e.space_id){
       // 保证一进入就新建space对应的vip_customers记录
       e.space_id = loveSpaceId;
@@ -231,7 +231,7 @@ export default class QuestionnaireList extends wepy.page {
   }
 
   async onShow() {
-    wx.showLoading();
+    wx.showLoading({mask: true});
     const user = this.$parent.globalData.user;
     if (user) {
       this.name = user.name || '未登录';

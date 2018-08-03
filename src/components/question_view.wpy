@@ -285,8 +285,8 @@
         height:50px;
         z-index: 100;
         .love_question_back {
-          margin: 10px;
-
+          margin-left:10px;
+          margin-top:13px;
         }
       }
 
@@ -297,6 +297,7 @@
         right: 0px;
         border-radius: 0px;
         height:50px;
+        line-height: 50px;
       }
 
       .big-bang-select{
@@ -371,6 +372,21 @@
         color: @mainBackground;
       }
 
+      .love_question_button{
+        width: 50px;
+        position: absolute;
+        bottom: 0px;
+        left: 0px;
+        border-radius: 0px;
+        height:50px;
+        z-index: 100;
+        .love_question_back {
+          margin-left:10px;
+          margin-top:13px;
+
+        }
+      }
+
 
       .question-body{
         margin:0 40rpx;
@@ -417,6 +433,8 @@
         position: absolute;
         bottom: 0px;
         border-radius: 0px;
+        height:50px;
+        line-height: 50px;
       }
     }
 
@@ -638,7 +656,7 @@
       </view>
       <view  class="love_question_button" @tap.stop="questionBack"  wx:if="{{answeredQuesionKeys.length > 0}}">
         <view class="love_question_back slds-icon slds-icon--small slds-m-right--x-small"></view>
-      </view>  
+      </view>
       <button class="weui-btn submit" type="primary" @tap="submit" wx:if="{{answer.other.length > 0}}" disabled="{{submitDisabled}}">{{bottonText}}</button>
 
       <view class="big-bang-select big-select" wx:if="{{showBigSelect}}">
@@ -788,7 +806,11 @@
           <view class="weui-footer__text weui-flex__item" @tap="goNext" wx:if="{{!globalRequired && !question.required}}">跳过此题</view>
         </view>
 
-        <button class="weui-btn submit" type="primary" @tap="storeProgress" form-type="submit" hover-class='button-hover' disabled="{{submitDisabled}}">{{bottonText}}</button>
+        <view  class="love_question_button" @tap.stop="questionBack"  wx:if="{{answeredQuesionKeys.length > 0}}">
+          <view class="love_question_back slds-icon slds-icon--small slds-m-right--x-small"></view>
+        </view>
+
+        <button class="weui-btn submit" type="primary" form-type="submit" hover-class='button-hover' disabled="{{submitDisabled}}">{{bottonText}}</button>
 
       </form>
     </view>
@@ -843,6 +865,7 @@
           if(!newValue.object_name){
             throw new Error('缺少参数 object_name');
           }
+          wx.showLoading({mask: true});
 
           await this.$parent.$parent.login()
           const setting = await wepy.getSetting();
@@ -909,8 +932,8 @@
 
           this.loading = false;
 
-          this.$apply()
-
+          this.$apply();
+          wx.hideLoading();
         }
       }
     };
@@ -1185,6 +1208,7 @@
         this.$apply();
       },
       submit: async function (e) {
+        wx.showLoading({mask: true});
         let qa = {};
         const q = this.question;
         const answer = this.answer;
@@ -1209,6 +1233,8 @@
         await this.updateAnswer(qa);
 
         this.nextQuestion();
+
+        wx.hideLoading();
       },
       clickMeAnswer: function (e) {
         this.showQuestionMe = true;
@@ -1239,8 +1265,9 @@
         this.questionsAnswer[this.question.name] = e.detail.value;
       },
       submitFieldForm: async function (e) {
+        wx.showLoading({mask: true});
         const formValues = e.detail.value;
-        const question = this.question
+        const question = this.question;
         const key = question.name;
         const fieldValue = formValues[key];
 
@@ -1260,7 +1287,7 @@
         if(this.globalRequired && !fieldValue){
           this.showError = true;
           this.fieldErrorMSG = `请填写${this.question.label}!`;
-          return ;
+          return wx.hideLoading();
         }
 
         if(question.range){
@@ -1278,13 +1305,13 @@
           if(this.globalRequired && !values[key + RANGE]){
             this.showError = true;
             this.fieldErrorMSG = `请填写${this.question.label}!`;
-            return ;
+            return wx.hideLoading();
           }
 
           if(Number(values[key]) > Number(values[key + RANGE])){
             this.showError = true;
             this.fieldErrorMSG = `第二个值不能小于第一个值!`;
-            return ;
+            return wx.hideLoading();
           }
         }
 
@@ -1301,6 +1328,8 @@
         await this.updateAnswer(values);
 
         this.nextQuestion();
+
+        wx.hideLoading();
       },
       bindSelectPickerMinChange: function (e) {
         console.log('bindSelectPickerMinChange', e);
