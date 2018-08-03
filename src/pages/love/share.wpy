@@ -121,6 +121,7 @@
       width: 750px;
       height: 1037px;
       top:-10000px;
+      position: absolute;
     }
   }
   .btn-save-image{
