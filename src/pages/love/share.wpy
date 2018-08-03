@@ -102,14 +102,16 @@
     }
   }
   .share-friend-circle-box{
-    padding-top: 10rpx;
-    padding-bottom: 70rpx;
+    padding: 20rpx 0;
     .share-friend-circle-title{
       text-align:center;
       color:#777;
     }
     .image{
-      width: 100%;
+      width: 70%;
+      display: block;
+      margin: 30rpx auto 50rpx;
+      box-shadow:0px 0px 60rpx #ccc;
     }
   }
   .page{
@@ -121,11 +123,7 @@
     }
   }
   .btn-save-image{
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    border-radius: 0; 
+    width: 70%;
   }
 </style>
 <template>
@@ -153,10 +151,10 @@
       <view class="vip_close"></view>
     </view>
     <view class="share-friend-circle-box">
-      <view class="share-friend-circle-title"></view>
+      <view class="share-friend-circle-title">保存图片后分享到朋友圏</view>
       <image class="image" mode="widthFix" src="{{friend_circle_image_url}}" @load="friendCircleImageLoaded" @error="friendCircleImageLoadFailed"/>
       <button type="primary" class="btn-save-image" @tap="saveImageToPhotosAlbum">
-        保存图片后分享到朋友圏
+        保存图片
       </button>
     </view>
   </view>
