@@ -112,6 +112,7 @@
       display: block;
       margin: 30rpx auto 50rpx;
       box-shadow:0px 0px 60rpx #ccc;
+      padding:20rpx;
     }
   }
   .page{
