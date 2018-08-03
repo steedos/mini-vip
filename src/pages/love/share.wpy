@@ -39,7 +39,8 @@
     transition: all .3s linear;
     box-sizing: border-box;
     .close {
-      float: right;
+      position: absolute;
+      right: 40rpx;
       padding:0 0 40rpx 40rpx;
       .vip_close {
         width: 30rpx;
@@ -101,6 +102,8 @@
     }
   }
   .share-friend-circle-box{
+    padding-top: 10rpx;
+    padding-bottom: 70rpx;
     .share-friend-circle-title{
       text-align:center;
       color:#777;
@@ -117,6 +120,13 @@
       top:-10000px;
     }
   }
+  .btn-save-image{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-radius: 0; 
+  }
 </style>
 <template>
 <view class="page" wx:if="{{is_loaded}}">
@@ -125,6 +135,7 @@
   </view>
   <view class="page__bd">
     转发“无颜”这位聪明又勤快的智能机器人给身边的朋友，让它每周推荐与他“相互匹配”值最高的有缘人给他吧。
+    {{errMsg}}
   </view>
   <view class="tab-bar border-top-1px">
     <button open-type="share" class="btn btn-share-wexin" type="default" plain="{{true}}">
@@ -142,10 +153,10 @@
       <view class="vip_close"></view>
     </view>
     <view class="share-friend-circle-box">
-      <view class="share-friend-circle-title">保存图片分享到朋友圏</view>
+      <view class="share-friend-circle-title"></view>
       <image class="image" mode="widthFix" src="{{friend_circle_image_url}}" @load="friendCircleImageLoaded" @error="friendCircleImageLoadFailed"/>
       <button type="primary" class="btn-save-image" @tap="saveImageToPhotosAlbum">
-        保存图片
+        保存图片后分享到朋友圏
       </button>
     </view>
   </view>
@@ -178,7 +189,8 @@
       showPop: false,
       responses: [],
       cash_back_total: 0,
-      friend_circle_image_url: ''
+      friend_circle_image_url: '',
+      errMsg: ''
     }
 
     async onLoad (e) {
@@ -272,6 +284,7 @@
         mask: true
       });
       const url = `/api/steedos/weixin/code?appid=${appId}&store_id=${this.space_id}&page=${path}`;
+      console.log("codeImgRes======url=========", this.baseUrl + url);
       const codeImgRes = await wepy.downloadFile({
         url: this.baseUrl + url
       });
@@ -284,6 +297,9 @@
       const imgRes = await wepy.downloadFile({
         url: imageUrl
       }).catch((err)=>{
+        console.log("err====downloadFile===============", err);
+        this.errMsg = JSON.stringify(err);
+        this.$apply();
         return false;
       });
       if(!imgRes){
