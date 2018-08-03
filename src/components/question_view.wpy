@@ -371,6 +371,20 @@
         color: @mainBackground;
       }
 
+      .love_question_button{
+        width: 50px;
+        position: absolute;
+        bottom: 0px;
+        left: 0px;
+        border-radius: 0px;
+        height:50px;
+        z-index: 100;
+        .love_question_back {
+          margin: 10px;
+
+        }
+      }
+
 
       .question-body{
         margin:0 40rpx;
@@ -638,7 +652,7 @@
       </view>
       <view  class="love_question_button" @tap.stop="questionBack"  wx:if="{{answeredQuesionKeys.length > 0}}">
         <view class="love_question_back slds-icon slds-icon--small slds-m-right--x-small"></view>
-      </view>  
+      </view>
       <button class="weui-btn submit" type="primary" @tap="submit" wx:if="{{answer.other.length > 0}}" disabled="{{submitDisabled}}">{{bottonText}}</button>
 
       <view class="big-bang-select big-select" wx:if="{{showBigSelect}}">
@@ -786,6 +800,10 @@
 
         <view class="weui-footer jump-question weui-flex" wx:if="{{!loading}}">
           <view class="weui-footer__text weui-flex__item" @tap="goNext" wx:if="{{!globalRequired && !question.required}}">跳过此题</view>
+        </view>
+
+        <view  class="love_question_button" @tap.stop="questionBack"  wx:if="{{answeredQuesionKeys.length > 0}}">
+          <view class="love_question_back slds-icon slds-icon--small slds-m-right--x-small"></view>
         </view>
 
         <button class="weui-btn submit" type="primary" form-type="submit" hover-class='button-hover' disabled="{{submitDisabled}}">{{bottonText}}</button>
