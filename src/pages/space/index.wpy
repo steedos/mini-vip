@@ -275,7 +275,9 @@ page {
           <postList :portletList.sync="portlet_list" :spaceId.sync="space_id"/>
         </block>
         <block wx:else>
-          <postList wx:else :list.sync="posts" />
+          <block wx:if="{{store_info.show_post}}">
+            <postList wx:else :list.sync="posts" />
+          </block>
         </block>
       </view>
     </view>
@@ -318,7 +320,9 @@ export default class Posts extends wepy.page {
     // await this.getPortlet();
     // await this.laodPortletList();
     // await this.loadPostList();
-    await this.loadList();
+    if(this.store_info.show_post){
+      await this.loadList();
+    }
 
     console.log('[this.loadList]', this.portlet_list, this.posts)
 
@@ -333,7 +337,9 @@ export default class Posts extends wepy.page {
     this.current_skip = 0;
     // await this.loadCardInfo();
     await this.loadStoreInfo();
-    await this.loadList();
+    if(this.store_info.show_post){
+      await this.loadList();
+    }
   }
 
   components = {
