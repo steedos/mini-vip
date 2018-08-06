@@ -285,10 +285,10 @@
         height:50px;
         z-index: 100;
         .love_question_back {
-          height:30px;
-          width:30px;
-          margin-top:10px;
-          margin-left:5px;
+          height:20px;
+          width:20px;
+          margin-top:15px;
+          margin-left:10px;
         }
       }
 
@@ -385,6 +385,8 @@
         .love_question_back {
           margin-left:10px;
           margin-top:13px;
+          width:20px;
+          height:20px;
 
         }
       }
