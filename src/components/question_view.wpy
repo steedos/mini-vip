@@ -1111,14 +1111,14 @@
       if(this.pendingQuesionKeys.length === 0){
         console.log('已经回答所有问题', this.object_name);
         const naire = this.object_name;
-        let finishedNaire = wx.getStorageSync('finishedNaire');
+        let finishedNaire = wx.getStorageSync('questionnaire_progess');
         if (_.isArray(finishedNaire)) {
           finishedNaire.push(naire);
         } else {
           finishedNaire = [naire];
         }
         finishedNaire = _.uniq(finishedNaire);
-        wx.setStorageSync("finishedNaire", finishedNaire);
+        wx.setStorageSync("questionnaire_progess", finishedNaire);
 
         if(!init){
           if(this.answered_url){

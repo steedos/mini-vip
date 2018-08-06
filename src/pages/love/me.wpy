@@ -278,7 +278,7 @@ export default class QuestionnaireList extends wepy.page {
 
     this.$apply();
 
-    const finishedNaire = wx.getStorageSync('finishedNaire');
+    const finishedNaire = wx.getStorageSync('questionnaire_progess');
     for (let naire of finishedNaire) {
       this.progress[naire] = true;
     }

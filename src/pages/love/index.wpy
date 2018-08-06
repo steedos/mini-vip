@@ -174,7 +174,7 @@ export default class LoveIndex extends wepy.page {
 		console.log('[current_customer]', current_customer)
 
 		if (current_customer.is_member) {
-			let finishedNaire = wx.getStorageSync('finishedNaire');
+			let finishedNaire = wx.getStorageSync('questionnaire_progess');
 			if (finishedNaire.indexOf('love_hobby') > -1) {
 				finishedNaire.splice(finishedNaire.indexOf('love_hobby'), 1);
 			} 
@@ -208,7 +208,7 @@ export default class LoveIndex extends wepy.page {
 	}
 	
 	async onShow() {
-		const finishedNaire = wx.getStorageSync('finishedNaire');
+		const finishedNaire = wx.getStorageSync('questionnaire_progess');
 		if (finishedNaire && finishedNaire.indexOf('love_hobby') > -1) {
 			this.finishHobby = true;
 		}

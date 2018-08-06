@@ -21,7 +21,7 @@
                     <view class="weui-label">邀请码</view>
                 </view>
                 <view class="weui-cell__bd">
-                    <input class="weui-input" placeholder="请输入邀请码" bindinput="bindKeyInput" value="{{code}}"/>
+                    <input class="weui-input" placeholder="请输入邀请码" type="number" bindinput="bindKeyInput" value="{{code}}"/>
                 </view>
             </view>
         </view>
