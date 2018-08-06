@@ -367,7 +367,7 @@ export default class LoveShake extends wepy.page {
     let title = this.$parent.globalData.title;
     return {
       title: title,
-      path: `pages/love/index?space_id=${this.space_id}&share_from=${userId}`,
+      path: `pages/love/index?space_id=${this.space_id}&share_from=${userId}&love=1`,
       imageUrl: `${baseMaterialUrl}love_share.jpg`
     };
   }

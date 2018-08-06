@@ -272,7 +272,7 @@
     }
 
     getSharePath(){
-      let path = `pages/love/index?space_id=${this.space_id}`;
+      let path = `pages/love/index?love=1&space_id=${this.space_id}`;
       if(this.share_id){
         const userId = this.$parent.globalData.user._id;
         path += `&share_id=${this.share_id}`;
