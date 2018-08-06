@@ -11,7 +11,7 @@ import ComponentQuestions from '@/components/cover_answer_questions';
 
 export default class CoverAnswerQuestions extends wepy.page {
   config = {
-    navigationBarTitleText: '问卷匹配'
+    navigationBarTitleText: '无颜'
   };
 
   data = {
