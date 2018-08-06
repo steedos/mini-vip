@@ -91,7 +91,8 @@
 					</view>
 					<view class="page__bd">
 						<view class="love-summary">邀请好友一起回答有趣的问卷，测试你们的匹配度。</view>
-						<button class="btn-join" @tap="goInterest">测试兴趣爱好</button>
+						<button wx:if="{{finishHobby}}" class="btn-join" open-type="share">邀请好友测试</button>
+						<button wx:else class="btn-join" @tap="goHobby">测试兴趣爱好</button>
 						<button wx:if="{{showLoveBtn}}" class="btn-love" @tap="goLove">填写完整问卷</button>
 						<view class="love-licence"></view>
 					</view>
@@ -131,7 +132,7 @@ export default class LoveIndex extends wepy.page {
     space_id: null,
     load_page: '',
 		is_loaded: false,
-		loveEnable: false,
+		finishHobby: false,
 		showLoveBtn: false
   };
 
@@ -201,10 +202,19 @@ export default class LoveIndex extends wepy.page {
 			}
 		}
 
-    this.is_loaded = true;
+    // this.is_loaded = true;
     this.$apply();
     wx.hideLoading();
-  }
+	}
+	
+	async onShow() {
+		const finishedNaire = wx.getStorageSync('finishedNaire');
+		if (finishedNaire && finishedNaire.indexOf('love_hobby') > -1) {
+			this.finishHobby = true;
+		}
+		this.is_loaded = true;
+		this.$apply();
+	}
 
   // 分享
   onShareAppMessage(res) {
@@ -212,8 +222,7 @@ export default class LoveIndex extends wepy.page {
     let title = this.$parent.globalData.title;
     return {
       title: title,
-      path: `pages/love/index?space_id=${this.space_id}&share_from=${userId}&love=1`,
-      imageUrl: `${baseMaterialUrl}love_share.jpg`
+      path: `pages/love/index?space_id=${this.space_id}&share_from=${userId}`,
     };
   }
 
@@ -227,7 +236,7 @@ export default class LoveIndex extends wepy.page {
 		goLove() {
 			wx.redirectTo({url: '/pages/love/index?love=1'})
 		},
-		goInterest() {
+		goHobby() {
 			wx.navigateTo({url: `/pages/love/papers_view?object_name=love_hobby&space_id=${this.space_id}`})
 		}
   };
