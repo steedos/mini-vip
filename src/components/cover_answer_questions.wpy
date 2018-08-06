@@ -36,11 +36,11 @@ page {
 <template>
   <view class="page">
     <view class="page__hd">
-      <view class="love-title">交友问答</view>
+      <view class="love-title">问卷匹配</view>
     </view>
     <view class="page__bd">
       <view class="love-summary">
-        请填写以下交友问卷，“无颜”将根据你的回答为你找到匹配度最高的人。
+        请填写以下问卷，“无颜”将根据你的回答为你找到匹配度最高的人。
       </view>
       <view  class="love-attention">你回答的越认真，“无颜”匹配的越精准。</view>
       <button class="btn-join" @tap="next">下一步</button>
