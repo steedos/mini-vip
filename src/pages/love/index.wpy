@@ -92,7 +92,7 @@
 					<view class="page__bd">
 						<view class="love-summary">邀请好友一起回答有趣的问卷，测试你们的匹配度。</view>
 						<button class="btn-join" @tap="goInterest">测试兴趣爱好</button>
-						<button wx:if="{{showLoveBtn}}" class="btn-love" @tap="goLove">填写完整问卷</button>
+						<button wx:if="{{showLoveBtn}}" class="btn-love" @tap="goLove">寻找有缘人</button>
 						<view class="love-licence"></view>
 					</view>
 				</view>
