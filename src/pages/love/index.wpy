@@ -16,7 +16,7 @@
     .love-summary{
       color:#fff;
       font-size:45rpx;
-      margin-bottom:100rpx;
+      margin-bottom:50rpx;
     }
   }
   .btn-join{
