@@ -190,7 +190,9 @@ export default class LoveIndex extends wepy.page {
 				} else {
 					this.load_page = 'cover_about_yourself'
 				}
-			}
+			} else {
+        this.load_page = 'cover_about_yourself'
+      }
 		} else {
 			if(e.love) {
 				this.load_page = 'index'
