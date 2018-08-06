@@ -122,7 +122,7 @@ import ComponentLookingFor from '@/components/cover_you_looking_for';
 
 export default class LoveIndex extends wepy.page {
   config = {
-    navigationBarTitleText: ''
+    navigationBarTitleText: '无颜 (内测版)'
   };
 
   data = {
@@ -175,15 +175,12 @@ export default class LoveIndex extends wepy.page {
 		if (current_customer && current_customer.questionnaire_progess) {
 			switch(current_customer.questionnaire_progess) {
 				case 1:
-					wx.setNavigationBarTitle({title: '无颜'});
 					self.load_page = 'cover_about_yourself';
 					break;
 				case 2:
-					wx.setNavigationBarTitle({title: '无颜'});
 					self.load_page = 'cover_you_looking_for';
 					break;
 				case 3:
-					wx.setNavigationBarTitle({title: '无颜'});
 					self.load_page = 'cover_answer_questions';
 					break;
 				case 4:
@@ -196,7 +193,6 @@ export default class LoveIndex extends wepy.page {
 			} else {
 				this.load_page = 'love_disabled';
 			}
-			wx.setNavigationBarTitle({title: '无颜(内测版)'});
 		}
 	
     this.is_loaded = true;
