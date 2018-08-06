@@ -19,7 +19,7 @@
       margin-bottom:100rpx;
     }
   }
-  .btn-join{
+  .btn-join, .btn-love{
     background:#4D7BD9;
     padding:6px;
     color:#fff;
@@ -66,30 +66,45 @@
 
 <template>
   <view wx:if="{{is_loaded}}">
-    <view class="page">
-      <block wx:if="{{load_page == 'index'}}">
-        <view class="page__hd">
-          <view class="love-title">告别刷脸时代，寻找志趣相投的有缘人</view>
-        </view>
-        <view class="page__bd">
-          <view class="love-summary">“无颜”是一位聪明又勤快的智能机器人，每周他都会根据你的喜好和对方喜好，执行海量的数据计算，找到与你“相互匹配”值最高的有缘人，并互发微信。</view>
-          <button class="btn-join" @tap="join">我想试试</button>
-          <view class="love-licence"></view>
-        </view>
-      </block>
-      <block wx:elif="{{load_page == 'cover_about_yourself'}}">
-        <ComponentCoverYourself :spaceId.sync="space_id" />
-      </block>
-      <block wx:elif="{{load_page == 'cover_you_looking_for'}}">
-        <ComponentLookingFor :spaceId.sync="space_id" />
-      </block>
-      <block wx:elif="{{load_page == 'cover_answer_questions'}}">
-        <ComponentQuestions :spaceId.sync="space_id" />
-      </block>
-    </view>
-    <view class="about-me-container" wx:if="{{load_page == 'index'}}">
-      <view class="about-me" @tap="goAbout">关于无颜</view>
-    </view>
+		<block wx:if="{{!loveEnable}}">
+			<view class="page">
+				<view class="page__hd">
+					<view class="love-title">测一测你和好友的匹配度</view>
+				</view>
+				<view class="page__bd">
+					<view class="love-summary">“无颜”是一位聪明又勤快的智能机器人，精确执行数据计算，测试你和好友的匹配度。</view>
+					<button class="btn-join" @tap="goInterest">测试兴趣爱好</button>
+					<button wx:if="{{showLoveBtn}}" class="btn-love" @tap="goLove">寻找有缘人</button>
+					<view class="love-licence"></view>
+				</view>
+			</view>
+		</block>
+		<block wx:else>
+			<view class="page">
+				<block wx:if="{{load_page == 'index'}}">
+					<view class="page__hd">
+						<view class="love-title">告别刷脸时代，寻找志趣相投的有缘人</view>
+					</view>
+					<view class="page__bd">
+						<view class="love-summary">“无颜”是一位聪明又勤快的智能机器人，每周他都会根据你的喜好和对方喜好，执行海量的数据计算，找到与你“相互匹配”值最高的有缘人，并互发微信。</view>
+						<button class="btn-join" @tap="join">我想试试</button>
+						<view class="love-licence"></view>
+					</view>
+				</block>
+				<block wx:elif="{{load_page == 'cover_about_yourself'}}">
+					<ComponentCoverYourself :spaceId.sync="space_id" />
+				</block>
+				<block wx:elif="{{load_page == 'cover_you_looking_for'}}">
+					<ComponentLookingFor :spaceId.sync="space_id" />
+				</block>
+				<block wx:elif="{{load_page == 'cover_answer_questions'}}">
+					<ComponentQuestions :spaceId.sync="space_id" />
+				</block>
+			</view>
+			<view class="about-me-container" wx:if="{{load_page == 'index'}}">
+				<view class="about-me" @tap="goAbout">关于无颜</view>
+			</view>
+		</block>
   </view>
 </template>
 
@@ -113,7 +128,9 @@ export default class LoveIndex extends wepy.page {
     baseMaterialUrl: baseMaterialUrl,
     space_id: null,
     load_page: '',
-    is_loaded: false
+		is_loaded: false,
+		loveEnable: false,
+		showLoveBtn: false
   };
 
   async onLoad (e) {
@@ -122,10 +139,17 @@ export default class LoveIndex extends wepy.page {
     if(!e.space_id){
       // 保证一进入就新建space对应的vip_customers记录
       e.space_id = loveSpaceId;
-    }
+		}
     this.space_id = e.space_id;
     console.log("this.space_id============", this.space_id);
-    await this.$parent.login(e);
+		await this.$parent.login(e);
+		
+		const love = this.$parent.globalData.love;
+		if (love && love.enabled) {
+			this.showLoveBtn = true;
+			this.$apply();
+		}
+
     if(!this.space_id){
       wx.showToast({
         title: "未配置工作区ID",
@@ -134,40 +158,45 @@ export default class LoveIndex extends wepy.page {
       return;
     }
 
-    let index = 0;
-    let spaceId = this.space_id;
-    let my_customers = this.$parent.globalData.my_customers;
-    let current_customer = my_customers.find((customer, i) => {
-      if (customer.space == spaceId) {
-        index = i;
-        return customer
-      }
-    });
+		if(e.love) {
+			this.loveEnable = true;
+			let index = 0;
+			let spaceId = this.space_id;
+			let my_customers = this.$parent.globalData.my_customers;
+			let current_customer = my_customers.find((customer, i) => {
+				if (customer.space == spaceId) {
+					index = i;
+					return customer
+				}
+			});
 
-    console.log('[current_customer]', current_customer)
+			console.log('[current_customer]', current_customer)
 
-    if (current_customer && current_customer.questionnaire_progess) {
-      switch(current_customer.questionnaire_progess) {
-        case 1:
-          wx.setNavigationBarTitle({title: '无颜'});
-          self.load_page = 'cover_about_yourself';
-          break;
-        case 2:
-          wx.setNavigationBarTitle({title: '理想伴侣'});
-          self.load_page = 'cover_you_looking_for';
-          break;
-        case 3:
-          wx.setNavigationBarTitle({title: '交友问答'});
-          self.load_page = 'cover_answer_questions';
-          break;
-        case 4:
-          wx.switchTab({url: `/pages/love/shake`});
-          break;
-      }
-    } else {
-      this.load_page = 'index';
-      wx.setNavigationBarTitle({title: '无颜'});
-    }
+			if (current_customer && current_customer.questionnaire_progess) {
+				switch(current_customer.questionnaire_progess) {
+					case 1:
+						wx.setNavigationBarTitle({title: '无颜'});
+						self.load_page = 'cover_about_yourself';
+						break;
+					case 2:
+						wx.setNavigationBarTitle({title: '理想伴侣'});
+						self.load_page = 'cover_you_looking_for';
+						break;
+					case 3:
+						wx.setNavigationBarTitle({title: '交友问答'});
+						self.load_page = 'cover_answer_questions';
+						break;
+					case 4:
+						wx.switchTab({url: `/pages/love/shake`});
+						break;
+				}
+			} else {
+				this.load_page = 'index';
+				wx.setNavigationBarTitle({title: '无颜(内测版)'});
+			}
+		} else {
+			wx.setNavigationBarTitle({title: '无颜(内测版)'});
+		}
     this.is_loaded = true;
     this.$apply();
     wx.hideLoading();
@@ -185,12 +214,18 @@ export default class LoveIndex extends wepy.page {
   }
 
   methods = {
-    join(){
+    join() {
       pageRouter.navigateTo({url: `/pages/love/invite_code?space_id=${this.space_id}`});
     },
-    goAbout(){
+    goAbout() {
       wx.navigateTo({url: `/pages/space/index?space_id=${this.space_id}`})
-    }
+		},
+		goLove() {
+			wx.redirectTo({url: '/pages/love/index?love=1'})
+		},
+		goInterest() {
+			wx.navigateTo({url: `/pages/love/papers_view?object_name=love_hobby&space_id=${this.space_id}`})
+		}
   };
 
   components = {
