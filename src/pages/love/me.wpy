@@ -76,7 +76,12 @@
             <image class="image" mode="aspectFill" src="https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/avatar.png"></image>
           </view>
           <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
-            未登录
+            <view class="weui-media-box__title" style="line-height: 30px;">
+              {{name}}
+            </view>
+            <view wx:if="{{is_member}}" class="weui-media-box__desc" style="margin-top: 6rpx;">
+              VIP会员
+            </view>
           </view>
         </button>
       </block>
@@ -272,8 +277,8 @@ export default class QuestionnaireList extends wepy.page {
       this.name = user.name;
       this.avatar = user.avatar;
     } else {
-      this.name = '未登录';
-      this.avatar = 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg';
+      this.name = user.name;
+      // this.avatar = 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg'
     }
 
     this.$apply();
