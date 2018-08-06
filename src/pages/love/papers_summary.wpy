@@ -73,27 +73,6 @@ export default class PapersSummary extends wepy.page {
 
   methods = {
     async continue(){
-      const spaceId = this.space_id;
-      let index = 0;
-      let my_customers = this.$parent.globalData.my_customers;
-      let current_customer = my_customers.find((customer, i) => {
-        if (customer.space == spaceId) {
-          index = i;
-          return customer
-        }
-      });
-      if (current_customer && current_customer._id && current_customer.questionnaire_progess == 3) {
-        current_customer.questionnaire_progess = 4;
-        my_customers[index] = current_customer
-        this.$parent.globalData.my_customers = my_customers;
-        this.$apply();
-        await this.$parent.update(
-          'vip_customers',
-          current_customer._id,
-          { questionnaire_progess: 4 },
-          spaceId
-        );
-      };
       pageRouter.reLaunch({url: `/pages/love/me?space_id=${this.space_id}`})
     }
   }

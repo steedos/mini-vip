@@ -172,20 +172,24 @@ export default class LoveIndex extends wepy.page {
 
 		console.log('[current_customer]', current_customer)
 
-		if (current_customer && current_customer.questionnaire_progess) {
-			switch(current_customer.questionnaire_progess) {
-				case 1:
-					self.load_page = 'cover_about_yourself';
-					break;
-				case 2:
+		if (current_customer.is_member) {
+			let finishedNaire = wx.getStorageSync('finishedNaire');
+			if (finishedNaire.indexOf('love_hobby') > -1) {
+				finishedNaire.splice(finishedNaire.indexOf('love_hobby'), 1);
+			} 
+			if (finishedNaire.indexOf('love_answer2') > -1) {
+				finishedNaire.splice(finishedNaire.indexOf('love_answer2'), 1);
+			}
+			if (finishedNaire && finishedNaire.constructor === Array && finishedNaire.length > 0) {
+				if (finishedNaire.length == 1 && finishedNaire.includes('love_about_me')) {
 					self.load_page = 'cover_you_looking_for';
-					break;
-				case 3:
+				} else if (finishedNaire.length == 2 && finishedNaire.includes('love_about_me') && finishedNaire.includes('love_looking_for')) {
 					self.load_page = 'cover_answer_questions';
-					break;
-				case 4:
+				} else if (finishedNaire.length == 3 && finishedNaire.includes('love_about_me') && finishedNaire.includes('love_looking_for') && finishedNaire.includes('love_answer')) {
 					wx.switchTab({url: `/pages/love/shake`});
-					break;
+				} else {
+					this.load_page = 'cover_about_yourself'
+				}
 			}
 		} else {
 			if(e.love) {
@@ -194,7 +198,7 @@ export default class LoveIndex extends wepy.page {
 				this.load_page = 'love_disabled';
 			}
 		}
-	
+
     this.is_loaded = true;
     this.$apply();
     wx.hideLoading();
