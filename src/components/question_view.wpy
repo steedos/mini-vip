@@ -1277,6 +1277,8 @@
         const key = question.name;
         const fieldValue = formValues[key];
 
+//        console.log('submitFieldForm', formValues, key, fieldValue, question.type)
+
         let values = {};
 
         if(question.type === 'select' && (question.options_all.length >= 10 || question.range)){
@@ -1290,7 +1292,7 @@
         }
 
 
-        if(this.globalRequired && !fieldValue){
+        if(this.globalRequired && !values[key]){
           this.showError = true;
           if (this.question.label.indexOf('？')>0){
           var errorMsg = this.question.label.substr(0, this.question.label.length - 1);}else{
