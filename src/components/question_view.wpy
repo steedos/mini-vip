@@ -1081,7 +1081,7 @@
     getProgress(){
 //      console.log('this.pendingQuesionKeys', this.pendingQuesionKeys);
 //      console.log('this.questionKeys', this.questionKeys);
-      return (1 - this.pendingQuesionKeys.length / this.questionKeys.length) * 100 + '%';
+      return (1 - (this.pendingQuesionKeys.length - 1) / this.questionKeys.length) * 100 + '%';
     }
 
     goBack() {
@@ -1327,7 +1327,7 @@
               this.fieldErrorMSG = `请填写合理的身高范围。`;
             }else{
               this.fieldErrorMSG = `请填写合理的范围。`;
-            }           
+            }
             return wx.hideLoading();
           }
         }
