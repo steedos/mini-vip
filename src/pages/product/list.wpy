@@ -203,7 +203,7 @@ page {
     <view class="tab-bar">
       <view class="comment-btn action">
         <view class="slds-icon slds-icon--small slds-m-right--x-small">
-          <image class="ion" src="/static/images/ic_menu_sort_nor.png"></image>
+          <image class="ion" src="/static/images/apps_pressed.png"></image>
         </view>
         <view class="text">分类</view>
       </view>
