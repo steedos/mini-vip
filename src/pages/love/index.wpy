@@ -1,26 +1,24 @@
 <style lang="less">
-  page{
-    background: #353535;
-  }
   .page__hd{
-    padding:40rpx;
+    padding:20rpx;
     .love-title{
-      margin-top:40rpx;
-      color:#fff;
+      margin-top:80rpx;
+      color:#353535;
       font-size:65rpx;
       font-weight:bold;
+      text-align: center;
     }
   }
   .page__bd{
     padding:40rpx;
     .love-summary{
-      color:#fff;
+      color:#353535;
       font-size:45rpx;
       margin-bottom:50rpx;
     }
   }
   .btn-join{
-    background:#4D7BD9;
+    background:#5f6fee;
     padding:6px;
     color:#fff;
     font-weight:bold;
@@ -123,7 +121,7 @@ import ComponentLookingFor from '@/components/cover_you_looking_for';
 
 export default class LoveIndex extends wepy.page {
   config = {
-    navigationBarTitleText: '无颜 (内测版)'
+    navigationBarTitleText: '无颜'
   };
 
   data = {

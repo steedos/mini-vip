@@ -30,7 +30,9 @@
 
   export default class PapersView extends wepy.page {
     config = {
-      navigationBarTitleText: ''
+      navigationBarTitleText: '',
+      navigationBarBackgroundColor: '#f6f7f8',
+      navigationBarTextStyle: 'black',
     };
 
     components = {

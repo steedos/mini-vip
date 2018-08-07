@@ -4,7 +4,7 @@
 @import "../lib/slds/slds_margin.less";
 @import "../lib/vip/vip.less";
 page {
-  background-color: #efeef3;
+  background-color: #f6f7f8;
   font-size: 16px;
   font-family: -apple-system-font,Helvetica Neue,Helvetica,sans-serif;
 }
@@ -208,7 +208,7 @@ export default class VIP extends wepy.app {
     tabBar: {
       color: '#666',
       selectedColor: '#5e9bf4',
-      backgroundColor: '#fff',
+      backgroundColor: '#f6f7f8',
       borderStyle: 'black',
       list: [
       {
@@ -225,10 +225,10 @@ export default class VIP extends wepy.app {
       }]
     },
     window: {
-      navigationBarBackgroundColor: '#353535',
-      navigationBarTitleText: '华炎客服',
-      navigationBarTextStyle: 'white',
-      backgroundColor: "#efeef3",
+      navigationBarBackgroundColor: '#f6f7f8',
+      navigationBarTitleText: '无颜',
+      navigationBarTextStyle: 'black',
+      backgroundColor: "#f6f7f8",
       backgroundTextStyle: 'dark',
     }
   }
