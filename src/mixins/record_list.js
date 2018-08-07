@@ -24,7 +24,8 @@ export default class recordList extends wepy.mixin {
     allowCreate: false,
     filter: '',
     url: '/pages/record/edit',
-    add_url: '/pages/record/create'
+    add_url: '/pages/record/create',
+    navigationBarTitle: ''
   };
 
   dataRefresh() {
@@ -90,6 +91,10 @@ export default class recordList extends wepy.mixin {
     return e.filter || this.filter
   }
 
+  getFinalExpand(expand) {
+    return expand.join(',')
+  }
+
   getQueryOptions(searchValue){
     const options = {
       $count: true,
@@ -141,7 +146,7 @@ export default class recordList extends wepy.mixin {
       keys.push(this.price_field);
     }
     if (expand.length > 0) {
-      options.$expand = expand.join(',')
+      options.$expand = this.getFinalExpand(expand);
     }
 
     console.log('this.fields', this.fields);
@@ -180,8 +185,8 @@ export default class recordList extends wepy.mixin {
 
     this.space_id = e.space_id;
     this.object_name = e.object_name || this.object_name;
-    this.avatar_field = e.avatar_field;
-    this.name_field = e.name_field || 'name';
+    this.avatar_field = e.avatar_field || this.avatar_field;
+    this.name_field = e.name_field || this.name_field || 'name';
     this.description_field = e.description_field;
     this.date_field = e.date_field;
     this.price_field = e.price_field;
@@ -202,7 +207,7 @@ export default class recordList extends wepy.mixin {
     this.searchPlaceholder = '搜索' + object.label;
 
     wx.setNavigationBarTitle({
-      title: object.label
+      title: this.navigationBarTitle || object.label
     });
     await this.loadRecords()
     this.is_loaded = true

@@ -1,0 +1,132 @@
+<style lang="less">
+page {
+  height: 100% !important;
+  .page {
+    height: 100%;
+    .user-login {
+      position: relative;
+      width: 100%;
+      height: 50%;
+      .info {
+        padding: 15px;
+        font-size: 20px;
+        position: absolute;
+        top: 40%;
+        text-align: center;
+      }
+      .input-btn {
+        position: absolute;
+        left: 15px;
+        right: 15px;
+        bottom: 0;
+      }
+    }
+    .love-result {
+      position: relative;
+      width: 100%;
+      height: 50%;
+      .result-container {
+        padding: 15px;
+        font-size: 20px;
+        position: absolute;
+        box-sizing: border-box;
+        width: 100%;
+        top: 40%;
+        display: flex;
+        .user-avatar {
+          height: 120rpx;
+          width: 120rpx;
+          border-radius: 50%;
+          image {
+            width: 100%;
+            height: 100%;
+          }
+        }
+        .result {
+          text-align: center;
+          font-size: 20px;
+          font-weight: bold;
+          color: rgb(255, 131, 15);
+          flex: 1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      }
+      .input-btn {
+        position: absolute;
+        left: 15px;
+        right: 15px;
+        bottom: 0;
+      }
+    }
+  }
+}
+</style>
+
+<template>
+  <view class="page">
+    <block wx:if="{{!isAuthUserInfo}}">
+      <view class="user-login">
+        <view class="info">授权身份信息之后即可查看你与好友的匹配分数</view>
+        <button class="input-btn weui-btn button-hover" type="primary" open-type="getUserInfo" bindgetuserinfo="getUserInfo">
+          微信登录
+        </button>
+      </view>
+    </block>
+    <block wx:else>
+      <view class="love-result">
+        <view class="result-container">
+          <view class="user-avatar">
+            <image mode="aspectFill" src="https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJ4cicQ9OIzkE3AhBZ5iczMOwrRaGtPbpqF9blGunKWrgGa6BR4DD63amMkDwfnIVunIpsN6f9HlTTw/132">
+            </image>
+          </view>
+          <view class="result">
+            75%
+          </view>
+          <view class="user-avatar">
+            <image mode="aspectFill" src="https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJ4cicQ9OIzkE3AhBZ5iczMOwrRaGtPbpqF9blGunKWrgGa6BR4DD63amMkDwfnIVunIpsN6f9HlTTw/132">
+            </image>
+          </view>
+        </view>
+        <button class="input-btn weui-btn button-hover" type="primary" open-type="share">
+          邀请好友测试
+        </button>
+      </view>
+    </block>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+
+export default class MatchingResult extends wepy.page {
+  config = {
+    navigationBarTitleText: '匹配结果',
+    enablePullDownRefresh: true
+  }
+
+  data = {
+    is_loaded: false,
+    isAuthUserInfo: false
+  }
+
+  async onLoad() {
+    const setting = await wepy.getSetting();
+    if (setting.authSetting['scope.userInfo']) {
+      this.isAuthUserInfo = true;
+    }
+    this.$apply();
+  }
+
+  methods = {
+    getUserInfo(e) {
+      if (e.detail.userInfo) {
+        this.isAuthUserInfo = true;
+        this.$apply();
+      }
+    }
+  }
+}
+
+</script>
