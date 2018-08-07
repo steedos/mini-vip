@@ -199,7 +199,7 @@ export default class recordList extends wepy.mixin {
     } else if (e.allow_create === 'false'){
       this.allowCreate = false
     }
-    this.searchPlaceholder = '搜索' + object.label;
+    this.searchPlaceholder = '搜索'; // + object.label;
 
     wx.setNavigationBarTitle({
       title: object.label
