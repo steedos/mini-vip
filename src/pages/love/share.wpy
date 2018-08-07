@@ -181,6 +181,7 @@
 
 <script>
   import wepy from 'wepy';
+  import req from '@/network'
   import { baseUrl, appId } from '@/config';
   import { baseMaterialUrl } from '@/config';
   import util from '../../wxs/util.wxs';
@@ -255,19 +256,29 @@
       }
       else{
         console.log("===============addShare============insert");
-        share = await this.$parent.insert("vip_share", values, this.space_id);
+        // share = await this.$parent.insert("vip_share", values, this.space_id).catch((err)=>{
+        //   console.log("sssssss",err.data)
+        //   return false
+        // });
+        const url = '/api/odata/v4/' + this.space_id + '/' + "vip_share";
+        share = await req.post(url, values).catch((err)=>{
+          console.log("error...",err)
+          return err.data;
+        });
       }
       if(share && share.value && share.value.length){
         this.share_id = share.value[0]._id;
         this.share_failed = false;
       }
       else{
-        console.log("============share=======error==============");
-        wx.showToast({
-          title: "分享失败",
-          icon: "none"
-        });
-        this.share_failed = true;
+        console.log("============share=======error==============", share);
+        if (!share || share.error.error !== "repeat") {
+          wx.showToast({
+            title: "分享失败",
+            icon: "none"
+          });
+          this.share_failed = true;
+        }
       }
     }
 
