@@ -222,7 +222,7 @@ export default class LoveIndex extends wepy.page {
     let title = this.$parent.globalData.title;
     return {
       title: title,
-      path: `pages/love/index?share_from=${userId}&love=1`,
+      path: `pages/love/index?share_from=${userId}`,
     };
   }
 
