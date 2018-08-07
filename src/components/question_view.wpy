@@ -599,7 +599,7 @@
           <view class="weui-flex__item other">你的理想伴侣</view>
         </view>
         <view class="question-body">
-          <block wx:if="{{question.options_all.length > 4}}">
+          <block wx:if="{{question.options_all.length > 0}}">
             <view class="big-select">
               <view class="triangleb"></view>
               <checkbox-group bindchange="checkboxChange" class="weui-flex">
