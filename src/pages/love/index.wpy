@@ -1,38 +1,4 @@
 <style lang="less">
-  .page__hd{
-    padding:20rpx;
-    .love-title{
-      margin-top:80rpx;
-      color:#353535;
-      font-size:65rpx;
-      font-weight:bold;
-      text-align: center;
-    }
-  }
-  .page__bd{
-    padding:40rpx;
-    .love-summary{
-      color:#353535;
-      font-size:45rpx;
-      margin-bottom:50rpx;
-    }
-  }
-  .btn-join{
-    background:#5f6fee;
-    padding:6px;
-    color:#fff;
-    font-weight:bold;
-    margin:30rpx 0;
-	}
-	.btn-love {
-		padding:6px;
-		font-weight:bold;
-	}
-  .love-licence{
-    color:#fff;
-    font-size:32rpx;
-    text-align:center;
-  }
 
   .loading-container {
     position: absolute;
@@ -68,7 +34,7 @@
 
 <template>
   <view wx:if="{{is_loaded}}">
-		<view class="page">
+		<view class="page cover-page">
 			<block wx:if="{{load_page == 'index'}}">
 				<view class="page__hd">
 					<view class="love-title">告别刷脸时代，寻找志趣相投的有缘人</view>

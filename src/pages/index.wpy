@@ -93,7 +93,7 @@
 </style>
 
 <template>
-  <view class="page-index" wx:if="{{is_loaded}}">
+  <view class="cover-pagepage-index" wx:if="{{is_loaded}}">
 
     <view class="page__bd">
       <view class="weui-grids">

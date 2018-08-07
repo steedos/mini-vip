@@ -213,6 +213,7 @@
           margin-bottom: 15px;
           padding-left:15px;
           padding-right:15px;
+          font-size:17px;
           .weui-cells{
             background-color: @otherBackground;
             /*color: #FFFFFF;*/
@@ -511,6 +512,9 @@
       margin-top: 0px;
       text-align: center;
       color: #888;
+      font-size:11px;
+      padding-top:5px;
+
     }
   }
 
