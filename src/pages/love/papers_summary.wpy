@@ -1,7 +1,4 @@
 <style lang="less">
-  page{
-    background: #fff;
-  }
   .page__hd{
     padding:40rpx;
     .love-title{

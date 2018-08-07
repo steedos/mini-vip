@@ -189,7 +189,7 @@
  
   export default class LoveShare extends wepy.page {
 		config = {
-			navigationBarTitleText: '拯救单身狗'
+			navigationBarTitleText: '分享'
     };
 
     wxs = {

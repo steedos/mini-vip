@@ -40,7 +40,7 @@
     <view class="love-summary">
       完成问卷测试，让“无颜”为你匹配理想伴侣。
     </view>
-    <button class="btn-join" @tap="confirm">领取会员</button>
+    <button class="btn-join" @tap="confirm">下一步</button>
     <view class="love-licence"></view>
   </view>
 </view>

@@ -97,6 +97,7 @@
           position: relative;
           max-width: 75%;
           .label{
+            font-size:17px;
             min-width: 50px;
             text-align: center;
             line-height: @height;
@@ -478,11 +479,10 @@
       left: 0px;
     }
     button[type=primary] {
-      background-color:@mainBackground;
+      background-color: @mainBackground;
     }
 
     .button-hover{
-      background-color:@mainBackground !important;
     }
 
     .check-icon {

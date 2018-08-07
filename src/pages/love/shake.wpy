@@ -162,6 +162,8 @@ const Z_THRESHOLD = 0.18;
 
 export default class LoveShake extends wepy.page {
   config = {
+    navigationBarBackgroundColor: '#353535',
+    navigationBarTextStyle: 'white',
     navigationBarTitleText: '摇一摇'
   };
 
