@@ -55,7 +55,7 @@
 					</view>
 					<view class="page__bd">
 						<view class="love-summary">邀请好友一起回答有趣的问卷，测试你们的匹配度。</view>
-						<button wx:if="{{finishHobby}}" class="btn-join" open-type="share">邀请好友测试</button>
+						<button wx:if="{{finishHobby}}" class="btn-join" @tap="goShare">邀请好友测试</button>
 						<button wx:else class="btn-join" @tap="goHobby">测试兴趣爱好</button>
 						<button wx:if="{{showLoveBtn}}" class="btn-love" @tap="goLove">寻找有缘人</button>
 						<view class="love-licence"></view>
@@ -202,7 +202,10 @@ export default class LoveIndex extends wepy.page {
 		},
 		goHobby() {
 			wx.navigateTo({url: `/pages/love/papers_view?object_name=love_hobby&space_id=${this.space_id}`})
-		}
+    },
+    goShare() {
+      wx.navigateTo({url: `/pages/love/matching_degree?object_name=vip_invites&space_id=${this.space_id}`})
+    }
   };
 
   components = {
