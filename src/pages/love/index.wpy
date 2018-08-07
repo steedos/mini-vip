@@ -85,7 +85,7 @@
 			<block wx:elif="{{load_page == 'love_disabled'}}">
 				<view class="page">
 					<view class="page__hd">
-						<view class="love-title">测试你和好友的匹配度</view>
+						<view class="love-title">测试好友匹配度</view>
 					</view>
 					<view class="page__bd">
 						<view class="love-summary">邀请好友一起回答有趣的问卷，测试你们的匹配度。</view>
