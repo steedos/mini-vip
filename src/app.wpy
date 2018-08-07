@@ -209,21 +209,21 @@ export default class VIP extends wepy.app {
     ],
     tabBar: {
       color: '#666',
-      selectedColor: '#5e9bf4',
-      backgroundColor: '#f6f7f8',
+      selectedColor: '#5f71ee',
+      backgroundColor: '#fff',
       borderStyle: 'black',
       list: [
       {
         pagePath: 'pages/love/shake',
         selectedIconPath: './images/tabbars/topic_pressed.png',
         iconPath: './images/tabbars/topic.png',
-        text: '摇一摇',
+        text: '有缘人',
       },
       {
         pagePath: 'pages/love/me',
         selectedIconPath: './images/tabbars/me_pressed.png',
         iconPath: './images/tabbars/me.png',
-        text: '我的',
+        text: '我',
       }]
     },
     window: {
