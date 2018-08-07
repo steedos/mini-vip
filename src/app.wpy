@@ -117,7 +117,7 @@ page {
   min-height:100vh;
 
   .page__hd{
-    padding:20rpx;
+    padding:40rpx;
     .love-title{
       margin-top:80rpx;
       color:#00396b;
@@ -131,13 +131,13 @@ page {
     .love-summary{
       color:#00396b;
       font-size:45rpx;
-      margin-bottom:50rpx;
+      margin-bottom:80rpx;
       text-align: center;
     }
     .love-attention{
       color: #00396b;
       font-size:35rpx;
-      margin-bottom:50rpx;
+      margin-bottom:80rpx;
       text-align: center;
     }
   }
@@ -152,6 +152,7 @@ page {
   .btn-love {
     padding:6px;
     font-weight:bold;
+    color:#353535;
   }
   .love-licence{
     color:#fff;
