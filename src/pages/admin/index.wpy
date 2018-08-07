@@ -109,12 +109,13 @@ export default class AdminIndex extends wepy.page {
       ],
       [
         {title: '团队', icon:'standard-user', url: `../record/list?space_id=${this.space_id}&object_name=space_users&avatar_field=user.profile.avatar&description_field=mobile&filter=(((profile eq \'user\') or (profile eq \'admin\')))&add_url=/pages/space/invite_user&allow_create=${this.is_space_owner}`},
+        {title: '客户', icon:'standard-client', url: `../record/list?space_id=${this.space_id}&object_name=vip_customers&avatar_field=user.profile.avatar&description_field=mobile`},
         {title: 'WIFI', icon:'utility-wifi', url: `../record/list?space_id=${this.space_id}&object_name=vip_wifi`},
         {title: '二维码', icon:'standard-product', url: `qrcode?space_id=${this.space_id}`}
       ],
       [
         {title: '菜单', icon:'standard-apps', url: `../record/list?space_id=${this.space_id}&object_name=vip_menu`},
-        {title: '主页模块', icon:'lead_list', url: `../record/list?space_id=${this.space_id}&object_name=vip_portlet`}
+        {title: '主页模块', icon:'standard-work-order-item', url: `../record/list?space_id=${this.space_id}&object_name=vip_portlet`}
       ]
 
     ];
