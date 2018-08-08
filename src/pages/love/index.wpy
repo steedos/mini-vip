@@ -14,7 +14,11 @@
       background-position: center center;
       background-repeat: no-repeat;
     }
-  }
+	}
+	
+	.btn-index {
+		margin: 30rpx 0;
+	}
 
   .about-me-container {
     position: absolute;
@@ -55,9 +59,9 @@
 					</view>
 					<view class="page__bd">
 						<view class="love-summary">邀请好友一起回答有趣的问卷，测试你们的缘分值。</view>
-						<button class="btn-join" @tap="goHobby">开始答题</button>
+						<button class="btn-join" @tap="goAnswer">开始答题</button>
 						<button class="btn-love" @tap="goShare">缘分排行榜</button>
-						<button wx:if="{{showLoveBtn}}" class="btn-love" @tap="goLove">寻找有缘人</button>
+						<button wx:if="{{showLoveBtn}}" class="btn-index btn-love" @tap="goLove">寻找有缘人</button>
 						<view class="love-licence"></view>
 					</view>
 				</view>
@@ -99,7 +103,9 @@ export default class LoveIndex extends wepy.page {
     load_page: '',
 		is_loaded: false,
 		finishHobby: false,
-		showLoveBtn: false
+		showLoveBtn: false,
+		naire: '',
+		share_from: ''
   };
 
   async onLoad (e) {
@@ -140,15 +146,16 @@ export default class LoveIndex extends wepy.page {
 		console.log('[current_customer]', current_customer)
 
 		if (e.naire) {
-			const answeredUrl = encodeURIComponent(`/pages/love/matching_result?space_id=${this.space_id}&share_from=${e.share_from}`);
+			this.naire = e.naire;
+			this.share_from = e.share_from;
+			this.$apply();
+			const answeredUrl = encodeURIComponent(`/pages/love/matching_degree?space_id=${this.space_id}`);
 
 			console.log('[answeredUrl]', answeredUrl)
 
-			if (e.naire == 'love_hobby') {
-				wx.redirectTo({
-					url: `/pages/love/papers_view?object_name=love_hobby&space_id=${this.space_id}&answered_url=${answeredUrl}`
-				})
-			}
+			wx.redirectTo({
+				url: `/pages/love/papers_view?object_name=${e.naire}&space_id=${this.space_id}&answered_url=${answeredUrl}&answered_url_type=redirectTo`
+			})
 		}
 
 		if (current_customer.is_member) {
@@ -200,7 +207,7 @@ export default class LoveIndex extends wepy.page {
     let title = this.$parent.globalData.title;
     return {
       title: title,
-      path: `pages/love/index?share_from=${userId}`,
+      path: `pages/love/index?share_from=${userId}&love=1`,
     };
   }
 
@@ -214,8 +221,15 @@ export default class LoveIndex extends wepy.page {
 		goLove() {
 			wx.navigateTo({url: '/pages/love/index?love=1'})
 		},
-		goHobby() {
-			wx.navigateTo({url: `/pages/love/papers_view?object_name=love_hobby&space_id=${this.space_id}`})
+		async goAnswer() {
+			const setting = await wepy.getSetting();
+			if (setting.authSetting['scope.userInfo']) {
+				wx.navigateTo({
+					url: `/pages/love/papers_view?object_name=love_answer&space_id=${this.space_id}&answered_url_type=redirectTo&answered_url=${encodeURIComponent(`/pages/love/matching_degree?space_id=${this.space_id}`)}`
+				});
+			} else {
+				wx.navigateTo({url: `/pages/user_info_login?naire=${this.naire}&share_from=${this.share_from}&next=${encodeURIComponent(`/pages/love/papers_view?object_name=love_answer&space_id=${this.space_id}`)}`})
+			}
     },
     goShare() {
       wx.navigateTo({url: `/pages/love/matching_degree?object_name=vip_invites&space_id=${this.space_id}`})

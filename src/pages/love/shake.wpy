@@ -348,7 +348,7 @@ export default class LoveShake extends wepy.page {
     return {
       title: title,
       path: `pages/love/index?share_from=${userId}&love=1`,
-      imageUrl: `${baseMaterialUrl}love_share.jpg`
+      imageUrl: `${baseMaterialUrl}love_share_bg.jpg`
     };
   }
 

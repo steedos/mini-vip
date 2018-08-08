@@ -233,6 +233,7 @@ export default class VIP extends wepy.app {
       'pages/consuming_records',
       'pages/home/post',
       'pages/phone_number_login',
+      'pages/user_info_login',
       'pages/empty_page',
       'pages/404',
       'pages/record/view',

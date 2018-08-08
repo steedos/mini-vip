@@ -296,7 +296,7 @@
     onShareAppMessage(res) {
       let title = this.$parent.globalData.title;
       let path = this.getSharePath();
-      let imageUrl = `${baseMaterialUrl}love_share.jpg`;
+      let imageUrl = `${baseMaterialUrl}love_share_bg.jpg`;
       return {
         title: title,
         path: path,

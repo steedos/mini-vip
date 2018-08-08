@@ -13,7 +13,7 @@ export default class CoverYouLookingFor extends wepy.page {
   config = {
     navigationBarTitleText: '无颜', 
     navigationBarBackgroundColor: '#cae6f1',
-      navigationBarTextStyle: 'black',
+    navigationBarTextStyle: 'black',
   };
 
   data = {

@@ -80,19 +80,24 @@ export default class MatchingDegree extends wepy.page {
 
   data = {
     object_name: 'vip_invites',
-    filter: `(from eq 'ootievH6oBKzMsxPz')`,
+    filter: '',
     avatar_field: 'from.profile.avatar',
     name_field: 'from.name',
     baseUrl: baseUrl,
     navigationBarTitle: '缘分排行榜'
   }
 
+  getQueryFilter() {
+    const user_id = this.$parent.globalData.user._id;
+    return `(from eq '${user_id}' or owner eq '${user_id}')`;
+  }
+
   onShareAppMessage(res) {
     const user_id = this.$parent.globalData.user._id;
     console.log('onShareAppMessage', user_id);
     let title = '测试匹配度';
-    let path = `/pages/love/index?love=1&naire=love_hobby&share_from=${user_id}`
-    let imageUrl = `${baseMaterialUrl}love_share.jpg`;
+    let path = `/pages/love/index?love=1&naire=love_answer&share_from=${user_id}`
+    let imageUrl = `${baseMaterialUrl}love_share_bg.jpg`;
     return {
       title: title,
       path: path,

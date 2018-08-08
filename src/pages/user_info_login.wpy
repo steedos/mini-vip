@@ -1,0 +1,104 @@
+<style lang="less">
+page {
+  height: 100%;
+}
+.page.love {
+  background-color: #fff;
+  height: 100%;
+}
+.other {
+  button[type='primary'][plain] {
+    color: #fff;
+    background-color: #1aad19;
+    margin-top: 190rpx;
+    width: 580rpx;
+  }
+  .container-title {
+    padding-top: 20rpx;
+    font-size: 32rpx;
+    font-weight: bold;
+  }
+  .user-avatar {
+    width: 140rpx;
+    height: 140rpx;
+    margin: 140rpx auto 0 auto;
+    image {
+      border-radius: 50%;
+      border: 2px solid #e1e1e1;
+    }
+  }
+}
+</style>
+
+<template>
+	<view class="page phone-login love">
+    <view class="weui-toptips weui-toptips_warn" wx:if="{{showTopTips}}">{{message}}</view>
+    <view class="page__hd"></view>
+    <view class="page__bd page__bd_spacing">
+			<view class="container other">
+				<view class="weui-media-box__hd weui-media-box__hd_in-appmsg user-avatar">
+					<image wx:if="{{userAvatarUrl}}" class="weui-media-box__thumb" mode="aspectFill" src="{{userAvatarUrl}}"></image>
+					<image wx:else mode="aspectFill" class="weui-media-box__thumb" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg"></image>
+				</view>
+				<view wx:if="{{nickName}}" class="container-title">{{nickName}}</view>
+				<view wx:else class="container-title">未登录</view>
+				<button class="weui-btn" type="primary" plain="true" open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo">获取微信昵称</button>
+			</view>
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import req from '@/network';
+import { loveSpaceId } from '@/config';
+
+export default class UserInfoLogin extends wepy.page {
+  config = {
+    navigationBarTitleText: '登录'
+  };
+
+  data = {
+    isAuthUserInfo: false,
+    nickName: '',
+    userAvatarUrl: '',
+		showTopTips: false,
+		next: '',
+		message: '',
+		space_id: loveSpaceId
+  };
+
+  async onLoad(e) {
+		console.log(e)
+    if (e) {
+			this.next = e.next;
+			this.naire = e.naire;
+			this.share_from = e.share_from;
+			this.$apply();
+		}
+  }
+
+  bindGetUserInfo(e) {
+		console.log('[this.next]', this.next);
+    if (e.detail.userInfo) {
+      const userInfo = e.detail.userInfo;
+      const name = userInfo.nickName;
+      const sex = userInfo.gender ? '男' : '女';
+      const avatar = userInfo.avatarUrl;
+			const url = '/mini/vip/user';
+			const next = decodeURIComponent(this.next);
+			this.isAuthUserInfo = true;
+      this.nickName = name;
+      this.userAvatarUrl = avatar;
+      this.showTopTips = false;
+      this.message = '';
+			req.put(url, { name: name, sex: sex, avatar: avatar });
+			if (this.share_from && e.naire) {
+      	wx.navigateTo({url: next});				
+			} else {
+				wx.navigateTo({url: `${next}&answered_url_type=redirectTo&answered_url=${encodeURIComponent(`/pages/love/matching_degree?space_id=${this.space_id}`)}`});
+			}
+    }
+  }
+}
+</script>
