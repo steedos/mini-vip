@@ -51,10 +51,10 @@
 			<block wx:elif="{{load_page == 'love_disabled'}}">
 				<view class="page">
 					<view class="page__hd">
-						<view class="love-title">测试好友匹配度</view>
+						<view class="love-title">测试好友缘分值</view>
 					</view>
 					<view class="page__bd">
-						<view class="love-summary">邀请好友一起回答有趣的问卷，测试你们的匹配度。</view>
+						<view class="love-summary">邀请好友一起回答有趣的问卷，测试你们的缘分值。</view>
 						<button wx:if="{{finishHobby}}" class="btn-join" @tap="goShare">邀请好友测试</button>
 						<button wx:else class="btn-join" @tap="goHobby">测试兴趣爱好</button>
 						<button wx:if="{{showLoveBtn}}" class="btn-love" @tap="goLove">寻找有缘人</button>
