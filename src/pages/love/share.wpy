@@ -1,19 +1,21 @@
 <style lang="less">
   page{
     height: 100%;
-    background:#353535;
+    background:#cae6f1;
   }
   .page__hd{
     padding:40rpx;
-    color:#fff;
+    color:#003971;
     font-size:65rpx;
     font-weight:bold;
+    text-align:center;
   }
   .page__bd{
     padding:40rpx;
-    color:#fff;
+    color:#003971;
     font-size:45rpx;
     padding-bottom: 80px;
+    text-align:center;
   }
 
   .pop-mask {
@@ -169,9 +171,16 @@
       <view class="share-friend-circle-box">
         <view class="share-friend-circle-title">保存图片后分享到朋友圏</view>
         <image class="image" mode="widthFix" src="{{friend_circle_image_url}}" @load="friendCircleImageLoaded" @error="friendCircleImageLoadFailed"/>
-        <button type="primary" class="btn-save-image" @tap="saveImageToPhotosAlbum">
-          保存图片
-        </button>
+        <block wx:if="{{showOpenSetting}}">
+          <button type="primary" open-type="openSetting" class="btn-save-image" @opensetting="openSetting">
+            保存失败，请点击授权
+          </button>
+        </block>
+        <block wx:else>
+          <button type="primary" class="btn-save-image" @tap="saveImageToPhotosAlbum">
+            保存图片
+          </button>
+        </block>
       </view>
     </view>
     <canvas canvas-id="myCanvas" class="canvas"/>
@@ -189,7 +198,9 @@
  
   export default class LoveShare extends wepy.page {
 		config = {
-			navigationBarTitleText: '分享'
+			navigationBarTitleText: '分享',
+      navigationBarBackgroundColor: '#cae6f1',
+      navigationBarTextStyle: 'black',
     };
 
     wxs = {
@@ -207,7 +218,7 @@
       responses: [],
       cash_back_total: 0,
       friend_circle_image_url: '',
-      errMsg: ''
+      showOpenSetting: false
     }
 
     async onLoad (e) {
@@ -305,18 +316,29 @@
     }
 
     async generateFriendCircleImage() {
-      let path = this.getSharePath();
-      console.log("path========================", path);
-      path = "pages/love/index";
+      let path = `pages/love/index`;
+      const userId = this.$parent.globalData.user._id;
+      const scene = `share_from=${userId}`;
       wepy.showLoading({
         title: '正在获取小程序码',
         mask: true
       });
-      const url = `/api/steedos/weixin/code?appid=${appId}&store_id=${this.space_id}&page=${path}`;
+      const url = `/api/steedos/weixin/code?appid=${appId}&scene=${scene}&page=${path}`;
       console.log("codeImgRes======url=========", this.baseUrl + url);
       const codeImgRes = await wepy.downloadFile({
         url: this.baseUrl + url
+      }).catch((err)=>{
+        console.log("err====downloadFile====codeImgRes===========", err);
+        this.$apply();
+        return false;
       });
+      if(!codeImgRes){
+        wepy.showToast({
+          title: "小程序码生成失败",
+          icon: "none"
+        });
+        return;
+      }
       wepy.hideLoading();
       wepy.showLoading({
         title: '分享图片下载中',
@@ -326,8 +348,7 @@
       const imgRes = await wepy.downloadFile({
         url: imageUrl
       }).catch((err)=>{
-        console.log("err====downloadFile===============", err);
-        this.errMsg = JSON.stringify(err);
+        console.log("err====downloadFile==========imgRes=====", err);
         this.$apply();
         return false;
       });
@@ -428,6 +449,22 @@
             title: "保存失败",
             icon: "none"
           });
+          wepy.showLoading({
+            title: '加载中',
+            mask: true
+          });
+          const setting = await wepy.getSetting();
+          if(setting.authSetting["scope.writePhotosAlbum"] === false){
+            this.showOpenSetting = true;
+            this.$apply();
+          }
+          wepy.hideLoading();
+        }
+      },
+      async openSetting(e){
+        if(e.detail.authSetting["scope.writePhotosAlbum"]){
+          this.showOpenSetting = false;
+          this.$apply();
         }
       }
     }

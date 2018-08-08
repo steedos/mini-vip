@@ -109,11 +109,17 @@ export default class LoveIndex extends wepy.page {
   };
 
   async onLoad (e) {
+    console.log("=======index==e============", e);
     wx.showLoading({mask: true});
     const self = this;
-    if(!e.space_id){
-      // 保证一进入就新建space对应的vip_customers记录
-      e.space_id = loveSpaceId;
+		// 保证一进入就新建space对应的vip_customers记录
+		e.space_id = loveSpaceId;
+		if(e.scene){
+			// 朋友圏二维码识别进入的，则取出scene中的share_from
+			let scene = decodeURIComponent(e.scene);
+			let scenes = scene.split('=');
+			e.love = 1;
+			e.share_from = scenes[1];
 		}
     this.space_id = e.space_id;
     console.log("this.space_id============", this.space_id);
