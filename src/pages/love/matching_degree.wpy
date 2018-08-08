@@ -84,7 +84,7 @@ export default class MatchingDegree extends wepy.page {
     avatar_field: 'from.profile.avatar',
     name_field: 'from.name',
     baseUrl: baseUrl,
-    navigationBarTitle: '您与好友的匹配度'
+    navigationBarTitle: '缘分排行榜'
   }
 
   onShareAppMessage(res) {

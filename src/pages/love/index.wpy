@@ -55,8 +55,8 @@
 					</view>
 					<view class="page__bd">
 						<view class="love-summary">邀请好友一起回答有趣的问卷，测试你们的缘分值。</view>
-						<button wx:if="{{finishHobby}}" class="btn-join" @tap="goShare">邀请好友测试</button>
-						<button wx:else class="btn-join" @tap="goHobby">测试兴趣爱好</button>
+						<button class="btn-join" @tap="goHobby">开始答题</button>
+						<button class="btn-love" @tap="goShare">缘分排行榜</button>
 						<button wx:if="{{showLoveBtn}}" class="btn-love" @tap="goLove">寻找有缘人</button>
 						<view class="love-licence"></view>
 					</view>
