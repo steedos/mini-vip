@@ -25,12 +25,12 @@
                 </view>
             </view>
         </view>
-        <!-- <view class="weui-cells__tips">如果没有邀请码，请直接点击跳过</view> -->
+         <!--<view class="weui-cells__tips">如果没有邀请码，请直接点击跳过</view> -->
       </view>
 
       <view class="page__bd_spacing">
-          <button class="weui-btn background" type="primary" @tap="confirm">确定</button>
-           <!--<button class="weui-btn" type="default" @tap="cancel">跳过</button>-->
+        <button class="weui-btn background" type="primary" @tap="confirm">确定</button>
+        <button class="weui-btn" type="default" @tap="cancel">跳过</button>
       </view>
     </view>
   </view>
@@ -112,8 +112,8 @@ export default class InviteCode extends wepy.page {
         );
 
         wx.hideLoading();
-        wx.navigateTo({
-          url: `/pages/love/invite_code_success?space_id=${spaceId}`
+        wx.redirectTo({
+          url: `/pages/love/invite_code_success_me?space_id=${spaceId}&card_rule=${result.value[0].card_rule}`
         });
       } else {
         wx.hideLoading();
@@ -123,9 +123,7 @@ export default class InviteCode extends wepy.page {
       }
     },
      cancel() {
-       wx.navigateTo({
-         url: `/pages/love/cover_about_yourself?space_id=${this.space_id}`
-       });
+       wx.navigateTo({url:`/pages/card/select?space_id=${this.space_id}`});
      }
   };
 

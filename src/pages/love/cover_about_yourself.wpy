@@ -11,7 +11,9 @@ import ComponentCoverYourself from '@/components/cover_about_yourself';
 
 export default class CoverAboutYourself extends wepy.page {
   config = {
-    navigationBarTitleText: '无颜'
+    navigationBarTitleText: '无颜', 
+    navigationBarBackgroundColor: '#cae6f1',
+    navigationBarTextStyle: 'black',
   };
 
   data = {
