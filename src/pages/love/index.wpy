@@ -137,6 +137,18 @@ export default class LoveIndex extends wepy.page {
 
 		console.log('[current_customer]', current_customer)
 
+		if (e.naire) {
+			const answeredUrl = encodeURIComponent(`/pages/love/matching_result?space_id=${this.space_id}&share_from=${e.share_from}`);
+
+			console.log('[answeredUrl]', answeredUrl)
+
+			if (e.naire == 'love_hobby') {
+				wx.redirectTo({
+					url: `/pages/love/papers_view?object_name=love_hobby&space_id=${this.space_id}&answered_url=${answeredUrl}`
+				})
+			}
+		}
+
 		if (current_customer.is_member) {
 			let finishedNaire = wx.getStorageSync('questionnaire_progess');
 			if (finishedNaire.indexOf('love_hobby') > -1) {
@@ -198,7 +210,7 @@ export default class LoveIndex extends wepy.page {
       wx.navigateTo({url: `/pages/space/index?space_id=${this.space_id}`})
 		},
 		goLove() {
-			wx.redirectTo({url: '/pages/love/index?love=1'})
+			wx.navigateTo({url: '/pages/love/index?love=1'})
 		},
 		goHobby() {
 			wx.navigateTo({url: `/pages/love/papers_view?object_name=love_hobby&space_id=${this.space_id}`})

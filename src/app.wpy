@@ -564,6 +564,19 @@ export default class VIP extends wepy.app {
         this.globalData.my_customers.push(customer.value[0]);
       }
     }
+
+    // 往vip_invites中插入数据
+    if(e.naire && e.share_from && e.share_from != userId) {
+      const url = '/api/odata/v4/' + e.space_id + '/' + "vip_invites";
+      const val = {
+        from: e.share_from,
+        name: '分享'
+      }
+      await req.post(url, val).catch((err)=>{
+        console.log("[vip_invites error]", err)
+        return err.data;
+      });
+    }
   }
 
   isSpaceOwner(space_id, user_id){

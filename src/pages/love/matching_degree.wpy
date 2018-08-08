@@ -91,7 +91,7 @@ export default class MatchingDegree extends wepy.page {
     const user_id = this.$parent.globalData.user._id;
     console.log('onShareAppMessage', user_id);
     let title = '测试匹配度';
-    let path = `/pages/love/index?love=1&naire=love_hobby?user_id=${user_id}`
+    let path = `/pages/love/index?love=1&naire=love_hobby&share_from=${user_id}`
     let imageUrl = `${baseMaterialUrl}love_share.jpg`;
     return {
       title: title,
