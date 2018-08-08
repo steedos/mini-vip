@@ -1,17 +1,17 @@
 <style lang="less">
   page{
     height: 100%;
-    background:#353535;
+    background:#cae6f1;
   }
   .page__hd{
     padding:40rpx;
-    color:#fff;
+    color:#003971;
     font-size:65rpx;
     font-weight:bold;
   }
   .page__bd{
     padding:40rpx;
-    color:#fff;
+    color:#003971;
     font-size:45rpx;
     padding-bottom: 80px;
   }
@@ -189,7 +189,9 @@
  
   export default class LoveShare extends wepy.page {
 		config = {
-			navigationBarTitleText: '分享'
+			navigationBarTitleText: '分享',
+      navigationBarBackgroundColor: '#cae6f1',
+      navigationBarTextStyle: 'black',
     };
 
     wxs = {
