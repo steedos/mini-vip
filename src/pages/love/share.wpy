@@ -8,6 +8,7 @@
     color:#003971;
     font-size:65rpx;
     font-weight:bold;
+    text-align:center;
   }
   .page__bd{
     padding:40rpx;
