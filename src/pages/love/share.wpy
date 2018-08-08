@@ -322,7 +322,7 @@
         title: '分享图片下载中',
         mask: true
       });
-      let imageUrl = `https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/love_share_qr.jpg`;
+      let imageUrl = `https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/love_share_bg.jpg`;
       const imgRes = await wepy.downloadFile({
         url: imageUrl
       }).catch((err)=>{
@@ -339,30 +339,15 @@
         return;
       }
       wepy.hideLoading();
-      console.log('res.tempFilePath....',codeImgRes.tempFilePath)
+      console.log('codeImgRes....',codeImgRes.tempFilePath)
       const self = this
       const ctx = wepy.createCanvasContext('myCanvas')
       const width = 750;
       const height = 1037;
-      // const radius = width * 105/430
-      // const avatar_x = width/2 - radius/1.414
-      // const avatar_y = avatar_x
-      // const avatar_width = radius*1.414
       console.log("=======imgRes.tempFilePath=====1===", imgRes.tempFilePath);
       ctx.drawImage(imgRes.tempFilePath, 0, 0, width, height)
-      // ctx.arc(width/2, width/2, radius, 0, 2 * Math.PI)
-      // ctx.setFillStyle('white')
-      // ctx.fill()
-      // const avatar_radius = radius-6
-      // ctx.save()
-      // ctx.beginPath()
-      // // ctx.arc(width/2, width/2, avatar_radius, 0, 2 * Math.PI)
-      // ctx.setFillStyle('white')
-      // ctx.fill()
-      // // ctx.clip()
-      // ctx.drawImage(codeImgRes.tempFilePath, 200, 200, 100, 100)
-      // ctx.restore();
-      // console.log("avatarUrl",this.avatarUrl);
+      ctx.drawImage(codeImgRes.tempFilePath, 275, 710, 200, 200);
+      ctx.restore();
       ctx.draw(true, async ()=>{
         let x = self;
         const res = await wepy.canvasToTempFilePath({
