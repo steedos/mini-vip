@@ -90,7 +90,7 @@ page {
           </view>
         </view>
         <button class="input-btn weui-btn button-hover" type="primary" open-type="share">
-          邀请好友测试
+          测试好友缘分值
         </button>
       </view>
     </block>

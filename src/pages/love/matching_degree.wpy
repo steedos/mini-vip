@@ -58,7 +58,7 @@
     </view>
     <view class="tab-bar border-top-1px">
       <button open-type="share" class="btn btn-share-wexin" type="default" plain="{{true}}">
-        邀请好友测试
+        测试好友缘分值
       </button>
     </view>
   </view>
