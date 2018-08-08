@@ -53,7 +53,7 @@
 </style>
 
 <template>
-  <view class="page questionnaire-list" wx:if="{{is_loaded}}">
+  <view class="page questionnaire-list cover-page" wx:if="{{is_loaded}}">
     <view class="weui-cells">
       <block wx:if="{{isAuthUserInfo}}">
         <view class="weui-media-box weui-media-box_appmsg">
@@ -145,7 +145,7 @@ import req from '@/network';
 
 export default class QuestionnaireList extends wepy.page {
   config = {
-    navigationBarTitleText: '我的',
+    navigationBarTitleText: '我',
     enablePullDownRefresh: false
   };
 

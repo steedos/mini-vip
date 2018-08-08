@@ -4,7 +4,7 @@
 @import "../lib/slds/slds_margin.less";
 @import "../lib/vip/vip.less";
 page {
-  background-color: #f6f7f8;
+  background-color: #cae6f1;
   font-size: 16px;
   font-family: -apple-system-font,Helvetica Neue,Helvetica,sans-serif;
 }
@@ -106,6 +106,60 @@ page {
       border:none;
   }
 }
+
+
+.cover-page {
+  background-image:url('https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/bg-info-2x.png');
+  background-position: bottom center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-color: #cae6f1;
+  min-height:100vh;
+
+  .page__hd{
+    padding:40rpx;
+    .love-title{
+      margin-top:80rpx;
+      color:#00396b;
+      font-size:65rpx;
+      font-weight:bold;
+      text-align: center;
+    }
+  }
+  .page__bd{
+    padding:40rpx;
+    .love-summary{
+      color:#00396b;
+      font-size:45rpx;
+      margin-bottom:80rpx;
+      text-align: center;
+    }
+    .love-attention{
+      color: #00396b;
+      font-size:35rpx;
+      margin-bottom:80rpx;
+      text-align: center;
+    }
+  }
+
+  .btn-join{
+    background:#5f6fee;
+    padding:6px;
+    color:#fff;
+    font-weight:bold;
+    margin:30rpx 0;
+  }
+  .btn-love {
+    padding:6px;
+    font-weight:bold;
+    color:#353535;
+  }
+  .love-licence{
+    color:#fff;
+    font-size:32rpx;
+    text-align:center;
+  }
+}
 </style>
 
 <script>
@@ -197,6 +251,8 @@ export default class VIP extends wepy.app {
       'pages/love/invite_code',
       'pages/love/invite_code_success',
       'pages/love/invite_code_fail',
+      'pages/love/matching_degree',
+      'pages/love/matching_result',
       'pages/love/papers_view',
       'pages/love/papers_summary',
       'pages/love/navigation_qusestion',
@@ -209,28 +265,28 @@ export default class VIP extends wepy.app {
     ],
     tabBar: {
       color: '#666',
-      selectedColor: '#5e9bf4',
-      backgroundColor: '#f6f7f8',
+      selectedColor: '#5f71ee',
+      backgroundColor: '#fff',
       borderStyle: 'black',
       list: [
       {
         pagePath: 'pages/love/shake',
         selectedIconPath: './images/tabbars/topic_pressed.png',
         iconPath: './images/tabbars/topic.png',
-        text: '摇一摇',
+        text: '有缘人',
       },
       {
         pagePath: 'pages/love/me',
         selectedIconPath: './images/tabbars/me_pressed.png',
         iconPath: './images/tabbars/me.png',
-        text: '我的',
+        text: '我',
       }]
     },
     window: {
-      navigationBarBackgroundColor: '#f6f7f8',
+      navigationBarBackgroundColor: '#cae6f1',
       navigationBarTitleText: '无颜',
       navigationBarTextStyle: 'black',
-      backgroundColor: "#f6f7f8",
+      backgroundColor: "#cae6f1",
       backgroundTextStyle: 'dark',
     }
   }
