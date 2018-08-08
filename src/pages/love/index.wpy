@@ -87,7 +87,9 @@ import ComponentLookingFor from '@/components/cover_you_looking_for';
 
 export default class LoveIndex extends wepy.page {
   config = {
-    navigationBarTitleText: '无颜'
+    navigationBarTitleText: '无颜', 
+    navigationBarBackgroundColor: '#cae6f1',
+    navigationBarTextStyle: 'black',
   };
 
   data = {
