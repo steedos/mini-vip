@@ -239,8 +239,8 @@ export default class cardActivate extends wepy.page {
     const data = {
       name: this.cardName,
       owner: this.$parent.globalData.user._id,
-      // amount: this.price,
-      amount: 0.01,
+      amount: this.price,
+      // amount: 0.01,
       status: 'draft',
       store: this.store_id,
       card: this.card_id,
@@ -249,8 +249,8 @@ export default class cardActivate extends wepy.page {
     var order = await this.$parent.insert('vip_order', data, this.space_id);
     if (order) {
       var params = {
-        // amount: this.price,
-        amount: 0.01,
+        amount: this.price,
+        // amount: 0.01,
         order_id: order.value[0]._id
       };
 
