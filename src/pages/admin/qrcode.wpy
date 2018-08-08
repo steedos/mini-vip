@@ -119,8 +119,9 @@ export default class QRCode extends wepy.page {
     }
     else{
       const page = "pages/space/index"
+      const scene = `space_id=${store_id}`
       const url = `/api/steedos/weixin/code?appid=${appId}&scene=${
-        store_id
+        scene
       }&page=${page}`;
       const imgRes = await wepy.downloadFile({
         url: this.baseUrl + url
