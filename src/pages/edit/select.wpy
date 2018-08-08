@@ -131,6 +131,9 @@
           radioItems[i].checked = radioItems[i].value == e.detail.value;
         }
         this.setParentValue(key, e.detail.value)
+        wepy.navigateBack({
+          delta: 1
+        })
       }
     }
   }
