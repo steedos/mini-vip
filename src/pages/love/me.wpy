@@ -57,7 +57,7 @@
     <view class="weui-cells">
       <block wx:if="{{isAuthUserInfo}}">
         <view class="weui-media-box weui-media-box_appmsg">
-          <view class="weui-media-box__hd weui-media-box__hd_in-appmsg" style="width: 50px; height: 50px; line-height: 50px;">
+          <view class="weui-media-box__hd weui-media-box__hd_in-appmsg" style="width: 50px; height: 50px; line-height: 50px;" @tap="clickAvatar">
             <image class="image" mode="aspectFill" wx:if="{{isAuthUserInfo}}" src="{{avatar}}"></image>
           </view>
           <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
@@ -157,6 +157,7 @@ export default class QuestionnaireList extends wepy.page {
     is_loaded: false,
     is_member: false,
     isAuthUserInfo: false,
+    card_rule: null,
     userId: '',
     options: [
       {
@@ -290,7 +291,7 @@ export default class QuestionnaireList extends wepy.page {
 
     const options = {
       $filter: `owner eq '${userId}'`,
-      $select: 'is_member'
+      $select: 'is_member,invite_code'
     };
 
     const customer = await this.$parent.query(
@@ -301,7 +302,38 @@ export default class QuestionnaireList extends wepy.page {
 
     if (customer && customer.value && customer.value[0]) {
       this.is_member = customer.value[0].is_member;
+
+      const love_invite_code = await this.$parent.query(
+        'love_invite_codes',
+        {$filter: `code eq '${customer.value[0].invite_code}'`},
+        spaceId
+      );
+
+      if (love_invite_code.value && love_invite_code.value.length && new Date() < new Date(love_invite_code.value[0].expired)) {
+        this.card_rule = love_invite_code.value[0].card_rule
+      }
+
     }
+
+
+    const card_options = {
+      $filter: `owner eq '${userId}'`,
+      $select: '_id,card_name,is_actived'
+    };
+
+    const vip_card = await this.$parent.query(
+      'vip_card',
+      card_options,
+      spaceId
+    );
+
+
+    if (vip_card && vip_card.value && vip_card.value[0]) {
+      this.vip_card = vip_card.value[0];
+    }else{
+      this.vip_card = null;
+    }
+
 
     this.$apply();
     wx.hideLoading();
@@ -329,6 +361,22 @@ export default class QuestionnaireList extends wepy.page {
 
         const url = '/mini/vip/user';
         req.put(url, { name: name, sex: sex, avatar: avatar });
+      }
+    },
+    clickAvatar: function (e) {
+      if(this.is_member){
+        if(this.vip_card){
+          console.log('this.vip_card', this.vip_card);
+          if(this.vip_card.is_actived){
+            wepy.navigateTo({url:`/pages/card?space_id=${this.space_id}&card_id=${this.vip_card._id}&category_id=${this.vip_card.card_name}`})
+          }else{
+            wepy.navigateTo({url:`/pages/card_activate?space_id=${this.space_id}&card_id=${this.vip_card._id}&category_id=${this.vip_card.card_name}`})
+          }
+        }else{
+          wepy.navigateTo({url:`/pages/card_activate?space_id=${this.space_id}&category_id=${this.card_rule}`})
+        }
+      }else{
+        wepy.navigateTo({url:`/pages/love/invite_code_me?space_id=${this.space_id}`})
       }
     }
   };
