@@ -14,6 +14,7 @@
     color:#003971;
     font-size:45rpx;
     padding-bottom: 80px;
+    text-align:center;
   }
 
   .pop-mask {
