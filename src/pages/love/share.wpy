@@ -171,9 +171,16 @@
       <view class="share-friend-circle-box">
         <view class="share-friend-circle-title">保存图片后分享到朋友圏</view>
         <image class="image" mode="widthFix" src="{{friend_circle_image_url}}" @load="friendCircleImageLoaded" @error="friendCircleImageLoadFailed"/>
-        <button type="primary" class="btn-save-image" @tap="saveImageToPhotosAlbum">
-          保存图片
-        </button>
+        <block wx:if="{{showOpenSetting}}">
+          <button type="primary" open-type="openSetting" class="btn-save-image" @opensetting="openSetting">
+            保存失败，请点击授权
+          </button>
+        </block>
+        <block wx:else>
+          <button type="primary" class="btn-save-image" @tap="saveImageToPhotosAlbum">
+            保存图片
+          </button>
+        </block>
       </view>
     </view>
     <canvas canvas-id="myCanvas" class="canvas"/>
@@ -210,7 +217,8 @@
       showPop: false,
       responses: [],
       cash_back_total: 0,
-      friend_circle_image_url: ''
+      friend_circle_image_url: '',
+      showOpenSetting: false
     }
 
     async onLoad (e) {
@@ -441,6 +449,22 @@
             title: "保存失败",
             icon: "none"
           });
+          wepy.showLoading({
+            title: '加载中',
+            mask: true
+          });
+          const setting = await wepy.getSetting();
+          if(setting.authSetting["scope.writePhotosAlbum"] === false){
+            this.showOpenSetting = true;
+            this.$apply();
+          }
+          wepy.hideLoading();
+        }
+      },
+      async openSetting(e){
+        if(e.detail.authSetting["scope.writePhotosAlbum"]){
+          this.showOpenSetting = false;
+          this.$apply();
         }
       }
     }
