@@ -118,7 +118,7 @@
     </checkbox-group>
 
     <view class="btn-container">
-      <block wx:if="{{price>0}}">
+      <block wx:if="{{price>0 && !is_member}}">
         <button class="submit-btn" form-type="submit" @tap="nextStep" disabled="{{submitDisabled}}">下一步</button>
       </block>
       <block wx:else>
@@ -172,11 +172,12 @@ export default class cardActivate extends wepy.page {
       this.price = parseInt(e.price);
     }
     if (e.card_id) {
+      //普通用户不能修改vip_card记录
       this.card_id = e.card_id;
-      const data = {
-        card_name: e.category_id
-      };
-      await this.$parent.update('vip_card', e.card_id, data, this.space_id);
+//      const data = {
+//        card_name: e.category_id
+//      };
+//      await this.$parent.update('vip_card', e.card_id, data, this.space_id);
     } else {
       const data = {
         $filter: `owner eq '${this.$parent.globalData.user._id}'`,
@@ -198,6 +199,23 @@ export default class cardActivate extends wepy.page {
     this.phoneNumber = user.mobile;
     this.is_loaded = true
     console.log('e.category_name', e.category_name);
+
+    const options = {
+      $filter: `owner eq '${this.$parent.globalData.user._id}'`,
+      $select: 'is_member'
+    };
+
+    const customer = await this.$parent.query(
+      'vip_customers',
+      options,
+      this.space_id
+    );
+
+    if (customer && customer.value && customer.value[0]) {
+      this.is_member = customer.value[0].is_member;
+    }
+
+
     this.$apply();
     wepy.hideLoading();
   }
@@ -223,7 +241,8 @@ export default class cardActivate extends wepy.page {
     price: 0,
     avatar: '',
     cover: '',
-    is_loaded: false
+    is_loaded: false,
+    is_member: false
   };
   addVipCard() {
     this.submitDisabled = true;
