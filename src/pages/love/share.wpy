@@ -206,8 +206,7 @@
       showPop: false,
       responses: [],
       cash_back_total: 0,
-      friend_circle_image_url: '',
-      errMsg: ''
+      friend_circle_image_url: ''
     }
 
     async onLoad (e) {
@@ -305,18 +304,29 @@
     }
 
     async generateFriendCircleImage() {
-      let path = this.getSharePath();
-      console.log("path========================", path);
-      path = "pages/love/index";
+      let path = `pages/love/index`;
+      const userId = this.$parent.globalData.user._id;
+      const scene = `share_from=${userId}`;
       wepy.showLoading({
         title: '正在获取小程序码',
         mask: true
       });
-      const url = `/api/steedos/weixin/code?appid=${appId}&store_id=${this.space_id}&page=${path}`;
+      const url = `/api/steedos/weixin/code?appid=${appId}&scene=${scene}&page=${path}`;
       console.log("codeImgRes======url=========", this.baseUrl + url);
       const codeImgRes = await wepy.downloadFile({
         url: this.baseUrl + url
+      }).catch((err)=>{
+        console.log("err====downloadFile====codeImgRes===========", err);
+        this.$apply();
+        return false;
       });
+      if(!codeImgRes){
+        wepy.showToast({
+          title: "小程序码生成失败",
+          icon: "none"
+        });
+        return;
+      }
       wepy.hideLoading();
       wepy.showLoading({
         title: '分享图片下载中',
@@ -326,8 +336,7 @@
       const imgRes = await wepy.downloadFile({
         url: imageUrl
       }).catch((err)=>{
-        console.log("err====downloadFile===============", err);
-        this.errMsg = JSON.stringify(err);
+        console.log("err====downloadFile==========imgRes=====", err);
         this.$apply();
         return false;
       });
