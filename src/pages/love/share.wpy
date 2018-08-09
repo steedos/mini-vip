@@ -307,7 +307,7 @@
     onShareAppMessage(res) {
       let title = this.$parent.globalData.title;
       let path = this.getSharePath();
-      let imageUrl = `${baseMaterialUrl}love_share_bg.jpg`;
+      let imageUrl = 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/love_share_bg.jpg';
       return {
         title: title,
         path: path,

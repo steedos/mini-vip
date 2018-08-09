@@ -125,6 +125,24 @@
         </view>
         <view class="weui-cell__ft weui-cell__ft_in-access"></view>
       </navigator>
+      <button open-type="share" class="weui-cell weui-cell_access" type="default" plain="{{true}}" style="line-height:initial;">
+        <view class="weui-cell__hd">
+          <view class="slds-icon-standard-link slds-icon slds-icon--small slds-m-right--x-small"/>
+        </view>
+        <view class="weui-cell__bd" style="text-align: left;color: #000;">
+          <view>测试缘分值</view>
+        </view>
+        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+      </button>
+      <!-- <navigator class="weui-cell weui-cell_access" url="share?space_id={{space_id}}">
+        <view class="weui-cell__hd">
+          <view class="slds-icon-standard-link slds-icon slds-icon--small slds-m-right--x-small"/>
+        </view>
+        <view class="weui-cell__bd">
+          <view>测试缘分值</view>
+        </view>
+        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+      </navigator> -->
       <navigator class="weui-cell weui-cell_access" url="/pages/space/index?space_id={{space_id}}">
         <view class="weui-cell__hd">
           <view class="slds-icon-custom-custom1 slds-icon slds-icon--small slds-m-right--x-small"/>
@@ -222,6 +240,19 @@ export default class QuestionnaireList extends wepy.page {
     ],
     progress: {}
   };
+
+  // 分享
+  onShareAppMessage(res) {
+    const user_id = this.$parent.globalData.user._id;
+    let title = '快来与我测试匹配度吧';
+    let path = `/pages/love/invite_index?naire=love_answer&share_from=${user_id}`
+    let imageUrl = 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/love_share_bg.jpg';
+    return {
+      title: title,
+      path: path,
+      imageUrl: imageUrl
+    };
+  }
 
   async getProgress(object_name) {
     const object = await this.$parent.getObject(object_name);

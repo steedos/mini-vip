@@ -61,7 +61,7 @@
       </block>
     </view>
     <view class="tab-bar border-top-1px">
-      <button open-type="share" class="btn btn-share-wexin" type="default" plain="{{true}}">
+      <button open-type="share" class="btn btn-share-wexin" type="default" plain="true">
         测试好友缘分值
       </button>
     </view>
@@ -106,9 +106,9 @@ export default class MatchingDegree extends wepy.page {
   onShareAppMessage(res) {
     const user_id = this.$parent.globalData.user._id;
     console.log('onShareAppMessage', user_id);
-    let title = '测试匹配度';
-    let path = `/pages/love/index?love=1&naire=love_answer&share_from=${user_id}`
-    let imageUrl = `${baseMaterialUrl}love_share_bg.jpg`;
+    let title = '快来与我测试匹配度吧';
+    let path = `/pages/love/invite_index?naire=love_answer&share_from=${user_id}`
+    let imageUrl = 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/love_share_bg.jpg';
     return {
       title: title,
       path: path,
