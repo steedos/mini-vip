@@ -39,28 +39,14 @@
 <template>
   <view wx:if="{{is_loaded}}">
 		<view class="page cover-page">
-			<block wx:if="{{load_page == 'index'}}">
-				<view class="page__hd">
-					<view class="love-title">告别刷脸时代，寻找志趣相投的有缘人</view>
-				</view>
-				<view class="page__bd">
-					<view class="love-summary">“无颜”是一位聪明又勤快的智能机器人，每周他都会根据你的喜好和对方喜好，执行海量的数据计算，找到与你“相互匹配”值最高的有缘人，并互发微信。</view>
-					<button class="btn-join" @tap="join">下一步</button>
-					<view class="love-licence"></view>
-				</view>
-				<view class="about-me-container" wx:if="{{load_page == 'index'}}">
-					<view class="about-me" @tap="goAbout">关于无颜</view>
-				</view>
-			</block>
-			<block wx:elif="{{load_page == 'love_disabled'}}">
+			<block wx:if="{{load_page == 'love_disabled'}}">
 				<view class="page">
 					<view class="page__hd">
-						<view class="love-title">测试好友缘分值</view>
+						<view class="love-title"></view>
 					</view>
 					<view class="page__bd">
-						<view class="love-summary">邀请好友一起回答有趣的问卷，测试你们的缘分值。</view>
-						<button class="btn-join" @tap="goAnswer">开始答题</button>
-						<button class="btn-love" @tap="goShare">缘分排行榜</button>
+						<view class="love-summary"></view>
+						<button class="btn-join" @tap="goAnswer">测试好友缘分</button>
 						<button wx:if="{{showLoveBtn}}" class="btn-index btn-love" @tap="goLove">寻找有缘人</button>
 						<view class="love-licence"></view>
 					</view>
@@ -155,7 +141,7 @@ export default class LoveIndex extends wepy.page {
 			this.naire = e.naire;
 			this.share_from = e.share_from;
 			this.$apply();
-			const answeredUrl = encodeURIComponent(`/pages/love/matching_degree?space_id=${this.space_id}`);
+			const answeredUrl = encodeURIComponent(`/pages/love/matching?space_id=${this.space_id}`);
 
 			console.log('[answeredUrl]', answeredUrl)
 
@@ -187,7 +173,7 @@ export default class LoveIndex extends wepy.page {
       }
 		} else {
 			if(e.love) {
-				this.load_page = 'index'
+				this.load_page = 'love_disabled'
 			} else {
 				this.load_page = 'love_disabled';
 			}
@@ -218,28 +204,15 @@ export default class LoveIndex extends wepy.page {
   }
 
   methods = {
-    join() {
-      pageRouter.navigateTo({url: `/pages/love/invite_code?space_id=${this.space_id}`});
-    },
     goAbout() {
       wx.navigateTo({url: `/pages/space/index?space_id=${this.space_id}`})
 		},
 		goLove() {
-			wx.navigateTo({url: '/pages/love/index?love=1'})
+			wx.navigateTo({url: '/pages/love/find'})
 		},
-		async goAnswer() {
-			const setting = await wepy.getSetting();
-			if (setting.authSetting['scope.userInfo']) {
-				wx.navigateTo({
-					url: `/pages/love/papers_view?object_name=love_answer&space_id=${this.space_id}&answered_url_type=redirectTo&answered_url=${encodeURIComponent(`/pages/love/matching_degree?space_id=${this.space_id}`)}`
-				});
-			} else {
-				wx.navigateTo({url: `/pages/user_info_login?naire=${this.naire}&share_from=${this.share_from}&next=${encodeURIComponent(`/pages/love/papers_view?object_name=love_answer&space_id=${this.space_id}`)}`})
-			}
+		goAnswer() {
+		    wx.navigateTo({url: '/pages/love/test'})
     },
-    goShare() {
-      wx.navigateTo({url: `/pages/love/matching_degree?object_name=vip_invites&space_id=${this.space_id}`})
-    }
   };
 
   components = {

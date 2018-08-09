@@ -96,7 +96,7 @@ export default class UserInfoLogin extends wepy.page {
 			if (this.share_from && e.naire) {
       	wx.navigateTo({url: next});				
 			} else {
-				wx.navigateTo({url: `${next}&answered_url_type=redirectTo&answered_url=${encodeURIComponent(`/pages/love/matching_degree?space_id=${this.space_id}`)}`});
+				wx.navigateTo({url: `${next}&answered_url_type=redirectTo&answered_url=${encodeURIComponent(`/pages/love/matching?space_id=${this.space_id}`)}`});
 			}
     }
   }

@@ -1,0 +1,137 @@
+<style lang="less">
+.loading-container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #66ceff;
+  .loading {
+    width: 100%;
+    height: 100%;
+    background: url(https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/loading.gif);
+    background-position: center center;
+    background-repeat: no-repeat;
+  }
+}
+
+.btn-index {
+  margin: 30rpx 0;
+}
+
+.about-me-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  .about-me {
+    padding: 20px 30px;
+    color: #ccc;
+    display: inline-block;
+    margin-bottom: 6px;
+    font-size: 14px;
+  }
+}
+</style>
+
+<template>
+  <view class="page cover-page" wx:if="{{is_loaded}}">
+    <view class="page__hd">
+      <view class="love-title">告别刷脸时代，寻找志趣相投的有缘人</view>
+    </view>
+    <view class="page__bd">
+      <view class="love-summary">“无颜”是一位聪明又勤快的智能机器人，每周他都会根据你的喜好和对方喜好，执行海量的数据计算，找到与你“相互匹配”值最高的有缘人，并互发微信。</view>
+      <button class="btn-join" @tap="goAnswer">开始答题</button>
+      <view class="love-licence"></view>
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import { loveSpaceId } from '@/config';
+
+export default class InviteIndex extends wepy.page {
+
+  config = {
+    navigationBarTitleText: '无颜',
+    navigationBarBackgroundColor: '#cae6f1',
+    navigationBarTextStyle: 'black'
+  };
+
+  data = {
+    is_loaded: false,
+    space_id: '',
+    showLoveBtn: false,
+    naire: '',
+    share_from: ''
+  }
+
+  onShareAppMessage(res) {
+    const user_id = this.$parent.globalData.user._id;
+    let title = '快来与我测试匹配度吧';
+    let path = `/pages/love/test?naire=love_answer&share_from=${user_id}`
+    let imageUrl = 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/love_share_bg.jpg';
+    return {
+      title: title,
+      path: path,
+      imageUrl: imageUrl
+    };
+  }
+
+  async onLoad(e) {
+    wx.showLoading({mask: true});
+    e.space_id = loveSpaceId;
+    this.space_id = e.space_id;
+    await this.$parent.login(e);
+    const love = this.$parent.globalData.love;
+		if (love && love.enabled) {
+			this.showLoveBtn = true;
+			this.$apply();
+    }
+    
+    if(!this.space_id){
+      wx.showToast({
+        title: "未配置工作区ID",
+        icon: "none"
+      });
+      return;
+    }
+    
+    if (e.naire) {
+			this.naire = e.naire;
+			this.share_from = e.share_from;
+			this.$apply();
+			const answeredUrl = encodeURIComponent(`/pages/love/matching?space_id=${this.space_id}`);
+
+			console.log('[answeredUrl]', answeredUrl)
+
+			wx.navigateTo({
+				url: `/pages/love/papers_view?object_name=${e.naire}&space_id=${this.space_id}&answered_url=${answeredUrl}&answered_url_type=redirectTo`
+			})
+    }
+
+    this.is_loaded = true;
+    this.$apply();
+    
+    wx.hideLoading();
+  }
+
+  methods = {
+    async goAnswer() {
+			const setting = await wepy.getSetting();
+			if (setting.authSetting['scope.userInfo']) {
+				wx.navigateTo({
+					url: `/pages/love/papers_view?object_name=love_answer&space_id=${this.space_id}&answered_url_type=redirectTo&answered_url=${encodeURIComponent(`/pages/love/matching?space_id=${this.space_id}`)}`
+				});
+			} else {
+				wx.navigateTo({url: `/pages/user_info_login?naire=${this.naire}&share_from=${this.share_from}&next=${encodeURIComponent(`/pages/love/papers_view?object_name=love_answer&space_id=${this.space_id}`)}`})
+			}
+    },
+    goLove() {
+			wx.navigateTo({url: '/pages/love/index?love=1'})
+		},
+  }
+}
+</script>

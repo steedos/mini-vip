@@ -76,7 +76,7 @@ import recordList from '../../mixins/record_list';
 import { baseMaterialUrl } from '@/config';
 import { loveSpaceId } from '@/config';
 
-export default class MatchingDegree extends wepy.page {
+export default class Matching extends wepy.page {
   config = {
     navigationBarTitleText: '',
     enablePullDownRefresh: true
@@ -88,7 +88,7 @@ export default class MatchingDegree extends wepy.page {
     avatar_field: 'from.profile.avatar',
     name_field: 'from.name',
     baseUrl: baseUrl,
-    navigationBarTitle: '缘分排行榜',
+    navigationBarTitle: '缘分圈',
     userId: ''
   }
 
@@ -107,7 +107,7 @@ export default class MatchingDegree extends wepy.page {
     const user_id = this.$parent.globalData.user._id;
     console.log('onShareAppMessage', user_id);
     let title = '快来与我测试匹配度吧';
-    let path = `/pages/love/invite_index?naire=love_answer&share_from=${user_id}`
+    let path = `/pages/love/test?naire=love_answer&share_from=${user_id}`
     let imageUrl = 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/love_share_bg.jpg';
     return {
       title: title,
