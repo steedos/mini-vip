@@ -608,10 +608,9 @@ export default class Posts extends wepy.page {
 
     const result = await this.$parent.get('vip_store', spaceId, spaceId);
     const options = {
-      $filter: `enabled eq true`,
       $expand: 'space($select=name)',
       $count: true,
-      $select:'name,avatar,related_to,sort_no,enabled',
+      $select:'name,avatar,related_to,sort_no',
       $orderby:'sort_no',
       $top: 5
     };
@@ -643,7 +642,7 @@ export default class Posts extends wepy.page {
         }
         if(object.related_to.o == 'vip_product'){
           if(object.related_to.ids){
-            object['url'] = `../product/view?record_id=${object.related_to.ids[0]}&space_id=${spaceId}`
+            object['url'] = `../product/view?product_id=${object.related_to.ids[0]}&space_id=${spaceId}`
           }else{
             object['url'] = `../product/list?space_id=${this.space_id}`
           }
