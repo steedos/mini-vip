@@ -43,7 +43,6 @@
     <view class="page__bd">
       <view class="love-summary">邀请好友一起回答有趣的问卷，测试你们的缘分值。</view>
       <button class="btn-join" @tap="goAnswer">开始答题</button>
-      <button class="btn-love" @tap="goShare">缘分排行榜</button>
       <view class="love-licence"></view>
     </view>
   </view>
