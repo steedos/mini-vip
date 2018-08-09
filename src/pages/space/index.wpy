@@ -28,6 +28,9 @@ page {
         margin: 0 auto;
         position: relative;
         }
+      .text {
+        font-size: 24rpx;
+      }
       .ion {
         width: 100%;
         height: 100%;
