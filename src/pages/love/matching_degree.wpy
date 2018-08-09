@@ -44,11 +44,15 @@
         <view class="weui-cells weui-cells_after-title">
           <repeat for="{{record_list}}" key="index" index="index" item="record">
             <navigator class="record-container weui-cell weui-cell_access"  data-item-id="{{record._id}}" hover-class="weui-cell_active">
-              <view class="weui-cell__hd" wx:if="{{avatar_field}}">
-                <image src="{{util.formatAvatarImageUrl(record[avatar_field], baseUrl)}}" class='avatar-field'></image>
+              <view class="weui-cell__hd">
+                <image wx:if="{{userId != record.from._id}}" src="{{record.from.profile.avatar}}" class='avatar-field'></image>
+                <image wx:if="{{userId != record.owner._id}}" src="{{record.owner.profile.avatar}}" class='avatar-field'></image>
               </view>
-              <view class="weui-cell__bd">
+              <view class="weui-cell__bd" wx:if="{{userId != record.from._id}}">
                 {{record.from.name}}
+              </view>
+              <view class="weui-cell__bd" wx:if="{{userId != record.owner._id}}">
+                {{record.owner.name}}
               </view>
               <view class="weui-cell__ft">95%</view>
             </navigator>
@@ -84,7 +88,14 @@ export default class MatchingDegree extends wepy.page {
     avatar_field: 'from.profile.avatar',
     name_field: 'from.name',
     baseUrl: baseUrl,
-    navigationBarTitle: '缘分排行榜'
+    navigationBarTitle: '缘分排行榜',
+    userId: ''
+  }
+
+  onLoad() {
+    const user_id = this.$parent.globalData.user._id;
+    this.userId = user_id;
+    this.$apply();
   }
 
   getQueryFilter() {
@@ -110,7 +121,7 @@ export default class MatchingDegree extends wepy.page {
   }
 
   getFinalExpand() {
-    return 'from($select=profile,name)'
+    return 'owner($select=profile,name),from($select=profile,name)'
   }
 
   // onLoad (e) {
