@@ -82,7 +82,9 @@ import { loveSpaceId } from '@/config';
 
 export default class UserInfoLogin extends wepy.page {
   config = {
-    navigationBarTitleText: '关于我'
+    navigationBarTitleText: '关于我',
+      navigationBarBackgroundColor: '#f6f7f8',
+      navigationBarTextStyle: 'black',
   };
 
   data = {
