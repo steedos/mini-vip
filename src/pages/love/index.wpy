@@ -42,10 +42,10 @@
 			<block wx:if="{{load_page == 'love_disabled'}}">
 				<view class="page">
 					<view class="page__hd">
-						<view class="love-title"></view>
+						<view class="love-title">我不想看你美丽的照片</view>
 					</view>
 					<view class="page__bd">
-						<view class="love-summary"></view>
+						<view class="love-summary">我想看到你的真心</view>
 						<button class="btn-join" @tap="goAnswer">测试好友缘分</button>
 						<button wx:if="{{showLoveBtn}}" class="btn-index btn-love" @tap="goLove">寻找有缘人</button>
 						<view class="love-licence"></view>
@@ -196,7 +196,7 @@ export default class LoveIndex extends wepy.page {
   // 分享
   onShareAppMessage(res) {
     const userId = this.$parent.globalData.user._id;
-    let title = this.$parent.globalData.title;
+    let title = "我们是天生一对吗？";
     return {
       title: title,
       path: `pages/love/index?share_from=${userId}&love=1`,

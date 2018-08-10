@@ -344,10 +344,10 @@ export default class LoveShake extends wepy.page {
   // 分享
   onShareAppMessage(res) {
     const userId = this.$parent.globalData.user._id;
-    let title = this.$parent.globalData.title;
+    let title = "我们是天生一对吗？";
     return {
       title: title,
-      path: `pages/love/invite_index?share_from=${userId}`,
+      path: `pages/love/find?share_from=${userId}`,
       imageUrl: `https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/love_share_bg.jpg`
     };
   }

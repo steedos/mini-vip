@@ -38,10 +38,10 @@
 <template>
   <view class="page cover-page" wx:if="{{is_loaded}}">
     <view class="page__hd">
-      <view class="love-title">测试好友缘分值</view>
+      <view class="love-title">测试好友缘分</view>
     </view>
     <view class="page__bd">
-      <view class="love-summary">邀请好友一起回答有趣的问卷，测试你们的缘分值。</view>
+      <view class="love-summary">邀请好友一起回答有趣的问卷，测试你们的“相互”匹配度。</view>
       <button class="btn-join" @tap="goAnswer">开始答题</button>
       <view class="love-licence"></view>
     </view>
@@ -70,13 +70,11 @@ export default class Test extends wepy.page {
 
   onShareAppMessage(res) {
     const user_id = this.$parent.globalData.user._id;
-    let title = '快来与我测试匹配度吧';
-    let path = `/pages/love/invite_index?naire=love_answer&share_from=${user_id}`
-    let imageUrl = 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/love_share_bg.jpg';
+    let title = '我们是天生一对吗？';
+    let path = `/pages/love/test?naire=love_answer&share_from=${user_id}`
     return {
       title: title,
-      path: path,
-      imageUrl: imageUrl
+      path: path
     };
   }
 
