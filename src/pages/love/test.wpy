@@ -123,7 +123,7 @@ export default class Test extends wepy.page {
 			this.$apply();
     }
 
-    if (e.share_from) {
+    if (e.share_from && e.share_from != user_id) {
       const options = {
         $filter: `(owner eq '${user_id}')`,
         $select: 'owner,user_b,a_to_b,b_to_a,match',

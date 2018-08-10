@@ -111,6 +111,9 @@
           <view class="weui-cell__bd">
             <view>{{other_naire.label}}</view>
           </view>
+          <view wx:if="{{progress[other_naire.object_name]}}" class="weui-cell__ft" style="padding-right: 13px">
+            <icon type="success_no_circle" size="14"></icon>
+          </view>
           <view class="weui-cell__ft weui-cell__ft_in-access"></view>
         </navigator>
       </repeat>
