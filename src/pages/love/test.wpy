@@ -63,7 +63,7 @@
       <button class="input-btn btn-join button-hover" type="primary" @tap="goAnswer">
         开始答题
       </button>
-      <button wx:if="{{isAuthUserInfo}}" @tap="goShare">
+      <button wx:if="{{isAuthUserInfo}}" class="btn-index btn-love" @tap="goShare">
         邀请好友测试
       </button>
     </view>

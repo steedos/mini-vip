@@ -119,7 +119,7 @@ page {
   .page__hd{
     padding:20rpx 40rpx;
     .love-title{
-      margin-top:40rpx;
+      margin-top:80rpx;
       color:#00396b;
       font-size:65rpx;
       font-weight:bold;
