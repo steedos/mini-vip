@@ -664,7 +664,7 @@
       <view  class="love_question_button" @tap.stop="questionBack"  wx:if="{{answeredQuesionKeys.length > 0}}">
         <view class="love_question_back slds-icon slds-icon--small slds-m-right--x-small"></view>
       </view>
-      <button class="weui-btn submit" type="primary" @tap="submit" wx:if="{{answer.other.length > 0}}" disabled="{{submitDisabled}}">{{bottonText}}</button>
+      <button class="weui-btn submit" type="primary" @tap="submit" wx:if="{{answer.other.length > 0}}" disabled="{{submitDisabled}}">{{buttonText}}</button>
 
       <view class="big-bang-select big-select" wx:if="{{showBigSelect}}">
         <view class="name">
@@ -817,7 +817,7 @@
           <view class="love_question_back slds-icon slds-icon--small slds-m-right--x-small"></view>
         </view>
 
-        <button class="weui-btn submit" type="primary" form-type="submit" hover-class='button-hover' disabled="{{submitDisabled}}">{{bottonText}}</button>
+        <button class="weui-btn submit" type="primary" form-type="submit" hover-class='button-hover' disabled="{{submitDisabled}}">{{buttonText}}</button>
 
       </form>
     </view>
@@ -830,6 +830,7 @@
   import pageRouter from '@/utils/pageRouter'
   import util from '../wxs/util.wxs'
   import citySelect from '@/components/city_select'
+  import req from '@/network'
 
   const OTHER = '_o';
   const IMPORTANT = '_i';
@@ -1076,7 +1077,7 @@
       questionsAnswer: {},
       showBigSelect: false,
       submitDisabled: true,
-      bottonText: '提交',
+      buttonText: '',
       fieldErrorMSG: '',
       showError: false,
       keep_progress: false,
@@ -1095,7 +1096,7 @@
       })
     }
 
-    nextQuestion(init){
+    async nextQuestion(init){
       this.submitDisabled = true;
       this.$apply();
 
@@ -1124,6 +1125,10 @@
         }
         finishedNaire = _.uniq(finishedNaire);
         wx.setStorageSync("questionnaire_progess", finishedNaire);
+
+        if (naire != 'love_about_me') {
+          await req.post('/api/mini/vip/friend/answered', {space_id: this.space_id, object_name: naire});
+        }
 
         if(!init){
           if(this.answered_url){
@@ -1166,11 +1171,13 @@
       }
 
       if(!this.showOtherQuesion){
-        this.bottonText = '下一题';
+        this.buttonText = '下一题';
+      } else {
+        this.buttonText = '提交';
       }
 
       if(this.pendingQuesionKeys.length < 2){
-        this.bottonText = '完成';
+        this.buttonText = '完成';
       }
 //      console.log('this.answer', this.answer);
 //      console.log('this.question', this.question);

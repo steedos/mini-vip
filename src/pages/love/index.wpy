@@ -46,7 +46,7 @@
 					</view>
 					<view class="page__bd">
 						<view class="love-summary">我想看到你的真心</view>
-						<button class="btn-join" @tap="goAnswer">测试好友缘分</button>
+						<button class="btn-join" @tap="goTest">测试好友缘分</button>
 						<button wx:if="{{showLoveBtn}}" class="btn-index btn-love" @tap="goLove">寻找有缘人</button>
 						<view class="love-licence"></view>
 					</view>
@@ -210,8 +210,8 @@ export default class LoveIndex extends wepy.page {
 		goLove() {
 			wx.navigateTo({url: '/pages/love/find'})
 		},
-		goAnswer() {
-		    wx.navigateTo({url: '/pages/love/test'})
+		goTest() {
+		  wx.navigateTo({url: '/pages/love/test'})
     },
   };
 

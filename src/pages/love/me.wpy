@@ -116,6 +116,24 @@
       </repeat>
     </view>
     <view class="weui-cells">
+      <navigator class="weui-cell weui-cell_access" url="test?space_id={{space_id}}">
+        <view class="weui-cell__hd">
+          <view class="slds-icon-standard-link slds-icon slds-icon--small slds-m-right--x-small"/>
+        </view>
+        <view class="weui-cell__bd">
+          <view>测试好友缘分</view>
+        </view>
+        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+      </navigator>
+      <navigator class="weui-cell weui-cell_access" url="share?space_id={{space_id}}&card=true">
+        <view class="weui-cell__hd">
+          <view class="slds-icon-standard-announcement slds-icon slds-icon--small slds-m-right--x-small"/>
+        </view>
+        <view class="weui-cell__bd">
+          <view>交友名片</view>
+        </view>
+        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+      </navigator>
       <navigator class="weui-cell weui-cell_access" url="share?space_id={{space_id}}">
         <view class="weui-cell__hd">
           <view class="slds-icon-standard-announcement slds-icon slds-icon--small slds-m-right--x-small"/>
@@ -125,16 +143,9 @@
         </view>
         <view class="weui-cell__ft weui-cell__ft_in-access"></view>
       </navigator>
+    </view>
 
-      <navigator class="weui-cell weui-cell_access" url="test?space_id={{space_id}}">
-        <view class="weui-cell__hd">
-          <view class="slds-icon-standard-link slds-icon slds-icon--small slds-m-right--x-small"/>
-        </view>
-        <view class="weui-cell__bd">
-          <view>测试缘分值</view>
-        </view>
-        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-      </navigator>
+    <view class="weui-cells">
       <navigator class="weui-cell weui-cell_access" url="/pages/space/index?space_id={{space_id}}">
         <view class="weui-cell__hd">
           <view class="slds-icon-custom-custom1 slds-icon slds-icon--small slds-m-right--x-small"/>
@@ -196,6 +207,8 @@ export default class QuestionnaireList extends wepy.page {
         url: `/pages/love/papers_view?object_name=love_looking_for&space_id=${loveSpaceId}`,
         object_name: 'love_looking_for'
       },
+    ],
+    other_questionnaire: [
       {
         icon: 'slds-icon-standard-social',
         label: '问答匹配 (玫瑰卷)',
@@ -214,21 +227,19 @@ export default class QuestionnaireList extends wepy.page {
         label: '兴趣爱好匹配',
         object_name: 'love_hobby',
         url: `/pages/love/papers_view?object_name=love_hobby&space_id=${loveSpaceId}`
-      }
-    ],
-    other_questionnaire: [
+      },
       {
         icon: 'slds-icon-standard-reward',
         label: '校友匹配',
         object_name: 'love_educational_experience',
         url: `../record/list?space_id=${loveSpaceId}&object_name=love_educational_experience`
       },
-      {
-        icon: 'slds-icon-standard-poll',
-        label: '工作经历匹配',
-        object_name: 'love_work_experience',
-        url: `../record/list?space_id=${loveSpaceId}&object_name=love_work_experience`
-      }
+//      {
+//        icon: 'slds-icon-standard-poll',
+//        label: '工作经历匹配',
+//        object_name: 'love_work_experience',
+//        url: `../record/list?space_id=${loveSpaceId}&object_name=love_work_experience`
+//      }
     ],
     progress: {}
   };
