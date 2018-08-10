@@ -60,7 +60,10 @@
           <image wx:else mode="aspectFill" class="image" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg"></image>
         </view>
       </view>
-      <button class="input-btn btn-join button-hover" type="primary" @tap="goAnswer">
+      <button wx:if="{{show_friends}}" class="input-btn btn-join button-hover" @tap="goMatching">
+        缘分排行榜
+      </button>
+      <button wx:else class="input-btn btn-join button-hover" type="primary" @tap="goAnswer">
         开始答题
       </button>
       <button wx:if="{{isAuthUserInfo}}" class="btn-index btn-love" @tap="goShare">
@@ -93,6 +96,7 @@ export default class Test extends wepy.page {
 
   data = {
     is_loaded: false,
+    show_friends: false,
     isAuthUserInfo: false,
     space_id: '',
     showLoveBtn: false,
@@ -121,6 +125,12 @@ export default class Test extends wepy.page {
 		if (love && love.enabled) {
 			this.showLoveBtn = true;
 			this.$apply();
+    }
+
+    const finishedNaire = wx.getStorageSync('questionnaire_progess');
+    if (finishedNaire.includes('love_answer')) {
+      this.show_friends = true;
+      this.$apply();
     }
 
     if (e.share_from && e.share_from != user_id) {
@@ -187,6 +197,9 @@ export default class Test extends wepy.page {
       } else {
         wx.navigateTo({url: `/pages/user_info_login?share=true`})
       }
+    },
+    goMatching() {
+      wx.navigateTo({url: `/pages/love/matching?space_id=${this.space_id}`})
     }
   }
 }
