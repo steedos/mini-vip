@@ -128,15 +128,6 @@
         </view>
         <view class="weui-cell__ft weui-cell__ft_in-access"></view>
       </navigator>
-      <navigator class="weui-cell weui-cell_access" url="share?space_id={{space_id}}&card=true">
-        <view class="weui-cell__hd">
-          <view class="slds-icon-standard-announcement slds-icon slds-icon--small slds-m-right--x-small"/>
-        </view>
-        <view class="weui-cell__bd">
-          <view>交友名片</view>
-        </view>
-        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-      </navigator>
       <navigator class="weui-cell weui-cell_access" url="share?space_id={{space_id}}">
         <view class="weui-cell__hd">
           <view class="slds-icon-standard-announcement slds-icon slds-icon--small slds-m-right--x-small"/>
