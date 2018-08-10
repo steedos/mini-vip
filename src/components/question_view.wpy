@@ -1077,7 +1077,7 @@
       questionsAnswer: {},
       showBigSelect: false,
       submitDisabled: true,
-      buttonText: '',
+      buttonText: '提交',
       fieldErrorMSG: '',
       showError: false,
       keep_progress: false,
