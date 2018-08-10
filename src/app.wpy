@@ -483,6 +483,15 @@ export default class VIP extends wepy.app {
     // needs_login = true;
 
     let space_id = e.space_id, share_id = e.share_id, share_from = e.share_from;
+    if(share_id || share_from){
+      needs_login = true;
+      if(!space_id){
+        wx.showToast({
+          title: "分享链接未传入工作区ID",
+          icon: "none"
+        });
+      }
+    }
     if (needs_login) {
       console.log("=========needs_login============");
       const data = await wepy.login()
