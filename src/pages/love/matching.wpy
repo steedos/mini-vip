@@ -87,7 +87,8 @@ export default class Matching extends wepy.page {
     baseUrl: baseUrl,
     navigationBarTitle: '缘分排行榜',
     date_field: ['match', 'a_to_b', 'b_to_a'],
-    userId: ''
+    userId: '',
+    orderby: 'match desc'
   }
 
   onLoad() {

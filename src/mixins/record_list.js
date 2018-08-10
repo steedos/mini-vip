@@ -25,7 +25,8 @@ export default class recordList extends wepy.mixin {
     filter: '',
     url: '/pages/record/edit',
     add_url: '/pages/record/create',
-    navigationBarTitle: ''
+    navigationBarTitle: '',
+    orderby: '',
   };
 
   dataRefresh() {
@@ -147,6 +148,10 @@ export default class recordList extends wepy.mixin {
     }
     if (expand.length > 0) {
       options.$expand = this.getFinalExpand(expand);
+    }
+
+    if (this.orderby) {
+      options.$orderby = this.orderby;
     }
 
     console.log('this.fields', this.fields);
