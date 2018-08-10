@@ -188,7 +188,7 @@ export default class recordList extends wepy.mixin {
     this.avatar_field = e.avatar_field || this.avatar_field;
     this.name_field = e.name_field || this.name_field || 'name';
     this.description_field = e.description_field;
-    this.date_field = e.date_field;
+    this.date_field = e.date_field || this.date_field;
     this.price_field = e.price_field;
     this.url = this.getRecordUrl(e);
 
