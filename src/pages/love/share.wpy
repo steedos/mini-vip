@@ -318,7 +318,7 @@
 
     getSharePath(){
       let path = '';
-      if(this.card){
+      if(this.share_card){
         path = `pages/love/test?space_id=${this.space_id}`
       }else{
         path = `pages/love/find`
