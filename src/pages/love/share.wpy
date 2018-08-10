@@ -159,7 +159,7 @@
         {{title}}
       </block>
     </view>
-    <view class="page__bd">
+    <view class="page__bd" wx:if="{{!card_url}}">
       {{description}}
     </view>
     <view class="tab-bar border-top-1px">
@@ -242,6 +242,7 @@
       }
       if(e.card){
         await this.generateFriendCard()
+        this.showPop = false
         this.description = '分享给好友，找到隐藏在好友中的“另一半”吧。'
         this.share_card = true
         this.$apply()
@@ -320,7 +321,7 @@
       if(this.card){
         path = `pages/love/test?space_id=${this.space_id}`
       }else{
-        path = `pages/love/index?love=1`
+        path = `pages/love/find`,
       }
       if(this.share_id){
         const userId = this.$parent.globalData.user._id;
@@ -332,12 +333,9 @@
 
     // 分享
     onShareAppMessage(res) {
-      let title = ''
+      let title = "我们是天生一对吗？";
       let imageUrl = ''
-      if(this.share_card){
-        title = "测试一下我们适合做cp还是基友？";
-      }else{
-        title = "我们是天生一对吗？";
+      if(!this.share_card){
         imageUrl = 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/love_share_bg.jpg';
       }
       let path = this.getSharePath();
@@ -368,11 +366,11 @@
         const avatarRes = await wepy.downloadFile({
           url: this.$parent.globalData.user.avatar
         })
-        let path = `pages/love/index`;
+        let path = `pages/love/test`;
         const userId = this.$parent.globalData.user._id;
         const scene = `share_from=${userId}`;
         wepy.showLoading({
-          title: '正在获取小程序码',
+          title: '正在生成你的交友名片',
           mask: true
         });
         const url = `/api/steedos/weixin/code?appid=${appId}&scene=${scene}&page=${path}`;
@@ -433,7 +431,7 @@
             console.log("res.tempFilePath================", res.tempFilePath);
             if(res){
               self.card_url = res.tempFilePath
-              self.friend_circle_image_url = res.tempFilePath
+              // self.friend_circle_image_url = res.tempFilePath
               self.$apply();
             }
             else{
@@ -455,7 +453,7 @@
        }
     }
     async generateFriendCircleImage() {
-      let path = `pages/love/index`;
+      let path = `pages/love/find`;
       const userId = this.$parent.globalData.user._id;
       const scene = `share_from=${userId}`;
       wepy.showLoading({
@@ -539,6 +537,7 @@
       async shareToFriendCircle(){
         if(this.share_card){
           if(this.card_url){
+            this.friend_circle_image_url = this.card_url
             this.showPop = true;
             this.$apply();
           }else{
@@ -561,7 +560,6 @@
       friendCircleImageLoadFailed(){
         console.log("==========friendCircleImageLoadFailed======2====");
         this.friend_circle_image_url = "";
-        this.card_url = ''
         wepy.showToast({
           title: "图片加载失败，请再试一次",
           icon: "none"
@@ -581,7 +579,8 @@
         wepy.hideLoading();
       },
       async saveImageToPhotosAlbum(){
-        let imageUrl = this.friend_circle_image_url;
+        let imageUrl = ''
+        imageUrl = this.friend_circle_image_url;     
         const saveRes = await wepy.saveImageToPhotosAlbum({
           filePath: imageUrl
         }).catch((err)=>{
