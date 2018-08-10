@@ -1126,7 +1126,9 @@
         finishedNaire = _.uniq(finishedNaire);
         wx.setStorageSync("questionnaire_progess", finishedNaire);
 
-        await req.post('/api/mini/vip/friend/answered', {space_id: this.space_id, object_name: naire})
+        if (naire != 'love_about_me') {
+          await req.post('/api/mini/vip/friend/answered', {space_id: this.space_id, object_name: naire});
+        }
 
         if(!init){
           if(this.answered_url){

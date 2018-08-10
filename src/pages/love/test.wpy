@@ -96,6 +96,7 @@ export default class Test extends wepy.page {
     isAuthUserInfo: false,
     space_id: '',
     showLoveBtn: false,
+    userB_avatar: '',
     naire: '',
     share_from: ''
   }
@@ -116,13 +117,22 @@ export default class Test extends wepy.page {
     this.space_id = e.space_id;
     await this.$parent.login(e);
     const love = this.$parent.globalData.love;
+    const user_id = this.$parent.globalData.user._id;
 		if (love && love.enabled) {
 			this.showLoveBtn = true;
 			this.$apply();
     }
 
     if (e.share_from) {
-      
+      const options = {
+        $filter: `(owner eq '${user_id}')`,
+        $select: 'owner,user_b,a_to_b,b_to_a,match',
+        $expand: 'user_b($select=profile)'
+      }
+      const result = await this.$parent.query('love_friends', options, this.space_id);
+      if (result && result.value && result.value[0]) {
+        this.userB_avatar = result.value[0].user_b.profile.avatar;
+      }
     }
 
     const setting = await wepy.getSetting();
