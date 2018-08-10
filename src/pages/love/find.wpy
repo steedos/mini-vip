@@ -72,7 +72,7 @@ export default class InviteIndex extends wepy.page {
   onShareAppMessage(res) {
     const user_id = this.$parent.globalData.user._id;
     let title = '我们是天生一对吗？';
-    let path = `/pages/love/find?naire=love_answer&share_from=${user_id}`
+    let path = `/pages/love/find?share_from=${user_id}`
     return {
       title: title,
       path: path
