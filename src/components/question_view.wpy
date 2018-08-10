@@ -664,7 +664,7 @@
       <view  class="love_question_button" @tap.stop="questionBack"  wx:if="{{answeredQuesionKeys.length > 0}}">
         <view class="love_question_back slds-icon slds-icon--small slds-m-right--x-small"></view>
       </view>
-      <button class="weui-btn submit" type="primary" @tap="submit" wx:if="{{answer.other.length > 0}}" disabled="{{submitDisabled}}">{{bottonText}}</button>
+      <button class="weui-btn submit" type="primary" @tap="submit" wx:if="{{answer.other.length > 0}}" disabled="{{submitDisabled}}">{{buttonText}}</button>
 
       <view class="big-bang-select big-select" wx:if="{{showBigSelect}}">
         <view class="name">
@@ -817,7 +817,7 @@
           <view class="love_question_back slds-icon slds-icon--small slds-m-right--x-small"></view>
         </view>
 
-        <button class="weui-btn submit" type="primary" form-type="submit" hover-class='button-hover' disabled="{{submitDisabled}}">{{bottonText}}</button>
+        <button class="weui-btn submit" type="primary" form-type="submit" hover-class='button-hover' disabled="{{submitDisabled}}">{{buttonText}}</button>
 
       </form>
     </view>
@@ -1076,7 +1076,7 @@
       questionsAnswer: {},
       showBigSelect: false,
       submitDisabled: true,
-      bottonText: '提交',
+      buttonText: '',
       fieldErrorMSG: '',
       showError: false,
       keep_progress: false,
@@ -1166,11 +1166,13 @@
       }
 
       if(!this.showOtherQuesion){
-        this.bottonText = '下一题';
+        this.buttonText = '下一题';
+      } else {
+        this.buttonText = '提交';
       }
 
       if(this.pendingQuesionKeys.length < 2){
-        this.bottonText = '完成';
+        this.buttonText = '完成';
       }
 //      console.log('this.answer', this.answer);
 //      console.log('this.question', this.question);
