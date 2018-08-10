@@ -406,6 +406,12 @@ function includes(arr, item) {
   return false;
 }
 
+// fix数据
+
+function fixed(num, length) {
+  return num.toFixed(length) * 100;
+}
+
 
 module.exports = {
   formatDate: formatDate,
@@ -419,5 +425,6 @@ module.exports = {
   transformFieldValue: transformFieldValue,
   formatDateMini: formatDateMini,
   showRequired: showRequired,
-  includes: includes
+  includes: includes,
+  fixed: fixed
 }

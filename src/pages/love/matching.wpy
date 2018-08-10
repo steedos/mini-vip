@@ -51,7 +51,7 @@
                 {{record.user_b.name}}
               </view>
               <view class="weui-cell__ft" wx:if="{{record.match == undefined}}">?</view>
-              <view class="weui-cell__ft" wx:else>{{record.match * 100}}%</view>
+              <view class="weui-cell__ft" wx:else>{{util.fixed(record.match, 4)}}%</view>
             </navigator>
           </repeat>
         </view>
