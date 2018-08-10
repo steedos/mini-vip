@@ -117,9 +117,9 @@ page {
   min-height:100vh;
 
   .page__hd{
-    padding:40rpx;
+    padding:20rpx 40rpx;
     .love-title{
-      margin-top:80rpx;
+      margin-top:40rpx;
       color:#00396b;
       font-size:65rpx;
       font-weight:bold;
@@ -127,17 +127,17 @@ page {
     }
   }
   .page__bd{
-    padding:40rpx;
+    padding:20rpx 40rpx;
     .love-summary{
       color:#00396b;
       font-size:45rpx;
-      margin-bottom:80rpx;
+      margin-bottom:40rpx;
       text-align: center;
     }
     .love-attention{
       color: #00396b;
       font-size:35rpx;
-      margin-bottom:80rpx;
+      margin-bottom:40rpx;
       text-align: center;
     }
   }
@@ -147,12 +147,13 @@ page {
     padding:6px;
     color:#fff;
     font-weight:bold;
-    margin:30rpx 0;
+    margin-top:120rpx;
   }
   .btn-love {
     padding:6px;
     font-weight:bold;
     color:#353535;
+    margin-top:30rpx;
   }
   .love-licence{
     color:#fff;
