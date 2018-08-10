@@ -58,7 +58,7 @@
       </block>
     </view>
     <view class="tab-bar border-top-1px">
-      <button open-type="share" class="btn btn-share-wexin" type="default" plain="true">
+      <button class="btn btn-share-wexin" type="default" plain="true" @tap="goShare">
         测试好友缘分值
       </button>
     </view>
@@ -129,7 +129,13 @@ export default class Matching extends wepy.page {
 
   mixins = [recordList];
 
-  methods = {};
+  methods = {
+    goShare() {
+      wx.navigateTo({
+        url: `/pages/love/share?card=true&space_id=${this.space_id}`
+      })
+    }
+  };
 }
 
 </script>
