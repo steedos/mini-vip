@@ -1,36 +1,38 @@
 <style lang="less">
-.loading-container {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: #66ceff;
-  .loading {
+
+.love-result {
+  padding: 60rpx;
+  margin-top: 40rpx;
+  .result-container {
+    font-size: 40rpx;
+    box-sizing: border-box;
     width: 100%;
-    height: 100%;
-    background: url(https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/loading.gif);
-    background-position: center center;
-    background-repeat: no-repeat;
+    display: flex;
+    .user-avatar {
+      height: 200rpx;
+      width: 200rpx;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 2px solid #fff;
+      .image {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+      }
+    }
+    .result {
+      text-align: center;
+      font-size: 60rpx;
+      font-weight: bold;
+      color: #00396b;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
   }
-}
-
-.btn-index {
-  margin: 30rpx 0;
-}
-
-.about-me-container {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  text-align: center;
-  .about-me {
-    padding: 20px 30px;
-    color: #ccc;
-    display: inline-block;
-    margin-bottom: 6px;
-    font-size: 14px;
+  .input-btn {
+    margin-top: 160rpx;
   }
 }
 </style>
@@ -38,13 +40,35 @@
 <template>
   <view class="page cover-page" wx:if="{{is_loaded}}">
     <view class="page__hd">
+      <view class="love-title">测试我们的缘分</view>
+    </view>
+
+    <view class="love-result">
+      <view class="result-container">
+        <view class="user-avatar">
+          <open-data class="image" type="userAvatarUrl"></open-data>
+        </view>
+        <view class="result">
+          ?
+        </view>
+        <view class="user-avatar">
+          <image wx:if="{{userB_avatar}}" class="image" mode="aspectFill" src="{{userB_avatar}}"></image>
+          <image wx:else mode="aspectFill" class="image" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg"></image>
+        </view>
+      </view>
+      <button class="input-btn btn-join button-hover" type="primary" @tap="goAnswer">
+        开始答题
+      </button>
+    </view>
+
+    <!-- <view class="page__hd">
       <view class="love-title">测试好友缘分</view>
     </view>
     <view class="page__bd">
       <view class="love-summary">邀请好友一起回答有趣的问卷，测试你们的“相互”匹配度。</view>
       <button class="btn-join" @tap="goAnswer">开始答题</button>
       <view class="love-licence"></view>
-    </view>
+    </view> -->
   </view>
 </template>
 
