@@ -323,10 +323,10 @@
       }else{
         path = `pages/love/find`
       }
+      const userId = this.$parent.globalData.user._id;
+      path += `&share_from=${userId}`;
       if(this.share_id){
-        const userId = this.$parent.globalData.user._id;
         path += `?share_id=${this.share_id}`;
-        path += `&share_from=${userId}`;
       }
       return path;
     }
