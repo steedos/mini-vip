@@ -64,7 +64,7 @@
         开始答题
       </button>
       <button class="btn-index btn-love" @tap="goMatching">
-        缘分排行榜
+        我的缘分榜
       </button>
     </view>
 

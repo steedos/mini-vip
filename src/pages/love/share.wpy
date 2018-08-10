@@ -207,7 +207,7 @@
  
   export default class LoveShare extends wepy.page {
 		config = {
-			navigationBarTitleText: '分享',
+			navigationBarTitleText: '邀请',
     };
 
     wxs = {
