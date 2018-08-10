@@ -174,24 +174,7 @@ export default class Test extends wepy.page {
     wx.hideLoading();
   }
 
-  async onShow() {
-    wx.showLoading();
-    const user_id = this.$parent.globalData.user._id;
-
-    if (e.share_from && e.share_from != user_id) {
-      const options = {
-        $filter: `(user_b eq '${e.share_from}')`,
-        $select: 'owner,user_b,a_to_b,b_to_a,match',
-        $expand: 'user_b($select=profile)'
-      }
-      const result = await this.$parent.query('love_friends', options, this.space_id);
-      if (result && result.value && result.value[0]) {
-        this.userB_avatar = result.value[0].user_b.profile.avatar;
-        this.score = result.value[0].match;
-      }
-    }
-    wx.hideLoading()
-  }
+ 
 
   methods = {
     async goAnswer() {
