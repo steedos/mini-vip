@@ -830,6 +830,7 @@
   import pageRouter from '@/utils/pageRouter'
   import util from '../wxs/util.wxs'
   import citySelect from '@/components/city_select'
+  import req from '@/network'
 
   const OTHER = '_o';
   const IMPORTANT = '_i';
@@ -1095,7 +1096,7 @@
       })
     }
 
-    nextQuestion(init){
+    async nextQuestion(init){
       this.submitDisabled = true;
       this.$apply();
 
@@ -1124,6 +1125,8 @@
         }
         finishedNaire = _.uniq(finishedNaire);
         wx.setStorageSync("questionnaire_progess", finishedNaire);
+
+        await req.post('/api/mini/vip/friend/answered', {space_id: this.space_id, object_name: naire})
 
         if(!init){
           if(this.answered_url){
