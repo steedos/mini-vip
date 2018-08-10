@@ -208,8 +208,6 @@
   export default class LoveShare extends wepy.page {
 		config = {
 			navigationBarTitleText: '分享',
-      navigationBarBackgroundColor: '#cae6f1',
-      navigationBarTextStyle: 'black',
     };
 
     wxs = {
