@@ -409,7 +409,8 @@ function includes(arr, item) {
 // fix数据
 
 function fixed(num, length) {
-  return num.toFixed(length) * 100;
+  var num = num * 100;
+  return num.toFixed(length);
 }
 
 
