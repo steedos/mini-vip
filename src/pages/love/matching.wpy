@@ -72,6 +72,7 @@ import util from '../../wxs/util.wxs';
 import recordList from '../../mixins/record_list';
 import { baseMaterialUrl } from '@/config';
 import { loveSpaceId } from '@/config';
+import req from '@/network'
 
 export default class Matching extends wepy.page {
   config = {
@@ -91,7 +92,8 @@ export default class Matching extends wepy.page {
     orderby: 'match desc'
   }
 
-  onLoad() {
+  async onLoad() {
+    await req.post('/api/mini/vip/friend/answered', {space_id: this.space_id, rest: true}); 
     const user_id = this.$parent.globalData.user._id;
     this.userId = user_id;
     this.$apply();

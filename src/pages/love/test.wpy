@@ -9,8 +9,8 @@
     width: 100%;
     display: flex;
     .user-avatar {
-      height: 200rpx;
-      width: 200rpx;
+      height: 180rpx;
+      width: 180rpx;
       border-radius: 50%;
       overflow: hidden;
       border: 2px solid #fff;
@@ -22,7 +22,7 @@
     }
     .result {
       text-align: center;
-      font-size: 60rpx;
+      font-size: 56rpx;
       font-weight: bold;
       color: #00396b;
       flex: 1;
@@ -52,9 +52,8 @@
         <view class="user-avatar">
           <open-data class="image" type="userAvatarUrl"></open-data>
         </view>
-        <view class="result">
-          ?
-        </view>
+        <view wx:if="{{score == undefined}}" class="result" style="font-size: 60rpx">?</view>
+        <view wx:else class="result">{{util.fixed(score,2)}}%</view>
         <view class="user-avatar">
           <image wx:if="{{userB_avatar}}" class="image" mode="aspectFill" src="{{userB_avatar}}"></image>
           <image wx:else mode="aspectFill" class="image" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg"></image>
@@ -82,6 +81,7 @@
 <script>
 import wepy from 'wepy';
 import { loveSpaceId } from '@/config';
+import util from '../../wxs/util.wxs';
 
 export default class Test extends wepy.page {
 
@@ -98,7 +98,12 @@ export default class Test extends wepy.page {
     showLoveBtn: false,
     userB_avatar: '',
     naire: '',
-    share_from: ''
+    share_from: '',
+    score: undefined
+  }
+
+  wxs = {
+    util: util
   }
 
   onShareAppMessage(res) {
@@ -123,17 +128,18 @@ export default class Test extends wepy.page {
 			this.$apply();
     }
 
-    if (e.share_from && e.share_from != user_id) {
-      const options = {
-        $filter: `(user_b eq '${e.share_from}')`,
-        $select: 'owner,user_b,a_to_b,b_to_a,match',
-        $expand: 'user_b($select=profile)'
-      }
-      const result = await this.$parent.query('love_friends', options, this.space_id);
-      if (result && result.value && result.value[0]) {
-        this.userB_avatar = result.value[0].user_b.profile.avatar;
-      }
-    }
+    // if (e.share_from && e.share_from != user_id) {
+    //   const options = {
+    //     $filter: `(user_b eq '${e.share_from}')`,
+    //     $select: 'owner,user_b,a_to_b,b_to_a,match',
+    //     $expand: 'user_b($select=profile)'
+    //   }
+    //   const result = await this.$parent.query('love_friends', options, this.space_id);
+    //   if (result && result.value && result.value[0]) {
+    //     this.userB_avatar = result.value[0].user_b.profile.avatar;
+    //     this.score = result.value[0].match;
+    //   }
+    // }
 
     const setting = await wepy.getSetting();
     if (setting.authSetting['scope.userInfo']) {
@@ -166,6 +172,25 @@ export default class Test extends wepy.page {
     this.$apply();
     
     wx.hideLoading();
+  }
+
+  onShow() {
+    wx.showLoading();
+    const user_id = this.$parent.globalData.user._id;
+
+    if (e.share_from && e.share_from != user_id) {
+      const options = {
+        $filter: `(user_b eq '${e.share_from}')`,
+        $select: 'owner,user_b,a_to_b,b_to_a,match',
+        $expand: 'user_b($select=profile)'
+      }
+      const result = await this.$parent.query('love_friends', options, this.space_id);
+      if (result && result.value && result.value[0]) {
+        this.userB_avatar = result.value[0].user_b.profile.avatar;
+        this.score = result.value[0].match;
+      }
+    }
+    wx.hideLoading()
   }
 
   methods = {
