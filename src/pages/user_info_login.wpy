@@ -91,7 +91,8 @@ export default class UserInfoLogin extends wepy.page {
     isAuthUserInfo: false,
     nickName: '',
     userAvatarUrl: '',
-		showTopTips: false,
+    showTopTips: false,
+    share: '',
 		next: '',
 		message: '',
     space_id: loveSpaceId,
@@ -102,7 +103,8 @@ export default class UserInfoLogin extends wepy.page {
     if (e) {
 			this.next = e.next;
 			this.naire = e.naire;
-			this.share_from = e.share_from;
+      this.share_from = e.share_from;
+      this.share = e.share;
 			this.$apply();
     }
   }
@@ -132,16 +134,23 @@ export default class UserInfoLogin extends wepy.page {
       this.$apply();
     },
     goNext() {
+      console.log('[this.naire]', this.naire)
       if (!this.isAuthUserInfo) {
         console.log('[goNext]')
         this.showTopTips = true;
         this.message = '请在获取昵称之后再点击下一步';
         this.$apply();
       } else {
-        const next = decodeURIComponent(this.next);
-        wx.redirectTo({
-          url: `${next}&answered_url_type=redirectTo&answered_url=${encodeURIComponent(`/pages/love/matching?space_id=${this.space_id}`)}`
-        })
+        if (!this.share) {
+          const next = decodeURIComponent(this.next);
+          wx.redirectTo({
+            url: `${next}&answered_url_type=redirectTo&answered_url=${encodeURIComponent(`/pages/love/matching?space_id=${this.space_id}`)}`
+          })
+        } else {
+          wx.redirectTo({
+            url: `/pages/love/share?card=true&space_id=${this.space_id}`
+          })
+        }
       }
     }
   }

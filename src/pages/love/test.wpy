@@ -63,7 +63,7 @@
       <button class="input-btn btn-join button-hover" type="primary" @tap="goAnswer">
         开始答题
       </button>
-      <button wx:if="{{isAuthUserInfo}}" class="btn-share" open-type="share">
+      <button wx:if="{{isAuthUserInfo}}" @tap="goShare">
         邀请好友测试
       </button>
     </view>
@@ -121,6 +121,10 @@ export default class Test extends wepy.page {
 			this.$apply();
     }
 
+    if (e.share_from) {
+      
+    }
+
     const setting = await wepy.getSetting();
     if (setting.authSetting['scope.userInfo']) {
       this.isAuthUserInfo = true;
@@ -156,8 +160,7 @@ export default class Test extends wepy.page {
 
   methods = {
     async goAnswer() {
-			const setting = await wepy.getSetting();
-			if (setting.authSetting['scope.userInfo']) {
+			if (this.isAuthUserInfo) {
 				wx.navigateTo({
 					url: `/pages/love/papers_view?object_name=love_answer&space_id=${this.space_id}&answered_url_type=redirectTo&answered_url=${encodeURIComponent(`/pages/love/matching?space_id=${this.space_id}`)}`
 				});
@@ -167,7 +170,14 @@ export default class Test extends wepy.page {
     },
     goLove() {
 			wx.navigateTo({url: '/pages/love/index?love=1'})
-		},
+    },
+    goShare() {
+      if (this.isAuthUserInfo) {
+        wx.navigateTo({url: `/pages/love/share?card=true&space_id=${this.space_id}`});
+      } else {
+        wx.navigateTo({url: `/pages/user_info_login?share=true`})
+      }
+    }
   }
 }
 </script>
