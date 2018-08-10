@@ -44,7 +44,7 @@
 <template>
   <view class="page cover-page" wx:if="{{is_loaded}}">
     <view class="page__hd">
-      <view class="love-title">测试我们的缘分</view>
+      <view class="love-title">我们是天生一对吗？</view>
     </view>
 
     <view class="love-result">
