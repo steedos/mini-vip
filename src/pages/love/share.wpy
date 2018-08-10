@@ -1,7 +1,7 @@
 <style lang="less">
   page{
     height: 100%;
-    background:#cae6f1;
+    background:#ffffff;
   }
   .page__hd{
     padding:40rpx;
@@ -9,6 +9,10 @@
     font-size:65rpx;
     font-weight:bold;
     text-align:center;
+    .image {
+      width: 100%;
+      height: 100%;
+    }
   }
   .page__bd{
     padding:40rpx;
@@ -148,10 +152,15 @@
   </block>
   <block wx:else>
     <view class="page__hd">
-      拯救单身狗
+      <block wx:if="{{card_url}}">
+        <image mode="widthFix" class="image" src="{{card_url}}"/>
+      </block>
+      <block wx:else>
+        {{title}}
+      </block>
     </view>
     <view class="page__bd">
-      转发“无颜”这位聪明又勤快的智能机器人给身边的朋友，让它每周推荐与他“相互匹配”值最高的有缘人给他吧。
+      {{description}}
     </view>
     <view class="tab-bar border-top-1px">
       <button open-type="share" class="btn btn-share-wexin" type="default" plain="{{true}}">
@@ -218,7 +227,11 @@
       responses: [],
       cash_back_total: 0,
       friend_circle_image_url: '',
-      showOpenSetting: false
+      showOpenSetting: false,
+      title:'',
+      description:'',
+      share_card:false,
+      card_url:''
     }
 
     async onLoad (e) {
@@ -226,6 +239,15 @@
       if(!e.space_id){
         // 保证一进入就新建space对应的vip_customers记录
         e.space_id = loveSpaceId;
+      }
+      if(e.card){
+        await this.generateFriendCard()
+        this.description = '分享给好友，找到隐藏在好友中的“另一半”吧。'
+        this.share_card = true
+        this.$apply()
+      }else{
+        this.title = '拯救单身狗'
+        this.description = '转发“无颜”这位聪明又勤快的智能机器人给身边的朋友，让它每周推荐与他“相互匹配”值最高的有缘人给他吧。'
       }
       this.space_id = e.space_id;
       console.log("this.space_id============", this.space_id);
@@ -294,7 +316,12 @@
     }
 
     getSharePath(){
-      let path = `pages/love/index?love=1`;
+      let path = '';
+      if(this.card){
+        path = `pages/love/test?space_id=${this.space_id}`
+      }else{
+        path = `pages/love/index?love=1`
+      }
       if(this.share_id){
         const userId = this.$parent.globalData.user._id;
         path += `&share_id=${this.share_id}`;
@@ -305,9 +332,15 @@
 
     // 分享
     onShareAppMessage(res) {
-      let title = "我们是天生一对吗？";
+      let title = ''
+      let imageUrl = ''
+      if(this.share_card){
+        title = "测试一下我们适合做cp还是基友？";
+      }else{
+        title = "我们是天生一对吗？";
+        imageUrl = 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/love_share_bg.jpg';
+      }
       let path = this.getSharePath();
-      let imageUrl = 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/love_share_bg.jpg';
       return {
         title: title,
         path: path,
@@ -315,6 +348,112 @@
       };
     }
 
+    async generateFriendCard() {
+      if(this.$parent.globalData.user.avatar) {
+        const imageUrl = `https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/share_me.png`;
+        const imgRes = await wepy.downloadFile({
+          url: imageUrl
+        }).catch((err)=>{
+          console.log("err====downloadFile==========imgRes=====", err);
+          this.$apply();
+          return false;
+        });
+        if(!imgRes){
+          wepy.showToast({
+            title: "分享图片下载失败",
+            icon: "none"
+          });
+          return;
+        }
+        const avatarRes = await wepy.downloadFile({
+          url: this.$parent.globalData.user.avatar
+        })
+        let path = `pages/love/index`;
+        const userId = this.$parent.globalData.user._id;
+        const scene = `share_from=${userId}`;
+        wepy.showLoading({
+          title: '正在获取小程序码',
+          mask: true
+        });
+        const url = `/api/steedos/weixin/code?appid=${appId}&scene=${scene}&page=${path}`;
+        console.log("codeImgRes======url=========", this.baseUrl + url);
+        const codeImgRes = await wepy.downloadFile({
+          url: this.baseUrl + url
+        }).catch((err)=>{
+          console.log("err====downloadFile====codeImgRes===========", err);
+          this.$apply();
+          return false;
+        });
+        if(!codeImgRes){
+          wepy.showToast({
+            title: "小程序码生成失败",
+            icon: "none"
+          });
+          return;
+        }
+        console.log("codeImgRes===========",codeImgRes.tempFilePath)
+        console.log("avatarRes===============",avatarRes.tempFilePath)
+        console.log("imgRes===============",imgRes.tempFilePath)
+        if(codeImgRes && avatarRes){
+          const self = this
+          const ctx = wepy.createCanvasContext('myCanvas')
+          ctx.drawImage(imgRes.tempFilePath, 0, 0, 750, 1000)
+          ctx.save()
+          ctx.restore();
+          const width = 750
+          const radius = width * 105/430
+          const avatar_x = width/2 - radius/1.414
+          const avatar_y = avatar_x
+          const avatar_width = radius*1.414
+          ctx.drawImage(codeImgRes.tempFilePath, 0, 0, width, width)
+          ctx.arc(width/2, width/2, radius, 0, 2 * Math.PI)
+          ctx.setFillStyle('white')
+          ctx.fill()
+          const avatar_radius = radius-6
+          ctx.save()
+          ctx.beginPath()
+          ctx.arc(width/2, width/2, avatar_radius, 0, 2 * Math.PI)
+          ctx.setFillStyle('white')
+          ctx.fill()
+          ctx.clip()
+          ctx.drawImage(avatarRes.tempFilePath, width/2-avatar_radius, width/2-avatar_radius, 2*avatar_radius, 2*avatar_radius)
+          ctx.restore();
+          ctx.draw(true, async ()=>{
+            let x = self;
+            const res = await wepy.canvasToTempFilePath({
+              width:750,
+              height:1000,
+              destWidth:750,
+              destHeight:1000,
+              canvasId: 'myCanvas',
+              fileType: 'jpeg'
+            }).catch((err)=>{
+              return false;
+            });
+            console.log("res.tempFilePath================", res.tempFilePath);
+            if(res){
+              self.card_url = res.tempFilePath
+              self.friend_circle_image_url = res.tempFilePath
+              self.$apply();
+            }
+            else{
+              wepy.showToast({
+                title: "生成图片失败，请再试一次",
+                icon: "none"
+              });
+            }
+          });
+          this.$apply();
+          console.log("this.card_url================", this.card_url);
+          }
+        }
+       else{
+         wepy.showToast({
+          title: "请先授权获取微信头像",
+          icon: "none"
+        });
+       }
+    }
     async generateFriendCircleImage() {
       let path = `pages/love/index`;
       const userId = this.$parent.globalData.user._id;
@@ -398,11 +537,20 @@
 
     methods = {
       async shareToFriendCircle(){
-        if(this.friend_circle_image_url){
-          this.showPop = true;
-          this.$apply();
+        if(this.share_card){
+          if(this.card_url){
+            this.showPop = true;
+            this.$apply();
+          }else{
+            await this.generateFriendCard()
+          }
         }else{
-          await this.generateFriendCircleImage();
+          if(this.friend_circle_image_url){
+            this.showPop = true;
+            this.$apply();
+          }else{
+            await this.generateFriendCircleImage();
+          }
         }
       },
       friendCircleImageLoaded(){
@@ -413,6 +561,7 @@
       friendCircleImageLoadFailed(){
         console.log("==========friendCircleImageLoadFailed======2====");
         this.friend_circle_image_url = "";
+        this.card_url = ''
         wepy.showToast({
           title: "图片加载失败，请再试一次",
           icon: "none"
