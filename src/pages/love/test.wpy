@@ -32,7 +32,11 @@
     }
   }
   .input-btn {
-    margin-top: 160rpx;
+    margin-top: 140rpx;
+    margin-bottom: 40rpx;
+  }
+  .btn-share {
+    padding: 6px;
   }
 }
 </style>
@@ -58,6 +62,9 @@
       </view>
       <button class="input-btn btn-join button-hover" type="primary" @tap="goAnswer">
         开始答题
+      </button>
+      <button wx:if="{{isAuthUserInfo}}" class="btn-share" open-type="share">
+        邀请好友测试
       </button>
     </view>
 
@@ -86,6 +93,7 @@ export default class Test extends wepy.page {
 
   data = {
     is_loaded: false,
+    isAuthUserInfo: false,
     space_id: '',
     showLoveBtn: false,
     naire: '',
@@ -112,6 +120,12 @@ export default class Test extends wepy.page {
 			this.showLoveBtn = true;
 			this.$apply();
     }
+
+    const setting = await wepy.getSetting();
+    if (setting.authSetting['scope.userInfo']) {
+      this.isAuthUserInfo = true;
+      this.$apply();
+    }
     
     if(!this.space_id){
       wx.showToast({
@@ -121,18 +135,18 @@ export default class Test extends wepy.page {
       return;
     }
     
-    if (e.naire) {
-			this.naire = e.naire;
-			this.share_from = e.share_from;
-			this.$apply();
-			const answeredUrl = encodeURIComponent(`/pages/love/matching?space_id=${this.space_id}`);
+    // if (e.naire) {
+		// 	this.naire = e.naire;
+		// 	this.share_from = e.share_from;
+		// 	this.$apply();
+		// 	const answeredUrl = encodeURIComponent(`/pages/love/matching?space_id=${this.space_id}`);
 
-			console.log('[answeredUrl]', answeredUrl)
+		// 	console.log('[answeredUrl]', answeredUrl)
 
-			wx.navigateTo({
-				url: `/pages/love/papers_view?object_name=${e.naire}&space_id=${this.space_id}&answered_url=${answeredUrl}&answered_url_type=redirectTo`
-			})
-    }
+		// 	wx.navigateTo({
+		// 		url: `/pages/love/papers_view?object_name=${e.naire}&space_id=${this.space_id}&answered_url=${answeredUrl}&answered_url_type=redirectTo`
+		// 	})
+    // }
 
     this.is_loaded = true;
     this.$apply();
