@@ -321,11 +321,11 @@
       if(this.card){
         path = `pages/love/test?space_id=${this.space_id}`
       }else{
-        path = `pages/love/find`,
+        path = `pages/love/index`
       }
       if(this.share_id){
         const userId = this.$parent.globalData.user._id;
-        path += `&share_id=${this.share_id}`;
+        path += `?share_id=${this.share_id}`;
         path += `&share_from=${userId}`;
       }
       return path;
