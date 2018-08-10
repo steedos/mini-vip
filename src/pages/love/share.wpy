@@ -233,6 +233,9 @@
     }
 
     async onLoad (e) {
+      wepy.showShareMenu({
+        withShareTicket: true
+      });
       console.log("onLoad=======share==e===", e);
       if(!e.space_id){
         // 保证一进入就新建space对应的vip_customers记录

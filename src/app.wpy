@@ -304,7 +304,8 @@ export default class VIP extends wepy.app {
     storeInfo: null,
     launchOptions: null,
     is_login: false,
-    objects: {}
+    objects: {},
+    shareTicket: null
   }
 
   constructor () {
@@ -329,6 +330,8 @@ export default class VIP extends wepy.app {
     this.saveRecentSites(options.space_id);
 
     pageRouter.setApp(this);
+
+    this.globalData.shareTicket = options.shareTicket;
 
     pageRouter.pushEnter({
       page: '/pages/me_profile',
@@ -509,7 +512,20 @@ export default class VIP extends wepy.app {
         url += `&share_from=${share_from}`
       }
 
-      const res = await req.post(url).catch((err) => {
+      let ssoData = {};
+      let shareTicket = this.globalData.shareTicket;
+      if(shareTicket){
+        let shareInfo = await wepy.getShareInfo({
+          shareTicket: shareTicket
+        });
+        console.log("==========shareInfo=============", shareInfo);
+        ssoData = {
+          encryptedData: shareInfo.encryptedData,
+          iv: shareInfo.iv
+        };
+      }
+
+      const res = await req.post(url, ssoData).catch((err) => {
         console.log("cache error...", err);
         return {}
       })
