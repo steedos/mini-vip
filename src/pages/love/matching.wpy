@@ -48,10 +48,20 @@
           <repeat for="{{record_list}}" key="index" index="index" item="record">
             <navigator class="record-container weui-cell weui-cell_access"  data-item-id="{{record._id}}" hover-class="weui-cell_active">
               <view class="weui-cell__hd">
-                <image src="{{record.user_b.profile.avatar}}" class='avatar-field'></image>
+                <block wx:if="{{record.user_b.profile.avatar}}">
+                  <image src="{{record.user_b.profile.avatar}}" class='avatar-field' />
+                </block>
+                <block wx:else>
+                  <image src="{{defaultAvatar}}" class='avatar-field' />
+                </block>
               </view>
               <view class="weui-cell__bd">
-                {{record.user_b.name}}
+                <block wx:if="{{record.user_b.name}}">
+                  {{record.user_b.name}}
+                </block>
+                <block wx:else>
+                  匿名
+                </block>
               </view>
               <view class="weui-cell__ft" wx:if="{{record.match == undefined}}">?</view>
               <view class="weui-cell__ft" wx:else>{{util.fixed(record.match,2)}}%</view>
@@ -92,7 +102,8 @@ export default class Matching extends wepy.page {
     navigationBarTitle: '我的缘分榜',
     date_field: ['match', 'a_to_b', 'b_to_a'],
     userId: '',
-    orderby: 'match desc'
+    orderby: 'match desc',
+    defaultAvatar: 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg'
   }
 
   async onLoad() {
