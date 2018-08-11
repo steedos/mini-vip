@@ -884,6 +884,8 @@
 
           this.object_name = newValue.object_name;
 
+          this.question_name = newValue.question_name;
+
           this.space_id = spaceId;
 
           this.answered_url = newValue.answered_url;
@@ -925,14 +927,60 @@
 
           this.questionKeys = _.keys(this.questions);
 
-          this.pendingQuesionKeys = _.difference(this.questionKeys, _.keys(this.questionsAnswer));
+          if(this.question_name){
+            this.pendingQuesionKeys = _.clone(this.questionKeys).splice(_.indexOf(this.questionKeys, this.question_name), this.questionKeys.length - 1)
+            this.keep_progress = true;
+          }else{
+            this.pendingQuesionKeys = _.difference(this.questionKeys, _.keys(this.questionsAnswer));
+          }
 
           //如果所有问题都已回答，则跳转第一个问题
-          if(this.pendingQuesionKeys.length === 0|| !this.keep_progress){
+          if(this.pendingQuesionKeys.length === 0 || !this.keep_progress){
             this.pendingQuesionKeys = _.clone(this.questionKeys);
           }
 
           this.answeredQuesionKeys = _.difference(this.questionKeys, this.pendingQuesionKeys);
+
+          if(!this.question_name && this.keep_progress){
+            if(_.indexOf(wx.getStorageSync('questionnaire_progess'), this.object_name) > -1){
+              wx.hideLoading();
+              wx.showModal({
+                title: '您已回答完所有问题',
+                cancelText: '重新答题',
+                confirmText: '跳过',
+                success: (res) =>{
+                  if (res.confirm) {
+                    console.log('用户点击确定')
+                    this.pendingQuesionKeys = [];
+                    this.nextQuestion();
+                    this.$apply()
+                  } else if (res.cancel) {
+                    console.log('用户点击取消')
+                  }
+                }
+              });
+            }else if(_.intersection(this.questionKeys, _.keys(this.questionsAnswer)).length > 0){
+              wx.hideLoading();
+              wx.showModal({
+                title: '继续上次答题进度',
+                cancelText: '重新答题',
+                confirmText: '继续',
+                success: (res) =>{
+                  if (res.confirm) {
+                    console.log('用户点击确定')
+                    this.pendingQuesionKeys = _.difference(this.questionKeys, _.keys(this.questionsAnswer));
+                    this.nextQuestion(true);
+                    this.$apply()
+                  } else if (res.cancel) {
+                    this.pendingQuesionKeys = _.clone(this.questionKeys);
+                    this.answeredQuesionKeys = [];
+                    this.nextQuestion(true);
+                    this.$apply()
+                  }
+                }
+              });
+            }
+          }
 
           this.nextQuestion(true);
 
@@ -1082,6 +1130,7 @@
       showError: false,
       keep_progress: false,
       globalRequired: false,
+      question_name: ''
     };
 
     getProgress(){
@@ -1384,7 +1433,7 @@
         this.question.value.max = this.question.options_all[e.detail.value]
       },
       questionBack: function () {
-        console.log('questionBack,,,,,,');
+        console.log('questionBack,,,,,,',this.answeredQuesionKeys);
         if(this.answeredQuesionKeys.length > 0){
           const lastKey = _.last(this.answeredQuesionKeys);
           this.pendingQuesionKeys.unshift(lastKey);

@@ -33,7 +33,7 @@ export default class ComponentLookingFor extends wepy.component {
     next() {
       const answeredUrl = encodeURIComponent(`/pages/love/cover_answer_questions?space_id=${this.spaceId}`);
       wx.navigateTo({
-        url: `/pages/love/papers_view?object_name=love_looking_for&space_id=${this.spaceId}&required=true&answered_url=${answeredUrl}&answered_url_type=reLaunch`
+        url: `/pages/love/papers_view?object_name=love_looking_for&space_id=${this.spaceId}&required=true&answered_url=${answeredUrl}&answered_url_type=reLaunch&keep_progress`
       });
     }
   };

@@ -15,7 +15,7 @@
       background-repeat: no-repeat;
     }
 	}
-	
+
 	.btn-index {
 		margin: 30rpx 0;
 	}
@@ -77,7 +77,7 @@ import ComponentLookingFor from '@/components/cover_you_looking_for';
 
 export default class LoveIndex extends wepy.page {
   config = {
-    navigationBarTitleText: '无颜', 
+    navigationBarTitleText: '无颜',
     navigationBarBackgroundColor: '#cae6f1',
     navigationBarTextStyle: 'black',
   };
@@ -110,7 +110,7 @@ export default class LoveIndex extends wepy.page {
     this.space_id = e.space_id;
     console.log("this.space_id============", this.space_id);
 		await this.$parent.login(e);
-		
+
 		const love = this.$parent.globalData.love;
 		if (love && love.enabled) {
 			this.showLoveBtn = true;
@@ -146,7 +146,7 @@ export default class LoveIndex extends wepy.page {
 			console.log('[answeredUrl]', answeredUrl)
 
 			wx.navigateTo({
-				url: `/pages/love/papers_view?object_name=${e.naire}&space_id=${this.space_id}&answered_url=${answeredUrl}&answered_url_type=redirectTo`
+				url: `/pages/love/papers_view?object_name=${e.naire}&space_id=${this.space_id}&answered_url=${answeredUrl}&answered_url_type=redirectTo&keep_progress`
 			})
 		}
 
@@ -154,7 +154,7 @@ export default class LoveIndex extends wepy.page {
 			let finishedNaire = wx.getStorageSync('questionnaire_progess');
 			if (finishedNaire.indexOf('love_hobby') > -1) {
 				finishedNaire.splice(finishedNaire.indexOf('love_hobby'), 1);
-			} 
+			}
 			if (finishedNaire.indexOf('love_answer2') > -1) {
 				finishedNaire.splice(finishedNaire.indexOf('love_answer2'), 1);
 			}
@@ -183,7 +183,7 @@ export default class LoveIndex extends wepy.page {
     this.$apply();
     wx.hideLoading();
 	}
-	
+
 	async onShow() {
 		const finishedNaire = wx.getStorageSync('questionnaire_progess');
 		if (finishedNaire && finishedNaire.indexOf('love_hobby') > -1) {
