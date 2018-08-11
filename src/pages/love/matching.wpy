@@ -32,9 +32,9 @@
     padding:0 30rpx;
     font-size:15px;
     width:auto;
-    height:44px;
+    height:100rpx;
     border: none!important;
-    line-height:44px;
+    line-height:100rpx;
     display: flex;
     align-items: center;
     justify-content: center;
