@@ -71,9 +71,12 @@
       </block>
     </view>
     <view class="tab-bar border-top-1px">
-      <button class="btn-toolbar-primary" type="default" plain="true" @tap="goShare">
+      <button open-type="share" class="btn-toolbar-primary" type="default" plain="true">
         邀请好友打榜
       </button>
+      <!--<button class="btn-toolbar-primary" type="default" plain="true" @tap="goShare">-->
+        <!--邀请好友打榜-->
+      <!--</button>-->
     </view>
   </view>
 </template>
@@ -106,7 +109,7 @@ export default class Matching extends wepy.page {
   }
 
   async onLoad() {
-    await req.post('/api/mini/vip/friend/answered', {space_id: this.space_id, rest: true}); 
+    await req.post('/api/mini/vip/friend/answered', {space_id: this.space_id, rest: true});
     const user_id = this.$parent.globalData.user._id;
     this.userId = user_id;
     this.$apply();
@@ -126,7 +129,7 @@ export default class Matching extends wepy.page {
     return {
       title: title,
       path: path,
-      imageUrl: imageUrl
+//      imageUrl: imageUrl
     };
   }
 
