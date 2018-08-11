@@ -1,0 +1,91 @@
+<style>
+  .page{
+
+  }
+</style>
+
+<template>
+  <view class="page">
+    <view class="weui-cells">
+      <repeat for="{{questions}}" key="index" index="index" item="question">
+        <navigator url="/pages/love/papers_view?object_name={{object_name}}&space_id={{space_id}}&question_name={{question.name}}{{required}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+          <view class="weui-cell__bd">{{question.label}}</view>
+          <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+        </navigator>
+      </repeat>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import _ from 'underscore'
+
+  const OTHER = '_o';
+  const IMPORTANT = '_i';
+  const RANGE = '_max';
+
+  export default class QuestionList extends wepy.page {
+
+    data = {
+      object_name: '',
+      space_id: '',
+      questions: [],
+      required: ''
+    };
+
+    getQuestions(fields){
+      let questions = {};
+      const keys = _.keys(fields);
+      _.forEach(keys, (key)=>{
+        let field = fields[key];
+        if(key.slice(-OTHER.length) != OTHER && key.slice(-IMPORTANT.length) != IMPORTANT && key.slice(-RANGE.length) != RANGE && !field.hidden && !field.omit){
+
+          let question = {};
+
+          question.label = field.label || field.name;
+
+          question.name = field.name;
+
+          question.type = field.type;
+
+          question.scale = field.scale || 0;
+
+          question.required = field.required || false;
+
+          question.defaultValue = field.defaultValue;
+
+          if(field.options){
+            question.options = field.options.slice(0,4);
+            question.options_all = field.options;
+          }
+
+          question.showOtherQuesion = _.include(keys, key + OTHER);
+
+          question.showImportant = _.include(keys, key + IMPORTANT);
+
+          question.range = _.include(keys, key + RANGE);
+
+          questions[key] = question;
+        }
+      });
+      return questions;
+    }
+
+    async onLoad(e){
+      wx.showLoading({mask: true});
+      this.object_name = e.object_name;
+      this.space_id = e.space_id;
+      if(e.required)
+        this.required = '&required=true';
+
+      const object = JSON.parse(JSON.stringify(await this.$parent.getObject(this.object_name, this.space_id)));
+
+      wx.setNavigationBarTitle({title:object.label});
+
+      this.questions = this.getQuestions(object.fields);
+      this.$apply();
+      wx.hideLoading();
+    }
+  }
+</script>

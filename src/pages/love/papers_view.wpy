@@ -81,6 +81,11 @@
         args.keep_progress = e.keep_progress;
       }
 
+      //直接定位到此问题
+      if(e && e.question_name){
+        args.question_name = e.question_name
+      }
+
       this.args = args;
       this.$apply()
     }
