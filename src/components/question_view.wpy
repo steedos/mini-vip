@@ -942,7 +942,7 @@
           this.answeredQuesionKeys = _.difference(this.questionKeys, this.pendingQuesionKeys);
 
           if(!this.question_name && this.keep_progress){
-            if(_.indexOf(wx.getStorageSync('questionnaire_progess'), this.object_name) > -1){
+            if(_.indexOf(wx.getStorageSync('questionnaire_progess'), this.object_name) > -1 || _.intersection(this.questionKeys, _.keys(this.questionsAnswer)).length == this.questionKeys.length){
               wx.hideLoading();
               wx.showModal({
                 title: '您已回答完所有问题',
