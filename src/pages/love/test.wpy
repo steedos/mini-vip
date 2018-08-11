@@ -60,7 +60,10 @@
           <image wx:else mode="aspectFill" class="image" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg"></image>
         </view>
       </view>
-      <button class="input-btn btn-join button-hover" type="primary" @tap="goAnswer">
+      <button class="input-btn btn-join button-hover" type="primary" @tap="goMe" wx:if="{{answered}}">
+        我的无颜
+      </button>
+      <button class="input-btn btn-join button-hover" type="primary" @tap="goAnswer" wx:else>
         开始答题
       </button>
       <button class="btn-index btn-love" @tap="goMatching">
@@ -98,7 +101,8 @@ export default class Test extends wepy.page {
     showLoveBtn: false,
     userB_avatar: '',
     naire: '',
-    share_from: ''
+    share_from: '',
+    answered: false
   }
 
   onShareAppMessage(res) {
@@ -140,7 +144,7 @@ export default class Test extends wepy.page {
       this.isAuthUserInfo = true;
       this.$apply();
     }
-    
+
     if(!this.space_id){
       wx.showToast({
         title: "未配置工作区ID",
@@ -148,7 +152,7 @@ export default class Test extends wepy.page {
       });
       return;
     }
-    
+
     // if (e.naire) {
     //  this.naire = e.naire;
     //  this.share_from = e.share_from;
@@ -163,8 +167,15 @@ export default class Test extends wepy.page {
     // }
 
     this.is_loaded = true;
+
+    const finishedNaire = wx.getStorageSync('questionnaire_progess');
+
+    if(finishedNaire.indexOf('love_answer') > -1){
+      this.answered = true
+    }
+
     this.$apply();
-    
+
     wx.hideLoading();
   }
 
@@ -190,6 +201,9 @@ export default class Test extends wepy.page {
     },
     goMatching() {
       wx.navigateTo({url: `/pages/love/matching?space_id=${this.space_id}`})
+    },
+    goMe(){
+      wx.switchTab({url: '/pages/love/me'})
     }
   }
 }
