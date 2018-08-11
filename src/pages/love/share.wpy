@@ -244,7 +244,7 @@
       if(e.card){
         await this.generateFriendCard()
         this.showPop = false
-        this.description = '分享给好友，找到隐藏在好友中的“另一半”吧。'
+        // this.description = '分享给好友，找到隐藏在好友中的“另一半”吧。'
         this.share_card = true
         this.$apply()
       }else{
