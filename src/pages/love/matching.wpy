@@ -1,4 +1,7 @@
 <style lang="less">
+page {
+  background-color: #cae6f1;
+}
 .avatar-field {
   border-radius: 50%;
   margin-right: 16rpx;
