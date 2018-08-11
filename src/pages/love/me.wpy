@@ -119,15 +119,15 @@
       </repeat>
     </view>
     <view class="weui-cells">
-      <navigator class="weui-cell weui-cell_access" url="test?space_id={{space_id}}">
-        <view class="weui-cell__hd">
-          <view class="slds-icon-standard-link slds-icon slds-icon--small slds-m-right--x-small"/>
-        </view>
-        <view class="weui-cell__bd">
-          <view>测试好友缘分</view>
-        </view>
-        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-      </navigator>
+      <!--<navigator class="weui-cell weui-cell_access" url="test?space_id={{space_id}}">-->
+        <!--<view class="weui-cell__hd">-->
+          <!--<view class="slds-icon-standard-link slds-icon slds-icon&#45;&#45;small slds-m-right&#45;&#45;x-small"/>-->
+        <!--</view>-->
+        <!--<view class="weui-cell__bd">-->
+          <!--<view>测试好友缘分</view>-->
+        <!--</view>-->
+        <!--<view class="weui-cell__ft weui-cell__ft_in-access"></view>-->
+      <!--</navigator>-->
       <navigator class="weui-cell weui-cell_access" url="share?space_id={{space_id}}">
         <view class="weui-cell__hd">
           <view class="slds-icon-standard-announcement slds-icon slds-icon--small slds-m-right--x-small"/>

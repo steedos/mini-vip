@@ -267,7 +267,8 @@ export default class VIP extends wepy.app {
       'pages/edit/city_select',
       'pages/love/invite_code_me',
       'pages/love/invite_code_success_me',
-      'pages/love/question_list'
+      'pages/love/question_list',
+      'pages/love/discovery',
     ],
     tabBar: {
       color: '#666',
@@ -280,6 +281,12 @@ export default class VIP extends wepy.app {
         selectedIconPath: './images/tabbars/topic_pressed.png',
         iconPath: './images/tabbars/topic.png',
         text: '有缘人',
+      },
+      {
+        pagePath: 'pages/love/discovery',
+        selectedIconPath: './images/tabbars/apps_pressed.png',
+        iconPath: './images/tabbars/apps.png',
+        text: '发现',
       },
       {
         pagePath: 'pages/love/me',
