@@ -1,5 +1,10 @@
 <style>
-
+  .live_chat {
+    line-height:inherit;
+    font-size:inherit;
+    background-color:transparent;
+    text-align:left;
+  }
 </style>
 
 
@@ -15,6 +20,8 @@
         </view>
         <view class="weui-cell__ft weui-cell__ft_in-access"></view>
       </navigator>
+    </view>
+    <view class="weui-cells">
       <navigator class="weui-cell weui-cell_access" url="test?space_id={{space_id}}">
         <view class="weui-cell__hd">
           <view class="slds-icon-standard-link slds-icon slds-icon--small slds-m-right--x-small"/>
@@ -24,7 +31,19 @@
         </view>
         <view class="weui-cell__ft weui-cell__ft_in-access"></view>
       </navigator>
-      <navigator class="weui-cell weui-cell_access" url="find?space_id={{space_id}}" wx:if="{{showFind}}">
+      <navigator class="weui-cell weui-cell_access" url="share?space_id={{space_id}}">
+        <view class="weui-cell__hd">
+          <view class="slds-icon-standard-announcement slds-icon slds-icon--small slds-m-right--x-small"/>
+        </view>
+        <view class="weui-cell__bd">
+          <view>拯救单身狗</view>
+        </view>
+        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+      </navigator>
+    </view>
+
+    <view class="weui-cells" wx:if="{{showFind}}">
+      <navigator class="weui-cell weui-cell_access" url="find?space_id={{space_id}}">
         <view class="weui-cell__hd">
           <view class="slds-icon-standard-forecasts slds-icon slds-icon--small slds-m-right--x-small"/>
         </view>
@@ -34,6 +53,17 @@
         <view class="weui-cell__ft weui-cell__ft_in-access"></view>
       </navigator>
     </view>
+
+    <view class="weui-cells">
+      <button open-type="contact" plain="true" class="weui-cell weui-cell_access live_chat" hover-class="weui-cell_active">
+        <view class="weui-cell__hd">
+          <view class="slds-icon-standard-live-chat weui-grid__icon slds-icon slds-icon--small slds-m-right--x-small"/>
+        </view>
+        <view class="weui-cell__bd">在线客服</view>
+        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+      </button>
+    </view>
+
   </view>
 </template>
 
