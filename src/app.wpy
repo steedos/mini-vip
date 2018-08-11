@@ -286,7 +286,7 @@ export default class VIP extends wepy.app {
         pagePath: 'pages/love/discovery',
         selectedIconPath: './images/tabbars/apps_pressed.png',
         iconPath: './images/tabbars/apps.png',
-        text: '发现',
+        text: '有缘人',
       },
       {
         pagePath: 'pages/love/me',
