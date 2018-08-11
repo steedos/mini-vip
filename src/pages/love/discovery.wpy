@@ -22,7 +22,7 @@
       </navigator>
     </view>
     <view class="weui-cells">
-      <navigator class="weui-cell weui-cell_access" url="test?space_id={{space_id}}">
+      <navigator class="weui-cell weui-cell_access" url="share?card=true&space_id={{space_id}}">
         <view class="weui-cell__hd">
           <view class="slds-icon-standard-link slds-icon slds-icon--small slds-m-right--x-small"/>
         </view>
