@@ -1,5 +1,7 @@
 <style lang="less">
-
+page {
+  background-color: #cae6f1;
+}
 .love-result {
   padding: 60rpx;
   margin-top: 40rpx;
