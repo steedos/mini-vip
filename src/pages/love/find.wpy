@@ -66,7 +66,8 @@ export default class InviteIndex extends wepy.page {
     space_id: '',
     showLoveBtn: false,
     naire: '',
-    share_from: ''
+    share_from: '',
+    load_page: ''
   }
 
   onShareAppMessage(res) {
@@ -80,6 +81,7 @@ export default class InviteIndex extends wepy.page {
   }
 
   async onLoad(e) {
+    console.log("e==============",e)
     wx.showLoading({mask: true});
     e.space_id = loveSpaceId;
     this.space_id = e.space_id;
@@ -97,7 +99,14 @@ export default class InviteIndex extends wepy.page {
       });
       return;
     }
-    
+    let index = 0;
+    let my_customers = this.$parent.globalData.my_customers;
+		let current_customer = my_customers.find((customer, i) => {
+			if (customer.space == this.space_id) {
+				index = i;
+				return customer
+			}
+		});
     if (e.naire) {
 			this.naire = e.naire;
 			this.share_from = e.share_from;
@@ -110,7 +119,35 @@ export default class InviteIndex extends wepy.page {
 				url: `/pages/love/papers_view?object_name=${e.naire}&space_id=${this.space_id}&answered_url=${answeredUrl}&answered_url_type=redirectTo`
 			})
     }
-
+    if (current_customer.is_member) {
+			let finishedNaire = wx.getStorageSync('questionnaire_progess');
+			if (finishedNaire.indexOf('love_hobby') > -1) {
+				finishedNaire.splice(finishedNaire.indexOf('love_hobby'), 1);
+			}
+			if (finishedNaire.indexOf('love_answer2') > -1) {
+				finishedNaire.splice(finishedNaire.indexOf('love_answer2'), 1);
+			}
+			if (finishedNaire && finishedNaire.constructor === Array && finishedNaire.length > 0) {
+				if (finishedNaire.length == 1 && finishedNaire.includes('love_about_me')) {
+					self.load_page = 'cover_you_looking_for';
+				} else if (finishedNaire.length == 2 && finishedNaire.includes('love_about_me') && finishedNaire.includes('love_looking_for')) {
+					self.load_page = 'cover_answer_questions';
+				} else if (finishedNaire.length == 3 && finishedNaire.includes('love_about_me') && finishedNaire.includes('love_looking_for') && finishedNaire.includes('love_answer')) {
+					wx.switchTab({url: `/pages/love/shake`});
+				} else {
+					this.load_page = 'cover_about_yourself'
+				}
+			} else {
+        this.load_page = 'cover_about_yourself'
+      }
+		} else {
+			if(e.love) {
+				this.load_page = 'love_disabled'
+			} else {
+				this.load_page = 'love_disabled';
+			}
+    }
+    
     this.is_loaded = true;
     this.$apply();
     
