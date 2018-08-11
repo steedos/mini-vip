@@ -62,7 +62,7 @@
                 <view class="weui-cell__bd">
                   {{record.user_b.name}}
                 </view>
-                <view class="weui-cell__ft" wx:if="{{record.match == undefined}}">?</view>
+                <view class="weui-cell__ft" wx:if="{{record.match == undefined}}">答题中</view>
                 <view class="weui-cell__ft record-match" wx:else>{{util.fixed(record.match,2)}}%</view>
               </navigator>
             </block>
