@@ -31,11 +31,10 @@
     flex: 1;
     padding:0 30rpx;
     font-size:15px;
-    line-height:inherit;
     width:auto;
-    height:auto;
+    height:44px;
     border: none!important;
-    line-height:50px;
+    line-height:44px;
     display: flex;
     align-items: center;
     justify-content: center;
