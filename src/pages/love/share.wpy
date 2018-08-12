@@ -64,7 +64,7 @@
     box-sizing: border-box;
     z-index: 500;
     bottom: 0;
-    height: auto;
+    height: 100rpx;
     width: 100%;
     background-color: #fff;
     color: #6d6d78;
@@ -77,7 +77,7 @@
       font-size:15px;
       line-height:inherit;
       width:auto;
-      height:auto;
+      height:100rpx;
       border: none!important;
       line-height:50px;
       display: flex;
@@ -97,8 +97,7 @@
     }
     .slds-icon {
       display: inline-block;
-      margin-bottom:-13px;
-      margin-top:8px;
+      margin-top:-20rpx;
     }
     .text {
       display: inline-block;
@@ -165,11 +164,11 @@
     <view class="tab-bar border-top-1px">
       <button open-type="share" class="btn btn-share-wexin" type="default" plain="{{true}}">
         <view class="vip_wechat slds-icon slds-icon--small slds-m-right--x-small"></view>
-        <view class="text">微信好友</view>
+        <view class="text"></view>
       </button>
       <view class="btn btn-share-friend-circle" @tap="shareToFriendCircle">
         <view class="vip_wechat_moments slds-icon slds-icon--small slds-m-right--x-small"></view>
-        <view class="text">朋友圈</view>
+        <view class="text"></view>
       </view>
     </view>
     <view class="pop-mask" wx:if="{{showPop}}" @tap="closePop"></view>
@@ -178,7 +177,7 @@
         <view class="vip_close"></view>
       </view>
       <view class="share-friend-circle-box">
-        <view class="share-friend-circle-title">保存图片后分享到朋友圏</view>
+        <view class="share-friend-circle-title"></view>
         <image class="image" mode="widthFix" src="{{friend_circle_image_url}}" @load="friendCircleImageLoaded" @error="friendCircleImageLoadFailed"/>
         <block wx:if="{{showOpenSetting}}">
           <button type="primary" open-type="openSetting" class="btn-save-image" @opensetting="openSetting">
