@@ -656,7 +656,7 @@
         </view>
         <view class="weui-footer" wx:else>
           <view class="weui-footer__text">
-            <view>你选择了所有答案</view>
+            <view>你选择了所有</view>
             <view>此问题将被标记为无关紧要</view>
           </view>
         </view>
