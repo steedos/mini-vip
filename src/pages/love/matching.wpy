@@ -11,6 +11,8 @@
     }
     .group-name {
       font-size: 28rpx;
+      line-height: 28rpx;
+      height: 28rpx;
       color: #aaa;
     }
   }

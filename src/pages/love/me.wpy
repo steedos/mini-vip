@@ -86,6 +86,17 @@
         </button>
       </block>
     </view>
+    <view class="weui-cells" wx:if="{{showFind}}">
+      <navigator class="weui-cell weui-cell_access" url="find?space_id={{space_id}}">
+        <view class="weui-cell__hd">
+          <view class="slds-icon-standard-forecasts slds-icon slds-icon--small slds-m-right--x-small"/>
+        </view>
+        <view class="weui-cell__bd">
+          <view>寻找有缘人</view>
+        </view>
+        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+      </navigator>
+    </view>
     <view class="weui-cells">
       <repeat for="{{questionnaire}}" key="index" index="index" item="naire">
         <navigator class="weui-cell weui-cell_access" url="{{naire.url}}">
@@ -162,6 +173,7 @@ export default class QuestionnaireList extends wepy.page {
     is_member: false,
     isAuthUserInfo: false,
     card_rule: null,
+    showFind: false,
     userId: '',
     options: [
       {
@@ -305,6 +317,13 @@ export default class QuestionnaireList extends wepy.page {
     this.$apply();
 
     const finishedNaire = wx.getStorageSync('questionnaire_progess');
+
+    if (finishedNaire.indexOf('love_about_me') < 0 || finishedNaire.indexOf('love_looking_for') < 0 || finishedNaire.indexOf('love_answer') < 0) {
+      this.showFind = true;
+    } else {
+      this.showFind = false;
+    }
+
     for (let naire of finishedNaire) {
       this.progress[naire] = true;
     }

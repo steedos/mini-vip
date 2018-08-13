@@ -136,7 +136,8 @@ export default class Test extends wepy.page {
 			// 朋友圏二维码识别进入的，则取出scene中的share_from
 			let scene = decodeURIComponent(e.scene);
 			let scenes = scene.split('=');
-			e.share_from = scenes[1];
+      e.share_from = scenes[1];
+      e.qrcode = 1
     }
     await this.$parent.login(e);
     const love = this.$parent.globalData.love;
@@ -149,7 +150,7 @@ export default class Test extends wepy.page {
       this.share_from = e.share_from;
       this.$apply();
       const options = {
-        $filter: `(user_b eq '${e.share_from}')`,
+        $filter: `(user_b eq '${e.share_from}' and owner eq '${user_id}')`,
         $select: 'owner,user_b,a_to_b,b_to_a,match',
         $expand: 'user_b($select=profile)'
       }
@@ -189,8 +190,9 @@ export default class Test extends wepy.page {
 
   async onShow() {
     if (this.share_from) {
+      const user_id = this.$parent.globalData.user._id;
       const options = {
-        $filter: `(user_b eq '${this.share_from}')`,
+        $filter: `(user_b eq '${this.share_from}' and owner eq '${user_id}')`,
         $select: 'owner,user_b,a_to_b,b_to_a,match',
         $expand: 'user_b($select=profile)'
       }
