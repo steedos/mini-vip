@@ -25,12 +25,12 @@
                 </view>
             </view>
         </view>
-        <!-- <view class="weui-cells__tips">如果没有邀请码，请直接点击跳过</view> -->
+        <view class="weui-cells__tips">如果没有邀请码，请直接点击跳过</view>
       </view>
 
       <view class="page__bd_spacing">
           <button class="weui-btn background" type="primary" @tap="confirm">确定</button>
-           <!--<button class="weui-btn" type="default" @tap="cancel">跳过</button>-->
+           <button class="weui-btn" type="default" @tap="cancel">跳过</button>
       </view>
     </view>
   </view>
