@@ -1,4 +1,20 @@
 <style lang="less">
+.friend-list {
+  .weui-cell__bd {
+    font-size: 0;
+    height: 80rpx;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    .name {
+      font-size: 36rpx;
+    }
+    .group-name {
+      font-size: 28rpx;
+      color: #aaa;
+    }
+  }
+}
 .avatar-field {
   border-radius: 50%;
   margin-right: 16rpx;
@@ -46,7 +62,7 @@
 </style>
 
 <template>
-  <view class="page record-list">
+  <view class="page friend-list">
     <view class="page__bd" style="margin-bottom: 60rpx">
       <block wx:if="{{record_list.length}}">
         <view class="weui-cells weui-cells_after-title">
@@ -60,10 +76,11 @@
                   <image src="{{record.user_b.profile.avatar}}" class='avatar-field' />
                 </view>
                 <view class="weui-cell__bd">
-                  {{record.user_b.name}}
+                  <view class="name">{{record.user_b.name}}</view>
+                  <open-data wx:if="{{record.open_group_id}}" class="group-name" type="groupName" open-gid="{{record.open_group_id}}"></open-data>
                 </view>
-                <view class="weui-cell__ft" wx:if="{{record.match == undefined}}">答题中</view>
-                <view class="weui-cell__ft record-match" wx:else>{{util.fixed(record.match,2)}}%</view>
+                <view class="weui-cell__ft" wx:if="{{record.match == undefined}}" style="font-size: 36rpx">答题中</view>
+                <view class="weui-cell__ft record-match" wx:else style="font-size: 36rpx">{{util.fixed(record.match,2)}}%</view>
               </navigator>
             </block>
           </repeat>
@@ -103,7 +120,7 @@ export default class Matching extends wepy.page {
     name_field: 'user_b.name',
     baseUrl: baseUrl,
     navigationBarTitle: '缘分榜',
-    date_field: ['match', 'a_to_b', 'b_to_a'],
+    date_field: ['match', 'a_to_b', 'b_to_a', 'open_group_id'],
     userId: '',
     orderby: 'match desc'
   }
