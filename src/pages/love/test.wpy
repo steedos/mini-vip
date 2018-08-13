@@ -150,7 +150,7 @@ export default class Test extends wepy.page {
       this.share_from = e.share_from;
       this.$apply();
       const options = {
-        $filter: `(user_b eq '${e.share_from}')`,
+        $filter: `(user_b eq '${e.share_from}' and owner eq '${user_id}')`,
         $select: 'owner,user_b,a_to_b,b_to_a,match',
         $expand: 'user_b($select=profile)'
       }
@@ -190,8 +190,9 @@ export default class Test extends wepy.page {
 
   async onShow() {
     if (this.share_from) {
+      const user_id = this.$parent.globalData.user._id;
       const options = {
-        $filter: `(user_b eq '${this.share_from}')`,
+        $filter: `(user_b eq '${this.share_from}' and owner eq '${user_id}')`,
         $select: 'owner,user_b,a_to_b,b_to_a,match',
         $expand: 'user_b($select=profile)'
       }
