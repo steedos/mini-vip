@@ -1,7 +1,7 @@
 <style lang="less">
   page{
     height: 100%;
-    background:#ffffff;
+    background:#cae6f1;
   }
   .page__hd{
     padding:40rpx;
@@ -348,7 +348,7 @@
 
     async generateFriendCard() {
       if(this.$parent.globalData.user.avatar) {
-        const imageUrl = `https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/share_me.png`;
+        const imageUrl = `https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/share_me_new.png`;
         const imgRes = await wepy.downloadFile({
           url: imageUrl
         }).catch((err)=>{
@@ -370,10 +370,12 @@
         const userId = this.$parent.globalData.user._id;
         const scene = `share_from=${userId}`;
         wepy.showLoading({
-          title: '正在生成你的交友名片',
+          title: '生成交友名片中',
           mask: true
         });
-        const url = `/api/steedos/weixin/code?appid=${appId}&scene=${scene}&page=${path}`;
+        const width = 750
+        const is_hyaline = true
+        const url = `/api/steedos/weixin/code?appid=${appId}&scene=${scene}&page=${path}&width=${width}&is_hyaline=${is_hyaline}`;
         console.log("codeImgRes======url=========", this.baseUrl + url);
         const codeImgRes = await wepy.downloadFile({
           url: this.baseUrl + url
@@ -405,13 +407,13 @@
           const avatar_width = radius*1.414
           ctx.drawImage(codeImgRes.tempFilePath, 0, 0, width, width)
           ctx.arc(width/2, width/2, radius, 0, 2 * Math.PI)
-          ctx.setFillStyle('white')
+          ctx.setFillStyle('rgb(202, 230, 241)')
           ctx.fill()
           const avatar_radius = radius-6
           ctx.save()
           ctx.beginPath()
           ctx.arc(width/2, width/2, avatar_radius, 0, 2 * Math.PI)
-          ctx.setFillStyle('white')
+          // ctx.setFillStyle('white')
           ctx.fill()
           ctx.clip()
           ctx.drawImage(avatarRes.tempFilePath, width/2-avatar_radius, width/2-avatar_radius, 2*avatar_radius, 2*avatar_radius)
@@ -457,7 +459,7 @@
       const userId = this.$parent.globalData.user._id;
       const scene = `share_from=${userId}`;
       wepy.showLoading({
-        title: '正在获取小程序码',
+        title: '获取小程序码',
         mask: true
       });
       const url = `/api/steedos/weixin/code?appid=${appId}&scene=${scene}&page=${path}`;

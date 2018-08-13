@@ -111,6 +111,7 @@ export default class LoveIndex extends wepy.page {
 			let scenes = scene.split('=');
 			e.love = 1;
 			e.share_from = scenes[1];
+			e.qrcode = 1
 		}
     this.space_id = e.space_id;
     console.log("this.space_id============", this.space_id);

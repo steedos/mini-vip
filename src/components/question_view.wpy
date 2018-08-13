@@ -1175,6 +1175,16 @@
         finishedNaire = _.uniq(finishedNaire);
         wx.setStorageSync("questionnaire_progess", finishedNaire);
 
+        const my_customers = wepy.$instance.globalData.my_customers;
+        const spaceId = this.space_id;
+        const current_customer = my_customers.find((customer, i) => {
+          return customer.space == spaceId;
+        });
+
+        if (current_customer && current_customer._id) {
+          await wepy.$instance.update('vip_customers', current_customer._id, {questionnaire_progess: finishedNaire}, spaceId);
+        }
+
         if (naire != 'love_about_me') {
           await req.post('/api/mini/vip/friend/answered', {space_id: this.space_id, object_name: naire});
         }
