@@ -24,7 +24,7 @@ page {
     }
     .result {
       text-align: center;
-      font-size: 60rpx;
+      font-size: 48rpx;
       font-weight: bold;
       color: #00396b;
       flex: 1;
@@ -55,7 +55,8 @@ page {
           <open-data class="image" type="userAvatarUrl"></open-data>
         </view>
         <view class="result">
-          ?
+          <view wx:if="{{score == undefined}}">?</view>
+          <view wx:else>{{util.fixed(score, 2)}}%</view>
         </view>
         <view class="user-avatar">
           <image wx:if="{{userB_avatar}}" class="image" mode="aspectFill" src="{{userB_avatar}}"></image>
@@ -87,6 +88,7 @@ page {
 <script>
 import wepy from 'wepy';
 import { loveSpaceId } from '@/config';
+import util from '../../wxs/util.wxs';
 
 export default class Test extends wepy.page {
 
@@ -104,7 +106,12 @@ export default class Test extends wepy.page {
     userB_avatar: '',
     naire: '',
     share_from: '',
+    score: undefined,
     answered: false
+  }
+
+  wxs = {
+    util: util
   }
 
   onShareAppMessage(res) {
@@ -130,6 +137,8 @@ export default class Test extends wepy.page {
     }
 
     if (e.share_from && e.share_from != user_id) {
+      this.share_from = e.share_from;
+      this.$apply();
       const options = {
         $filter: `(user_b eq '${e.share_from}')`,
         $select: 'owner,user_b,a_to_b,b_to_a,match',
@@ -138,6 +147,7 @@ export default class Test extends wepy.page {
       const result = await this.$parent.query('love_friends', options, this.space_id);
       if (result && result.value && result.value[0]) {
         this.userB_avatar = result.value[0].user_b.profile.avatar;
+        this.score = result.value[0].match;
       }
     }
 
@@ -155,19 +165,6 @@ export default class Test extends wepy.page {
       return;
     }
 
-    // if (e.naire) {
-    //  this.naire = e.naire;
-    //  this.share_from = e.share_from;
-    //  this.$apply();
-    //  const answeredUrl = encodeURIComponent(`/pages/love/matching?space_id=${this.space_id}`);
-
-    //  console.log('[answeredUrl]', answeredUrl)
-
-    //  wx.navigateTo({
-    //    url: `/pages/love/papers_view?object_name=${e.naire}&space_id=${this.space_id}&answered_url=${answeredUrl}&answered_url_type=redirectTo`
-    //  })
-    // }
-
     this.is_loaded = true;
 
     const finishedNaire = wx.getStorageSync('questionnaire_progess');
@@ -179,6 +176,22 @@ export default class Test extends wepy.page {
     this.$apply();
 
     wx.hideLoading();
+  }
+
+  async onShow() {
+    if (this.share_from) {
+      const options = {
+        $filter: `(user_b eq '${this.share_from}')`,
+        $select: 'owner,user_b,a_to_b,b_to_a,match',
+        $expand: 'user_b($select=profile)'
+      }
+      const result = await this.$parent.query('love_friends', options, this.space_id);
+      if (result && result.value && result.value[0]) {
+        this.userB_avatar = result.value[0].user_b.profile.avatar;
+        this.score = result.value[0].match;
+        this.$apply();
+      }
+    }
   }
 
   methods = {
