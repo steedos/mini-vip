@@ -84,10 +84,19 @@ export default class InviteIndex extends wepy.page {
   }
 
   async onLoad(e) {
+    wepy.showShareMenu({
+      withShareTicket: true
+    });
     console.log("e==============",e)
     wx.showLoading({mask: true});
     e.space_id = loveSpaceId;
     this.space_id = e.space_id;
+    if(e.scene){
+			// 朋友圏二维码识别进入的，则取出scene中的share_from
+			let scene = decodeURIComponent(e.scene);
+			let scenes = scene.split('=');
+			e.share_from = scenes[1];
+		}
     await this.$parent.login(e);
     const love = this.$parent.globalData.love;
 		if (love && love.enabled) {
@@ -109,19 +118,7 @@ export default class InviteIndex extends wepy.page {
 				index = i;
 				return customer
 			}
-		});
-    if (e.naire) {
-			this.naire = e.naire;
-			this.share_from = e.share_from;
-			this.$apply();
-			const answeredUrl = encodeURIComponent(`/pages/love/matching?space_id=${this.space_id}`);
-
-			console.log('[answeredUrl]', answeredUrl)
-
-			wx.navigateTo({
-				url: `/pages/love/papers_view?object_name=${e.naire}&space_id=${this.space_id}&answered_url=${answeredUrl}&answered_url_type=redirectTo`
-			})
-    }
+    });
     if (current_customer.is_member) {
 			let finishedNaire = wx.getStorageSync('questionnaire_progess');
 			if (finishedNaire.indexOf('love_hobby') > -1) {

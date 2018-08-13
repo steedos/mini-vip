@@ -238,6 +238,9 @@ export default class LoveShake extends wepy.page {
   }
 
   async onLoad (e) {
+    wepy.showShareMenu({
+      withShareTicket: true
+    });
     if(!e.space_id){
       // 保证一进入就新建space对应的vip_customers记录
       e.space_id = loveSpaceId;

@@ -261,6 +261,9 @@ export default class QuestionnaireList extends wepy.page {
   }
 
   async onLoad(e) {
+    wepy.showShareMenu({
+      withShareTicket: true
+    });
     wx.showLoading({ mask: true });
     if (!e.space_id) {
       // 保证一进入就新建space对应的vip_customers记录
