@@ -16,6 +16,11 @@
 
     @otherBackground: #FFFFFF;
 
+    .weui-uploader__input-box,.weui-uploader__file{
+      margin-top: 9px;
+      margin-bottom: 0px;
+    }
+
     .big-select{
       .weui-flex{
         .weui-flex__item{
@@ -807,6 +812,26 @@
               <switch name="{{question.name}}" bindchange="{{switchChange}}" checked="{{questionsAnswer[question.name]}}"></switch>
             </view>
           </block>
+          <block wx:elif="{{question.type === 'image'}}">
+            <view class="image-view weui-flex__item">
+              <view class="weui-uploader">
+                <view class="weui-uploader__bd">
+                  <view class="weui-uploader__files" id="uploaderFiles">
+                    <repeat for="{{questionsAnswer[question.name]}}" key="*this" item="file" index="index">
+                      <view class="weui-uploader__file" bindtap="previewImage" id="{{file}}" style="position:relative;">
+                        <image class="weui-uploader__img" src="{{util.formatImageUrl(file, baseUrl)}}" mode="aspectFill"/>
+                        <view style="position: absolute;top: -.4em;right: -.4em;" @tap.stop="clearImage"><icon type="clear" size="20" color="red" data-index="{{index}}"/></view>
+                      </view>
+                    </repeat>
+                  </view>
+                  <view class="weui-uploader__input-box" wx:if="{{question.showChooseImage}}">
+                    <view class="weui-uploader__input" bindtap="chooseImage" data-id="{{question.name}}"
+                          data-multiple="{{question.multiple}}" data-type="{{question.type}}"></view>
+                  </view>
+                </view>
+              </view>
+            </view>
+          </block>
         </view>
 
         <view class="weui-footer jump-question weui-flex" wx:if="{{!loading}}">
@@ -831,6 +856,7 @@
   import util from '../wxs/util.wxs'
   import citySelect from '@/components/city_select'
   import req from '@/network'
+  import {baseUrl} from '@/config';
 
   const OTHER = '_o';
   const IMPORTANT = '_i';
@@ -1001,7 +1027,6 @@
     }
 
     async onLoad(e){
-
     }
 
     /*
@@ -1036,6 +1061,10 @@
           question.scale = field.scale || 0;
 
           question.required = field.required || false;
+
+          question.multiple = field.multiple;
+
+          question.max = field.max
 
           question.defaultValue = field.defaultValue;
 
@@ -1109,6 +1138,7 @@
     data = {
       loading: true,
       me_avatar: '',
+      baseUrl: baseUrl,
       object_name: 'love_answer',
       questionKeys: [],
       pendingQuesionKeys: [],
@@ -1219,6 +1249,8 @@
 
       }
 
+      this.question.showChooseImage =  !this.question.value || (this.question.value.length < this.question.max);
+
       if(!this.showOtherQuesion){
         this.buttonText = '下一题';
       } else {
@@ -1238,12 +1270,80 @@
 
     async updateAnswer(answer){
       const record_id = this.questionsAnswer._id;
+
       _.extend(this.questionsAnswer, answer);
+
       if (this.object_name === 'love_about_me' && this.question.name === 'name') {
         this.$parent.$parent.globalData.user.name = answer.name;
         this.$apply();
       }
-      await this.$parent.$parent.update(this.object_name, record_id, answer, this.space_id);
+
+      if(this.question.type === 'image' && this.question.value){
+        const imageIds = await this.uploadImages(this.question.value, this.question.name, record_id);
+        let v = {};
+        v[this.question.name] = imageIds;
+        await this.$parent.$parent.update(this.object_name, record_id, v, this.space_id);
+      }else{
+        await this.$parent.$parent.update(this.object_name, record_id, answer, this.space_id);
+      }
+    }
+
+    isTempFile(filePath){
+      return (new RegExp(":\/\/")).test(filePath)
+    }
+
+    async uploadImage(filePath, field_name, record_id){
+      const imageInfo = await wepy.getImageInfo({
+        src: filePath
+      });
+      let formData = {
+        width: imageInfo.width,
+        height: imageInfo.height,
+        type: imageInfo.type,
+        orientation: imageInfo.orientation,
+        object_name: this.args.object_name,
+        field_name: field_name,
+        record_id: record_id
+      };
+      const authToken = this.$parent.$parent.globalData.user.auth_token;
+      const userId = this.$parent.$parent.globalData.user._id;
+      const fileResult = await wepy.uploadFile({
+        url: `${baseUrl}/s3/images`,
+        filePath: filePath,
+        name: 'file',
+        formData: formData,
+        header: {
+          'X-Auth-Token': authToken,
+          'X-User-Id': userId
+        }
+      }).catch((err)=>{
+        console.log("error...",err)
+      });
+      const fileData = JSON.parse(fileResult.data);
+      if (fileData.errors || fileResult.statusCode != 200) {
+        wx.showToast({
+          title: "图片上传失败，请稍后再试",
+          icon: "none"
+        });
+        return false;
+      }else{
+        return fileData
+      }
+    }
+
+    async uploadImages(values, field_name, record_id) {
+      const new_fv = [];
+      for(let v of values){
+        if(this.isTempFile(v)){
+          const image = await this.uploadImage(v, field_name, record_id);
+          if(image){
+            new_fv.push(image._id)
+          }
+        }else{
+          new_fv.push(v)
+        }
+      }
+      return new_fv;
     }
 
     methods = {
@@ -1348,12 +1448,23 @@
           }else{
             values[key] = '';
           }
-        }else{
+        }else if(question.type === 'image'){
+          if(question.value){
+            values[key] = question.value;
+          }else{
+            if(question.multiple){
+              values[key] = [];
+            }else{
+              values[key] = '';
+            }
+          }
+        }
+        else{
           values[key] = fieldValue;
         }
 
 
-        if(this.globalRequired && !values[key]){
+        if(this.globalRequired && this.question.type != 'image' && this.question.type != 'textarea' && !values[key]){
           this.showError = true;
           if (this.question.label.indexOf('？')>0){
           var errorMsg = this.question.label.substr(0, this.question.label.length - 1);}else{
@@ -1433,7 +1544,7 @@
         this.question.value.max = this.question.options_all[e.detail.value]
       },
       questionBack: function () {
-        console.log('questionBack,,,,,,',this.answeredQuesionKeys);
+//        console.log('questionBack,,,,,,',this.answeredQuesionKeys);
         if(this.answeredQuesionKeys.length > 0){
           const lastKey = _.last(this.answeredQuesionKeys);
           this.pendingQuesionKeys.unshift(lastKey);
@@ -1443,6 +1554,46 @@
       },
       switchChange: function (e) {
 
+      },
+      chooseImage: async function(e) {
+
+        let images = this.questionsAnswer[this.question.name] || [];
+
+        let options = {
+          sizeType: ['original', 'compressed'],
+          sourceType: ['album', 'camera'],
+        };
+
+        if (!this.question.multiple) {
+          options.count = 1
+        }else {
+          if(this.question.max){
+            options.count = this.question.max - images.length;
+          }
+        }
+        const res = await wepy.chooseImage(options);
+        images = images.concat(res.tempFilePaths);
+        this.question.value = images;
+        this.questionsAnswer[this.question.name] = this.question.value;
+        this.question.showChooseImage =  (this.question.value.length < this.question.max);
+        this.$apply();
+      },
+      previewImage: function(e){
+        let urls = [];
+        this.question.value.forEach(function (f) {
+          urls.push(utilJs.formatImageUrl(f, baseUrl))
+        });
+
+        wx.previewImage({
+          current: utilJs.formatImageUrl(e.currentTarget.id, baseUrl), // 当前显示图片的http链接
+          urls: urls // 需要预览的图片http链接列表
+        })
+      },
+      clearImage: function (e) {
+        this.question.value.splice(e.target.dataset.index,1);
+        this.questionsAnswer[this.question.name] = this.question.value;
+        this.question.showChooseImage =  (this.question.value.length < this.question.max);
+        this.$apply();
       }
     }
   }
