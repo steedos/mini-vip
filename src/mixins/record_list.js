@@ -52,6 +52,11 @@ export default class recordList extends wepy.mixin {
     this.loadRecords(searchValue);
   }
 
+  //onLoad之前做一些初始化
+  async init() {
+
+  }
+
   //点击单条记录时，跳转的页面
   getRecordUrl(e){
     let url = this.url;
@@ -198,6 +203,8 @@ export default class recordList extends wepy.mixin {
     this.url = this.getRecordUrl(e);
 
     this.add_url = this.getAddUrl(e);
+
+    await this.init();
 
     this.filter = await this.getQueryFilter(e);
 

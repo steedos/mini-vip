@@ -177,7 +177,7 @@
         <view class="vip_close"></view>
       </view>
       <view class="share-friend-circle-box">
-        <view class="share-friend-circle-title"></view>
+        <view class="share-friend-circle-title">我的交友名片</view>
         <image class="image" mode="widthFix" src="{{friend_circle_image_url}}" @load="friendCircleImageLoaded" @error="friendCircleImageLoadFailed"/>
         <block wx:if="{{showOpenSetting}}">
           <button type="primary" open-type="openSetting" class="btn-save-image" @opensetting="openSetting">
