@@ -600,10 +600,10 @@
       <view class="question-section-other" wx:if="{{!showQuestionMe}}">
         <view class="weui-cells__title weui-flex user-other">
           <image class="avatar" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg"></image>
-          <view class="weui-flex__item other">你的理想伴侣（可多选）</view>
+          <view class="weui-flex__item other">你的理想伴侣</view>
         </view>
         <view class="question-body">
-          <block wx:if="{{question.options_all.length > 0}}">
+          <block wx:if="{{question.options_all.length > 4}}">
             <view class="big-select">
               <view class="triangleb"></view>
               <checkbox-group bindchange="checkboxChange" class="weui-flex">
