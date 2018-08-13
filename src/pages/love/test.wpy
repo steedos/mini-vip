@@ -118,6 +118,9 @@ export default class Test extends wepy.page {
   }
 
   async onLoad(e) {
+    wepy.showShareMenu({
+      withShareTicket: true
+    });
     console.log("e========test==========",e)
     wx.showLoading({mask: true});
     e.space_id = loveSpaceId;

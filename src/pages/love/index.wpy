@@ -97,6 +97,9 @@ export default class LoveIndex extends wepy.page {
   };
 
   async onLoad (e) {
+    wepy.showShareMenu({
+      withShareTicket: true
+    });
     console.log("=======index==e============", e);
     wx.showLoading({mask: true});
     const self = this;

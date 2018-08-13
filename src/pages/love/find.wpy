@@ -84,6 +84,9 @@ export default class InviteIndex extends wepy.page {
   }
 
   async onLoad(e) {
+    wepy.showShareMenu({
+      withShareTicket: true
+    });
     console.log("e==============",e)
     wx.showLoading({mask: true});
     e.space_id = loveSpaceId;
