@@ -265,7 +265,7 @@
 }
 </style>
 <template>
-  <view class="page" wx:if="{{is_loaded}}">
+  <view class="page" wx:if="{{is_loaded && is_show}}">
     <block wx:if="{{is_readonly}}">
       <view class="order-time">
         <view class="text">
@@ -411,6 +411,7 @@ export default class Checkout extends wepy.page {
     baseUrl: baseUrl,
     is_readonly: false,
     is_loaded: false,
+    is_show: false,
     order: {},
     checkedProductList: [],
     checkedAddress: {},
@@ -506,6 +507,9 @@ export default class Checkout extends wepy.page {
 
       this.goodsTotalPrice = this.getgoodsTotalPrice(this.checkedProductList);
     }
+
+    this.is_loaded = true;
+
     this.$apply();
   }
 
@@ -526,7 +530,7 @@ export default class Checkout extends wepy.page {
       }
     }
 
-    this.is_loaded = true;
+    this.is_show = true;
     this.$apply();
 
     wepy.hideLoading();
