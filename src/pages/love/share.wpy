@@ -376,11 +376,9 @@
         const width = 750
         const is_hyaline = true
         const url = `/api/steedos/weixin/code?appid=${appId}&scene=${scene}&page=${path}&width=${width}&is_hyaline=${is_hyaline}`;
-        console.log("codeImgRes======url=========", this.baseUrl + url);
         const codeImgRes = await wepy.downloadFile({
           url: this.baseUrl + url
         }).catch((err)=>{
-          console.log("err====downloadFile====codeImgRes===========", err);
           this.$apply();
           return false;
         });
@@ -400,24 +398,10 @@
           ctx.drawImage(imgRes.tempFilePath, 0, 0, 750, 1000)
           ctx.save()
           ctx.restore();
+          const position_x = 0
+          const position_y = 0
           const width = 750
-          const radius = width * 105/430
-          const avatar_x = width/2 - radius/1.414
-          const avatar_y = avatar_x
-          const avatar_width = radius*1.414
-          ctx.drawImage(codeImgRes.tempFilePath, 0, 0, width, width)
-          ctx.arc(width/2, width/2, radius, 0, 2 * Math.PI)
-          ctx.setFillStyle('rgb(202, 230, 241)')
-          ctx.fill()
-          const avatar_radius = radius-6
-          ctx.save()
-          ctx.beginPath()
-          ctx.arc(width/2, width/2, avatar_radius, 0, 2 * Math.PI)
-          // ctx.setFillStyle('white')
-          ctx.fill()
-          ctx.clip()
-          ctx.drawImage(avatarRes.tempFilePath, width/2-avatar_radius, width/2-avatar_radius, 2*avatar_radius, 2*avatar_radius)
-          ctx.restore();
+          await this.$parent.generateQrCode(ctx,codeImgRes.tempFilePath,avatarRes.tempFilePath, position_x, position_y, width, width,'rgb(202, 230, 241)')
           ctx.draw(true, async ()=>{
             let x = self;
             const res = await wepy.canvasToTempFilePath({
@@ -444,7 +428,6 @@
             }
           });
           this.$apply();
-          console.log("this.card_url================", this.card_url);
           }
         }
        else{
@@ -454,6 +437,7 @@
         });
        }
     }
+    
     async generateFriendCircleImage() {
       let path = `pages/love/find`;
       const userId = this.$parent.globalData.user._id;
