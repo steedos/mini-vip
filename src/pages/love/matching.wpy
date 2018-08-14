@@ -17,6 +17,13 @@
     }
   }
 }
+
+.image {
+  width: 100%;
+  height: 100%;
+  border-radius: 0.15rem;
+}
+
 .avatar-field {
   border-radius: 50%;
   margin-right: 16rpx;
@@ -76,8 +83,36 @@
 <template>
   <view class="page friend-list">
     <view class="page__bd" style="margin-bottom: 60rpx">
+      <view class="weui-cells" wx:if="{{record_list.length}}">
+        <block wx:if="{{isAuthUserInfo}}">
+          <view class="weui-media-box weui-media-box_appmsg" @tap="goIntroduce">
+            <view class="weui-media-box__hd weui-media-box__hd_in-appmsg" style="width: 50px; height: 50px; line-height: 50px;">
+              <image class="image" mode="aspectFill" wx:if="{{isAuthUserInfo}}" src="{{avatar}}"></image>
+            </view>
+            <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
+              <view class="weui-media-box__title">
+                {{name}}
+              </view>
+            </view>
+            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+          </view>
+        </block>
+        <block wx:else>
+          <button open-type="getUserInfo" bindgetuserinfo="userLogin" plain="true" class="user-active weui-media-box weui-media-box_appmsg">
+            <view class="weui-media-box__hd weui-media-box__hd_in-appmsg" style="width: 50px; height: 50px; line-height: 50px;">
+              <image class="image" mode="aspectFill" src="https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/avatar.png"></image>
+            </view>
+            <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
+              <view class="weui-media-box__title" style="line-height: 30px;">
+                {{name}}
+              </view>
+            </view>
+            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+          </button>
+        </block>
+      </view>
       <block wx:if="{{record_list.length}}">
-        <view class="weui-cells weui-cells_after-title">
+        <view class="weui-cells">
           <repeat for="{{record_list}}" key="index" index="index" item="record">
             <block wx:if="{{record.user_b.name}}">
               <navigator class="record-container weui-cell weui-cell_access"  data-item-id="{{record._id}}" hover-class="weui-cell_active">
@@ -128,6 +163,7 @@ import recordList from '../../mixins/record_list';
 import { baseMaterialUrl } from '@/config';
 import { loveSpaceId } from '@/config';
 import req from '@/network';
+import _ from 'underscore';
 
 export default class Matching extends wepy.page {
   config = {
@@ -136,6 +172,10 @@ export default class Matching extends wepy.page {
   }
 
   data = {
+    isAuthUserInfo: false,
+    name: '',
+    avatar: '',
+    match_index: 0,
     object_name: 'love_friends',
     filter: '',
     avatar_field: 'user_b.profile.avatar',
@@ -145,7 +185,8 @@ export default class Matching extends wepy.page {
     date_field: ['match', 'a_to_b', 'b_to_a', 'open_group_id', 'heart'],
     userId: '',
     orderby: 'match desc',
-    space_id: null
+    space_id: null,
+    pageSize: 25
   }
 
   async onLoad() {
@@ -155,6 +196,32 @@ export default class Matching extends wepy.page {
     });
     const user_id = this.$parent.globalData.user._id;
     this.userId = user_id;
+    this.$apply();
+  }
+
+  async onShow() {
+    let user = this.$parent.globalData.user;
+    const spaceId = this.space_id;
+    const userId = user._id;
+    const setting = await wepy.getSetting();
+    if (!user.name) {
+      const query_options = {
+        $filter: `owner eq '${userId}'`,
+        $expand: 'owner($select=profile,name)'
+      };
+      const user_result = await this.$parent.query('vip_customers',query_options,spaceId)
+      user.name = user_result.value[0].owner.name
+      user.avatar = user_result.value[0].owner.profile['avatar']
+    }
+    if (setting.authSetting['scope.userInfo']) {
+      this.isAuthUserInfo = true;
+      this.userInfo = this.$parent.globalData.userInfo;
+      this.name = user.name;
+      this.avatar = user.avatar;
+    } else {
+      this.name = user.name;
+      // this.avatar = 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg'
+    }
     this.$apply();
   }
 
@@ -168,6 +235,44 @@ export default class Matching extends wepy.page {
     this.current_skip = 0;
     await this.init();
     this.loadRecords();
+  }
+
+  async loadRecords(searchValue) {
+    wepy.showLoading({
+      title: '加载中',
+      mask: true
+    });
+    const skip = this.current_skip;
+    const object_name = this.object_name;
+
+    const queryOptions = this.getQueryOptions(searchValue);
+    if (this.allow_load) {
+      const result = await this.$parent.query(object_name, queryOptions, this.space_id);
+      if (result.value) {
+        let records = [];
+        for(let record of result.value){
+          if(this.avatar_field){
+            record[this.avatar_field] = this.getFieldValue(this.avatar_field, record)
+          }
+
+          if (record.user_b.name) {
+            const owner = _.isObject(record.owner) ? record.owner._id : record.owner
+            record.allow_delete = await this.$parent.recordAllowDelete(object_name, owner, record.space)
+            this.style_list[record._id] = {positionX: 0, offsetX: 0}
+            records.push(record)
+          }
+
+        }
+        this.record_list = this.record_list.concat(records)
+      }
+      this.current_skip = skip + result.value.length;
+      if (this.current_skip === result['@odata.count']) {
+        this.allow_load = false
+      }
+      this.$apply();
+    }
+    wepy.hideLoading();
+    wx.stopPullDownRefresh();
   }
 
   getQueryFilter() {
@@ -225,6 +330,11 @@ export default class Matching extends wepy.page {
       }
       this.$apply();
       wepy.hideLoading();
+    },
+    goIntroduce() {
+      wx.navigateTo({
+        url: `/pages/love/introduce`
+      })
     }
   };
 }
