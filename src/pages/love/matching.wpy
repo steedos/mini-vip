@@ -61,6 +61,16 @@
     border-radius:0;
   }
 }
+.light{
+  width: 50px;
+  height: 50px;
+}
+.page-else .page__bd{
+  padding:20% 5%;
+  text-align:center;
+  color:#00396b;
+  font-size:18px;
+}
 </style>
 
 <template>
@@ -86,6 +96,15 @@
               </navigator>
             </block>
           </repeat>
+        </view>
+      </block>
+      <block wx:else>
+        <view class="page cover-page page-else">
+          <view class="page__bd">
+            <image class="light" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/light.png"/>
+            <text style="display:block;">快来邀请好友打榜</text>
+            <text  style="display:block;">打造属于你自己的榜单吧~</text>
+          </view>
         </view>
       </block>
     </view>
