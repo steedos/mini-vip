@@ -265,6 +265,7 @@ export default class VIP extends wepy.app {
       'pages/love/cover_answer_questions',
       'pages/love/cover',
       'pages/edit/city_select',
+      'pages/love/introduce',
       'pages/love/invite_code_me',
       'pages/love/invite_code_success_me',
       'pages/love/question_list',

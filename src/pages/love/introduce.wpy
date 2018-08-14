@@ -1,0 +1,412 @@
+<style lang="less">
+page {
+  height: 100%;
+
+  .top-container {
+    position: relative;
+  }
+  .ion-container {
+    display: inline-block;
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    z-index: 1000;
+
+    .ion {
+      font-size: 30px;
+      color: #fff;
+    }
+
+    .stared {
+      color: #fcb95b;
+    }
+  }
+  .page {
+    &.is-open {
+      .header{
+        .cover-wrapper{
+          height: 210px;
+          &::after {
+            content: '';
+            position: absolute;
+            height: 80px;
+            bottom: -30px;
+            left: 0;
+            right: 0;
+            background-image: linear-gradient(to bottom, transparent , #efeef3 50%);
+          }
+        }
+      }
+      .weui-grids{
+        margin-top: 1.17647059em;
+      }
+    }
+
+    .image {
+      display: block;
+    }
+
+    .header {
+      position: relative;
+
+      .cover-wrapper{
+        position: relative;
+        height: 210px;
+        background-size: cover;
+      }
+      .image{
+        width: 100%;
+      }
+      .empty-cover {
+        position: relative;
+        height: 210px;
+        background-image: url("https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/empty.png");
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .text {
+          position: relative;
+          top: -82px;
+          color: #262626;
+          text-shadow: 1px 1px 0px #686868;
+          font-size: 20px;
+        }
+      }
+      .space-info {
+        position: relative;
+        text-align: center;
+        top: -50px;
+        width: auto;
+        border: 1px solid transparent;
+        margin: 0 10px;
+        padding-bottom:10px;
+        border-radius: 0.25rem;
+        background: #fff;
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
+        z-index: 100;
+
+        .wrapper {
+          top: -50px;
+
+          .avatar-container {
+            background: #fff;
+            padding: 5px;
+            border-radius: 0.25rem;
+            display: inline-block;
+            box-shadow: 0 2px 2px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08);
+            position: absolute;
+            left: calc(~"50% - 40px");
+            top: -50px;
+
+            .avatar {
+              display: block;
+              width: 80px;
+              height: 80px;
+            }
+          }
+
+          .name {
+            margin-top: 50px;
+            font-size: 20px;
+            font-weight: bold;
+          }
+
+          .introduction {
+            font-size: 16px;
+            font-weight: bold;
+          }
+
+          .zodiac-constellation, .height, .live {
+            font-size: 15px;
+            color: #777;
+          }
+
+          .star-count {
+            margin-top: 0px;
+            color: #898989;
+            display: none;
+          }
+
+          .weui-btn {
+            display: inline-block;
+            border-color: #018cc6;
+            line-height: 31px;
+            height: 31px;
+            margin: 8px 4px 0;
+          }
+
+          .btn-star {
+            color: #018cc6;
+          }
+          .btn-manage {
+            background: #018cc6;
+            color: #fff;
+          }
+        }
+      }
+    }
+
+    .weui-grids {
+      background: #fff;
+      margin-top: 0px;
+    }
+
+
+    .page__bd{
+      .need_read{
+        display:block;
+        background:#f00;
+        border-radius:50%;
+        width:0.4em;
+        height:0.4em;
+        margin-left:1.8rem;
+        margin-top:-0.2rem;
+        position:absolute;
+      }
+    }
+    .support {
+      border: none;
+      border-right:1rpx solid #d9d9d9;
+      border-bottom:1rpx solid #d9d9d9;
+      border-radius: 0;
+      line-height: inherit;
+    }
+    .post-list-wrapper{
+      margin-top: 30rpx;
+    }
+  }
+}
+</style>
+
+<template>
+  <view class="page" wx:if="{{is_loaded}}">
+    <view class="top-container">
+      <view class="header">
+        <view wx:if="{{cover}}">
+          <view class="cover-wrapper" @tap="uploadImage(true)" style="background-image: url({{util.formatImageUrl(cover, baseUrl)}})"></view>
+        </view>
+        <view wx:else class="empty-cover" @tap="uploadImage(true)">
+          <view class="text" wx:if="{{is_space_owner}}"></view>
+        </view>
+        <view class="space-info">
+          <view class="wrapper">
+            <view class="bg-image"></view>
+            <view class="avatar-container">
+              <image wx:if="{{avatar}}" class="avatar" mode="aspectFill" src="{{util.formatImageUrl(avatar, baseUrl)}}" @tap.stop="uploadImage()"/>
+              <image wx:else class="avatar" mode="aspectFill" src="{{baseMaterialUrl + 'avatar.png'}}" @tap.stop="uploadImage()"/>
+            </view>
+            <view class="name">{{name}}</view>
+            <view class="introduction">{{self_introduction}}</view>
+            <view class="zodiac-constellation">生肖{{zodiac}} {{constellation}}座</view>
+            <view class="height">{{height}}cm</view>
+            <view class="live">{{live}}</view>
+          </view>
+        </view>
+      </view>
+      <view class="weui-grids" style="margin-top: -20px">
+        <repeat for="{{settings}}" key="index" index="index" item="setting">
+          <navigator url="{{setting.url}}" class="weui-grid" hover-class="weui-grid_active">
+            <view class="{{setting.icon}} weui-grid__icon slds-icon"></view>
+            <view class="weui-grid__label">{{setting.label}}</view>
+          </navigator>
+        </repeat>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import { baseUrl } from '@/config';
+import util from '../../wxs/util.wxs';
+import { baseMaterialUrl } from '@/config';
+import { loveSpaceId } from '@/config';
+
+export default class loveIntroduce extends wepy.page {
+  config = {
+    navigationBarTitleText: '个人介绍',
+  };
+
+  data = {
+    is_loaded: false,
+    space_id: loveSpaceId,
+    current_customer: {},
+    cover: '',
+    avatar: '',
+    name: '',
+    self_introduction: '',
+    height: null,
+    weight: null,
+    live: '',
+    hometown: '',
+    zodiac: '',
+    constellation: '',
+    baseUrl: baseUrl,
+    baseMaterialUrl: baseMaterialUrl,
+    loveSpaceId: loveSpaceId,
+    settings: [{
+      icon: 'slds-icon-standard-client',
+      label: '关于我',
+      url: `/pages/love/papers_view?object_name=love_about_me&space_id=${loveSpaceId}&required=true`,
+      object_name: 'love_about_me'
+    },{
+      icon: 'slds-icon-standard-campaign',
+      label: '筛选条件',
+      url: `/pages/love/papers_view?object_name=love_looking_for&space_id=${loveSpaceId}`,
+      object_name: 'love_looking_for'
+    },{
+      icon: 'slds-icon-standard-social',
+      label: '问答匹配',
+      url: `/pages/love/papers_view?object_name=love_answer&space_id=${loveSpaceId}`,
+      object_name: 'love_answer'
+    }]
+  }
+
+  wxs = {
+    util: util
+  }
+
+  async onLoad() {
+
+  }
+
+  async onShow() {
+    wx.showLoading({ mask: true });
+    const user = this.$parent.globalData.user;
+    const spaceId = this.space_id;
+    this.avatar = user.avatar;
+    this.name = user.name;
+
+    const my_customers = this.$parent.globalData.my_customers;
+    const current_customer = my_customers.find((customer, i) => {
+      return customer.space == spaceId
+    })
+
+    if (current_customer.cover) {
+      this.cover = current_customer.cover;
+    } else {
+      this.cover = this.avatar;
+    }
+
+    if (current_customer.avatar) {
+      this.avatar = current_customer.avatar;
+    }
+    
+    this.current_customer = current_customer;
+
+    const options = {
+      $filter: `owner eq ${user._id}`
+    }
+
+    const about_me = await this.$parent.query('love_about_me', options, loveSpaceId);
+    if (about_me && about_me.value && about_me.value[0]) {
+      this.height = about_me.value[0].height;
+      this.live = about_me.value[0].live;
+      this.hometown = about_me.value[0].hometown;
+      this.self_introduction = about_me.value[0].self_introduction;
+      this.zodiac = about_me.value[0].zodiac;
+      this.constellation = about_me.value[0].constellation;
+    }
+
+    this.is_loaded = true;
+    this.$apply();
+    wx.hideLoading();
+  }
+
+  methods = {
+    async uploadImage(isCover) {
+      const title = isCover ? '更换封面' : '更换头像';
+
+      const result = await wepy.showActionSheet({
+        itemList: [title]
+      });
+      if (!result.cancel) {
+        const result2 = await wepy.chooseImage({
+          count: 1,
+          sizeType: ['compressed']
+        });
+        // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
+        const tempFilePaths = result2.tempFilePaths;
+        if (tempFilePaths.length) {
+          const authToken = this.$parent.globalData.user.auth_token;
+          const userId = this.$parent.globalData.user._id;
+          let tempSrc = "";
+          if(isCover){
+            tempSrc = this.cover;
+            this.cover = tempFilePaths[0];
+          }
+          else{
+            tempSrc = this.avatar;
+            this.avatar = tempFilePaths[0];
+          }
+          this.$apply();
+          wepy.showLoading({
+            title: '正在上传...',
+            mask: true
+          });
+          let formData = {};
+          formData.size = result2.tempFiles.length && result2.tempFiles[0].size;
+          const imageInfo = await wepy.getImageInfo({
+            src: tempFilePaths[0]
+          });
+          formData.width = imageInfo.width;
+          formData.height = imageInfo.height;
+          formData.orientation = imageInfo.orientation;
+          formData.type = imageInfo.type;
+          const fileResult = await wepy.uploadFile({
+            url: `${this.baseUrl}/s3/images`,
+            filePath: tempFilePaths[0],
+            name: 'file',
+            formData: formData,
+            header: {
+              'X-Auth-Token': authToken,
+              'X-User-Id': userId
+            }
+          }).catch((err)=>{
+            console.log("error...",err)
+          });
+          const fileData = JSON.parse(fileResult.data);
+          if (fileData.errors || fileResult.statusCode != 200) {
+            wx.showToast({
+              title: "图片上传失败，请稍后再试",
+              icon: "none"
+            });
+            if(isCover){
+              this.cover = tempSrc;
+            }
+            else{
+              this.avatar = tempSrc;
+            }
+            this.$apply();
+            wepy.hideLoading();
+            return;
+          }
+          // TODO 更新对应表的字段
+          const fileId = fileData._id;
+          let storageKey = isCover ? 'cover' : 'avatar';
+          let storageSet = {};
+          storageSet[storageKey] = fileId;
+
+          let updateSuc = await this.$parent.update("vip_customers", this.current_customer._id, storageSet, this.space_id);
+  
+          if(!updateSuc){
+            wx.showToast({
+              title: "图片上传失败，请稍后再试",
+              icon: "none"
+            });
+            if(isCover){
+              this.cover = tempSrc;
+            }
+            else{
+              this.avatar = tempSrc;
+            }
+          }
+          this.$apply();
+          wepy.hideLoading();
+        }
+      }
+    }
+  }
+}
+</script>
