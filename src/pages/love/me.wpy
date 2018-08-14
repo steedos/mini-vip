@@ -282,7 +282,6 @@ export default class QuestionnaireList extends wepy.page {
       e.space_id = loveSpaceId;
     }
     this.space_id = e.space_id;
-    console.log('this.space_id============', this.space_id);
     await this.$parent.login(e);
     if (!this.space_id) {
       wx.showToast({
@@ -297,13 +296,21 @@ export default class QuestionnaireList extends wepy.page {
     wx.hideLoading();
   }
 
-  async onShow() {
+  async onShow() {  
     wx.showLoading({ mask: true });
-    const user = this.$parent.globalData.user;
+    let user = this.$parent.globalData.user;
     const spaceId = this.space_id;
     const userId = user._id;
     const setting = await wepy.getSetting();
-
+    if (!user.name) {
+      const query_options = {
+        $filter: `owner eq '${userId}'`,
+        $expand: 'owner($select=profile,name)'
+      };
+      const user_result = await this.$parent.query('vip_customers',query_options,spaceId)
+      user.name = user_result.value[0].owner.name
+      user.avatar = user_result.value[0].owner.profile['avatar']
+    }
     if (setting.authSetting['scope.userInfo']) {
       this.isAuthUserInfo = true;
       this.userInfo = this.$parent.globalData.userInfo;
@@ -313,7 +320,6 @@ export default class QuestionnaireList extends wepy.page {
       this.name = user.name;
       // this.avatar = 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg'
     }
-
     this.$apply();
 
     const finishedNaire = wx.getStorageSync('questionnaire_progess');
