@@ -74,7 +74,16 @@ page {
 			</navigator>
 		</view>
 
-
+		<!--
+		<view class="weui-cells">
+			<navigator class="weui-cell weui-cell_access" url="/pages/love/shake" hover-class="weui-cell_active">
+				<view class="weui-cell__bd">
+					每周有缘人
+				</view>
+				<view class="weui-cell__ft weui-cell__ft_in-access"></view>
+			</navigator>
+		</view>
+		-->
 
 	</view>
 </view>
@@ -103,6 +112,15 @@ export default class LoveHome extends wepy.page {
 	isAuthUserInfo:true
 	}
 
+	onShareAppMessage(res) {
+		const user_id = this.$parent.globalData.user._id;
+		let title = '我们的缘分排行榜，快来打榜！';
+		let path = `/pages/love/home?share_from=${user_id}`
+		return {
+		  title: title,
+		  path: path
+		};
+	}
 	async onLoad(e) {
 		wx.showLoading({mask: true});
 		const self = this;
