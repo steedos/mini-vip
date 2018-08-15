@@ -263,124 +263,131 @@
     }
   }
 }
+  .order-info{
+    margin-bottom: 50px;
+  }
 </style>
 <template>
   <view class="page" wx:if="{{is_loaded && is_show}}">
-    <block wx:if="{{is_readonly}}">
-      <view class="order-time">
-        <view class="text">
-          下单时间: {{util.formatDate(order.created, '-')}}
-        </view>
-        <view class="text">
-        </view>
-      </view>
-    </block>
-    <block wx:else>
-      <view class="address-box" wx:if="{{!is_readonly}}">
-        <view class="address-item" @tap="selectAddress" wx:if="{{checkedAddress._id}}">
-          <view class="l">
-            <view class="name">{{checkedAddress.name}}</view>
-            <view class="default {{checkedAddress.is_default ? 'show' : 'hide'}}">默认</view>
+    <view class="weui-toptips weui-toptips_warn" wx:if="{{showTopTips}}">{{message}}</view>
+    <view class="order-info">
+      <block wx:if="{{is_readonly}}">
+        <view class="order-time">
+          <view class="text">
+            下单时间: {{util.formatDate(order.created, '-')}}
           </view>
-          <view class="c">
-            <view class="mobile">{{checkedAddress.phone}}</view>
-            <view class="address">{{checkedAddress.address.address}}{{checkedAddress.door ? checkedAddress.door : ''}}</view>
-          </view>
-          <view class="r after-chevronright">
+          <view class="text">
           </view>
         </view>
-
-        <view class="address-item address-empty" bindtap="selectAddress" wx:if="{{!checkedAddress._id}}">
-          <view class="m">
-            还没有收货地址，去添加
-          </view>
-          <view class="r after-chevronright">
-          </view>
-        </view>
-      </view>
-    </block>
-
-    <view class="order-box">
-      <view class="order-item">
-        <view class="l">
-          <text class="name">金额合计</text>
-        </view>
-        <view class="r">
-          <text class="txt">￥{{goodsTotalPrice}}</text>
-        </view>
-      </view>
-      <!-- <view class="order-item">
-        <view class="l">
-          <text class="name">运费</text>
-        </view>
-        <view class="r">
-          <text class="txt">￥{{freightPrice}}</text>
-        </view>
-      </view>
-      <view class="order-item no-border">
-        <view class="l">
-          <text class="name">优惠券</text>
-        </view>
-        <view class="r">
-          <text class="txt">-￥{{couponPrice}}</text>
-        </view>
-      </view> -->
-    </view>
-
-    <view class="goods-items">
-      <repeat for="{{checkedProductList}}" key="index" index="index" item="goods">
-        <navigator class="item" url="/pages/product/view?product_id={{goods._id}}&space_id={{goods.space || order.space}}">
-          <view class="cart-goods">
-            <image class="img" src="{{util.formatImageUrl(goods.avatar, baseUrl)}}" mode="aspectFill"></image>
-            <view class="info">
-              <view class="t">
-                <view class="name">{{goods.name}}</view>
-                <text class="num">x{{goods.count}}</text>
-              </view>
-              <view class="b">
-                <text class="price">￥{{goods.default_price}}</text>
-              </view>
+      </block>
+      <block wx:else>
+        <view class="address-box" wx:if="{{!is_readonly}}">
+          <view class="address-item" @tap="selectAddress" wx:if="{{checkedAddress._id}}">
+            <view class="l">
+              <view class="name">{{checkedAddress.name}}</view>
+              <view class="default {{checkedAddress.is_default ? 'show' : 'hide'}}">默认</view>
+            </view>
+            <view class="c">
+              <view class="mobile">{{checkedAddress.phone}}</view>
+              <view class="address">{{checkedAddress.address.address}}{{checkedAddress.door ? checkedAddress.door : ''}}</view>
+            </view>
+            <view class="r after-chevronright">
             </view>
           </view>
-        </navigator>
-      </repeat>
-    </view>
 
-    <view class="user-info" wx:if="{{is_readonly}}">
-      <view class="address">
-        <view class="info">
-          <view class="name">{{checkedAddress.name}}</view>
-          <view>{{checkedAddress.phone}}</view>
+          <view class="address-item address-empty" bindtap="selectAddress" wx:if="{{!checkedAddress._id}}">
+            <view class="m">
+              还没有收货地址，去添加
+            </view>
+            <view class="r after-chevronright">
+            </view>
+          </view>
         </view>
-        <view>{{checkedAddress.address.address}}{{checkedAddress.door ? checkedAddress.door : ''}}</view>
-      </view>
-      <view class="pay">
-        <view class="info">
-          <view class="title">支付方式:</view>
-          <view class="res">微信</view>
-        </view>
-        <view class="info">
-          <view class="title">实付:</view>
-          <view class="price">￥{{goodsTotalPrice}}</view>
-        </view>
-      </view>
-    </view>
+      </block>
 
-    <view class="weui-cells deliver_info" wx:if="{{false}}">
-      <view class="weui-cell weui-cell_input">
-        <view class="weui-cell__hd">
-          <view class="weui-label">快递公司</view>
+      <view class="order-box">
+        <view class="order-item">
+          <view class="l">
+            <text class="name">金额合计</text>
+          </view>
+          <view class="r">
+            <text class="txt">￥{{goodsTotalPrice}}</text>
+          </view>
         </view>
-        <view class="weui-cell__bd">
-          <input class="weui-input" placeholder="请输入快递公司"/>
+        <!-- <view class="order-item">
+		  <view class="l">
+			<text class="name">运费</text>
+		  </view>
+		  <view class="r">
+			<text class="txt">￥{{freightPrice}}</text>
+		  </view>
+		</view>
+		<view class="order-item no-border">
+		  <view class="l">
+			<text class="name">优惠券</text>
+		  </view>
+		  <view class="r">
+			<text class="txt">-￥{{couponPrice}}</text>
+		  </view>
+		</view> -->
+      </view>
+
+      <view class="goods-items">
+        <repeat for="{{checkedProductList}}" key="index" index="index" item="goods">
+          <navigator class="item" url="/pages/product/view?product_id={{goods._id}}&space_id={{goods.space || order.space}}">
+            <view class="cart-goods">
+              <image class="img" src="{{util.formatImageUrl(goods.avatar, baseUrl)}}" mode="aspectFill"></image>
+              <view class="info">
+                <view class="t">
+                  <view class="name">{{goods.name}}</view>
+                  <text class="num">x{{goods.count}}</text>
+                </view>
+                <view class="b">
+                  <text class="price">￥{{goods.default_price}}</text>
+                </view>
+              </view>
+            </view>
+          </navigator>
+        </repeat>
+      </view>
+
+
+      <view class="user-info" wx:if="{{is_readonly}}">
+        <view class="address">
+          <view class="info">
+            <view class="name">{{checkedAddress.name}}</view>
+            <view>{{checkedAddress.phone}}</view>
+          </view>
+          <view>{{checkedAddress.address.address}}{{checkedAddress.door ? checkedAddress.door : ''}}</view>
+        </view>
+        <view class="pay">
+          <view class="info">
+            <view class="title">支付方式:</view>
+            <view class="res">微信</view>
+          </view>
+          <view class="info">
+            <view class="title">实付:</view>
+            <view class="price">￥{{goodsTotalPrice}}</view>
+          </view>
         </view>
       </view>
-      <view class="weui-cell weui-cell_input weui-cell_vcode">
-        <view class="weui-cell__hd">
-          <view class="weui-label">快递单号</view>
+
+      <view class="weui-cells deliver_info" wx:if="{{is_readonly && status == 'paid' && isSpaceAdmin}}">
+        <view class="weui-cell weui-cell_input">
+          <view class="weui-cell__hd">
+            <view class="weui-label">快递公司</view>
+          </view>
+          <view class="weui-cell__bd">
+            <input class="weui-input" bindinput="inputDeliverCompany"/>
+          </view>
         </view>
-        <view class="weui-cell__bd">
-          <input class="weui-input" placeholder="请输入快递单号" />
+        <view class="weui-cell weui-cell_input weui-cell_vcode">
+          <view class="weui-cell__hd">
+            <view class="weui-label">快递单号</view>
+          </view>
+          <view class="weui-cell__bd">
+            <input class="weui-input" bindinput="inputDeliverNO"/>
+          </view>
         </view>
       </view>
     </view>
@@ -447,6 +454,10 @@ export default class Checkout extends wepy.page {
     isSpaceAdmin: false,
     isOrderOwner: false,
     space_id: null,
+    showTopTips: false,
+    message: '',
+    deliver_company: '',
+    deliver_no: ''
   };
 
   wxs = {
@@ -501,7 +512,6 @@ export default class Checkout extends wepy.page {
         this.checkedProductList = order.products;
         this.goodsTotalPrice = order.amount;
         this.status = order.status;
-//        this.status = 'paid';
         this.is_readonly = true;
         this.isSpaceAdmin = this.$parent.isSpaceAdmin(order.space);
         this.isOrderOwner = (order.owner == this.$parent.globalData.user._id);
@@ -684,12 +694,31 @@ export default class Checkout extends wepy.page {
         title: '加载中',
         mask: true
       });
+
+      if(status == 'delivered'){
+        if(!this.deliver_company){
+          this.message = '请填写快递公司';
+          this.showTopTips = true;
+          this.$apply();
+          wx.hideLoading();
+          return;
+        }
+
+        if(!this.deliver_no){
+          this.message = '请填写快递单号';
+          this.showTopTips = true;
+          this.$apply();
+          wx.hideLoading();
+          return;
+        }
+      }
+
       if (status == 'completed') {
         var result = await this.$parent.invokeMethod('vip_order', this.order._id, {}, this.order.space, 'confirmReceipt');
       } else if (status == 'canceled') {
         var result = await this.$parent.invokeMethod('vip_order', this.order._id, {}, this.order.space, 'cancelOrder');
       } else {
-        var result = await this.$parent.update('vip_order', this.order._id, {status: status}, this.order.space);
+        var result = await this.$parent.update('vip_order', this.order._id, {status: status, deliver_company: this.deliver_company, deliver_no: this.deliver_no}, this.order.space);
       }
 
       wx.hideLoading();
@@ -707,6 +736,12 @@ export default class Checkout extends wepy.page {
           title: '成功'
         })
       }
+    },
+    inputDeliverCompany: function (e) {
+      this.deliver_company = e.detail.value
+    },
+    inputDeliverNO: function (e) {
+      this.deliver_no = e.detail.value
     }
   };
 
