@@ -19,9 +19,48 @@ page {
 	<view class="page__hd">
 		<view class="love-title">群缘份榜</view>
 	</view>
+	
 	<view class="page__bd" wx:if="{{is_loaded}}">
-		
-		<view class="weui-cells weui-cells_after-title">
+	
+
+		<view class="weui-cells">
+		  <navigator url="/pages/love/me" class='questionnaire-list'>
+			<block wx:if="{{isAuthUserInfo}}">
+			  <view class="weui-media-box weui-media-box_appmsg">
+				<view class="weui-media-box__hd weui-media-box__hd_in-appmsg" style="width: 50px; height: 50px; line-height: 50px;">
+				  <image class="image" mode="aspectFill" wx:if="{{isAuthUserInfo}}" src="{{avatar}}"></image>
+				</view>
+				<view class="weui-media-box__bd weui-media-box__bd_in-appmsg" style="display: flex;">
+				  <view class="weui-media-box__title" style="flex: 1;">
+					{{name}}
+				  </view>
+				  <view wx:if="{{is_member}}" class="weui-media-box__desc" style="margin-top: 6rpx;">
+					VIP会员
+				  </view>
+				  <view class="weui-cell__ft weui-cell__ft_in-access">
+					<view class="slds-icon slds-icon--small slds-m-right--x-small"></view>
+				  </view>
+				</view>
+			  </view>
+			</block>
+			<block wx:else>
+			  <button open-type="getUserInfo" bindgetuserinfo="userLogin" plain="true" class="user-active weui-media-box weui-media-box_appmsg">
+				<view class="weui-media-box__hd weui-media-box__hd_in-appmsg" style="width: 50px; height: 50px; line-height: 50px;">
+				  <image class="image" mode="aspectFill" src="https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/avatar.png"></image>
+				</view>
+				<view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
+				  <view class="weui-media-box__title" style="line-height: 30px;">
+					{{name}}
+				  </view>
+				  <view wx:if="{{is_member}}" class="weui-media-box__desc" style="margin-top: 6rpx;">
+					VIP会员
+				  </view>
+				</view>
+			  </button>
+			</block>
+		  </navigator>
+		</view>	
+		<view class="weui-cells">
 			<repeat for="{{groups}}" key="index" index="index" item="group">
 				<navigator class="weui-cell weui-cell_access" url="/pages/love/matching?space_id={{space_id}}&filter=(owner eq '{{user_id}}' and open_group_id eq '{{group.open_group_id}}')" hover-class="weui-cell_active">
 					<view class="weui-cell__bd" style="height: 24px">
@@ -47,44 +86,6 @@ page {
 			</navigator>
 		</view>
 
-
-		<view class="weui-cells">
-		  <navigator url="/pages/love/me" class='questionnaire-list'>
-			<block wx:if="{{isAuthUserInfo}}">
-			  <view class="weui-media-box weui-media-box_appmsg">
-				<view class="weui-media-box__hd weui-media-box__hd_in-appmsg" style="width: 50px; height: 50px; line-height: 50px;">
-				  <image class="image" mode="aspectFill" wx:if="{{isAuthUserInfo}}" src="{{avatar}}"></image>
-				</view>
-				<view class="weui-media-box__bd weui-media-box__bd_in-appmsg" style="display: flex;">
-				  <view class="weui-media-box__title" style="flex: 1;">
-					{{name}}
-				  </view>
-				  <view wx:if="{{is_member}}" class="weui-media-box__desc" style="margin-top: 6rpx;">
-					VIP会员
-				  </view>
-				  <view class="weui-cell__ft weui-cell__ft_in-access">
-					<view class="vip_page_qrcode slds-icon slds-icon--small slds-m-right--x-small"></view>
-				  </view>
-				</view>
-			  </view>
-			</block>
-			<block wx:else>
-			  <button open-type="getUserInfo" bindgetuserinfo="userLogin" plain="true" class="user-active weui-media-box weui-media-box_appmsg">
-				<view class="weui-media-box__hd weui-media-box__hd_in-appmsg" style="width: 50px; height: 50px; line-height: 50px;">
-				  <image class="image" mode="aspectFill" src="https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/avatar.png"></image>
-				</view>
-				<view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
-				  <view class="weui-media-box__title" style="line-height: 30px;">
-					{{name}}
-				  </view>
-				  <view wx:if="{{is_member}}" class="weui-media-box__desc" style="margin-top: 6rpx;">
-					VIP会员
-				  </view>
-				</view>
-			  </button>
-			</block>
-		  </navigator>
-		</view>
 	</view>
 </view>
 </template>
