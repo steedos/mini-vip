@@ -165,7 +165,12 @@ export default class Test extends wepy.page {
     if (setting.authSetting['scope.userInfo']) {
       this.isAuthUserInfo = true;
       this.$apply();
+    }else if(this.$parent.globalData.user.name && this.$parent.globalData.user.avatar){
+      this.isAuthUserInfo = true;
+      this.$apply();
     }
+
+
 
     if(!this.space_id){
       wx.showToast({

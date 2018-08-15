@@ -302,7 +302,7 @@ export default class QuestionnaireList extends wepy.page {
     const spaceId = this.space_id;
     const userId = user._id;
     const setting = await wepy.getSetting();
-    if (!user.name) {
+    if (!user.name || !this.avatar) {
       const query_options = {
         $filter: `owner eq '${userId}'`,
         $expand: 'owner($select=profile,name)'
@@ -318,8 +318,15 @@ export default class QuestionnaireList extends wepy.page {
       this.avatar = user.avatar;
     } else {
       this.name = user.name;
+      this.avatar = user.avatar;
+
       // this.avatar = 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg'
     }
+
+    if(this.name && this.avatar){
+      this.isAuthUserInfo = true;
+    }
+
     this.$apply();
 
     const finishedNaire = wx.getStorageSync('questionnaire_progess');
