@@ -97,7 +97,7 @@
 </style>
 
 <template>
-  <view class="page friend-list">
+  <view class="page friend-list" wx:if="{{is_loaded}}">
     <view class="page__bd" style="margin-bottom: 60rpx">
       <view class="weui-cells" wx:if="{{record_list.length}}">
         <block wx:if="{{isAuthUserInfo}}">
@@ -246,11 +246,15 @@ export default class Matching extends wepy.page {
   }
 
   async dataRefresh() {
+    this.is_loaded = false;
+    this.$apply();
     this.record_list = [];
     this.allow_load = true;
     this.current_skip = 0;
     await this.init();
-    this.loadRecords();
+    await this.loadRecords();
+    this.is_loaded = true;
+    this.$apply();
   }
 
   async loadRecords(searchValue) {
