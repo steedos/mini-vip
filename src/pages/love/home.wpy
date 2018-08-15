@@ -1,0 +1,142 @@
+<style lang="less">
+
+</style>
+
+<template>
+	<view class="page__bd" style="margin-top: 20px" wx:if="{{is_loaded}}">
+		<view class="weui-cells__title">
+			缘份榜
+		</view>
+		<view class="weui-cells weui-cells_after-title">
+			<repeat for="{{groups}}" key="index" index="index" item="group">
+				<navigator class="weui-cell weui-cell_access" url="/pages/love/matching?space_id={{space_id}}" hover-class="weui-cell_active">
+					<view class="weui-cell__bd" style="height: 24px">
+						<open-data class="group-name" type="groupName" open-gid="{{group.open_group_id}}"></open-data>
+					</view>
+					<view class="weui-cell__ft weui-cell__ft_in-access"></view>
+				</navigator>
+			</repeat>
+			<navigator class="weui-cell weui-cell_access" url="/pages/love/matching?space_id={{space_id}}" hover-class="weui-cell_active">
+				<view class="weui-cell__bd">
+					好友榜
+				</view>
+				<view class="weui-cell__ft weui-cell__ft_in-access"></view>
+			</navigator>
+		</view>
+
+		<view class="weui-cells">
+			<navigator class="weui-cell weui-cell_access" url="/pages/love/shake" hover-class="weui-cell_active">
+				<view class="weui-cell__bd">
+					每周有缘人
+				</view>
+				<view class="weui-cell__ft weui-cell__ft_in-access"></view>
+			</navigator>
+		</view>
+
+		<view class="weui-cells">
+			<navigator class="weui-cell weui-cell_access" url="/pages/love/me" hover-class="weui-cell_active">
+				<view class="weui-cell__bd">
+					设置
+				</view>
+				<view class="weui-cell__ft weui-cell__ft_in-access"></view>
+			</navigator>
+		</view>
+	</view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import { loveSpaceId } from '../../config/index.js';
+
+export default class LoveHome extends wepy.page {
+	config = {
+		navigationBarTitleText: '无颜',
+	}
+
+	data = {
+		user_id: '',
+		is_loaded: false,
+		space_id: null,
+		friendList: [],
+		groups: [],
+		group_friends: {}
+	}
+
+	async onLoad(e) {
+		wx.showLoading({mask: true});
+		const self = this;
+		e.space_id = loveSpaceId;
+		if(e.scene){
+			// 朋友圏二维码识别进入的，则取出scene中的share_from
+			let scene = decodeURIComponent(e.scene);
+			let scenes = scene.split('=');
+			e.love = 1;
+			e.share_from = scenes[1];
+			e.qrcode = 1
+		}
+		this.space_id = e.space_id;
+		await this.$parent.login(e);
+		this.user_id = this.$parent.globalData.user._id;
+		await this.loadGroups();
+		await this.loadFriendList();
+		let group_friends = {};
+		for (let group of this.groups) {
+			let result = await self.loadGroupFriends(group.open_group_id);
+			group_friends[group.open_group_id] = result;
+		}
+		this.group_friends = group_friends;
+		this.is_loaded = true;
+		this.$apply();
+		console.log('[groups]', this.groups);
+		console.log('[friendList]', this.friendList);
+		console.log('[group_friends]', group_friends);
+		
+		wx.hideLoading();
+	}
+
+	async loadFriendList() {
+		const user_id = this.$parent.globalData.user._id;
+		const options = {
+			$filter: `(owner eq '${user_id}' and open_group_id eq null)`,
+			$top: 5,
+			$expand: 'user_b($select=profile,name)',
+			$orderby: 'match desc'
+		}
+		const result = await this.$parent.query('love_friends', options, this.space_id);
+		if (result && result.value) {
+			this.friendList = result.value;
+		}
+		this.$apply();
+		return this.friendList
+	}
+
+	async loadGroups() {
+		const user_id = this.$parent.globalData.user._id;
+		const options = {
+			$filter: `(users eq '${user_id}')`
+		}
+		const result = await this.$parent.query('vip_groups', options, 'guest');
+		if (result && result.value) {
+			this.groups = result.value;
+		}
+		this.$apply();
+		return this.groups
+	}
+
+	async loadGroupFriends(group_id) {
+		const user_id = this.$parent.globalData.user._id;
+		const options = {
+			$filter: `(owner eq '${user_id}' and open_group_id eq '${group_id}')`,
+			$top: 5,
+			$expand: 'user_b($select=profile,name)',
+			$orderby: 'match desc'
+		}
+		const result = await this.$parent.query('love_friends', options, this.space_id);
+		if (result && result.value) {
+			return result.value
+		} else {
+			return []
+		}
+	} 
+}
+</script>

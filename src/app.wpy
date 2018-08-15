@@ -182,6 +182,7 @@ setStore(store)
 export default class VIP extends wepy.app {
   config = {
     pages: [
+      'pages/love/home',
 //      'pages/tabbar_index',
       'pages/love/index',
       'pages/love/shake',
@@ -272,31 +273,31 @@ export default class VIP extends wepy.app {
       'pages/love/discovery',
       'pages/love/privacy_protection',
     ],
-    tabBar: {
-      color: '#666',
-      selectedColor: '#5f71ee',
-      backgroundColor: '#fff',
-      borderStyle: 'black',
-      list: [
-      {
-        pagePath: 'pages/love/shake',
-        selectedIconPath: './images/tabbars/topic_pressed.png',
-        iconPath: './images/tabbars/topic.png',
-        text: '摇一摇',
-      },
-      {
-        pagePath: 'pages/love/discovery',
-        selectedIconPath: './images/tabbars/apps_pressed.png',
-        iconPath: './images/tabbars/apps.png',
-        text: '缘分',
-      },
-      {
-        pagePath: 'pages/love/me',
-        selectedIconPath: './images/tabbars/me_pressed.png',
-        iconPath: './images/tabbars/me.png',
-        text: '我',
-      }]
-    },
+    // tabBar: {
+    //   color: '#666',
+    //   selectedColor: '#5f71ee',
+    //   backgroundColor: '#fff',
+    //   borderStyle: 'black',
+    //   list: [
+    //   {
+    //     pagePath: 'pages/love/shake',
+    //     selectedIconPath: './images/tabbars/topic_pressed.png',
+    //     iconPath: './images/tabbars/topic.png',
+    //     text: '摇一摇',
+    //   },
+    //   {
+    //     pagePath: 'pages/love/discovery',
+    //     selectedIconPath: './images/tabbars/apps_pressed.png',
+    //     iconPath: './images/tabbars/apps.png',
+    //     text: '缘分',
+    //   },
+    //   {
+    //     pagePath: 'pages/love/me',
+    //     selectedIconPath: './images/tabbars/me_pressed.png',
+    //     iconPath: './images/tabbars/me.png',
+    //     text: '我',
+    //   }]
+    // },
     window: {
       navigationBarBackgroundColor: '#353535',
       navigationBarTitleText: '无颜',
