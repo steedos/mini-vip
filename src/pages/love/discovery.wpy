@@ -50,7 +50,7 @@
       </button>
     </view>
 
-    <view class="weui-cells">
+    <!-- <view class="weui-cells">
       <navigator class="weui-cell weui-cell_access" url="/pages/space/index?space_id={{space_id}}">
         <view class="weui-cell__hd">
           <view class="slds-icon-custom-custom1 slds-icon slds-icon--small slds-m-right--x-small"/>
@@ -60,7 +60,7 @@
         </view>
         <view class="weui-cell__ft weui-cell__ft_in-access"></view>
       </navigator>
-    </view>
+    </view> -->
   </view>
 </template>
 
