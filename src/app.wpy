@@ -109,7 +109,7 @@ page {
 
 
 .cover-page {
-  background-image:url('https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/bg-info-2x.png');
+  background-image:url('https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/bg-grass-640.png');
   background-position: bottom center;
   background-repeat: no-repeat;
   background-size: contain;
