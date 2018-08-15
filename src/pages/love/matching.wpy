@@ -128,6 +128,7 @@
         </block>
       </view>
       <block wx:if="{{record_list.length}}">
+        <!-- <view class="slds-icon-action-filter slds-icon slds-icon--small slds-m-right--x-small" @tap="goFilter"/> -->
         <view class="weui-cells">
           <repeat for="{{record_list}}" key="index" index="index" item="record">
             <block wx:if="{{record.user_b.name}}">
@@ -264,24 +265,25 @@ export default class Matching extends wepy.page {
     });
     const skip = this.current_skip;
     const object_name = this.object_name;
-
     const queryOptions = this.getQueryOptions(searchValue);
     if (this.allow_load) {
       const result = await this.$parent.query(object_name, queryOptions, this.space_id);
       if (result.value) {
+        const filterEnable = wepy.getStorageSync('matching_filter_enable');
         let records = [];
         for(let record of result.value){
           if(this.avatar_field){
             record[this.avatar_field] = this.getFieldValue(this.avatar_field, record)
           }
-
           if (record.user_b.name) {
-            const owner = _.isObject(record.owner) ? record.owner._id : record.owner
-            record.allow_delete = await this.$parent.recordAllowDelete(object_name, owner, record.space)
-            this.style_list[record._id] = {positionX: 0, offsetX: 0}
-            records.push(record)
+            if(filterEnable){
+              if(record.is_looking_for){
+                records.push(record);
+              }
+            }else{
+              records.push(record);
+            }
           }
-
         }
         this.record_list = this.record_list.concat(records)
       }
@@ -327,6 +329,11 @@ export default class Matching extends wepy.page {
     goShare() {
       wx.navigateTo({
         url: `/pages/love/share?card=true&space_id=${this.space_id}`
+      })
+    },
+    async goFilter(event) {
+      wx.navigateTo({
+        url: `/pages/love/question_list?object_name=love_looking_for&space_id=${this.space_id}`
       })
     },
     async markHeart(_id, heart, event) {
