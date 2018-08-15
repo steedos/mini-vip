@@ -193,13 +193,13 @@ export default class QuestionnaireList extends wepy.page {
       {
         icon: 'slds-icon-standard-client',
         label: '关于我',
-        url: `/pages/love/papers_view?object_name=love_about_me&space_id=${loveSpaceId}&required=true`,
+        url: `/pages/love/question_list?object_name=love_about_me&space_id=${loveSpaceId}&required=true`,
         object_name: 'love_about_me'
       },
       {
         icon: 'slds-icon-standard-campaign',
         label: '筛选条件',
-        url: `/pages/love/papers_view?object_name=love_looking_for&space_id=${loveSpaceId}`,
+        url: `/pages/love/question_list?object_name=love_looking_for&space_id=${loveSpaceId}`,
         object_name: 'love_looking_for'
       },
     ],
@@ -207,21 +207,21 @@ export default class QuestionnaireList extends wepy.page {
       {
         icon: 'slds-icon-standard-social',
         label: '问答匹配 (玫瑰卷)',
-        url: `/pages/love/papers_view?object_name=love_answer&space_id=${loveSpaceId}`,
+        url: `/pages/love/question_list?object_name=love_answer&space_id=${loveSpaceId}`,
         object_name: 'love_answer'
       },
       {
         // icon: "slds-icon-standard-bot",
         icon: 'slds-icon-standard-feed',
         label: '问答匹配 (蔷薇卷)',
-        url: `/pages/love/papers_view?object_name=love_answer2&space_id=${loveSpaceId}`,
+        url: `/pages/love/question_list?object_name=love_answer2&space_id=${loveSpaceId}`,
         object_name: 'love_answer2'
       },
       {
         icon: 'slds-icon-standard-canvas',
         label: '兴趣爱好匹配',
         object_name: 'love_hobby',
-        url: `/pages/love/papers_view?object_name=love_hobby&space_id=${loveSpaceId}`
+        url: `/pages/love/question_list?object_name=love_hobby&space_id=${loveSpaceId}`
       },
       {
         icon: 'slds-icon-standard-reward',
@@ -296,7 +296,7 @@ export default class QuestionnaireList extends wepy.page {
     wx.hideLoading();
   }
 
-  async onShow() {  
+  async onShow() {
     wx.showLoading({ mask: true });
     let user = this.$parent.globalData.user;
     const spaceId = this.space_id;

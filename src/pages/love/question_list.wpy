@@ -8,7 +8,7 @@
   <view class="page">
     <view class="weui-cells">
       <repeat for="{{questions}}" key="index" index="index" item="question">
-        <navigator url="/pages/love/papers_view?object_name={{object_name}}&space_id={{space_id}}&question_name={{question.name}}{{required}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+        <navigator url="/pages/love/papers_view?object_name={{object_name}}&space_id={{space_id}}&fields={{question.name}}{{required}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
           <view class="weui-cell__bd">{{question.label}}</view>
           <view class="weui-cell__ft weui-cell__ft_in-access"></view>
         </navigator>
