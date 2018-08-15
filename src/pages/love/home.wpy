@@ -8,6 +8,9 @@
     height: 100%;
     border-radius: 0.15rem;
   }}
+// page {
+//   background-color: #cae6f1;
+// }
 </style>
 
 <template>
@@ -50,7 +53,7 @@
       </navigator>
     </view>
 		<view class="weui-cells__title">
-			缘份榜
+			群缘份
 		</view>
 		<view class="weui-cells weui-cells_after-title">
 			<repeat for="{{groups}}" key="index" index="index" item="group">
@@ -95,7 +98,7 @@ import { loveSpaceId } from '../../config/index.js';
 
 export default class LoveHome extends wepy.page {
 	config = {
-		navigationBarTitleText: '无颜',
+		navigationBarTitleText: '缘份榜',
 	}
 
 	data = {
