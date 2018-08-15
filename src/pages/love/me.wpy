@@ -55,38 +55,43 @@
 <template>
   <view class="page questionnaire-list" wx:if="{{is_loaded}}">
     <view class="weui-cells">
-      <block wx:if="{{isAuthUserInfo}}">
-        <view class="weui-media-box weui-media-box_appmsg">
-          <view class="weui-media-box__hd weui-media-box__hd_in-appmsg" style="width: 50px; height: 50px; line-height: 50px;" @tap="clickAvatar">
-            <image class="image" mode="aspectFill" wx:if="{{isAuthUserInfo}}" src="{{avatar}}"></image>
-          </view>
-          <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
-            <view class="weui-media-box__title">
-              {{name}}
+      <navigator url="/pages/love/share?card=true&space_id={{space_id}}">
+        <block wx:if="{{isAuthUserInfo}}">
+          <view class="weui-media-box weui-media-box_appmsg">
+            <view class="weui-media-box__hd weui-media-box__hd_in-appmsg" style="width: 50px; height: 50px; line-height: 50px;">
+              <image class="image" mode="aspectFill" wx:if="{{isAuthUserInfo}}" src="{{avatar}}"></image>
             </view>
-            <view wx:if="{{is_member}}" class="weui-media-box__desc" style="margin-top: 6rpx;">
-              VIP会员
-            </view>
-          </view>
-        </view>
-      </block>
-      <block wx:else>
-        <button open-type="getUserInfo" bindgetuserinfo="userLogin" plain="true" class="user-active weui-media-box weui-media-box_appmsg">
-          <view class="weui-media-box__hd weui-media-box__hd_in-appmsg" style="width: 50px; height: 50px; line-height: 50px;">
-            <image class="image" mode="aspectFill" src="https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/avatar.png"></image>
-          </view>
-          <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
-            <view class="weui-media-box__title" style="line-height: 30px;">
-              {{name}}
-            </view>
-            <view wx:if="{{is_member}}" class="weui-media-box__desc" style="margin-top: 6rpx;">
-              VIP会员
+            <view class="weui-media-box__bd weui-media-box__bd_in-appmsg" style="display: flex;">
+              <view class="weui-media-box__title" style="flex: 1;">
+                {{name}}
+              </view>
+              <view wx:if="{{is_member}}" class="weui-media-box__desc" style="margin-top: 6rpx;">
+                VIP会员
+              </view>
+              <view class="weui-cell__ft weui-cell__ft_in-access">
+                <view class="vip_page_qrcode slds-icon slds-icon--small slds-m-right--x-small"></view>
+              </view>
             </view>
           </view>
-        </button>
-      </block>
+        </block>
+        <block wx:else>
+          <button open-type="getUserInfo" bindgetuserinfo="userLogin" plain="true" class="user-active weui-media-box weui-media-box_appmsg">
+            <view class="weui-media-box__hd weui-media-box__hd_in-appmsg" style="width: 50px; height: 50px; line-height: 50px;">
+              <image class="image" mode="aspectFill" src="https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/avatar.png"></image>
+            </view>
+            <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
+              <view class="weui-media-box__title" style="line-height: 30px;">
+                {{name}}
+              </view>
+              <view wx:if="{{is_member}}" class="weui-media-box__desc" style="margin-top: 6rpx;">
+                VIP会员
+              </view>
+            </view>
+          </button>
+        </block>
+      </navigator>
     </view>
-    <view class="weui-cells" wx:if="{{showFind}}">
+    <!-- <view class="weui-cells" wx:if="{{showFind}}">
       <navigator class="weui-cell weui-cell_access" url="find?space_id={{space_id}}">
         <view class="weui-cell__hd">
           <view class="slds-icon-standard-forecasts slds-icon slds-icon--small slds-m-right--x-small"/>
@@ -96,7 +101,7 @@
         </view>
         <view class="weui-cell__ft weui-cell__ft_in-access"></view>
       </navigator>
-    </view>
+    </view> -->
     <view class="weui-cells">
       <repeat for="{{questionnaire}}" key="index" index="index" item="naire">
         <navigator class="weui-cell weui-cell_access" url="{{naire.url}}">
@@ -129,27 +134,33 @@
         </navigator>
       </repeat>
     </view>
-    <!--<view class="weui-cells">-->
-      <!--&lt;!&ndash;<navigator class="weui-cell weui-cell_access" url="test?space_id={{space_id}}">&ndash;&gt;-->
-        <!--&lt;!&ndash;<view class="weui-cell__hd">&ndash;&gt;-->
-          <!--&lt;!&ndash;<view class="slds-icon-standard-link slds-icon slds-icon&#45;&#45;small slds-m-right&#45;&#45;x-small"/>&ndash;&gt;-->
-        <!--&lt;!&ndash;</view>&ndash;&gt;-->
-        <!--&lt;!&ndash;<view class="weui-cell__bd">&ndash;&gt;-->
-          <!--&lt;!&ndash;<view>测试好友缘分</view>&ndash;&gt;-->
-        <!--&lt;!&ndash;</view>&ndash;&gt;-->
-        <!--&lt;!&ndash;<view class="weui-cell__ft weui-cell__ft_in-access"></view>&ndash;&gt;-->
-      <!--&lt;!&ndash;</navigator>&ndash;&gt;-->
-      <!--<navigator class="weui-cell weui-cell_access" url="share?space_id={{space_id}}">-->
-        <!--<view class="weui-cell__hd">-->
-          <!--<view class="slds-icon-standard-announcement slds-icon slds-icon&#45;&#45;small slds-m-right&#45;&#45;x-small"/>-->
-        <!--</view>-->
-        <!--<view class="weui-cell__bd">-->
-          <!--<view>拯救单身狗</view>-->
-        <!--</view>-->
-        <!--<view class="weui-cell__ft weui-cell__ft_in-access"></view>-->
-      <!--</navigator>-->
-    <!--</view>-->
-
+    <view class="weui-cells">
+      <repeat for="{{primacy_card}}" key="index" index="index" item="other_naire">
+        <navigator class="weui-cell weui-cell_access" url="{{other_naire.url}}&filter=(owner eq '{{userId}}')">
+          <view class="weui-cell__hd">
+            <view class="{{other_naire.icon}} slds-icon slds-icon--small slds-m-right--x-small"/>
+          </view>
+          <view class="weui-cell__bd">
+            <view>{{other_naire.label}}</view>
+          </view>
+          <view wx:if="{{progress[other_naire.object_name]}}" class="weui-cell__ft" style="padding-right: 13px">
+            <icon type="success_no_circle" size="14"></icon>
+          </view>
+          <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+        </navigator>
+      </repeat>
+    </view>
+   <view class="weui-cells">
+      <navigator class="weui-cell weui-cell_access" url="/pages/space/index?space_id={{space_id}}">
+        <view class="weui-cell__hd">
+          <view class="slds-icon-custom-custom1 slds-icon slds-icon--small slds-m-right--x-small"/>
+        </view>
+        <view class="weui-cell__bd">
+          <view>关于无颜</view>
+        </view>
+        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+      </navigator>
+    </view>
   </view>
 </template>
 
@@ -160,7 +171,7 @@ import req from '@/network';
 
 export default class QuestionnaireList extends wepy.page {
   config = {
-    navigationBarTitleText: '我',
+    navigationBarTitleText: '设置',
     enablePullDownRefresh: false
   };
 
@@ -193,49 +204,57 @@ export default class QuestionnaireList extends wepy.page {
       {
         icon: 'slds-icon-standard-client',
         label: '关于我',
-        url: `/pages/love/question_list?object_name=love_about_me&space_id=${loveSpaceId}&required=true`,
+        url: `/pages/love/papers_view?object_name=love_about_me&space_id=${loveSpaceId}&required=true`,
         object_name: 'love_about_me'
       },
       {
         icon: 'slds-icon-standard-campaign',
         label: '筛选条件',
-        url: `/pages/love/question_list?object_name=love_looking_for&space_id=${loveSpaceId}`,
+        url: `/pages/love/papers_view?object_name=love_looking_for&space_id=${loveSpaceId}`,
         object_name: 'love_looking_for'
       },
     ],
     other_questionnaire: [
       {
         icon: 'slds-icon-standard-social',
-        label: '问答匹配 (玫瑰卷)',
-        url: `/pages/love/question_list?object_name=love_answer&space_id=${loveSpaceId}`,
+        label: '问答匹配',
+        url: `/pages/love/papers_view?object_name=love_answer&space_id=${loveSpaceId}`,
         object_name: 'love_answer'
-      },
-      {
-        // icon: "slds-icon-standard-bot",
-        icon: 'slds-icon-standard-feed',
-        label: '问答匹配 (蔷薇卷)',
-        url: `/pages/love/question_list?object_name=love_answer2&space_id=${loveSpaceId}`,
-        object_name: 'love_answer2'
-      },
-      {
-        icon: 'slds-icon-standard-canvas',
-        label: '兴趣爱好匹配',
-        object_name: 'love_hobby',
-        url: `/pages/love/question_list?object_name=love_hobby&space_id=${loveSpaceId}`
-      },
-      {
-        icon: 'slds-icon-standard-reward',
-        label: '校友匹配',
-        object_name: 'love_educational_experience',
-        url: `../record/list?space_id=${loveSpaceId}&object_name=love_educational_experience`
-      },
-//      {
-//        icon: 'slds-icon-standard-poll',
-//        label: '工作经历匹配',
-//        object_name: 'love_work_experience',
-//        url: `../record/list?space_id=${loveSpaceId}&object_name=love_work_experience`
-//      }
+      }
     ],
+      // {
+      //   // icon: "slds-icon-standard-bot",
+      //   icon: 'slds-icon-standard-feed',
+      //   label: '问答匹配 (蔷薇卷)',
+      //   url: `/pages/love/papers_view?object_name=love_answer2&space_id=${loveSpaceId}`,
+      //   object_name: 'love_answer2'
+      // }
+      // ],
+      // hobby_educations:[
+      //   {
+      //   icon: 'slds-icon-standard-canvas',
+      //   label: '兴趣爱好匹配',
+      //   object_name: 'love_hobby',
+      //   url: `/pages/love/papers_view?object_name=love_hobby&space_id=${loveSpaceId}`
+      // },
+      // {
+      //   icon: 'slds-icon-standard-reward',
+      //   label: '校友匹配',
+      //   object_name: 'love_educational_experience',
+      //   url: `../record/list?space_id=${loveSpaceId}&object_name=love_educational_experience`
+      // },
+      // ],
+      primacy_card: [
+        {
+          icon: 'slds-icon-standard-poll',
+          label: '隐私保护',
+          url: `/pages/love/privacy_protection?space_id=${loveSpaceId}`
+        },
+        // {
+        //   icon: 'slds-icon-standard-poll',
+        //   label: '交友名片',
+        // }
+      ],
     progress: {}
   };
 
