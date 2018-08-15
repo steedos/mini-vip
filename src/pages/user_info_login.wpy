@@ -122,6 +122,8 @@ export default class UserInfoLogin extends wepy.page {
         this.isAuthUserInfo = true;
         this.nickName = name;
         this.userAvatarUrl = avatar;
+        this.$parent.globalData.user.name = name;
+        this.$parent.globalData.user.avatar = avatar;
         this.showTopTips = false;
         this.message = '';
         req.put(url, { name: name, sex: sex, avatar: avatar });
