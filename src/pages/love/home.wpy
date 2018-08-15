@@ -74,14 +74,7 @@ page {
 			</navigator>
 		</view>
 
-		<view class="weui-cells">
-			<navigator class="weui-cell weui-cell_access" url="/pages/love/shake" hover-class="weui-cell_active">
-				<view class="weui-cell__bd">
-					每周有缘人
-				</view>
-				<view class="weui-cell__ft weui-cell__ft_in-access"></view>
-			</navigator>
-		</view>
+
 
 	</view>
 </view>
