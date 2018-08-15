@@ -5,7 +5,6 @@
       padding-top:20px;
       padding-left:20px;
       padding-right:45px;
-
       .page__title{
         max-height:80px;
         overflow:hidden;
@@ -14,12 +13,39 @@
         color:#2A2F35;
       }
   }
-  .btn-container {
-    width: 100%;
-
-    .submit-btn {
+  .weui-cell__hd {
+    height: 1.5rem;
+    .ion {
+      text-align: center;
+      line-height: 1.5rem;
+      border-radius: 0.25rem;
       color: #fff;
-      margin: 0 15px;
+      background: #fcb95b;
+    }
+  }
+  .weui-cell__bd {
+    .nav-btn::after {
+      border-radius: 0;
+    }
+    .nav-btn {
+      border-radius: 0;
+      background-color: white;
+      text-align: left;
+      border: none;
+      margin: 0;
+      padding: 0;
+      padding-left: 14px;
+      height: 45px;
+      font-size: 17px;
+      .content {
+        .text {
+          float: left;
+        }
+        .weui-cell__ft_switch {
+          padding-bottom: 45px;
+          margin-right: 15px;
+        }
+      }
     }
   }
 }
@@ -28,20 +54,19 @@
 <template>
     <view class="page privacy-list">
         <view class="name">
-            <view class="page__title">以下信息对匹配对象可见</view>
+            <view class="page__title">设置以下信息对匹配对象可见</view>
         </view>
-        <view class="privacy-body">
-            <checkbox-group bindchange="checkboxChange">
-                <repeat for="{{privacy_list}}" key="index" index="index" item="privacy">
-                    <view class="privacy-box">
-                        <label class="privacy-label">{{privacy.label}}</label>
-                        <checkbox class="privacy-checkbox" value="{{privacy.value}}" checked="{{privacy.checked}}"/>
+        <view class="weui-cells">
+            <repeat for="{{privacy_list}}" key="index" index="index" item="privacy">
+                <view class="weui-cell weui-cell_access">
+                    <view class="weui-cell__bd">
+                        <view>{{privacy.label}}</view>
                     </view>
-                </repeat>
-            </checkbox-group>
-        </view>
-        <view class="btn-container">
-            <button class="weui-btn submit-btn" type="primary" @tap="savePrivacy">保存</button>
+                    <view class="weui-cell__ft weui-cell__ft_switch">
+                        <switch id="{{privacy.value}}" checked="{{privacy.checked}}" bindchange="switchChange"/>
+                    </view>
+                </view>
+            </repeat>
         </view>
     </view>
 </template>
@@ -106,8 +131,7 @@ export default class PrivacyProtection extends wepy.page {
     //     value: 'love_work_experience'
     //   }
     ],
-    select_privacy_list:[],
-    old_privacy_list:[]
+    select_privacy_list:[]
   }
 
   
@@ -150,13 +174,13 @@ export default class PrivacyProtection extends wepy.page {
         if(result && result.value && result.value.length>0){
             this.vip_customers_id = result.value[0]._id;
             if(result.value[0].privacy_protection){
-                this.old_privacy_list = result.value[0].privacy_protection;
+                this.select_privacy_list = result.value[0].privacy_protection;
             }
         }
     }
     async checkedList() {
         this.privacy_list.forEach((privacy,index)=>{
-            const num = this.old_privacy_list.indexOf(privacy.value);
+            const num = this.select_privacy_list.indexOf(privacy.value);
             console.log("privacy=======index",index,privacy);
             if(num>-1){
                 this.privacy_list[index].checked = true
@@ -164,7 +188,6 @@ export default class PrivacyProtection extends wepy.page {
         });
     }
   methods = {
-    
     async savePrivacy() {
       console.log("this.select_privacy_list",this.select_privacy_list);
       // 保存到 vip_customers 的 privacy_protection 字段
@@ -173,9 +196,25 @@ export default class PrivacyProtection extends wepy.page {
       };
       await this.$parent.update("vip_customers", this.vip_customers_id, data, this.space_id);
     },
-    async checkboxChange(e) {
-        console.log('checkbox发生change事件，携带value值为：', e.detail.value)
-        this.select_privacy_list = e.detail.value
+    async switchChange(e){
+      console.log('switch 发生 change 事件，携带值为', e.currentTarget.id, e.detail.value);
+      var privacy = e.currentTarget.id
+      var select_privacy_list = this.select_privacy_list
+      if(e.detail.value==true){
+          if(select_privacy_list.indexOf(privacy)<0){
+            select_privacy_list.push(privacy);
+          }
+      }else{
+          var index = select_privacy_list.indexOf(privacy)
+          if(index>-1){
+            select_privacy_list.splice(index, 1);
+          }
+      }
+      console.log("====select_privacy_list====",select_privacy_list);
+      let data = {
+          privacy_protection: select_privacy_list
+      };
+      await this.$parent.update("vip_customers", this.vip_customers_id, data, this.space_id);
     }
   }
 }
