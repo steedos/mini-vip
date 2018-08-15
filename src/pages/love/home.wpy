@@ -9,14 +9,14 @@
 		</view>
 		<view class="weui-cells weui-cells_after-title">
 			<repeat for="{{groups}}" key="index" index="index" item="group">
-				<navigator class="weui-cell weui-cell_access" url="/pages/love/matching?space_id={{space_id}}" hover-class="weui-cell_active">
+				<navigator class="weui-cell weui-cell_access" url="/pages/love/matching?space_id={{space_id}}&filter=(owner eq '{{user_id}}' and open_group_id eq '{{group.open_group_id}}')" hover-class="weui-cell_active">
 					<view class="weui-cell__bd" style="height: 24px">
 						<open-data class="group-name" type="groupName" open-gid="{{group.open_group_id}}"></open-data>
 					</view>
 					<view class="weui-cell__ft weui-cell__ft_in-access"></view>
 				</navigator>
 			</repeat>
-			<navigator class="weui-cell weui-cell_access" url="/pages/love/matching?space_id={{space_id}}" hover-class="weui-cell_active">
+			<navigator class="weui-cell weui-cell_access" url="/pages/love/matching?space_id={{space_id}}&filter=(owner eq '{{user_id}}' and open_group_id eq null)" hover-class="weui-cell_active">
 				<view class="weui-cell__bd">
 					好友榜
 				</view>

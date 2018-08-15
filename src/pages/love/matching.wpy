@@ -206,7 +206,11 @@ export default class Matching extends wepy.page {
     pageSize: 25
   }
 
-  async onLoad() {
+  async onLoad(e) {
+    if (e.filter) {
+      this.filter = e.filter;
+      this.$apply();
+    }
     this.space_id = loveSpaceId;
     wepy.showShareMenu({
       withShareTicket: true
