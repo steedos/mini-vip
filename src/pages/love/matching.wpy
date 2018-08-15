@@ -99,37 +99,9 @@
 <template>
   <view class="page friend-list" wx:if="{{is_loaded}}">
     <view class="page__bd" style="margin-bottom: 60rpx">
-      <view class="weui-cells" wx:if="{{record_list.length}}">
-        <block wx:if="{{isAuthUserInfo}}">
-          <view class="weui-media-box weui-media-box_appmsg" @tap="goIntroduce">
-            <view class="weui-media-box__hd weui-media-box__hd_in-appmsg" style="width: 50px; height: 50px; line-height: 50px;">
-              <image class="image" mode="aspectFill" wx:if="{{isAuthUserInfo}}" src="{{avatar}}"></image>
-            </view>
-            <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
-              <view class="weui-media-box__title">
-                {{name}}
-              </view>
-            </view>
-            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-          </view>
-        </block>
-        <block wx:else>
-          <button open-type="getUserInfo" bindgetuserinfo="userLogin" plain="true" class="user-active weui-media-box weui-media-box_appmsg">
-            <view class="weui-media-box__hd weui-media-box__hd_in-appmsg" style="width: 50px; height: 50px; line-height: 50px;">
-              <image class="image" mode="aspectFill" src="https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/avatar.png"></image>
-            </view>
-            <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
-              <view class="weui-media-box__title" style="line-height: 30px;">
-                {{name}}
-              </view>
-            </view>
-            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-          </button>
-        </block>
-      </view>
       <block wx:if="{{record_list.length}}">
         <!-- <view class="slds-icon-action-filter slds-icon slds-icon--small slds-m-right--x-small" @tap="goFilter"/> -->
-        <view class="weui-cells">
+        <view class="weui-cells weui-cells_after-title">
           <repeat for="{{record_list}}" key="index" index="index" item="record">
             <block wx:if="{{record.user_b.name}}">
               <navigator class="record-container weui-cell weui-cell_access"  data-item-id="{{record._id}}" hover-class="weui-cell_active">
