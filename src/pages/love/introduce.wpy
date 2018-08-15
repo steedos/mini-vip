@@ -295,7 +295,7 @@ export default class loveIntroduce extends wepy.page {
     this.current_customer = current_customer;
 
     const options = {
-      $filter: `owner eq ${user._id}`
+      $filter: `(owner eq '${user._id}')`
     }
 
     const about_me = await this.$parent.query('love_about_me', options, loveSpaceId);
