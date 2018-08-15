@@ -8,12 +8,12 @@ page {
   .ion-container {
     display: inline-block;
     position: absolute;
-    right: 15px;
-    top: 15px;
+    right: 30rpx;
+    top: 30rpx;
     z-index: 1000;
 
     .ion {
-      font-size: 30px;
+      font-size: 60rpx;
       color: #fff;
     }
 
@@ -25,12 +25,12 @@ page {
     &.is-open {
       .header{
         .cover-wrapper{
-          height: 210px;
+          height: 420rpx;
           &::after {
             content: '';
             position: absolute;
-            height: 80px;
-            bottom: -30px;
+            height: 160rpx;
+            bottom: -60rpx;
             left: 0;
             right: 0;
             background-image: linear-gradient(to bottom, transparent , #efeef3 50%);
@@ -51,7 +51,7 @@ page {
 
       .cover-wrapper{
         position: relative;
-        height: 210px;
+        height: 420rpx;
         background-size: cover;
       }
       .image{
@@ -76,49 +76,49 @@ page {
       .space-info {
         position: relative;
         text-align: center;
-        top: -50px;
+        top: -100rpx;
         width: auto;
         border: 1px solid transparent;
-        margin: 0 10px;
-        padding-bottom:10px;
+        margin: 0 20rpx;
+        padding-bottom: 20rpx;
         border-radius: 0.25rem;
         background: #fff;
         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
         z-index: 100;
 
         .wrapper {
-          top: -50px;
+          top: -100rpx;
 
           .avatar-container {
             background: #fff;
-            padding: 5px;
+            padding: 10rpx;
             border-radius: 0.25rem;
             display: inline-block;
             box-shadow: 0 2px 2px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08);
             position: absolute;
-            left: calc(~"50% - 40px");
-            top: -50px;
+            left: calc(~"50% - 110rpx");
+            top: -120rpx;
 
             .avatar {
               display: block;
-              width: 80px;
-              height: 80px;
+              width: 200rpx;
+              height: 200rpx;
             }
           }
 
           .name {
-            margin-top: 50px;
-            font-size: 20px;
+            margin-top: 110rpx;
+            font-size: 44rpx;
             font-weight: bold;
           }
 
           .introduction {
-            font-size: 16px;
+            font-size: 32rpx;
             font-weight: bold;
           }
 
           .zodiac-constellation, .height, .live {
-            font-size: 15px;
+            font-size: 30rpx;
             color: #777;
           }
 
@@ -126,14 +126,6 @@ page {
             margin-top: 0px;
             color: #898989;
             display: none;
-          }
-
-          .weui-btn {
-            display: inline-block;
-            border-color: #018cc6;
-            line-height: 31px;
-            height: 31px;
-            margin: 8px 4px 0;
           }
 
           .btn-star {
@@ -197,10 +189,12 @@ page {
               <image wx:else class="avatar" mode="aspectFill" src="{{baseMaterialUrl + 'avatar.png'}}" @tap.stop="uploadImage()"/>
             </view>
             <view class="name">{{name}}</view>
-            <view class="introduction">{{self_introduction}}</view>
-            <view class="zodiac-constellation">生肖{{zodiac}} {{constellation}}座</view>
-            <view class="height">{{height}}cm</view>
-            <view class="live">{{live}}</view>
+            <view wx:if="{{self_introduction}}" class="introduction">{{self_introduction}}</view>
+            <view wx:if="{{zodiac || constellation}}" class="zodiac-constellation">
+              {{zodiac}} {{constellation}}
+            </view>
+            <view wx:if="{{height}}" class="height">{{height}}cm</view>
+            <view wx:if="{{live}}" class="live">{{live}}</view>
           </view>
         </view>
       </view>
@@ -310,8 +304,8 @@ export default class loveIntroduce extends wepy.page {
       this.live = about_me.value[0].live;
       this.hometown = about_me.value[0].hometown;
       this.self_introduction = about_me.value[0].self_introduction;
-      this.zodiac = about_me.value[0].zodiac;
-      this.constellation = about_me.value[0].constellation;
+      this.zodiac = '生肖' + about_me.value[0].zodiac;
+      this.constellation = about_me.value[0].constellation + '座';
     }
 
     this.is_loaded = true;
@@ -395,7 +389,7 @@ export default class loveIntroduce extends wepy.page {
 
           let updateSuc = await this.$parent.update("vip_customers", this.current_customer._id, storageSet, this.space_id);
   
-          if(!updateSuc){
+          if (!updateSuc) {
             wx.showToast({
               title: "图片上传失败，请稍后再试",
               icon: "none"
@@ -406,6 +400,15 @@ export default class loveIntroduce extends wepy.page {
             else{
               this.avatar = tempSrc;
             }
+          } else {
+            let my_customers = this.$parent.globalData.my_customers;
+            my_customers = my_customers.map(c => {
+              if (c.space == loveSpaceId) {
+                c[storageKey] = fileId;
+              }
+              return c
+            })
+            this.$parent.globalData.my_customers = my_customers;
           }
           this.$apply();
           wepy.hideLoading();

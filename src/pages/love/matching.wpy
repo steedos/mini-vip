@@ -16,6 +16,17 @@
       color: #aaa;
     }
   }
+  .record-container {
+    padding-right: 0;
+    
+    .heart {
+      height: 80rpx;
+      margin: 0;
+      width:1.75rem;
+      border-right: 15px solid transparent;
+      border-left: 0.5rem solid transparent;
+    }
+  }
 }
 
 .image {
@@ -78,6 +89,11 @@
   color:#00396b;
   font-size:18px;
 }
+.user-active {
+  border: none !important;
+  text-align: left;
+  font-size: 17px;
+}
 </style>
 
 <template>
@@ -128,7 +144,7 @@
                 </view>
                 <view class="weui-cell__ft" wx:if="{{record.match == undefined}}" style="font-size: 36rpx">答题中</view>
                 <view class="weui-cell__ft record-match" wx:else style="font-size: 36rpx">{{util.fixed(record.match,2)}}%</view>
-                <view class="weui-cell__ft"><view class="vip_heart-{{record.heart ? 'light' : 'default'}} slds-icon slds-icon--small slds-m-left--x-small" @tap="markHeart({{record._id}},{{record.heart}})" /></view>
+                <view class="weui-cell__ft heart-container"><view class="heart vip_heart-{{record.heart ? 'light' : 'default'}} slds-icon slds-icon--small slds-m-left--x-small" @tap="markHeart({{record._id}},{{record.heart}})" /></view>
               </navigator>
             </block>
           </repeat>
@@ -335,6 +351,28 @@ export default class Matching extends wepy.page {
       wx.navigateTo({
         url: `/pages/love/introduce`
       })
+    },
+    userLogin(e) {
+      const userInfo = e.detail.userInfo;
+      if (userInfo) {
+        const name = userInfo.nickName;
+        const sex = userInfo.gender ? '男' : '女';
+        const avatar = userInfo.avatarUrl;
+
+        this.isAuthUserInfo = true;
+        this.avatar = avatar;
+        this.name = name;
+        this.sex = sex;
+        this.$parent.globalData.userInfo = userInfo;
+        this.$parent.globalData.user.name = name;
+        this.$parent.globalData.user.sex = sex;
+        this.$apply();
+
+        const url = '/mini/vip/user';
+        req.put(url, {name: name, sex: sex, avatar: avatar}).then((res) => {
+          pageRouter.navigateTo({ url: '/pages/me_profile' })
+        })
+      }
     }
   };
 }
