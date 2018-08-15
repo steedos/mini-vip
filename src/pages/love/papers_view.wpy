@@ -86,6 +86,10 @@
         args.question_name = e.question_name
       }
 
+      if(e && e.fields){
+        args.fields = e.fields.split(',')
+      }
+
       this.args = args;
       this.$apply()
     }
