@@ -1,0 +1,182 @@
+<style lang="less" scoped>
+.privacy-list {
+  padding-bottom: 20px !important;
+  .name{
+      padding-top:20px;
+      padding-left:20px;
+      padding-right:45px;
+
+      .page__title{
+        max-height:80px;
+        overflow:hidden;
+        line-height:26px;
+        font-size:20px;
+        color:#2A2F35;
+      }
+  }
+  .btn-container {
+    width: 100%;
+
+    .submit-btn {
+      color: #fff;
+      margin: 0 15px;
+    }
+  }
+}
+</style>
+
+<template>
+    <view class="page privacy-list">
+        <view class="name">
+            <view class="page__title">以下信息对匹配对象可见</view>
+        </view>
+        <view class="privacy-body">
+            <checkbox-group bindchange="checkboxChange">
+                <repeat for="{{privacy_list}}" key="index" index="index" item="privacy">
+                    <view class="privacy-box">
+                        <label class="privacy-label">{{privacy.label}}</label>
+                        <checkbox class="privacy-checkbox" value="{{privacy.value}}" checked="{{privacy.checked}}"/>
+                    </view>
+                </repeat>
+            </checkbox-group>
+        </view>
+        <view class="btn-container">
+            <button class="weui-btn submit-btn" type="primary" @tap="savePrivacy">保存</button>
+        </view>
+    </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import { loveSpaceId } from '../../config/index.js';
+import req from '@/network';
+
+export default class PrivacyProtection extends wepy.page {
+  config = {
+    navigationBarTitleText: '隐私保护',
+    enablePullDownRefresh: false
+  };
+  
+  data = {
+    space_id: null,
+    vip_customers_id: null,    
+    privacy_list:[
+      {
+        label: '姓名',
+        value: 'name',
+        checked: false
+      },
+      {
+        label: '身高',
+        value: 'height',
+        checked: false
+      },
+      {
+        label: '年龄',
+        value: 'age',
+        checked: false
+      },
+      {
+        label: '现居地',
+        value: 'live',
+        checked: false
+      },
+      {
+        label: '家乡',
+        value: 'hometown',
+        checked: false
+      },
+      {
+        label: '照片',
+        value: 'photos',
+        checked: false
+      },
+      {
+        label: '兴趣爱好',
+        value: 'love_hobby',
+        checked: false
+      },
+      {
+        label: '教育经历',
+        value: 'love_educational_experience',
+        checked: false
+      },
+    //   {
+    //     label: '工作经历',
+    //     value: 'love_work_experience'
+    //   }
+    ],
+    select_privacy_list:[],
+    old_privacy_list:[]
+  }
+
+  
+
+  async onLoad(e) {
+    wx.showLoading({ mask: true });
+    if (!e.space_id) {
+        // 保证一进入就新建space对应的vip_customers记录
+        e.space_id = loveSpaceId;
+    }
+    this.space_id = e.space_id;
+    console.log('this.space_id============', this.space_id);
+
+    await this.$parent.login(e);
+
+    if (!this.space_id) {
+      wx.showToast({
+        title: '未配置工作区ID',
+        icon: 'none'
+      });
+    }
+
+    await this.loadUserPrivacy();
+    await this.checkedList();
+
+    this.is_loaded = true;
+    this.$apply();
+    wx.hideLoading();
+  }
+  async loadUserPrivacy() {
+        const options = {
+        $select: 'privacy_protection',
+        $filter: `(owner eq '${this.$parent.globalData.user._id}')`
+        }
+        
+        const result = await this.$parent.query('vip_customers', options, this.space_id);
+        
+        console.log("============result==========",result)
+
+        if(result && result.value && result.value.length>0){
+            this.vip_customers_id = result.value[0]._id;
+            if(result.value[0].privacy_protection){
+                this.old_privacy_list = result.value[0].privacy_protection;
+            }
+        }
+    }
+    async checkedList() {
+        this.privacy_list.forEach((privacy,index)=>{
+            const num = this.old_privacy_list.indexOf(privacy.value);
+            console.log("privacy=======index",index,privacy);
+            if(num>-1){
+                this.privacy_list[index].checked = true
+            }
+        });
+    }
+  methods = {
+    
+    async savePrivacy() {
+      console.log("this.select_privacy_list",this.select_privacy_list);
+      // 保存到 vip_customers 的 privacy_protection 字段
+      let data = {
+          privacy_protection: this.select_privacy_list
+      };
+      await this.$parent.update("vip_customers", this.vip_customers_id, data, this.space_id);
+    },
+    async checkboxChange(e) {
+        console.log('checkbox发生change事件，携带value值为：', e.detail.value)
+        this.select_privacy_list = e.detail.value
+    }
+  }
+}
+</script>
