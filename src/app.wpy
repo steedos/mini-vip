@@ -256,6 +256,7 @@ export default class VIP extends wepy.app {
       'pages/love/find',
       'pages/love/test',
       'pages/love/matching',
+      'pages/love/matching_filter',
       'pages/love/matching_result',
       'pages/love/papers_view',
       'pages/love/papers_summary',

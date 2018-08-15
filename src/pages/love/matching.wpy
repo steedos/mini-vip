@@ -94,6 +94,18 @@
   text-align: left;
   font-size: 17px;
 }
+.btn-filter{
+  width: 100rpx;
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  border-radius: 0px;
+  height:100rpx;
+  z-index: 100;
+  .slds-icon {
+    background-color:transparent;
+  }
+}
 </style>
 
 <template>
@@ -128,7 +140,6 @@
         </block>
       </view>
       <block wx:if="{{record_list.length}}">
-        <!-- <view class="slds-icon-action-filter slds-icon slds-icon--small slds-m-right--x-small" @tap="goFilter"/> -->
         <view class="weui-cells">
           <repeat for="{{record_list}}" key="index" index="index" item="record">
             <block wx:if="{{record.user_b.name}}">
@@ -162,6 +173,9 @@
       </block>
     </view>
     <view class="tab-bar border-top-1px">
+      <view  class="btn-filter" @tap.stop="goFilter">
+        <view class="slds-icon-action-filter slds-icon slds-icon--small slds-m-right--x-small"></view>
+      </view>
       <button open-type="share" class="btn-toolbar-primary" type="default" plain="true">
         邀请好友打榜
       </button>
@@ -333,7 +347,7 @@ export default class Matching extends wepy.page {
     },
     async goFilter(event) {
       wx.navigateTo({
-        url: `/pages/love/question_list?object_name=love_looking_for&space_id=${this.space_id}`
+        url: `/pages/love/matching_filter`
       })
     },
     async markHeart(_id, heart, event) {
