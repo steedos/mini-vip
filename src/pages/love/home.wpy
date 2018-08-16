@@ -80,9 +80,11 @@
 </style>
 
 <template>
-<view class="cover-page" wx:if="{{is_loaded}}">
-	<view class="page__hd">
-		  <view class='love-avatar'>
+<view>
+	<view class="cover-page-bg"></view>
+	<view class="cover-page" wx:if="{{is_loaded}}">
+		<view class="page__hd">
+			<view class='love-avatar'>
 				<block wx:if="{{isAuthUserInfo}}">
 					<view class="" style="">
 						<image class="image" mode="aspectFill" wx:if="{{isAuthUserInfo}}" src="{{avatar}}"></image>
@@ -95,24 +97,44 @@
 						</view>
 					</button>
 				</block>
-		  </view>
-		  
-	</view>
+			</view>
+		</view>
+		<view class="page__bd">
+		
+			<repeat for="{{groups}}" key="index" index="index" item="group">
+				<navigator class="group" url="/pages/love/matching?space_id={{space_id}}&open_group_id={{group.open_group_id}}">
+					<view class="header">
+						<view class="group-name">
+							<open-data class="group-name" type="groupName" open-gid="{{group.open_group_id}}"></open-data>
+						</view>
+						<view class="weui-cell__ft weui-cell__ft_in-access"></view>
+					</view>
+					<view class="body">
+						<view class="count">{{group_friends[group.open_group_id].length}}人</view>
+						<view class="join-avatar">
+							<repeat for="{{group_friends[group.open_group_id]}}" key="index" index="index" item="friend">
+								<block wx:if="{{friend.user_b.name}}">
+									<view class="avatar-container">
+										<image class="image" mode="aspectFill" src="{{friend.user_b.profile.avatar}}"></image>
+									</view>
+								</block>
+							</repeat>
+						</view>
+					</view>
+				</navigator>
+			</repeat>
 
-	<view class="page__bd">
-	
-		<repeat for="{{groups}}" key="index" index="index" item="group">
-			<navigator class="group" url="/pages/love/matching?space_id={{space_id}}&open_group_id={{group.open_group_id}}">
+			<navigator class="group" url="/pages/love/matching?space_id={{space_id}}">
 				<view class="header">
 					<view class="group-name">
-						<open-data class="group-name" type="groupName" open-gid="{{group.open_group_id}}"></open-data>
+						<view class="group-name">好友</view>
 					</view>
 					<view class="weui-cell__ft weui-cell__ft_in-access"></view>
 				</view>
 				<view class="body">
-					<view class="count">{{group_friends[group.open_group_id].length}}人</view>
+					<view class="count">{{friendList.length}}人</view>
 					<view class="join-avatar">
-						<repeat for="{{group_friends[group.open_group_id]}}" key="index" index="index" item="friend">
+						<repeat for="{{friendList}}" key="index" index="index" item="friend">
 							<block wx:if="{{friend.user_b.name}}">
 								<view class="avatar-container">
 									<image class="image" mode="aspectFill" src="{{friend.user_b.profile.avatar}}"></image>
@@ -122,40 +144,19 @@
 					</view>
 				</view>
 			</navigator>
-		</repeat>
 
-		<navigator class="group" url="/pages/love/matching?space_id={{space_id}}">
-			<view class="header">
-				<view class="group-name">
-					<view class="group-name">好友</view>
-				</view>
-				<view class="weui-cell__ft weui-cell__ft_in-access"></view>
+			<!--
+			<view class="weui-cells">
+				<navigator class="weui-cell weui-cell_access" url="/pages/love/shake" hover-class="weui-cell_active">
+					<view class="weui-cell__bd">
+						每周有缘人
+					</view>
+					<view class="weui-cell__ft weui-cell__ft_in-access"></view>
+				</navigator>
 			</view>
-			<view class="body">
-				<view class="count">{{friendList.length}}人</view>
-				<view class="join-avatar">
-					<repeat for="{{friendList}}" key="index" index="index" item="friend">
-						<block wx:if="{{friend.user_b.name}}">
-							<view class="avatar-container">
-								<image class="image" mode="aspectFill" src="{{friend.user_b.profile.avatar}}"></image>
-							</view>
-						</block>
-					</repeat>
-				</view>
-			</view>
-		</navigator>
+			-->
 
-		<!--
-		<view class="weui-cells">
-			<navigator class="weui-cell weui-cell_access" url="/pages/love/shake" hover-class="weui-cell_active">
-				<view class="weui-cell__bd">
-					每周有缘人
-				</view>
-				<view class="weui-cell__ft weui-cell__ft_in-access"></view>
-			</navigator>
 		</view>
-		-->
-
 	</view>
 </view>
 </template>

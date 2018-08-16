@@ -107,14 +107,25 @@ page {
   }
 }
 
+.cover-page-bg {
+  position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background-image:url('https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/bg-celebrate-valentines.jpg');
+	background-position: bottom center;
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-color: #fdfdfd;
+	z-index: 1;
+}
+
 
 .cover-page {
-  background-image:url('https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/bg-celebrate-valentines.jpg');
-  background-position: bottom center;
-  background-repeat: no-repeat;
-  background-size: contain;
-  background-color: #fdfdfd;
-  min-height:100vh;
+  background: transparent;
+  position: relative;
+  z-index: 10;
 
   .page__hd{
     padding:20rpx 40rpx;
