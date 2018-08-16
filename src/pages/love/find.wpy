@@ -125,7 +125,7 @@ export default class InviteIndex extends wepy.page {
 			}
 			if (finishedNaire && finishedNaire.constructor === Array && finishedNaire.length > 0) {
 				if (finishedNaire.length == 1 && finishedNaire.includes('love_about_me')) {
-					self.load_page = 'cover_you_looking_for';
+					self.load_page = 'home';
 				} else if (finishedNaire.length == 2 && finishedNaire.includes('love_about_me') && finishedNaire.includes('love_looking_for')) {
 					self.load_page = 'cover_answer_questions';
 				} else if (finishedNaire.length == 3 && finishedNaire.includes('love_about_me') && finishedNaire.includes('love_looking_for') && finishedNaire.includes('love_answer')) {

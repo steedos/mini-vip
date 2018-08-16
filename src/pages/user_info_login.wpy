@@ -146,7 +146,7 @@ export default class UserInfoLogin extends wepy.page {
         if (!this.share) {
           const next = decodeURIComponent(this.next);
           wx.redirectTo({
-            url: `${next}&answered_url_type=redirectTo&answered_url=${encodeURIComponent(`/pages/love/matching?space_id=${this.space_id}`)}`
+            url: `${next}&answered_url_type=redirectTo&answered_url=${encodeURIComponent(`/pages/love/cover_you_looking_for?space_id=${this.space_id}`)}`
           })
         } else {
           wx.redirectTo({
