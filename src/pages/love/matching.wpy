@@ -212,6 +212,12 @@ export default class Matching extends wepy.page {
   }
 
   async beforeOnLoad(e) {
+    if(this.$parent.globalData.shareTicket){
+      let finishedNaire = wx.getStorageSync('questionnaire_progess');
+			if (finishedNaire.length > 0) {
+				wx.switchTab({url: '/pages/love/home'});
+			}
+    }
     console.log("beforeOnLoad=================", e);
     wx.showLoading({mask: true});
     e.space_id = loveSpaceId;
@@ -247,7 +253,7 @@ export default class Matching extends wepy.page {
 
   async onShow() {
     const finishedNaire = wx.getStorageSync('questionnaire_progess');
-    if(finishedNaire.indexOf('love_test')>-1) {
+    if (finishedNaire.length > 0) {
       this.answered = true
     }
     this.$apply();
