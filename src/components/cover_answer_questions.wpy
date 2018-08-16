@@ -21,7 +21,7 @@
 
 <script>
 import wepy from 'wepy';
-
+import { loveSpaceId } from '@/config';
 export default class ComponentQuestions extends wepy.component {
 
   props = {
@@ -38,9 +38,9 @@ export default class ComponentQuestions extends wepy.component {
       //   url: `/pages/love/papers_view?object_name=love_answer&space_id=${this.spaceId}&answered_url=${answeredUrl}&answered_url_type=switchTab`
       // });
 
-      const answeredUrl = encodeURIComponent(`/pages/love/cover_you_looking_for?space_id=${this.spaceId}`);
+      const answeredUrl = encodeURIComponent(`/pages/love/cover_you_looking_for?space_id=${loveSpaceId}`);
       wx.navigateTo({
-        url: `/pages/love/papers_view?object_name=love_test&space_id=${this.spaceId}&answered_url=${answeredUrl}&answered_url_type=reLaunch&keep_progress`
+        url: `/pages/love/papers_view?object_name=love_test&space_id=${loveSpaceId}&answered_url=${answeredUrl}&answered_url_type=reLaunch&keep_progress`
       });
     }
   };
