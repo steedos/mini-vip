@@ -375,7 +375,7 @@
             <view class="title">实付:</view>
             <view class="price">￥{{goodsTotalPrice}}</view>
           </view>
-          <view class="info">
+          <view class="info" wx:if="{{order.paid_time}}">
             <view class="title">支付时间:</view>
             <view class="res">{{util.formatDate(order.paid_time, '-')}}</view>
           </view>
