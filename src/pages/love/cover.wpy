@@ -2,16 +2,19 @@
 </style>
 
 <template>
-  <view class="page cover-page">
-    <view class="page__hd">
-      <view class="love-title">{{options[object_name].title}}</view>
-    </view>
-    <view class="page__bd">
-      <view class="love-summary">{{options[object_name].summary}}</view>
-      <view class="love-attention">{{options[object_name].attention}}</view>
-      <button class="btn-join" @tap="next">下一步</button>
-    </view>
   </view>
+    <view class="cover-page-bg"></view>
+    <view class="page cover-page">
+      <view class="page__hd">
+        <view class="love-title">{{options[object_name].title}}</view>
+      </view>
+      <view class="page__bd">
+        <view class="love-summary">{{options[object_name].summary}}</view>
+        <view class="love-attention">{{options[object_name].attention}}</view>
+        <button class="btn-join" @tap="next">下一步</button>
+      </view>
+    </view>
+  <view>
 </template>
 
 <script>

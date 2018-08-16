@@ -2,18 +2,21 @@
 </style>
 
 <template>
-  <view class="page cover-page">
-    <view class="page__hd">
-      <view class="love-title">只遇见对的人</view>
-    </view>
-    <view class="page__bd">
-      <view class="love-summary">
-        请填写你的筛选条件，
-        “无颜”只会为你选择符合要求的人。
-        </view>
-      <view  class="love-attention">你的筛选条件，其他人都不会看到。</view>
+  <view>
+    <view class="cover-page-bg"></view>
+    <view class="page cover-page">
+      <view class="page__hd">
+        <view class="love-title">只遇见对的人</view>
+      </view>
+      <view class="page__bd">
+        <view class="love-summary">
+          请填写你的筛选条件，
+          “无颜”只会为你选择符合要求的人。
+          </view>
+        <view  class="love-attention">你的筛选条件，其他人都不会看到。</view>
 
-      <button class="btn-join" @tap="next">下一步</button>
+        <button class="btn-join" @tap="next">下一步</button>
+      </view>
     </view>
   </view>
 </template>

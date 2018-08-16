@@ -41,7 +41,9 @@
 </style>
 
 <template>
-  <view class="page cover-page" wx:if="{{is_loaded}}">
+<view wx:if="{{is_loaded}}">
+  <view class="cover-page-bg"></view>
+  <view class="page cover-page">
     <view class="page__hd">
       <view class="love-title">我们是天生一对吗？</view>
     </view>
@@ -77,6 +79,7 @@
       <view class="love-licence"></view>
     </view> -->
   </view>
+</view>
 </template>
 
 <script>

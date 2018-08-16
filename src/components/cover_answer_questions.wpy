@@ -2,16 +2,19 @@
 </style>
 
 <template>
-  <view class="page cover-page">
-    <view class="page__hd">
-      <view class="love-title">问卷匹配</view>
-    </view>
-    <view class="page__bd">
-      <view class="love-summary">
-        回答下面的问卷，我们的人工智能算法将根据你的答案，计算匹配度。
+  <view>
+    <view class="cover-page-bg"></view>
+    <view class="page cover-page">
+      <view class="page__hd">
+        <view class="love-title">问卷匹配</view>
       </view>
-      <view  class="love-attention">你回答的越认真，“无颜”匹配的越精准。</view>
-      <button class="btn-join" @tap="next">开始答题</button>
+      <view class="page__bd">
+        <view class="love-summary">
+          回答下面的问卷，我们的人工智能算法将根据你的答案，计算匹配度。
+        </view>
+        <view  class="love-attention">你回答的越认真，“无颜”匹配的越精准。</view>
+        <button class="btn-join" @tap="next">开始答题</button>
+      </view>
     </view>
   </view>
 </template>
