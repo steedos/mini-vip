@@ -39,28 +39,17 @@
   <view wx:if="{{is_loaded}}">
 		<view class="cover-page-bg"></view>
 		<view class="page cover-page">
-			<block wx:if="{{load_page == 'love_disabled'}}">
-				<view class="page">
-					<view class="page__hd">
-						<view class="love-title">我不想看你美丽的照片</view>
-					</view>
-					<view class="page__bd">
-						<view class="love-summary">我想看到你的真心</view>
-						<button class="btn-join" @tap="goTest">测试好友缘分</button>
-						<button wx:if="{{showLoveBtn}}" class="btn-index btn-love" @tap="goLove">寻找有缘人</button>
-						<view class="love-licence"></view>
-					</view>
+			<view class="page">
+				<view class="page__hd">
+					<view class="love-title">我不想看你美丽的照片</view>
 				</view>
-			</block>
-			<block wx:elif="{{load_page == 'cover_about_yourself'}}">
-				<ComponentCoverYourself :spaceId.sync="space_id" />
-			</block>
-			<block wx:elif="{{load_page == 'cover_you_looking_for'}}">
-				<ComponentLookingFor :spaceId.sync="space_id" />
-			</block>
-			<block wx:elif="{{load_page == 'cover_answer_questions'}}">
-				<ComponentQuestions :spaceId.sync="space_id" />
-			</block>
+				<view class="page__bd">
+					<view class="love-summary">我想看到你的真心</view>
+					<button class="btn-join" @tap="goTest">测试好友缘分</button>
+					<button wx:if="{{showLoveBtn}}" class="btn-index btn-love" @tap="goLove">寻找有缘人</button>
+					<view class="love-licence"></view>
+				</view>
+			</view>
 		</view>
   </view>
 </template>
@@ -127,73 +116,11 @@ export default class LoveIndex extends wepy.page {
       return;
 		}
 
-		let index = 0;
-		let spaceId = this.space_id;
-		let my_customers = this.$parent.globalData.my_customers;
-		let current_customer = my_customers.find((customer, i) => {
-			if (customer.space == spaceId) {
-				index = i;
-				return customer
-			}
-		});
-
-		console.log('[current_customer]', current_customer)
-
-		if (e.naire) {
-			this.naire = e.naire;
-			this.share_from = e.share_from;
-			this.$apply();
-			const answeredUrl = encodeURIComponent(`/pages/love/matching?space_id=${this.space_id}`);
-
-			console.log('[answeredUrl]', answeredUrl)
-
-			wx.navigateTo({
-				url: `/pages/love/papers_view?object_name=${e.naire}&space_id=${this.space_id}&answered_url=${answeredUrl}&answered_url_type=redirectTo&keep_progress`
-			})
-		}
-
-		if (current_customer.is_member) {
-			let finishedNaire = wx.getStorageSync('questionnaire_progess');
-			if (finishedNaire.indexOf('love_hobby') > -1) {
-				finishedNaire.splice(finishedNaire.indexOf('love_hobby'), 1);
-			}
-			if (finishedNaire.indexOf('love_answer2') > -1) {
-				finishedNaire.splice(finishedNaire.indexOf('love_answer2'), 1);
-			}
-			if (finishedNaire && finishedNaire.constructor === Array && finishedNaire.length > 0) {
-				if (finishedNaire.length == 1 && finishedNaire.includes('love_about_me')) {
-					self.load_page = 'home';
-				} else if (finishedNaire.length == 2 && finishedNaire.includes('love_about_me') && finishedNaire.includes('love_looking_for')) {
-					self.load_page = 'cover_answer_questions';
-				} else if (finishedNaire.length == 3 && finishedNaire.includes('love_about_me') && finishedNaire.includes('love_looking_for') && finishedNaire.includes('love_answer')) {
-					wx.switchTab({url: `/pages/love/shake`});
-				} else {
-					this.load_page = 'cover_about_yourself'
-				}
-			} else {
-        this.load_page = 'cover_about_yourself'
-      }
-		} else {
-			if(e.love) {
-				this.load_page = 'love_disabled'
-			} else {
-				this.load_page = 'love_disabled';
-			}
-		}
-
-    // this.is_loaded = true;
+		this.is_loaded = true;
     this.$apply();
     wx.hideLoading();
 	}
 
-	async onShow() {
-		const finishedNaire = wx.getStorageSync('questionnaire_progess');
-		if (finishedNaire && finishedNaire.indexOf('love_hobby') > -1) {
-			this.finishHobby = true;
-		}
-		this.is_loaded = true;
-		this.$apply();
-	}
 
   // 分享
   onShareAppMessage(res) {
