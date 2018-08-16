@@ -129,9 +129,14 @@
                   <view class="name">{{record.user_b.name}}</view>
                   <open-data wx:if="{{record.open_group_id}}" class="group-name" type="groupName" open-gid="{{record.open_group_id}}"></open-data>
                 </view>
-                <view class="weui-cell__ft" wx:if="{{record.match == undefined}}" style="font-size: 36rpx">答题中</view>
-                <view class="weui-cell__ft record-match" wx:else style="font-size: 36rpx">{{util.fixed(record.match,2)}}%</view>
-                <view class="weui-cell__ft heart-container"><view class="heart vip_heart-{{record.heart ? 'light' : 'default'}} slds-icon slds-icon--small slds-m-left--x-small" @tap="markHeart({{record._id}},{{record.heart}})" /></view>
+                <block wx:if="{{answered}}">
+                  <view class="weui-cell__ft" wx:if="{{record.match == undefined}}" style="font-size: 36rpx">答题中</view>
+                  <view class="weui-cell__ft record-match" wx:else style="font-size: 36rpx">{{util.fixed(record.match,2)}}%</view>
+                  <view class="weui-cell__ft heart-container"><view class="heart vip_heart-{{record.heart ? 'light' : 'default'}} slds-icon slds-icon--small slds-m-left--x-small" @tap="markHeart({{record._id}},{{record.heart}})" /></view>
+                </block>
+                <block wx:else>
+                  <view class="weui-cell__ft" style="font-size: 36rpx;padding-right: 15px">请答题</view>
+                </block>
               </navigator>
             </block>
           </repeat>
@@ -159,7 +164,7 @@
       </block>
       <block wx:else>
         <button class="btn-toolbar-primary" type="default" plain="true" @tap="start_answer">
-          查看群缘分
+          答题测试群缘分
         </button>
       </block>
       <!--<button class="btn-toolbar-primary" type="default" plain="true" @tap="goShare">-->
