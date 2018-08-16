@@ -1,7 +1,4 @@
 <style lang="less">
-page {
-  background-color: #cae6f1;
-}
   .loading-container {
     position: absolute;
     top: 0;
