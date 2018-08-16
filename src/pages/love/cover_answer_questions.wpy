@@ -12,8 +12,6 @@ import ComponentQuestions from '@/components/cover_answer_questions';
 export default class CoverAnswerQuestions extends wepy.page {
   config = {
     navigationBarTitleText: '无颜', 
-    navigationBarBackgroundColor: '#cae6f1',
-    navigationBarTextStyle: 'black',
   };
 
   data = {
