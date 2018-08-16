@@ -123,7 +123,7 @@
 				</navigator>
 			</repeat>
 
-			<navigator class="group" url="/pages/love/matching?space_id={{space_id}}">
+			<navigator class="group" url="/pages/love/matching?space_id={{space_id}}&open_group_id=-1">
 				<view class="header">
 					<view class="group-name">
 						<view class="group-name">好友</view>
@@ -315,7 +315,7 @@ export default class LoveHome extends wepy.page {
   async loadFriendList() {
     const user_id = this.$parent.globalData.user._id;
     const options = {
-      $filter: `(owner eq '${user_id}' and open_group_id eq null)`,
+      $filter: `(owner eq '${user_id}')`,
       $top: 5,
       $expand: 'user_b($select=profile,name)',
       $orderby: 'match desc'
