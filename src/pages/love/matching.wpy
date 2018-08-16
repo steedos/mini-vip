@@ -148,9 +148,16 @@
       <view  class="btn-filter" @tap.stop="goFilter">
         <view class="slds-icon-action-filter slds-icon slds-icon--small slds-m-right--x-small"></view>
       </view>
-      <button open-type="share" class="btn-toolbar-primary" type="default" plain="true">
-        查看群缘分
-      </button>
+      <block wx:if="{{answered}}">
+        <button open-type="share" class="btn-toolbar-primary" type="default" plain="true">
+          查看群缘分
+        </button>
+      </block>
+      <block wx:else>
+        <button class="btn-toolbar-primary" type="default" plain="true" @tap="start_answer">
+          查看群缘分
+        </button>
+      </block>
       <!--<button class="btn-toolbar-primary" type="default" plain="true" @tap="goShare">-->
         <!--邀请好友打榜-->
       <!--</button>-->
@@ -190,7 +197,8 @@ export default class Matching extends wepy.page {
     orderby: 'match desc',
     space_id: null,
     pageSize: 25,
-    open_group_id: ''
+    open_group_id: '',
+    answered:false
   }
 
   async onLoad(e) {
@@ -229,6 +237,10 @@ export default class Matching extends wepy.page {
     } else {
       this.name = user.name;
       // this.avatar = 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg'
+    }
+    const finishedNaire = wx.getStorageSync('questionnaire_progess');
+    if(finishedNaire.indexOf('love_test')>-1) {
+      this.answered = true
     }
     this.$apply();
   }
@@ -331,6 +343,18 @@ export default class Matching extends wepy.page {
       wx.navigateTo({
         url: `/pages/love/matching_filter`
       })
+    },
+    async start_answer() {
+      if (this.isAuthUserInfo) {
+        wx.navigateTo({
+          url: `/pages/love/papers_view?object_name=love_test&space_id=${this.space_id}&answered_url_type=redirectTo&answered_url=${encodeURIComponent(`/pages/love/matching?space_id=${this.space_id}`)}`
+        });
+      } else {
+        wx.navigateTo({url: `/pages/user_info_login?naire=${this.naire}&share_from=${this.share_from}&next=${encodeURIComponent(`/pages/love/papers_view?object_name=love_test&space_id=${this.space_id}`)}`})
+      }
+      // wx.navigateTo({
+      //   url: `/pages/love/papers_view?object_name=love_test&space_id=${this.space_id}`
+      // })
     },
     async markHeart(_id, heart, event) {
       wepy.showLoading({
