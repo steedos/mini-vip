@@ -142,8 +142,8 @@
         <view class="page cover-page page-else">
           <view class="page__bd">
             <image class="light" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/light.png"/>
-            <text style="display:block;">快来邀请好友打榜</text>
-            <text  style="display:block;">打造属于你自己的榜单吧~</text>
+            <text style="display:block;">无颜是一个神奇的小程序，</text>
+            <text  style="display:block;">可以测试群友之间的缘分哦~</text>
           </view>
         </view>
       </block>
