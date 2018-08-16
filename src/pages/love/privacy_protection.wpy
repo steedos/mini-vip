@@ -54,7 +54,7 @@
 <template>
     <view class="page privacy-list">
         <view class="name">
-            <view class="page__title">设置匹配对象可见的信息</view>
+            <view class="page__title">以下信息好友可见</view>
         </view>
         <view class="weui-cells">
             <repeat for="{{privacy_list}}" key="index" index="index" item="privacy">
