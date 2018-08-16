@@ -83,6 +83,10 @@ export default class LoveIndex extends wepy.page {
   };
 
   async onLoad (e) {
+    let finishedNaire = wx.getStorageSync('questionnaire_progess');
+    if(finishedNaire.length > 2){
+      wx.switchTab({url: '/pages/love/home'});
+    }
     wepy.showShareMenu({
       withShareTicket: true
     });
