@@ -82,10 +82,6 @@
 <template>
 <view class="cover-page" wx:if="{{is_loaded}}">
 	<view class="page__hd">
-
-
-		<view class="love-title">群缘份榜</view>
-
 		  <view class='love-avatar'>
 				<block wx:if="{{isAuthUserInfo}}">
 					<view class="" style="">
@@ -171,9 +167,7 @@ import req from '@/network';
 
 export default class LoveHome extends wepy.page {
   config = {
-    navigationBarTitleText: '无颜',
-		navigationBarBackgroundColor: '#fdfdfd',
-		navigationBarTextStyle: 'black',
+    navigationBarTitleText: '群缘份榜',
   };
 
   data = {

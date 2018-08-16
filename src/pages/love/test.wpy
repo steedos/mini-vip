@@ -1,7 +1,4 @@
 <style lang="less">
-page {
-  background-color: #cae6f1;
-}
 .love-result {
   padding: 60rpx;
   margin-top: 40rpx;
@@ -64,13 +61,10 @@ page {
         </view>
       </view>
       <button class="input-btn btn-join button-hover" type="primary" @tap="goMe" wx:if="{{answered}}">
-        我的无颜
+        我的缘分榜
       </button>
       <button class="input-btn btn-join button-hover" type="primary" @tap="goAnswer" wx:else>
         开始答题
-      </button>
-      <button class="btn-index btn-love" @tap="goMatching">
-        我的缘分榜
       </button>
     </view>
 
@@ -236,7 +230,7 @@ export default class Test extends wepy.page {
       wx.navigateTo({url: `/pages/love/matching?space_id=${this.space_id}`})
     },
     goMe(){
-      wx.switchTab({url: '/pages/love/me'})
+      wx.switchTab({url: '/pages/love/home'})
     }
   }
 }
