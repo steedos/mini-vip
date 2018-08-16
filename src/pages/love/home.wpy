@@ -167,7 +167,7 @@ import req from '@/network';
 
 export default class LoveHome extends wepy.page {
   config = {
-		navigationBarTitleText: '群缘份榜',
+		navigationBarTitleText: '缘分榜',
 		enablePullDownRefresh: true
   };
 

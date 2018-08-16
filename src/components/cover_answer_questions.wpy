@@ -12,7 +12,6 @@
         <view class="love-summary">
           回答下面的问卷，我们的人工智能算法将根据你的答案，计算匹配度。
         </view>
-        <view  class="love-attention">你回答的越认真，“无颜”匹配的越精准。</view>
         <button class="btn-join" @tap="next">开始答题</button>
       </view>
     </view>

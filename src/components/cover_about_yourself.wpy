@@ -10,7 +10,6 @@
       </view>
       <view class="page__bd">
         <view class="love-summary">“无颜”会根据你填写的资料，匹配喜欢你的人。</view>
-        <view class="love-attention">匹配成功后，对方可以看到你的资料。</view>
         <button class="btn-join" @tap="next">下一步</button>
       </view>
     </view>
