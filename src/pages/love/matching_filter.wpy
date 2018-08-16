@@ -23,8 +23,19 @@ page {
           </view>
         </view>
       </view>
-      <button class="weui-btn btn-filter" type="primary" @tap="goLookingFor">
-        设置筛选条件
+      <view class="weui-cells">
+      <navigator class="weui-cell weui-cell_access" @tap="goLookingFor">
+        <!-- <view class="weui-cell__hd">
+          <view class="slds-icon-action-filter slds-icon slds-icon--small slds-m-right--x-small"/>
+        </view> -->
+        <view class="weui-cell__bd">
+          <view>设置筛选条件</view>
+        </view>
+        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+      </navigator>
+    </view>
+      <button class="weui-btn btn-filter" type="primary" @tap="goBack">
+        返回
       </button>
     </view>
   </view>
@@ -61,6 +72,11 @@ export default class MatchingFilter extends wepy.page {
     goLookingFor(event) {
       wx.navigateTo({
         url: `/pages/love/question_list?object_name=love_looking_for&space_id=${this.space_id}`
+      })
+    },
+    goBack(event) {
+      wepy.navigateBack({
+        delta: 1
       })
     },
     async switchChange(event) {
