@@ -138,7 +138,7 @@ export default class LoveIndex extends wepy.page {
       wx.navigateTo({url: `/pages/space/index?space_id=${this.space_id}`})
 		},
 		goLove() {
-			wx.navigateTo({url: '/pages/love/find'})
+			wx.navigateTo({url: '/pages/love/cover_answer_questions'})
 		},
 		goTest() {
 		  wx.navigateTo({url: '/pages/love/test'})
