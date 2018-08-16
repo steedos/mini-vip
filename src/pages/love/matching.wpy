@@ -212,12 +212,6 @@ export default class Matching extends wepy.page {
   }
 
   async beforeOnLoad(e) {
-    if(this.$parent.globalData.shareTicket){
-      let finishedNaire = wx.getStorageSync('questionnaire_progess');
-			if (finishedNaire.length > 0) {
-				wx.switchTab({url: '/pages/love/home'});
-			}
-    }
     console.log("beforeOnLoad=================", e);
     wx.showLoading({mask: true});
     e.space_id = loveSpaceId;
@@ -230,6 +224,13 @@ export default class Matching extends wepy.page {
       e.qrcode = 1
     }
     await this.$parent.login(e);
+    if(this.$parent.globalData.shareTicket){
+      this.$parent.globalData.shareTicket = null;
+      let finishedNaire = wx.getStorageSync('questionnaire_progess');
+			if (finishedNaire.length > 0) {
+				wx.switchTab({url: '/pages/love/home'});
+			}
+    }
     const user_id = this.$parent.globalData.user._id;
     this.userId = user_id;
     this.$apply();
