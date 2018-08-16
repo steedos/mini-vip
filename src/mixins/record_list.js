@@ -179,7 +179,10 @@ export default class recordList extends wepy.mixin {
 
   async onLoad(e) {
     console.log('mixin onLoad...', this.object_name, this.baseUrl, e);
-
+    if (this.beforeOnLoad) {
+      console.log('mixin beforeOnLoad...', e);
+      await this.beforeOnLoad(e);
+    }
     wepy.showLoading({
       title: '加载中',
       mask: true
