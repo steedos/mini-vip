@@ -98,7 +98,7 @@
   width: 100rpx;
   position: absolute;
   bottom: 0px;
-  left: 0px;
+  right: 0px;
   border-radius: 0px;
   height:100rpx;
   z-index: 100;
