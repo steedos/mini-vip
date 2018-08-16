@@ -217,33 +217,32 @@ export default class QuestionnaireList extends wepy.page {
     other_questionnaire: [
       {
         icon: 'slds-icon-standard-social',
-        label: '问答匹配',
+        label: '问答匹配(玫瑰卷)',
         url: `/pages/love/papers_view?object_name=love_answer&space_id=${loveSpaceId}`,
         object_name: 'love_answer'
+      },
+      {
+        // icon: "slds-icon-standard-bot",
+        icon: 'slds-icon-standard-feed',
+        label: '问答匹配 (蔷薇卷)',
+        url: `/pages/love/papers_view?object_name=love_answer2&space_id=${loveSpaceId}`,
+        object_name: 'love_answer2'
       }
-    ],
-      // {
-      //   // icon: "slds-icon-standard-bot",
-      //   icon: 'slds-icon-standard-feed',
-      //   label: '问答匹配 (蔷薇卷)',
-      //   url: `/pages/love/papers_view?object_name=love_answer2&space_id=${loveSpaceId}`,
-      //   object_name: 'love_answer2'
-      // }
-      // ],
-      // hobby_educations:[
-      //   {
-      //   icon: 'slds-icon-standard-canvas',
-      //   label: '兴趣爱好匹配',
-      //   object_name: 'love_hobby',
-      //   url: `/pages/love/papers_view?object_name=love_hobby&space_id=${loveSpaceId}`
-      // },
-      // {
-      //   icon: 'slds-icon-standard-reward',
-      //   label: '校友匹配',
-      //   object_name: 'love_educational_experience',
-      //   url: `../record/list?space_id=${loveSpaceId}&object_name=love_educational_experience`
-      // },
-      // ],
+      ],
+      hobby_educations:[
+        {
+        icon: 'slds-icon-standard-canvas',
+        label: '兴趣爱好匹配',
+        object_name: 'love_hobby',
+        url: `/pages/love/papers_view?object_name=love_hobby&space_id=${loveSpaceId}`
+      },
+      {
+        icon: 'slds-icon-standard-reward',
+        label: '校友匹配',
+        object_name: 'love_educational_experience',
+        url: `../record/list?space_id=${loveSpaceId}&object_name=love_educational_experience`
+      },
+      ],
       primacy_card: [
         {
           icon: 'slds-icon-standard-poll',
