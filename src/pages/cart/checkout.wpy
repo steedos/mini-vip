@@ -264,8 +264,14 @@
   }
 }
   .order-info{
-    margin-bottom: 50px;
+    margin-bottom: 150px;
   }
+.deliver-info{
+  position: absolute;
+  bottom: 41px;
+  margin-top: 0px;
+  box-shadow: 0px -1px 2px rgba(7, 2, 1, 0.09);
+}
 </style>
 <template>
   <view class="page" wx:if="{{is_loaded && is_show}}">
@@ -369,25 +375,11 @@
             <view class="title">实付:</view>
             <view class="price">￥{{goodsTotalPrice}}</view>
           </view>
-        </view>
-      </view>
+          <view class="info">
+            <view class="title">支付时间:</view>
+            <view class="res">{{util.formatDate(order.paid_time, '-')}}</view>
+          </view>
 
-      <view class="weui-cells deliver_info" wx:if="{{is_readonly && status == 'paid' && isSpaceAdmin}}">
-        <view class="weui-cell weui-cell_input">
-          <view class="weui-cell__hd">
-            <view class="weui-label">快递公司</view>
-          </view>
-          <view class="weui-cell__bd">
-            <input class="weui-input" bindinput="inputDeliverCompany"/>
-          </view>
-        </view>
-        <view class="weui-cell weui-cell_input weui-cell_vcode">
-          <view class="weui-cell__hd">
-            <view class="weui-label">快递单号</view>
-          </view>
-          <view class="weui-cell__bd">
-            <input class="weui-input" bindinput="inputDeliverNO"/>
-          </view>
         </view>
       </view>
     </view>
@@ -403,6 +395,24 @@
         <button class="weui-btn" type="default" @tap="updateOrderStatus('canceled')">取消订单</button>
       </view>
       <view class="order-total" wx:elif="{{status == 'paid' && isSpaceAdmin}}">
+        <view class="weui-cells deliver-info" wx:if="{{is_readonly && status == 'paid' && isSpaceAdmin}}">
+          <view class="weui-cell weui-cell_input">
+            <view class="weui-cell__hd">
+              <view class="weui-label">快递公司</view>
+            </view>
+            <view class="weui-cell__bd">
+              <input class="weui-input" bindinput="inputDeliverCompany" focus="{{deliverCompanyFocus}}"/>
+            </view>
+          </view>
+          <view class="weui-cell weui-cell_input weui-cell_vcode" focus="{{deliverNOFocus}}">
+            <view class="weui-cell__hd">
+              <view class="weui-label">快递单号</view>
+            </view>
+            <view class="weui-cell__bd">
+              <input class="weui-input" bindinput="inputDeliverNO"/>
+            </view>
+          </view>
+        </view>
         <view class="t"></view>
         <view class="l"></view>
         <view class="r" bindtap="updateOrderStatus('delivered')">确认发货</view>
@@ -457,7 +467,9 @@ export default class Checkout extends wepy.page {
     showTopTips: false,
     message: '',
     deliver_company: '',
-    deliver_no: ''
+    deliver_no: '',
+    deliverCompanyFocus: false,
+    deliverNOFocus: false,
   };
 
   wxs = {
@@ -699,6 +711,9 @@ export default class Checkout extends wepy.page {
         if(!this.deliver_company){
           this.message = '请填写快递公司';
           this.showTopTips = true;
+          this.deliverCompanyFocus = false;
+          this.$apply
+          this.deliverCompanyFocus = true;
           this.$apply();
           wx.hideLoading();
           return;
@@ -707,6 +722,9 @@ export default class Checkout extends wepy.page {
         if(!this.deliver_no){
           this.message = '请填写快递单号';
           this.showTopTips = true;
+          this.deliverNOFocus = false;
+          this.$apply
+          this.deliverNOFocus = true;
           this.$apply();
           wx.hideLoading();
           return;
