@@ -109,11 +109,11 @@
 						<view class="weui-cell__ft weui-cell__ft_in-access"></view>
 					</view>
 					<view class="body">
-						<view class="count">{{group_friends[group.open_group_id].length}}人</view>
+						<view class="count">{{group_friends[group.open_group_id].count}}人</view>
 						<view class="join-avatar">
-							<repeat for="{{group_friends[group.open_group_id]}}" key="index" index="index" item="friend">
+							<repeat for="{{group_friends[group.open_group_id].value}}" key="index" index="index" item="friend">
 								<block wx:if="{{friend.user_b.name}}">
-									<view class="avatar-container" style="z-index: {{group_friends[group.open_group_id].length - index}}">
+									<view class="avatar-container" style="z-index: {{group_friends[group.open_group_id].value.length - index}}">
 										<image class="image" mode="aspectFill" src="{{friend.user_b.profile.avatar}}"></image>
 									</view>
 								</block>
@@ -131,9 +131,9 @@
 					<view class="weui-cell__ft weui-cell__ft_in-access"></view>
 				</view>
 				<view class="body">
-					<view class="count">{{friendList.length}}人</view>
+					<view class="count">{{friendList.count}}人</view>
 					<view class="join-avatar">
-						<repeat for="{{friendList}}" key="index" index="index" item="friend">
+						<repeat for="{{friendList.value}}" key="index" index="index" item="friend">
 							<block wx:if="{{friend.user_b.name}}">
 								<view class="avatar-container">
 									<image class="image" mode="aspectFill" src="{{friend.user_b.profile.avatar}}"></image>
@@ -194,6 +194,7 @@ export default class LoveHome extends wepy.page {
 	}
 	
 	async onPullDownRefresh() {
+		const self = this;
 		wx.showLoading();
 		await this.loadGroups();
     await this.loadFriendList();
@@ -231,8 +232,8 @@ export default class LoveHome extends wepy.page {
     await this.loadFriendList();
     let group_friends = {};
     for (let group of this.groups) {
-      let result = await self.loadGroupFriends(group.open_group_id);
-      group_friends[group.open_group_id] = result;
+			let result = await self.loadGroupFriends(group.open_group_id);
+			group_friends[group.open_group_id] = result;
     }
     this.group_friends = group_friends;
 
@@ -325,8 +326,10 @@ export default class LoveHome extends wepy.page {
       this.space_id
     );
     if (result && result.value) {
-      this.friendList = result.value;
-    }
+      this.friendList = {count: result['@odata.count'], value:result.value};
+    } else {
+			this.friendList = {count: 0, result: []};
+		}
     this.$apply();
     return this.friendList;
   }
@@ -358,9 +361,9 @@ export default class LoveHome extends wepy.page {
       this.space_id
     );
     if (result && result.value) {
-      return result.value;
+      return {count: result['@odata.count'], value: result.value};
     } else {
-      return [];
+      return {count: 0, value: []};
     }
   }
 
