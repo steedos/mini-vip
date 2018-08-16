@@ -182,7 +182,7 @@ import { setStore, getStore } from 'wepy-redux'
 import configStore from './store'
 import req from '@/network'
 import * as interceptor from '@/network/interceptor'
-import { baseUrl, appId } from '@/config'
+import { baseUrl, appId, loveSpaceId } from '@/config'
 import _ from 'underscore'
 import { serverAPI } from '@/server';
 import pageRouter from '@/utils/pageRouter'
@@ -574,6 +574,11 @@ export default class VIP extends wepy.app {
       globalData.love = res.love
       console.log("===============login============globalData.my_customers", globalData.my_customers);
 
+      for (let customer of res.my_customers) {
+        if (customer.space == loveSpaceId) {
+          wx.setStorageSync("questionnaire_progess", customer.questionnaire_progess);
+        }
+      }
 
       req.header(header)
 
