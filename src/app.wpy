@@ -109,11 +109,11 @@ page {
 
 
 .cover-page {
-  background-image:url('https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/bg-grass-640.png');
+  background-image:url('https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/bg-celebrate-valentines.jpg');
   background-position: bottom center;
   background-repeat: no-repeat;
   background-size: contain;
-  background-color: #cae6f1;
+  background-color: #fdfdfd;
   min-height:100vh;
 
   .page__hd{
@@ -257,6 +257,7 @@ export default class VIP extends wepy.app {
       'pages/love/find',
       'pages/love/test',
       'pages/love/matching',
+      'pages/love/matching_filter',
       'pages/love/matching_result',
       'pages/love/papers_view',
       'pages/love/papers_summary',
@@ -276,7 +277,7 @@ export default class VIP extends wepy.app {
     tabBar: {
       color: '#666',
       selectedColor: '#5f71ee',
-      backgroundColor: '#fff',
+      backgroundColor: '#fdfdfd',
       borderStyle: 'black',
       list: [
       {
@@ -302,7 +303,7 @@ export default class VIP extends wepy.app {
       navigationBarBackgroundColor: '#353535',
       navigationBarTitleText: '无颜',
       navigationBarTextStyle: 'white',
-      backgroundColor: "#f6f7f8",
+      backgroundColor: "#fdfdfd",
       backgroundTextStyle: 'dark',
     }
   }

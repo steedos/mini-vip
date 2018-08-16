@@ -94,13 +94,24 @@
   text-align: left;
   font-size: 17px;
 }
+.btn-filter{
+  width: 100rpx;
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  border-radius: 0px;
+  height:100rpx;
+  z-index: 100;
+  .slds-icon {
+    background-color:transparent;
+  }
+}
 </style>
 
 <template>
   <view class="page friend-list" wx:if="{{is_loaded}}">
     <view class="page__bd" style="margin-bottom: 60rpx">
       <block wx:if="{{record_list.length}}">
-        <!-- <view class="slds-icon-action-filter slds-icon slds-icon--small slds-m-right--x-small" @tap="goFilter"/> -->
         <view class="weui-cells weui-cells_after-title">
           <repeat for="{{record_list}}" key="index" index="index" item="record">
             <block wx:if="{{record.user_b.name}}">
@@ -134,6 +145,9 @@
       </block>
     </view>
     <view class="tab-bar border-top-1px">
+      <view  class="btn-filter" @tap.stop="goFilter">
+        <view class="slds-icon-action-filter slds-icon slds-icon--small slds-m-right--x-small"></view>
+      </view>
       <button open-type="share" class="btn-toolbar-primary" type="default" plain="true">
         查看群缘分
       </button>
@@ -287,7 +301,8 @@ export default class Matching extends wepy.page {
     const user_id = this.$parent.globalData.user._id;
     console.log('onShareAppMessage', user_id);
     let title = '我们是天生一对吗？';
-    let path = `/pages/love/test?naire=love_answer&share_from=${user_id}`
+    // let path = `/pages/love/test?naire=love_answer&share_from=${user_id}`
+    let path = `/pages/love/matching?space_id=${this.space_id}&filter=(owner eq '${user_id}' and open_group_id eq null)`
     let imageUrl = 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/love_share_bg.jpg';
     return {
       title: title,
@@ -314,7 +329,7 @@ export default class Matching extends wepy.page {
     },
     async goFilter(event) {
       wx.navigateTo({
-        url: `/pages/love/question_list?object_name=love_looking_for&space_id=${this.space_id}`
+        url: `/pages/love/matching_filter`
       })
     },
     async markHeart(_id, heart, event) {
