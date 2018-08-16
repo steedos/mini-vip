@@ -70,8 +70,7 @@
           }
         }
         .avatar-container:not(:last-of-type) {
-          position: relative;
-          right: -16rpx;
+					margin-right: -16rpx;
         }
       }
     }
@@ -114,7 +113,7 @@
 						<view class="join-avatar">
 							<repeat for="{{group_friends[group.open_group_id]}}" key="index" index="index" item="friend">
 								<block wx:if="{{friend.user_b.name}}">
-									<view class="avatar-container">
+									<view class="avatar-container" style="z-index: {{group_friends[group.open_group_id].length - index}}">
 										<image class="image" mode="aspectFill" src="{{friend.user_b.profile.avatar}}"></image>
 									</view>
 								</block>
@@ -196,7 +195,7 @@ export default class LoveHome extends wepy.page {
     wepy.showShareMenu({
       withShareTicket: true
     });
-    wx.showLoading({ mask: true });
+    wx.showLoading();
     const self = this;
     e.space_id = loveSpaceId;
     if (e.scene) {
