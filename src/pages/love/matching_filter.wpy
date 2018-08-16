@@ -35,7 +35,7 @@ page {
       </navigator>
     </view>
       <button class="weui-btn btn-filter" type="primary" @tap="goBack">
-        返回
+        确定
       </button>
     </view>
   </view>
