@@ -175,12 +175,13 @@ export default class Matching extends wepy.page {
     userId: '',
     orderby: 'match desc',
     space_id: null,
-    pageSize: 25
+    pageSize: 25,
+    open_group_id: ''
   }
 
   async onLoad(e) {
-    if (e.filter) {
-      this.filter = e.filter;
+    if (e.open_group_id) {
+      this.open_group_id = e.open_group_id;
       this.$apply();
     }
     this.space_id = loveSpaceId;
@@ -274,11 +275,11 @@ export default class Matching extends wepy.page {
   }
 
   getQueryFilter() {
-    if (this.filter) {
-      return this.filter
+    const user_id = this.$parent.globalData.user._id;
+    if (this.open_group_id) {
+      return `(owner eq '${user_id}' and open_group_id eq '${this.open_group_id}')`
     } else {
-      const user_id = this.$parent.globalData.user._id;
-      return `(owner eq '${user_id}')`;
+      return `(owner eq '${user_id}' and open_group_id eq null)`;
     }
   }
 

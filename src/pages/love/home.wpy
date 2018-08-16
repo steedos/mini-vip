@@ -1,78 +1,153 @@
 <style lang="less">
 .page {
   padding-bottom: 20px !important;
+  background-color: #cae6f1;
 }
-.love-avatar {
-  width:auto;
-  top: 0;
-  position: absolute;
-  left: calc(~"50% - 110rpx");
-
-  .image {
-	width: 100%;
-	height: 100%;
-	border-radius: 50%;
-  }
-}
-page {
-   background-color: #cae6f1;
-}
-
 
 .cover-page {
-  .page__hd{
+  .page__hd {
     .love-title {
-    	margin-top: 180rpx;
+      margin-top: 120rpx;
+    }
+
+    .love-avatar {
+      width: 160rpx;
+      height: 160rpx;
+      margin: 30rpx auto 0;
+
+      view {
+        width: 100%;
+        height: 100%;
+
+        .image {
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+        }
+      }
+
+      .user-active {
+        border: none;
+        width: 100%;
+        height: 100%;
+        padding: 0;
+      }
+    }
+  }
+
+  .group {
+    background: #fff;
+    margin-top: 30rpx;
+    padding: 30rpx;
+    border-radius: 0.25rem;
+    .header {
+      display: flex;
+      line-height: 1.41176471;
+      font-size: 17px;
+      .group-name {
+        flex: 1;
+      }
+    }
+    .body {
+      display: flex;
+      margin-top: 16rpx;
+      .count {
+        color: #999;
+        flex: 1;
+      }
+      .join-avatar {
+        display: flex;
+        align-items: center;
+        .avatar-container {
+          width: 50rpx;
+          height: 50rpx;
+          border-radius: 50%;
+          border: 1px solid #fff;
+          image {
+            border-radius: 50%;
+            width: 100%;
+            height: 100%;
+          }
+        }
+        .avatar-container:not(:last-of-type) {
+          position: relative;
+          right: -16rpx;
+        }
+      }
     }
   }
 }
 </style>
 
 <template>
-<view class="cover-page">
+<view class="cover-page" wx:if="{{is_loaded}}">
 	<view class="page__hd">
 
 
 		<view class="love-title">群缘份榜</view>
 
-		  <navigator url="/pages/love/me" class='love-avatar'>
-			<block wx:if="{{isAuthUserInfo}}">
-			  <view class="weui-media-box weui-media-box_appmsg">
-				<view class="weui-media-box__hd weui-media-box__hd_in-appmsg" style="width: 160rpx; height: 160rpx;">
-				  <image class="image" mode="aspectFill" wx:if="{{isAuthUserInfo}}" src="{{avatar}}"></image>
-				</view>
-			  </view>
-			</block>
-			<block wx:else>
-			  <button open-type="getUserInfo" bindgetuserinfo="userLogin" plain="true" class="user-active weui-media-box weui-media-box_appmsg">
-				<view class="weui-media-box__hd weui-media-box__hd_in-appmsg" style="width: 160rpx; height: 160rpx;">
-				  <image class="image" mode="aspectFill" src="https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/avatar.png"></image>
-				</view>
-			  </button>
-			</block>
-		  </navigator>
+		  <view class='love-avatar'>
+				<block wx:if="{{isAuthUserInfo}}">
+					<view class="" style="">
+						<image class="image" mode="aspectFill" wx:if="{{isAuthUserInfo}}" src="{{avatar}}"></image>
+					</view>
+				</block>
+				<block wx:else>
+					<button open-type="getUserInfo" bindgetuserinfo="userLogin" plain="true" class="user-active">
+						<view class="">
+							<image class="image" mode="aspectFill" src="https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/avatar.png"></image>
+						</view>
+					</button>
+				</block>
+		  </view>
 		  
 	</view>
 
-	<view class="page__bd" wx:if="{{is_loaded}}">
+	<view class="page__bd">
 	
-
-		<view class="weui-cells">
-			<repeat for="{{groups}}" key="index" index="index" item="group">
-				<navigator class="weui-cell weui-cell_access" url="/pages/love/matching?space_id={{space_id}}&filter=(owner eq '{{user_id}}' and open_group_id eq '{{group.open_group_id}}')" hover-class="weui-cell_active">
-					<view class="weui-cell__bd" style="height: 24px">
+		<repeat for="{{groups}}" key="index" index="index" item="group">
+			<navigator class="group" url="/pages/love/matching?space_id={{space_id}}&open_group_id={{group.open_group_id}}">
+				<view class="header">
+					<view class="group-name">
 						<open-data class="group-name" type="groupName" open-gid="{{group.open_group_id}}"></open-data>
 					</view>
 					<view class="weui-cell__ft weui-cell__ft_in-access"></view>
-				</navigator>
-			</repeat>
-			<navigator class="weui-cell weui-cell_access" url="/pages/love/matching?space_id={{space_id}}&filter=(owner eq '{{user_id}}' and open_group_id eq null)" hover-class="weui-cell_active">
-				<view class="weui-cell__bd">
+				</view>
+				<view class="body">
+					<view class="count">{{group_friends[group.open_group_id].length}}人</view>
+					<view class="join-avatar">
+						<repeat for="{{group_friends[group.open_group_id]}}" key="index" index="index" item="friend">
+							<block wx:if="{{friend.user_b.name}}">
+								<view class="avatar-container">
+									<image class="image" mode="aspectFill" src="{{friend.user_b.profile.avatar}}"></image>
+								</view>
+							</block>
+						</repeat>
+					</view>
+				</view>
+			</navigator>
+		</repeat>
+
+		<navigator class="group" url="/pages/love/matching?space_id={{space_id}}">
+			<view class="header">
+				<view class="group-name">
 					好友
 				</view>
 				<view class="weui-cell__ft weui-cell__ft_in-access"></view>
-			</navigator>
-		</view>
+			</view>
+			<view class="body">
+				<view class="count">{{friendList.length}}人</view>
+				<view class="join-avatar">
+					<repeat for="{{friendList}}" key="index" index="index" item="friend">
+						<block wx:if="{{friend.user_b.name}}">
+							<view class="avatar-container">
+								<image class="image" mode="aspectFill" src="{{friend.user_b.profile.avatar}}"></image>
+							</view>
+						</block>
+					</repeat>
+				</view>
+			</view>
+		</navigator>
 
 		<!--
 		<view class="weui-cells">
@@ -92,125 +167,213 @@ page {
 <script>
 import wepy from 'wepy';
 import { loveSpaceId } from '../../config/index.js';
+import req from '@/network';
 
 export default class LoveHome extends wepy.page {
-	config = {
-		navigationBarTitleText: '无颜',
-		navigationBarBackgroundColor: '#cae6f1',
-		navigationBarTextStyle: 'black',
-	}
+  config = {
+    navigationBarTitleText: '无颜',
+    navigationBarBackgroundColor: '#cae6f1',
+    navigationBarTextStyle: 'black'
+  };
 
-	data = {
-		user_id: '',
-		is_loaded: false,
-		space_id: null,
-		friendList: [],
-	groups: [],
-	avatar:'',
-	name:'',
-	group_friends: {},
-	isAuthUserInfo:true
-	}
+  data = {
+    user_id: '',
+    is_loaded: false,
+    space_id: null,
+    friendList: [],
+    groups: [],
+    avatar: '',
+    name: '',
+    group_friends: {},
+    isAuthUserInfo: false
+  };
 
-	onShareAppMessage(res) {
-		const user_id = this.$parent.globalData.user._id;
-		let title = '我们的缘分排行榜，快来打榜！';
-		let path = `/pages/love/home?share_from=${user_id}`
-		return {
-		  title: title,
-		  path: path
-		};
-	}
-	async onLoad(e) {
-		wx.showLoading({mask: true});
-		const self = this;
-		e.space_id = loveSpaceId;
-		if(e.scene){
-			// 朋友圏二维码识别进入的，则取出scene中的share_from
-			let scene = decodeURIComponent(e.scene);
-			let scenes = scene.split('=');
-			e.love = 1;
-			e.share_from = scenes[1];
-			e.qrcode = 1
-		}
-		this.space_id = e.space_id;
-		await this.$parent.login(e);
-		this.user_id = this.$parent.globalData.user._id;
-		await this.loadGroups();
-		await this.loadFriendList();
-		let group_friends = {};
-		for (let group of this.groups) {
-			let result = await self.loadGroupFriends(group.open_group_id);
-			group_friends[group.open_group_id] = result;
-		}
-	this.group_friends = group_friends;
-	let user = this.$parent.globalData.user;
-	const spaceId = this.space_id;
-	const userId = user._id;
-	const setting = await wepy.getSetting();
-	if (!user.name || !this.avatar) {
-	  const query_options = {
-		$filter: `owner eq '${userId}'`,
-		$expand: 'owner($select=profile,name)'
-	  };
-	  const user_result = await this.$parent.query('vip_customers',query_options,spaceId)
-	  user.name = user_result.value[0].owner.name
-	  user.avatar = user_result.value[0].owner.profile['avatar']
-	}
-	this.name = user.name;
-	this.avatar = user.avatar;
-		this.is_loaded = true;
-		this.$apply();
-		console.log('[groups]', this.groups);
-		console.log('[friendList]', this.friendList);
-		console.log('[group_friends]', group_friends);
-		
-		wx.hideLoading();
-	}
+  onShareAppMessage(res) {
+    const user_id = this.$parent.globalData.user._id;
+    let title = '我们的缘分排行榜，快来打榜！';
+    let path = `/pages/love/home?share_from=${user_id}`;
+    return {
+      title: title,
+      path: path
+    };
+  }
+  async onLoad(e) {
+    wepy.showShareMenu({
+      withShareTicket: true
+    });
+    wx.showLoading({ mask: true });
+    const self = this;
+    e.space_id = loveSpaceId;
+    if (e.scene) {
+      // 朋友圏二维码识别进入的，则取出scene中的share_from
+      let scene = decodeURIComponent(e.scene);
+      let scenes = scene.split('=');
+      e.love = 1;
+      e.share_from = scenes[1];
+      e.qrcode = 1;
+    }
+    this.space_id = e.space_id;
+    await this.$parent.login(e);
+    this.user_id = this.$parent.globalData.user._id;
 
-	async loadFriendList() {
-		const user_id = this.$parent.globalData.user._id;
-		const options = {
-			$filter: `(owner eq '${user_id}' and open_group_id eq null)`,
-			$top: 5,
-			$expand: 'user_b($select=profile,name)',
-			$orderby: 'match desc'
-		}
-		const result = await this.$parent.query('love_friends', options, this.space_id);
-		if (result && result.value) {
-			this.friendList = result.value;
-		}
-		this.$apply();
-		return this.friendList
-	}
+    await this.loadGroups();
+    await this.loadFriendList();
+    let group_friends = {};
+    for (let group of this.groups) {
+      let result = await self.loadGroupFriends(group.open_group_id);
+      group_friends[group.open_group_id] = result;
+    }
+    this.group_friends = group_friends;
 
-	async loadGroups() {
-		const user_id = this.$parent.globalData.user._id;
-		const options = {
-			$filter: `(users eq '${user_id}')`
-		}
-		const result = await this.$parent.query('vip_groups', options, 'guest');
-		if (result && result.value) {
-			this.groups = result.value;
-		}
-		this.$apply();
-		return this.groups
-	}
+    console.log('[groups]', this.groups);
+    console.log('[friendList]', this.friendList);
+    console.log('[group_friends]', group_friends);
 
-	async loadGroupFriends(group_id) {
-		const user_id = this.$parent.globalData.user._id;
-		const options = {
-			$filter: `(owner eq '${user_id}' and open_group_id eq '${group_id}')`,
-			$top: 5,
-			$expand: 'user_b($select=profile,name)',
-			$orderby: 'match desc'
-		}
-		const result = await this.$parent.query('love_friends', options, this.space_id);
-		if (result && result.value) {
-			return result.value
-		} else {
-			return []
-		}
-	} 
+    let user = this.$parent.globalData.user;
+    const spaceId = this.space_id;
+    const userId = user._id;
+
+    if (!user.name || !user.avatar) {
+      const query_options = {
+        $filter: `owner eq '${userId}'`,
+        $expand: 'owner($select=profile,name)'
+      };
+
+      const user_result = await this.$parent.query(
+        'vip_customers',
+        query_options,
+        spaceId
+      );
+      if (user_result && user_result.value[0]) {
+        user.name = user_result.value[0].owner.name;
+        if (user_result.value[0].owner.profile) {
+          user.avatar = user_result.value[0].owner.profile.avatar;
+        }
+      }
+    }
+
+    console.log('[user]', user);
+
+    this.name = user.name;
+    this.avatar = user.avatar;
+
+    if (!this.name || !this.avatar) {
+      const setting = await wepy.getSetting();
+      if (setting.authSetting['scope.userInfo']) {
+        const info = await wepy.getUserInfo();
+        const userInfo = info.userInfo;
+        this.$parent.globalData.userInfo = userInfo;
+        this.name = userInfo.nickName;
+        this.avatar = userInfo.avatarUrl;
+        this.isAuthUserInfo = true;
+      } else {
+        this.isAuthUserInfo = false;
+      }
+    } else {
+      this.isAuthUserInfo = true;
+    }
+
+    this.is_loaded = true;
+    this.$apply();
+
+    wx.hideLoading();
+  }
+
+  // async onShow() {
+  // 	wx.showLoading({mask: true});
+  // 	this.is_loaded = false;
+  // 	await this.loadGroups();
+  //   await this.loadFriendList();
+  //   let group_friends = {};
+  //   for (let group of this.groups) {
+  //     let result = await self.loadGroupFriends(group.open_group_id);
+  //     group_friends[group.open_group_id] = result;
+  //   }
+  // 	this.group_friends = group_friends;
+  // 	this.is_loaded = true;
+
+  // 	console.log('[groups]', this.groups);
+  //   console.log('[friendList]', this.friendList);
+  //   console.log('[group_friends]', group_friends);
+
+  // 	this.$apply();
+  // 	wx.hideLoading()
+  // }
+
+  async loadFriendList() {
+    const user_id = this.$parent.globalData.user._id;
+    const options = {
+      $filter: `(owner eq '${user_id}' and open_group_id eq null)`,
+      $top: 5,
+      $expand: 'user_b($select=profile,name)',
+      $orderby: 'match desc'
+    };
+    const result = await this.$parent.query(
+      'love_friends',
+      options,
+      this.space_id
+    );
+    if (result && result.value) {
+      this.friendList = result.value;
+    }
+    this.$apply();
+    return this.friendList;
+  }
+
+  async loadGroups() {
+    const user_id = this.$parent.globalData.user._id;
+    const options = {
+      $filter: `(users eq '${user_id}')`
+    };
+    const result = await this.$parent.query('vip_groups', options, 'guest');
+    if (result && result.value) {
+      this.groups = result.value;
+    }
+    this.$apply();
+    return this.groups;
+  }
+
+  async loadGroupFriends(group_id) {
+    const user_id = this.$parent.globalData.user._id;
+    const options = {
+      $filter: `(owner eq '${user_id}' and open_group_id eq '${group_id}')`,
+      $top: 5,
+      $expand: 'user_b($select=profile,name)',
+      $orderby: 'match desc'
+    };
+    const result = await this.$parent.query(
+      'love_friends',
+      options,
+      this.space_id
+    );
+    if (result && result.value) {
+      return result.value;
+    } else {
+      return [];
+    }
+  }
+
+  methods = {
+    userLogin(e) {
+      const userInfo = e.detail.userInfo;
+      const user = this.$parent.globalData.user;
+      if (userInfo) {
+        const name = user.name || userInfo.nickName;
+        const sex = userInfo.gender ? '男' : '女';
+        const avatar = userInfo.avatarUrl;
+
+        this.userInfo = userInfo;
+        this.isAuthUserInfo = true;
+        this.name = name;
+        this.avatar = userInfo.avatarUrl;
+        this.$parent.globalData.userInfo = userInfo;
+        this.$parent.globalData.user.sex = sex;
+        this.$apply();
+
+        const url = '/mini/vip/user';
+        req.put(url, { name: name, sex: sex, avatar: avatar });
+      }
+    }
+  };
 }
 </script>
