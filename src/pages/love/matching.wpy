@@ -199,7 +199,7 @@ export default class Matching extends wepy.page {
     userId: '',
     orderby: 'match desc',
     space_id: null,
-    pageSize: 25,
+    pageSize: 50,
     open_group_id: '',
     answered:false
   }
