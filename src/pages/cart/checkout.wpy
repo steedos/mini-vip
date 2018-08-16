@@ -272,10 +272,20 @@
   margin-top: 0px;
   box-shadow: 0px -1px 2px rgba(7, 2, 1, 0.09);
 }
+
+  .status-info{
+    padding: 32rpx 31.25rpx;
+    background: #fff;
+    margin-bottom: 20rpx;
+  }
 </style>
 <template>
   <view class="page" wx:if="{{is_loaded && is_show}}">
     <view class="weui-toptips weui-toptips_warn" wx:if="{{showTopTips}}">{{message}}</view>
+    <view class="weui-flex status-info {{status}}" wx:if="{{status == 'canceled'}}">
+      <view class="weui-flex__item"><icon type="warn" size="18" style="padding-right: 5px"/>已取消</view>
+      <view style="display: inline-block;text-align: right">{{util.formatDate(order.canceled_time, '-')}}</view>
+    </view>
     <view class="order-info">
       <block wx:if="{{is_readonly}}">
         <view class="order-time">
