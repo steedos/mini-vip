@@ -138,6 +138,7 @@
         </view>
       </block>
       <block wx:else>
+        <view class="cover-page-bg"></view>
         <view class="page cover-page page-else">
           <view class="page__bd">
             <image class="light" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/light.png"/>
