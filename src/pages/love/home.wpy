@@ -170,11 +170,10 @@ import { loveSpaceId } from '../../config/index.js';
 import req from '@/network';
 
 export default class LoveHome extends wepy.page {
-<<<<<<< HEAD
   config = {
     navigationBarTitleText: '无颜',
-    navigationBarBackgroundColor: '#cae6f1',
-    navigationBarTextStyle: 'black'
+		navigationBarBackgroundColor: '#fdfdfd',
+		navigationBarTextStyle: 'black',
   };
 
   data = {
@@ -376,125 +375,5 @@ export default class LoveHome extends wepy.page {
       }
     }
   };
-=======
-	config = {
-		navigationBarTitleText: '无颜',
-		navigationBarBackgroundColor: '#fdfdfd',
-		navigationBarTextStyle: 'black',
-	}
-
-	data = {
-		user_id: '',
-		is_loaded: false,
-		space_id: null,
-		friendList: [],
-	groups: [],
-	avatar:'',
-	name:'',
-	group_friends: {},
-	isAuthUserInfo:true
-	}
-
-	onShareAppMessage(res) {
-		const user_id = this.$parent.globalData.user._id;
-		let title = '我们的缘分排行榜，快来打榜！';
-		let path = `/pages/love/home?share_from=${user_id}`
-		return {
-		  title: title,
-		  path: path
-		};
-	}
-	async onLoad(e) {
-		wx.showLoading({mask: true});
-		const self = this;
-		e.space_id = loveSpaceId;
-		if(e.scene){
-			// 朋友圏二维码识别进入的，则取出scene中的share_from
-			let scene = decodeURIComponent(e.scene);
-			let scenes = scene.split('=');
-			e.love = 1;
-			e.share_from = scenes[1];
-			e.qrcode = 1
-		}
-		this.space_id = e.space_id;
-		await this.$parent.login(e);
-		this.user_id = this.$parent.globalData.user._id;
-		await this.loadGroups();
-		await this.loadFriendList();
-		let group_friends = {};
-		for (let group of this.groups) {
-			let result = await self.loadGroupFriends(group.open_group_id);
-			group_friends[group.open_group_id] = result;
-		}
-	this.group_friends = group_friends;
-	let user = this.$parent.globalData.user;
-	const spaceId = this.space_id;
-	const userId = user._id;
-	const setting = await wepy.getSetting();
-	if (!user.name || !this.avatar) {
-	  const query_options = {
-		$filter: `owner eq '${userId}'`,
-		$expand: 'owner($select=profile,name)'
-	  };
-	  const user_result = await this.$parent.query('vip_customers',query_options,spaceId)
-	  user.name = user_result.value[0].owner.name
-	  user.avatar = user_result.value[0].owner.profile['avatar']
-	}
-	this.name = user.name;
-	this.avatar = user.avatar;
-		this.is_loaded = true;
-		this.$apply();
-		console.log('[groups]', this.groups);
-		console.log('[friendList]', this.friendList);
-		console.log('[group_friends]', group_friends);
-		
-		wx.hideLoading();
-	}
-
-	async loadFriendList() {
-		const user_id = this.$parent.globalData.user._id;
-		const options = {
-			$filter: `(owner eq '${user_id}' and open_group_id eq null)`,
-			$top: 5,
-			$expand: 'user_b($select=profile,name)',
-			$orderby: 'match desc'
-		}
-		const result = await this.$parent.query('love_friends', options, this.space_id);
-		if (result && result.value) {
-			this.friendList = result.value;
-		}
-		this.$apply();
-		return this.friendList
-	}
-
-	async loadGroups() {
-		const user_id = this.$parent.globalData.user._id;
-		const options = {
-			$filter: `(users eq '${user_id}')`
-		}
-		const result = await this.$parent.query('vip_groups', options, 'guest');
-		if (result && result.value) {
-			this.groups = result.value;
-		}
-		this.$apply();
-		return this.groups
-	}
-
-	async loadGroupFriends(group_id) {
-		const user_id = this.$parent.globalData.user._id;
-		const options = {
-			$filter: `(owner eq '${user_id}' and open_group_id eq '${group_id}')`,
-			$top: 5,
-			$expand: 'user_b($select=profile,name)',
-			$orderby: 'match desc'
-		}
-		const result = await this.$parent.query('love_friends', options, this.space_id);
-		if (result && result.value) {
-			return result.value
-		} else {
-			return []
-		}
-	} 
->>>>>>> 703758e6b67564923f57f06c7d435d1fd4bff3ad
 }
 </script>
