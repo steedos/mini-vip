@@ -183,6 +183,12 @@ export default class QuestionnaireList extends wepy.page {
     ],
     other_questionnaire: [
       {
+        icon: 'slds-icon-standard-skill',
+        label: '问答匹配(缘分卷)',
+        url: `/pages/love/papers_view?object_name=love_test&space_id=${loveSpaceId}`,
+        object_name: 'love_test'
+      },
+      {
         icon: 'slds-icon-standard-social',
         label: '问答匹配(玫瑰卷)',
         url: `/pages/love/papers_view?object_name=love_answer&space_id=${loveSpaceId}`,
