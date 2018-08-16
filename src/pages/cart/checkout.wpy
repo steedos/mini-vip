@@ -381,7 +381,7 @@
             <view class="title">支付方式:</view>
             <view class="res">微信</view>
           </view>
-          <view class="info">
+          <view class="info" wx:if="{{status != 'canceled' || order.paid_time}}">
             <view class="title">实付:</view>
             <view class="price">￥{{goodsTotalPrice}}</view>
           </view>
