@@ -198,6 +198,7 @@ export default class Matching extends wepy.page {
     navigationBarTitle: '缘分榜',
     date_field: ['match', 'a_to_b', 'b_to_a', 'open_group_id', 'heart', 'is_looking_for'],
     userId: '',
+    share_from: '',
     orderby: 'match desc',
     space_id: null,
     pageSize: 50,
@@ -209,6 +210,9 @@ export default class Matching extends wepy.page {
     if (e.open_group_id) {
       this.open_group_id = e.open_group_id;
       this.$apply();
+    }
+    if (e.share_from) {
+      this.share_from = e.share_from;
     }
     this.space_id = loveSpaceId;
     wepy.showShareMenu({
@@ -223,25 +227,7 @@ export default class Matching extends wepy.page {
     let user = this.$parent.globalData.user;
     const spaceId = this.space_id;
     const userId = user._id;
-    const setting = await wepy.getSetting();
-    if (!user.name && this.isAuthUserInfo) {
-      const query_options = {
-        $filter: `owner eq '${userId}'`,
-        $expand: 'owner($select=profile,name)'
-      };
-      const user_result = await this.$parent.query('vip_customers',query_options,spaceId)
-      user.name = user_result.value[0].owner.name
-      user.avatar = user_result.value[0].owner.profile['avatar']
-    }
-    if (setting.authSetting['scope.userInfo']) {
-      this.isAuthUserInfo = true;
-      this.userInfo = this.$parent.globalData.userInfo;
-      this.name = user.name;
-      this.avatar = user.avatar;
-    } else {
-      this.name = user.name;
-      // this.avatar = 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg'
-    }
+    
     const finishedNaire = wx.getStorageSync('questionnaire_progess');
     if(finishedNaire.indexOf('love_test')>-1) {
       this.answered = true
@@ -250,6 +236,7 @@ export default class Matching extends wepy.page {
   }
 
   async init() {
+    await this.$parent.login({space_id: this.space_id});
     await req.post('/api/mini/vip/friend/answered', {space_id: this.space_id, rest: true});
   }
 
@@ -259,7 +246,7 @@ export default class Matching extends wepy.page {
     this.record_list = [];
     this.allow_load = true;
     this.current_skip = 0;
-    await this.init();
+    await req.post('/api/mini/vip/friend/answered', {space_id: this.space_id, rest: true});
     await this.loadRecords();
     this.is_loaded = true;
     this.$apply();
