@@ -167,7 +167,8 @@ import req from '@/network';
 
 export default class LoveHome extends wepy.page {
   config = {
-    navigationBarTitleText: '群缘份榜',
+		navigationBarTitleText: '群缘份榜',
+		enablePullDownRefresh: true
   };
 
   data = {
@@ -190,7 +191,23 @@ export default class LoveHome extends wepy.page {
       title: title,
       path: path
     };
-  }
+	}
+	
+	async onPullDownRefresh() {
+		wx.showLoading();
+		await this.loadGroups();
+    await this.loadFriendList();
+    let group_friends = {};
+    for (let group of this.groups) {
+      let result = await self.loadGroupFriends(group.open_group_id);
+      group_friends[group.open_group_id] = result;
+    }
+		this.group_friends = group_friends;
+		this.$apply();
+		wx.stopPullDownRefresh();
+		wx.hideLoading();
+	}
+
   async onLoad(e) {
     wepy.showShareMenu({
       withShareTicket: true

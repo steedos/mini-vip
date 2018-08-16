@@ -219,6 +219,9 @@ export default class Matching extends wepy.page {
       e.qrcode = 1
     }
     await this.$parent.login(e);
+    const user_id = this.$parent.globalData.user._id;
+    this.userId = user_id;
+    this.$apply();
     wx.hideLoading();
   }
 
@@ -234,16 +237,10 @@ export default class Matching extends wepy.page {
     wepy.showShareMenu({
       withShareTicket: true
     });
-    const user_id = this.$parent.globalData.user._id;
-    this.userId = user_id;
     this.$apply();
   }
 
   async onShow() {
-    let user = this.$parent.globalData.user;
-    const spaceId = this.space_id;
-    const userId = user._id;
-    
     const finishedNaire = wx.getStorageSync('questionnaire_progess');
     if(finishedNaire.indexOf('love_test')>-1) {
       this.answered = true
@@ -252,7 +249,6 @@ export default class Matching extends wepy.page {
   }
 
   async init() {
-    await this.$parent.login({space_id: this.space_id});
     await req.post('/api/mini/vip/friend/answered', {space_id: this.space_id, rest: true});
   }
 
@@ -309,7 +305,10 @@ export default class Matching extends wepy.page {
 
   getQueryFilter() {
     const user_id = this.$parent.globalData.user._id;
-    if (this.open_group_id) {
+
+    if (this.open_group_id === '-1') {
+      return `(owner eq '${user_id}')`;
+    } else if (this.open_group_id) {
       return `(owner eq '${user_id}' and open_group_id eq '${this.open_group_id}')`
     } else {
       return `(owner eq '${user_id}' and open_group_id eq null)`;
@@ -320,13 +319,10 @@ export default class Matching extends wepy.page {
     const user_id = this.$parent.globalData.user._id;
     console.log('onShareAppMessage', user_id);
     let title = '我们是天生一对吗？';
-    // let path = `/pages/love/test?naire=love_answer&share_from=${user_id}`
-    let path = `/pages/love/matching?space_id=${this.space_id}&share_from=${user_id}`
-    // let imageUrl = 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/love_share_bg.jpg';
+    let path = `/pages/love/matching?space_id=${this.space_id}&share_from=${user_id}&open_group_id=-1`
     return {
       title: title,
       path: path,
-//      imageUrl: imageUrl
     };
   }
 
