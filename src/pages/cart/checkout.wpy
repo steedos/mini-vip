@@ -382,6 +382,12 @@
 
         </view>
       </view>
+
+
+      <view class="weui-btn-area" wx:if="{{is_readonly && status == 'pending' && isOrderOwner}}">
+        <button class="weui-btn" type="primary" @tap="submitOrder">微信支付</button>
+        <button class="weui-btn" type="default" @tap="updateOrderStatus('canceled')">取消订单</button>
+      </view>
     </view>
 
     <view class="order-total" wx:if="{{!is_readonly}}">
@@ -390,11 +396,7 @@
       <view class="r" bindtap="submitOrder">去付款</view>
     </view>
     <view wx:else>
-      <view class="weui-btn-area" wx:if="{{status == 'pending' && isOrderOwner}}">
-        <button class="weui-btn" type="primary" @tap="submitOrder">微信支付</button>
-        <button class="weui-btn" type="default" @tap="updateOrderStatus('canceled')">取消订单</button>
-      </view>
-      <view class="order-total" wx:elif="{{status == 'paid' && isSpaceAdmin}}">
+      <view class="order-total" wx:if="{{status == 'paid' && isSpaceAdmin}}">
         <view class="weui-cells deliver-info" wx:if="{{is_readonly && status == 'paid' && isSpaceAdmin}}">
           <view class="weui-cell weui-cell_input">
             <view class="weui-cell__hd">
