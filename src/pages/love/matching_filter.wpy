@@ -37,15 +37,26 @@ export default class MatchingFilter extends wepy.page {
   config = {
     navigationBarTitleText: '筛选条件'
   }
+
   data = {
     is_filter_enable: false
   }
+
   async onLoad(e) {
     this.space_id = loveSpaceId;
     const filterEnable = wepy.getStorageSync('matching_filter_enable');
     this.is_filter_enable = filterEnable;
     this.$apply();
   }
+
+  onUnload() {
+    const pages = getCurrentPages();
+    const prevPage = pages[pages.length - 2];
+    if (prevPage.dataRefresh) {
+      prevPage.dataRefresh()
+    }
+  }
+
   methods = {
     goLookingFor(event) {
       wx.navigateTo({
