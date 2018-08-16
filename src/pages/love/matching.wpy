@@ -18,7 +18,7 @@
   }
   .record-container {
     padding-right: 0;
-    
+
     .heart {
       height: 80rpx;
       margin: 0;
@@ -196,7 +196,7 @@ export default class Matching extends wepy.page {
     name_field: 'user_b.name',
     baseUrl: baseUrl,
     navigationBarTitle: '缘分榜',
-    date_field: ['match', 'a_to_b', 'b_to_a', 'open_group_id', 'heart'],
+    date_field: ['match', 'a_to_b', 'b_to_a', 'open_group_id', 'heart', 'is_looking_for'],
     userId: '',
     orderby: 'match desc',
     space_id: null,
