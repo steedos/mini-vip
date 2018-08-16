@@ -273,6 +273,7 @@ export default class VIP extends wepy.app {
       'pages/love/question_list',
       'pages/love/discovery',
       'pages/love/privacy_protection',
+      'pages/love/settings',
     ],
     tabBar: {
       color: '#666',
