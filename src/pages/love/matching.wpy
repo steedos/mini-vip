@@ -360,8 +360,9 @@ export default class Matching extends wepy.page {
       })
     },
     async start_answer() {
-      if (this.isAuthUserInfo) {
-         wx.navigateTo({url:'/pages/love/cover_answer_questions'})
+      const user = this.$parent.globalData.user;
+      if (user.name && user.avatar) {
+        wx.navigateTo({url:'/pages/love/cover_answer_questions'})
       } else {
         wx.navigateTo({url: `/pages/user_info_login?naire=${this.naire}&share_from=${this.share_from}&next=${encodeURIComponent(`/pages/love/cover_answer_questions`)}`})
       }

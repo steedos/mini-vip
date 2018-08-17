@@ -211,7 +211,8 @@ export default class Test extends wepy.page {
 
   methods = {
     async goAnswer() {
-      if (this.isAuthUserInfo) {
+      const user = this.$parent.globalData.user; 
+      if (user.name && user.avatar) {
         wx.navigateTo({
           url: `/pages/love/papers_view?object_name=love_test&space_id=${this.space_id}&answered_url_type=redirectTo&answered_url=${encodeURIComponent(`/pages/love/matching?space_id=${this.space_id}`)}`
         });
@@ -223,7 +224,8 @@ export default class Test extends wepy.page {
       wx.navigateTo({url: '/pages/love/index?love=1'})
     },
     goShare() {
-      if (this.isAuthUserInfo) {
+      const user = this.$parent.globalData.user; 
+      if (user.name && user.avatar) {
         wx.navigateTo({url: `/pages/love/share?card=true&space_id=${this.space_id}`});
       } else {
         wx.navigateTo({url: `/pages/user_info_login?share=true`})
