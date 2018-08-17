@@ -23,17 +23,34 @@ page {
           </view>
         </view>
       </view>
+      
       <view class="weui-cells">
-      <navigator class="weui-cell weui-cell_access" @tap="goLookingFor">
-        <!-- <view class="weui-cell__hd">
-          <view class="slds-icon-action-filter slds-icon slds-icon--small slds-m-right--x-small"/>
-        </view> -->
-        <view class="weui-cell__bd">
-          <view>设置筛选条件</view>
-        </view>
-        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-      </navigator>
-    </view>
+        <repeat for="{{questionnaire}}" key="index" index="index" item="naire">
+          <navigator class="weui-cell weui-cell_access" url="{{naire.url}}">
+            <view class="weui-cell__hd">
+              <view class="{{naire.icon}}  slds-icon slds-icon--small slds-m-right--x-small"/>
+            </view>
+            <view class="weui-cell__bd">
+              <view>{{naire.label}}</view>
+            </view>
+            <view wx:if="{{progress[naire.object_name]}}" class="weui-cell__ft" style="padding-right: 13px">
+              <icon type="success_no_circle" size="14"></icon>
+            </view>
+            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+          </navigator>
+        </repeat>
+      </view>
+      <view class="weui-cells">
+        <navigator class="weui-cell weui-cell_access" url="/pages/love/love_question?space_id={{space_id}}">
+          <view class="weui-cell__hd">
+            <view class="slds-icon-custom-custom37 slds-icon slds-icon--small slds-m-right--x-small"/>
+          </view>
+          <view class="weui-cell__bd">
+            <view>问答匹配</view>
+          </view>
+          <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+        </navigator>
+      </view>
       <button class="weui-btn btn-filter" type="primary" @tap="goBack">
         确定
       </button>
@@ -50,7 +67,22 @@ export default class MatchingFilter extends wepy.page {
   }
 
   data = {
-    is_filter_enable: false
+    is_filter_enable: false,
+    questionnaire: [
+      {
+        icon: 'slds-icon-standard-client',
+        label: '关于我',
+        url: `/pages/love/papers_view?object_name=love_about_me&space_id=${loveSpaceId}&required=true`,
+        object_name: 'love_about_me'
+      },
+      {
+        icon: 'slds-icon-standard-campaign',
+        label: '筛选条件',
+        url: `/pages/love/papers_view?object_name=love_looking_for&space_id=${loveSpaceId}`,
+        object_name: 'love_looking_for'
+      },
+    ],
+    progress: {}
   }
 
   async onLoad(e) {
@@ -65,6 +97,13 @@ export default class MatchingFilter extends wepy.page {
     const prevPage = pages[pages.length - 2];
     if (prevPage.dataRefresh) {
       prevPage.dataRefresh()
+    }
+  }
+
+  async onShow() {
+    const finishedNaire = wx.getStorageSync('questionnaire_progess');
+    for (let naire of finishedNaire) {
+      this.progress[naire] = true;
     }
   }
 
