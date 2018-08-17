@@ -94,24 +94,21 @@
   text-align: left;
   font-size: 17px;
 }
-.btn-filter{
-  width: 100rpx;
-  position: absolute;
-  bottom: 0px;
-  right: 0px;
-  border-radius: 0px;
-  height:100rpx;
-  z-index: 100;
-  display:flex;
-  align-items:center;
-  .slds-icon {
-    background-color: transparent;
-    width:0.6em;
-  }
-}
 .weui-cells{
   position:relative;
   z-index:10;
+}
+.btn-filter{
+  position: relative;
+  .filter-light-dot{
+    position:absolute;
+    background:red;
+    width:20rpx;
+    height:20rpx;
+    border-radius:50%;
+    top:-6rpx;
+    right:-6rpx;
+  }
 }
 </style>
 
@@ -133,8 +130,9 @@
           </view>
           <view class="weui-cell__bd">
           </view>
-          <view class="weui-cell__ft">
-            <view class="slds-icon-custom-custom3 slds-icon slds-icon--small slds-m-left--x-small" @tap="goFilter"></view>
+          <view class="weui-cell__ft btn-filter" @tap="goFilter">
+            <view class="slds-icon-custom-custom3 slds-icon slds-icon--small slds-m-left--x-small"></view>
+            <view class="filter-light-dot" wx:if="{{matching_filter_enable}}"></view>
           </view>
         </view>
       </view>
@@ -178,9 +176,6 @@
       </block>
     </view>
     <view class="tab-bar border-top-1px">
-      <!-- <view  class="btn-filter" @tap.stop="goFilter">
-        <view class="slds-icon-action-filter slds-icon slds-icon--small slds-m-left--x-small"></view>
-      </view> -->
       <block wx:if="{{answered}}">
         <button open-type="share" class="btn-toolbar-primary" type="default" plain="true">
           查看群缘分
@@ -232,7 +227,8 @@ export default class Matching extends wepy.page {
     space_id: null,
     pageSize: 50,
     open_group_id: '',
-    answered:false
+    answered:false,
+    matching_filter_enable: false
   }
 
   async beforeOnLoad(e) {
@@ -277,6 +273,8 @@ export default class Matching extends wepy.page {
   }
 
   async onShow() {
+    const filterEnable = wepy.getStorageSync('matching_filter_enable');
+    this.matching_filter_enable = filterEnable;
     const finishedNaire = wx.getStorageSync('questionnaire_progess');
     if (finishedNaire.length > 0) {
       this.answered = true
