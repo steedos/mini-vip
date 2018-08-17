@@ -213,11 +213,12 @@ export default class Test extends wepy.page {
     async goAnswer() {
       const user = this.$parent.globalData.user; 
       if (user.name && user.avatar) {
-        wx.navigateTo({
-          url: `/pages/love/papers_view?object_name=love_test&space_id=${this.space_id}&answered_url_type=redirectTo&answered_url=${encodeURIComponent(`/pages/love/matching?space_id=${this.space_id}`)}`
-        });
+         const answeredUrl = encodeURIComponent(`/pages/love/cover_you_looking_for?space_id=${loveSpaceId}`)
+         wx.navigateTo({
+          url: `/pages/love/papers_view?object_name=love_test&space_id=${this.space_id}&answered_url=${answeredUrl}&keep_progress`})
       } else {
-        wx.navigateTo({url: `/pages/user_info_login?naire=${this.naire}&share_from=${this.share_from}&next=${encodeURIComponent(`/pages/love/papers_view?object_name=love_test&space_id=${this.space_id}`)}`})
+        const answeredUrl = encodeURIComponent(`/pages/love/cover_answer_questions?space_id=${loveSpaceId}`);
+        wx.navigateTo({url: `/pages/user_info_login?naire=${this.naire}&share_from=${this.share_from}&next=${answeredUrl}`})
       }
     },
     goLove() {
