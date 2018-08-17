@@ -2,6 +2,11 @@
 .page {
   padding-bottom: 20px !important;
 }
+.user-active {
+  border: none;
+  text-align: left;
+  font-size: 17px;
+}
 .questionnaire-list {
   .image {
     width: 100%;
@@ -49,41 +54,39 @@
 <template>
   <view class="page questionnaire-list" wx:if="{{is_loaded}}">
     <view class="weui-cells">
-      <navigator url="/pages/love/share?card=true&space_id={{space_id}}">
-        <block wx:if="{{isAuthUserInfo}}">
-          <view class="weui-media-box weui-media-box_appmsg">
-            <view class="weui-media-box__hd weui-media-box__hd_in-appmsg" style="width: 50px; height: 50px; line-height: 50px;">
-              <image class="image" mode="aspectFill" wx:if="{{isAuthUserInfo}}" src="{{avatar}}"></image>
+      <block wx:if="{{isAuthUserInfo}}">
+        <view class="weui-media-box weui-media-box_appmsg" @tap="goShare">
+          <view class="weui-media-box__hd weui-media-box__hd_in-appmsg" style="width: 50px; height: 50px; line-height: 50px;">
+            <image class="image" mode="aspectFill" wx:if="{{isAuthUserInfo}}" src="{{avatar}}"></image>
+          </view>
+          <view class="weui-media-box__bd weui-media-box__bd_in-appmsg" style="display: flex;">
+            <view class="weui-media-box__title" style="flex: 1;">
+              {{name}}
             </view>
-            <view class="weui-media-box__bd weui-media-box__bd_in-appmsg" style="display: flex;">
-              <view class="weui-media-box__title" style="flex: 1;">
-                {{name}}
-              </view>
-              <view wx:if="{{is_member}}" class="weui-media-box__desc" style="margin-top: 6rpx;">
-                VIP会员
-              </view>
-              <view class="weui-cell__ft weui-cell__ft_in-access">
-                <view class="vip_page_qrcode slds-icon slds-icon--small slds-m-right--x-small"></view>
-              </view>
+            <view wx:if="{{is_member}}" class="weui-media-box__desc" style="margin-top: 6rpx;">
+              VIP会员
+            </view>
+            <view class="weui-cell__ft weui-cell__ft_in-access">
+              <view class="vip_page_qrcode slds-icon slds-icon--small slds-m-right--x-small"></view>
             </view>
           </view>
-        </block>
-        <block wx:else>
-          <button open-type="getUserInfo" bindgetuserinfo="userLogin" plain="true" class="user-active weui-media-box weui-media-box_appmsg">
-            <view class="weui-media-box__hd weui-media-box__hd_in-appmsg" style="width: 50px; height: 50px; line-height: 50px;">
-              <image class="image" mode="aspectFill" src="https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/avatar.png"></image>
+        </view>
+      </block>
+      <block wx:else>
+        <button open-type="getUserInfo" bindgetuserinfo="userLogin" plain="true" class="user-active weui-media-box weui-media-box_appmsg">
+          <view class="weui-media-box__hd weui-media-box__hd_in-appmsg" style="width: 50px; height: 50px; line-height: 50px;">
+            <image class="image" mode="aspectFill" src="https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/avatar.png"></image>
+          </view>
+          <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
+            <view class="weui-media-box__title" style="line-height: 30px;">
+              {{name}}
             </view>
-            <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
-              <view class="weui-media-box__title" style="line-height: 30px;">
-                {{name}}
-              </view>
-              <view wx:if="{{is_member}}" class="weui-media-box__desc" style="margin-top: 6rpx;">
-                VIP会员
-              </view>
+            <view wx:if="{{is_member}}" class="weui-media-box__desc" style="margin-top: 6rpx;">
+              VIP会员
             </view>
-          </button>
-        </block>
-      </navigator>
+          </view>
+        </button>
+      </block>
     </view>
     <view class="weui-cells">
       <repeat for="{{questionnaire}}" key="index" index="index" item="naire">
@@ -304,29 +307,26 @@ export default class QuestionnaireList extends wepy.page {
     const spaceId = this.space_id;
     const userId = user._id;
     const setting = await wepy.getSetting();
-    if (!user.name || !this.avatar) {
+
+    if (!user.name || !user.avatar) {
       const query_options = {
         $filter: `owner eq '${userId}'`,
         $expand: 'owner($select=profile,name)'
       };
-      const user_result = await this.$parent.query('vip_customers',query_options,spaceId)
-      user.name = user_result.value[0].owner.name
-      user.avatar = user_result.value[0].owner.profile['avatar']
+      const user_result = await this.$parent.query('vip_customers', query_options, spaceId);
+      user.name = user_result.value[0].owner.name;
+      user.avatar = user_result.value[0].owner.profile ? user_result.value[0].owner.profile.avatar : '';
     }
-    if (setting.authSetting['scope.userInfo']) {
-      this.isAuthUserInfo = true;
-      this.userInfo = this.$parent.globalData.userInfo;
+ 
+    if (user.name && user.avatar) {
       this.name = user.name;
       this.avatar = user.avatar;
+      this.isAuthUserInfo = true;
     } else {
-      this.name = user.name;
-      this.avatar = user.avatar;
-
-      // this.avatar = 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg'
-    }
-
-    if(this.name && this.avatar){
-      this.isAuthUserInfo = true;
+      this.isAuthUserInfo = false;
+      if (!user.name) {
+        this.name = '未登录'
+      }
     }
 
     this.$apply();
@@ -432,6 +432,9 @@ export default class QuestionnaireList extends wepy.page {
       }else{
         wepy.navigateTo({url:`/pages/love/invite_code_me?space_id=${this.space_id}`})
       }
+    },
+    goShare() {
+      wepy.navigateTo({url: `/pages/love/share?card=true&space_id=${this.space_id}`})
     }
   };
 
