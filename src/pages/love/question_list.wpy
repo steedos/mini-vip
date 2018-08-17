@@ -1,18 +1,44 @@
-<style>
-  .page{
+<style lang="less">
+  .question-list{
+    .weui-cell__bd{
+     min-width: 50%;
+      /*max-width: 75%;*/
+    }
+    .weui-cell__ft{
+      text-align: left;
+      margin-left: 10px;
+    }
 
+    .weui-media-box__desc{
+      font-size: inherit;
+      color: #5f6fee;
+    }
   }
 </style>
 
 <template>
-  <view class="page">
-    <view class="weui-cells">
-      <repeat for="{{questions}}" key="index" index="index" item="question">
-        <navigator url="/pages/love/papers_view?object_name={{object_name}}&space_id={{space_id}}&fields={{question.name}}{{required}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
-          <view class="weui-cell__bd">{{question.label}}</view>
-          <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-        </navigator>
-      </repeat>
+  <view class="page question-list">
+    <!--左右显示-->
+    <!--<view class="weui-cells">-->
+      <!--<repeat for="{{questions}}" key="index" index="index" item="question">-->
+        <!--<navigator url="/pages/love/papers_view?object_name={{object_name}}&space_id={{space_id}}&fields={{question.name}}{{required}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active">-->
+          <!--<view class="weui-cell__bd">{{question.label}}</view>-->
+          <!--<view class="weui-cell__ft weui-cell__ft_in-access" wx:if="{{question.type === 'date'}}">{{util.formatDate(values[question.name], '', 'date')}}</view>-->
+          <!--<view class="weui-cell__ft weui-cell__ft_in-access" wx:else>{{values[question.name]}}<block wx:if="{{question.range}}"> 至 {{values[question.name + "_max"]}}</block></view>-->
+        <!--</navigator>-->
+      <!--</repeat>-->
+    <!--</view>-->
+
+    <view class="weui-panel weui-panel_access">
+      <view class="weui-panel__bd">
+        <repeat for="{{questions}}" key="index" index="index" item="question">
+          <navigator class="weui-media-box weui-media-box_text" url="/pages/love/papers_view?object_name={{object_name}}&space_id={{space_id}}&fields={{question.name}}{{required}}">
+            <view class=" weui-media-box__title_in-text">{{question.label}}</view>
+            <view class="weui-media-box__desc" wx:if="{{question.type === 'date'}}">{{util.formatDate(values[question.name], '', 'date')}}</view>
+            <view class="weui-media-box__desc" wx:else>{{values[question.name]}}<block wx:if="{{question.range}}"> 至 {{values[question.name + "_max"]}}</block></view>
+          </navigator>
+        </repeat>
+      </view>
     </view>
   </view>
 </template>
@@ -20,6 +46,7 @@
 <script>
   import wepy from 'wepy'
   import _ from 'underscore'
+  import util from '../../wxs/util.wxs'
 
   const OTHER = '_o';
   const IMPORTANT = '_i';
@@ -27,11 +54,16 @@
 
   export default class QuestionList extends wepy.page {
 
+    wxs = {
+      util: util
+    };
+
     data = {
       object_name: '',
       space_id: '',
       questions: [],
-      required: ''
+      required: '',
+      values: {}
     };
 
     getQuestions(fields){
@@ -86,6 +118,20 @@
       this.questions = this.getQuestions(object.fields);
       this.$apply();
       wx.hideLoading();
+    }
+
+    async onShow(e){
+      //获取用户答案
+      let query_options = {
+        $filter: `owner eq '${this.$parent.globalData.user._id}'`
+      };
+
+      let result = await this.$parent.query(this.object_name, query_options, this.space_id);
+
+      if(result.value.length > 0){
+        this.values = JSON.parse(JSON.stringify(result.value[0] || {}));
+      }
+      this.$apply();
     }
   }
 </script>
