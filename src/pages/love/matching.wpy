@@ -109,13 +109,38 @@
     width:0.6em;
   }
 }
+.weui-cells{
+  position:relative;
+  z-index:10;
+}
 </style>
 
 <template>
   <view class="page friend-list" wx:if="{{is_loaded}}">
     <view class="page__bd" style="margin-bottom: 60rpx">
+      <view class="weui-cells top-hearder weui-cells_after-title">
+        <view class="weui-cell weui-cell_access">
+          <view class="weui-cell__hd">
+            <block wx:if="{{open_group_id == '-1'}}">
+              好友缘分总榜
+            </block>
+            <block wx:if="{{open_group_id}}">
+              <open-data class="group-name" type="groupName" open-gid="{{open_group_id}}"></open-data>
+            </block>
+            <block wx:else>
+              好友缘分榜
+            </block>
+          </view>
+          <view class="weui-cell__bd">
+          </view>
+          <view class="weui-cell__ft">
+            <view class="slds-icon-custom-custom3 slds-icon slds-icon--small slds-m-left--x-small" @tap="goFilter"></view>
+          </view>
+        </view>
+      </view>
+      <view class="cover-page-bg"></view>
       <block wx:if="{{record_list.length}}">
-        <view class="weui-cells weui-cells_after-title">
+        <view class="weui-cells">
           <repeat for="{{record_list}}" key="index" index="index" item="record">
             <block wx:if="{{record.user_b.name}}">
               <navigator class="record-container weui-cell weui-cell_access"  data-item-id="{{record._id}}" hover-class="weui-cell_active">
@@ -143,7 +168,6 @@
         </view>
       </block>
       <block wx:else>
-        <view class="cover-page-bg"></view>
         <view class="page cover-page page-else">
           <view class="page__bd">
             <image class="light" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/light.png"/>
@@ -154,9 +178,9 @@
       </block>
     </view>
     <view class="tab-bar border-top-1px">
-      <view  class="btn-filter" @tap.stop="goFilter">
+      <!-- <view  class="btn-filter" @tap.stop="goFilter">
         <view class="slds-icon-action-filter slds-icon slds-icon--small slds-m-left--x-small"></view>
-      </view>
+      </view> -->
       <block wx:if="{{answered}}">
         <button open-type="share" class="btn-toolbar-primary" type="default" plain="true">
           查看群缘分
