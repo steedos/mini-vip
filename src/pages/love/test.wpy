@@ -62,7 +62,7 @@
           <image wx:else mode="aspectFill" class="image" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg"></image>
         </view>
       </view>
-      <button class="input-btn btn-join button-hover" type="primary" @tap="goMe" wx:if="{{answered}}">
+      <button class="input-btn btn-join button-hover" type="primary" @tap="goHome" wx:if="{{answered}}">
         我的缘分榜
       </button>
       <button class="input-btn btn-join button-hover" type="primary" @tap="goAnswer" wx:else>
@@ -179,7 +179,7 @@ export default class Test extends wepy.page {
 
     const finishedNaire = wx.getStorageSync('questionnaire_progess');
 
-    if(finishedNaire.indexOf('love_answer') > -1){
+    if(finishedNaire.indexOf('love_test') > -1){
       this.answered = true
     }
 
@@ -190,7 +190,7 @@ export default class Test extends wepy.page {
 
   async onShow() {
     const finishedNaire = wx.getStorageSync('questionnaire_progess');
-    if(finishedNaire.indexOf('love_answer') > -1){
+    if(finishedNaire.indexOf('love_test') > -1){
       this.answered = true
     }
     if (this.share_from) {
@@ -235,7 +235,7 @@ export default class Test extends wepy.page {
     goMatching() {
       wx.navigateTo({url: `/pages/love/matching?space_id=${this.space_id}`})
     },
-    goMe(){
+    goHome(){
       wx.switchTab({url: '/pages/love/home'})
     }
   }
