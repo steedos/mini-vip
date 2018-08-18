@@ -103,24 +103,6 @@
           <view class="weui-cell__ft weui-cell__ft_in-access"></view>
         </navigator>
       </repeat>
-    </view>
-    <!-- <view class="weui-cells">
-      <repeat for="{{other_questionnaire}}" key="index" index="index" item="other_naire">
-        <navigator class="weui-cell weui-cell_access" url="{{other_naire.url}}&filter=(owner eq '{{userId}}')">
-          <view class="weui-cell__hd">
-            <view class="{{other_naire.icon}} slds-icon slds-icon--small slds-m-right--x-small"/>
-          </view>
-          <view class="weui-cell__bd">
-            <view>{{other_naire.label}}</view>
-          </view>
-          <view wx:if="{{progress[other_naire.object_name]}}" class="weui-cell__ft" style="padding-right: 13px">
-            <icon type="success_no_circle" size="14"></icon>
-          </view>
-          <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-        </navigator>
-      </repeat>
-    </view> -->
-    <view class="weui-cells">
       <navigator class="weui-cell weui-cell_access" url="/pages/love/love_question?space_id={{space_id}}">
         <view class="weui-cell__hd">
           <view class="slds-icon-custom-custom37 slds-icon slds-icon--small slds-m-right--x-small"/>
@@ -195,52 +177,6 @@ export default class QuestionnaireList extends wepy.page {
         object_name: 'love_looking_for'
       },
     ],
-    other_questionnaire: [
-      {
-        icon: 'slds-icon-standard-skill',
-        label: '问答匹配(缘分卷)',
-        url: `/pages/love/papers_view?object_name=love_test&space_id=${loveSpaceId}`,
-        object_name: 'love_test'
-      },
-      {
-        icon: 'slds-icon-standard-social',
-        label: '问答匹配(玫瑰卷)',
-        url: `/pages/love/papers_view?object_name=love_answer&space_id=${loveSpaceId}`,
-        object_name: 'love_answer'
-      },
-      {
-        // icon: "slds-icon-standard-bot",
-        icon: 'slds-icon-standard-feed',
-        label: '问答匹配 (蔷薇卷)',
-        url: `/pages/love/papers_view?object_name=love_answer2&space_id=${loveSpaceId}`,
-        object_name: 'love_answer2'
-      }
-      ],
-      hobby_educations:[
-        {
-        icon: 'slds-icon-standard-canvas',
-        label: '兴趣爱好匹配',
-        object_name: 'love_hobby',
-        url: `/pages/love/papers_view?object_name=love_hobby&space_id=${loveSpaceId}`
-      },
-      {
-        icon: 'slds-icon-standard-reward',
-        label: '校友匹配',
-        object_name: 'love_educational_experience',
-        url: `../record/list?space_id=${loveSpaceId}&object_name=love_educational_experience`
-      },
-      ],
-      primacy_card: [
-        {
-          icon: 'slds-icon-standard-poll',
-          label: '隐私保护',
-          url: `/pages/love/privacy_protection?space_id=${loveSpaceId}`
-        },
-        // {
-        //   icon: 'slds-icon-standard-poll',
-        //   label: '交友名片',
-        // }
-      ],
     progress: {}
   };
 
@@ -248,7 +184,7 @@ export default class QuestionnaireList extends wepy.page {
   onShareAppMessage(res) {
     const user_id = this.$parent.globalData.user._id;
     let title = '我们是天生一对吗？';
-    let path = `/pages/love/test?naire=love_answer&share_from=${user_id}`
+    let path = `/pages/love/index?share_from=${user_id}`
     let imageUrl = 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/love_share_bg.jpg';
     return {
       title: title,

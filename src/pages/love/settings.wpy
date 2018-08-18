@@ -50,20 +50,27 @@
 <template>
   <view class="page questionnaire-list" wx:if="{{is_loaded}}">
     <view class="weui-cells">
-      <repeat for="{{primacy_card}}" key="index" index="index" item="other_naire">
-        <navigator class="weui-cell weui-cell_access" url="{{other_naire.url}}&filter=(owner eq '{{userId}}')">
-          <view class="weui-cell__hd">
-            <view class="{{other_naire.icon}} slds-icon slds-icon--small slds-m-right--x-small"/>
-          </view>
-          <view class="weui-cell__bd">
-            <view>{{other_naire.label}}</view>
-          </view>
-          <view wx:if="{{progress[other_naire.object_name]}}" class="weui-cell__ft" style="padding-right: 13px">
-            <icon type="success_no_circle" size="14"></icon>
-          </view>
-          <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-        </navigator>
-      </repeat>
+      <navigator class="weui-cell weui-cell_access" url="/pages/love/privacy_protection?space_id=${loveSpaceId}">
+        <view class="weui-cell__hd">
+          <view class="slds-icon-standard-poll slds-icon slds-icon--small slds-m-right--x-small"/>
+        </view>
+        <view class="weui-cell__bd">
+          <view>隐私保护</view>
+        </view>
+        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+      </navigator>
+      <navigator class="weui-cell weui-cell_access" url="/pages/love/share?space_id=${loveSpaceId}">
+        <view class="weui-cell__hd">
+          <view class="slds-icon-standard-announcement slds-icon slds-icon--small slds-m-right--x-small"/>
+        </view>
+        <view class="weui-cell__bd">
+          <view>拯救单身狗</view>
+        </view>
+        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+      </navigator>
+      
+    </view>
+    <view class="weui-cells">
       <navigator class="weui-cell weui-cell_access" url="/pages/space/index?space_id={{space_id}}">
         <view class="weui-cell__hd">
           <view class="slds-icon-custom-custom1 slds-icon slds-icon--small slds-m-right--x-small"/>
@@ -113,13 +120,6 @@ export default class QuestionnaireList extends wepy.page {
         value: '80'
       }
     ],
-      primacy_card: [
-        {
-          icon: 'slds-icon-standard-poll',
-          label: '隐私保护',
-          url: `/pages/love/privacy_protection?space_id=${loveSpaceId}`
-        },
-      ],
     progress: {}
   };
 
