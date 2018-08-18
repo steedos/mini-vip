@@ -347,7 +347,7 @@ export default class Matching extends wepy.page {
     if (this.open_group_id === '-1') {
       return `(owner eq '${user_id}')`;
     } else if (this.open_group_id) {
-      return `(owner eq '${user_id}' and open_group_id eq '${this.open_group_id}')`
+      return `(owner eq '${user_id}' and open_groups eq '${this.open_group_id}')`
     } else {
       return `(owner eq '${user_id}' and open_group_id eq null)`;
     }
