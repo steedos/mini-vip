@@ -72,13 +72,13 @@ export default class MatchingFilter extends wepy.page {
       {
         icon: 'slds-icon-standard-client',
         label: '关于我',
-        url: `/pages/love/papers_view?object_name=love_about_me&space_id=${loveSpaceId}&required=true`,
+        url: `/pages/love/question_list?object_name=love_about_me&space_id=${loveSpaceId}&required=true`,
         object_name: 'love_about_me'
       },
       {
         icon: 'slds-icon-standard-campaign',
         label: '筛选条件',
-        url: `/pages/love/papers_view?object_name=love_looking_for&space_id=${loveSpaceId}`,
+        url: `/pages/love/question_list?object_name=love_looking_for&space_id=${loveSpaceId}`,
         object_name: 'love_looking_for'
       },
     ],
