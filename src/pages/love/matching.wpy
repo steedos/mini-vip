@@ -115,7 +115,8 @@
 <template>
   <view class="page friend-list" wx:if="{{is_loaded}}">
     <view class="page__bd" style="margin-bottom: 60rpx">
-      <view class="weui-cells top-hearder weui-cells_after-title">
+      <view class="cover-page-bg"></view>
+      <view class="weui-cells top-hearder">
         <view class="weui-cell weui-cell_access">
           <view class="weui-cell__hd">
             <block wx:if="{{open_group_id == '-1'}}">
@@ -136,7 +137,6 @@
           </view>
         </view>
       </view>
-      <view class="cover-page-bg"></view>
       <block wx:if="{{record_list.length}}">
         <view class="weui-cells">
           <repeat for="{{record_list}}" key="index" index="index" item="record">
