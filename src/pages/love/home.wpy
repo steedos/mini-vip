@@ -99,6 +99,26 @@
 			</view>
 		</view>
 		<view class="page__bd">
+			<navigator class="group" url="/pages/love/matching?space_id={{space_id}}&open_group_id=-1">
+				<view class="header">
+					<view class="group-name">
+						<view class="group-name">好友缘分总榜</view>
+					</view>
+					<view class="weui-cell__ft weui-cell__ft_in-access"></view>
+				</view>
+				<view class="body">
+					<view class="count">{{friendList.count}}人</view>
+					<view class="join-avatar">
+						<repeat for="{{friendList.value}}" key="index" index="index" item="friend">
+							<block wx:if="{{friend.user_b.name}}">
+								<view class="avatar-container">
+									<image class="image" mode="aspectFill" src="{{friend.user_b.profile.avatar}}"></image>
+								</view>
+							</block>
+						</repeat>
+					</view>
+				</view>
+			</navigator>
 		
 			<repeat for="{{groups}}" key="index" index="index" item="group">
 				<navigator class="group" url="/pages/love/matching?space_id={{space_id}}&open_group_id={{group.open_group_id}}">
@@ -122,27 +142,6 @@
 					</view>
 				</navigator>
 			</repeat>
-
-			<navigator class="group" url="/pages/love/matching?space_id={{space_id}}&open_group_id=-1">
-				<view class="header">
-					<view class="group-name">
-						<view class="group-name">好友缘分总榜</view>
-					</view>
-					<view class="weui-cell__ft weui-cell__ft_in-access"></view>
-				</view>
-				<view class="body">
-					<view class="count">{{friendList.count}}人</view>
-					<view class="join-avatar">
-						<repeat for="{{friendList.value}}" key="index" index="index" item="friend">
-							<block wx:if="{{friend.user_b.name}}">
-								<view class="avatar-container">
-									<image class="image" mode="aspectFill" src="{{friend.user_b.profile.avatar}}"></image>
-								</view>
-							</block>
-						</repeat>
-					</view>
-				</view>
-			</navigator>
 
 			<!--
 			<view class="weui-cells">
@@ -338,7 +337,8 @@ export default class LoveHome extends wepy.page {
   async loadGroups() {
     const user_id = this.$parent.globalData.user._id;
     const options = {
-      $filter: `(users eq '${user_id}')`
+      $filter: `(users eq '${user_id}')`,
+      $orderby: 'modified desc'
     };
     const result = await this.$parent.query('vip_groups', options, 'guest');
     if (result && result.value) {
