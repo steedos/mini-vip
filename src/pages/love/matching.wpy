@@ -287,7 +287,7 @@ export default class Matching extends wepy.page {
   }
 
   async init() {
-    await req.post('/api/mini/vip/friend/answered', {space_id: this.space_id, rest: true});
+    await req.post('/api/mini/vip/friend/answered', {space_id: this.space_id, rest: true, matching_filter_enable: wepy.getStorageSync('matching_filter_enable')});
   }
 
   async dataRefresh() {
@@ -296,7 +296,7 @@ export default class Matching extends wepy.page {
     this.record_list = [];
     this.allow_load = true;
     this.current_skip = 0;
-    await req.post('/api/mini/vip/friend/answered', {space_id: this.space_id, rest: true});
+    await req.post('/api/mini/vip/friend/answered', {space_id: this.space_id, rest: true, matching_filter_enable: wepy.getStorageSync('matching_filter_enable')});
     await this.loadRecords();
     this.is_loaded = true;
     this.$apply();

@@ -1,10 +1,14 @@
 <style lang="less">
   page{
     background-color: #fff;
+    height: 100%;
   }
 
   .question{
-
+    /*background-image: url("http://img5.lamaqun.com/M00/EB/A6/DhFprFI9ug6AWqRHAACP5kxkjsA666.jpg");*/
+    /*background-attachment: fixed;*/
+    /*background-repeat: no-repeat;*/
+    /*background-size: cover;*/
     @height: 40px;
     @radius: 4px;
 
@@ -526,7 +530,7 @@
 </style>
 
 <template>
-  <view class="question">
+  <view class="question" bindtap="touchQuestion" style="height: 100%">
     <view class="question-progress">
       <view class="question-progress-bar" style="width: {{progress}};"></view>
     </view>
@@ -538,7 +542,7 @@
         <!--<view class="page__desc"></view>-->
       </view>
 
-      <view class="me-answer" wx:if="{{!showQuestionMe}}" @tap="clickMeAnswer">
+      <view class="me-answer" @tap="clickMeAnswer" wx:if="{{answer.me.label}}" animation="{{meAnswerAnimationData}}">
         <view class="weui-cell__ft weui-cells__title weui-flex">
           <view class="weui-flex__item"></view>
           <view class="answer-text">
@@ -552,7 +556,7 @@
         </view>
       </view>
 
-      <view class="question-section-me" wx:else>
+      <view class="question-section-me" animation="{{questionMeAnimationData}}">
         <view class="weui-cell__ft weui-cells__title weui-flex user-me">
           <view class="weui-flex__item me">你</view>
           <image class="avatar" src="{{me_avatar}}"></image>
@@ -602,7 +606,7 @@
       </view>
 
 
-      <view class="question-section-other" wx:if="{{!showQuestionMe}}">
+      <view class="question-section-other" animation="{{questionOtherAnimationData}}">
         <view class="weui-cells__title weui-flex user-other">
           <image class="avatar" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg"></image>
           <view class="weui-flex__item other">你的理想伴侣</view>
@@ -846,6 +850,7 @@
 
       </form>
     </view>
+    <view animation="{{animationData}}" style="color:red;width: 40px;opacity: 0;position: absolute">💗</view>
   </view>
 </template>
 
@@ -1032,6 +1037,51 @@
     }
 
     async onLoad(e){
+      /* 小💗 动画*/
+      let animation = wx.createAnimation({
+        duration: 600,
+        timingFunction: 'ease',
+      })
+
+      animation.top(0).left(0).step()
+
+      this.animation = animation;
+
+      this.animationData = this.animation.export()
+
+      /* 我的答案选项动画 */
+      let questionMeAnimation = wx.createAnimation({
+        transformOrigin: '100% 1%',
+        duration: 400,
+        timingFunction: 'linear',
+      });
+
+      this.questionMeAnimation = questionMeAnimation;
+
+      this.questionMeAnimationData = this.questionMeAnimation.export()
+
+      /* 我的答案动画*/
+      let meAnswerAnimation = wx.createAnimation({
+        transformOrigin: '100% 50%',
+        duration: 400,
+        timingFunction: 'linear',
+      });
+
+      this.meAnswerAnimation = meAnswerAnimation;
+
+      this.meAnswerAnimationData = this.meAnswerAnimation.export()
+
+      /* 理想对象动画 */
+      let questionOtherAnimation = wx.createAnimation({
+        transformOrigin: '1% 100%',
+        duration: 400,
+        timingFunction: 'linear',
+      });
+
+      this.questionOtherAnimation = questionOtherAnimation;
+
+      this.questionOtherAnimationData = this.questionOtherAnimation.export()
+
     }
 
     /*
@@ -1141,6 +1191,10 @@
 //    }
 
     data = {
+      animationData: {},
+      questionMeAnimationData: {},
+      meAnswerAnimationData: {},
+      questionOtherAnimationData: {},
       loading: true,
       me_avatar: '',
       baseUrl: baseUrl,
@@ -1220,9 +1274,7 @@
           await wepy.$instance.update('vip_customers', current_customer._id, {questionnaire_progess: finishedNaire}, spaceId);
         }
 
-        if (naire != 'love_about_me') {
-          await req.post('/api/mini/vip/friend/answered', {space_id: this.space_id, object_name: naire});
-        }
+        await req.post('/api/mini/vip/friend/answered', {space_id: this.space_id, object_name: naire, matching_filter_enable: wepy.getStorageSync('matching_filter_enable')});
 
         if(!init){
           if(this.answered_url){
@@ -1257,8 +1309,10 @@
           important: this.questionsAnswer[q_name + IMPORTANT] === 2
         };
         if(this.answer.me){
+          this.hideQuestionMeView();
           this.showQuestionMe = false;
         }else{
+          this.showQuestionMeView();
           this.showQuestionMe = true;
         }
 
@@ -1361,6 +1415,53 @@
       return new_fv;
     }
 
+    hideQuestionMeView(e){
+//      this.questionMeAnimation.translateY(-150).scale(0.1, 0.1).opacity(0).step()
+      this.questionMeAnimation.scale(0, 0).opacity(0).step()
+      this.questionMeAnimationData = this.questionMeAnimation.export()
+      this.$apply()
+
+      setTimeout(()=>{
+        this.showMeAnswer()
+        this.showQuestionOtherView()
+      }, 10)
+    }
+
+    showQuestionMeView(){
+      this.hideQuestionOtherView()
+      this.hideMeAnswer()
+
+      setTimeout(()=>{
+        this.questionMeAnimation.translateY(0).opacity(1).scale(1, 1).step()
+        this.questionMeAnimationData = this.questionMeAnimation.export()
+        this.$apply()
+      }, 10)
+    }
+
+    hideQuestionOtherView(){
+      this.questionOtherAnimation.opacity(0).scale(0, 0).step()
+      this.questionOtherAnimationData = this.questionOtherAnimation.export()
+      this.$apply()
+    }
+
+    showQuestionOtherView(){
+      this.questionOtherAnimation.opacity(1).scale(1, 1).step()
+      this.questionOtherAnimationData = this.questionOtherAnimation.export()
+      this.$apply()
+    }
+
+    hideMeAnswer(){
+      this.meAnswerAnimation.scale(0.1, 0.1).opacity(0).step()
+      this.meAnswerAnimationData = this.meAnswerAnimation.export()
+      this.$apply()
+    }
+
+    showMeAnswer(){
+      this.meAnswerAnimation.opacity(1).scale(1, 1).step()
+      this.meAnswerAnimationData = this.meAnswerAnimation.export()
+      this.$apply()
+    }
+
     methods = {
       radioChange: function (e) {
         this.showQuestionMe = false;
@@ -1377,8 +1478,9 @@
 
         this.$apply();
       },
-      clickMeAnswerItem: function () {
+      clickMeAnswerItem: function (e) {
         this.showQuestionMe = false;
+        this.hideQuestionMeView(e)
         this.$apply()
       },
       checkboxChange: function (e) {
@@ -1421,6 +1523,7 @@
       clickMeAnswer: function (e) {
         this.showQuestionMe = true;
         this.answer.other = [];
+        this.showQuestionMeView();
         this.$apply();
       },
       goNext: async function () {
@@ -1609,6 +1712,12 @@
         this.questionsAnswer[this.question.name] = this.question.value;
         this.question.showChooseImage =  (this.question.value.length < this.question.max);
         this.$apply();
+      },
+      touchQuestion: function (e) {
+        this.animation.translateX(e.detail.x + _.random(5,15)).translateY(e.detail.y).scale(1,1).opacity(1).step();
+        this.animation.scale(2, 2).opacity(0).step();
+        this.animationData = this.animation.export();
+        this.$apply()
       }
     }
   }
