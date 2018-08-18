@@ -110,6 +110,10 @@
     right:-6rpx;
   }
 }
+.btn-answer{
+  color: #fff;
+  font-size: 15px;
+}
 </style>
 
 <template>
@@ -131,10 +135,17 @@
           </view>
           <view class="weui-cell__bd">
           </view>
-          <view class="weui-cell__ft btn-filter" @tap="goFilter">
-            <view class="slds-icon-custom-custom3 slds-icon slds-icon--small slds-m-left--x-small"></view>
-            <view class="filter-light-dot" wx:if="{{matching_filter_enable}}"></view>
-          </view>
+          <block wx:if="{{answered}}">
+            <view class="weui-cell__ft btn-filter" @tap="goFilter">
+              <view class="slds-icon-custom-custom3 slds-icon slds-icon--small slds-m-left--x-small"></view>
+              <view class="filter-light-dot" wx:if="{{matching_filter_enable}}"></view>
+            </view>
+          </block>
+          <block wx:else>
+            <button class="btn-answer" type="primary" @tap="start_answer">
+              开始答题
+            </button>
+          </block>
         </view>
       </view>
       <block wx:if="{{record_list.length}}">
@@ -174,21 +185,16 @@
         </view>
       </block>
     </view>
-    <view class="tab-bar border-top-1px">
-      <block wx:if="{{answered}}">
+    <block wx:if="{{answered}}">
+      <view class="tab-bar border-top-1px">
         <button open-type="share" class="btn-toolbar-primary" type="default" plain="true">
           查看群缘分
         </button>
-      </block>
-      <block wx:else>
-        <button class="btn-toolbar-primary" type="default" plain="true" @tap="start_answer">
-          答题测试群缘分
-        </button>
-      </block>
-      <!--<button class="btn-toolbar-primary" type="default" plain="true" @tap="goShare">-->
-        <!--邀请好友打榜-->
-      <!--</button>-->
-    </view>
+        <!--<button class="btn-toolbar-primary" type="default" plain="true" @tap="goShare">-->
+          <!--邀请好友打榜-->
+        <!--</button>-->
+      </view>
+    </block>
   </view>
 </template>
 
