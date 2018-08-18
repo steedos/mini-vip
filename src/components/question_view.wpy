@@ -12,11 +12,11 @@
     @height: 40px;
     @radius: 4px;
 
-    @bigSelectBGColor: #5f6fee;
+    @bigSelectBGColor: #1AAD19;
 
-    @mainBackground: #5f6fee;
+    @mainBackground: #1AAD19;
 
-    @meBackground: #5f6fee;
+    @meBackground: #1AAD19;
 
     @otherBackground: #FFFFFF;
 
@@ -637,7 +637,7 @@
                     <view class="weui-cell__ft weui-check__hd_in-checkbox">
                       <view class="weui-icon-checkbox_circle check-icon" wx:if="{{!util.includes(answer.other, option.value)}}"></view>
                       <view class="weui-icon-checkbox_success check-icon" wx:if="{{util.includes(answer.other, option.value)}}">
-                        <icon type="success_no_circle" size="16" color="#4d7bd9"></icon>
+                        <icon type="success_no_circle" size="16" color="#1AAD19"></icon>
                       </view>
                       <!-- <icon class="weui-icon-checkbox_circle" type="circle" size="23" wx:if="{{!util.includes(answer.other, option.value)}}"></icon> -->
                       <!-- <icon class="weui-icon-checkbox_success" type="success" size="23" wx:if="{{util.includes(answer.other, option.value)}}"></icon> -->
@@ -658,7 +658,7 @@
             <view class="weui-check__hd_in-checkbox">
               <view class="weui-icon-checkbox_circle check-icon" wx:if="{{!answer.important}}"></view>
               <view class="weui-icon-checkbox_success check-icon" wx:if="{{answer.important}}">
-                <icon type="success_no_circle" size="16" color="#4d7bd9"></icon>
+                <icon type="success_no_circle" size="16" color="#1AAD19"></icon>
               </view>
             </view>
           </view>
@@ -708,7 +708,7 @@
                   <view class="weui-check__hd_in-checkbox">
                     <view class="weui-icon-checkbox_circle check-icon" wx:if="{{!answer.important}}"></view>
                     <view class="weui-icon-checkbox_success check-icon" wx:if="{{answer.important}}">
-                      <icon type="success_no_circle" size="16" color="#4d7bd9"></icon>
+                      <icon type="success_no_circle" size="16" color="#1AAD19"></icon>
                     </view>
                   </view>
                 </view>

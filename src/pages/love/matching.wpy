@@ -249,8 +249,7 @@ export default class Matching extends wepy.page {
       e.qrcode = 1
     }
     await this.$parent.login(e);
-    if(this.$parent.globalData.shareTicket){
-      this.$parent.globalData.shareTicket = null;
+    if(getCurrentPages().length<=1){
       let finishedNaire = wx.getStorageSync('questionnaire_progess');
 			if (finishedNaire.length > 0) {
 				wx.switchTab({url: '/pages/love/home'});
