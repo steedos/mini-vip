@@ -113,7 +113,7 @@ export default class Test extends wepy.page {
 
   onShareAppMessage(res) {
     const user_id = this.$parent.globalData.user._id;
-    let title = '我们是天生一对吗？';
+    let title = '无颜是一个神奇的小程序，可以测试好友缘分哦！';
     let path = `/pages/love/test?naire=love_answer&share_from=${user_id}`
     return {
       title: title,
