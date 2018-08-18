@@ -210,7 +210,7 @@ import _ from 'underscore';
 
 export default class Matching extends wepy.page {
   config = {
-    navigationBarTitleText: '',
+    navigationBarTitleText: '缘分榜',
     enablePullDownRefresh: true
   }
 

@@ -172,6 +172,7 @@ export default class LoveHome extends wepy.page {
   };
 
   data = {
+    navigationBarTitle: '缘分圈',
     user_id: '',
     is_loaded: false,
     space_id: null,
