@@ -1717,7 +1717,7 @@
       },
       touchQuestion: function (e) {
         this.animation.translateX(e.detail.x + _.random(20,35)).translateY(e.detail.y - _.random(1,10)).scale(1.5, 1.5).opacity(1).step();
-        this.animation.scale(0, 0).opacity(1).step();
+        this.animation.scale(0, 0).opacity(0).step();
         this.animationData = this.animation.export();
         this.$apply()
       }
