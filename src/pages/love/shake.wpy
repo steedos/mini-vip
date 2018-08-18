@@ -164,7 +164,7 @@ export default class LoveShake extends wepy.page {
   config = {
     navigationBarBackgroundColor: '#353535',
     navigationBarTextStyle: 'white',
-    navigationBarTitleText: '摇一摇'
+    navigationBarTitleText: '交换缘分圈'
   };
 
   data = {
@@ -175,7 +175,7 @@ export default class LoveShake extends wepy.page {
     loveSpaceId: loveSpaceId,
     topAnimationData: {},
     bottomAnimationData: {},
-    text: '还没摇',
+    text: '还没匹配',
     matching: null,
     noMatching: false,
     shakeData: {
@@ -297,7 +297,7 @@ export default class LoveShake extends wepy.page {
         if (!self.isLoading) {
           const user_id = self.$parent.globalData.user._id;
           shakeAudioContext.play();
-          self.text = '正在摇';
+          self.text = '正在匹配';
           self.matching = null;
           self.noMatching = false;
           self.isLoading = true;
