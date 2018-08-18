@@ -92,7 +92,7 @@ import util from '../../wxs/util.wxs';
 export default class Test extends wepy.page {
 
   config = {
-    navigationBarTitleText: '好友缘分',
+    navigationBarTitleText: '缘分测试',
   };
 
   data = {
