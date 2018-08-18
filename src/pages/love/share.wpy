@@ -177,7 +177,7 @@
         <view class="vip_close"></view>
       </view>
       <view class="share-friend-circle-box">
-        <view class="share-friend-circle-title">我的交友名片</view>
+        <view class="share-friend-circle-title">交友海报</view>
         <image class="image" mode="widthFix" src="{{friend_circle_image_url}}" @load="friendCircleImageLoaded" @error="friendCircleImageLoadFailed"/>
         <block wx:if="{{showOpenSetting}}">
           <button type="primary" open-type="openSetting" class="btn-save-image" @opensetting="openSetting">
@@ -370,7 +370,7 @@
         const userId = this.$parent.globalData.user._id;
         const scene = `share_from=${userId}`;
         wepy.showLoading({
-          title: '生成交友名片中',
+          title: '生成海报中',
           mask: true
         });
         const width = 750
