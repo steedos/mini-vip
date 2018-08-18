@@ -1,7 +1,7 @@
 <style lang="less">
   page{
     height: 100%;
-    background:#cae6f1;
+    background-color: #fff;
   }
   .page__hd{
     padding:40rpx;
@@ -348,7 +348,7 @@
 
     async generateFriendCard() {
       if(this.$parent.globalData.user.avatar) {
-        const imageUrl = `https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/share_me_new.png`;
+        const imageUrl = `https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/share_me.png`;
         const imgRes = await wepy.downloadFile({
           url: imageUrl
         }).catch((err)=>{
