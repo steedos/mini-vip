@@ -74,7 +74,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background:#5f6fee!important;
+    background: #1AAD19!important;
     color:#fff!important;
     border-radius:0;
   }
@@ -150,7 +150,6 @@
                 </view>
                 <view class="weui-cell__bd">
                   <view class="name">{{record.user_b.name}}</view>
-                  <open-data wx:if="{{record.open_group_id}}" class="group-name" type="groupName" open-gid="{{record.open_group_id}}"></open-data>
                 </view>
                 <block wx:if="{{answered}}">
                   <view class="weui-cell__ft" wx:if="{{record.match == undefined}}" style="font-size: 36rpx">答题中</view>
