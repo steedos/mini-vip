@@ -1274,9 +1274,7 @@
           await wepy.$instance.update('vip_customers', current_customer._id, {questionnaire_progess: finishedNaire}, spaceId);
         }
 
-        if (naire != 'love_about_me') {
-          await req.post('/api/mini/vip/friend/answered', {space_id: this.space_id, object_name: naire});
-        }
+        await req.post('/api/mini/vip/friend/answered', {space_id: this.space_id, object_name: naire, matching_filter_enable: wepy.getStorageSync('matching_filter_enable')});
 
         if(!init){
           if(this.answered_url){
