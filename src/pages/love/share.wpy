@@ -401,7 +401,7 @@
           const position_x = 0
           const position_y = 0
           const width = 750
-          await this.$parent.generateQrCode(ctx,codeImgRes.tempFilePath,avatarRes.tempFilePath, position_x, position_y, width, width,'rgb(202, 230, 241)')
+          await this.$parent.generateQrCode(ctx,codeImgRes.tempFilePath,avatarRes.tempFilePath, position_x, position_y, width, width,'white')
           ctx.draw(true, async ()=>{
             let x = self;
             const res = await wepy.canvasToTempFilePath({
