@@ -631,18 +631,20 @@
             <view class="weui-cells weui-cells_after-title">
               <checkbox-group bindchange="checkboxChange">
                 <repeat for="{{question.options}}" key="index" index="index" item="option">
-                  <label class="weui-cell">
-                    <checkbox class="weui-check" value="{{option.value}}" checked="{{util.includes(answer.other, option.value)}}"/>
-                    <view class="weui-cell__bd">{{option.label}}</view>
-                    <view class="weui-cell__ft weui-check__hd_in-checkbox">
-                      <view class="weui-icon-checkbox_circle check-icon" wx:if="{{!util.includes(answer.other, option.value)}}"></view>
-                      <view class="weui-icon-checkbox_success check-icon" wx:if="{{util.includes(answer.other, option.value)}}">
-                        <icon type="success_no_circle" size="16" color="#1AAD19"></icon>
+                  <view class="weui-cell" hover-class="weui-cell_active">
+                    <label style="width: 100%;position:relative;display: flex">
+                      <checkbox class="weui-check" value="{{option.value}}" checked="{{util.includes(answer.other, option.value)}}"/>
+                      <view class="weui-cell__bd">{{option.label}}</view>
+                      <view class="weui-cell__ft weui-check__hd_in-checkbox">
+                        <view class="weui-icon-checkbox_circle check-icon" wx:if="{{!util.includes(answer.other, option.value)}}"></view>
+                        <view class="weui-icon-checkbox_success check-icon" wx:if="{{util.includes(answer.other, option.value)}}">
+                          <icon type="success_no_circle" size="16" color="#1AAD19"></icon>
+                        </view>
+                        <!-- <icon class="weui-icon-checkbox_circle" type="circle" size="23" wx:if="{{!util.includes(answer.other, option.value)}}"></icon> -->
+                        <!-- <icon class="weui-icon-checkbox_success" type="success" size="23" wx:if="{{util.includes(answer.other, option.value)}}"></icon> -->
                       </view>
-                      <!-- <icon class="weui-icon-checkbox_circle" type="circle" size="23" wx:if="{{!util.includes(answer.other, option.value)}}"></icon> -->
-                      <!-- <icon class="weui-icon-checkbox_success" type="success" size="23" wx:if="{{util.includes(answer.other, option.value)}}"></icon> -->
-                    </view>
-                  </label>
+                    </label>
+                  </view>
                 </repeat>
               </checkbox-group>
               <view class="weui-cell more" wx:if="{{question.options_all.length > 4}}" @tap="clickMore">
