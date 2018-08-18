@@ -154,7 +154,7 @@ page {
   }
 
   .btn-join{
-    background:#5f6fee;
+    background:#1AAD19;
     padding:6px;
     color:#fff;
     font-weight:bold;
@@ -289,7 +289,7 @@ export default class VIP extends wepy.app {
     ],
     tabBar: {
       color: '#666',
-      selectedColor: '#5f71ee',
+      selectedColor: '#1AAD19',
       backgroundColor: '#fdfdfd',
       borderStyle: 'black',
       list: [
@@ -297,13 +297,13 @@ export default class VIP extends wepy.app {
         pagePath: 'pages/love/home',
         selectedIconPath: './images/tabbars/apps_pressed.png',
         iconPath: './images/tabbars/apps.png',
-        text: '缘分',
+        text: '缘分圈',
       },
       {
-        pagePath: 'pages/love/shake',
+        pagePath: 'pages/love/test',
         selectedIconPath: './images/tabbars/topic_pressed.png',
         iconPath: './images/tabbars/topic.png',
-        text: '摇一摇',
+        text: '好友缘分',
       },
       {
         pagePath: 'pages/love/me',

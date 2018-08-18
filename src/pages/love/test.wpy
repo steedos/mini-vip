@@ -62,12 +62,14 @@
           <image wx:else mode="aspectFill" class="image" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg"></image>
         </view>
       </view>
-      <button class="input-btn btn-join button-hover" type="primary" @tap="goHome" wx:if="{{answered}}">
+      <button class="input-btn btn-join button-hover" type="primary" @tap="goMatching" wx:if="{{answered}}">
         我的缘分榜
       </button>
       <button class="input-btn btn-join button-hover" type="primary" @tap="goAnswer" wx:else>
         开始答题
       </button>
+
+      <button class="btn-love" @tap="goShare">邀请好友测试</button>
     </view>
 
     <!-- <view class="page__hd">
@@ -90,7 +92,7 @@ import util from '../../wxs/util.wxs';
 export default class Test extends wepy.page {
 
   config = {
-    navigationBarTitleText: '无颜',
+    navigationBarTitleText: '好友缘分',
   };
 
   data = {
