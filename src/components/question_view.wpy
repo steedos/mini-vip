@@ -1775,9 +1775,23 @@
       },
       navigateTo(key, e){
         let question = _.clone(this.question);
-        question.name = key;
+
         question.options = question.options_all;
-        let url = `/pages/edit/select?title=${question.label}&text=${question.name}&field=${JSON.stringify(question)}&value=${question.value.value}`;
+
+        let value = question.value ? question.value.value : '';
+
+        if(question.range){
+          if(!_.isObject(this.question.value)){
+            question.value = {}
+          }
+          if(question.name === key){
+            value = question.value.min ? question.value.min.value : ''
+          }else{
+            value = question.value.max ? question.value.max.value : ''
+          }
+        }
+        question.name = key;
+        let url = `/pages/edit/select?title=${question.label}&text=${question.name}&field=${JSON.stringify(question)}&value=${value}`;
         wepy.navigateTo({url: url});
       }
     }
