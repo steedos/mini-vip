@@ -2,7 +2,7 @@
 </style>
 
 <template>
-  </view>
+  <view>
     <view class="cover-page-bg"></view>
     <view class="page cover-page">
       <view class="page__hd">
@@ -14,16 +14,16 @@
         <button class="btn-join" @tap="next">下一步</button>
       </view>
     </view>
-  <view>
+  </view>
 </template>
 
 <script>
 import wepy from 'wepy';
 import { loveSpaceId } from '@/config';
-  
+
 export default class Cover extends wepy.page {
   config = {
-    navigationBarTitleText: '无颜', 
+    navigationBarTitleText: '无颜',
   };
 
   data = {
@@ -65,7 +65,7 @@ export default class Cover extends wepy.page {
           // });
           wx.navigateTo({url:`/pages/love/home`})
           break;
-        
+
         case 'love_looking_for':
           var answeredUrl = encodeURIComponent(`/pages/love/cover_about_yourself?space_id=${this.spaceId}`);
           wx.navigateTo({

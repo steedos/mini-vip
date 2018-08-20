@@ -746,7 +746,7 @@
                       {{question.value.min.label}}
                     </view>
                   </view>
-                  <input type="number" name="{{question.name}}" value="{{question.value_min_index}}" style="display: none">
+                  <input type="number" name="{{question.name}}" value="{{question.value_min_index}}" style="display: none" />
                   <!--<picker bindchange="bindSelectPickerMinChange" value="{{question.value_min_index}}" range="{{question.options_all}}" range-key="label" name="{{question.name}}">-->
                     <!--<view class="weui-input shadow" name="{{question.name}}">-->
                       <!--{{question.value.min.label}}-->
@@ -760,7 +760,7 @@
                       {{question.value.max.label}}
                     </view>
                   </view>
-                  <input type="number" name="{{question.name}}_max" value="{{question.value_max_index}}" style="display: none">
+                  <input type="number" name="{{question.name}}_max" value="{{question.value_max_index}}" style="display: none" />
                   <!--<picker bindchange="bindSelectPickerMaxChange" value="{{question.value_max_index}}" range="{{question.options_all}}" range-key="label" name="{{question.name}}_max">-->
                     <!--<view class="weui-input shadow">-->
                       <!--{{question.value.max.label}}-->
@@ -788,7 +788,7 @@
                     {{question.value.label}}
                     </view>
                   </view>
-                  <input type="number" name="{{question.name}}" value="{{question.value_index}}" style="display: none">
+                  <input type="number" name="{{question.name}}" value="{{question.value_index}}" style="display: none" />
                   <!--<picker bindchange="bindSelectPickerChange" value="{{question.value_index}}" range="{{question.options_all}}" range-key="label" name="{{question.name}}">-->
                     <!--<view class="weui-input shadow" name="{{question.name}}">-->
                       <!--{{question.value.label}}-->
