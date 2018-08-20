@@ -1,32 +1,39 @@
+<style lang="less">
+  page {
+    height: 100%;
+  }
+</style>
 <template>
-  <view class="page-edit-text">
-    <view class="page__bd">
-      <view class="weui-cells">
-        <checkbox-group bindchange="selectChange" data-id="{{key}}" wx:if="{{multiple}}">
-          <repeat for="{{options}}" key="index" index="index" item="option">
-            <label class="weui-cell weui-check__label">
-              <checkbox class="weui-check" value="{{option.value}}" checked="{{option.checked}}" />
-              <view class="weui-cell__bd">{{option.label}}</view>
-              <view class="weui-cell__ft weui-cell__ft_in-radio" wx:if="{{option.checked}}">
-                <icon class="weui-icon-radio" type="success_no_circle" size="16"></icon>
-              </view>
-            </label>
-          </repeat>
-        </checkbox-group>
-        <radio-group bindchange="radioChange" data-id="{{key}}" wx:else>
-          <repeat for="{{options}}" key="index" index="index" item="option">
-            <label class="weui-cell weui-check__label">
-              <radio class="weui-check" value="{{option.value}}" checked="{{option.checked}}"/>
-              <view class="weui-cell__bd">{{option.label}}</view>
-              <view class="weui-cell__ft weui-cell__ft_in-radio" wx:if="{{option.checked}}">
-                <icon class="weui-icon-radio" type="success_no_circle" size="16"></icon>
-              </view>
-            </label>
-          </repeat>
-        </radio-group>
+  <scroll-view scroll-into-view="_{{value}}" style="height: 100%;" scroll-y="true" scroll-with-animation="true">
+    <view class="page-edit-text">
+      <view class="page__bd">
+        <view class="weui-cells">
+          <checkbox-group bindchange="selectChange" data-id="{{key}}" wx:if="{{multiple}}">
+            <repeat for="{{options}}" key="index" index="index" item="option">
+              <label class="weui-cell weui-check__label" id="{{option.value}}">
+                <checkbox class="weui-check" value="{{option.value}}" checked="{{option.checked}}" />
+                <view class="weui-cell__bd">{{option.label}}</view>
+                <view class="weui-cell__ft weui-cell__ft_in-radio" wx:if="{{option.checked}}">
+                  <icon class="weui-icon-radio" type="success_no_circle" size="16"></icon>
+                </view>
+              </label>
+            </repeat>
+          </checkbox-group>
+          <radio-group bindchange="radioChange" data-id="{{key}}" wx:else >
+            <repeat for="{{options}}" key="index" index="index" item="option">
+              <label class="weui-cell weui-check__label" id="_{{option.value}}">
+                <radio class="weui-check" value="{{option.value}}" checked="{{option.checked}}"/>
+                <view class="weui-cell__bd">{{option.label}}</view>
+                <view class="weui-cell__ft weui-cell__ft_in-radio" wx:if="{{option.checked}}">
+                  <icon class="weui-icon-radio" type="success_no_circle" size="16"></icon>
+                </view>
+              </label>
+            </repeat>
+          </radio-group>
+        </view>
       </view>
     </view>
-  </view>
+  </scroll-view>
 </template>
 
 
@@ -40,6 +47,7 @@
 
     data = {
       key: '',
+      value: '',
       options: [],
       multiple: false
     }
@@ -68,6 +76,7 @@
       if(e.field){
         field = JSON.parse(e.field);
         let value = e.value || '';
+        this.value = value;
         if(field.multiple){
           value = value.split(',')
           field.options.forEach(function (o) {
@@ -96,6 +105,7 @@
       if (e.title) {
         wx.setNavigationBarTitle({title: '选择' + e.title});
       }
+      this.$apply()
     }
 
     methods = {

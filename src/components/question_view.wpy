@@ -741,19 +741,31 @@
             <block wx:if="{{question.range}}">
               <view class="select-picker weui-flex">
                 <view class="weui-flex__item">
-                  <picker bindchange="bindSelectPickerMinChange" value="{{question.value_min_index}}" range="{{question.options_all}}" range-key="label" name="{{question.name}}">
+                  <view @tap.stop="navigateTo({{question.name}})">
                     <view class="weui-input shadow" name="{{question.name}}">
                       {{question.value.min.label}}
                     </view>
-                  </picker>
+                  </view>
+                  <input type="number" name="{{question.name}}" value="{{question.value_min_index}}" style="display: none">
+                  <!--<picker bindchange="bindSelectPickerMinChange" value="{{question.value_min_index}}" range="{{question.options_all}}" range-key="label" name="{{question.name}}">-->
+                    <!--<view class="weui-input shadow" name="{{question.name}}">-->
+                      <!--{{question.value.min.label}}-->
+                    <!--</view>-->
+                  <!--</picker>-->
                 </view>
                 <view class="range-joiner"> — </view>
                 <view class="weui-flex__item">
-                  <picker bindchange="bindSelectPickerMaxChange" value="{{question.value_max_index}}" range="{{question.options_all}}" range-key="label" name="{{question.name}}_max">
-                    <view class="weui-input shadow">
+                  <view @tap.stop="navigateTo({{question.name + '_max'}})">
+                    <view class="weui-input shadow" name="{{question.name}}">
                       {{question.value.max.label}}
                     </view>
-                  </picker>
+                  </view>
+                  <input type="number" name="{{question.name}}_max" value="{{question.value_max_index}}" style="display: none">
+                  <!--<picker bindchange="bindSelectPickerMaxChange" value="{{question.value_max_index}}" range="{{question.options_all}}" range-key="label" name="{{question.name}}_max">-->
+                    <!--<view class="weui-input shadow">-->
+                      <!--{{question.value.max.label}}-->
+                    <!--</view>-->
+                  <!--</picker>-->
                 </view>
               </view>
             </block>
@@ -771,11 +783,17 @@
                   </radio-group>
                 </block>
                 <block wx:else>
-                  <picker bindchange="bindSelectPickerChange" value="{{question.value_index}}" range="{{question.options_all}}" range-key="label" name="{{question.name}}">
-                    <view class="weui-input shadow" name="{{question.name}}">
-                      {{question.value.label}}
+                  <view @tap.stop="navigateTo({{question.name}})">
+                    <view class="weui-input shadow">
+                    {{question.value.label}}
                     </view>
-                  </picker>
+                  </view>
+                  <input type="number" name="{{question.name}}" value="{{question.value_index}}" style="display: none">
+                  <!--<picker bindchange="bindSelectPickerChange" value="{{question.value_index}}" range="{{question.options_all}}" range-key="label" name="{{question.name}}">-->
+                    <!--<view class="weui-input shadow" name="{{question.name}}">-->
+                      <!--{{question.value.label}}-->
+                    <!--</view>-->
+                  <!--</picker>-->
                 </block>
               </view>
             </block>
@@ -1464,6 +1482,38 @@
       this.$apply()
     }
 
+    changeValue(key, value){
+
+      let question = this.question;
+
+      if(question.range && question.type === 'select'){
+        if(question.name === key){
+          question.value.min = _.find(question.options_all, (o, i)=>{
+            if(o.value === value){
+              question.value_min_index = i;
+              return true;
+            }
+          })
+        }else{
+          question.value.max = _.find(question.options_all, (o, i)=>{
+            if(o.value === value){
+              question.value_max_index = i;
+              return true;
+            }
+          })
+        }
+      }else{
+        this.question.value =  _.find(this.question.options_all, (o, i)=>{
+          if(o.value === value){
+            this.question.value_index = i;
+            return true;
+          }
+        });
+      }
+
+      this.$apply()
+    }
+
     methods = {
       radioChange: function (e) {
         this.showQuestionMe = false;
@@ -1558,11 +1608,13 @@
         const key = question.name;
         const fieldValue = formValues[key];
 
-//        console.log('submitFieldForm', formValues, key, fieldValue, question.type)
 
         let values = {};
 
         if(question.type === 'select' && (question.options_all.length >= 10 || question.range)){
+
+//          values[key] = question.options_all[question.value_index].value;
+
           if(fieldValue || _.isNumber(fieldValue)){
             values[key] = question.options_all[fieldValue].value;
           }else{
@@ -1720,6 +1772,13 @@
         this.animation.scale(0, 0).opacity(0).step();
         this.animationData = this.animation.export();
         this.$apply()
+      },
+      navigateTo(key, e){
+        let question = _.clone(this.question);
+        question.name = key;
+        question.options = question.options_all;
+        let url = `/pages/edit/select?title=${question.label}&text=${question.name}&field=${JSON.stringify(question)}&value=${question.value.value}`;
+        wepy.navigateTo({url: url});
       }
     }
   }
