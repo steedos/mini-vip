@@ -558,7 +558,7 @@
 
       <view class="question-section-me" animation="{{questionMeAnimationData}}">
         <view class="weui-cell__ft weui-cells__title weui-flex user-me">
-          <view class="weui-flex__item me">你</view>
+          <view class="weui-flex__item me">你的选择</view>
           <image class="avatar" src="{{me_avatar}}"></image>
         </view>
         <view class="question-body">
@@ -609,7 +609,7 @@
       <view class="question-section-other" animation="{{questionOtherAnimationData}}">
         <view class="weui-cells__title weui-flex user-other">
           <image class="avatar" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg"></image>
-          <view class="weui-flex__item other">你的理想伴侣</view>
+          <view class="weui-flex__item other">期待对方的选择（可多选）</view>
         </view>
         <view class="question-body">
           <block wx:if="{{question.options_all.length > 4}}">
