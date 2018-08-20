@@ -86,6 +86,7 @@ export default class LoveIndex extends wepy.page {
     let finishedNaire = wx.getStorageSync('questionnaire_progess');
     if(finishedNaire.length > 0){
       wx.switchTab({url: '/pages/love/home'});
+      return ;
     }
     wepy.showShareMenu({
       withShareTicket: true
