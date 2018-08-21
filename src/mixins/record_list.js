@@ -183,10 +183,7 @@ export default class recordList extends wepy.mixin {
       console.log('mixin beforeOnLoad...', e);
       await this.beforeOnLoad(e);
     }
-    wepy.showLoading({
-      title: '加载中',
-      mask: true
-    });
+    wx.showNavigationBarLoading();
 
     if(!e){
       throw new Error('缺少参数:space_id,object_name')
@@ -227,7 +224,7 @@ export default class recordList extends wepy.mixin {
     await this.loadRecords()
     this.is_loaded = true
     this.$apply()
-    wepy.hideLoading();
+    wx.hideNavigationBarLoading();
   }
 
   methods = {
