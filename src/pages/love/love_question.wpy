@@ -202,7 +202,7 @@ export default class QuestionnaireList extends wepy.page {
     wepy.showShareMenu({
       withShareTicket: true
     });
-    wx.showLoading({ mask: true });
+    wx.showNavigationBarLoading()
     if (!e.space_id) {
       // 保证一进入就新建space对应的vip_customers记录
       e.space_id = loveSpaceId;
@@ -219,11 +219,11 @@ export default class QuestionnaireList extends wepy.page {
     this.userId = this.$parent.globalData.user._id;
     this.is_loaded = true;
     this.$apply();
-    wx.hideLoading();
+    wx.hideNavigationBarLoading()
   }
 
   async onShow() {
-    wx.showLoading({ mask: true });
+    wx.showNavigationBarLoading()
     let user = this.$parent.globalData.user;
     const spaceId = this.space_id;
     const userId = user._id;
@@ -314,7 +314,7 @@ export default class QuestionnaireList extends wepy.page {
 
 
     this.$apply();
-    wx.hideLoading();
+    wx.hideNavigationBarLoading()
     // console.log('[progress]', progress_love_about_me, progress_love_looking_for, progress_love_answer)
   }
 

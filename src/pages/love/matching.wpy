@@ -238,7 +238,7 @@ export default class Matching extends wepy.page {
 
   async beforeOnLoad(e) {
     console.log("beforeOnLoad=================", e);
-    wx.showLoading({mask: true});
+    wx.showNavigationBarLoading();
     e.space_id = loveSpaceId;
     this.space_id = e.space_id;
     if (e.scene){
@@ -258,7 +258,6 @@ export default class Matching extends wepy.page {
     const user_id = this.$parent.globalData.user._id;
     this.userId = user_id;
     this.$apply();
-    wx.hideLoading();
   }
 
   async onLoad(e) {
@@ -291,7 +290,8 @@ export default class Matching extends wepy.page {
   }
 
   async dataRefresh() {
-    this.is_loaded = false;
+//    this.is_loaded = false;
+    wx.showNavigationBarLoading();
     this.$apply();
     this.record_list = [];
     this.allow_load = true;
@@ -303,10 +303,10 @@ export default class Matching extends wepy.page {
   }
 
   async loadRecords(searchValue) {
-    wepy.showLoading({
-      title: '加载中',
-      mask: true
-    });
+//    wepy.showLoading({
+//      title: '加载中',
+//      mask: true
+//    });
     const skip = this.current_skip;
     const object_name = this.object_name;
     const queryOptions = this.getQueryOptions(searchValue);
@@ -337,7 +337,7 @@ export default class Matching extends wepy.page {
       }
       this.$apply();
     }
-    wepy.hideLoading();
+    wx.hideNavigationBarLoading();
     wx.stopPullDownRefresh();
   }
 
@@ -402,10 +402,7 @@ export default class Matching extends wepy.page {
       // })
     },
     async markHeart(_id, heart, event) {
-      wepy.showLoading({
-        title: '加载中',
-        mask: true
-      });
+      wx.showNavigationBarLoading();
       if(event == undefined){
         event = heart;
         heart = false;
@@ -421,7 +418,7 @@ export default class Matching extends wepy.page {
         currentItem.heart = !heart;
       }
       this.$apply();
-      wepy.hideLoading();
+      wx.hideNavigationBarLoading();
     },
     goIntroduce() {
       wx.navigateTo({

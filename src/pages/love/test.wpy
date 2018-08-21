@@ -126,7 +126,7 @@ export default class Test extends wepy.page {
       withShareTicket: true
     });
     console.log("e========test==========",e)
-    wx.showLoading({mask: true});
+    wx.showNavigationBarLoading();
     e.space_id = loveSpaceId;
     this.space_id = e.space_id;
     if (e.scene){
@@ -187,7 +187,7 @@ export default class Test extends wepy.page {
 
     this.$apply();
 
-    wx.hideLoading();
+    wx.hideNavigationBarLoading()
   }
 
   async onShow() {
@@ -213,7 +213,7 @@ export default class Test extends wepy.page {
 
   methods = {
     async goAnswer() {
-      const user = this.$parent.globalData.user; 
+      const user = this.$parent.globalData.user;
       if (user.name && user.avatar) {
          const answeredUrl = encodeURIComponent(`/pages/love/cover_you_looking_for?space_id=${loveSpaceId}`)
          wx.navigateTo({
@@ -227,7 +227,7 @@ export default class Test extends wepy.page {
       wx.navigateTo({url: '/pages/love/index?love=1'})
     },
     goShare() {
-      const user = this.$parent.globalData.user; 
+      const user = this.$parent.globalData.user;
       if (user.name && user.avatar) {
         wx.navigateTo({url: `/pages/love/share?card=true&space_id=${this.space_id}`});
       } else {
