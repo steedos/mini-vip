@@ -569,6 +569,7 @@ export default class VIP extends wepy.app {
       globalData.user.sex = res.sex
       globalData.user.birthdate = res.birthdate
       globalData.user.avatar = res.avatar
+      globalData.user.qrcode = res.qrcode
       globalData.my_spaces = res.my_spaces
       globalData.my_customers = res.my_customers
       globalData.love = res.love

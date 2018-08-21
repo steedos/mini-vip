@@ -202,6 +202,7 @@
   import { baseUrl, appId } from '@/config';
   import { baseMaterialUrl } from '@/config';
   import util from '../../wxs/util.wxs';
+  var utilJs = require('../../utils/util.js')
   import { loveSpaceId } from '@/config';
  
   export default class LoveShare extends wepy.page {
@@ -347,7 +348,10 @@
     }
 
     async generateFriendCard() {
-      if(this.$parent.globalData.user.avatar) {
+      if(this.$parent.globalData.user.qrcode) {
+        this.card_url = utilJs.formatImageUrl(this.$parent.globalData.user.qrcode,this.baseUrl)
+      }else{
+        if(this.$parent.globalData.user.avatar) {
         const imageUrl = `https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/share_me.png`;
         const imgRes = await wepy.downloadFile({
           url: imageUrl
@@ -418,6 +422,23 @@
             if(res){
               self.card_url = res.tempFilePath
               // self.friend_circle_image_url = res.tempFilePath
+              const authToken = self.$parent.globalData.user.auth_token;
+              const userId = self.$parent.globalData.user._id;
+              const name = this.$parent.globalData.user.name;
+              const fileResult = await wepy.uploadFile({
+                url: `${self.baseUrl}/s3/images`,
+                filePath: res.tempFilePath,
+                name: 'file',
+                // formData: formData,
+                header: {
+                  'X-Auth-Token': authToken,
+                  'X-User-Id': userId
+                }
+              })
+              const fileData = JSON.parse(fileResult.data);
+              const url = '/mini/vip/user';
+              console.log('fileData====',fileData['_id'])
+              req.put(url, {name: name, qrcode: fileData['_id']});
               self.$apply();
             }
             else{
@@ -436,6 +457,7 @@
           icon: "none"
         });
        }
+      }
     }
     
     async generateFriendCircleImage() {
