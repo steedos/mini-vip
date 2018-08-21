@@ -50,7 +50,7 @@
 <template>
   <view class="page questionnaire-list" wx:if="{{is_loaded}}">
     <view class="weui-cells">
-      <navigator class="weui-cell weui-cell_access" url="/pages/love/privacy_protection?space_id=${loveSpaceId}">
+      <!-- <navigator class="weui-cell weui-cell_access" url="/pages/love/privacy_protection?space_id=${loveSpaceId}">
         <view class="weui-cell__hd">
           <view class="slds-icon-standard-poll slds-icon slds-icon--small slds-m-right--x-small"/>
         </view>
@@ -58,7 +58,7 @@
           <view>隐私保护</view>
         </view>
         <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-      </navigator>
+      </navigator> -->
       <navigator class="weui-cell weui-cell_access" url="/pages/love/share?space_id=${loveSpaceId}">
         <view class="weui-cell__hd">
           <view class="slds-icon-standard-announcement slds-icon slds-icon--small slds-m-right--x-small"/>
