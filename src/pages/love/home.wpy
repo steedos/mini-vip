@@ -196,7 +196,7 @@ export default class LoveHome extends wepy.page {
 
 	async onPullDownRefresh() {
 		const self = this;
-		wx.showLoading();
+    wx.showLoading({title: '加载中'});
 		await this.loadGroups();
     await this.loadFriendList();
 		this.$apply();
@@ -208,7 +208,7 @@ export default class LoveHome extends wepy.page {
     wepy.showShareMenu({
       withShareTicket: true
     });
-    wx.showLoading();
+    wx.showLoading({title: '加载中'});
     const self = this;
     e.space_id = loveSpaceId;
     if (e.scene) {
