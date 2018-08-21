@@ -198,7 +198,7 @@ page {
           </view>
         </view>
       </view>
-      <view class="weui-grids" style="margin-top: -20px">
+      <view class="weui-grids" style="margin-top: -20px" wx:if="{{is_owner}}">
         <repeat for="{{settings}}" key="index" index="index" item="setting">
           <navigator url="{{setting.url}}" class="weui-grid" hover-class="weui-grid_active">
             <view class="{{setting.icon}} weui-grid__icon slds-icon"></view>
@@ -226,9 +226,11 @@ export default class loveIntroduce extends wepy.page {
     is_loaded: false,
     space_id: loveSpaceId,
     current_customer: {},
+    userId: '',
     cover: '',
     avatar: '',
     name: '',
+    is_owner: false,
     self_introduction: '',
     height: null,
     weight: null,
@@ -261,51 +263,55 @@ export default class loveIntroduce extends wepy.page {
     util: util
   }
 
-  async onLoad() {
-
+  async onLoad(e) {
+    this.userId = e.userId || this.$parent.globalData.user._id;
+    this.$apply();
   }
 
   async onShow() {
     wx.showLoading({ mask: true });
-    const user = this.$parent.globalData.user;
-    const spaceId = this.space_id;
-    this.name = user.name;
+    if (this.userId != this.$parent.globalData.user._id) {
+      this.is_owner = false;
+      this.$apply();
+    } else {
+      this.is_owner = true;
+      this.$apply();
+    }
+    const a_options = {
+      $filter: `(owner eq '${this.userId}' and space eq '${this.space_id}')`,
+      $expand: 'owner($select=name,profile)'
+    }
+    const result = await this.$parent.query('vip_customers', a_options, this.space_id);
+    const customer = result.value[0];
+    this.name = customer.owner.name;
 
-    const my_customers = this.$parent.globalData.my_customers;
-    const current_customer = my_customers.find((customer, i) => {
-      return customer.space == spaceId
-    })
-    
     if (!this.cover) {
-      if (current_customer.cover) {
-        this.cover = current_customer.cover;
+      if (customer.cover) {
+        this.cover = customer.cover;
       } else {
-        this.cover = user.avatar;
+        this.cover = customer.owner.profile.avatar;
       }
     }
 
     if (!this.avatar) {
-      if (current_customer.avatar) {
-        this.avatar = current_customer.avatar;
+      if (customer.avatar) {
+        this.avatar = customer.avatar;
       } else {
-        this.avatar = user.avatar;
+        this.avatar = customer.owner.profile.avatar;
       }
     }
 
-    this.current_customer = current_customer;
-
-    const options = {
-      $filter: `(owner eq '${user._id}')`
+    const b_options = {
+      $filter: `(owner eq '${this.userId}')`
     }
-
-    const about_me = await this.$parent.query('love_about_me', options, loveSpaceId);
+    const about_me = await this.$parent.query('love_about_me', b_options, loveSpaceId);
     if (about_me && about_me.value && about_me.value[0]) {
       this.height = about_me.value[0].height;
       this.live = about_me.value[0].live;
       this.hometown = about_me.value[0].hometown;
       this.self_introduction = about_me.value[0].self_introduction;
-      this.zodiac = '生肖' + about_me.value[0].zodiac;
-      this.constellation = about_me.value[0].constellation + '座';
+      this.zodiac = about_me.value[0].zodiac;
+      this.constellation = about_me.value[0].constellation;
     }
 
     this.is_loaded = true;
@@ -315,6 +321,11 @@ export default class loveIntroduce extends wepy.page {
 
   methods = {
     async uploadImage(isCover) {
+      if (!this.is_owner) {
+        return
+      }
+
+
       const title = isCover ? '更换封面' : '更换头像';
 
       const result = await wepy.showActionSheet({
