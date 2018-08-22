@@ -25,7 +25,7 @@ page {
     &.is-open {
       .header{
         .cover-wrapper{
-          height: 420rpx;
+          height: 300rpx;
           &::after {
             content: '';
             position: absolute;
@@ -51,7 +51,7 @@ page {
 
       .cover-wrapper{
         position: relative;
-        height: 420rpx;
+        height: 300rpx;
         background-size: cover;
       }
       .image{
@@ -76,38 +76,62 @@ page {
       .space-info {
         position: relative;
         text-align: center;
+        margin: 0 20rpx;
+        border-radius: 0.25rem;
         top: -100rpx;
         width: auto;
         border: 1px solid transparent;
-        margin: 0 20rpx;
         padding-bottom: 20rpx;
-        border-radius: 0.25rem;
         background: #fff;
         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
         z-index: 100;
 
         .wrapper {
           top: -100rpx;
+          padding: 0 40rpx;
 
           .avatar-container {
             background: #fff;
             padding: 10rpx;
-            border-radius: 0.25rem;
+            border-radius: 50%;
             display: inline-block;
             box-shadow: 0 2px 2px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08);
             position: absolute;
-            left: calc(~"50% - 110rpx");
-            top: -120rpx;
+            left: calc(~"50% - 135rpx");
+            top: -145rpx;
 
             .avatar {
+              border-radius: 50%;
               display: block;
-              width: 200rpx;
-              height: 200rpx;
+              width: 250rpx;
+              height: 250rpx;
+            }
+
+            .sex-container {
+              position: absolute;
+              width: 35rpx;
+              height: 35rpx;
+              background: #fff;
+              right: 6rpx;
+              bottom: 6rpx;
+              border-radius: 50%;
+              padding: 8rpx;
+              &.boy {
+                border: 4rpx solid #00aeef;
+              }
+              &.girl {
+                border: 4rpx solid #ec148e;
+              }
+              .sex-img {
+                display: block;
+                width: 100%;
+                height: 100%;
+              }
             }
           }
 
           .name {
-            margin-top: 110rpx;
+            margin-top: 155rpx;
             font-size: 44rpx;
             font-weight: bold;
           }
@@ -185,8 +209,11 @@ page {
           <view class="wrapper">
             <view class="bg-image"></view>
             <view class="avatar-container">
-              <image wx:if="{{avatar}}" class="avatar" mode="aspectFill" src="{{util.formatImageUrl(avatar, baseUrl)}}" @tap.stop="uploadImage()"/>
-              <image wx:else class="avatar" mode="aspectFill" src="{{baseMaterialUrl + 'avatar.png'}}" @tap.stop="uploadImage()"/>
+              <image class="avatar" mode="aspectFill" src="{{util.formatImageUrl(avatar, baseUrl)}}" @tap.stop="uploadImage()"/>
+              <view class="sex-container {{sex == '男' ? 'boy' : 'girl'}}">
+                <image wx:if="{{sex == '男'}}" class="sex-img" mode="aspectFill" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/boy.png"></image>
+                <image wx:else class="sex-img" mode="aspectFill" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/girl.png"></image>
+              </view>
             </view>
             <view class="name">{{name}}</view>
             <view wx:if="{{self_introduction}}" class="introduction">{{self_introduction}}</view>
@@ -198,14 +225,28 @@ page {
           </view>
         </view>
       </view>
-      <view class="weui-grids" style="margin-top: -20px" wx:if="{{is_owner}}">
-        <repeat for="{{settings}}" key="index" index="index" item="setting">
-          <navigator url="{{setting.url}}" class="weui-grid" hover-class="weui-grid_active">
-            <view class="{{setting.icon}} weui-grid__icon slds-icon"></view>
-            <view class="weui-grid__label">{{setting.label}}</view>
-          </navigator>
-        </repeat>
+
+      <view class="weui-cells" style="margin-top: -20px">
+        <view class="weui-cell">
+          <view class="weui-cell__bd">
+            <view>我对他的匹配度</view>
+          </view>
+          <view class="weui-cell__ft">{{util.fixed(record.a_to_b, 2)}}%</view>
+        </view>
+        <view class="weui-cell">
+          <view class="weui-cell__bd">
+            <view>他对我的匹配度</view>
+          </view>
+          <view class="weui-cell__ft">{{util.fixed(record.b_to_a, 2)}}%</view>
+        </view>
+        <view class="weui-cell">
+          <view class="weui-cell__bd">
+            <view>综合匹配度</view>
+          </view>
+          <view class="weui-cell__ft">{{util.fixed(record.match, 2)}}%</view>
+        </view>
       </view>
+
     </view>
   </view>
 </template>
@@ -219,17 +260,19 @@ import { loveSpaceId } from '@/config';
 
 export default class loveIntroduce extends wepy.page {
   config = {
-    navigationBarTitleText: '个人介绍',
+    navigationBarTitleText: '个人资料',
   };
 
   data = {
     is_loaded: false,
     space_id: loveSpaceId,
     current_customer: {},
+    record: {},
     userId: '',
     cover: '',
     avatar: '',
     name: '',
+    sex: '',
     is_owner: false,
     self_introduction: '',
     height: null,
@@ -266,6 +309,15 @@ export default class loveIntroduce extends wepy.page {
   async onLoad(e) {
     this.userId = e.userId || this.$parent.globalData.user._id;
     this.$apply();
+
+    const record_id = e._id;
+		const space_id = e.space_id;
+		const options = {
+			$expand: 'user_b($select=profile,name),owner($select=profile,name)'
+		}
+		const record = await this.$parent.get('love_friends', record_id, space_id, options);
+
+		this.record = record;
   }
 
   async onShow() {
@@ -306,6 +358,7 @@ export default class loveIntroduce extends wepy.page {
     }
     const about_me = await this.$parent.query('love_about_me', b_options, loveSpaceId);
     if (about_me && about_me.value && about_me.value[0]) {
+      this.sex = about_me.value[0].sex;
       this.height = about_me.value[0].height;
       this.live = about_me.value[0].live;
       this.hometown = about_me.value[0].hometown;

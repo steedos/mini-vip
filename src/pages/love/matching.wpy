@@ -152,7 +152,7 @@
         <view class="weui-cells">
           <repeat for="{{record_list}}" key="index" index="index" item="record">
             <block wx:if="{{record.user_b.name}}">
-              <navigator class="record-container weui-cell weui-cell_access"  data-item-id="{{record._id}}" hover-class="weui-cell_active" url="/pages/love/detail?_id={{record._id}}&space_id={{record.space}}">
+              <navigator class="record-container weui-cell weui-cell_access"  data-item-id="{{record._id}}" hover-class="weui-cell_active" url="/pages/love/introduce?_id={{record._id}}&space_id={{record.space}}&userId={{record.user_b._id}}">
                 <view class="weui-cell__hd record-index">
                   {{index + 1}}
                 </view>
