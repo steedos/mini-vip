@@ -71,7 +71,7 @@ page {
 				<button class="weui-btn" type="primary" plain="true" open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo">获取微信昵称</button>
 			</view>
     </view> -->
-    <button class="weui-btn submit button-hover" type="primary" @tap="goNext">下一步</button>
+    <button class="weui-btn submit" type="primary" @tap="goNext">下一步</button>
   </view>
 </template>
 
@@ -128,7 +128,7 @@ export default class UserInfoLogin extends wepy.page {
         this.message = '';
         req.put(url, { name: name, sex: sex, avatar: avatar });
         // if (this.share_from && e.naire) {
-        // 	wx.redirectTo({url: next});				
+        // 	wx.redirectTo({url: next});
         // } else {
         // 	wx.redirectTo({url: `${next}&answered_url_type=redirectTo&answered_url=${encodeURIComponent(`/pages/love/matching?space_id=${this.space_id}`)}`});
         // }
