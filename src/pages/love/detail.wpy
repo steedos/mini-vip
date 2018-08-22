@@ -9,14 +9,13 @@
 	.detail {
 		.row {
 			display: flex;
-			padding: 10px 0;
+			padding: 10px 10px;
 			.column {
 				flex: 1;
 				display: flex;
 				flex-wrap:wrap;
 				.label {
 					font-size: 15px;
-					font-weight: bold;
 					color: #333;
 				}
 				.result {
@@ -32,6 +31,9 @@
 		padding: 5px 15px 5px;
 		font-size: 16px;
 		font-weight: bold;
+	}
+	.column {
+		padding-left: 10px
 	}
 	.weui-cell::before {
 		display: none;
@@ -101,7 +103,9 @@
 						<repeat for="{{row}}" key="_index" index="_index" item="column">
 							<view class="column">
 								<view class="label">{{column.label}}：</view>
-								<view class="result">{{about_me[column.key]}}</view>
+								  <block wx:if="{{about_me[column.key]}}">
+                    <view class="result">{{about_me[column.key]}}</view>
+                  </block>
 							</view>
 						</repeat>
 					</view>
@@ -111,19 +115,19 @@
 		<view class="summary">
 			<view class="title">匹配详情：</view>
 			<view class="weui-cell">
-				<view class="weui-cell__bd">
+				<view class="weui-cell__bd column">
 					<view>我对他的匹配度</view>
 				</view>
 				<view class="weui-cell__ft">{{util.fixed(record.a_to_b, 2)}}%</view>
 			</view>
 			<view class="weui-cell">
-				<view class="weui-cell__bd">
+				<view class="weui-cell__bd column">
 					<view>他对我的匹配度</view>
 				</view>
 				<view class="weui-cell__ft">{{util.fixed(record.b_to_a, 2)}}%</view>
 			</view>
 			<view class="weui-cell">
-				<view class="weui-cell__bd">
+				<view class="weui-cell__bd column">
 					<view>综合匹配度</view>
 				</view>
 				<view class="weui-cell__ft">{{util.fixed(record.match, 2)}}%</view>
@@ -133,10 +137,10 @@
 			<image class="qrcode-img" mode="aspectfill" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/qrcode.jpg"></image>
 		</view> -->
 		<view class="tab-bar border-top-1px">
-      <button open-type="share" class="btn btn-share-wexin" type="default" plain="true">
+	  <button open-type="share" class="btn btn-share-wexin" type="default" plain="true">
 				分享到群
 			</button>
-    </view>
+	</view>
 	</view>
 </template>
 
@@ -160,7 +164,6 @@ export default class LoveDetail extends wepy.page {
 			[{label: '身高', key: 'height'}, {label: '年龄', key: 'age'}],
 			[{label: '生肖', key: 'zodiac'}, {label: '星座', key: 'constellation'}],
 			[{label: '家乡', key: 'hometown'}, {label: '现居地', key: 'live'}],
-			[{label: '交友宣言', key: 'self_introduction'}],
 		],
 		summary: ''
 	}
@@ -183,7 +186,9 @@ export default class LoveDetail extends wepy.page {
 		const about_me = await this.$parent.query('love_about_me', b_options, space_id);
 		this.about_me = about_me.value[0] || {};
 		this.about_me.name = record.user_b.name;
-
+    if(this.about_me.self_introduction) {
+      this.introduce.push([{label: '交友宣言', key: 'self_introduction'}])
+    }
 		this.$apply();
 	}
 
