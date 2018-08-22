@@ -86,6 +86,12 @@ page {
         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
         z-index: 100;
 
+        .heart {
+          position: absolute;
+          right: 0;
+          top: -64rpx;
+        }
+
         .wrapper {
           top: -100rpx;
           padding: 0 40rpx;
@@ -130,8 +136,20 @@ page {
             }
           }
 
-          .name {
+          .love-heart {
             margin-top: 155rpx;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #823c3d;
+            font-weight: bold;
+            .love-img {
+              margin-right: 0.5rem;
+            }
+          }
+
+          .name {
+            // margin-top: 155rpx;
             font-size: 44rpx;
             font-weight: bold;
           }
@@ -213,15 +231,20 @@ page {
           <view class="text" wx:if="{{is_space_owner}}"></view>
         </view>
         <view class="space-info">
+          <!-- <view class="heart vip_heart-light slds-icon slds-icon--small slds-m-left--x-small"></view> -->
           <view class="wrapper">
             <view class="bg-image"></view>
             <view class="avatar-container">
               <image class="avatar" mode="aspectFill" src="{{util.formatImageUrl(avatar, baseUrl)}}" @tap.stop="uploadImage()"/>
               <view class="sex-container {{about_me.sex == '男' ? 'boy' : 'girl'}}">
                 <image wx:if="{{about_me.sex == '男'}}" class="sex-img" mode="aspectFill" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/boy.png"></image>
-                <image wx:else class="sex-img" mode="aspectFill" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/girl.png"></image>
+                <image wx:else class="sex-img" mode="aspectFill" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/each_love.png"></image>
               </view>
             </view>
+            <!-- <view class="love-heart">
+              <image class="love-img slds-icon slds-icon--small slds-m-left--x-small" mode="aspectFit" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/love_heart.png"></image>
+              <view>互相喜欢</view>
+            </view> -->
             <view class="name">{{name}}</view>
             <view wx:if="{{about_me.self_introduction}}" class="introduction">{{about_me.self_introduction}}</view>
             <view class="zodiac-constellation">
