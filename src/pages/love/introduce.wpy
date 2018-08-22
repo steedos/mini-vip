@@ -112,7 +112,7 @@ page {
               width: 35rpx;
               height: 35rpx;
               background: #fff;
-              right: 6rpx;
+              right: 14rpx;
               bottom: 6rpx;
               border-radius: 50%;
               padding: 8rpx;
@@ -138,12 +138,19 @@ page {
 
           .introduction {
             font-size: 32rpx;
+            margin-top: 10rpx;
             font-weight: bold;
           }
 
-          .zodiac-constellation, .height, .live {
+          .zodiac-constellation{
+            display: flex;
+            margin-top: 10rpx;
             font-size: 30rpx;
             color: #777;
+            justify-content: center;
+            view {
+              padding: 0 6rpx;
+            }
           }
 
           .star-count {
@@ -200,7 +207,7 @@ page {
     <view class="top-container">
       <view class="header">
         <view wx:if="{{cover}}">
-          <view class="cover-wrapper" @tap="uploadImage(true)" style="background-image: url({{util.formatImageUrl(cover, baseUrl)}})"></view>
+          <view class="cover-wrapper" @tap="uploadImage(true)" style="background-image: url(https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/header.jpg)"></view>
         </view>
         <view wx:else class="empty-cover" @tap="uploadImage(true)">
           <view class="text" wx:if="{{is_space_owner}}"></view>
@@ -210,18 +217,20 @@ page {
             <view class="bg-image"></view>
             <view class="avatar-container">
               <image class="avatar" mode="aspectFill" src="{{util.formatImageUrl(avatar, baseUrl)}}" @tap.stop="uploadImage()"/>
-              <view class="sex-container {{sex == '男' ? 'boy' : 'girl'}}">
-                <image wx:if="{{sex == '男'}}" class="sex-img" mode="aspectFill" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/boy.png"></image>
+              <view class="sex-container {{about_me.sex == '男' ? 'boy' : 'girl'}}">
+                <image wx:if="{{about_me.sex == '男'}}" class="sex-img" mode="aspectFill" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/boy.png"></image>
                 <image wx:else class="sex-img" mode="aspectFill" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/girl.png"></image>
               </view>
             </view>
             <view class="name">{{name}}</view>
-            <view wx:if="{{self_introduction}}" class="introduction">{{self_introduction}}</view>
-            <view wx:if="{{zodiac || constellation}}" class="zodiac-constellation">
-              {{zodiac}} {{constellation}}
+            <view wx:if="{{about_me.self_introduction}}" class="introduction">{{about_me.self_introduction}}</view>
+            <view class="zodiac-constellation">
+              <view wx:if="{{about_me.sex}}">{{about_me.sex}}</view>
+              <view wx:if="{{about_me.age}}">{{about_me.age}}岁</view>
+              <view wx:if="{{about_me.height}}">{{about_me.height}}cm</view>
+              <view wx:if="{{about_me.constellation}}">{{about_me.constellation}}座</view>
+              <view wx:if="{{about_me.live}}">{{about_me.live}}</view>
             </view>
-            <view wx:if="{{height}}" class="height">{{height}}cm</view>
-            <view wx:if="{{live}}" class="live">{{live}}</view>
           </view>
         </view>
       </view>
@@ -266,6 +275,7 @@ export default class loveIntroduce extends wepy.page {
   data = {
     is_loaded: false,
     space_id: loveSpaceId,
+    about_me: {},
     current_customer: {},
     record: {},
     userId: '',
@@ -358,13 +368,7 @@ export default class loveIntroduce extends wepy.page {
     }
     const about_me = await this.$parent.query('love_about_me', b_options, loveSpaceId);
     if (about_me && about_me.value && about_me.value[0]) {
-      this.sex = about_me.value[0].sex;
-      this.height = about_me.value[0].height;
-      this.live = about_me.value[0].live;
-      this.hometown = about_me.value[0].hometown;
-      this.self_introduction = about_me.value[0].self_introduction;
-      this.zodiac = about_me.value[0].zodiac;
-      this.constellation = about_me.value[0].constellation;
+      this.about_me = about_me.value[0];
     }
 
     this.is_loaded = true;
