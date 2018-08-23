@@ -350,7 +350,7 @@ export default class Matching extends wepy.page {
     } else if (this.open_group_id) {
       filter =  `(owner eq '${user_id}' and open_groups eq '${this.open_group_id}')`;
     } else {
-      filter =  `(owner eq '${user_id}' and open_group_id eq null)`;
+      filter =  `(owner eq '${user_id}')`;
     }
     if (filterEnable) {
       filter += ' and is_looking_for eq true';
