@@ -239,7 +239,7 @@ page {
               <image class="avatar" mode="aspectFill" src="{{util.formatImageUrl(avatar, baseUrl)}}" @tap.stop="uploadImage()"/>
               <view class="sex-container {{about_me.sex == '男' ? 'boy' : 'girl'}}">
                 <image wx:if="{{about_me.sex == '男'}}" class="sex-img" mode="aspectFill" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/boy.png"></image>
-                <image wx:else class="sex-img" mode="aspectFill" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/each_love.png"></image>
+                <image wx:else class="sex-img" mode="aspectFill" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/girl.png"></image>
               </view>
             </view>
             <view class="love-heart" wx:if="{{heartSummary}}">
