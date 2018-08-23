@@ -90,10 +90,13 @@ page {
           position: absolute;
           right: 0;
           top: -64rpx;
+          width: 1.75rem;
+          height: 1.75rem;
         }
 
         .wrapper {
           top: -100rpx;
+          margin-top: 155rpx;
           padding: 0 40rpx;
 
           .avatar-container {
@@ -137,7 +140,6 @@ page {
           }
 
           .love-heart {
-            margin-top: 155rpx;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -149,7 +151,6 @@ page {
           }
 
           .name {
-            // margin-top: 155rpx;
             font-size: 44rpx;
             font-weight: bold;
           }
@@ -231,7 +232,7 @@ page {
           <view class="text" wx:if="{{is_space_owner}}"></view>
         </view>
         <view class="space-info">
-          <!-- <view class="heart vip_heart-light slds-icon slds-icon--small slds-m-left--x-small"></view> -->
+          <view class="heart {{record.heart ? 'vip_heart-light' : 'vip_heart-default'}} slds-icon slds-icon--small slds-m-left--x-small" @tap="markHeart({{record._id}},{{record.heart}})"></view>
           <view class="wrapper">
             <view class="bg-image"></view>
             <view class="avatar-container">
@@ -241,9 +242,9 @@ page {
                 <image wx:else class="sex-img" mode="aspectFill" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/each_love.png"></image>
               </view>
             </view>
-            <view class="love-heart">
-              <!-- <image class="love-img slds-icon slds-icon--small slds-m-left--x-small" mode="aspectFit" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/love_heart.png"></image>
-              <view>互相喜欢</view> -->
+            <view class="love-heart" wx:if="{{heartSummary}}">
+              <image class="love-img slds-icon slds-icon--small slds-m-left--x-small" mode="aspectFit" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/love_heart.png"></image>
+              <view>{{heartSummary}}</view>
             </view>
             <view class="name">{{name}}</view>
             <view wx:if="{{about_me.self_introduction}}" class="introduction">{{about_me.self_introduction}}</view>
@@ -301,19 +302,13 @@ export default class loveIntroduce extends wepy.page {
     about_me: {},
     current_customer: {},
     record: {},
+    b_record: {},
     userId: '',
     cover: '',
     avatar: '',
     name: '',
-    sex: '',
     is_owner: false,
-    self_introduction: '',
-    height: null,
-    weight: null,
-    live: '',
-    hometown: '',
-    zodiac: '',
-    constellation: '',
+    // heart_summary: '',
     baseUrl: baseUrl,
     baseMaterialUrl: baseMaterialUrl,
     loveSpaceId: loveSpaceId,
@@ -348,9 +343,26 @@ export default class loveIntroduce extends wepy.page {
 		const options = {
 			$expand: 'user_b($select=profile,name),owner($select=profile,name)'
 		}
-		const record = await this.$parent.get('love_friends', record_id, space_id, options);
+		const a_record = await this.$parent.get('love_friends', record_id, space_id, options);
 
-		this.record = record;
+		this.record = a_record;
+
+    const b_options = {
+      $filter: `(owner eq '${a_record.user_b._id}' and user_b eq '${a_record.owner._id}')`
+    }
+    const b_result = await this.$parent.query('love_friends', b_options, space_id);
+    const b_record = b_result.value[0];
+    this.b_record = b_record;
+
+    // if (b_record.heart) {
+    //   this.heart_summary = '对方关注了你';
+    // }
+
+    // if (a_record.heart && b_record.heart) {
+    //   this.heart_summary = '互相关注';
+    // }
+
+    this.$apply();
   }
 
   async onShow() {
@@ -399,12 +411,25 @@ export default class loveIntroduce extends wepy.page {
     wx.hideLoading();
   }
 
+  computed = {
+    heartSummary() {
+      let heart_summary = '';
+      if (this.b_record.heart) {
+        heart_summary = '对方关注了你';
+      }
+
+      if (this.record.heart && this.b_record.heart) {
+        heart_summary = '互相关注';
+      }
+      return heart_summary
+    }
+  }
+
   methods = {
     async uploadImage(isCover) {
       if (!this.is_owner) {
         return
       }
-
 
       const title = isCover ? '更换封面' : '更换头像';
 
@@ -505,7 +530,24 @@ export default class loveIntroduce extends wepy.page {
           wepy.hideLoading();
         }
       }
-    }
+    },
+    async markHeart(_id, heart, event) {
+      console.log('[markHeart]', _id, heart);
+      wx.showNavigationBarLoading();
+      if(event == undefined){
+        event = heart;
+        heart = false;
+      }
+      let values = {
+        heart: !heart
+      };
+      let res = await this.$parent.update("love_friends", _id, values, this.space_id);
+      if(res){
+        this.record.heart = !heart;
+      }
+      this.$apply();
+      wx.hideNavigationBarLoading();
+    },
   }
 }
 </script>
