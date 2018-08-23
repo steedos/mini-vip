@@ -241,10 +241,10 @@ page {
                 <image wx:else class="sex-img" mode="aspectFill" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/each_love.png"></image>
               </view>
             </view>
-            <!-- <view class="love-heart">
-              <image class="love-img slds-icon slds-icon--small slds-m-left--x-small" mode="aspectFit" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/love_heart.png"></image>
-              <view>互相喜欢</view>
-            </view> -->
+            <view class="love-heart">
+              <!-- <image class="love-img slds-icon slds-icon--small slds-m-left--x-small" mode="aspectFit" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/love_heart.png"></image>
+              <view>互相喜欢</view> -->
+            </view>
             <view class="name">{{name}}</view>
             <view wx:if="{{about_me.self_introduction}}" class="introduction">{{about_me.self_introduction}}</view>
             <view class="zodiac-constellation">
