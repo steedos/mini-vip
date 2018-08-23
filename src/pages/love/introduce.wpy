@@ -144,6 +144,7 @@ page {
             align-items: center;
             justify-content: center;
             color: #823c3d;
+            margin-bottom:10rpx;
             font-weight: bold;
             .love-img {
               margin-right: 0.5rem;
