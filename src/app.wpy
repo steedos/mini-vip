@@ -193,6 +193,10 @@ setStore(store)
 export default class VIP extends wepy.app {
   config = {
     pages: [
+      'pages/creator/apps',
+      'pages/creator/app_objects',
+      'pages/creator/account_binding',
+      'pages/creator/index',
       'pages/love/index',
       'pages/love/home',
 //      'pages/tabbar_index',
@@ -296,22 +300,22 @@ export default class VIP extends wepy.app {
       borderStyle: 'black',
       list: [
       {
-        pagePath: 'pages/love/home',
+        pagePath: 'pages/creator/index',
         selectedIconPath: './images/tabbars/apps_pressed.png',
         iconPath: './images/tabbars/apps.png',
-        text: '缘分圈',
+        text: '首页',
       },
       {
-        pagePath: 'pages/love/test',
+        pagePath: 'pages/creator/apps',
         selectedIconPath: './images/tabbars/topic_pressed.png',
         iconPath: './images/tabbars/topic.png',
-        text: '缘分测试',
+        text: '应用',
       },
       {
-        pagePath: 'pages/love/me',
+        pagePath: 'pages/creator/account_binding',
         selectedIconPath: './images/tabbars/me_pressed.png',
         iconPath: './images/tabbars/me.png',
-        text: '我',
+        text: '账户',
       }]
     },
     window: {
@@ -332,8 +336,10 @@ export default class VIP extends wepy.app {
     launchOptions: null,
     is_login: false,
     objects: {},
-    shareTicket: null
-  }
+    shareTicket: null,
+  };
+
+  bootstrap = {};
 
   constructor () {
     super()

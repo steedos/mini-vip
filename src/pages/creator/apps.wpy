@@ -1,0 +1,54 @@
+<style>
+
+</style>
+
+<template>
+  <view class="creator-apps page">
+    <!--<view class="page__hd">-->
+      <!--<view class="page__title">应用程序</view>-->
+      <!--&lt;!&ndash;<view class="page__desc">九宫格</view>&ndash;&gt;-->
+    <!--</view>-->
+    <view class="page__bd">
+      <view class="weui-grids">
+        <block wx:for="{{apps}}" wx:key="*this">
+          <navigator url="app_objects?space_id={{space_id}}&app={{index}}" class="weui-grid" hover-class="weui-grid_active" wx:if="{{item.visible}}">
+            <view class="weui-grid__icon">
+              <view class="slds-icon-standard-{{item.icon_slds}} slds-icon slds-icon--small slds-m-right--x-small"/>
+            </view>
+            <view class="weui-grid__label">{{item.label || item.name}}</view>
+          </navigator>
+        </block>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import req from '@/network'
+  import creatorClient from '@/utils/creator_client.js'
+
+  export default class creatorApps extends wepy.page {
+    config = {
+      navigationBarTitleText: '应用程序'
+    };
+
+    async onLoad(e) {
+      await this.$parent.login();
+      this.$parent.bootstrap = await creatorClient.loadBootstrap(e.space_id || '51ae9b1a8e296a29c9000001')
+
+      this.apps = this.$parent.bootstrap.apps;
+
+      console.log(this.apps)
+
+      this.$apply()
+    }
+
+    data = {
+      apps: [],
+      space_id: '51ae9b1a8e296a29c9000001'
+    };
+
+    methods = {};
+  }
+</script>

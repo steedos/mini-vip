@@ -1,0 +1,29 @@
+<style>
+
+</style>
+
+<template>
+  <view class="creator-index">
+      首页
+  </view>
+</template>
+<script>
+  import wepy from 'wepy';
+  import req from '@/network'
+  import creatorClient from '@/utils/creator_client.js'
+
+  export default class creatorIndex extends wepy.page {
+    config = {
+      navigationBarTitleText: '首页'
+    };
+
+    async onLoad(e) {
+    }
+
+    data = {
+      apps: []
+    };
+
+    methods = {};
+  }
+</script>

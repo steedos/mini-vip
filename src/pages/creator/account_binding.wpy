@@ -1,0 +1,65 @@
+<style>
+
+</style>
+<template>
+  <view class="account-binding">
+    <view class="page__bd">
+      <form bindsubmit="formSubmit" >
+      <view class="weui-cells__title">账户信息</view>
+      <view class="weui-cells weui-cells_after-title">
+        <view class="weui-cell weui-cell_input">
+          <view class="weui-cell__hd">
+            <view class="weui-label">用户名</view>
+          </view>
+          <view class="weui-cell__bd">
+            <input class="weui-input" placeholder="请输入用户名" name="username"/>
+          </view>
+        </view>
+        <view class="weui-cell weui-cell_input weui-cell_vcode">
+          <view class="weui-cell__hd">
+            <view class="weui-label">密码</view>
+          </view>
+          <view class="weui-cell__bd">
+            <input class="weui-input" placeholder="请输入密码" name="password" password="true"/>
+          </view>
+        </view>
+      </view>
+      <view class="weui-cells__tips">将微信账户与原账户进行绑定</view>
+
+      <view class="weui-btn-area">
+        <button class="weui-btn" type="primary" formType="submit">绑定并登录</button>
+      </view>
+      </form>
+    </view>
+  </view>
+</template>
+
+
+<script>
+  import wepy from 'wepy';
+  import req from '@/network'
+
+  export default class AccountBinding extends wepy.page {
+    config = {
+      navigationBarTitleText: '账户绑定'
+    };
+
+    async onLoad(){
+      await this.$parent.login()
+    }
+
+    data = {
+      username:'',
+      password:''
+    };
+
+    methods = {
+      formSubmit: async function(e) {
+
+        const result = await req.post('/api/account/binding', e.detail.value);
+
+        console.log('form发生了submit事件，携带数据为：', result)
+      },
+    };
+  }
+</script>

@@ -1,0 +1,68 @@
+<style>
+
+</style>
+
+<template>
+  <view>
+    <view class="weui-cells weui-cells_after-title">
+      <block wx:for="{{app_objects}}" wx:key="*this">
+        <navigator url="/pages/record/list?space_id={{space_id}}&object_name={{item.name}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+          <view class="weui-cell__hd">
+            <view class="slds-icon-standard-{{item.icon}} slds-icon slds-icon--small slds-m-right--x-small"/>
+          </view>
+          <view class="weui-cell__bd">{{item.label || item.name}}</view>
+          <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+        </navigator>
+      </block>
+    </view>
+  </view>
+</template>
+
+
+<script>
+  import wepy from 'wepy';
+  import req from '@/network'
+  import creatorClient from '@/utils/creator_client.js'
+
+  export default class creatorIndex extends wepy.page {
+    config = {
+      navigationBarTitleText: ''
+    };
+
+    async onLoad(e) {
+      console.log(e)
+
+      this.space_id = e.space_id;
+
+      const app_id = e.app;
+
+      const app = this.$parent.bootstrap.apps[app_id];
+
+      wx.setNavigationBarTitle({title: app.label || app.name});
+
+      const app_objects_id = app.objects;
+
+      let app_objects = [];
+
+      app_objects_id.forEach((app_object_id) => {
+        const object = this.$parent.bootstrap.objects[app_object_id];
+        if(object){
+          app_objects.push(object)
+        }
+      });
+
+      console.log('app_objects', app_objects);
+
+      this.app_objects = app_objects;
+
+      this.$apply()
+    }
+
+    data = {
+      app_objects: [],
+      space_id: '',
+    };
+
+    methods = {};
+  }
+</script>
