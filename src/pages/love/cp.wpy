@@ -1,4 +1,56 @@
 <style lang="less">
+.star (@width: 60rpx, @height: 60rpx, @sHeight: 6rpx, @bg: #715af8) {
+  width: @width;
+  height: @height;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: @sHeight;
+    background: @bg;
+    border-radius: 50%;
+  }
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: @sHeight;
+    background: @bg;
+    border-radius: 50%;
+    transform: rotate(90deg);
+  }
+}
+.moon (@width: 60rpx, @height: 60rpx, @left: 12rpx, @backBg: #a49ae6, @frontBg: #725bf2) {
+  width: @width;
+  height: @height;
+  border-radius: 50%;
+  background: @backBg;
+  overflow: hidden;
+  transform: rotate(30deg);
+  &::before {
+    content: '';
+    position: absolute;
+    left: @left;
+    width: 100%;
+    border-radius: 50%;
+    height: 100%;
+    background: @frontBg;
+  }
+}
+.circle (@width: 35rpx, @height: 35rpx, @opacity: 1, @bg: #b3aaf8) {
+  width: @width;
+  height: @height;
+  background: @bg;
+  opacity: @opacity;
+  border-radius: 50%;
+}
 .cp-bg {
   position: fixed;
 	top: 0;
@@ -7,18 +59,47 @@
   right: 0;
   background: #6633ff;
 
+  .header {
+    margin-top: 100rpx;
+    font-size: 40rpx;
+    color: #fff;
+    text-align: center;
+  }
+
+  .top-sm-circle {
+    position: absolute;
+    right: 184rpx;
+    top: 180rpx;
+    .circle(8rpx, 8rpx, 1, #a293fc);
+  }
+
+  .top-sm-dark-circle {
+    position: absolute;
+    right: 230rpx;
+    top: 125rpx;
+    .circle(8rpx, 8rpx, 1, #6b59f3);
+  }
+
   .main-body {
     margin-top: 100rpx;
     width: 100%;
     .first-circle {
+      position: relative;
       margin: 0 auto;
-      width: 520rpx;
-      height: 520rpx;
+      width: 530rpx;
+      height: 530rpx;
       border-radius: 50%;
-      border: 2rpx solid #9966ff;
+      border: 4rpx solid #9966ff;
       display: flex;
       align-items: center;
       justify-content: center;
+
+      .lg-circle {
+        position: absolute;
+        top: 8rpx;
+        right: 135rpx;
+        .circle(35rpx, 35rpx, 0.91, #b3aaf8);
+      }
 
       .second-circle {
         width: 430rpx;
@@ -51,6 +132,8 @@
               padding: 45rpx;
               display: flex;
               flex-direction: column;
+              justify-content: center;
+              text-align: center;
               color: #6633ff;
               image {
                 width: auto;
@@ -66,13 +149,119 @@
       }
     }
   }
+
+  .lg-star {
+    position: absolute;
+    top: 120rpx;
+    left: 45rpx;
+    .star(34rpx, 34rpx, 4rpx, #715af8);
+  }
+  
+  .sm-left-light-star {
+    position: absolute;
+    top: 0rpx;
+    left: 80rpx;
+    .star(20rpx, 20rpx, 4rpx, #afa4fe);
+  }
+
+  .sm-right-light-star {
+    position: absolute;
+    top: 0rpx;
+    right: 0rpx;
+    .star(28rpx, 28rpx, 4rpx, #afa4fe);
+  }
+
+  .normal-moon {
+    position: absolute;
+    top: 10rpx;
+    left: -60rpx;
+    .moon(100rpx, 100rpx, 12rpx);
+  }
+
+  .lg-moon {
+    position: absolute;
+    right: 80rpx;
+    bottom: 100rpx;
+    .moon(150rpx, 150rpx, 24rpx, #7e6af4, #725cf0);
+  }
+
+  .sm-bt-star {
+    position: absolute;
+    right: 60rpx;
+    bottom: 30rpx;
+    .star(20rpx, 20rpx, 4rpx, #846efa);
+  }
+  
+  .lg-bt-star {
+    position: absolute;
+    right: 250rpx;
+    bottom: 120rpx;
+    .star(30rpx, 30rpx, 4rpx, #c1bce8);
+  }
+
+  .sm-bt-circle {
+    position: absolute;
+    left: 250rpx;
+    bottom: 110rpx;
+    .circle(8rpx, 8rpx, 1, #a293fc);
+  }
+
+  .sm-lf-star {
+    position: absolute;
+    left: 60rpx;
+    bottom: 260rpx;
+    .star(20rpx, 20rpx, 4rpx, #846efa);
+  }
+
+  .sm-lf-dark-star {
+    position: absolute;
+    left: 200rpx;
+    bottom: 260rpx;
+    .star(14rpx, 14rpx, 4rpx, #695ac5);
+  }
+
+  .sm-ri-star {
+    position: absolute;
+    right: 60rpx;
+    bottom: 300rpx;
+    .star(20rpx, 20rpx, 4rpx, #846efa);
+  }
+
+  .comet-container {
+    transform: rotate(-45deg);
+    .comet {
+      position: absolute;
+      left: 40rpx;
+      border-width: 4rpx 0 4rpx 46rpx;
+      border-style: solid;
+      border-color: transparent transparent transparent #887ee6;
+      &::before {
+        content: '';
+        position: absolute;
+        width: 8rpx;
+        height: 8rpx;
+        left: -50rpx;
+        top: -4rpx;
+        border-radius: 50%;
+        background: #887ee6;
+      }
+    } 
+  }
 }
 </style>
 
 <template>
   <view class="cp-bg">
+    <view class="header">本周匹配数</view>
+    <view class="top-sm-circle"></view>
+    <view class="top-sm-dark-circle"></view>
     <view class="main-body">
       <view class="first-circle">
+        <view class="lg-circle"></view>
+        <view class="lg-star"></view>
+        <view class="sm-left-light-star"></view>
+        <view class="sm-right-light-star"></view>
+        <view class="normal-moon"></view>
         <view class="second-circle">
           <view class="third-circle">
             <view class="forth-circle">
@@ -85,6 +274,16 @@
         </view>
       </view>
     </view>
+    <!-- <view class="comet-container">
+      <view class="comet"></view>
+    </view> -->
+    <view class="lg-moon"></view>
+    <view class="sm-bt-star"></view>
+    <view class="lg-bt-star"></view>
+    <view class="sm-bt-circle"></view>
+    <view class="sm-lf-star"></view>
+    <view class="sm-lf-dark-star"></view>
+    <view class="sm-ri-star"></view>
   </view>
 </template>
 
