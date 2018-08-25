@@ -49,7 +49,8 @@ export default class recordList extends wepy.mixin {
     this.record_list = [];
     this.allow_load = true;
     this.current_skip = 0;
-    this.loadRecords(searchValue);
+    this.searchValue = searchValue;
+    this.loadRecords();
   }
 
   //onLoad之前做一些初始化
@@ -101,12 +102,14 @@ export default class recordList extends wepy.mixin {
     return expand.join(',')
   }
 
-  getQueryOptions(searchValue){
+  getQueryOptions(){
     const options = {
       $count: true,
       $skip: this.current_skip,
       $top: this.pageSize || PAGESIZE,
     };
+
+    const searchValue = this.searchValue;
 
     if(this.filter){
       options.$filter = this.filter
@@ -217,7 +220,6 @@ export default class recordList extends wepy.mixin {
       this.allowCreate = false
     }
     this.searchPlaceholder = '搜索'; // + object.label;
-
     wx.setNavigationBarTitle({
       title: this.navigationBarTitle || object.label
     });
@@ -309,7 +311,7 @@ export default class recordList extends wepy.mixin {
     }
   }
 
-  async loadRecords(searchValue) {
+  async loadRecords() {
     wepy.showLoading({
       title: '加载中',
       mask: true
@@ -317,7 +319,7 @@ export default class recordList extends wepy.mixin {
     const skip = this.current_skip;
     const object_name = this.object_name;
 
-    const queryOptions = this.getQueryOptions(searchValue);
+    const queryOptions = this.getQueryOptions();
     if (this.allow_load) {
       const result = await this.$parent.query(object_name, queryOptions, this.space_id);
       if (result.value) {

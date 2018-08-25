@@ -96,6 +96,7 @@
   <view class="page record-list" wx:if="{{is_loaded}}">
     <view class="page__hd">
       <searchbar :placeholder.sync="searchPlaceholder" @confirm.user="searchRecords" />
+      <listViews :object_name.sync="object_name" @confirm.user="changeFilters" />
     </view>
     <view class="page__bd">
       <block wx:if="{{record_list.length}}">
@@ -143,6 +144,7 @@ import wepy from 'wepy';
 import { baseUrl } from '@/config';
 import util from '../../wxs/util.wxs';
 import searchbar from '../../components/searchbar';
+import listViews from '../../components/list_views';
 import recordList from '../../mixins/record_list';
 
 export default class RecordList extends wepy.page {
@@ -152,7 +154,12 @@ export default class RecordList extends wepy.page {
   };
 
   components = {
-    searchbar: searchbar
+    searchbar: searchbar,
+    listViews: listViews
+  };
+
+  data = {
+    object_name: ''
   };
 
   wxs = {
@@ -168,6 +175,11 @@ export default class RecordList extends wepy.page {
   methods = {
     searchRecords(searchValue, evt) {
       this.searchRecords(searchValue, evt);
+    },
+
+    changeFilters(filters){
+      this.filter = filters;
+      this.searchRecords(this.searchValue);
     }
   };
 }
