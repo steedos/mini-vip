@@ -96,7 +96,7 @@
   <view class="page record-list" wx:if="{{is_loaded}}">
     <view class="page__hd">
       <searchbar :placeholder.sync="searchPlaceholder" @confirm.user="searchRecords" />
-      <listViews :object_name.sync="object_name" @confirm.user="changeFilters" />
+      <listViews :object_name.sync="object_name" @confirm.user="changeFilters" wx:if="{{list_views_count > 1}}"/>
     </view>
     <view class="page__bd">
       <block wx:if="{{record_list.length}}">
@@ -147,6 +147,8 @@ import searchbar from '../../components/searchbar';
 import listViews from '../../components/list_views';
 import recordList from '../../mixins/record_list';
 
+import _ from 'underscore';
+
 export default class RecordList extends wepy.page {
   config = {
     navigationBarTitleText: '',
@@ -159,8 +161,19 @@ export default class RecordList extends wepy.page {
   };
 
   data = {
-    object_name: ''
+    object_name: '',
+    list_views_count: 0
   };
+
+  onLoad(e){
+    let list_views = this.$parent.bootstrap.objects[e.object_name].list_views;
+
+    delete list_views['default'];
+
+    this.list_views_count = _.keys(list_views).length;;
+
+    this.$apply();
+  }
 
   wxs = {
     util: util
