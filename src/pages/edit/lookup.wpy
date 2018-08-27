@@ -271,6 +271,8 @@
           if(record.user.profile){
             option.avatar = record.user.profile.avatar
           }
+        }else if(reference_to === 'objects'){
+          option.value = record.name
         } else {
           option.value = record._id
         }

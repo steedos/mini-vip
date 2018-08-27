@@ -20,6 +20,7 @@
         <view class="weui-cells__title weui-flex">
           <view class="slds-icon-standard-{{item.object.icon}} slds-icon slds-icon--small slds-m-right--x-small"/>
           {{item.object.label || item.object.name}}({{item.count}})
+          <view class="weui-flex__item weui-cell__ft"><button class="weui-btn mini-btn" type="default" size="mini" @tap.stop="createObject" data-oname="{{item.object_name}}">新建</button></view>
         </view>
         <view class="weui-cells weui-cells_after-title">
           <block wx:if="{{item.relatedRecords.length == 0}}">
@@ -33,7 +34,7 @@
                 <view class="weui-cell__bd">{{r.name}}</view>
               </view>
             </block>
-            <view class="weui-cell weui-cell_link">
+            <view class="weui-cell weui-cell_link related-more" @tap.stop="relatedMore" data-oname="{{item.object_name}}">
               <view class="weui-cell__bd">更多</view>
             </view>
           </block>
@@ -55,7 +56,12 @@
   export default class Related extends wepy.component {
     data = {
       title: '相关相关',
-      related_objects: []
+      related_objects: [],
+      space_id: '',
+      object_name: '',
+      record_id: '',
+      objects: '',
+      userId: '',
     };
 
     props = {
@@ -68,7 +74,6 @@
     watch = {
       args: async function (newValue, oldValue) {
         if (!_.isEmpty(newValue)) {
-          console.log('newValue', newValue)
           const object_name = newValue.object_name;
           const record_id = newValue.record_id;
           const objects = this.$parent.$parent.bootstrap.objects;
@@ -77,6 +82,11 @@
           const userId = this.$parent.$parent.globalData.user._id;
           console.log('related_objects', related_objects)
 
+          this.space_id = space_id;
+          this.object_name = object_name;
+          this.record_id = record_id;
+          this.objects = objects;
+          this.userId = userId;
 
           for(let ro of related_objects){
             console.log('ro.object_name', ro.object_name);
@@ -121,5 +131,20 @@
         }
       }
     };
+
+    methods = {
+      createObject: function (e) {
+        const oname = e.currentTarget.dataset.oname;
+        wepy.navigateTo({url: `/pages/record/create?object_name=${oname}&space_id=${this.space_id}`})
+      },
+      relatedMore: function (e) {
+        const oname = e.currentTarget.dataset.oname;
+        console.log('oname', oname);
+        const related_object = _.findWhere(this.related_objects, {object_name:oname});
+        console.log('this.related_objects', this.related_objects);
+        const filter =  creatorClient.getODataRelatedFilter(this.space_id, this.userId, this.object_name, this.objects[related_object.object_name], related_object.foreign_key, this.record_id, this.objects);
+        wepy.navigateTo({url: `/pages/record/list?object_name=${oname}&space_id=${this.space_id}&filter=${filter.join(' ')}`})
+      }
+    }
   }
 </script>
