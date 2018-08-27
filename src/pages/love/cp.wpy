@@ -83,6 +83,10 @@
   .main-body {
     margin-top: 100rpx;
     width: 100%;
+    height: 538rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     .first-circle {
       position: relative;
       margin: 0 auto;
@@ -146,6 +150,40 @@
             }
           }
         }
+      }
+    }
+
+    .first-animate-circle {
+      position: absolute;
+      background: #9281f4;
+      width: 210rpx;
+      height: 210rpx;
+      border-radius: 50%;
+      opacity: 1;
+      z-index: 1;
+    }
+
+    .second-animate-circle {
+      position: absolute;
+      background: #9281f4;
+      width: 210rpx;
+      height: 210rpx;
+      border-radius: 50%;
+      opacity: 1;
+      z-index: 2;
+    }
+    
+    .searching-container {
+      width: 210rpx;
+      height: 210rpx;
+      border-radius: 50%;
+      background: #fff;
+      z-index: 10;
+      image {
+        box-sizing:  border-box;
+        width: 100%;
+        height: 100%;
+        padding: 55rpx;
       }
     }
   }
@@ -255,7 +293,7 @@
     <view class="header">本周匹配数</view>
     <view class="top-sm-circle"></view>
     <view class="top-sm-dark-circle"></view>
-    <view class="main-body">
+    <!-- <view class="main-body">
       <view class="first-circle">
         <view class="lg-circle"></view>
         <view class="lg-star"></view>
@@ -273,10 +311,14 @@
           </view>
         </view>
       </view>
-    </view>
-    <!-- <view class="comet-container">
-      <view class="comet"></view>
     </view> -->
+    <view class="main-body">
+      <view class="first-animate-circle" animation="{{secondAnimation}}"></view>
+      <view class="second-animate-circle" animation="{{thirdAnimation}}"></view>
+      <view class="searching-container">
+        <image animation="{{firstAnimation}}" mode="aspectFit" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/love_cp.png"></image>
+      </view>
+    </view>
     <view class="lg-moon"></view>
     <view class="sm-bt-star"></view>
     <view class="lg-bt-star"></view>
@@ -291,6 +333,82 @@
 import wepy from 'wepy';
 
 export default class LoveCP extends wepy.page {
+  config = {};
 
+  data = {
+    firstAnimation: {},
+    secondAnimation: {},
+    thirdAnimation: {}
+  }
+
+  setAnimation() {
+    let firstAnimation = wx.createAnimation({
+      duration: 700,
+      timingFunction: 'ease',
+    })
+
+    let secondAnimation = wx.createAnimation({
+      duration: 2000,
+      timingFunction: 'ease',
+      delay: 1400
+    });
+
+    let thirdAnimation = wx.createAnimation({
+      duration: 2000,
+      timingFunction: 'ease',
+      delay: 2600
+    });
+
+    firstAnimation.scale(1.3).step().scale(1).step();
+    secondAnimation.scale(2.5).backgroundColor('#7864f1').opacity(0.4).step();
+    thirdAnimation.scale(2.0).backgroundColor('#7864f1').opacity(0.89).step();
+
+    this.firstAnimation = firstAnimation.export();
+    this.secondAnimation = secondAnimation.export();
+    this.thirdAnimation = thirdAnimation.export();
+
+    this.$apply();
+  }
+
+  initAnimation() {
+    let firstAnimation = wx.createAnimation({
+      duration: 0,
+      timingFunction: 'ease',
+    })
+
+    let secondAnimation = wx.createAnimation({
+      duration: 0,
+      timingFunction: 'ease',
+      delay: 0
+    });
+
+    let thirdAnimation = wx.createAnimation({
+      duration: 0,
+      timingFunction: 'ease',
+      delay: 0
+    });
+
+    firstAnimation.scale(1).step();
+    secondAnimation.scale(1).backgroundColor('#9281f4').opacity(1).step();
+    thirdAnimation.scale(1).backgroundColor('#9281f4').opacity(1).step();
+
+    this.firstAnimation = firstAnimation.export();
+    this.secondAnimation = secondAnimation.export();
+    this.thirdAnimation = thirdAnimation.export();
+
+    this.$apply();
+  }
+
+  async onLoad() {
+    const self = this;
+
+    setTimeout(() => {
+      setInterval(() => { 
+        this.initAnimation();
+        this.setAnimation();
+      }, 4600);
+    }, 1000);
+    
+  }
 }
 </script>
