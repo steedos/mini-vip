@@ -327,10 +327,7 @@
 
 <template>
   <view class="cp-bg">
-<<<<<<< HEAD
     <view class="header">寻找有缘人</view>
-=======
->>>>>>> b506d35e4d917e0f85098fba07cae99e01b36971
     <view class="top-sm-circle"></view>
     <view class="top-sm-dark-circle"></view>
     <block wx:if="{{isMatching}}">
