@@ -1,0 +1,236 @@
+<style lang="less">
+.header {
+	position: relative;
+
+	.cover-wrapper{
+		position: relative;
+		height: 300rpx;
+		background-size: cover;
+	}
+	.image{
+		width: 100%;
+	}
+	.empty-cover {
+		position: relative;
+		height: 210px;
+		background-image: url("https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/empty.png");
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		.text {
+			position: relative;
+			top: -82px;
+			color: #262626;
+			text-shadow: 1px 1px 0px #686868;
+			font-size: 20px;
+		}
+	}
+	.space-info {
+		position: relative;
+		text-align: center;
+		margin: 0 20rpx;
+		border-radius: 0.25rem;
+		top: -100rpx;
+		width: auto;
+		border: 1px solid transparent;
+		padding-bottom: 20rpx;
+		background: #fff;
+		box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
+		z-index: 100;
+
+		.heart {
+			position: absolute;
+			right: 0;
+			top: -64rpx;
+			width: 1.75rem;
+			height: 1.75rem;
+		}
+
+		.wrapper {
+			top: -100rpx;
+			margin-top: 155rpx;
+			padding: 0 40rpx;
+
+			.avatar-container {
+				background: #fff;
+				padding: 10rpx;
+				border-radius: 50%;
+				display: inline-block;
+				box-shadow: 0 2px 2px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08);
+				position: absolute;
+				left: calc(~"50% - 135rpx");
+				top: -145rpx;
+
+				.avatar {
+					border-radius: 50%;
+					display: block;
+					width: 250rpx;
+					height: 250rpx;
+				}
+
+				.sex-container {
+					position: absolute;
+					width: 35rpx;
+					height: 35rpx;
+					background: #fff;
+					right: 14rpx;
+					bottom: 6rpx;
+					border-radius: 50%;
+					padding: 8rpx;
+					&.boy {
+						border: 4rpx solid #00aeef;
+					}
+					&.girl {
+						border: 4rpx solid #ec148e;
+					}
+					.sex-img {
+						display: block;
+						width: 100%;
+						height: 100%;
+					}
+				}
+			}
+
+			.love-heart {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				color: #823c3d;
+				margin-bottom:10rpx;
+				font-weight: bold;
+				.love-img {
+					margin-right: 0.5rem;
+				}
+			}
+
+			.name {
+				font-size: 44rpx;
+				font-weight: bold;
+			}
+
+			.introduction {
+				font-size: 32rpx;
+				margin-top: 10rpx;
+				font-weight: bold;
+			}
+
+			.zodiac-constellation{
+				display: flex;
+				margin-top: 10rpx;
+				font-size: 30rpx;
+				color: #777;
+				justify-content: center;
+				view {
+					padding: 0 6rpx;
+				}
+			}
+
+			.star-count {
+				margin-top: 0px;
+				color: #898989;
+				display: none;
+			}
+
+			.btn-star {
+				color: #018cc6;
+			}
+			.btn-manage {
+				background: #018cc6;
+				color: #fff;
+			}
+		}
+	}
+}
+</style>
+<template>
+	<view class="wepy-list">
+		<view class="header">
+			<view wx:if="{{!about_me.cover}}">
+				<view class="cover-wrapper" @tap="uploadImage(true)" style="background-image: url(https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/header.jpg)"></view>
+			</view>
+			<view wx:else>
+				<view class="cover-wrapper" @tap="uploadImage(true)" style="background-image: url({{util.formatImageUrl(about_me.cover, baseUrl)}})"></view>
+			</view>
+			<view class="space-info">
+				<view class="wrapper">
+					<view class="bg-image"></view>
+					<block wx:if="{{isAuthUserInfo}}">
+						<view class="avatar-container">
+							<image class="avatar" mode="aspectFill" src="{{util.formatImageUrl(about_me.avatar, baseUrl)}}" @tap.stop="uploadImage()"/>
+							<view class="sex-container {{about_me.sex == '男' ? 'boy' : 'girl'}}">
+								<image wx:if="{{about_me.sex == '男'}}" class="sex-img" mode="aspectFill" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/boy.png"></image>
+								<image wx:else class="sex-img" mode="aspectFill" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/girl.png"></image>
+							</view>
+						</view>
+					</block>
+					<block wx:else>
+						<button open-type="getUserInfo" bindgetuserinfo="userLogin" plain="true" class="avatar-container" style="border: none">
+							<image class="avatar" mode="aspectFill" src="https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/avatar.png"></image>
+						</button>
+					</block>
+					<view wx:if="{{about_me.name}}" class="name">{{about_me.name}}</view>
+					<view wx:else class="name">未登录</view>
+					<view wx:if="{{about_me.self_introduction}}" class="introduction">{{about_me.self_introduction}}</view>
+					<view class="zodiac-constellation">
+						<view wx:if="{{about_me.sex}}">{{about_me.sex}}</view>
+						<view wx:if="{{about_me.age}}">{{about_me.age}}岁</view>
+						<view wx:if="{{about_me.height}}">{{about_me.height}}cm</view>
+						<view wx:if="{{about_me.constellation}}">{{about_me.constellation}}座</view>
+						<view wx:if="{{about_me.live}}">{{about_me.live}}</view>
+					</view>
+				</view>
+			</view>
+		</view>
+	</view>
+</template>
+<script>
+import wepy from 'wepy';
+import util from '../wxs/util.wxs';
+import req from '@/network';
+import { baseUrl } from '@/config';
+import { loveSpaceId } from '@/config';
+
+export default class UserHeader extends wepy.component {
+	props = {
+		about_me: {
+			type: Object,
+			default: {}
+		},
+		isAuthUserInfo: {
+			type: Boolean,
+			default: false
+		}
+	}
+
+  data = {
+		space_id: loveSpaceId,
+		avatar: ''
+	};
+
+	async onLoad() {}
+	
+  methods = {
+    async userLogin(e) {
+      const userInfo = e.detail.userInfo;
+      if (userInfo) {
+
+				this.$parent.$parent.globalData.user.avatar = userInfo.avatarUrl;
+				this.$parent.$parent.globalData.user.name = userInfo.nickName;
+				this.$apply();
+
+        const url = '/mini/vip/user';
+				const name = userInfo.nickName;
+				const sex = userInfo.sex;
+				const avatar = userInfo.avatarUrl;
+        await req.put(url, { name: name, sex: sex, avatar: avatar });
+				this.$parent.loadAboutMe();
+      }
+    } 
+  };
+
+	wxs = {
+		util: util
+	}
+}
+</script>

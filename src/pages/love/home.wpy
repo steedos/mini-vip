@@ -117,26 +117,7 @@
 <view>
 	<view class="cover-page-bg"></view>
 	<view class="cover-page" wx:if="{{is_loaded}}">
-		<view class="page__hd">
-			<view class='love-avatar'>
-				<block wx:if="{{isAuthUserInfo}}">
-					<view class="" style="">
-						<image class="image" mode="aspectFill" wx:if="{{isAuthUserInfo}}" src="{{avatar}}"></image>
-					</view>
-				</block>
-				<block wx:else>
-					<button open-type="getUserInfo" bindgetuserinfo="userLogin" plain="true" class="user-active">
-						<view class="">
-							<image class="image" mode="aspectFill" src="https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/avatar.png"></image>
-						</view>
-					</button>
-				</block>
-        <navigator url="/pages/love/me?space_id={{space_id}}">
-          <view class="">我的</view>
-          <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-        </navigator>
-			</view>
-		</view>
+    <userHeader :about_me.sync="about_me" :isAuthUserInfo.sync="isAuthUserInfo"/>
 		<view class="page__bd">
 			<bolck wx:if="{{!showLoveMatch}}">
         <navigator class="match" url="/pages/love/cp?space_id={{space_id}}">
@@ -213,6 +194,7 @@ import { loveSpaceId } from '../../config/index.js';
 import req from '@/network';
 import _ from 'underscore'
 import { baseUrl } from '@/config';
+import userHeader from '../../components/user_header';
 
 export default class LoveHome extends wepy.page {
   config = {
@@ -232,7 +214,8 @@ export default class LoveHome extends wepy.page {
     group_friends: {},
     isAuthUserInfo: false,
     baseUrl: baseUrl,
-    showLoveMatch:false
+    showLoveMatch: false,
+    about_me: {}
   };
 
   onShareAppMessage(res) {
@@ -254,6 +237,10 @@ export default class LoveHome extends wepy.page {
 		wx.stopPullDownRefresh();
     wx.hideNavigationBarLoading()
 	}
+  
+  components = {
+    userHeader: userHeader
+  }
 
   async onLoad(e) {
     wepy.showShareMenu({
@@ -278,6 +265,8 @@ export default class LoveHome extends wepy.page {
 			this.showLoveMatch = true;
 			this.$apply();
     }
+
+    await this.loadAboutMe();
     await this.loadGroups();
     await this.loadFriendList();
 
@@ -329,26 +318,47 @@ export default class LoveHome extends wepy.page {
     wx.hideNavigationBarLoading();
   }
 
-  // async onShow() {
-  // 	wx.showLoading({mask: true});
-  // 	this.is_loaded = false;
-  // 	await this.loadGroups();
-  //   await this.loadFriendList();
-  //   let group_friends = {};
-  //   for (let group of this.groups) {
-  //     let result = await self.loadGroupFriends(group.open_group_id);
-  //     group_friends[group.open_group_id] = result;
-  //   }
-  // 	this.group_friends = group_friends;
-  // 	this.is_loaded = true;
+  async loadAboutMe() {
+    const user_id = this.$parent.globalData.user._id;
+    const avatar = this.$parent.globalData.user.avatar;
+    const options = {
+      $filter: `(owner eq '${this.user_id}')`
+    }
+    const about_me = await wepy.$instance.query('love_about_me', options, this.space_id);
+    const customer = await this.loadCustomer();
+    if (about_me && about_me.value && about_me.value[0]) {
+      this.about_me = about_me.value[0];
+    } else {
+      this.about_me = {};
+      this.about_me.name = customer.owner.name;
+      if (customer.cover) {
+        this.about_me.cover = customer.cover;
+      }
+      if (customer.avatar) {
+        this.about_me.avatar = customer.avatar;
+      } else {
+        this.about_me.avatar = avatar;
+      }
+    }
 
-  // 	console.log('[groups]', this.groups);
-  //   console.log('[friendList]', this.friendList);
-  //   console.log('[group_friends]', group_friends);
+    if (this.about_me.avatar && this.about_me.name) {
+      this.isAuthUserInfo = true;
+      this.$apply();
+    }
 
-  // 	this.$apply();
-  // 	wx.hideLoading()
-  // }
+    this.$apply();
+  }
+
+  async loadCustomer() {
+    const user_id = this.$parent.globalData.user._id;
+    const options = {
+      $filter: `(owner eq '${user_id}' and space eq '${this.space_id}')`,
+      $expand: 'owner($select=name,profile)'
+    }
+    const result = await this.$parent.query('vip_customers', options, this.space_id);
+    const customer = result.value[0];
+    return customer;
+  }
 
   async loadFriendList() {
     const user_id = this.$parent.globalData.user._id;
