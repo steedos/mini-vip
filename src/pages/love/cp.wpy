@@ -361,7 +361,9 @@ export default class LoveCP extends wepy.page {
 
     firstAnimation.scale(1.3).step().scale(1).step();
     secondAnimation.scale(2.5).backgroundColor('#7864f1').opacity(0.4).step();
+    secondAnimation.scale(1).backgroundColor('#9281f4').opacity(1).step({ delay: 1300, duration: 0 });
     thirdAnimation.scale(2.0).backgroundColor('#7864f1').opacity(0.89).step();
+    thirdAnimation.scale(1).backgroundColor('#9281f4').opacity(1).step({ delay: 100, duration: 0 });
 
     this.firstAnimation = firstAnimation.export();
     this.secondAnimation = secondAnimation.export();
@@ -371,31 +373,9 @@ export default class LoveCP extends wepy.page {
   }
 
   initAnimation() {
-    let firstAnimation = wx.createAnimation({
-      duration: 0,
-      timingFunction: 'ease',
-    })
-
-    let secondAnimation = wx.createAnimation({
-      duration: 0,
-      timingFunction: 'ease',
-      delay: 0
-    });
-
-    let thirdAnimation = wx.createAnimation({
-      duration: 0,
-      timingFunction: 'ease',
-      delay: 0
-    });
-
-    firstAnimation.scale(1).step();
-    secondAnimation.scale(1).backgroundColor('#9281f4').opacity(1).step();
-    thirdAnimation.scale(1).backgroundColor('#9281f4').opacity(1).step();
-
-    this.firstAnimation = firstAnimation.export();
-    this.secondAnimation = secondAnimation.export();
-    this.thirdAnimation = thirdAnimation.export();
-
+    this.firstAnimation = {};
+    this.secondAnimation = {};
+    this.thirdAnimation = {};
     this.$apply();
   }
 
@@ -406,7 +386,7 @@ export default class LoveCP extends wepy.page {
       setInterval(() => { 
         this.initAnimation();
         this.setAnimation();
-      }, 4600);
+      }, 5000);
     }, 1000);
     
   }
