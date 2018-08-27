@@ -1,7 +1,23 @@
 <template>
-  <view>
-    <autoform :args.sync='args'></autoform>
+  <view class="weui-tab">
+    <view class="weui-navbar">
+      <block wx:for="{{tabs}}" wx:key="*this">
+        <view id="{{index}}" class="weui-navbar__item {{activeIndex == index ? 'weui-bar__item_on' : ''}}" bindtap="tabClick">
+          <view class="weui-navbar__title">{{item}}</view>
+        </view>
+      </block>
+      <view class="weui-navbar__slider" style="left: {{sliderLeft}}px; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);"></view>
+    </view>
+    <view class="weui-tab__panel">
+      <view class="weui-tab__content" hidden="{{activeIndex != 0}}">
+        <related :args.sync='args'/>
+      </view>
+      <view class="weui-tab__content" hidden="{{activeIndex != 1}}">
+        <autoform :args.sync='args'></autoform>
+      </view>
+    </view>
   </view>
+
 </template>
 
 
@@ -9,6 +25,7 @@
   import wepy from 'wepy';
   import req from '@/network';
   import form from '../../components/form';
+  import related from '../../components/related';
 
   export default class RecordEdit extends wepy.page {
 
@@ -17,11 +34,16 @@
     };
 
     data = {
-      args: {}
-    }
+      args: {},
+      tabs: ['相关', '详细信息'],
+      activeIndex: 1,
+      sliderLeft: 0,
+      sliderOffset:0
+    };
 
     components = {
-      autoform: form
+      autoform: form,
+      related: related
     };
 
     changeNavigationBarTitleText(title){
@@ -65,7 +87,26 @@
       }
 
       this.args = args;
+
+      const res = wx.getSystemInfoSync();
+
+      const sliderWidth = 96;
+
+      this.sliderLeft = (res.windowWidth / this.tabs.length - sliderWidth) / 2;
+
+      this.sliderOffset = res.windowWidth / this.tabs.length * this.activeIndex;
+
       this.$apply()
+    }
+
+    methods = {
+      tabClick: function (e) {
+        if(e.currentTarget.id === this.activeIndex){
+          return;
+        }
+        this.activeIndex = e.currentTarget.id;
+        this.sliderOffset = e.currentTarget.offsetLeft;
+      }
     }
   }
 </script>

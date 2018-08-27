@@ -53,22 +53,13 @@
 
           const views_count = _.keys(this.list_views).length;
 
-          console.log('this.list_views', this.list_views);
           const res = wx.getSystemInfoSync();
-
-          console.log('res', res)
 
           const sliderWidth = 96;
 
-          console.log(res.windowWidth , views_count , sliderWidth)
-
           this.sliderLeft = (res.windowWidth / views_count - sliderWidth) / 2;
 
-          console.log('this.sliderLeft', this.sliderLeft);
-
           this.sliderOffset = res.windowWidth / views_count * this.activeIndex;
-
-          console.log('this.sliderOffset', this.sliderOffset, this.activeIndex)
 
           this.$apply();
         }

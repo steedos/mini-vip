@@ -1,0 +1,125 @@
+<style>
+  .weui-cells__title{
+    line-height: 28px;
+  }
+
+  .related-item{
+    margin-bottom: 25px;
+  }
+
+  .no-data{
+    color:#999;
+    text-align: center;
+  }
+</style>
+
+<template>
+  <view class="related-view">
+    <block wx:for="{{related_objects}}" wx:key="*this">
+      <view class="related-item">
+        <view class="weui-cells__title weui-flex">
+          <view class="slds-icon-standard-{{item.object.icon}} slds-icon slds-icon--small slds-m-right--x-small"/>
+          {{item.object.label || item.object.name}}({{item.count}})
+        </view>
+        <view class="weui-cells weui-cells_after-title">
+          <block wx:if="{{item.relatedRecords.length == 0}}">
+            <view class="weui-cell">
+              <view class="weui-cell__bd no-data">没有可显示的项目。</view>
+            </view>
+          </block>
+          <block wx:else>
+            <block wx:for="{{item.relatedRecords}}" wx:key="*this" wx:for-item="r">
+              <view class="weui-cell">
+                <view class="weui-cell__bd">{{r.name}}</view>
+              </view>
+            </block>
+            <view class="weui-cell weui-cell_link">
+              <view class="weui-cell__bd">更多</view>
+            </view>
+          </block>
+        </view>
+      </view>
+    </block>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import req from '@/network';
+  import creatorClient from '@/utils/creator_client.js'
+  import ODataClinet from '@/utils/odata_client.js'
+  import _ from 'underscore'
+
+  const TOP = 5;
+
+  export default class Related extends wepy.component {
+    data = {
+      title: '相关相关',
+      related_objects: []
+    };
+
+    props = {
+      args: {
+        type: Object
+      }
+    };
+
+
+    watch = {
+      args: async function (newValue, oldValue) {
+        if (!_.isEmpty(newValue)) {
+          console.log('newValue', newValue)
+          const object_name = newValue.object_name;
+          const record_id = newValue.record_id;
+          const objects = this.$parent.$parent.bootstrap.objects;
+          const related_objects = creatorClient.getObjectRelateds(objects, object_name);
+          const space_id = newValue.space_id;
+          const userId = this.$parent.$parent.globalData.user._id;
+          console.log('related_objects', related_objects)
+
+
+          for(let ro of related_objects){
+            console.log('ro.object_name', ro.object_name);
+            ro.object = objects[ro.object_name];
+            let query_options = {
+
+            };
+            const filters = creatorClient.getODataRelatedFilter(space_id, userId,object_name, objects[ro.object_name], ro.foreign_key, record_id, objects);
+            console.log('filters', filters);
+            query_options.$top = TOP;
+            query_options.$select = 'name';
+            query_options.$filter = filters.join(' ');
+            query_options.$count = true;
+
+            const related_data = await ODataClinet.query(ro.object_name, query_options, space_id);
+
+            ro.count = related_data['@odata.count'];
+
+            ro.relatedRecords = related_data.value || [];
+            console.log('args forEach -> ', ro.object_name, ro.relatedRecords);
+          }
+
+//          _.forEach(related_objects, async (ro)=>{
+//            console.log('ro.object_name', ro.object_name);
+//            ro.object = objects[ro.object_name];
+//            let query_options = {
+//
+//            };
+//            const filters = creatorClient.getODataRelatedFilter(space_id, userId,object_name, objects[ro.object_name], ro.foreign_key, record_id);
+//
+//            query_options.$top = TOP;
+//            query_options.$select = 'name';
+//            query_options.$filter = filters.join(' ');
+//            query_options.$count = true;
+//
+//            ro.relatedRecords = (await ODataClinet.query(ro.object_name, query_options, space_id)).value || [];
+//            console.log('args forEach -> ', ro.object_name, ro.relatedRecords);
+//          });
+          this.related_objects = related_objects;
+          console.log('this.related_objects ', this.related_objects);
+          this.$apply();
+        }
+      }
+    };
+  }
+</script>
