@@ -85,13 +85,12 @@ export default class LoveIndex extends wepy.page {
   async onLoad (e) {
     let finishedNaire = wx.getStorageSync('questionnaire_progess');
     if(finishedNaire.length > 0){
-      wx.switchTab({url: '/pages/love/home'});
+      wx.navigateTo({url: '/pages/love/home'});
       return ;
     }
     wepy.showShareMenu({
       withShareTicket: true
     });
-    console.log("=======index==e============", e);
     wx.showLoading({mask: true});
     const self = this;
 		// 保证一进入就新建space对应的vip_customers记录
