@@ -85,7 +85,7 @@ export default class LoveIndex extends wepy.page {
   async onLoad (e) {
     let finishedNaire = wx.getStorageSync('questionnaire_progess');
     if(finishedNaire.length > 0){
-      wx.navigateTo({url: '/pages/love/home'});
+      wx.redirectTo({url: '/pages/love/home'});
       return ;
     }
     wepy.showShareMenu({
