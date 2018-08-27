@@ -33,7 +33,42 @@
       }
     }
   }
-
+  .match {
+		box-shadow: #aaa 0px 0px 10px;
+    background: #1AAD19;
+    margin-top: 30rpx;
+    padding: 30rpx;
+    border-radius: 0.25rem;
+    .header {
+      display: flex;
+      line-height: 1.41176471;
+      font-size: 17px;
+      .group-name {
+        flex: 1;
+      }
+    }
+    .body {
+      display: flex;
+      margin-top: 16rpx;
+      .count {
+        color: #999;
+        flex: 1;
+      }
+    }
+  }
+  .banner {
+    display: flex;
+    color: #fff;
+    .box {
+      flex: 1;
+    }
+    .weui-cell__ft {
+      display: flex;
+      color: #fff;
+      align-items: center;
+      justify-content: center;
+    }
+  }
   .group {
 		box-shadow: #aaa 0px 0px 10px;
     background: #fff;
@@ -96,10 +131,25 @@
 						</view>
 					</button>
 				</block>
+        <navigator url="/pages/love/me?space_id={{space_id}}">
+          <view class="">我的</view>
+          <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+        </navigator>
 			</view>
 		</view>
 		<view class="page__bd">
-			<navigator class="group" url="/pages/love/matching?space_id={{space_id}}&open_group_id=-1">
+			<bolck wx:if="{{!showLoveMatch}}">
+        <navigator class="match" url="/pages/love/cp?space_id={{space_id}}">
+          <view class="banner">
+            <view class="box">
+              <view class="title">每周匹配</view>
+              <view class="desc">没有cp，无颜为你分配</view>
+            </view>
+            <view class="weui-cell__ft weui-cell__ft_in-access">点击获取</view>
+          </view>
+        </navigator>
+      </bolck>
+      <navigator class="group" url="/pages/love/matching?space_id={{space_id}}&open_group_id=-1">
 				<view class="header">
 					<view class="group-name">
 						<view class="group-name">好友缘分总榜</view>
@@ -166,12 +216,12 @@ import { baseUrl } from '@/config';
 
 export default class LoveHome extends wepy.page {
   config = {
-		navigationBarTitleText: '缘分圈',
+		navigationBarTitleText: '无颜匹配',
 		enablePullDownRefresh: true
   };
 
   data = {
-    navigationBarTitle: '缘分圈',
+    navigationBarTitle: '无颜匹配',
     user_id: '',
     is_loaded: false,
     space_id: null,
@@ -181,7 +231,8 @@ export default class LoveHome extends wepy.page {
     name: '',
     group_friends: {},
     isAuthUserInfo: false,
-    baseUrl: baseUrl
+    baseUrl: baseUrl,
+    showLoveMatch:false
   };
 
   onShareAppMessage(res) {
@@ -222,7 +273,11 @@ export default class LoveHome extends wepy.page {
     this.space_id = e.space_id;
     await this.$parent.login(e);
     this.user_id = this.$parent.globalData.user._id;
-
+    const love = this.$parent.globalData.love;
+    if (love && love.enabled) {
+			this.showLoveMatch = true;
+			this.$apply();
+    }
     await this.loadGroups();
     await this.loadFriendList();
 
