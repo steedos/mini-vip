@@ -337,15 +337,16 @@ export default class LoveHome extends wepy.page {
       this.about_me = about_me.value[0];
     } else {
       this.about_me = {};
-      this.about_me.name = customer.owner.name;
-      if (customer.cover) {
-        this.about_me.cover = customer.cover;
-      }
-      if (customer.avatar) {
-        this.about_me.avatar = customer.avatar;
-      } else {
-        this.about_me.avatar = avatar;
-      }
+    }
+
+    this.about_me.name = customer.owner.name;
+    if (customer.cover) {
+      this.about_me.cover = customer.cover;
+    }
+    if (customer.avatar) {
+      this.about_me.avatar = customer.avatar;
+    } else {
+      this.about_me.avatar = avatar;
     }
 
     if (this.about_me.avatar && this.about_me.name) {
