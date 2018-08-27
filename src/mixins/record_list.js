@@ -275,13 +275,26 @@ export default class recordList extends wepy.mixin {
       this.$apply();
     },
     async deleteRecord(event) {
-      const data = event.currentTarget.dataset
-      const object_name = this.object_name;
-      const recordId = data.recordId;
-      const allowDelete = data.allowDelete;
-      const spaceId = _.isObject(data.recordSpace) ? data.recordSpace._id : data.recordSpace;
-      await this.$parent.delete(object_name, recordId, spaceId);
-      await this.dataRefresh();
+      wx.showModal({
+        // title: '您确定要删除吗',
+        content: '您确定要删除吗？',
+        confirmText: "确定",
+        cancelText: "取消",
+        success: async (res)=> {
+          console.log(res);
+          if (res.confirm) {
+            const data = event.currentTarget.dataset
+            const object_name = this.object_name;
+            const recordId = data.recordId;
+            const allowDelete = data.allowDelete;
+            const spaceId = _.isObject(data.recordSpace) ? data.recordSpace._id : data.recordSpace;
+            await this.$parent.delete(object_name, recordId, spaceId);
+            await this.dataRefresh();
+          }else{
+            console.log('用户点击辅助操作')
+          }
+        }
+      });
     }
     // searchRecords(searchValue, evt){
     //   console.log('mixins searchRecords.....')
