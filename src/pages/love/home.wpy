@@ -61,6 +61,12 @@
     color: #fff;
     .box {
       flex: 1;
+      .title {
+        font-size: 17px;
+      }
+      .desc {
+        font-size: 14px;
+      }
     }
     .weui-cell__ft {
       display: flex;
@@ -138,14 +144,15 @@
 			</view>
 		</view>
 		<view class="page__bd">
-			<bolck wx:if="{{!showLoveMatch}}">
+			<bolck wx:if="{{showLoveMatch}}">
         <navigator class="match" url="/pages/love/cp?space_id={{space_id}}">
           <view class="banner">
             <view class="box">
               <view class="title">每周匹配</view>
-              <view class="desc">没有cp，无颜为你分配</view>
+              <view class="desc">没有cp，无颜为你分配。</view>
+              <view class="desc">每周给你推荐一位双向匹配度最高的人。</view>
             </view>
-            <view class="weui-cell__ft weui-cell__ft_in-access">点击获取</view>
+            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
           </view>
         </navigator>
       </bolck>
