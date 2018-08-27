@@ -290,7 +290,6 @@
 
 <template>
   <view class="cp-bg">
-    <view class="header">本周匹配数</view>
     <view class="top-sm-circle"></view>
     <view class="top-sm-dark-circle"></view>
     <block wx:if="{{isMatching}}">
@@ -337,7 +336,10 @@
 import wepy from 'wepy';
 
 export default class LoveCP extends wepy.page {
-  config = {};
+  config = {
+		navigationBarTitleText: '无颜匹配',
+		enablePullDownRefresh: true
+  };
 
   data = {
     firstAnimation: {},

@@ -10,7 +10,7 @@
       </view>
       <view class="page__bd">
         <view class="love-summary">
-          你和有缘人的距离，只差一套问卷了。
+          你和有缘人的距离，只差一套问卷。
         </view>
         <button class="btn-join" @tap="next">开始答题</button>
       </view>
