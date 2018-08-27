@@ -6,11 +6,11 @@
     <view class="cover-page-bg"></view>
     <view class="page cover-page">
       <view class="page__hd">
-        <view class="love-title">问卷匹配</view>
+        <view class="love-title">缘分匹配</view>
       </view>
       <view class="page__bd">
         <view class="love-summary">
-          回答下面的问卷，我们的人工智能算法将根据你的答案，计算匹配度。
+          你和有缘人的距离，只差一套问卷了。
         </view>
         <button class="btn-join" @tap="next">开始答题</button>
       </view>
