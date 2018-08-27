@@ -146,7 +146,7 @@ export default class LoveIndex extends wepy.page {
 			wx.navigateTo({url: '/pages/love/cover_answer_questions'})
 		},
 		goTest() {
-		  wx.switchTab({url: '/pages/love/test'})
+		  wx.navigateTo({url: '/pages/love/test'})
 		},
 		goHome() {
 			wx.switchTab({url: '/pages/love/home'})

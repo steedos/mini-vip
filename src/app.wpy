@@ -302,10 +302,10 @@ export default class VIP extends wepy.app {
         text: '缘分圈',
       },
       {
-        pagePath: 'pages/love/test',
+        pagePath: 'pages/love/cp',
         selectedIconPath: './images/tabbars/topic_pressed.png',
         iconPath: './images/tabbars/topic.png',
-        text: '缘分测试',
+        text: '寻找有缘人',
       },
       {
         pagePath: 'pages/love/me',
