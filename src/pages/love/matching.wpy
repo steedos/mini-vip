@@ -320,7 +320,7 @@ export default class Matching extends wepy.page {
     }
     await this.$parent.login(e);
     const user_id = this.$parent.globalData.user._id;
-    if (this.$parent.globalData.user.open_group_id) {
+    if (this.$parent.globalData.user.open_group_id && e.share_from) {
       this.open_group_id = this.$parent.globalData.user.open_group_id;
     } else if (e.open_group_id) {
       this.open_group_id = e.open_group_id;
