@@ -212,6 +212,7 @@ export default class UserHeader extends wepy.component {
 	}
 
   data = {
+		baseUrl: baseUrl,
 		space_id: loveSpaceId,
     avatar: ''
 	};
