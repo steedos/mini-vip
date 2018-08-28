@@ -404,10 +404,9 @@
       </view>
     </block>
     <block wx:else>
-      <view class="tip-cell" wx:if="{{!isMatching}}">
+      <view class="tip-cell" wx:if="{{!isMatching}}" @tap="goMe">
         <view class="title">完善资料，提高匹配质量</view>
         <view class="footer">
-          <view class="progress">36%</view>
           <view class="weui-cell__ft_in-access"></view>
         </view>
       </view>
@@ -536,6 +535,9 @@ export default class LoveCP extends wepy.page {
     },
     goDetail() {
       wx.navigateTo({ url: `/pages/love/introduce?_id=${this.cp._id}&space_id=${this.space_id}&userId=${this.cp.user_b._id}` })
+    },
+    goMe() {
+      wx.navigateTo({ url: '/pages/love/me' })
     }
   }
 }
