@@ -332,7 +332,6 @@ export default class Matching extends wepy.page {
       }
       this.$apply();
     }
-    console.log("record_list=================",this.record_list)
     wx.hideNavigationBarLoading();
     wx.stopPullDownRefresh();
   }
