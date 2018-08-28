@@ -84,6 +84,9 @@
 
     .shadow{
       box-shadow: #aaa 0px 0px 10px;
+      .weui-cell::before {
+        border-color: #e2e2e2 !important;
+      }
     }
 
     .question-have-other{
