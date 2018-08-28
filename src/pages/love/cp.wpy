@@ -421,7 +421,7 @@ import { loveSpaceId } from '@/config';
 export default class LoveCP extends wepy.page {
   config = {
 		navigationBarTitleText: '无颜匹配',
-		enablePullDownRefresh: true
+		enablePullDownRefresh: false
   };
 
   data = {
