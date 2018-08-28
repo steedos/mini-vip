@@ -128,7 +128,7 @@ page {
         <navigator class="match" url="/pages/love/cp?space_id={{space_id}}">
           <view class="banner">
             <view class="box">
-              <view class="title">每周匹配</view>
+              <view class="title">每周推荐</view>
               <view class="desc">没有心上人？无颜每周给你推荐一位双向匹配度最高的人，交换微信号。</view>
             </view>
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
