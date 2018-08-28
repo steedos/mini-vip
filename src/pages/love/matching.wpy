@@ -223,8 +223,8 @@
           <view class="page cover-page page-else">
             <view class="page__bd">
               <image class="light" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/light.png"/>
-              <text style="display:block;">无颜是一个神奇的小程序，</text>
-              <text  style="display:block;">可以测试群友之间的缘分哦~</text>
+              <text style="display:block;">点击屏幕下方的按钮，</text>
+              <text  style="display:block;">邀请好友一起答题，就可以测试缘分啦~</text>
             </view>
           </view>
         </block>
@@ -235,8 +235,8 @@
             <view class="love-title">我该和谁谈恋爱？</view>
           </view>
           <view class="page__bd">
-            <view class="love-summary">根据你的喜好和对方喜好，无颜可以精确计算你与好友的“互相匹配度”。</view>
-            <button class="btn-join" @tap="goLove">开始匹配</button>
+            <view class="love-summary">根据你的喜好和对方喜好，无颜可以精确计算你与好友的“互相匹配度”，帮你优选恋爱对象。</view>
+            <button class="btn-join" @tap="goLove">开始答题</button>
           </view>
         </view>
       </block>
