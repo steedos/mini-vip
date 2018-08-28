@@ -63,11 +63,10 @@
             <view class="weui-media-box__title" style="flex: 1;">
               {{name}}
             </view>
-            <view wx:if="{{is_member}}" class="weui-media-box__desc" style="margin-top: 6rpx;">
-              VIP会员
+            <view class="weui-media-box__desc" style="margin-top: 6rpx;">
+              测试好友缘分
             </view>
             <view class="weui-cell__ft weui-cell__ft_in-access">
-              <view class="vip_page_qrcode slds-icon slds-icon--small slds-m-right--x-small"></view>
             </view>
           </view>
         </view>
@@ -81,8 +80,8 @@
             <view class="weui-media-box__title" style="line-height: 30px;">
               {{name}}
             </view>
-            <view wx:if="{{is_member}}" class="weui-media-box__desc" style="margin-top: 6rpx;">
-              VIP会员
+            <view class="weui-media-box__desc" style="margin-top: 6rpx;">
+              测试好友缘分
             </view>
           </view>
         </button>
