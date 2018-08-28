@@ -342,7 +342,7 @@
 
 <template>
   <view class="cp-bg">
-    <view class="header">寻找有缘人</view>
+    <view class="header"></view>
     <view class="top-sm-circle"></view>
     <view class="top-sm-dark-circle"></view>
     <block wx:if="{{isMatching}}">
@@ -397,7 +397,7 @@
           </block>
           <block wx:else>
             <view class="tip-cell">
-              <view class="title">你与有缘人的距离，也许只隔了一个共同好友，让更多的朋友加入“无颜”吧。</view>
+              <view class="title">本周有缘人与你擦肩而过，请期待下周的邂逅。</view>
             </view>
           </block>
         </block>
@@ -420,7 +420,7 @@ import { loveSpaceId } from '@/config';
 
 export default class LoveCP extends wepy.page {
   config = {
-		navigationBarTitleText: '无颜匹配',
+		navigationBarTitleText: '每周匹配',
 		enablePullDownRefresh: false
   };
 
