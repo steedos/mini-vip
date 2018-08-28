@@ -354,6 +354,7 @@
   import { baseUrl, appId } from '@/config'
   import util from '../wxs/util.wxs'
   const utilJs = require('../utils/util.js');
+  import Creator from '@/utils/creator';
 
   import _ from 'underscore'
 
@@ -564,6 +565,25 @@
           }
           for (let k in this.fields) {
             let field = this.fields[k];
+
+            if(field.type === 'lookup' || field.type === 'master_detail'){
+              if(field._optionsFunction){
+                field.optionsFunction = Creator.stringToFunction(field._optionsFunction);
+
+                console.log('field.optionsFunction', field.optionsFunction);
+
+                let objects = [];
+
+                if(this.$parent.$parent.bootstrap){
+                  objects = this.$parent.$parent.bootstrap.objects;
+                }
+
+                let options = field.optionsFunction(objects);
+
+                field.options = options;
+              }
+            }
+
             let fv = this.values[field.name];
             if (fv) {
 
@@ -591,7 +611,7 @@
                 if(field.multiple){
                   let _ids = _.pluck(fv, '_id')
                   _.forEach(field.options, (option) => {
-                    if (_ids.includes(option.value)) {
+                    if (fv.includes(option.value) || _ids.includes(option.value)) {
                       option.checked = true
                     }
                   })
@@ -836,7 +856,11 @@
         }
         if (field.type === 'lookup' || field.type === 'master_detail') {
           if (field.multiple && _.isArray(v)){
-            value[k] = _.compact(_.pluck(v, '_id'));
+            if(field.reference_to){
+              value[k] = _.compact(_.pluck(v, '_id'));
+            }else{
+              value[k] = v;
+            }
           }else if (_.isObject(v)) {
             value[k] = v._id
           }
@@ -1123,6 +1147,7 @@
           await this.uploadImages(record_id);
           await this.uploadVideos(record_id);
           const value = this.transformValue(formValues);
+          console.log('1146----', value, formValues);
           if(Object.keys(this.fields).indexOf('wx_form_id') > -1){
             value['wx_form_id'] = appId + ':'+ e.detail.formId
           }

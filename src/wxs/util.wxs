@@ -330,27 +330,40 @@ function transformFieldValue(field, value){
     }
   }else if(field.type === 'location'){
      return value.address
-  }else if((field.type === 'lookup' || field.type === 'master_detail') && field.reference_to){
-    if(field.multiple){
-      var val = [];
-      value.forEach(function(v){
-        val.push(v.name);
-      })
-      return val.join(",");
-    }else{
-      console.log('util value2222', JSON.stringify(value))
-      if(field.referenceToIsArray){
-        if(value.name && value.object_label){
-          return  value.name + '(' + value.object_label + ')'
+  }else if((field.type === 'lookup' || field.type === 'master_detail')){
+    if(field.reference_to){
+      if(field.multiple){
+        var val = [];
+        value.forEach(function(v){
+          val.push(v.name);
+        })
+        return val.join(",");
+      }else{
+        console.log('util value2222', JSON.stringify(value))
+        if(field.referenceToIsArray){
+          if(value.name && value.object_label){
+            return  value.name + '(' + value.object_label + ')'
+          }
+
+          if(value.object_label){
+            return  value.object_label
+          }
         }
 
-        if(value.object_label){
-          return  value.object_label
-        }
+        return value.name
       }
-
-      return value.name
+    }else{
+      if(field.multiple){
+        var val = [];
+        field.options.forEach(function(_o){
+          if (value.indexOf(_o.value) > -1) {
+            val.push(_o.label)
+          }
+        })
+        return val.join(",");
+      }
     }
+
   }else if(field.type === 'datetime'){
 
     if(typeof value == "string"){

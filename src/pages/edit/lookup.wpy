@@ -67,6 +67,9 @@
               <view class="weui-cell__hd" wx:if="{{showAvatar}}">
                 <image src="{{util.formatAvatarImageUrl(option.avatar, baseUrl)}}" class='avatar-field'></image>
               </view>
+              <view class="weui-cell__hd" wx:if="{{option.icon}}">
+                <view class="slds-icon-standard-{{option.icon}} slds-icon slds-icon--small slds-m-right--x-small"/>
+              </view>
               <view class="weui-cell__bd">{{option.label}}</view>
               <view class="weui-cell__ft weui-cell__ft_in-radio" wx:if="{{option.checked}}">
                 <icon class="weui-icon-radio" type="success_no_circle" size="16"></icon>
@@ -80,6 +83,9 @@
               <radio class="weui-check" value="{{option.value}}" checked="{{option.checked}}"/>
               <view class="weui-cell__hd" wx:if="{{showAvatar}}">
                 <image src="{{util.formatAvatarImageUrl(option.avatar, baseUrl)}}" class='avatar-field'></image>
+              </view>
+              <view class="weui-cell__hd" wx:if="{{option.icon}}">
+                <view class="slds-icon-standard-{{option.icon}} slds-icon slds-icon--small slds-m-right--x-small"/>
               </view>
               <view class="weui-cell__bd">{{option.label}}</view>
               <view class="weui-cell__ft weui-cell__ft_in-radio" wx:if="{{option.checked}}">
@@ -106,6 +112,8 @@
   import pageRouter from '@/utils/pageRouter';
   import util from '../../wxs/util.wxs';
   import searchbar from '../../components/searchbar';
+
+  import Creator from '@/utils/creator';
 
   export default class Lookup extends wepy.page {
     config = {
@@ -232,11 +240,37 @@
     async getReferenceTo(reference_to, searchValue) {
 
       wepy.showLoading({
-        title: '正在保存',
+        title: '加载中',
         mask: true
       });
 
       if(_.isArray(reference_to)){
+        return []
+      }
+
+      if(!reference_to){
+
+        const field = this.field;
+
+        if(field._optionsFunction){
+          field.optionsFunction = Creator.stringToFunction(field._optionsFunction);
+
+          const objects = this.$parent.bootstrap.objects;
+
+          let options = field.optionsFunction(objects);
+
+          if(searchValue){
+            options =  _.filter(options, (o)=>{
+              let skey = o.label || o.name;
+              return skey.indexOf(searchValue) > -1 || skey.indexOf(searchValue) > -1
+            });
+          }
+
+          wepy.hideLoading();
+          return options;
+        }
+
+        wepy.hideLoading();
         return []
       }
 
@@ -261,8 +295,8 @@
         }
       }
 
-
       const data = await this.$parent.query(reference_to, query, this.space_id);
+
       let options = [];
       data.value.forEach(function (record) {
         let option = {label: record.name};
@@ -290,6 +324,8 @@
       this.key = e.key;
 
       const field = this.getObjectField(e.key);
+
+      this.field = field;
 
       this.filters = field.filters;
 
@@ -338,7 +374,7 @@
           if(this.multiple){
             fieldValue.forEach((v)=>{
               let so = _.find(this.options, (o)=>{
-                return o.value === v._id
+                return o.value === v || o.value === v._id
               });
               if(so){
                 so.checked = true
@@ -346,16 +382,17 @@
             })
           }else{
             let so = _.find(this.options, (o)=>{
-              return o.value === fieldValue._id
+              return o.value === fieldValue || o.value === fieldValue._id
             });
             if(so){
               so.checked = true
             }
           }
         }
-        const object = await this.$parent.getObject(field.reference_to, this.space_id);
-        console.log('object', object)
-        this.allowCreate = object.allowCreate;
+        if(field.reference_to){
+          const object = await this.$parent.getObject(field.reference_to, this.space_id);
+          this.allowCreate = object.allowCreate;
+        }
       }
 
       this.$apply();
@@ -395,6 +432,10 @@
           }
         }
         let field_values = this.getCheckboxValue(checkboxItems)
+
+        if(!this.field.reference_to){
+          field_values = _.pluck(field_values, '_id')
+        }
         this.setParentValue(key, field_values)
       },
       radioChange: async function (e) {
@@ -406,12 +447,20 @@
 
         let value = this.getRadioValue(radioItems);
 
-        if(this.objects && _.isArray(this.objects)){
+        if(this.objectCode && this.objects && _.isArray(this.objects)){
           value.object_name = this.objectCode
           value.object_label = (await this.$parent.getObject(value.object_name, this.space_id)).label
         }
 
+        if(!this.field.reference_to){
+          value = value._id
+        }
+
         this.setParentValue(key, value)
+
+        wepy.navigateBack({
+          delta: 1
+        })
       },
       bindObjectCodeChange: async function (e){
         console.log('lookup bindObjectCodeChange', e)
