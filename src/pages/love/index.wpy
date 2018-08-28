@@ -41,7 +41,7 @@
 		<view class="page cover-page">
 			<view class="page">
 				<view class="page__hd">
-					<view class="love-title">我该和谁谈恋爱？</view>
+					<view class="love-title">你该和谁谈恋爱？</view>
 				</view>
 				<view class="page__bd">
 					<view class="love-summary">根据你的喜好和对方喜好，无颜可以精确计算你与好友的“互相匹配度”，帮你优选心灵好友。</view>
