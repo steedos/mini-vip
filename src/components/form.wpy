@@ -570,8 +570,6 @@
               if(field._optionsFunction){
                 field.optionsFunction = Creator.stringToFunction(field._optionsFunction);
 
-                console.log('field.optionsFunction', field.optionsFunction);
-
                 let objects = [];
 
                 if(this.$parent.$parent.bootstrap){
@@ -1147,7 +1145,6 @@
           await this.uploadImages(record_id);
           await this.uploadVideos(record_id);
           const value = this.transformValue(formValues);
-          console.log('1146----', value, formValues);
           if(Object.keys(this.fields).indexOf('wx_form_id') > -1){
             value['wx_form_id'] = appId + ':'+ e.detail.formId
           }
