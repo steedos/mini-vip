@@ -115,14 +115,16 @@
   font-size: 15px;
 }
 .l-collect {
-  width: 110rpx;
+  width: 130rpx;
   height: 100%;
-  box-sizing: border-box;
-  padding: 24rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background: #fff;
   image {
-    width: 100%;
-    height: 100%;
+    display:block;
+    height:46rpx;
+    width:46rpx;
   }
 }
 </style>
@@ -398,7 +400,7 @@ export default class Matching extends wepy.page {
     goHome() {
       wx.navigateTo({
         url: `/pages/love/home?space_id=${this.space_id}`
-      })s
+      })
     },
     async goFilter(event) {
       wx.navigateTo({
