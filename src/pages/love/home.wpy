@@ -123,7 +123,7 @@
 <view>
 	<view class="cover-page-bg"></view>
 	<view class="cover-page" wx:if="{{is_loaded}}">
-    <userHeader :about_me.sync="about_me" :isAuthUserInfo.sync="isAuthUserInfo"/>
+    <userHeader :about_me.sync="about_me" :isAuthUserInfo.sync="isAuthUserInfo" :user.sync="user_id"/>
 		<view class="page__bd" style="margin-top: -90rpx">
 			<block wx:if="{{showLoveMatch}}">
         <navigator class="match" url="/pages/love/cp?space_id={{space_id}}">
@@ -222,7 +222,7 @@ export default class LoveHome extends wepy.page {
     isAuthUserInfo: false,
     baseUrl: baseUrl,
     showLoveMatch: false,
-    about_me: {}
+    about_me: {},
   };
 
   onShareAppMessage(res) {

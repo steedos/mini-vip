@@ -169,8 +169,12 @@
 							<image class="avatar" mode="aspectFill" src="https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/avatar.png"></image>
 						</button>
 					</block>
-					<view wx:if="{{about_me.name}}" class="name">{{about_me.name}}</view>
-					<view wx:else class="name">未登录</view>
+					<block wx:if="{{about_me.owner==user}}">
+            <navigator url="/pages/love/me?space_id={{loveSpaceId}}">
+              <view wx:if="{{about_me.name}}" class="name weui-cell__ft_in-access">{{about_me.name}}</view>    
+					    <view wx:else class="name">未登录</view>
+            </navigator>
+          </block>
 					<view wx:if="{{about_me.self_introduction}}" class="introduction">{{about_me.self_introduction}}</view>
 					<view class="zodiac-constellation">
 						<view wx:if="{{about_me.sex}}">{{about_me.sex}}</view>
@@ -200,25 +204,29 @@ export default class UserHeader extends wepy.component {
 		isAuthUserInfo: {
 			type: Boolean,
 			default: false
+    },
+   user: {
+			type: String,
+			default: ''
 		}
 	}
 
   data = {
 		space_id: loveSpaceId,
-		avatar: ''
+    avatar: ''
 	};
 
-	async onLoad() {}
+	async onLoad() {
+  }
 	
   methods = {
     async userLogin(e) {
       const userInfo = e.detail.userInfo;
       if (userInfo) {
-
 				this.$parent.$parent.globalData.user.avatar = userInfo.avatarUrl;
 				this.$parent.$parent.globalData.user.name = userInfo.nickName;
-				this.$apply();
-
+        this.$apply();
+        console.log("currentUser=============",this.currentUser )
         const url = '/mini/vip/user';
 				const name = userInfo.nickName;
 				const sex = userInfo.sex;
