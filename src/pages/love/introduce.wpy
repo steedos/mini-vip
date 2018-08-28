@@ -263,13 +263,13 @@ page {
       <view class="weui-cells" style="margin-top: -20px">
         <view class="weui-cell">
           <view class="weui-cell__bd">
-            <view>我对他的匹配度</view>
+            <view>{{title_A}}</view>
           </view>
           <view class="weui-cell__ft">{{util.fixed(record.a_to_b, 2)}}%</view>
         </view>
         <view class="weui-cell">
           <view class="weui-cell__bd">
-            <view>他对我的匹配度</view>
+            <view>{{title_B}}</view>
           </view>
           <view class="weui-cell__ft">{{util.fixed(record.b_to_a, 2)}}%</view>
         </view>
@@ -301,6 +301,8 @@ export default class loveIntroduce extends wepy.page {
     is_loaded: false,
     space_id: loveSpaceId,
     about_me: {},
+    title_A:'',
+    title_B:'',
     current_customer: {},
     record: {},
     b_record: {},
@@ -406,7 +408,13 @@ export default class loveIntroduce extends wepy.page {
     if (about_me && about_me.value && about_me.value[0]) {
       this.about_me = about_me.value[0];
     }
-
+    if(this.about_me.sex =='男') {
+      this.title_A = '我对他的匹配度'
+      this.title_B = '他对我的匹配度'
+    }else{
+      this.title_A = '我对她的匹配度'
+      this.title_B = '她对我的匹配度'
+    }
     this.is_loaded = true;
     this.$apply();
     wx.hideLoading();
