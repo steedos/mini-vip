@@ -229,6 +229,7 @@ export default class VIP extends wepy.app {
       'pages/space/list',
       'pages/space/paid_list',
       'pages/record/list',
+      'pages/record/related_list',
       'pages/record/edit',
       'pages/record/test',
       'pages/edit/datetime',
@@ -301,14 +302,14 @@ export default class VIP extends wepy.app {
       list: [
       {
         pagePath: 'pages/creator/index',
-        selectedIconPath: './images/tabbars/apps_pressed.png',
-        iconPath: './images/tabbars/apps.png',
-        text: '首页',
+        selectedIconPath: './images/tabbars/topic_pressed.png',
+        iconPath: './images/tabbars/topic.png',
+        text: '最近访问',
       },
       {
         pagePath: 'pages/creator/apps',
-        selectedIconPath: './images/tabbars/topic_pressed.png',
-        iconPath: './images/tabbars/topic.png',
+        selectedIconPath: './images/tabbars/apps_pressed.png',
+        iconPath: './images/tabbars/apps.png',
         text: '应用',
       },
       {
@@ -861,10 +862,10 @@ export default class VIP extends wepy.app {
 
   async recordAllowCreate(object_name, space_id){
     space_id = space_id ? space_id : 'guest';
-    console.log("recordAllowCreate=======================object_name===", object_name);
-    console.log("recordAllowCreate=======================space_id===", space_id);
+//    console.log("recordAllowCreate=======================object_name===", object_name);
+//    console.log("recordAllowCreate=======================space_id===", space_id);
     const object = await this.getObject(object_name, space_id);
-    console.log("recordAllowCreate=======================object===", object);
+//    console.log("recordAllowCreate=======================object===", object);
 
     if(!object){
       throw new Error('未在globalData中找到对象：' + object_name);
@@ -888,9 +889,9 @@ export default class VIP extends wepy.app {
   async recordAllowDelete(object_name, owner, space_id){
     space_id = space_id ? space_id : 'guest';
     const object = await this.getObject(object_name, space_id);
-    console.log("recordAllowDelete=========object_name==========", object_name);
-    console.log("recordAllowDelete=========owner==========", owner);
-    console.log("recordAllowDelete=========object==========", object);
+//    console.log("recordAllowDelete=========object_name==========", object_name);
+//    console.log("recordAllowDelete=========owner==========", owner);
+//    console.log("recordAllowDelete=========object==========", object);
     if(!object){
       throw new Error('未在globalData中找到对象：' + object_name);
     }
