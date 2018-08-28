@@ -45,7 +45,8 @@
 				</view>
 				<view class="page__bd">
 					<view class="love-summary">根据你的喜好和对方喜好，无颜可以精确计算你与好友的“互相匹配度”，帮你优选心灵好友。</view>
-					<button class="btn-join" @tap="goLove">开始匹配</button>
+          <button wx:if="{{answered}}" class="btn-join" @tap="goHome">进入首页</button>
+          <button wx:else class="btn-join" @tap="goLove">开始匹配</button>
 					<button wx:if="{{showLoveBtn}}" class="btn-index btn-love" @tap="goAbout">关于无颜</button>
 					<view class="love-licence"></view>
 				</view>
@@ -73,6 +74,7 @@ export default class LoveIndex extends wepy.page {
     baseUrl: baseUrl,
     baseMaterialUrl: baseMaterialUrl,
     space_id: null,
+    answered: false,
     load_page: '',
 		is_loaded: false,
 		finishHobby: false,
@@ -84,6 +86,8 @@ export default class LoveIndex extends wepy.page {
   async onLoad (e) {
     let finishedNaire = wx.getStorageSync('questionnaire_progess');
     if(finishedNaire.length > 0){
+      this.answered = true;
+      this.$apply();
       wx.navigateTo({url: '/pages/love/home'});
     }
     wepy.showShareMenu({
