@@ -367,7 +367,7 @@
               <view class="forth-circle" @tap="matching">
                 <view class="match-container">
                   <image mode="aspectFit" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/light.png"></image>
-                  <view class="title">匹配</view>
+                  <view class="title">开始匹配</view>
                   <!-- <view class="title">匹配 X 1</view> -->
                 </view>
               </view>
