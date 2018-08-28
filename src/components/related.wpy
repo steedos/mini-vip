@@ -143,7 +143,7 @@
         const related_object = _.findWhere(this.related_objects, {object_name:oname});
         console.log('this.related_objects', this.related_objects);
         const filter =  creatorClient.getODataRelatedFilter(this.space_id, this.userId, this.object_name, this.objects[related_object.object_name], related_object.foreign_key, this.record_id, this.objects);
-        wepy.navigateTo({url: `/pages/record/list?object_name=${oname}&space_id=${this.space_id}&filter=${filter.join(' ')}`})
+        wepy.navigateTo({url: `/pages/record/related_list?object_name=${oname}&space_id=${this.space_id}&filter=${filter.join(' ')}`})
       }
     }
   }
