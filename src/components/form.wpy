@@ -393,6 +393,9 @@
     };
 
     recentInsert(object_name, record_id, spaceId){
+      if(object_name === 'object_recent_viewed'){
+        return ;
+      }
       odataClient.insert('object_recent_viewed', {
         record: {
           o: object_name,
