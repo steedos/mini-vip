@@ -41,13 +41,12 @@
 		<view class="page cover-page">
 			<view class="page">
 				<view class="page__hd">
-					<view class="love-title">我不想看你美丽的照片</view>
+					<view class="love-title">我该和谁谈恋爱？</view>
 				</view>
 				<view class="page__bd">
-					<view class="love-summary">我想看到你的真心</view>
-					<button class="btn-join" @tap="goMatching">我的缘份榜</button>
-					<button wx:if="{{showLoveBtn}}" class="btn-index btn-love" @tap="goLove">寻找有缘人</button>
-					<button class="btn-index btn-love" @tap="goTest">测试好友缘分</button>
+					<view class="love-summary">根据你的喜好和对方喜好，无颜可以精确计算你与好友的“互相匹配度”。</view>
+					<button class="btn-join" @tap="goLove">下一步</button>
+					<button wx:if="{{showLoveBtn}}" class="btn-index btn-love" @tap="goAbout">关于无颜</button>
 					<view class="love-licence"></view>
 				</view>
 			</view>
@@ -67,7 +66,7 @@ import ComponentLookingFor from '@/components/cover_you_looking_for';
 
 export default class LoveIndex extends wepy.page {
   config = {
-    navigationBarTitleText: '无颜',
+    navigationBarTitleText: '无颜匹配',
   };
 
   data = {
