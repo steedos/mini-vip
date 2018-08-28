@@ -407,7 +407,7 @@ import { loveSpaceId } from '@/config';
 
 export default class LoveCP extends wepy.page {
   config = {
-		navigationBarTitleText: '每周匹配',
+		navigationBarTitleText: '每周推荐',
 		enablePullDownRefresh: false
   };
 
