@@ -32,13 +32,17 @@ export default class ComponentCoverYourself extends wepy.component {
 
   methods = {
     next() {
-      console.log(this)
-			const answeredUrl = encodeURIComponent(`/pages/love/home`);
-			console.log('[answeredUrl]', answeredUrl)
-      wx.navigateTo({
-        url: `/pages/love/papers_view?object_name=love_about_me&space_id=${loveSpaceId}&required=true&answered_url=${answeredUrl}&answered_url_type=reLaunch&keep_progress`
-      });
-      
+      const user = wepy.$instance.globalData.user;
+      if (user.name && user.avatar) {
+        const answeredUrl = encodeURIComponent(`/pages/love/home`);
+        wx.navigateTo({
+          url: `/pages/love/papers_view?object_name=love_about_me&space_id=${loveSpaceId}&required=true&answered_url=${answeredUrl}&answered_url_type=reLaunch&keep_progress`
+        });
+      } else {
+        wx.navigateTo({
+          url: '/pages/user_info_login'
+        })
+      }
     }
   };
 }

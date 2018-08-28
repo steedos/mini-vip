@@ -143,16 +143,20 @@ export default class UserInfoLogin extends wepy.page {
         this.message = '请在获取昵称之后再点击下一步';
         this.$apply();
       } else {
-        if (!this.share) {
-          const next = decodeURIComponent(this.next);
-          wx.redirectTo({
-            url: `${next}`
-          })
-        } else {
-          wx.redirectTo({
-            url: `/pages/love/share?card=true&space_id=${this.space_id}`
-          })
-        }
+        const answeredUrl = encodeURIComponent(`/pages/love/home`);
+        wx.navigateTo({
+          url: `/pages/love/papers_view?object_name=love_about_me&space_id=${this.space_id}&required=true&answered_url=${answeredUrl}&answered_url_type=reLaunch&keep_progress`
+        });
+        // if (!this.share) {
+        //   const next = decodeURIComponent(this.next);
+        //   wx.redirectTo({
+        //     url: `${next}`
+        //   })
+        // } else {
+        //   wx.redirectTo({
+        //     url: `/pages/love/share?card=true&space_id=${this.space_id}`
+        //   })
+        // }
       }
     }
   }
