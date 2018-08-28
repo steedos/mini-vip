@@ -45,7 +45,7 @@
 				</view>
 				<view class="page__bd">
 					<view class="love-summary">根据你的喜好和对方喜好，无颜可以精确计算你与好友的“互相匹配度”。</view>
-					<button class="btn-join" @tap="goLove">下一步</button>
+					<button class="btn-join" @tap="goLove">开始测试</button>
 					<button wx:if="{{showLoveBtn}}" class="btn-index btn-love" @tap="goAbout">关于无颜</button>
 					<view class="love-licence"></view>
 				</view>

@@ -6,11 +6,11 @@
     <view class="cover-page-bg"></view>
     <view class="page cover-page">
       <view class="page__hd">
-        <view class="love-title">缘分匹配</view>
+        <view class="love-title">缘分测试</view>
       </view>
       <view class="page__bd">
         <view class="love-summary">
-          你和有缘人的距离，只差一套问卷。
+          根据你的喜好和对方喜好，无颜可以精确计算你与好友的“互相匹配度”。
         </view>
         <button class="btn-join" @tap="next">开始答题</button>
       </view>
