@@ -49,7 +49,7 @@
 
 		.wrapper {
 			top: -100rpx;
-			margin-top: 100rpx;
+			margin-top: 115rpx;
 			padding: 0 40rpx;
 
 			.avatar-container {
@@ -60,7 +60,7 @@
 				box-shadow: 0 2px 2px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08);
 				position: absolute;
 				left: calc(~"50% - 110rpx");
-				top: -145rpx;
+				top: -115rpx;
 
 				.avatar {
 					border-radius: 50%;
@@ -104,7 +104,7 @@
 				}
 			}
 
-			.name {
+			.name.weui-cell__ft_in-access {
 				font-size: 44rpx;
 				font-weight: bold;
 				padding-left:13px;
@@ -154,7 +154,7 @@
 				<view class="cover-wrapper" @tap="uploadImage(true)" style="background-image: url({{util.formatImageUrl(about_me.cover, baseUrl)}})"></view>
 			</view>
 			<view class="space-info">
-				<view class="wrapper">
+				<view class="wrapper" @tap="goMe">
 					<view class="bg-image"></view>
 					<block wx:if="{{isAuthUserInfo}}">
 						<view class="avatar-container">
@@ -171,11 +171,13 @@
 						</button>
 					</block>
 					<block wx:if="{{about_me.owner==user}}">
-            <navigator url="/pages/love/me?space_id={{loveSpaceId}}">
-              <view wx:if="{{about_me.name}}" class="name weui-cell__ft_in-access">{{about_me.name}}</view>    
-					    <view wx:else class="name">未登录</view>
-            </navigator>
+						<view wx:if="{{about_me.name}}" class="name weui-cell__ft_in-access">{{about_me.name}}</view>    
+						<view wx:else class="name">未登录</view>
           </block>
+					<block wx:else>
+						<view wx:if="{{about_me.name}}" class="name">{{about_me.name}}</view>    
+						<view wx:else class="name">未登录</view>
+					</block>
 					<view wx:if="{{about_me.self_introduction}}" class="introduction">{{about_me.self_introduction}}</view>
 					<view class="zodiac-constellation">
 						<view wx:if="{{about_me.sex}}">{{about_me.sex}}</view>
@@ -236,7 +238,14 @@ export default class UserHeader extends wepy.component {
         await req.put(url, { name: name, sex: sex, avatar: avatar });
 				this.$parent.loadAboutMe();
       }
-    } 
+		},
+		goMe() {
+			if (this.about_me.owner == this.user) {
+				wx.navigateTo({
+					url: `/pages/love/me?space_id=${loveSpaceId}`
+				})
+			}
+		}
   };
 
 	wxs = {
