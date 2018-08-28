@@ -83,7 +83,11 @@
           }
 
           if(operation === '='){
-            query.push(`(${key} eq '${value}')`)
+            if(value === false || value === true){
+              query.push(`(${key} eq ${value})`)
+            }else{
+              query.push(`(${key} eq '${value}')`)
+            }
           }
         }else{
           throw new Error('无效的filter', filter)

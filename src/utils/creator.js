@@ -31,6 +31,10 @@ class Creator{
     return _options
   }
 
+  otherFunction(){
+
+  }
+
   stringToFunction(str) {
     if(str.indexOf('_.forEach(Creator.objectsByName') > -1 || str.indexOf('_.forEach(Creator.Objects') > -1){
       console.log('find function........................88888888888888888')
@@ -38,7 +42,8 @@ class Creator{
     }else if(str.indexOf('Creator.resources.sldsIcons.standard') > -1){
       return this.svgIconOptionsFunction
     }else{
-      console.log('stringToFunction---------------------------------else...................',str)
+      console.error('stringToFunction转换失败，需要coding',str)
+      return this.otherFunction
     }
   }
 
