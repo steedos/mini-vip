@@ -246,7 +246,7 @@
         <view wx:if="{{showGoHome}}" class="l l-collect" hover-class='weui-grid_active' @tap="goHome">
           <image class="icon" mode="aspectFit" src="{{ collectBackImage }}"></image>
         </view>
-        <button class="btn-toolbar-primary" type="default" plain="true" @tap="goTest">
+        <button open-type="share" class="btn-toolbar-primary" type="default" plain="true">
           邀请好友打榜
         </button>
         <!--<button class="btn-toolbar-primary" type="default" plain="true" @tap="goShare">-->
