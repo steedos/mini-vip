@@ -171,7 +171,7 @@
         <view class="weui-cell weui-cell_access">
           <view class="weui-cell__hd header">
             <block wx:if="{{open_group_id == '-1'}}">
-              好友缘分总榜
+              好友缘分榜
             </block>
             <block wx:elif="{{open_group_id && open_group_id != '-1'}}">
               <open-data class="group-name" type="groupName" open-gid="{{open_group_id}}"></open-data>

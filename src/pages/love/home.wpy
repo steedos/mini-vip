@@ -138,7 +138,7 @@ page {
       <navigator class="group" url="/pages/love/matching?space_id={{space_id}}&open_group_id=-1">
 				<view class="header">
 					<view class="group-name">
-						<view class="group-name">好友缘分总榜</view>
+						<view class="group-name">好友缘分榜</view>
 					</view>
 					<view class="weui-cell__ft weui-cell__ft_in-access"></view>
 				</view>

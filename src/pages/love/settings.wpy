@@ -55,7 +55,7 @@
           <view class="slds-icon-custom-custom66 slds-icon slds-icon--small slds-m-right--x-small"/>
         </view>
         <view class="weui-cell__bd">
-          <view>邀请好友测试</view>
+          <view>测试好友缘分</view>
         </view>
         <view class="weui-cell__ft weui-cell__ft_in-access"></view>
       </navigator>
