@@ -243,11 +243,13 @@
     </view>
     <block wx:if="{{answered}}">
       <view class="tab-bar border-top-1px">
+        <!--
         <view class="l l-collect" hover-class='weui-grid_active' @tap="goHome">
           <image class="icon" mode="aspectFit" src="{{ collectBackImage }}"></image>
         </view>
+        -->
         <button open-type="share" class="btn-toolbar-primary" type="default" plain="true">
-          查看群缘分
+          邀请好友打榜
         </button>
         <!--<button class="btn-toolbar-primary" type="default" plain="true" @tap="goShare">-->
           <!--邀请好友打榜-->
@@ -439,7 +441,7 @@ export default class Matching extends wepy.page {
   onShareAppMessage(res) {
     const user_id = this.$parent.globalData.user._id;
     console.log('onShareAppMessage', user_id);
-    let title = '我们是天生一对吗？';
+    let title = '我们的缘分榜，快来打榜！';
     let path = `/pages/love/matching?space_id=${
       this.space_id
     }&share_from=${user_id}&open_group_id=-1`;

@@ -1,6 +1,6 @@
 <style lang="less">
-.page {
-  padding-bottom: 20px !important;
+page {
+  padding-bottom: 30px !important;
 }
 
 .cover-page {
@@ -225,8 +225,8 @@ export default class LoveHome extends wepy.page {
 
   onShareAppMessage(res) {
     const user_id = this.$parent.globalData.user._id;
-    let title = '我们的缘分排行榜，快来打榜！';
-    let path = `/pages/love/home?share_from=${user_id}`;
+    let title = '茫茫人海，你该和谁谈恋爱？';
+    let path = `/pages/love/index?share_from=${user_id}`;
     return {
       title: title,
       path: path

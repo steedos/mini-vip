@@ -183,13 +183,11 @@ export default class QuestionnaireList extends wepy.page {
   // 分享
   onShareAppMessage(res) {
     const user_id = this.$parent.globalData.user._id;
-    let title = '我们是天生一对吗？';
+    let title = '茫茫人海，你该和谁谈恋爱？';
     let path = `/pages/love/index?share_from=${user_id}`
-    let imageUrl = 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/love_share_bg.jpg';
     return {
       title: title,
-      path: path,
-      imageUrl: imageUrl
+      path: path
     };
   }
 
