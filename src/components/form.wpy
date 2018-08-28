@@ -355,6 +355,7 @@
   import util from '../wxs/util.wxs'
   const utilJs = require('../utils/util.js');
   import Creator from '@/utils/creator';
+  import odataClient from '@/utils/odata_client.js'
 
   import _ from 'underscore'
 
@@ -390,6 +391,15 @@
       hiddenBtn: false,
       _changeValue: {}
     };
+
+    recentInsert(object_name, record_id, spaceId){
+      odataClient.insert('object_recent_viewed', {
+        record: {
+          o: object_name,
+          ids: [record_id]
+        }
+      }, spaceId)
+    }
 
     getGroupFields(fields, action, values){
 
@@ -467,6 +477,12 @@
           let defaultValues = newValue.defaultValues || {}
 
           this.hiddenBtn = newValue.hidden_btn || false;
+
+
+          if(object_name && record_id && (action === 'edit' || action === 'read') && newValue.space_id){
+            this.recentInsert(object_name, record_id, newValue.space_id);
+          }
+
 
           if (object_name) {
             const object = JSON.parse(JSON.stringify(await this.$parent.$parent.getObject(object_name, this.args.space_id)));
