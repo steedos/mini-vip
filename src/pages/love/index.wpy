@@ -129,7 +129,7 @@ export default class LoveIndex extends wepy.page {
   // 分享
   onShareAppMessage(res) {
     const userId = this.$parent.globalData.user._id;
-    let title = "我们是天生一对吗？";
+    let title = "茫茫人海，你该和谁谈恋爱？";
     return {
       title: title,
       path: `pages/love/index?share_from=${userId}&love=1`,

@@ -334,7 +334,7 @@
 
     // 分享
     onShareAppMessage(res) {
-      let title = "我们是天生一对吗？";
+      let title = "我们的缘分榜，快来打榜！";
       let imageUrl = ''
       if(!this.share_card){
         imageUrl = 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/love_share_bg.jpg';
