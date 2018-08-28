@@ -243,11 +243,13 @@
     </view>
     <block wx:if="{{answered}}">
       <view class="tab-bar border-top-1px">
+        <!--
         <view class="l l-collect" hover-class='weui-grid_active' @tap="goHome">
           <image class="icon" mode="aspectFit" src="{{ collectBackImage }}"></image>
         </view>
+        -->
         <button open-type="share" class="btn-toolbar-primary" type="default" plain="true">
-          查看群缘分
+          邀请好友打榜
         </button>
         <!--<button class="btn-toolbar-primary" type="default" plain="true" @tap="goShare">-->
           <!--邀请好友打榜-->
