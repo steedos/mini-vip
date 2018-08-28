@@ -242,12 +242,10 @@
       </block>
     </view>
     <block wx:if="{{answered}}">
-      <view class="tab-bar border-top-1px">
-        <!--
-        <view class="l l-collect" hover-class='weui-grid_active' @tap="goHome">
+      <view class="tab-bar border-top-1px"> 
+        <view wx:if="{{showGoHome}}" class="l l-collect" hover-class='weui-grid_active' @tap="goHome">
           <image class="icon" mode="aspectFit" src="{{ collectBackImage }}"></image>
         </view>
-        -->
         <button open-type="share" class="btn-toolbar-primary" type="default" plain="true">
           邀请好友打榜
         </button>
@@ -302,7 +300,8 @@ export default class Matching extends wepy.page {
     open_group_id: '',
     answered: false,
     matching_filter_enable: false,
-    collectBackImage: '/static/images/ic_menu_choice_nor.png'
+    collectBackImage: '/static/images/ic_menu_choice_nor.png',
+    showGoHome:false
   };
 
   async beforeOnLoad(e) {
@@ -333,6 +332,10 @@ export default class Matching extends wepy.page {
   async onLoad(e) {
     if (e.share_from) {
       this.share_from = e.share_from;
+    }
+    console.log("getCurrentPages().length============",getCurrentPages().length)
+    if(getCurrentPages().length<=1){
+      this.showGoHome = true
     }
     this.space_id = loveSpaceId;
     wepy.showShareMenu({
