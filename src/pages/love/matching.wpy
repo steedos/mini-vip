@@ -22,11 +22,15 @@
     .heart {
       height: 80rpx;
       margin: 0;
-      width:1.75rem;
+      width: 1.75rem;
       border-right: 15px solid transparent;
       border-left: 0.5rem solid transparent;
     }
   }
+}
+
+.header {
+  display: flex;
 }
 
 .image {
@@ -42,11 +46,11 @@
   width: 80rpx;
   height: 80rpx;
 }
-.record-index{
+.record-index {
   margin-right: 30rpx;
 }
-.record-match{
-  color:#FA8B15;
+.record-match {
+  color: #fa8b15;
 }
 
 .tab-bar {
@@ -63,54 +67,84 @@
   align-items: center;
 
   .btn-toolbar-primary {
-    flex-direction:column;
+    flex-direction: column;
     flex: 1;
-    padding:0 30rpx;
-    font-size:15px;
-    width:auto;
-    height:100rpx;
-    border: none!important;
-    line-height:100rpx;
+    padding: 0 30rpx;
+    font-size: 15px;
+    width: auto;
+    height: 100rpx;
+    border: none !important;
+    line-height: 100rpx;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #1AAD19!important;
-    color:#fff!important;
-    border-radius:0;
+    background: #1aad19 !important;
+    color: #fff !important;
+    border-radius: 0;
   }
 }
-.light{
+.light {
   width: 50px;
   height: 50px;
 }
-.page-else .page__bd{
-  padding:20% 5%;
-  text-align:center;
-  color:#00396b;
-  font-size:18px;
+.page-else .page__bd {
+  padding: 20% 5%;
+  text-align: center;
+  color: #00396b;
+  font-size: 18px;
+}
+.page-index {
+  position: relative;
+  z-index: 10;
+  .page__hd {
+    padding: 20rpx 40rpx;
+    .love-title {
+      margin-top: 80rpx;
+      color: #00396b;
+      font-size: 65rpx;
+      font-weight: bold;
+      text-align: center;
+    }
+  }
+  .page__bd {
+    padding: 20rpx 40rpx;
+    .love-summary {
+      color: #00396b;
+      font-size: 45rpx;
+      margin-bottom: 40rpx;
+      text-align: center;
+    }
+    .btn-join {
+      background: #1aad19;
+      padding: 6px;
+      color: #fff;
+      font-weight: bold;
+      margin-top: 120rpx;
+    }
+  }
 }
 .user-active {
   border: none !important;
   text-align: left;
   font-size: 17px;
 }
-.weui-cells{
-  position:relative;
-  z-index:10;
-}
-.btn-filter{
+.weui-cells {
   position: relative;
-  .filter-light-dot{
-    position:absolute;
-    background:red;
-    width:20rpx;
-    height:20rpx;
-    border-radius:50%;
-    top:-6rpx;
-    right:-6rpx;
+  z-index: 10;
+}
+.btn-filter {
+  position: relative;
+  .filter-light-dot {
+    position: absolute;
+    background: red;
+    width: 20rpx;
+    height: 20rpx;
+    border-radius: 50%;
+    top: -6rpx;
+    right: -6rpx;
   }
 }
-.btn-answer{
+.btn-answer {
   color: #fff;
   font-size: 15px;
 }
@@ -122,9 +156,9 @@
   align-items: center;
   background: #fff;
   image {
-    display:block;
-    height:46rpx;
-    width:46rpx;
+    display: block;
+    height: 46rpx;
+    width: 46rpx;
   }
 }
 </style>
@@ -135,16 +169,17 @@
       <view class="cover-page-bg"></view>
       <view class="weui-cells top-hearder">
         <view class="weui-cell weui-cell_access">
-          <view class="weui-cell__hd">
+          <view class="weui-cell__hd header">
             <block wx:if="{{open_group_id == '-1'}}">
               好友缘分总榜
             </block>
-            <block wx:if="{{open_group_id}}">
+            <block wx:elif="{{open_group_id && open_group_id != '-1'}}">
               <open-data class="group-name" type="groupName" open-gid="{{open_group_id}}"></open-data>
             </block>
             <block wx:else>
               好友缘分榜
             </block>
+            <!-- <view wx:if="{{answered}}" class="weui-cell__ft weui-cell__ft_in-access"></view> -->
           </view>
           <view class="weui-cell__bd">
           </view>
@@ -154,46 +189,54 @@
               <view class="filter-light-dot" wx:if="{{matching_filter_enable}}"></view>
             </view>
           </block>
-          <block wx:else>
-            <button class="btn-answer" type="primary" @tap="start_answer">
-              开始答题
-            </button>
-          </block>
         </view>
       </view>
-      <block wx:if="{{record_list.length}}">
-        <view class="weui-cells">
-          <repeat for="{{record_list}}" key="index" index="index" item="record">
-            <block wx:if="{{record.user_b.name}}">
-              <navigator class="record-container weui-cell weui-cell_access"  data-item-id="{{record._id}}" hover-class="weui-cell_active" url="/pages/love/introduce?_id={{record._id}}&space_id={{record.space}}&userId={{record.user_b._id}}">
-                <view class="weui-cell__hd record-index">
-                  {{index + 1}}
-                </view>
-                <view class="weui-cell__hd">
-                  <image src="{{record.user_b.profile.avatar}}" class='avatar-field' />
-                </view>
-                <view class="weui-cell__bd">
-                  <view class="name">{{record.user_b.name}}</view>
-                </view>
-                <block wx:if="{{answered}}">
-                  <view class="weui-cell__ft" wx:if="{{record.match == undefined}}" style="font-size: 36rpx">答题中</view>
-                  <view class="weui-cell__ft record-match" wx:else style="font-size: 36rpx">{{util.fixed(record.match,2)}}%</view>
-                  <view class="weui-cell__ft heart-container"><view class="heart vip_heart-{{record.heart ? 'light' : 'default'}} slds-icon slds-icon--small slds-m-left--x-small" @tap.stop="markHeart({{record._id}},{{record.heart}})" /></view>
-                </block>
-                <block wx:else>
-                  <view class="weui-cell__ft" style="font-size: 36rpx;padding-right: 15px">请答题</view>
-                </block>
-              </navigator>
-            </block>
-          </repeat>
-        </view>
+      <block wx:if="{{answered}}">
+        <block wx:if="{{record_list.length}}">
+          <view class="weui-cells">
+            <repeat for="{{record_list}}" key="index" index="index" item="record">
+              <block wx:if="{{record.user_b.name}}">
+                <navigator class="record-container weui-cell weui-cell_access"  data-item-id="{{record._id}}" hover-class="weui-cell_active" url="/pages/love/introduce?_id={{record._id}}&space_id={{record.space}}&userId={{record.user_b._id}}">
+                  <view class="weui-cell__hd record-index">
+                    {{index + 1}}
+                  </view>
+                  <view class="weui-cell__hd">
+                    <image src="{{record.user_b.profile.avatar}}" class='avatar-field' />
+                  </view>
+                  <view class="weui-cell__bd">
+                    <view class="name">{{record.user_b.name}}</view>
+                  </view>
+                  <block wx:if="{{answered}}">
+                    <view class="weui-cell__ft" wx:if="{{record.match == undefined}}" style="font-size: 36rpx">答题中</view>
+                    <view class="weui-cell__ft record-match" wx:else style="font-size: 36rpx">{{util.fixed(record.match,2)}}%</view>
+                    <view class="weui-cell__ft heart-container"><view class="heart vip_heart-{{record.heart ? 'light' : 'default'}} slds-icon slds-icon--small slds-m-left--x-small" @tap.stop="markHeart({{record._id}},{{record.heart}})" /></view>
+                  </block>
+                  <block wx:else>
+                    <view class="weui-cell__ft" style="font-size: 36rpx;padding-right: 15px">请答题</view>
+                  </block>
+                </navigator>
+              </block>
+            </repeat>
+          </view>
+        </block>
+        <block wx:else>
+          <view class="page cover-page page-else">
+            <view class="page__bd">
+              <image class="light" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/light.png"/>
+              <text style="display:block;">无颜是一个神奇的小程序，</text>
+              <text  style="display:block;">可以测试群友之间的缘分哦~</text>
+            </view>
+          </view>
+        </block>
       </block>
       <block wx:else>
-        <view class="page cover-page page-else">
+        <view class="page-index">
+          <view class="page__hd">
+            <view class="love-title">我该和谁谈恋爱？</view>
+          </view>
           <view class="page__bd">
-            <image class="light" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/light.png"/>
-            <text style="display:block;">无颜是一个神奇的小程序，</text>
-            <text  style="display:block;">可以测试群友之间的缘分哦~</text>
+            <view class="love-summary">根据你的喜好和对方喜好，无颜可以精确计算你与好友的“互相匹配度”。</view>
+            <button class="btn-join" @tap="goLove">开始匹配</button>
           </view>
         </view>
       </block>
@@ -228,7 +271,7 @@ export default class Matching extends wepy.page {
   config = {
     navigationBarTitleText: '缘分榜',
     enablePullDownRefresh: true
-  }
+  };
 
   data = {
     isAuthUserInfo: false,
@@ -241,36 +284,45 @@ export default class Matching extends wepy.page {
     name_field: 'user_b.name',
     baseUrl: baseUrl,
     navigationBarTitle: '缘分榜',
-    date_field: ['match', 'a_to_b', 'b_to_a', 'open_group_id', 'heart', 'is_looking_for'],
+    date_field: [
+      'match',
+      'a_to_b',
+      'b_to_a',
+      'open_group_id',
+      'heart',
+      'is_looking_for'
+    ],
     userId: '',
     share_from: '',
     orderby: 'match desc',
     space_id: null,
     pageSize: 50,
     open_group_id: '',
-    answered:false,
+    answered: false,
     matching_filter_enable: false,
     collectBackImage: '/static/images/ic_menu_choice_nor.png'
-  }
+  };
 
   async beforeOnLoad(e) {
-    console.log("beforeOnLoad=================", e);
+    console.log('beforeOnLoad=================', e);
     wx.showNavigationBarLoading();
     e.space_id = loveSpaceId;
     this.space_id = e.space_id;
-    if (e.scene){
-			// 朋友圏二维码识别进入的，则取出scene中的share_from
-			let scene = decodeURIComponent(e.scene);
-			let scenes = scene.split('=');
+    if (e.scene) {
+      // 朋友圏二维码识别进入的，则取出scene中的share_from
+      let scene = decodeURIComponent(e.scene);
+      let scenes = scene.split('=');
       e.share_from = scenes[1];
-      e.qrcode = 1
+      e.qrcode = 1;
     }
     await this.$parent.login(e);
     const user_id = this.$parent.globalData.user._id;
-    if(this.$parent.globalData.user.open_group_id){
+    if (this.$parent.globalData.user.open_group_id) {
       this.open_group_id = this.$parent.globalData.user.open_group_id;
-    } else{
-      this.open_group_id = '-1'
+    } else if (e.open_group_id) {
+      this.open_group_id = e.open_group_id;
+    } else {
+      this.open_group_id = '-1';
     }
     this.userId = user_id;
     this.$apply();
@@ -292,60 +344,71 @@ export default class Matching extends wepy.page {
     this.matching_filter_enable = filterEnable;
     const finishedNaire = wx.getStorageSync('questionnaire_progess');
     if (finishedNaire.length > 0) {
-      this.answered = true
+      this.answered = true;
     }
     this.$apply();
   }
 
   async init() {
-    await req.post('/api/mini/vip/friend/answered', {space_id: this.space_id, rest: true, matching_filter_enable: wepy.getStorageSync('matching_filter_enable')});
+    await req.post('/api/mini/vip/friend/answered', {
+      space_id: this.space_id,
+      rest: true,
+      matching_filter_enable: wepy.getStorageSync('matching_filter_enable')
+    });
   }
 
   async dataRefresh() {
-//    this.is_loaded = false;
+    //    this.is_loaded = false;
     wx.showNavigationBarLoading();
     this.$apply();
     this.record_list = [];
     this.allow_load = true;
     this.current_skip = 0;
-    await req.post('/api/mini/vip/friend/answered', {space_id: this.space_id, rest: true, matching_filter_enable: wepy.getStorageSync('matching_filter_enable')});
+    await req.post('/api/mini/vip/friend/answered', {
+      space_id: this.space_id,
+      rest: true,
+      matching_filter_enable: wepy.getStorageSync('matching_filter_enable')
+    });
     await this.loadRecords();
     this.is_loaded = true;
     this.$apply();
   }
 
   async loadRecords(searchValue) {
-//    wepy.showLoading({
-//      title: '加载中',
-//      mask: true
-//    });
     const skip = this.current_skip;
     const object_name = this.object_name;
     const queryOptions = this.getQueryOptions(searchValue);
     if (this.allow_load) {
-      const result = await this.$parent.query(object_name, queryOptions, this.space_id);
+      const result = await this.$parent.query(
+        object_name,
+        queryOptions,
+        this.space_id
+      );
       if (result.value) {
         const filterEnable = wepy.getStorageSync('matching_filter_enable');
         let records = [];
-        for(let record of result.value){
-          if(this.avatar_field){
-            record[this.avatar_field] = this.getFieldValue(this.avatar_field, record)
+        for (let record of result.value) {
+          if (this.avatar_field) {
+            record[this.avatar_field] = this.getFieldValue(
+              this.avatar_field,
+              record
+            );
           }
           if (record.user_b.name) {
-            if(filterEnable){
-              if(record.is_looking_for){
+            if (filterEnable) {
+              if (record.is_looking_for) {
                 records.push(record);
               }
-            }else{
+            } else {
               records.push(record);
             }
           }
         }
-        this.record_list = this.record_list.concat(records)
+        this.record_list = this.record_list.concat(records);
       }
       this.current_skip = skip + result.value.length;
       if (this.current_skip === result['@odata.count']) {
-        this.allow_load = false
+        this.allow_load = false;
       }
       this.$apply();
     }
@@ -358,11 +421,13 @@ export default class Matching extends wepy.page {
     let filter = '';
     const filterEnable = wepy.getStorageSync('matching_filter_enable');
     if (this.open_group_id === '-1') {
-      filter =  `(owner eq '${user_id}')`;
+      filter = `(owner eq '${user_id}')`;
     } else if (this.open_group_id) {
-      filter =  `(owner eq '${user_id}' and open_groups eq '${this.open_group_id}')`;
+      filter = `(owner eq '${user_id}' and open_groups eq '${
+        this.open_group_id
+      }')`;
     } else {
-      filter =  `(owner eq '${user_id}')`;
+      filter = `(owner eq '${user_id}')`;
     }
     if (filterEnable) {
       filter += ' and is_looking_for eq true';
@@ -374,19 +439,21 @@ export default class Matching extends wepy.page {
     const user_id = this.$parent.globalData.user._id;
     console.log('onShareAppMessage', user_id);
     let title = '我们是天生一对吗？';
-    let path = `/pages/love/matching?space_id=${this.space_id}&share_from=${user_id}&open_group_id=-1`
+    let path = `/pages/love/matching?space_id=${
+      this.space_id
+    }&share_from=${user_id}&open_group_id=-1`;
     return {
       title: title,
-      path: path,
+      path: path
     };
   }
 
   wxs = {
     util: util
-  }
+  };
 
   getFinalExpand() {
-    return 'user_b($select=profile,name)'
+    return 'user_b($select=profile,name)';
   }
 
   mixins = [recordList];
@@ -395,41 +462,47 @@ export default class Matching extends wepy.page {
     goShare() {
       wx.navigateTo({
         url: `/pages/love/share?card=true&space_id=${this.space_id}`
-      })
+      });
     },
     goHome() {
       wx.navigateTo({
         url: `/pages/love/home?space_id=${this.space_id}`
-      })
+      });
     },
     async goFilter(event) {
       wx.navigateTo({
         url: `/pages/love/matching_filter`
-      })
+      });
     },
     async start_answer() {
       const user = this.$parent.globalData.user;
       if (user.name && user.avatar) {
-        wx.navigateTo({url:'/pages/love/cover_answer_questions'})
+        wx.navigateTo({ url: '/pages/love/cover_answer_questions' });
       } else {
-        wx.navigateTo({url: `/pages/user_info_login?naire=${this.naire}&share_from=${this.share_from}&next=${encodeURIComponent(`/pages/love/cover_answer_questions`)}`})
+        wx.navigateTo({
+          url: `/pages/user_info_login?naire=${this.naire}&share_from=${
+            this.share_from
+          }&next=${encodeURIComponent(`/pages/love/cover_answer_questions`)}`
+        });
       }
-      // wx.navigateTo({
-      //   url: `/pages/love/papers_view?object_name=love_test&space_id=${this.space_id}`
-      // })
     },
     async markHeart(_id, heart, event) {
       wx.showNavigationBarLoading();
-      if(event == undefined){
+      if (event == undefined) {
         event = heart;
         heart = false;
       }
       let values = {
         heart: !heart
       };
-      let res = await this.$parent.update("love_friends", _id, values, this.space_id);
-      if(res){
-        let currentItem = this.record_list.find((item)=>{
+      let res = await this.$parent.update(
+        'love_friends',
+        _id,
+        values,
+        this.space_id
+      );
+      if (res) {
+        let currentItem = this.record_list.find(item => {
           return item._id == _id;
         });
         currentItem.heart = !heart;
@@ -440,8 +513,14 @@ export default class Matching extends wepy.page {
     goIntroduce() {
       wx.navigateTo({
         url: `/pages/love/introduce`
-      })
+      });
     },
+    goLove() {
+      const answeredUrl = encodeURIComponent(`/pages/love/cover_you_looking_for?space_id=${this.space_id}`);
+      wx.navigateTo({
+        url: `/pages/love/papers_view?object_name=love_test&space_id=${this.space_id}&answered_url=${answeredUrl}&answered_url_type=reLaunch&keep_progress`
+      });
+		},
     userLogin(e) {
       const userInfo = e.detail.userInfo;
       if (userInfo) {
@@ -459,12 +538,11 @@ export default class Matching extends wepy.page {
         this.$apply();
 
         const url = '/mini/vip/user';
-        req.put(url, {name: name, sex: sex, avatar: avatar}).then((res) => {
-          pageRouter.navigateTo({ url: '/pages/me_profile' })
-        })
+        req.put(url, { name: name, sex: sex, avatar: avatar }).then(res => {
+          pageRouter.navigateTo({ url: '/pages/me_profile' });
+        });
       }
     }
   };
 }
-
 </script>
