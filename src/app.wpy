@@ -418,7 +418,7 @@ export default class VIP extends wepy.app {
     });
 
     pageRouter.pushEnter({
-      page: '/pages/love/papers_view',
+      page: '/pages/love/cp',
       script: function (to) {
         return this.checkMobile(to)
       }

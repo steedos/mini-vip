@@ -125,7 +125,7 @@ page {
     <userHeader :about_me.sync="about_me" :isAuthUserInfo.sync="isAuthUserInfo" :user.sync="user_id"/>
 		<view class="page__bd" style="margin-top: -90rpx">
 			<block wx:if="{{showLoveMatch}}">
-        <navigator class="match" url="/pages/love/cp?space_id={{space_id}}">
+        <view class="match" @tap="goCp">
           <view class="banner">
             <view class="box">
               <view class="title">每周推荐</view>
@@ -133,7 +133,7 @@ page {
             </view>
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
           </view>
-        </navigator>
+        </view>
       </block>
       <navigator class="group" url="/pages/love/matching?space_id={{space_id}}&open_group_id=-1">
 				<view class="header">
@@ -199,6 +199,7 @@ import { loveSpaceId } from '../../config/index.js';
 import req from '@/network';
 import _ from 'underscore'
 import { baseUrl } from '@/config';
+import pageRouter from '@/utils/pageRouter'
 import userHeader from '../../components/user_header';
 
 export default class LoveHome extends wepy.page {
@@ -419,6 +420,9 @@ export default class LoveHome extends wepy.page {
 
 
   methods = {
+    goCp() {
+      pageRouter.navigateTo({ url: '/pages/love/cp' })
+    },
     userLogin(e) {
       const userInfo = e.detail.userInfo;
       const user = this.$parent.globalData.user;
