@@ -344,6 +344,8 @@
           <!--<button class="submit-btn remove-btn" wx:if="{{!args.undeletable && _record_allowDelte}}"  @tap="removeRecord">删除</button>-->
           <button class="submit-btn" type="primary" @tap="goEdit" wx:if="{{_record_allowEdit && args.action === 'read'}}">编辑</button>
           <button class="submit-btn remove-btn" wx:if="{{!args.undeletable && _record_allowDelte}}"  @tap="removeRecord">删除</button>
+
+          <button class="submit-btn remove-btn" wx:if="{{!args.undeletable && showDownload}}"  @tap="downloadFile">在线查看</button>
         </view>
       </view>
     </form>
@@ -389,7 +391,8 @@
       groupFields: [],
       submitDisabled: false,
       hiddenBtn: false,
-      _changeValue: {}
+      _changeValue: {},
+      showDownload: false,
     };
 
     recentInsert(object_name, record_id, spaceId){
@@ -481,6 +484,7 @@
 
           this.hiddenBtn = newValue.hidden_btn || false;
 
+          this.showDownload = (object_name === "cms_files" && record_id);
 
           if(object_name && record_id && (action === 'edit' || action === 'read') && newValue.space_id){
             this.recentInsert(object_name, record_id, newValue.space_id);
@@ -568,6 +572,11 @@
                 keys.push(k)
               }
             });
+
+            if(object_name === 'cms_files'){
+              keys.push('versions');
+            }
+
             let query_options = {
               $select: keys.join(","),
               $filter: `_id eq '${record_id}'`
@@ -1296,6 +1305,25 @@
         }
         console.log('url', {url: '/pages/record/edit?' + url_args});
         wepy.navigateTo({url: '/pages/record/edit?' + url_args});
+      },
+      async downloadFile(){
+        console.log('this.values', this.values)
+        const fileId = this.values.versions[0];
+        const fileName = this.values.name;
+        if(
+          fileName.endsWith('.doc') || fileName.endsWith('.xls') || fileName.endsWith('.ppt')
+          || fileName.endsWith('.pdf') || fileName.endsWith('.docx')
+          || fileName.endsWith('.xlsx') || fileName.endsWith('.pptx')
+        ){
+          const res = await wepy.downloadFile({url: `${baseUrl}/api/files/files/${fileId}?download=true`})
+          console.log('res', res)
+          const openRes = await wepy.openDocument({filePath: res.tempFilePath})
+          console.log('openRes', openRes)
+//        const lres = await wepy.saveFile({tempFilePath: res.tempFilePath});
+//        console.log('lres',lres)
+        }else{
+          wepy.navigateTo({url: `/pages/creator/cms_file?fileId=${fileId}`})
+        }
       }
     }
   }

@@ -196,6 +196,7 @@ export default class VIP extends wepy.app {
       'pages/creator/apps',
       'pages/creator/app_objects',
       'pages/creator/account_binding',
+      'pages/creator/cms_file',
       'pages/creator/index',
       'pages/love/index',
       'pages/love/home',

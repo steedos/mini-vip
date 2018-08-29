@@ -1,0 +1,37 @@
+<style>
+
+</style>
+
+<template>
+  <view>
+   <web-view src="{{url}}"></web-view>
+  </view>
+</template>
+
+
+<script>
+  import wepy from 'wepy';
+  import req from '@/network'
+  import creatorClient from '@/utils/creator_client.js'
+  import { baseUrl } from '@/config'
+
+  export default class CMSFile extends wepy.page {
+    config = {
+      navigationBarTitleText: ''
+    };
+
+    onLoad(e) {
+      console.log('e', e);
+      this.fileId = e.fileId;
+      this.url = `${baseUrl}/api/files/files/${this.fileId}`;
+      this.$apply();
+    }
+
+    data = {
+      fileId: '',
+      url:'',
+    };
+
+    methods = {};
+  }
+</script>

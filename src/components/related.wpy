@@ -44,9 +44,9 @@
           </block>
           <block wx:else>
             <block wx:for="{{item.relatedRecords}}" wx:key="*this" wx:for-item="r">
-              <view class="weui-cell">
+              <navigator url="/pages/record/view?object_name={{item.object.name}}&record_id={{r._id}}&space_id={{space_id}}" class="weui-cell" hover-class="weui-cell_active">
                 <view class="weui-cell__bd weui-cell__label">{{r.name}}</view>
-              </view>
+              </navigator>
             </block>
             <view class="weui-cell weui-cell_link related-more" @tap.stop="relatedMore" data-oname="{{item.object_name}}" wx:if="{{item.count > 5}}">
               <view class="weui-cell__bd">更多</view>
