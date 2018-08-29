@@ -126,6 +126,7 @@ page {
   background: transparent;
   position: relative;
   z-index: 10;
+  padding-bottom: 100px;
 
   .page__hd{
     padding:20rpx 40rpx;

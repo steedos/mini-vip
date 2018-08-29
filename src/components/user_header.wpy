@@ -10,22 +10,6 @@
 	.image{
 		width: 100%;
 	}
-	.empty-cover {
-		position: relative;
-		height: 210px;
-		background-image: url("https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/empty.png");
-		display: flex;
-		align-items: center;
-		justify-content: center;
-
-		.text {
-			position: relative;
-			top: -82px;
-			color: #262626;
-			text-shadow: 1px 1px 0px #686868;
-			font-size: 20px;
-		}
-	}
 	.space-info {
 		position: relative;
 		text-align: center;
@@ -147,12 +131,15 @@
 <template>
 	<view class="wepy-list">
 		<view class="header">
+			<!--
 			<view wx:if="{{!about_me.cover}}">
-				<view class="cover-wrapper" @tap="uploadImage(true)" style="background-image: url(https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/header.jpg)"></view>
+				<view class="cover-wrapper" @tap="uploadImage(true)" style="background-image: url(https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/empty.jpg)"></view>
 			</view>
 			<view wx:else>
 				<view class="cover-wrapper" @tap="uploadImage(true)" style="background-image: url({{util.formatImageUrl(about_me.cover, baseUrl)}})"></view>
 			</view>
+			-->
+			<view class="cover-wrapper"></view>
 			<view class="space-info">
 				<view class="wrapper" @tap="goMe">
 					<view class="bg-image"></view>
