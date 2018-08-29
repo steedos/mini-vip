@@ -49,8 +49,8 @@
       right: 40rpx;
       padding:0 0 40rpx 40rpx;
       .vip_close {
-        width: 30rpx;
-        height: 30rpx;
+        width: 50rpx;
+        height: 50rpx;
       }
     }
     &.show {
