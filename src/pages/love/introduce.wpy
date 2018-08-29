@@ -221,7 +221,7 @@ page {
       margin: -90rpx 20rpx 0;
       .weui-cells {
         border-radius: 0.25rem;
-        box-shadow: #aaa 0px 0px 10px;
+        box-shadow: 0 4rpx 4rpx 0 rgba(0, 0, 0, 0.16), 0 0 0 2rpx rgba(0, 0, 0, 0.08);
         &::after {
           display: none;
         }
