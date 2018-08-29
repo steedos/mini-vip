@@ -208,7 +208,7 @@
  
   export default class LoveShare extends wepy.page {
 		config = {
-			navigationBarTitleText: '缘分测试',
+			navigationBarTitleText: '交友名片',
     };
 
     wxs = {

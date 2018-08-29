@@ -34,7 +34,7 @@ page {
     }
   }
   .match {
-		box-shadow: #aaa 0px 0px 10px;
+		box-shadow: 0 4rpx 4rpx 0 rgba(0, 0, 0, 0.16), 0 0 0 2rpx rgba(0, 0, 0, 0.08);
     background: #1AAD19;
     margin-top: 30rpx;
     padding: 30rpx;

@@ -218,12 +218,17 @@ page {
     }
 
     .body-wrapper {
-      margin: -40rpx 20rpx 0;
-      padding: 10rpx 0;
-      border-radius: 0.25rem;
-      background: #fff;
-      box-shadow: #aaa 0px 0px 10px;
-      // box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
+      margin: -90rpx 20rpx 0;
+      .weui-cells {
+        border-radius: 0.25rem;
+        box-shadow: 0 4rpx 4rpx 0 rgba(0, 0, 0, 0.16), 0 0 0 2rpx rgba(0, 0, 0, 0.08);
+        &::after {
+          display: none;
+        }
+        &::before {
+          display: none;
+        }
+      }
     }
   }
 }
@@ -317,7 +322,7 @@ import { loveSpaceId } from '@/config';
 
 export default class loveIntroduce extends wepy.page {
   config = {
-    navigationBarTitleText: '个人资料',
+    navigationBarTitleText: '交友名片',
   };
 
   data = {
@@ -404,29 +409,31 @@ export default class loveIntroduce extends wepy.page {
     const customer = result.value[0];
 
     let b_naire = [];
-    if (customer.questionnaire_progess.includes('love_test')) {
-      b_naire.push({
-        label: '缘分卷',
-        object_name: 'love_test'
-      })
-    }
-    if (customer.questionnaire_progess.includes('love_answer')) {
-      b_naire.push({
-        label: '玫瑰卷',
-        object_name: 'love_answer'
-      })
-    }
-    if (customer.questionnaire_progess.includes('love_test')) {
-      b_naire.push({
-        label: '蔷薇卷',
-        object_name: 'love_answer2'
-      })
-    }
-    if (customer.questionnaire_progess.includes('love_test')) {
-      b_naire.push({
-        label: '兴趣爱好',
-        object_name: 'love_hobby'
-      })
+    if (customer.questionnaire_progess && customer.questionnaire_progess.length) {
+      if (customer.questionnaire_progess.includes('love_test')) {
+        b_naire.push({
+          label: '缘分卷',
+          object_name: 'love_test'
+        })
+      }
+      if (customer.questionnaire_progess.includes('love_answer')) {
+        b_naire.push({
+          label: '玫瑰卷',
+          object_name: 'love_answer'
+        })
+      }
+      if (customer.questionnaire_progess.includes('love_test')) {
+        b_naire.push({
+          label: '蔷薇卷',
+          object_name: 'love_answer2'
+        })
+      }
+      if (customer.questionnaire_progess.includes('love_test')) {
+        b_naire.push({
+          label: '兴趣爱好',
+          object_name: 'love_hobby'
+        })
+      }
     }
     this.b_naire = b_naire;
     this.$apply();
@@ -436,7 +443,7 @@ export default class loveIntroduce extends wepy.page {
       if (customer.cover) {
         this.cover = customer.cover;
       } else {
-        this.cover = 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/bg-moon.jpg';
+        this.cover = 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/bg-star.jpg';
       }
     }
 
