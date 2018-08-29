@@ -117,6 +117,10 @@ page {
     }
   }
 }
+
+.cover-page-bg {
+  background-image:url('https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/bg-kiss.jpg');
+}
 </style>
 
 <template>
