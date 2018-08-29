@@ -234,9 +234,10 @@ export default class LoveHome extends wepy.page {
 	}
 
 	async onPullDownRefresh() {
-		const self = this;
+    const self = this;
     wx.showNavigationBarLoading();
-		await this.loadGroups();
+    await this.loadAboutMe();
+    await this.loadGroups();
     await this.loadFriendList();
 		this.$apply();
 		wx.stopPullDownRefresh();
