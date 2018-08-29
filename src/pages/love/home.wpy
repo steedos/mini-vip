@@ -181,7 +181,11 @@ page {
 					</view>
 				</navigator>
 			</repeat>
-
+      <!-- <view class="tab-bar border-top-1px">  -->
+        <button  class="btn-toolbar-primary" type="default" plain="true" @tap="goShare" style="color:#fff;font-size:34rpx;margin-top: 20rpx;border:none">
+          生成我的交友名片
+        </button>
+      <!-- </view> -->
 			<!--
 			<view class="weui-cells">
 				<navigator class="weui-cell weui-cell_access" url="/pages/love/shake" hover-class="weui-cell_active">
@@ -436,6 +440,9 @@ export default class LoveHome extends wepy.page {
   methods = {
     goCp() {
       pageRouter.navigateTo({ url: '/pages/love/cp' })
+    },
+    goShare() {
+      pageRouter.navigateTo({ url: `/pages/love/share?card=true&space_id=${this.space_id}` })
     },
     userLogin(e) {
       const userInfo = e.detail.userInfo;
