@@ -101,6 +101,7 @@
         height:@height;
         border-radius:20px;
         border:1rpx solid #efefef;
+        overflow: hidden;
       }
 
       .me-answer{
@@ -555,14 +556,18 @@
               编辑
             </view>
           </view>
-          <image class="avatar" src="{{me_avatar}}"></image>
+          <view class="avatar">
+            <open-data type="userAvatarUrl"></open-data>
+          </view>
         </view>
       </view>
 
       <view class="question-section-me" animation="{{questionMeAnimationData}}">
         <view class="weui-cell__ft weui-cells__title weui-flex user-me">
           <view class="weui-flex__item me">你的选择</view>
-          <image class="avatar" src="{{me_avatar}}"></image>
+          <view class="avatar">
+            <open-data type="userAvatarUrl"></open-data>
+          </view>
         </view>
         <view class="question-body">
           <block wx:if="{{question.options_all.length > 4}}">
