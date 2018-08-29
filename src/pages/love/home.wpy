@@ -121,6 +121,7 @@ page {
 
 <template>
 <view>
+  <view class="cover-page-bg"></view>
 	<view class="cover-page" wx:if="{{is_loaded}}">
     <userHeader :about_me.sync="about_me" :isAuthUserInfo.sync="isAuthUserInfo" :user.sync="user_id"/>
 		<view class="page__bd" style="margin-top: -90rpx">

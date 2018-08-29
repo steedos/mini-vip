@@ -57,8 +57,6 @@
 	bottom: 0;
 	left: 0;
   right: 0;
-  background: url('https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/cp_background.jpg');
-  background-size: cover;
 
   .header {
     margin-top: 75rpx;
@@ -346,7 +344,9 @@
 </style>
 
 <template>
-  <view class="cp-bg">
+<view>
+  <view class="cover-page-bg"></view>
+  <view class="cp-bg cover-page">
     <view class="header"></view>
     <block wx:if="{{isMatching}}">
       <view class="main-body">
@@ -403,6 +403,7 @@
       </view>
     </block>
   </view>
+</view>
 </template>
 
 <script>
