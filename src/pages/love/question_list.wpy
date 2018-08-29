@@ -32,11 +32,11 @@
     <view class="weui-panel weui-panel_access">
       <view class="weui-panel__bd">
         <repeat for="{{questions}}" key="index" index="index" item="question">
-          <navigator class="weui-media-box weui-media-box_text" url="/pages/love/papers_view?object_name={{object_name}}&space_id={{space_id}}&fields={{question.name}}{{required}}">
+          <view class="weui-media-box weui-media-box_text" @tap="goDetail({{question}})" url="/pages/love/papers_view?object_name={{object_name}}&space_id={{space_id}}&fields={{question.name}}{{required}}">
             <view class=" weui-media-box__title_in-text">{{question.label}}</view>
             <view class="weui-media-box__desc" wx:if="{{question.type === 'date'}}">{{util.formatDate(values[question.name], '', 'date')}}</view>
             <view class="weui-media-box__desc" wx:else>{{values[question.name]}}<block wx:if="{{question.range}}"> 至 {{values[question.name + "_max"]}}</block></view>
-          </navigator>
+          </view>
         </repeat>
       </view>
     </view>
@@ -108,6 +108,7 @@
       wx.showLoading({mask: true});
       this.object_name = e.object_name;
       this.space_id = e.space_id;
+      this.user_id = e.user_id || this.$parent.globalData.user._id
       if(e.required)
         this.required = '&required=true';
 
@@ -123,7 +124,7 @@
     async onShow(e){
       //获取用户答案
       let query_options = {
-        $filter: `owner eq '${this.$parent.globalData.user._id}'`
+        $filter: `owner eq '${this.user_id}'`
       };
 
       let result = await this.$parent.query(this.object_name, query_options, this.space_id);
@@ -132,6 +133,16 @@
         this.values = JSON.parse(JSON.stringify(result.value[0] || {}));
       }
       this.$apply();
+    }
+
+    methods = {
+      goDetail(e) {
+        if (this.user_id == this.$parent.globalData.user._id) {
+          wx.navigateTo({
+            url: `/pages/love/papers_view?object_name=${this.object_name}&space_id=${this.space_id}&fields=${e.name}${this.required}`
+          })
+        }
+      }
     }
   }
 </script>
