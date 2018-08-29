@@ -95,7 +95,8 @@
       width: 530rpx;
       height: 530rpx;
       border-radius: 50%;
-      border: 4rpx solid #9966ff;
+      // border: 4rpx solid #9966ff;
+      // background: rgba(255, 255, 255, 0.2);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -111,7 +112,7 @@
         width: 430rpx;
         height: 430rpx;
         border-radius: 50%;
-        background: #9966ff;
+        background: rgba(0, 0, 0, 0.1);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -120,7 +121,7 @@
           width: 340rpx;
           height: 340rpx;
           border-radius: 50%;
-          background: #9999ff;
+          background: rgba(0, 0, 0, 0.25);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -129,7 +130,7 @@
             width: 210rpx;
             height: 210rpx;
             border-radius: 50%;
-            background: #ded9fc;
+            background: #fff;
 
             .match-container {
               width: 100%;
@@ -141,6 +142,9 @@
               justify-content: center;
               text-align: center;
               color: #6633ff;
+              border-radius: 50%;
+              box-shadow:#fff 0px 0px 4rpx;
+              // color: #1AAD19;
               image {
                 width: auto;
                 flex: 1;
@@ -498,6 +502,9 @@ export default class LoveCP extends wepy.page {
       this.isMatching = true;
       this.$apply();
 
+      const shakeAudioContext = wx.createInnerAudioContext();
+      shakeAudioContext.src = 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/shake.mp3';
+      shakeAudioContext.play();
       setTimeout(() => {
         this.initAnimation();
         this.setAnimation();
@@ -509,16 +516,17 @@ export default class LoveCP extends wepy.page {
           this.showMatched = true;
           this.$apply();
 
+          if (this.cp) {
+            const successAudioContext = wx.createInnerAudioContext();
+            successAudioContext.src = 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/success.mp3';
+            successAudioContext.play();
+          }
+          
           this.setDropAnimation();
         }
       }, 5100)
 
       const cp = await this.loadCP();
-
-      // setInterval(() => { 
-      //   this.initAnimation();
-      //   this.setAnimation();
-      // }, 5100);
     },
     goDetail() {
       wx.navigateTo({ url: `/pages/love/introduce?_id=${this.cp._id}&space_id=${this.space_id}&userId=${this.cp.user_b._id}` })
