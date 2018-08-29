@@ -1,9 +1,8 @@
 <style lang="less">
 page {
   height: 100%;
-
-  .top-container {
-    position: relative;
+  .page {
+    padding-bottom: 20rpx;
   }
   .ion-container {
     display: inline-block;
@@ -224,64 +223,91 @@ page {
 
 <template>
   <view class="page" wx:if="{{is_loaded}}">
-    <view class="top-container">
-      <view class="header">
-        <view wx:if="{{cover}}">
-          <view class="cover-wrapper" @tap="uploadImage(true)" style="background-image: url(https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/header.jpg)"></view>
-        </view>
-        <view wx:else class="empty-cover" @tap="uploadImage(true)">
-          <view class="text" wx:if="{{is_space_owner}}"></view>
-        </view>
-        <view class="space-info">
-          <view class="heart {{record.heart ? 'vip_heart-light' : 'vip_heart-default'}} slds-icon slds-icon--small slds-m-left--x-small" @tap="markHeart({{record._id}},{{record.heart}})"></view>
-          <view class="wrapper">
-            <view class="bg-image"></view>
-            <view class="avatar-container">
-              <image class="avatar" mode="aspectFill" src="{{util.formatImageUrl(avatar, baseUrl)}}" @tap.stop="uploadImage()"/>
-              <view class="sex-container {{about_me.sex == '男' ? 'boy' : 'girl'}}">
-                <image wx:if="{{about_me.sex == '男'}}" class="sex-img" mode="aspectFill" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/boy.png"></image>
-                <image wx:else class="sex-img" mode="aspectFill" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/girl.png"></image>
-              </view>
+    <view class="header">
+      <view wx:if="{{cover}}">
+        <view class="cover-wrapper" @tap="uploadImage(true)" style="background-image: url(https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/header.jpg)"></view>
+      </view>
+      <view wx:else class="empty-cover" @tap="uploadImage(true)">
+        <view class="text" wx:if="{{is_space_owner}}"></view>
+      </view>
+      <view class="space-info">
+        <view class="heart {{record.heart ? 'vip_heart-light' : 'vip_heart-default'}} slds-icon slds-icon--small slds-m-left--x-small" @tap="markHeart({{record._id}},{{record.heart}})"></view>
+        <view class="wrapper">
+          <view class="bg-image"></view>
+          <view class="avatar-container">
+            <image class="avatar" mode="aspectFill" src="{{util.formatImageUrl(avatar, baseUrl)}}" @tap.stop="uploadImage()"/>
+            <view class="sex-container {{about_me.sex == '男' ? 'boy' : 'girl'}}">
+              <image wx:if="{{about_me.sex == '男'}}" class="sex-img" mode="aspectFill" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/boy.png"></image>
+              <image wx:else class="sex-img" mode="aspectFill" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/girl.png"></image>
             </view>
-            <view class="love-heart" wx:if="{{heartSummary}}">
-              <image class="love-img slds-icon slds-icon--small slds-m-left--x-small" mode="aspectFit" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/love_heart.png"></image>
-              <view>{{heartSummary}}</view>
-            </view>
-            <view class="name">{{name}}</view>
-            <view wx:if="{{about_me.self_introduction}}" class="introduction">{{about_me.self_introduction}}</view>
-            <view class="zodiac-constellation">
-              <view wx:if="{{about_me.sex}}">{{about_me.sex}}</view>
-              <view wx:if="{{about_me.age}}">{{about_me.age}}岁</view>
-              <view wx:if="{{about_me.height}}">{{about_me.height}}cm</view>
-              <view wx:if="{{about_me.constellation}}">{{about_me.constellation}}座</view>
-              <view wx:if="{{about_me.live}}">{{about_me.live}}</view>
-            </view>
+          </view>
+          <view class="love-heart" wx:if="{{heartSummary}}">
+            <image class="love-img slds-icon slds-icon--small slds-m-left--x-small" mode="aspectFit" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/love_heart.png"></image>
+            <view>{{heartSummary}}</view>
+          </view>
+          <view class="name">{{name}}</view>
+          <view wx:if="{{about_me.self_introduction}}" class="introduction">{{about_me.self_introduction}}</view>
+          <view class="zodiac-constellation">
+            <view wx:if="{{about_me.sex}}">{{about_me.sex}}</view>
+            <view wx:if="{{about_me.age}}">{{about_me.age}}岁</view>
+            <view wx:if="{{about_me.height}}">{{about_me.height}}cm</view>
+            <view wx:if="{{about_me.constellation}}">{{about_me.constellation}}座</view>
+            <view wx:if="{{about_me.live}}">{{about_me.live}}</view>
           </view>
         </view>
       </view>
-
-      <view class="weui-cells" style="margin-top: -20px">
-        <view class="weui-cell">
-          <view class="weui-cell__bd">
-            <view>{{title_A}}</view>
-          </view>
-          <view class="weui-cell__ft">{{util.fixed(record.a_to_b, 2)}}%</view>
-        </view>
-        <view class="weui-cell">
-          <view class="weui-cell__bd">
-            <view>{{title_B}}</view>
-          </view>
-          <view class="weui-cell__ft">{{util.fixed(record.b_to_a, 2)}}%</view>
-        </view>
-        <view class="weui-cell">
-          <view class="weui-cell__bd">
-            <view>综合匹配度</view>
-          </view>
-          <view class="weui-cell__ft">{{util.fixed(record.match, 2)}}%</view>
-        </view>
-      </view>
-
     </view>
+
+    <view class="weui-cells" style="margin-top: -20px">
+      <navigator class="weui-cell weui-cell_access" url="/pages/love/question_list?object_name=love_looking_for&space_id={{space_id}}">
+        <view wx:if="{{b_record.is_looking_for}}" class="weui-cell__bd">{{b_sex}}符合你的筛选条件</view>
+        <view wx:else class="weui-cell__bd">{{b_sex}}不符合你的筛选条件</view>
+        <view class="weui-cell__ft_in-access"></view>
+      </navigator>
+    </view>
+
+    <view class="weui-cells">
+      <navigator class="weui-cell weui-cell_access" url="/pages/love/question_list?object_name=love_hobby&space_id={{space_id}}">
+        <view class="weui-cell__bd">
+          <view>{{b_sex}}的兴趣爱好</view>
+        </view>
+        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+      </navigator>
+      <navigator class="weui-cell weui-cell_access" url="/pages/love/question_list?object_name=love_educational_experience&space_id={{space_id}}">
+        <view class="weui-cell__bd">
+          <view>{{b_sex}}的教育经历</view>
+        </view>
+        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+      </navigator>
+      <navigator class="weui-cell weui-cell_access" url="/pages/love/question_list?object_name=love_work_experience&space_id={{space_id}}">
+        <view class="weui-cell__bd">
+          <view>{{b_sex}}的工作经验</view>
+        </view>
+        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+      </navigator>
+    </view>
+
+    <view class="weui-cells" wx:if="{{b_record.is_looking_for}}">
+      <view class="weui-cell">
+        <view class="weui-cell__bd">
+          <view>我喜欢{{b_sex}}</view>
+        </view>
+        <view class="weui-cell__ft">{{util.fixed(record.a_to_b, 2)}}%</view>
+      </view>
+      <view class="weui-cell">
+        <view class="weui-cell__bd">
+          <view>{{b_sex}}喜欢我</view>
+        </view>
+        <view class="weui-cell__ft">{{util.fixed(record.b_to_a, 2)}}%</view>
+      </view>
+      <view class="weui-cell">
+        <view class="weui-cell__bd">
+          <view>综合匹配度</view>
+        </view>
+        <view class="weui-cell__ft">{{util.fixed(record.match, 2)}}%</view>
+      </view>
+    </view>
+
   </view>
 </template>
 
@@ -301,11 +327,11 @@ export default class loveIntroduce extends wepy.page {
     is_loaded: false,
     space_id: loveSpaceId,
     about_me: {},
-    title_A:'',
-    title_B:'',
     current_customer: {},
+    record_id: '',
     record: {},
     b_record: {},
+    b_sex: '他',
     userId: '',
     cover: '',
     avatar: '',
@@ -337,39 +363,34 @@ export default class loveIntroduce extends wepy.page {
     util: util
   }
 
-  async onLoad(e) {
-    this.userId = e.userId || this.$parent.globalData.user._id;
-    this.$apply();
-
-    const record_id = e._id;
-		const space_id = e.space_id;
-		const options = {
+  async loadLoveFriends() {
+    const options = {
 			$expand: 'user_b($select=profile,name),owner($select=profile,name)'
 		}
-		const a_record = await this.$parent.get('love_friends', record_id, space_id, options);
+		const a_record = await this.$parent.get('love_friends', this.record_id, this.space_id, options);
 
 		this.record = a_record;
 
     const b_options = {
       $filter: `(owner eq '${a_record.user_b._id}' and user_b eq '${a_record.owner._id}')`
     }
-    const b_result = await this.$parent.query('love_friends', b_options, space_id);
+    const b_result = await this.$parent.query('love_friends', b_options, this.space_id);
     const b_record = b_result.value[0];
     this.b_record = b_record;
-
-    // if (b_record.heart) {
-    //   this.heart_summary = '对方关注了你';
-    // }
-
-    // if (a_record.heart && b_record.heart) {
-    //   this.heart_summary = '互相关注';
-    // }
-
+    this.$apply();
+  }
+  
+  async onLoad(e) {
+    this.userId = e.userId || this.$parent.globalData.user._id;
+    this.record_id = e._id
     this.$apply();
   }
 
   async onShow() {
     wx.showLoading({ mask: true });
+
+    await this.loadLoveFriends();
+    
     if (this.userId != this.$parent.globalData.user._id) {
       this.is_owner = false;
       this.$apply();
@@ -408,12 +429,10 @@ export default class loveIntroduce extends wepy.page {
     if (about_me && about_me.value && about_me.value[0]) {
       this.about_me = about_me.value[0];
     }
-    if(this.about_me.sex =='男') {
-      this.title_A = '我对他的匹配度'
-      this.title_B = '他对我的匹配度'
+    if (this.about_me.sex == '男') {
+      this.b_sex = '他'
     }else{
-      this.title_A = '我对她的匹配度'
-      this.title_B = '她对我的匹配度'
+      this.b_sex = '她'
     }
     this.is_loaded = true;
     this.$apply();
@@ -557,6 +576,11 @@ export default class loveIntroduce extends wepy.page {
       this.$apply();
       wx.hideNavigationBarLoading();
     },
+    goLookingFor() {
+      wx.navigateTo({
+        url: `/pages/love/question_list?object_name=love_looking_for&space_id=${this.space_id}`
+      })
+    }
   }
 }
 </script>
