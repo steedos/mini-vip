@@ -441,7 +441,7 @@ export default class loveIntroduce extends wepy.page {
       if (customer.cover) {
         this.cover = customer.cover;
       } else {
-        this.cover = 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/bg-moon.jpg';
+        this.cover = 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/bg-star.jpg';
       }
     }
 
