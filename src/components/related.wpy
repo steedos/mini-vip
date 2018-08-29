@@ -11,6 +11,17 @@
     color:#999;
     text-align: center;
   }
+
+  .weui-cell__label{
+    /*margin-top:5px;*/
+    /*display:block;*/
+    /*text-align:center;*/
+    /*color:#000;*/
+    /*font-size:14px;*/
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    overflow:hidden;
+  }
 </style>
 
 <template>
@@ -20,7 +31,10 @@
         <view class="weui-cells__title weui-flex">
           <view class="slds-icon-standard-{{item.object.icon}} slds-icon slds-icon--small slds-m-right--x-small"/>
           {{item.object.label || item.object.name}}({{item.count}})
-          <view class="weui-flex__item weui-cell__ft"><button class="weui-btn mini-btn" type="default" size="mini" @tap.stop="createObject" data-oname="{{item.object_name}}">新建</button></view>
+          <block wx:if="{{item.object.permissions.allowCreate}}">
+            <view wx:if="{{item.is_file}}" class="weui-flex__item weui-cell__ft"><button class="weui-btn mini-btn" type="default" size="mini" @tap.stop="uploadFile" data-oname="{{item.object_name}}">上传</button></view>
+            <view wx:else class="weui-flex__item weui-cell__ft"><button class="weui-btn mini-btn" type="default" size="mini" @tap.stop="createObject" data-oname="{{item.object_name}}">新建</button></view>
+          </block>
         </view>
         <view class="weui-cells weui-cells_after-title">
           <block wx:if="{{item.relatedRecords.length == 0}}">
@@ -31,10 +45,10 @@
           <block wx:else>
             <block wx:for="{{item.relatedRecords}}" wx:key="*this" wx:for-item="r">
               <view class="weui-cell">
-                <view class="weui-cell__bd">{{r.name}}</view>
+                <view class="weui-cell__bd weui-cell__label">{{r.name}}</view>
               </view>
             </block>
-            <view class="weui-cell weui-cell_link related-more" @tap.stop="relatedMore" data-oname="{{item.object_name}}">
+            <view class="weui-cell weui-cell_link related-more" @tap.stop="relatedMore" data-oname="{{item.object_name}}" wx:if="{{item.count > 5}}">
               <view class="weui-cell__bd">更多</view>
             </view>
           </block>
@@ -49,13 +63,14 @@
   import req from '@/network';
   import creatorClient from '@/utils/creator_client.js'
   import ODataClinet from '@/utils/odata_client.js'
+  import { baseUrl, appId } from '@/config'
   import _ from 'underscore'
 
   const TOP = 5;
 
   export default class Related extends wepy.component {
     data = {
-      title: '相关相关',
+      title: '相关',
       related_objects: [],
       space_id: '',
       object_name: '',
@@ -104,6 +119,7 @@
             const related_data = await ODataClinet.query(ro.object_name, query_options, space_id);
 
             ro.count = related_data['@odata.count'];
+            ro.is_file = (ro.object_name === "cms_files");
 
             ro.relatedRecords = related_data.value || [];
             console.log('args forEach -> ', ro.object_name, ro.relatedRecords);
@@ -132,6 +148,32 @@
       }
     };
 
+    async uploadFile(filePath, object_name, record_id, space_id){
+
+      const user = this.$parent.$parent.globalData.user;
+
+      let formData = {
+        space: space_id,
+        object_name: object_name,
+        record_id: record_id,
+        owner: user._id
+      };
+      const authToken = user.auth_token;
+      const userId = user._id;
+      const fileResult = await wepy.uploadFile({
+        url: `${baseUrl}/s3`,
+        filePath: filePath,
+        name: 'file',
+        formData: formData,
+        header: {
+          'X-Auth-Token': authToken,
+          'X-User-Id': userId
+        }
+      }).catch((err)=>{
+        console.log("error...",err)
+      });
+    }
+
     methods = {
       createObject: function (e) {
         const oname = e.currentTarget.dataset.oname;
@@ -144,6 +186,16 @@
         console.log('this.related_objects', this.related_objects);
         const filter =  creatorClient.getODataRelatedFilter(this.space_id, this.userId, this.object_name, this.objects[related_object.object_name], related_object.foreign_key, this.record_id, this.objects);
         wepy.navigateTo({url: `/pages/record/related_list?object_name=${oname}&space_id=${this.space_id}&filter=${filter.join(' ')}`})
+      },
+
+      uploadFile: async function (e) {
+        const res = await wepy.chooseImage({});
+
+        res.tempFilePaths.forEach((tp)=>{
+          this.uploadFile(tp, this.object_name, this.record_id, this.space_id)
+        });
+
+        console.log('res.tempFilePaths', res.tempFilePaths)
       }
     }
   }
