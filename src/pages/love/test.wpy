@@ -63,13 +63,13 @@
         </view>
       </view>
       <button class="input-btn btn-join button-hover" type="primary" @tap="goMatching" wx:if="{{answered}}">
-        我的缘分榜
+        进入首页
       </button>
       <button class="input-btn btn-join button-hover" type="primary" @tap="goAnswer" wx:else>
         开始答题
       </button>
 
-      <button class="btn-love" @tap="goShare">邀请好友测试</button>
+      <button class="btn-love" @tap="goShare">我也要玩</button>
     </view>
 
     <!-- <view class="page__hd">
@@ -235,7 +235,7 @@ export default class Test extends wepy.page {
       }
     },
     goMatching() {
-      wx.navigateTo({url: `/pages/love/matching?space_id=${this.space_id}`})
+      wx.navigateTo({url: `/pages/love/home?space_id=${this.space_id}`})
     },
     goHome(){
       wx.navigateTo({url: '/pages/love/home'})

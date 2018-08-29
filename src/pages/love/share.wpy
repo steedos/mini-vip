@@ -169,7 +169,7 @@
       </button>
       <view class="btn btn-share-friend-circle" @tap="shareToFriendCircle">
         <view class="vip_wechat_moments slds-icon slds-icon--small slds-m-right--x-small"></view>
-        <view class="text">保存图片</view>
+        <view class="text">保存交友名片</view>
       </view>
     </view>
     <view class="pop-mask" wx:if="{{showPop}}" @tap="closePop"></view>
@@ -527,7 +527,6 @@
         }).catch((err)=>{
           return false;
         });
-        console.log("res.tempFilePath================", res.tempFilePath);
         if(res){
           self.friend_circle_image_url = res.tempFilePath;
           self.$apply();
