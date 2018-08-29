@@ -522,6 +522,16 @@
                   field.options = await this.getReferenceTo(field.name, field.reference_to)
                 }
 
+                if(!field.reference_to && field._reference_to){
+                  const objects = this.$parent.$parent.bootstrap.objects;
+                  const reference_to = Creator.getReferenceTo(field._reference_to, objects)
+                  field.reference_to = reference_to;
+                  if(_.isArray(field.reference_to)){
+                    field.referenceToIsArray = true
+                  }
+                  field.options = await this.getReferenceTo(field.name, field.reference_to)
+                }
+
                 thisFields[field_name] = field
 
 //                if(field.defaultValues){
@@ -641,8 +651,8 @@
 
                   if(field.referenceToIsArray){
                     let rto = fv["o"];
-                    if(fv["reference_to.o"]){
-                      rto = fv["reference_to.o"]
+                    if(fv["reference_to._o"]){
+                      rto = fv["reference_to._o"]
                     }
 
                     fv.object_label = (await this.$parent.$parent.getObject(rto, this.args.space_id)).label;

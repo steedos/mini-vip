@@ -84,7 +84,15 @@ class CreatorClinet{
       record_object_name = _.findWhere(objects, {_id: record_id}).name;
       selector.push("and", `(${related_field_name} eq '${record_object_name}')`);
     } else {
-      selector.push("and", `(${related_field_name} eq '${record_id}')`);
+      let related_field = related_object.fields[related_field_name];
+      console.log('====================>', object_name, related_field_name, related_field)
+      if(related_field && (_.isArray(related_field.reference_to) || _.isFunction(related_field.reference_to) || _.isString(related_field._reference_to))){
+        selector.push("and", `(${related_field_name}/o eq '${object_name}')`);
+        selector.push("and", `(${related_field_name}/ids eq '${record_id}')`);
+      }else{
+        selector.push("and", `(${related_field_name} eq '${record_id}')`);
+      }
+
     }
     permissions = this.getPermissions(related_object);
     if (!permissions.viewAllRecords && permissions.allowRead) {

@@ -334,15 +334,25 @@
       this.multiple = field.multiple || false;
 
       this.space_id = e.space_id;
+      console.log('fieldValue', fieldValue);
+      console.log('field.reference_to', field.reference_to);
 
-      if(_.isArray(field.reference_to)){
-        this.objects = await this.getObjects(field.reference_to);
+      let reference_to = field.reference_to;
+
+      if(!reference_to && field._reference_to){
+        const objects = this.$parent.bootstrap.objects;
+        reference_to = Creator.getReferenceTo(field._reference_to, objects)
+        this.field.reference_to = reference_to;
+      }
+
+      if(_.isArray(reference_to)){
+        this.objects = await this.getObjects(reference_to);
         if(this.objects.length > 0){
 
           let rto = fieldValue["o"];
 
-          if(fieldValue["reference_to.o"]){
-            rto = fieldValue["reference_to.o"]
+          if(fieldValue["reference_to._o"]){
+            rto = fieldValue["reference_to._o"]
           }
 
           if(rto){

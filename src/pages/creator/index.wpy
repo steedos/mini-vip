@@ -129,7 +129,7 @@
 
       _.forEach(result.value, (r)=>{
         if(r.record){
-          oname = r.record['reference_to.o'];
+          oname = r.record['reference_to._o'];
           r.object = objects[oname];
         }
       });

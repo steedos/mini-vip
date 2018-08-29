@@ -35,6 +35,36 @@ class Creator{
 
   }
 
+  getNotesRelatedToReference(objects){
+    let o = [];
+    _.each(objects, function(object, object_name) {
+      if (object.enable_notes) {
+        return o.push(object_name);
+      }
+    });
+    return o;
+  }
+
+  getTasksRelatedToReference(objects){
+    let o = [];
+    _.each(objects, function(object, object_name) {
+      if (object.enable_tasks) {
+        return o.push(object_name);
+      }
+    });
+    return o;
+  }
+
+  getReferenceTo(str, objects){
+    if(str.indexOf("object.enable_tasks") > -1){
+      return this.getTasksRelatedToReference(objects)
+    }else if(str.indexOf("object.enable_notes") > -1){
+      return this.getNotesRelatedToReference(objects)
+    }
+
+    return []
+  }
+
   stringToFunction(str) {
     if(str.indexOf('_.forEach(Creator.objectsByName') > -1 || str.indexOf('_.forEach(Creator.Objects') > -1){
       console.log('find function........................88888888888888888')

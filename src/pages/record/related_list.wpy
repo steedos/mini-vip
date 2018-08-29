@@ -170,7 +170,7 @@ export default class RelatedRecordList extends wepy.page {
 
     delete list_views['default'];
 
-    this.list_views_count = _.keys(list_views).length;;
+    this.list_views_count = _.keys(list_views).length;
 
     this.$apply();
   }
