@@ -322,7 +322,7 @@ import { loveSpaceId } from '@/config';
 
 export default class loveIntroduce extends wepy.page {
   config = {
-    navigationBarTitleText: '个人资料',
+    navigationBarTitleText: '交友名片',
   };
 
   data = {

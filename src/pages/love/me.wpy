@@ -64,7 +64,7 @@
               {{name}}
             </view>
             <view class="weui-media-box__desc" style="margin-top: 6rpx;">
-              测试好友缘分
+              我的交友名片
             </view>
             <view class="weui-cell__ft weui-cell__ft_in-access">
             </view>
