@@ -131,21 +131,13 @@
 <template>
 	<view class="wepy-list">
 		<view class="header">
-			<!--
-			<view wx:if="{{!about_me.cover}}">
-				<view class="cover-wrapper" @tap="uploadImage(true)" style="background-image: url(https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/empty.jpg)"></view>
-			</view>
-			<view wx:else>
-				<view class="cover-wrapper" @tap="uploadImage(true)" style="background-image: url({{util.formatImageUrl(about_me.cover, baseUrl)}})"></view>
-			</view>
-			-->
-			<view class="cover-wrapper"></view>
+			<view class="cover-wrapper" @tap="uploadImage(true)"></view>
 			<view class="space-info">
 				<view class="wrapper" @tap="goMe">
 					<view class="bg-image"></view>
 					<block wx:if="{{isAuthUserInfo}}">
 						<view class="avatar-container">
-							<image class="avatar" mode="aspectFill" src="{{util.formatImageUrl(about_me.avatar, baseUrl)}}" @tap.stop="uploadImage()"/>
+							<image class="avatar" mode="aspectFill" src="{{util.formatImageUrl(about_me.avatar, baseUrl)}}"/>
 							<view class="sex-container {{about_me.sex == '男' ? 'boy' : 'girl'}}">
 								<image wx:if="{{about_me.sex == '男'}}" class="sex-img" mode="aspectFill" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/boy.png"></image>
 								<image wx:else class="sex-img" mode="aspectFill" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/girl.png"></image>
@@ -195,7 +187,7 @@ export default class UserHeader extends wepy.component {
 			type: Boolean,
 			default: false
     },
-   user: {
+    user: {
 			type: String,
 			default: ''
 		}
@@ -211,6 +203,104 @@ export default class UserHeader extends wepy.component {
   }
 	
   methods = {
+		async uploadImage(isCover) {
+      const title = isCover ? '更换背景' : '更换头像';
+
+      const result = await wepy.showActionSheet({
+        itemList: [title]
+      });
+      if (!result.cancel) {
+        const result2 = await wepy.chooseImage({
+          count: 1,
+          sizeType: ['compressed']
+        });
+        // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
+        const tempFilePaths = result2.tempFilePaths;
+        if (tempFilePaths.length) {
+          const authToken = wepy.$instance.globalData.user.auth_token;
+          const userId = wepy.$instance.globalData.user._id;
+          let tempSrc = "";
+          if(isCover){
+            tempSrc = this.cover;
+            this.cover = tempFilePaths[0];
+          }
+          else{
+            tempSrc = this.avatar;
+            this.avatar = tempFilePaths[0];
+          }
+          this.$apply();
+          wepy.showLoading({
+            title: '正在上传...',
+            mask: true
+          });
+          let formData = {};
+          formData.size = result2.tempFiles.length && result2.tempFiles[0].size;
+          const imageInfo = await wepy.getImageInfo({
+            src: tempFilePaths[0]
+          });
+          formData.width = imageInfo.width;
+          formData.height = imageInfo.height;
+          formData.orientation = imageInfo.orientation;
+          formData.type = imageInfo.type;
+          const fileResult = await wepy.uploadFile({
+            url: `${this.baseUrl}/s3/images`,
+            filePath: tempFilePaths[0],
+            name: 'file',
+            formData: formData,
+            header: {
+              'X-Auth-Token': authToken,
+              'X-User-Id': userId
+            }
+          }).catch((err)=>{
+            console.log("error...",err)
+          });
+          const fileData = JSON.parse(fileResult.data);
+          if (fileData.errors || fileResult.statusCode != 200) {
+            wx.showToast({
+              title: "图片上传失败，请稍后再试",
+              icon: "none"
+            });
+            if(isCover){
+              this.cover = tempSrc;
+            }
+            else{
+              this.avatar = tempSrc;
+            }
+            this.$apply();
+            wepy.hideLoading();
+            return;
+          }
+          // TODO 更新对应表的字段
+          const fileId = fileData._id;
+          let storageKey = isCover ? 'cover' : 'avatar';
+          let storageSet = {};
+					storageSet[storageKey] = fileId;
+					
+					let current_customer = wepy.$instance.globalData.my_customers.find((c) => {
+						return c.space == loveSpaceId;
+					})
+
+          let updateSuc = await wepy.$instance.update("vip_customers", current_customer._id, storageSet, this.space_id);
+  
+          if (!updateSuc) {
+            wx.showToast({
+              title: "图片上传失败，请稍后再试",
+              icon: "none"
+            });
+            if(isCover){
+              this.cover = tempSrc;
+            }else{
+              this.avatar = tempSrc;
+            }
+          } else {
+						this.$parent.cover = tempFilePaths[0];
+						this.$parent.$apply();
+          }
+          this.$apply();
+          wepy.hideLoading();
+        }
+      }
+    },
     async userLogin(e) {
       const userInfo = e.detail.userInfo;
       if (userInfo) {

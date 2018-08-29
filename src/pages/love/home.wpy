@@ -119,13 +119,13 @@ page {
 }
 
 .cover-page-bg {
-  background-image:url('https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/bg-kiss.jpg');
+  // background-image:url('https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/bg-moon.jpg');
 }
 </style>
 
 <template>
 <view>
-  <view class="cover-page-bg"></view>
+  <view class="cover-page-bg" style="background-image: url({{util.formatImageUrl(cover, baseUrl)}})"></view>
 	<view class="cover-page" wx:if="{{is_loaded}}">
     <userHeader :about_me.sync="about_me" :isAuthUserInfo.sync="isAuthUserInfo" :user.sync="user_id"/>
 		<view class="page__bd" style="margin-top: -90rpx">
@@ -206,12 +206,17 @@ import _ from 'underscore'
 import { baseUrl } from '@/config';
 import pageRouter from '@/utils/pageRouter'
 import userHeader from '../../components/user_header';
+import util from '../../wxs/util.wxs';
 
 export default class LoveHome extends wepy.page {
   config = {
 		navigationBarTitleText: '无颜匹配',
 		enablePullDownRefresh: true
   };
+
+  wxs = {
+    util: util
+  }
 
   data = {
     navigationBarTitle: '无颜匹配',
@@ -220,6 +225,7 @@ export default class LoveHome extends wepy.page {
     space_id: null,
     friendList: [],
     groups: [],
+    cover: '',
     avatar: '',
     name: '',
     group_friends: {},
@@ -347,6 +353,9 @@ export default class LoveHome extends wepy.page {
     this.about_me.name = customer.owner.name;
     if (customer.cover) {
       this.about_me.cover = customer.cover;
+      this.cover = customer.cover;
+    } else {
+      this.cover = 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/bg-moon.jpg';
     }
     if (customer.avatar) {
       this.about_me.avatar = customer.avatar;
