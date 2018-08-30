@@ -910,7 +910,7 @@ export default class VIP extends wepy.app {
     ctx.save()
     ctx.beginPath()
     ctx.arc(dx+dWidth/2, dy+dWidth/2, avatar_radius, 0, 2 * Math.PI)
-    ctx.setFillStyle('red')
+    ctx.setFillStyle('white')
     ctx.fill()
     ctx.clip()
     ctx.drawImage(src2, dx+dWidth/2-avatar_radius, dy+dWidth/2-avatar_radius, 2*avatar_radius, 2*avatar_radius)

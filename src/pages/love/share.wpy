@@ -10,8 +10,8 @@
     font-weight:bold;
     text-align:center;
     .image {
-      width: 100%;
-      height: 100%;
+      width: 100%;//270
+      height: 100%;//240
     }
   }
   .page__bd{
@@ -20,6 +20,20 @@
     font-size:45rpx;
     padding-bottom: 80px;
     text-align:center;
+    .zodiac-constellation{
+      display: flex;
+      margin-top: 10rpx;
+      font-size: 40rpx;
+      color: #777;
+      justify-content: center;
+      view {
+        padding: 0 6rpx;
+      }
+    }
+    .test {
+      padding:40rpx;
+      font-size: 30rpx;
+    }
   }
 
   .pop-mask {
@@ -159,8 +173,15 @@
         {{title}}
       </block>
     </view>
-    <view class="page__bd" wx:if="{{!card_url}}">
-      {{description}}
+    <view class="page__bd">
+      <view class="zodiac-constellation">
+        <view wx:if="{{about_me.sex}}">{{about_me.sex}}</view>
+        <view wx:if="{{about_me.age}}">{{about_me.age}}岁</view>
+        <view wx:if="{{about_me.height}}">{{about_me.height}}cm</view>
+        <view wx:if="{{about_me.constellation}}">{{about_me.constellation}}座</view>
+        <view wx:if="{{about_me.live}}">{{about_me.live}}</view>
+      </view>
+      <view class="test">扫描测试我们之间的匹配度</view>
     </view>
     <view class="tab-bar border-top-1px">
       <button open-type="share" class="btn btn-share-wexin" type="default" plain="{{true}}">
@@ -230,7 +251,8 @@
       title:'',
       description:'',
       share_card:false,
-      card_url:''
+      card_url:'',
+      about_me:{}
     }
 
     async onLoad (e) {
@@ -348,26 +370,37 @@
       };
     }
 
+    async loadAboutMe() {
+      const user_id = this.$parent.globalData.user._id;
+      const avatar = this.$parent.globalData.user.avatar;
+      const options = {
+        $filter: `(owner eq '${this.user_id}')`
+      }
+      const about_me = await wepy.$instance.query('love_about_me', options, this.space_id);
+
+      this.$apply();
+    }
+    
     async generateFriendCard() {
       if(this.$parent.globalData.user.qrcode) {
         this.card_url = utilJs.formatImageUrl(this.$parent.globalData.user.qrcode,this.baseUrl)
       }else{
         if(this.$parent.globalData.user.avatar) {
-        const imageUrl = `https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/share_me.png`;
-        const imgRes = await wepy.downloadFile({
-          url: imageUrl
-        }).catch((err)=>{
-          console.log("err====downloadFile==========imgRes=====", err);
-          this.$apply();
-          return false;
-        });
-        if(!imgRes){
-          wepy.showToast({
-            title: "分享图片下载失败",
-            icon: "none"
-          });
-          return;
-        }
+        // const imageUrl = `https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/share_me.png`;
+        // const imgRes = await wepy.downloadFile({
+        //   url: imageUrl
+        // }).catch((err)=>{
+        //   console.log("err====downloadFile==========imgRes=====", err);
+        //   this.$apply();
+        //   return false;
+        // });
+        // if(!imgRes){
+        //   wepy.showToast({
+        //     title: "分享图片下载失败",
+        //     icon: "none"
+        //   });
+        //   return;
+        // }
         const avatarRes = await wepy.downloadFile({
           url: this.$parent.globalData.user.avatar
         })
@@ -396,24 +429,24 @@
         }
         console.log("codeImgRes===========",codeImgRes.tempFilePath)
         console.log("avatarRes===============",avatarRes.tempFilePath)
-        console.log("imgRes===============",imgRes.tempFilePath)
+        // console.log("imgRes===============",imgRes.tempFilePath)
         if(codeImgRes && avatarRes){
           const self = this
+          const width = wepy.getSystemInfoSync().windowWidth
           const ctx = wepy.createCanvasContext('myCanvas')
-          ctx.drawImage(imgRes.tempFilePath, 0, 0, 750, 1000)
+          ctx.drawImage(codeImgRes.tempFilePath, 0, 0, width, width)
           ctx.save()
           ctx.restore();
           const position_x = 0
           const position_y = 0
-          const width = 750
           await this.$parent.generateQrCode(ctx,codeImgRes.tempFilePath,avatarRes.tempFilePath, position_x, position_y, width, width,'white')
           ctx.draw(true, async ()=>{
             let x = self;
             const res = await wepy.canvasToTempFilePath({
-              width:750,
-              height:1000,
-              destWidth:750,
-              destHeight:1000,
+              width:width,
+              height:width,
+              destWidth:width,
+              destHeight:width,
               canvasId: 'myCanvas',
               fileType: 'jpeg'
             }).catch((err)=>{
@@ -459,6 +492,17 @@
         });
        }
       }
+      const user_id = this.$parent.globalData.user._id;
+      const options = {
+        $filter: `(owner eq '${user_id}')`
+      }
+      const about_me = await wepy.$instance.query('love_about_me', options, loveSpaceId);
+      if (about_me && about_me.value && about_me.value[0]) {
+        this.about_me = about_me.value[0];
+      } else {
+        this.about_me = {};
+      }
+      this.$apply()
     }
     
     async generateFriendCircleImage() {
