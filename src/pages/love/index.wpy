@@ -88,7 +88,7 @@ export default class LoveIndex extends wepy.page {
     if(finishedNaire.length > 0){
       this.answered = true;
       this.$apply();
-      wx.navigateTo({url: '/pages/love/home'});
+      wx.redirectTo({url: '/pages/love/home'});
     }
     wepy.showShareMenu({
       withShareTicket: true
