@@ -269,7 +269,7 @@ page {
     </view>
 
     <view class="body-wrapper">
-      <view class="weui-cells" wx:if="{{record._id && !record.is_looking_for}}">
+      <view class="weui-cells" wx:if="{{object_name == 'love_friends' && record._id && !record.is_looking_for}}">
         <navigator class="weui-cell weui-cell_access" url="/pages/love/question_list?object_name=love_looking_for&space_id={{space_id}}">
           <view class="weui-cell__bd">{{b_sex}}不符合你的筛选条件</view>
           <view class="weui-cell__ft_in-access"></view>
@@ -277,14 +277,14 @@ page {
       </view>
 
       <view class="weui-cells" wx:if="{{!is_owner}}">
-        <view class="weui-cell" @tap="goTest()" hover-class="{{record.a_to_b ? '' : 'weui-cell_active'}}">
+        <view class="weui-cell" @tap="goTest()" wx:if="{{object_name != 'love_recommend_history'}}" hover-class="{{record.a_to_b ? '' : 'weui-cell_active'}}">
           <view class="weui-cell__bd">
             <view>我喜欢{{b_sex}}</view>
           </view>
           <view class="weui-cell__ft" wx:if="{{record.a_to_b !== undefined}}">{{util.fixed(record.a_to_b, 2)}}%</view>
           <view class="weui-cell__ft" wx:else>?</view>
         </view>
-        <view class="weui-cell" @tap="goTest()" hover-class="{{record.b_to_a ? '' : 'weui-cell_active'}}">
+        <view class="weui-cell" @tap="goTest()" wx:if="{{object_name != 'love_recommend_history'}}" hover-class="{{record.b_to_a ? '' : 'weui-cell_active'}}">
           <view class="weui-cell__bd">
             <view>{{b_sex}}喜欢我</view>
           </view>

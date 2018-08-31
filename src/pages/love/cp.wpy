@@ -342,6 +342,19 @@
   }
 }
 
+.match-history {
+  position: fixed;
+  bottom: 50rpx;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .text {
+    font-size: 28rpx;
+    color: #fff;
+    padding: 20rpx 40rpx;
+  }
+}
 
 .cover-page-bg {
   background-image:url('https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/bg-bridge.jpg');
@@ -379,23 +392,21 @@
         </view>
       </view>
     </block>
-    <block wx:if="{{isMatching}}">
+    <block wx:if="{{showMatched}}">
       <view class="box">
-        <block wx:if="{{showMatched}}">
-          <block wx:if="{{cp}}">
-            <view class="result-box" animation="{{dropAnimation}}" @tap="goDetail">
-              <view class="avatar-container">
-                <image class="avatar" mode="aspectFill" src="{{cp.user_b.profile.avatar}}"></image>
-              </view>
-              <view class="name">{{cp.user_b.name}}</view>
-              <view class="weui-cell__ft_in-access"></view>
+        <block wx:if="{{cp}}">
+          <view class="result-box" animation="{{dropAnimation}}" @tap="goDetail">
+            <view class="avatar-container">
+              <image class="avatar" mode="aspectFill" src="{{cp.user_b.profile.avatar}}"></image>
             </view>
-          </block>
-          <block wx:else>
-            <view class="tip-cell">
-              <view class="title">本周有缘人与你擦肩而过，请期待下周的邂逅。</view>
-            </view>
-          </block>
+            <view class="name">{{cp.user_b.name}}</view>
+            <view class="weui-cell__ft_in-access"></view>
+          </view>
+        </block>
+        <block wx:else>
+          <view class="tip-cell">
+            <view class="title">有缘人与你擦肩而过，请期待下次的邂逅。</view>
+          </view>
         </block>
       </view>
     </block>
@@ -407,6 +418,9 @@
         </view>
       </view>
     </block>
+    <view class="match-history" @tap="goHistory">
+      <view class="text">查看匹配历史</view>
+    </view>
   </view>
 </view>
 </template>
@@ -414,6 +428,7 @@
 <script>
 import wepy from 'wepy';
 import { loveSpaceId } from '@/config';
+import req from '@/network';
 
 export default class LoveCP extends wepy.page {
   config = {
@@ -464,6 +479,19 @@ export default class LoveCP extends wepy.page {
     this.$apply();
   }
 
+  initDropAnimation() {
+    let dropAnimation = wx.createAnimation({
+      duration: 0,
+      timingFunction: 'ease',
+      delay: 0
+    })
+
+    dropAnimation.translateY(0).step();
+
+    this.dropAnimation = dropAnimation.export();
+    this.$apply();
+  }
+
   setDropAnimation() {
     let dropAnimation = wx.createAnimation({
       duration: 400,
@@ -491,12 +519,18 @@ export default class LoveCP extends wepy.page {
       $select: 'user_b',
       $expand: 'user_b($select=profile,name)'
     }
-    const result = await this.$parent.query('love_recommend', options, this.space_id);
-    if (result && result.value && result.value[0]) {
-      this.cp = result.value[0];
+    const result = await req.post('/api/mini/vip/match/result', {space_id: this.space_id})
+    if (result.errors) {
+      this.cp = null;
+    } else {
+      this.cp = result;
     }
     this.$apply();
-    return true
+    if (this.cp) {
+      return true
+    } else {
+      return false
+    }
   }
 
   async onLoad() {
@@ -505,6 +539,7 @@ export default class LoveCP extends wepy.page {
 
   methods = {
     async matching() {
+      this.showMatched = false;
       this.isMatching = true;
       this.$apply();
 
@@ -517,19 +552,21 @@ export default class LoveCP extends wepy.page {
       }, 100)
 
       setTimeout(() => {
+        this.showMatched = true;
+        this.initDropAnimation();
+        this.initAnimation();
+        this.$apply();
         if (cp) {
-          this.initAnimation();
-          this.showMatched = true;
-          this.$apply();
-
           if (this.cp) {
             const successAudioContext = wx.createInnerAudioContext();
             successAudioContext.src = 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/success.mp3';
             successAudioContext.play();
           }
-          
           this.setDropAnimation();
         }
+        this.showMatched = true;
+        this.isMatching = false;
+        this.$apply();
       }, 5100)
 
       const cp = await this.loadCP();
@@ -539,6 +576,9 @@ export default class LoveCP extends wepy.page {
     },
     goMe() {
       wx.navigateTo({ url: '/pages/love/me' })
+    },
+    goHistory() {
+      wx.navigateTo({ url: `/pages/love/match_history?space_id=${this.space_id}` })
     }
   }
 }
