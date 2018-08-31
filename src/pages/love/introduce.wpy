@@ -300,6 +300,13 @@ page {
         </view>
       </view>
 
+      <view class="weui-cells" wx:if="{{!is_owner}}">
+        <navigator class="weui-cell weui-cell_access" url="/pages/love/cp">
+          <view class="weui-cell__bd">想要找到匹配度更高的人？</view>
+          <view class="weui-cell__ft_in-access"></view>
+        </navigator>
+      </view>
+
       <view class="weui-cells">
         <repeat for="{{b_naire}}" key="index" index="index" item="naire">
           <navigator class="weui-cell weui-cell_access" url="/pages/love/question_list?object_name={{naire.object_name}}&space_id={{space_id}}&user_id={{userId}}">
