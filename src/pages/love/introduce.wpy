@@ -277,14 +277,14 @@ page {
       </view>
 
       <view class="weui-cells" wx:if="{{!is_owner}}">
-        <view class="weui-cell" @tap="goTest()" wx:if="{{object_name != 'love_recommend_history'}}" hover-class="{{record.a_to_b ? '' : 'weui-cell_active'}}">
+        <view class="weui-cell" @tap="goTest()" wx:if="{{object_name == 'love_friends'}}" hover-class="{{record.a_to_b ? '' : 'weui-cell_active'}}">
           <view class="weui-cell__bd">
             <view>我喜欢{{b_sex}}</view>
           </view>
           <view class="weui-cell__ft" wx:if="{{record.a_to_b !== undefined}}">{{util.fixed(record.a_to_b, 2)}}%</view>
           <view class="weui-cell__ft" wx:else>?</view>
         </view>
-        <view class="weui-cell" @tap="goTest()" wx:if="{{object_name != 'love_recommend_history'}}" hover-class="{{record.b_to_a ? '' : 'weui-cell_active'}}">
+        <view class="weui-cell" @tap="goTest()" wx:if="{{object_name == 'love_friends'}}" hover-class="{{record.b_to_a ? '' : 'weui-cell_active'}}">
           <view class="weui-cell__bd">
             <view>{{b_sex}}喜欢我</view>
           </view>
@@ -618,7 +618,7 @@ export default class loveIntroduce extends wepy.page {
       let values = {
         heart: !heart
       };
-      if (this.object_name == 'love_recommend_history') {
+      if (this.object_name != 'love_friends') {
         if (!heart) {
           wx.showModal({
             title: '友情提示',
@@ -645,7 +645,7 @@ export default class loveIntroduce extends wepy.page {
             }
           }) 
         }
-      } else if (this.object_name == 'love_friends') {
+      } else {
         let res = await this.$parent.update(this.object_name, _id, values, this.space_id);
         if (res) {
           this.record.heart = !heart;
