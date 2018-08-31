@@ -85,6 +85,42 @@
       }
     };
 
+    async loadData(){
+      const object_name = this.object_name;
+      const record_id = this.record_id;
+      const objects = this.objects;
+      const space_id = this.space_id;
+      const userId = this.userId;
+
+      const related_objects = creatorClient.getObjectRelateds(objects, object_name);
+
+      for(let ro of related_objects){
+        console.log('ro.object_name', ro.object_name);
+        ro.object = objects[ro.object_name];
+        let query_options = {
+
+        };
+        const filters = creatorClient.getODataRelatedFilter(space_id, userId,object_name, objects[ro.object_name], ro.foreign_key, record_id, objects);
+        console.log('filters', filters);
+        query_options.$top = TOP;
+        query_options.$select = 'name';
+        query_options.$filter = filters.join(' ');
+        query_options.$count = true;
+
+        const related_data = await ODataClinet.query(ro.object_name, query_options, space_id);
+
+        ro.count = related_data['@odata.count'];
+        ro.is_file = (ro.object_name === "cms_files");
+
+        ro.relatedRecords = related_data.value || [];
+        console.log('args forEach -> ', ro.object_name, ro.relatedRecords);
+      }
+
+      this.related_objects = related_objects;
+
+      this.$apply()
+    }
+
 
     watch = {
       args: async function (newValue, oldValue) {
@@ -92,61 +128,23 @@
           const object_name = newValue.object_name;
           const record_id = newValue.record_id;
           const objects = this.$parent.$parent.bootstrap.objects;
-          const related_objects = creatorClient.getObjectRelateds(objects, object_name);
           const space_id = newValue.space_id;
           const userId = this.$parent.$parent.globalData.user._id;
-          console.log('related_objects', related_objects)
 
           this.space_id = space_id;
           this.object_name = object_name;
           this.record_id = record_id;
           this.objects = objects;
           this.userId = userId;
-
-          for(let ro of related_objects){
-            console.log('ro.object_name', ro.object_name);
-            ro.object = objects[ro.object_name];
-            let query_options = {
-
-            };
-            const filters = creatorClient.getODataRelatedFilter(space_id, userId,object_name, objects[ro.object_name], ro.foreign_key, record_id, objects);
-            console.log('filters', filters);
-            query_options.$top = TOP;
-            query_options.$select = 'name';
-            query_options.$filter = filters.join(' ');
-            query_options.$count = true;
-
-            const related_data = await ODataClinet.query(ro.object_name, query_options, space_id);
-
-            ro.count = related_data['@odata.count'];
-            ro.is_file = (ro.object_name === "cms_files");
-
-            ro.relatedRecords = related_data.value || [];
-            console.log('args forEach -> ', ro.object_name, ro.relatedRecords);
-          }
-
-//          _.forEach(related_objects, async (ro)=>{
-//            console.log('ro.object_name', ro.object_name);
-//            ro.object = objects[ro.object_name];
-//            let query_options = {
-//
-//            };
-//            const filters = creatorClient.getODataRelatedFilter(space_id, userId,object_name, objects[ro.object_name], ro.foreign_key, record_id);
-//
-//            query_options.$top = TOP;
-//            query_options.$select = 'name';
-//            query_options.$filter = filters.join(' ');
-//            query_options.$count = true;
-//
-//            ro.relatedRecords = (await ODataClinet.query(ro.object_name, query_options, space_id)).value || [];
-//            console.log('args forEach -> ', ro.object_name, ro.relatedRecords);
-//          });
-          this.related_objects = related_objects;
-          console.log('this.related_objects ', this.related_objects);
-          this.$apply();
+          this.loadData();
         }
       }
     };
+
+    refresh() {
+      this.loadData();
+      console.log('----------**--related refresh--**----------')
+    }
 
     async uploadFile(filePath, object_name, record_id, space_id){
 
@@ -191,9 +189,16 @@
       uploadFile: async function (e) {
         const res = await wepy.chooseImage({});
 
-        res.tempFilePaths.forEach((tp)=>{
-          this.uploadFile(tp, this.object_name, this.record_id, this.space_id)
-        });
+
+        for(let tp of res.tempFilePaths){
+          await this.uploadFile(tp, this.object_name, this.record_id, this.space_id)
+        }
+
+        this.loadData();
+
+//        res.tempFilePaths.forEach((tp)=>{
+//          this.uploadFile(tp, this.object_name, this.record_id, this.space_id)
+//        });
 
         console.log('res.tempFilePaths', res.tempFilePaths)
       }

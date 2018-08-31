@@ -198,6 +198,7 @@ export default class VIP extends wepy.app {
       'pages/creator/account_binding',
       'pages/creator/cms_file',
       'pages/creator/index',
+      'pages/creator/register_space',
       'pages/love/index',
       'pages/love/home',
 //      'pages/tabbar_index',
@@ -302,16 +303,16 @@ export default class VIP extends wepy.app {
       borderStyle: 'black',
       list: [
       {
-        pagePath: 'pages/creator/index',
-        selectedIconPath: './images/tabbars/topic_pressed.png',
-        iconPath: './images/tabbars/topic.png',
-        text: '最近访问',
-      },
-      {
         pagePath: 'pages/creator/apps',
         selectedIconPath: './images/tabbars/apps_pressed.png',
         iconPath: './images/tabbars/apps.png',
         text: '应用',
+      },
+      {
+        pagePath: 'pages/creator/index',
+        selectedIconPath: './images/tabbars/topic_pressed.png',
+        iconPath: './images/tabbars/topic.png',
+        text: '最近访问',
       },
       {
         pagePath: 'pages/creator/account_binding',

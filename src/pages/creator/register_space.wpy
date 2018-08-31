@@ -1,0 +1,69 @@
+<style>
+
+</style>
+
+
+<template>
+  <view class="page">
+    <view class="weui-cells__title">企业信息</view>
+    <view class="weui-cells weui-cells_after-title">
+      <view class="weui-cell weui-cell_input">
+        <view class="weui-cell__hd">
+          <view class="weui-label">企业名称</view>
+        </view>
+        <view class="weui-cell__bd">
+          <input class="weui-input" placeholder="" value="" bindchange="bindStoreNameChange"/>
+        </view>
+      </view>
+    </view>
+
+    <view class="weui-cells__title">管理员信息</view>
+    <view class="weui-cells weui-cells_after-title">
+      <view class="weui-cell weui-cell_input">
+        <view class="weui-cell__hd">
+          <view class="weui-label">管理员姓名</view>
+        </view>
+        <view class="weui-cell__bd">
+          <input class="weui-input" placeholder="" value="" bindchange="bindStoreNameChange"/>
+        </view>
+      </view>
+      <view class="weui-cell weui-cell_input">
+        <view class="weui-cell__hd">
+          <view class="weui-label">管理员邮箱</view>
+        </view>
+        <view class="weui-cell__bd">
+          <input class="weui-input" placeholder="" value="" bindchange="bindStoreNameChange"/>
+        </view>
+      </view>
+      <view class="weui-cell weui-cell_input">
+        <view class="weui-cell__hd">
+          <view class="weui-label">密码</view>
+        </view>
+        <view class="weui-cell__bd">
+          <input class="weui-input" type="password" placeholder="" value="" bindchange="bindStoreNameChange"/>
+        </view>
+      </view>
+      <view class="weui-cell weui-cell_input">
+        <view class="weui-cell__hd">
+          <view class="weui-label">确认密码</view>
+        </view>
+        <view class="weui-cell__bd">
+          <input class="weui-input" type="password" placeholder="" value="" bindchange="bindStoreNameChange"/>
+        </view>
+      </view>
+    </view>
+    <view class="page__bd page__bd_spacing" style="margin-top: 15px">
+    <button class="weui-btn" type="primary">注                            册</button>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import req from '@/network'
+  import _ from 'underscore';
+
+  export default class registerSpace extends wepy.page {
+
+  }
+</script>
