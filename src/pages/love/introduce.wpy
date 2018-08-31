@@ -255,7 +255,7 @@ page {
             <image class="love-img slds-icon slds-icon--small slds-m-left--x-small" mode="aspectFit" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/love_heart.png"></image>
             <view>{{heartSummary}}</view>
           </view>
-          <view class="name weui-cell__ft_in-access">{{name}}</view>
+          <view class="name">{{name}}</view>
           <view wx:if="{{about_me.self_introduction}}" class="introduction">{{about_me.self_introduction}}</view>
           <view class="zodiac-constellation">
             <view wx:if="{{about_me.sex}}">{{about_me.sex}}</view>
