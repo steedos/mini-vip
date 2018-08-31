@@ -292,21 +292,21 @@ page {
           <view class="weui-cell__bd">
             <view>我喜欢{{b_sex}}</view>
           </view>
-          <view class="weui-cell__ft" wx:if="{{record.a_to_b}}">{{util.fixed(record.a_to_b, 2)}}%</view>
+          <view class="weui-cell__ft" wx:if="{{record.a_to_b !== undefined}}">{{util.fixed(record.a_to_b, 2)}}%</view>
           <view class="weui-cell__ft" wx:else>?</view>
         </view>
         <view class="weui-cell" @tap="goTest()" hover-class="{{record.b_to_a ? '' : 'weui-cell_active'}}">
           <view class="weui-cell__bd">
             <view>{{b_sex}}喜欢我</view>
           </view>
-          <view class="weui-cell__ft" wx:if="{{record.b_to_a}}">{{util.fixed(record.b_to_a, 2)}}%</view>
+          <view class="weui-cell__ft" wx:if="{{record.b_to_a !== undefined}}">{{util.fixed(record.b_to_a, 2)}}%</view>
           <view class="weui-cell__ft" wx:else>?</view>
         </view>
         <view class="weui-cell" @tap="goTest()" hover-class="{{record.match ? '' : 'weui-cell_active'}}">
           <view class="weui-cell__bd">
             <view>综合匹配度</view>
           </view>
-          <view class="weui-cell__ft" wx:if="{{record.match}}">{{util.fixed(record.match, 2)}}%</view>
+          <view class="weui-cell__ft" wx:if="{{record.match !== undefined}}">{{util.fixed(record.match, 2)}}%</view>
           <view class="weui-cell__ft" wx:else>?</view>
         </view>
       </view>
