@@ -241,7 +241,7 @@ page {
     <view class="header">
       <view class="cover-wrapper"></view>
       <view class="space-info">
-        <view class="heart {{record.heart ? 'vip_heart-light' : 'vip_heart-default'}} slds-icon slds-icon--small slds-m-left--x-small" @tap="markHeart({{record._id}},{{record.heart}})"></view>
+        <view wx:if="{{!is_owner}}" class="heart {{record.heart ? 'vip_heart-light' : 'vip_heart-default'}} slds-icon slds-icon--small slds-m-left--x-small" @tap="markHeart({{record._id}},{{record.heart}})"></view>
         <view class="wrapper">
           <view class="bg-image"></view>
           <view class="avatar-container">
