@@ -490,7 +490,9 @@ export default class VIP extends wepy.app {
     const self = this
     let globalData = self.globalData
     let needs_login = false
-
+    if(e.share_from) {
+      globalData.share_from = e.share_from//记录分享来源share_from
+    }
     if (!globalData.userInfo) {
       const setting = await wepy.getSetting()
       if (setting.authSetting['scope.userInfo']) {

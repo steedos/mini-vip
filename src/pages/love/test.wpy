@@ -62,14 +62,18 @@
           <image wx:else mode="aspectFill" class="image" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg"></image>
         </view>
       </view>
-      <button class="input-btn btn-join button-hover" type="primary" @tap="goMatching" wx:if="{{answered}}">
-        进入首页
-      </button>
-      <button class="input-btn btn-join button-hover" type="primary" @tap="goAnswer" wx:else>
-        开始答题
-      </button>
-
-      <button class="btn-love" @tap="goShare">我也要玩</button>
+      <block wx:if="{{isAuthUserInfo && answered}}">
+        <button class="input-btn btn-join button-hover" type="primary" @tap="goLove">
+          想要找到匹配度更高的人？
+        </button>
+        <button class="btn-love" @tap="goShare">我也要玩</button>
+        <button class="btn-love" @tap="goHome">进入首页</button>
+      </block>
+      <block wx:else>
+         <button class="input-btn btn-join button-hover" type="primary" @tap="goAnswer">
+          开始答题
+        </button>
+      </block>
     </view>
 
     <!-- <view class="page__hd">
@@ -143,8 +147,13 @@ export default class Test extends wepy.page {
       this.showLoveBtn = true;
       this.$apply();
     }
+    if(!e.share_from){
+      e.share_from = this.$parent.globalData.share_from
+    }
+    console.log("share_from================",this.$parent.globalData.share_from)
     if (e.share_from && e.share_from != user_id) {
-      this.share_from = e.share_from;
+      this.share_from = e.share_from || this.$parent.globalData.share_from
+      console.log("this.share_from==============",this.share_from)
       this.$apply();
       const options = {
         $filter: `(user_b eq '${e.share_from}' and owner eq '${user_id}')`,
@@ -219,12 +228,12 @@ export default class Test extends wepy.page {
          wx.navigateTo({
           url: `/pages/love/papers_view?object_name=love_test&space_id=${this.space_id}&answered_url=${answeredUrl}&keep_progress`})
       } else {
-        const answeredUrl = encodeURIComponent(`/pages/love/cover_answer_questions?space_id=${loveSpaceId}`);
+        const answeredUrl = encodeURIComponent(`/pages/love/cover_you_looking_for?space_id=${loveSpaceId}`)
         wx.navigateTo({url: `/pages/user_info_login?naire=${this.naire}&share_from=${this.share_from}&next=${answeredUrl}`})
       }
     },
     goLove() {
-      wx.navigateTo({url: '/pages/love/index?love=1'})
+      wx.navigateTo({url: '/pages/love/cp'})
     },
     goShare() {
       const user = this.$parent.globalData.user;
