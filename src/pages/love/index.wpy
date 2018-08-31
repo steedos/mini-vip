@@ -84,12 +84,6 @@ export default class LoveIndex extends wepy.page {
   };
 
   async onLoad (e) {
-    let finishedNaire = wx.getStorageSync('questionnaire_progess');
-    if(finishedNaire.length > 0){
-      this.answered = true;
-      this.$apply();
-      wx.redirectTo({url: '/pages/love/home'});
-    }
     wepy.showShareMenu({
       withShareTicket: true
     });
@@ -122,6 +116,14 @@ export default class LoveIndex extends wepy.page {
       });
       return;
 		}
+
+    let finishedNaire = wx.getStorageSync('questionnaire_progess');
+    if(finishedNaire && finishedNaire.length > 2){
+      this.answered = true;
+      this.$apply();
+      wx.redirectTo({url: '/pages/love/home'});
+      return;
+    }
 
 		this.is_loaded = true;
     this.$apply();
