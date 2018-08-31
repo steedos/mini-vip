@@ -277,14 +277,14 @@ page {
       </view>
 
       <view class="weui-cells" wx:if="{{!is_owner}}">
-        <view class="weui-cell" @tap="goTest()" wx:if="{{object_name != 'love_recommend_history'}}" hover-class="{{record.a_to_b ? '' : 'weui-cell_active'}}">
+        <view class="weui-cell" @tap="goTest()" wx:if="{{object_name == 'love_friends'}}" hover-class="{{record.a_to_b ? '' : 'weui-cell_active'}}">
           <view class="weui-cell__bd">
             <view>我喜欢{{b_sex}}</view>
           </view>
           <view class="weui-cell__ft" wx:if="{{record.a_to_b !== undefined}}">{{util.fixed(record.a_to_b, 2)}}%</view>
           <view class="weui-cell__ft" wx:else>?</view>
         </view>
-        <view class="weui-cell" @tap="goTest()" wx:if="{{object_name != 'love_recommend_history'}}" hover-class="{{record.b_to_a ? '' : 'weui-cell_active'}}">
+        <view class="weui-cell" @tap="goTest()" wx:if="{{object_name == 'love_friends'}}" hover-class="{{record.b_to_a ? '' : 'weui-cell_active'}}">
           <view class="weui-cell__bd">
             <view>{{b_sex}}喜欢我</view>
           </view>
@@ -329,6 +329,7 @@ import { baseUrl } from '@/config';
 import util from '../../wxs/util.wxs';
 import { baseMaterialUrl } from '@/config';
 import { loveSpaceId } from '@/config';
+import req from '@/network';
 
 export default class loveIntroduce extends wepy.page {
   config = {
@@ -623,7 +624,7 @@ export default class loveIntroduce extends wepy.page {
       }
     },
     async markHeart(_id, heart, event) {
-      console.log('[markHeart]', _id, heart);
+      const self = this;
       wx.showNavigationBarLoading();
       if(event == undefined){
         event = heart;
@@ -632,11 +633,40 @@ export default class loveIntroduce extends wepy.page {
       let values = {
         heart: !heart
       };
-      let res = await this.$parent.update("love_friends", _id, values, this.space_id);
-      if(res){
-        this.record.heart = !heart;
+      if (this.object_name != 'love_friends') {
+        if (!heart) {
+          wx.showModal({
+            title: '友情提示',
+            content: `点击爱心之后，系统将会发短信通知对方你对${this.b_sex}有好感`,
+            success: function(res) {
+              if (res.confirm) {
+                req.post('/api/mini/vip/like/sms', {user_id: self.userId, space_id: self.space_id}).then((res) => {
+                  if(event == undefined){
+                    event = heart;
+                    heart = false;
+                  }
+                  let values = {
+                    heart: !heart
+                  };
+                  self.$parent.update(self.object_name, _id, values, self.space_id).then((res) => {
+                    if(res){
+                      self.record.heart = !heart;
+                    }
+                    self.$apply();
+                    wx.hideNavigationBarLoading();
+                  })
+                })
+              }
+            }
+          }) 
+        }
+      } else {
+        let res = await this.$parent.update(this.object_name, _id, values, this.space_id);
+        if (res) {
+          this.record.heart = !heart;
+        }
+        this.$apply();
       }
-      this.$apply();
       wx.hideNavigationBarLoading();
     },
     goLookingFor() {
