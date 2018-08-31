@@ -13,8 +13,8 @@
 	.space-info {
 		position: relative;
 		text-align: center;
-		margin: 0 20rpx;
-		border-radius: 0.25rem;
+		// margin: 0 20rpx;
+		// border-radius: 0.25rem;
 		top: -100rpx;
 		width: auto;
 		border: 1px solid transparent;
@@ -133,7 +133,7 @@
 		<view class="header">
 			<view class="cover-wrapper" @tap="uploadImage(true)"></view>
 			<view class="space-info">
-				<view class="wrapper" @tap="goMe">
+				<view class="wrapper" @tap="goIntroduce">
 					<view class="bg-image"></view>
 					<block wx:if="{{isAuthUserInfo}}">
 						<view class="avatar-container">
@@ -157,7 +157,7 @@
 						<view wx:if="{{about_me.name}}" class="name">{{about_me.name}}</view>    
 						<view wx:else class="name">未登录</view>
 					</block>
-					<view wx:if="{{about_me.self_introduction}}" class="introduction">{{about_me.self_introduction}}</view>
+					<!-- <view wx:if="{{about_me.self_introduction}}" class="introduction">{{about_me.self_introduction}}</view> -->
 					<view class="zodiac-constellation">
 						<view wx:if="{{about_me.sex}}">{{about_me.sex}}</view>
 						<view wx:if="{{about_me.age}}">{{about_me.age}}岁</view>
@@ -320,6 +320,13 @@ export default class UserHeader extends wepy.component {
 			if (this.about_me.owner == this.user) {
 				wx.navigateTo({
 					url: `/pages/love/me?space_id=${loveSpaceId}`
+				})
+			}
+		},
+		goIntroduce() {
+			if (this.about_me.owner == this.user) {
+				wx.navigateTo({
+					url: `/pages/love/introduce`
 				})
 			}
 		}

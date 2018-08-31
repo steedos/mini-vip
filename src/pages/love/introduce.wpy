@@ -269,7 +269,7 @@ page {
     </view>
 
     <view class="body-wrapper">
-      <view class="weui-cells" wx:if="{{!record.is_looking_for}}">
+      <view class="weui-cells" wx:if="{{record._id && !record.is_looking_for}}">
         <navigator class="weui-cell weui-cell_access" url="/pages/love/question_list?object_name=love_looking_for&space_id={{space_id}}">
           <view class="weui-cell__bd">{{b_sex}}不符合你的筛选条件</view>
           <view class="weui-cell__ft_in-access"></view>
@@ -280,7 +280,7 @@ page {
         <repeat for="{{b_naire}}" key="index" index="index" item="naire">
           <navigator class="weui-cell weui-cell_access" url="/pages/love/question_list?object_name={{naire.object_name}}&space_id={{space_id}}&user_id={{userId}}">
             <view class="weui-cell__bd">
-              <view>{{b_sex}}的{{naire.label}}</view>
+              <view>{{is_owner ? "我" : b_sex}}的{{naire.label}}</view>
             </view>
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
           </navigator>
@@ -368,6 +368,9 @@ export default class loveIntroduce extends wepy.page {
   }
 
   async loadLoveFriends() {
+    if(!this.record_id){
+      return;
+    }
     const options = {
 			$expand: 'user_b($select=profile,name),owner($select=profile,name)'
 		}
