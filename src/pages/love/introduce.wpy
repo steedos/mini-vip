@@ -287,24 +287,27 @@ page {
         </repeat>
       </view>
 
-      <view class="weui-cells" wx:if="{{record.is_looking_for}}">
-        <view class="weui-cell">
+      <view class="weui-cells" wx:if="{{!is_owner}}">
+        <view class="weui-cell" @tap="goTest()" hover-class="{{record.a_to_b ? '' : 'weui-cell_active'}}">
           <view class="weui-cell__bd">
             <view>我喜欢{{b_sex}}</view>
           </view>
-          <view class="weui-cell__ft">{{util.fixed(record.a_to_b, 2)}}%</view>
+          <view class="weui-cell__ft" wx:if="{{record.a_to_b}}">{{util.fixed(record.a_to_b, 2)}}%</view>
+          <view class="weui-cell__ft" wx:else>?</view>
         </view>
-        <view class="weui-cell">
+        <view class="weui-cell" @tap="goTest()" hover-class="{{record.b_to_a ? '' : 'weui-cell_active'}}">
           <view class="weui-cell__bd">
             <view>{{b_sex}}喜欢我</view>
           </view>
-          <view class="weui-cell__ft">{{util.fixed(record.b_to_a, 2)}}%</view>
+          <view class="weui-cell__ft" wx:if="{{record.b_to_a}}">{{util.fixed(record.b_to_a, 2)}}%</view>
+          <view class="weui-cell__ft" wx:else>?</view>
         </view>
-        <view class="weui-cell">
+        <view class="weui-cell" @tap="goTest()" hover-class="{{record.match ? '' : 'weui-cell_active'}}">
           <view class="weui-cell__bd">
             <view>综合匹配度</view>
           </view>
-          <view class="weui-cell__ft">{{util.fixed(record.match, 2)}}%</view>
+          <view class="weui-cell__ft" wx:if="{{record.match}}">{{util.fixed(record.match, 2)}}%</view>
+          <view class="weui-cell__ft" wx:else>?</view>
         </view>
       </view>
     </view>
@@ -617,6 +620,14 @@ export default class loveIntroduce extends wepy.page {
     goLookingFor() {
       wx.navigateTo({
         url: `/pages/love/question_list?object_name=love_looking_for&space_id=${this.space_id}`
+      })
+    },
+    goTest(){
+      if(this.record.match){
+        return;
+      }
+      wx.navigateTo({
+        url: `/pages/love/test?share_from=${this.userId}`
       })
     }
   }
