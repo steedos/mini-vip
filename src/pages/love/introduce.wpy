@@ -255,7 +255,7 @@ page {
             <image class="love-img slds-icon slds-icon--small slds-m-left--x-small" mode="aspectFit" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/love_heart.png"></image>
             <view>{{heartSummary}}</view>
           </view>
-          <view class="name">{{name}}</view>
+          <view class="name weui-cell__ft_in-access">{{name}}</view>
           <view wx:if="{{about_me.self_introduction}}" class="introduction">{{about_me.self_introduction}}</view>
           <view class="zodiac-constellation">
             <view wx:if="{{about_me.sex}}">{{about_me.sex}}</view>
@@ -398,6 +398,21 @@ export default class loveIntroduce extends wepy.page {
   }
   
   async onLoad(e) {
+    wepy.showShareMenu({
+      withShareTicket: true
+    });
+    wx.showNavigationBarLoading();
+    const self = this;
+    e.space_id = loveSpaceId;
+    if (e.scene) {
+      // 朋友圏二维码识别进入的，则取出scene中的share_from
+      let scene = decodeURIComponent(e.scene);
+      let scenes = scene.split('=');
+      e.love = 1;
+      e.share_from = scenes[1];
+      e.qrcode = 1;
+    }
+    await this.$parent.login(e);
     this.userId = e.userId || this.$parent.globalData.user._id;
     this.record_id = e._id
     this.object_name = e.object_name || 'love_friends'
