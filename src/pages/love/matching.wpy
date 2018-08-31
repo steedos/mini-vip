@@ -31,6 +31,14 @@
 
 .header {
   display: flex;
+  align-items: center;
+  .switch-group {
+    margin-left: 16rpx;
+    height: 80rpx;
+  }
+  .switch-group::after {
+    transform: rotate(135deg);
+  }
 }
 
 .image {
@@ -169,7 +177,7 @@
       <view class="cover-page-bg"></view>
       <view class="weui-cells top-hearder">
         <view class="weui-cell weui-cell_access">
-          <view class="weui-cell__hd header">
+          <view class="weui-cell__hd header" @tap="switchGroup">
             <block wx:if="{{open_group_id == '-1'}}">
               好友缘分榜
             </block>
@@ -179,7 +187,7 @@
             <block wx:else>
               好友缘分榜
             </block>
-            <!-- <view wx:if="{{answered}}" class="weui-cell__ft weui-cell__ft_in-access"></view> -->
+            <view wx:if="{{answered}}" class="weui-cell__ft switch-group weui-cell__ft_in-access"></view>
           </view>
           <view class="weui-cell__bd">
           </view>
@@ -441,6 +449,14 @@ export default class Matching extends wepy.page {
     return filter;
   }
 
+  setOpenGroupId(open_group_id) {
+    console.log('[setOpenGroupId]', open_group_id)
+    this.open_group_id = open_group_id;
+    this.filter = this.getQueryFilter();
+    this.$apply();
+    this.dataRefresh();
+  }
+
   onShareAppMessage(res) {
     const user_id = this.$parent.globalData.user._id;
     console.log('onShareAppMessage', user_id);
@@ -556,6 +572,9 @@ export default class Matching extends wepy.page {
           pageRouter.navigateTo({ url: '/pages/me_profile' });
         });
       }
+    },
+    switchGroup() {
+      wx.navigateTo({ url: '/pages/love/group' })
     }
   };
 }
