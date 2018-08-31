@@ -204,7 +204,7 @@
           <view class="weui-cells">
             <repeat for="{{record_list}}" key="index" index="index" item="record">
               <block wx:if="{{record.user_b.name}}">
-                <navigator class="record-container weui-cell weui-cell_access"  data-item-id="{{record._id}}" hover-class="weui-cell_active" url="/pages/love/introduce?_id={{record._id}}&space_id={{record.space}}&userId={{record.user_b._id}}">
+                <view @tap="goIntroduce({{record}})" class="record-container weui-cell weui-cell_access" data-item-id="{{record._id}}" hover-class="{{record.match == undefined ? '' : 'weui-cell_active'}}">
                   <view class="weui-cell__hd record-index">
                     {{index + 1}}
                   </view>
@@ -215,14 +215,14 @@
                     <view class="name">{{record.user_b.name}}</view>
                   </view>
                   <block wx:if="{{answered}}">
-                    <view class="weui-cell__ft weui-cell__ft_in-access" wx:if="{{record.match == undefined}}" style="font-size: 36rpx">答题中</view>
+                    <view class="weui-cell__ft" wx:if="{{record.match == undefined}}" style="font-size: 36rpx">答题中</view>
                     <view class="weui-cell__ft record-match weui-cell__ft_in-access" wx:else style="font-size: 36rpx">{{util.fixed(record.match,2)}}%</view>
                     <!-- <view class="weui-cell__ft heart-container"><view class="heart vip_heart-{{record.heart ? 'light' : 'default'}} slds-icon slds-icon--small slds-m-left--x-small" @tap.stop="markHeart({{record._id}},{{record.heart}})" /></view> -->
                   </block>
                   <block wx:else>
                     <view class="weui-cell__ft" style="font-size: 36rpx;padding-right: 15px">请答题</view>
                   </block>
-                </navigator>
+                </view>
               </block>
             </repeat>
           </view>
@@ -540,9 +540,13 @@ export default class Matching extends wepy.page {
       this.$apply();
       wx.hideNavigationBarLoading();
     },
-    goIntroduce() {
+    goIntroduce(record) {
+      if(record.match == undefined){
+        return;
+      }
+      let url=`/pages/love/introduce?_id=${record._id}&space_id=${record.space}&userId=${record.user_b._id}`;
       wx.navigateTo({
-        url: `/pages/love/introduce`
+        url: url
       });
     },
     goLove() {
