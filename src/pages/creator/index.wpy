@@ -1,183 +1,102 @@
-<style lang="less">
-  .record-list {
-    overflow: hidden;
-    .image {
-      display: block;
-    }
-    .page__bd {
-      padding-bottom: 50px;
-    }
-    .tab-bar {
-      display: flex;
-      position: fixed;
-      z-index: 500;
-      bottom: 0;
-      height: 50px;
-      width: 100%;
-      background-color: #f7f7fa;
-      justify-content: center;
-      align-items: center;
-    }
+<style>
+  page{
+    height: 100%;
+  }
 
-    .item-body {
-      width: 55%;
-      height: 100%;
-    }
+  .creator-index{
+    height: 100%;
+    /*background-color: #2b3558;*/
+    /*background: #333399;  !* fallback for old browsers *!*/
+    /*background: -webkit-linear-gradient(to bottom, #2b3558, #333399);  !* Chrome 10-25, Safari 5.1-6 *!*/
+    /*background: linear-gradient(to bottom, #2b3558, #333399); !* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ *!*/
 
-    .page__hd {
-      padding: 0px;
-    }
 
-    .weui-search-bar {
-      border-bottom: 0px;
-    }
-
-    .secondary-field{
-      color: #999;
-      font-size: 13px;
-    }
-
-    .primary-field{
-      font-size: 14px;
-    }
   }
 </style>
 
+
 <template>
-  <view class="creator-index">
-    <view class="page record-list">
-      <view class="page__hd">
-        <searchbar :placeholder.sync="searchPlaceholder" @confirm.user="searchRecords"/>
+  <view class="page creator-index">
+    <view class="page__hd">
+      <view class="page__title" >零代码开发业务系统</view>
+      <view class="page__desc" >
+        通过配置的业务表单、配置业务字段、配置权限实现快速开发业务系统。熟练的配置人员只需一天，甚至一小时，即可开发出一套手机、平板、电脑三合一的台账类业务系统
+        <navigator url="help" class="weui-footer__link" >查看详细</navigator>
       </view>
-      <view class="page__bd">
-        <block wx:if="{{record_list.length}}">
-          <view class="weui-cells weui-cells_after-title">
-            <repeat for="{{record_list}}" key="index" index="index" item="record">
-              <navigator url="/pages/record/view?object_name={{record.object.name}}&record_id={{record.record._id}}&space_id={{space_id}}"
-                         class="record-container weui-cell weui-cell_access" data-item-id="{{record._id}}"
-                         hover-class="weui-cell_active">
-                <view class="weui-cell__hd">
-                  <view class="slds-icon-standard-{{record.object.icon}} slds-icon slds-icon--small slds-m-right--x-small"/>
-                </view>
-                <view class="weui-cell__bd">
-                  <view class="item-body-1">
-                    <view class="primary-field">{{record.object.label || record.object.name}}</view>
-                    <view class="secondary-field">{{record.record.name}}</view>
-                  </view>
-                </view>
-              </navigator>
-            </repeat>
+    </view>
+    <view class="page__bd page__bd_spacing">
+
+
+      <view class="weui-msg">
+        <view class="weui-msg__text-area">
+          <view class="weui-msg__title">您还没有加入任何企业</view>
+          <!--<view class="weui-msg__desc">内容详情，可根据实际需要安排，如果换行则不超过规定长度，居中展现<navigator url="" class="weui-msg__link">文字链接</navigator></view>-->
+        </view>
+        <view class="weui-msg__opr-area">
+          <view class="weui-btn-area">
+            <button class="weui-btn" type="primary" @tap.stop="registerSpage">开通企业</button>
+            <button class="weui-btn" type="default" @tap.stop="bindingAccount">原账户进行绑定</button>
           </view>
-        </block>
-        <block wx:else>
-          <view class="weui-loadmore weui-loadmore_line">
-            <view class="weui-loadmore__tips weui-loadmore__tips_in-line">暂无记录</view>
-          </view>
-        </block>
+        </view>
       </view>
     </view>
   </view>
 </template>
+
+
 <script>
   import wepy from 'wepy';
-  import req from '@/network'
   import creatorClient from '@/utils/creator_client.js'
   import odataClient from '@/utils/odata_client.js'
-  import searchbar from '../../components/searchbar';
   import _ from 'underscore';
+  import pageRouter from '@/utils/pageRouter'
 
-  const PAGESIZE = 15;
-
-  export default class creatorIndex extends wepy.page {
+  export default class Index extends wepy.page {
     config = {
-      navigationBarTitleText: '最近访问',
-      enablePullDownRefresh: true,
-    };
+      navigationBarBackgroundColor: '#2b3558',
+    }
 
-    components = {
-      searchbar: searchbar,
-    };
+    data = {};
 
-    async loadRecords(e) {
-      wx.showNavigationBarLoading();
-      const userId = this.$parent.globalData.user._id;
+    async onLoad(e){
+      await this.$parent.login();
 
-      const query_options = {
-        $top: PAGESIZE,
-        $select: 'record',
-        $expand: 'record($select=name)',
-        $orderby: 'modified desc',
-        $filter: `owner eq '${userId}'`,
-        $count: true
-      };
+      const my_spaces = this.$parent.globalData.my_spaces;
 
-      if(this.searchValue){
-        if(query_options.$filter){
-          query_options.$filter = query_options.$filter + ` and (contains(name,'${this.searchValue}'))`
+      if(my_spaces && my_spaces.length > 0){
+
+        let space = my_spaces[0];
+
+        if(wx.getStorageSync('space')){
+          if(_.indexOf(my_spaces, wx.getStorageSync('space')._id) > -1){
+            space = wx.getStorageSync('space')
+          }
         }else{
-          query_options.$filter = `(contains(name,'${this.searchValue}'))`
+          wx.setStorageSync('space', space)
         }
+
+        console.log('space', space);
+
+        this.$parent.space = space;
+
+        console.log('this.$parent.space_id',this.$parent.space._id);
+
+        this.$parent.bootstrap = await creatorClient.loadBootstrap(this.$parent.space._id)
+        pageRouter.switchTab({ url: '/pages/creator/apps' });
+      }else{
+//        pageRouter.redirectTo({ url: '/pages/creator/register_space' });
+        return;
       }
-
-      const result = await odataClient.query('object_recent_viewed', query_options, this.space_id);
-
-      const objects = this.$parent.bootstrap.objects;
-
-      let record_list = [];
-
-      let oname = '';
-
-      _.forEach(result.value, (r)=>{
-        if(r.record){
-          oname = r.record['reference_to._o'];
-          r.object = objects[oname];
-        }
-      });
-
-      this.record_list = this.record_list.concat(result.value);
-      this.$apply();
-      wx.hideNavigationBarLoading();
-      wx.stopPullDownRefresh();
+      console.log('Index..........................')
     }
-
-    searchRecords(searchValue, evt){
-      this.record_list = [];
-      this.current_skip = 0;
-      this.searchValue = searchValue;
-      this.loadRecords();
-    }
-
-    dataRefresh() {
-      this.record_list = [];
-      this.allow_load = true;
-      this.current_skip = 0;
-      this.loadRecords();
-    }
-
-    onReachBottom() {
-      console.log('onReachBottom...')
-      this.loadRecords();
-    }
-
-    onPullDownRefresh() {
-      console.log('onPullDownRefresh...');
-      this.dataRefresh();
-    }
-
-    async onLoad(e) {
-      this.loadRecords(e)
-    }
-
-    data = {
-      record_list: [],
-      searchPlaceholder: '',
-      space_id: '51ae9b1a8e296a29c9000001'
-    };
 
     methods = {
-      searchRecords(searchValue, evt) {
-        this.searchRecords(searchValue, evt);
+      registerSpage: function () {
+        pageRouter.navigateTo({ url: '/pages/creator/register_space' });
+      },
+      bindingAccount: function () {
+        pageRouter.navigateTo({ url: '/pages/creator/account_binding' });
       }
-    };
+    }
   }
 </script>

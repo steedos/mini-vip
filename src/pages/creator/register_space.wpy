@@ -1,60 +1,41 @@
 <style>
-
+  .page{
+    padding-top: 35px;
+  }
 </style>
 
 
 <template>
   <view class="page">
-    <view class="weui-cells__title">企业信息</view>
-    <view class="weui-cells weui-cells_after-title">
-      <view class="weui-cell weui-cell_input">
-        <view class="weui-cell__hd">
-          <view class="weui-label">企业名称</view>
-        </view>
-        <view class="weui-cell__bd">
-          <input class="weui-input" placeholder="" value="" bindchange="bindStoreNameChange"/>
+    <view wx:if="{{showTopTips}}" class="weui-toptips weui-toptips_warn">{{message}}</view>
+    <form bindsubmit="formSubmit">
+      <view class="weui-cells__title">企业信息</view>
+      <view class="weui-cells weui-cells_after-title">
+        <view class="weui-cell weui-cell_input">
+          <view class="weui-cell__hd">
+            <view class="weui-label">企业名称</view>
+          </view>
+          <view class="weui-cell__bd">
+            <input class="weui-input" placeholder="请输入企业名称" name="spaceName"/>
+          </view>
         </view>
       </view>
-    </view>
 
-    <view class="weui-cells__title">管理员信息</view>
-    <view class="weui-cells weui-cells_after-title">
-      <view class="weui-cell weui-cell_input">
-        <view class="weui-cell__hd">
-          <view class="weui-label">管理员姓名</view>
-        </view>
-        <view class="weui-cell__bd">
-          <input class="weui-input" placeholder="" value="" bindchange="bindStoreNameChange"/>
-        </view>
-      </view>
-      <view class="weui-cell weui-cell_input">
-        <view class="weui-cell__hd">
-          <view class="weui-label">管理员邮箱</view>
-        </view>
-        <view class="weui-cell__bd">
-          <input class="weui-input" placeholder="" value="" bindchange="bindStoreNameChange"/>
+      <view class="weui-cells__title">创建人信息</view>
+      <view class="weui-cells weui-cells_after-title">
+        <view class="weui-cell weui-cell_input">
+          <view class="weui-cell__hd">
+            <view class="weui-label">真实姓名</view>
+          </view>
+          <view class="weui-cell__bd">
+            <input class="weui-input" placeholder="请输入真实姓名" name="name" value="{{name}}"/>
+          </view>
         </view>
       </view>
-      <view class="weui-cell weui-cell_input">
-        <view class="weui-cell__hd">
-          <view class="weui-label">密码</view>
-        </view>
-        <view class="weui-cell__bd">
-          <input class="weui-input" type="password" placeholder="" value="" bindchange="bindStoreNameChange"/>
-        </view>
+      <view class="page__bd page__bd_spacing" style="margin-top: 15px">
+        <button class="weui-btn" type="primary" form-type="submit">确定</button>
       </view>
-      <view class="weui-cell weui-cell_input">
-        <view class="weui-cell__hd">
-          <view class="weui-label">确认密码</view>
-        </view>
-        <view class="weui-cell__bd">
-          <input class="weui-input" type="password" placeholder="" value="" bindchange="bindStoreNameChange"/>
-        </view>
-      </view>
-    </view>
-    <view class="page__bd page__bd_spacing" style="margin-top: 15px">
-    <button class="weui-btn" type="primary">注                            册</button>
-    </view>
+    </form>
   </view>
 </template>
 
@@ -62,8 +43,65 @@
   import wepy from 'wepy';
   import req from '@/network'
   import _ from 'underscore';
+  import odataClient from '@/utils/odata_client.js'
+  import pageRouter from '@/utils/pageRouter'
 
   export default class registerSpace extends wepy.page {
+    config = {
+      navigationBarTitleText: '创建企业',
+    };
 
+    data = {
+      showTopTips: false,
+      message: '',
+      name: ''
+    };
+
+    onLoad(){
+      this.name = this.$parent.globalData.user.name;
+    }
+
+    methods = {
+      formSubmit: async function (e) {
+        console.log('fs', e.detail.value)
+        const spaceName = e.detail.value.spaceName;
+
+        if(!spaceName){
+          this.showTopTips = true;
+          this.message = '请填写企业名称';
+          this.$apply();
+          return;
+        }
+
+        const name = e.detail.value.name;
+
+        if(!name){
+          this.showTopTips = true;
+          this.message = '请输入真实姓名';
+          this.$apply();
+          return ;
+        }
+
+        if(this.name != name){
+          await req.put('/mini/vip/user', { name: name});
+        }
+
+        const res = await odataClient.insert('spaces', {name: spaceName});
+
+        if(res && res.value && res.value.length > 0){
+          const space = res.value[0];
+
+          const space2 = {name: space.name, _id: space._id, owner: space.owner};
+
+          this.$parent.globalData.my_spaces.push(space2);
+
+          wx.setStorageSync('space', space2);
+
+          this.$parent.space = space2;
+
+          pageRouter.redirectTo({ url: '/pages/creator/index' });
+        }
+      }
+    }
   }
 </script>

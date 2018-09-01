@@ -1,0 +1,16 @@
+<style>
+
+</style>
+
+<template>
+  <web-view src="https://www.steedos.com/cn/help/creator/"></web-view>
+</template>
+
+
+<script>
+  import wepy from 'wepy';
+
+  export default class Help extends wepy.page {
+
+  }
+</script>

@@ -1,0 +1,189 @@
+<style lang="less">
+  .page-me {
+    .image {
+      width: 100%;
+      height: 100%;
+      border-radius: 0.15rem;
+    }
+    .weui-cell__hd {
+      height: 1.5rem;
+      .ion {
+        text-align: center;
+        line-height: 1.5rem;
+        border-radius: 0.25rem;
+        color: #fff;
+        background: #fcb95b;
+      }
+    }
+    .weui-cell__bd {
+      .nav-btn::after {
+        border-radius: 0;
+      }
+      .nav-btn {
+        border-radius: 0;
+        background-color: white;
+        text-align: left;
+        border: none;
+        margin: 0;
+        padding: 0;
+        padding-left: 14px;
+        height: 45px;
+        font-size: 17px;
+        .content {
+          .text {
+            float: left;
+          }
+          .weui-cell__ft_in-access {
+            padding-bottom: 45px;
+            margin-right: 15px;
+          }
+        }
+      }
+    }
+
+    .user-active {
+      border: none;
+      text-align: left;
+      font-size: 17px;
+    }
+  }
+</style>
+<template>
+  <view class="page-me">
+    <view class="weui-panel__bd">
+      <view class="weui-cells">
+        <block wx:if="{{isAuthUserInfo}}">
+          <view @tap="editUser" class="weui-media-box weui-media-box_appmsg" hover-class="weui-cell_active">
+            <view class="weui-media-box__hd weui-media-box__hd_in-appmsg" style="width: 50px; height: 50px; line-height: 50px;">
+              <image class="image" mode="aspectFill" wx:if="{{isAuthUserInfo}}" src="{{userInfo.avatarUrl}}"></image>
+            </view>
+            <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
+              <view class="weui-media-box__title">
+                {{name}}
+              </view>
+            </view>
+            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+          </view>
+        </block>
+        <block wx:else>
+          <button open-type="getUserInfo" bindgetuserinfo="userLogin" plain="true" class="user-active weui-media-box weui-media-box_appmsg">
+            <view class="weui-media-box__hd weui-media-box__hd_in-appmsg" style="width: 50px; height: 50px; line-height: 50px;">
+              <image class="image" mode="aspectFill" src="https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/avatar.png"></image>
+            </view>
+            <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
+              <view class="weui-media-box__title">
+                <open-data type="userNickName"></open-data>
+              </view>
+            </view>
+            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+          </button>
+        </block>
+      </view>
+    </view>
+
+    <view class="weui-cells">
+      <button open-type="contact" style="line-height:1.41176471;text-align: left" plain="true" class="weui-cell weui-cell_access">
+        <view class="weui-cell__hd">
+          <view class="slds-icon-standard-bot slds-icon slds-icon--small slds-m-right--x-small"/>
+        </view>
+        <view class="weui-cell__bd">
+          在线客服
+        </view>
+        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+      </button>
+    </view>
+
+    <view class="weui-cells">
+      <navigator url="./address/list" class="weui-cell weui-cell_access">
+        <view class="weui-cell__hd">
+          <view class="slds-icon-standard-channel-programs slds-icon slds-icon--small slds-m-right--x-small"/>
+        </view>
+        <view class="weui-cell__bd">
+          <view>切换企业</view>
+        </view>
+        <view class="weui-cell__ft weui-cell__ft_in-access">{{space.name}}</view>
+      </navigator>
+    </view>
+
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import req from '@/network';
+  import { serverAPI } from '@/server';
+  import pageRouter from '@/utils/pageRouter'
+
+  export default class Me extends wepy.page {
+    config = {
+      navigationBarTitleText: '我的'
+    };
+
+    data = {
+      name: '',
+      mobile: '',
+      isAuthUserInfo: false,
+      userInfo: null,
+      userId: null,
+      space: ''
+    };
+
+    async onLoad() {
+
+      this.space = this.$parent.space;
+
+      const setting = await wepy.getSetting()
+      if (setting.authSetting['scope.userInfo']) {
+        this.isAuthUserInfo = true
+        this.userInfo = this.$parent.globalData.userInfo
+      }
+      this.userId = this.$parent.globalData.user._id
+      this.$apply()
+    }
+
+    onShow() {
+      const user = this.$parent.globalData.user;
+      if (user) {
+        this.name = user.name || '未登录';
+        this.mobile = user.mobile;
+        this.$apply();
+      }
+    }
+
+    methods = {
+      toContact(e) {
+        console.log('进入在线客服');
+      },
+      // TODO 使用修改用户信息接口，保存用户信息
+      editUser() {
+        if (this.isAuthUserInfo) {
+          pageRouter.navigateTo({ url: '/pages/me_profile' })
+        }
+      },
+      userLogin(e) {
+        console.log('userLogin')
+        const self = this;
+        const userInfo = e.detail.userInfo;
+        if (userInfo) {
+          const name = userInfo.nickName;
+          const sex = userInfo.gender ? '男' : '女';
+          const avatar = userInfo.avatarUrl;
+
+          this.userInfo = userInfo
+          this.isAuthUserInfo = true
+          this.name = name
+          this.sex = sex
+          this.$parent.globalData.userInfo = userInfo
+          this.$parent.globalData.user.name = name
+          this.$parent.globalData.user.sex = sex
+          this.$apply()
+
+          const url = '/mini/vip/user'
+          req.put(url, {name: name, sex: sex, avatar: avatar}).then((res) => {
+            pageRouter.navigateTo({ url: '/pages/me_profile' })
+          })
+        }
+      }
+    };
+  }
+</script>

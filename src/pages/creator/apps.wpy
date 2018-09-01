@@ -35,18 +35,15 @@
 
     async onLoad(e) {
       await this.$parent.login();
-      this.$parent.bootstrap = await creatorClient.loadBootstrap(e.space_id || '51ae9b1a8e296a29c9000001')
-
+      this.space_id = this.$parent.space._id;
+      this.$parent.bootstrap = await creatorClient.loadBootstrap(this.space_id);
       this.apps = this.$parent.bootstrap.apps;
-
-      console.log(this.apps)
-
       this.$apply()
     }
 
     data = {
       apps: [],
-      space_id: '51ae9b1a8e296a29c9000001'
+      space_id: ''
     };
 
     methods = {};

@@ -193,11 +193,14 @@ setStore(store)
 export default class VIP extends wepy.app {
   config = {
     pages: [
+      'pages/creator/index',
+      'pages/creator/help',
+      'pages/creator/me',
       'pages/creator/apps',
       'pages/creator/app_objects',
       'pages/creator/account_binding',
       'pages/creator/cms_file',
-      'pages/creator/index',
+      'pages/creator/recent_visit',
       'pages/creator/register_space',
       'pages/love/index',
       'pages/love/home',
@@ -309,21 +312,21 @@ export default class VIP extends wepy.app {
         text: '应用',
       },
       {
-        pagePath: 'pages/creator/index',
+        pagePath: 'pages/creator/recent_visit',
         selectedIconPath: './images/tabbars/topic_pressed.png',
         iconPath: './images/tabbars/topic.png',
         text: '最近访问',
       },
       {
-        pagePath: 'pages/creator/account_binding',
+        pagePath: 'pages/creator/me',
         selectedIconPath: './images/tabbars/me_pressed.png',
         iconPath: './images/tabbars/me.png',
         text: '账户',
       }]
     },
     window: {
-      navigationBarBackgroundColor: '#353535',
-      navigationBarTitleText: '无颜',
+      navigationBarBackgroundColor: '#2b3558',
+      navigationBarTitleText: 'Creator',
       navigationBarTextStyle: 'white',
       backgroundColor: "#fdfdfd",
       backgroundTextStyle: 'dark',

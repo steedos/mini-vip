@@ -1,8 +1,11 @@
 <style>
-
+  .page{
+    padding-top: 35px;
+  }
 </style>
 <template>
-  <view class="account-binding">
+  <view class="page account-binding">
+    <view wx:if="{{showTopTips}}" class="weui-toptips weui-toptips_warn">{{message}}</view>
     <view class="page__bd">
       <form bindsubmit="formSubmit" >
       <view class="weui-cells__title">账户信息</view>
@@ -49,12 +52,32 @@
     }
 
     data = {
+      showTopTips: false,
+      message: '',
       username:'',
       password:''
     };
 
     methods = {
       formSubmit: async function(e) {
+
+        const username = e.detail.value.username;
+
+        if(!username){
+          this.showTopTips = true;
+          this.message = '请填用户名';
+          this.$apply();
+          return;
+        }
+
+        const password = e.detail.value.password;
+
+        if(!password){
+          this.showTopTips = true;
+          this.message = '请填用密码';
+          this.$apply();
+          return;
+        }
 
         const result = await req.post('/api/account/binding', e.detail.value);
 
