@@ -32,15 +32,6 @@
         </view>
         <view class="weui-cell__ft weui-cell__ft_in-access"></view>
       </navigator>
-      <navigator class="weui-cell weui-cell_access" url="share?space_id={{space_id}}">
-        <view class="weui-cell__hd">
-          <view class="slds-icon-standard-announcement slds-icon slds-icon--small slds-m-right--x-small"/>
-        </view>
-        <view class="weui-cell__bd">
-          <view>拯救单身狗</view>
-        </view>
-        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-      </navigator>
       <button open-type="contact" plain="true" class="weui-cell weui-cell_access live_chat" hover-class="weui-cell_active">
         <view class="weui-cell__hd">
           <view class="slds-icon-standard-live-chat weui-grid__icon slds-icon slds-icon--small slds-m-right--x-small"/>

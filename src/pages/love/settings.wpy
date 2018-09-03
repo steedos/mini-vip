@@ -59,15 +59,6 @@
         </view>
         <view class="weui-cell__ft weui-cell__ft_in-access"></view>
       </navigator>
-      <navigator class="weui-cell weui-cell_access" url="/pages/love/share?space_id=${loveSpaceId}">
-        <view class="weui-cell__hd">
-          <view class="slds-icon-standard-announcement slds-icon slds-icon--small slds-m-right--x-small"/>
-        </view>
-        <view class="weui-cell__bd">
-          <view>拯救单身狗</view>
-        </view>
-        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-      </navigator>
 
     </view>
     <view class="weui-cells">
