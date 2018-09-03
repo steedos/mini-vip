@@ -347,6 +347,7 @@ import req from '@/network';
 export default class loveIntroduce extends wepy.page {
   config = {
     navigationBarTitleText: '交友名片',
+		enablePullDownRefresh: true
   };
 
   data = {
@@ -392,11 +393,11 @@ export default class loveIntroduce extends wepy.page {
   }
 
   async loadLoveFriends() {
-    if (!this.record_id) {
+    if(this.is_owner){
       return;
     }
 
-    if (this.record_id == '-1') {
+    if (this.record_id == '-1' || !this.record_id) {
       const user_id = this.$parent.globalData.user._id;
       const a_options = {
         $filter: `(owner eq '${user_id}' and user_b eq '${this.userId}')`,
@@ -440,6 +441,9 @@ export default class loveIntroduce extends wepy.page {
   }
   
   async onLoad(e) {
+    wepy.showShareMenu({
+      withShareTicket: true
+    });
     wx.showLoading({ mask: true });
     e.space_id = loveSpaceId;
     if (e.scene) {
@@ -453,7 +457,13 @@ export default class loveIntroduce extends wepy.page {
     this.space_id = e.space_id;
     await this.$parent.login(e);
 
-    this.userId = e.userId || this.$parent.globalData.user._id;
+    this.userId = e.userId || e.share_from || this.$parent.globalData.user._id;
+    if(!this.userId){
+      wepy.showToast({
+        title: "用户ID不能为空",
+        icon: "none"
+      });
+    }
     this.record_id = e._id
     this.object_name = e.object_name || 'love_friends'
     if (this.userId != this.$parent.globalData.user._id) {
@@ -486,9 +496,7 @@ export default class loveIntroduce extends wepy.page {
 
 	async onPullDownRefresh() {
     wx.showNavigationBarLoading();
-    await this.loadLoveFriends();
-    await this.loadCustomer();
-    await this.loadAboutMe();
+    await this.loadData();
 		this.$apply();
 		wx.stopPullDownRefresh();
     wx.hideNavigationBarLoading();
