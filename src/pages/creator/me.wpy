@@ -94,7 +94,7 @@
     </view>
 
     <view class="weui-cells">
-      <navigator url="./address/list" class="weui-cell weui-cell_access">
+      <navigator url="switch_space" class="weui-cell weui-cell_access">
         <view class="weui-cell__hd">
           <view class="slds-icon-standard-channel-programs slds-icon slds-icon--small slds-m-right--x-small"/>
         </view>
@@ -129,9 +129,7 @@
     };
 
     async onLoad() {
-
-      this.space = this.$parent.space;
-
+//      this.space = this.$parent.space;
       const setting = await wepy.getSetting()
       if (setting.authSetting['scope.userInfo']) {
         this.isAuthUserInfo = true
@@ -143,6 +141,7 @@
 
     onShow() {
       const user = this.$parent.globalData.user;
+      this.space = this.$parent.space;
       if (user) {
         this.name = user.name || '未登录';
         this.mobile = user.mobile;

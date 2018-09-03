@@ -97,6 +97,8 @@
 
           wx.setStorageSync('space', space2);
 
+          console.log('space2', space2)
+
           this.$parent.space = space2;
 
           pageRouter.redirectTo({ url: '/pages/creator/index' });

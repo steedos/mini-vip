@@ -16,7 +16,7 @@
 
 
 <template>
-  <view class="page creator-index">
+  <view class="page creator-index" wx:if="{{show}}">
     <view class="page__hd">
       <view class="page__title" >零代码开发业务系统</view>
       <view class="page__desc" >
@@ -56,9 +56,12 @@
       navigationBarBackgroundColor: '#2b3558',
     }
 
-    data = {};
+    data = {
+      show: false,
+    };
 
     async onLoad(e){
+      wx.showNavigationBarLoading();
       await this.$parent.login();
 
       const my_spaces = this.$parent.globalData.my_spaces;
@@ -68,7 +71,7 @@
         let space = my_spaces[0];
 
         if(wx.getStorageSync('space')){
-          if(_.indexOf(my_spaces, wx.getStorageSync('space')._id) > -1){
+          if(_.indexOf(_.pluck(my_spaces, "_id"), wx.getStorageSync('space')._id) > -1){
             space = wx.getStorageSync('space')
           }
         }else{
@@ -83,11 +86,15 @@
 
         this.$parent.bootstrap = await creatorClient.loadBootstrap(this.$parent.space._id)
         pageRouter.switchTab({ url: '/pages/creator/apps' });
-      }else{
-//        pageRouter.redirectTo({ url: '/pages/creator/register_space' });
-        return;
       }
-      console.log('Index..........................')
+//      else{
+////        pageRouter.redirectTo({ url: '/pages/creator/register_space' });
+//        return;
+//      }
+//      console.log('Index..........................')
+      wx.hideNavigationBarLoading();
+      this.show = true;
+      this.$apply()
     }
 
     methods = {

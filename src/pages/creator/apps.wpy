@@ -33,10 +33,16 @@
       navigationBarTitleText: '应用程序'
     };
 
-    async onLoad(e) {
-      await this.$parent.login();
+//    async onLoad(e) {
+//      await this.$parent.login();
+//      this.space_id = this.$parent.space._id;
+//      this.$parent.bootstrap = await creatorClient.loadBootstrap(this.space_id);
+//      this.apps = this.$parent.bootstrap.apps;
+//      this.$apply()
+//    }
+
+    onShow(){
       this.space_id = this.$parent.space._id;
-      this.$parent.bootstrap = await creatorClient.loadBootstrap(this.space_id);
       this.apps = this.$parent.bootstrap.apps;
       this.$apply()
     }
