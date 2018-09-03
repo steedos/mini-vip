@@ -166,8 +166,11 @@
   </block>
   <block wx:else>
     <view class="page__hd">
-      <block wx:if="{{card_url}}">
-        <image mode="widthFix" class="image" src="{{card_url}}"/>
+      <block wx:if="{{share_card}}">
+        <image wx:if="{{card_url}}" class="image" mode="widthFix" src="{{card_url}}" @error="cardImageLoadFailed"/>
+        <button wx:if="{{is_card_load_failed}}" type="primary" class="btn-share-again" @tap="tryLoadCardAgain">
+          加载名片失败，点击再试一次
+        </button>
       </block>
       <block wx:else>
         {{title}}
@@ -252,7 +255,8 @@
       description:'',
       share_card:false,
       card_url:'',
-      about_me:{}
+      about_me:{},
+      is_card_load_failed: false
     }
 
     async onLoad (e) {
@@ -265,7 +269,8 @@
         e.space_id = loveSpaceId;
       }
       if(e.card){
-        await this.generateFriendCard()
+        await this.generateFriendCard();
+        await this.loadAboutMe();
         this.showPop = false
         // this.description = '分享给好友，找到隐藏在好友中的“另一半”吧。'
         this.share_card = true
@@ -373,35 +378,20 @@
 
     async loadAboutMe() {
       const user_id = this.$parent.globalData.user._id;
-      const avatar = this.$parent.globalData.user.avatar;
       const options = {
-        $filter: `(owner eq '${this.user_id}')`
+        $filter: `(owner eq '${user_id}')`
       }
-      const about_me = await wepy.$instance.query('love_about_me', options, this.space_id);
-
+      const about_me = await wepy.$instance.query('love_about_me', options, loveSpaceId);
+      if (about_me && about_me.value && about_me.value[0]) {
+        this.about_me = about_me.value[0];
+      } else {
+        this.about_me = {};
+      }
       this.$apply();
     }
     
     async generateFriendCard() {
-      if(this.$parent.globalData.user.qrcode) {
-        this.card_url = utilJs.formatImageUrl(this.$parent.globalData.user.qrcode,this.baseUrl)
-      }else{
-        if(this.$parent.globalData.user.avatar) {
-        // const imageUrl = `https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/share_me.png`;
-        // const imgRes = await wepy.downloadFile({
-        //   url: imageUrl
-        // }).catch((err)=>{
-        //   console.log("err====downloadFile==========imgRes=====", err);
-        //   this.$apply();
-        //   return false;
-        // });
-        // if(!imgRes){
-        //   wepy.showToast({
-        //     title: "分享图片下载失败",
-        //     icon: "none"
-        //   });
-        //   return;
-        // }
+      if(this.$parent.globalData.user.avatar) {
         const avatarRes = await wepy.downloadFile({
           url: this.$parent.globalData.user.avatar
         })
@@ -484,24 +474,13 @@
             }
           });
           this.$apply();
-          }
         }
-       else{
-         wepy.showToast({
+      }
+      else{
+        wepy.showToast({
           title: "请先授权获取微信头像",
           icon: "none"
         });
-       }
-      }
-      const user_id = this.$parent.globalData.user._id;
-      const options = {
-        $filter: `(owner eq '${user_id}')`
-      }
-      const about_me = await wepy.$instance.query('love_about_me', options, loveSpaceId);
-      if (about_me && about_me.value && about_me.value[0]) {
-        this.about_me = about_me.value[0];
-      } else {
-        this.about_me = {};
       }
       this.$apply()
     }
@@ -589,13 +568,9 @@
     methods = {
       async shareToFriendCircle(){
         if(this.share_card){
-          if(this.card_url){
-            this.friend_circle_image_url = this.card_url
-            this.showPop = true;
-            this.$apply();
-          }else{
-            await this.generateFriendCard()
-          }
+          this.friend_circle_image_url = this.card_url;
+          this.showPop = true;
+          this.$apply();
         }else{
           if(this.friend_circle_image_url){
             this.showPop = true;
@@ -618,9 +593,22 @@
           icon: "none"
         });
       },
+      cardImageLoadFailed(){
+        this.is_card_load_failed = true;
+      },
       closePop() {
         this.showPop = false;
         this.$apply();
+      },
+      async tryLoadCardAgain(){
+        this.is_card_load_failed = false;
+        wepy.showLoading({
+          title: '加载中',
+          mask: true
+        });
+        await this.generateFriendCard();
+        this.$apply();
+        wepy.hideLoading();
       },
       async tryShareAgain(){
         wepy.showLoading({
