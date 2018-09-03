@@ -130,7 +130,7 @@ export default class LoveGroup extends wepy.page {
     if (result && result.value) {
       this.friendList = {count: result['@odata.count'], value:result.value};
     } else {
-			this.friendList = {count: 0, result: []};
+			this.friendList = {count: 0, value: []};
 		}
     this.$apply();
     return this.friendList;
