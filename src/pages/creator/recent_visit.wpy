@@ -170,6 +170,12 @@
       this.loadRecords(e)
     }
 
+    async onShow(){
+      this.record_list = [];
+      this.space_id = this.$parent.space._id;
+      this.loadRecords()
+    }
+
     data = {
       record_list: [],
       searchPlaceholder: '',
