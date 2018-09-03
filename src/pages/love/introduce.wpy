@@ -399,24 +399,61 @@ export default class loveIntroduce extends wepy.page {
   }
   
   async onLoad(e) {
+    wx.showLoading({ mask: true });
+    e.space_id = loveSpaceId;
+    if (e.scene) {
+      // 朋友圏二维码识别进入的，则取出scene中的share_from
+      let scene = decodeURIComponent(e.scene);
+      let scenes = scene.split('=');
+      e.love = 1;
+      e.share_from = scenes[1];
+      e.qrcode = 1;
+    }
+    this.space_id = e.space_id;
+    await this.$parent.login(e);
+
     this.userId = e.userId || this.$parent.globalData.user._id;
     this.record_id = e._id
     this.object_name = e.object_name || 'love_friends'
+    if (this.userId != this.$parent.globalData.user._id) {
+      this.is_owner = false;
+    } else {
+      this.is_owner = true;
+    }
+
+    await this.loadData();
+
+    this.is_loaded = true;
     this.$apply();
+    wx.hideLoading();
   }
 
   async onShow() {
-    wx.showLoading({ mask: true });
-
-    await this.loadLoveFriends();
-    
-    if (this.userId != this.$parent.globalData.user._id) {
-      this.is_owner = false;
+    if(this.is_loaded){
+      wx.showNavigationBarLoading();
+      await this.loadData();
       this.$apply();
-    } else {
-      this.is_owner = true;
-      this.$apply();
+      wx.hideNavigationBarLoading();
     }
+  }
+  
+  async loadData() {
+    await this.loadLoveFriends();
+    await this.loadCustomer();
+    await this.loadAboutMe();
+  }
+
+	async onPullDownRefresh() {
+    wx.showNavigationBarLoading();
+    await this.loadLoveFriends();
+    await this.loadCustomer();
+    await this.loadAboutMe();
+		this.$apply();
+		wx.stopPullDownRefresh();
+    wx.hideNavigationBarLoading();
+	}
+  
+  async loadCustomer() {
     const a_options = {
       $filter: `(owner eq '${this.userId}' and space eq '${this.space_id}')`,
       $expand: 'owner($select=name,profile)'
@@ -452,7 +489,6 @@ export default class loveIntroduce extends wepy.page {
       }
     }
     this.b_naire = b_naire;
-    this.$apply();
 
     this.name = customer.owner.name;
     if (!this.cover) {
@@ -470,7 +506,9 @@ export default class loveIntroduce extends wepy.page {
         this.avatar = customer.owner.profile.avatar;
       }
     }
-
+  }
+  
+  async loadAboutMe() {
     const b_options = {
       $filter: `(owner eq '${this.userId}')`
     }
@@ -483,9 +521,6 @@ export default class loveIntroduce extends wepy.page {
     }else{
       this.b_sex = '她'
     }
-    this.is_loaded = true;
-    this.$apply();
-    wx.hideLoading();
   }
 
   computed = {
