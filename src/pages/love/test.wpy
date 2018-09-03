@@ -130,7 +130,7 @@ export default class Test extends wepy.page {
       withShareTicket: true
     });
     console.log("e========test==========",e)
-    wx.showNavigationBarLoading();
+    wx.showLoading({ mask: true });
     e.space_id = loveSpaceId;
     this.space_id = e.space_id;
     if (e.scene){
@@ -196,7 +196,7 @@ export default class Test extends wepy.page {
 
     this.$apply();
 
-    wx.hideNavigationBarLoading()
+    wx.hideLoading();
   }
 
   async onShow() {
