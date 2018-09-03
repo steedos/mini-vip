@@ -34,26 +34,25 @@
 </style>
 
 <template>
-<view class="cover-page page" wx:if="{{is_loaded}}">
-	<block wx:if="{{record_list.length}}">
-		<view class="weui-cells">
-			<repeat for="{{record_list}}" key="index" index="index" item="record">
-				<block wx:if="{{record.user_b.name}}">
-					<navigator class="record-container weui-cell weui-cell_access"  data-item-id="{{record._id}}" hover-class="weui-cell_active" url="/pages/love/introduce?_id={{record._id}}&space_id={{record.space}}&userId={{record.user_b._id}}&object_name=love_recommend_history">
-						<view class="weui-cell__hd">
-							<image src="{{record.user_b.profile.avatar}}" class='avatar-field' />
-						</view>
-						<view class="weui-cell__bd">
-							<view class="name">{{record.user_b.name}}</view>
-						</view>
-						<view class="weui-cell__ft record-match weui-cell__ft_in-access" style="font-size: 36rpx">{{util.fixed(record.match,2)}}%</view>
-					</navigator>
-				</block>
-			</repeat>
-		</view>
-	</block>
-</view>
-	
+	<view class="cover-page page" wx:if="{{is_loaded}}">
+		<block wx:if="{{record_list.length}}">
+			<view class="weui-cells">
+				<repeat for="{{record_list}}" key="index" index="index" item="record">
+					<block wx:if="{{record.owner.name}}">
+						<navigator class="record-container weui-cell weui-cell_access"  data-item-id="{{record._id}}" hover-class="weui-cell_active" url="/pages/love/introduce?_id=-1&space_id={{record.space}}&userId={{record.owner._id}}&object_name=love_recommend_history">
+							<view class="weui-cell__hd">
+								<image src="{{record.owner.profile.avatar}}" class='avatar-field' />
+							</view>
+							<view class="weui-cell__bd">
+								<view class="name">{{record.owner.name}}</view>
+							</view>
+							<view class="weui-cell__ft record-match weui-cell__ft_in-access" style="font-size: 36rpx">{{util.fixed(record.match,2)}}%</view>
+						</navigator>
+					</block>
+				</repeat>
+			</view>
+		</block>
+	</view>	
 </template>
 
 <script>
@@ -67,30 +66,30 @@ import pageRouter from '@/utils/pageRouter';
 import req from '@/network';
 import _ from 'underscore';
 
-export default class MatchHistory extends wepy.page {
+export default class LoveMe extends wepy.page  {
 	config = {
 		enablePullDownRefresh: true
 	}
 
+	onLoad() {
+
+	}
+
 	data = {
-    object_name: 'love_recommend_history',
+		object_name: 'love_recommend_history',
 		filter: '',
 		avatar_field: 'user_b.profile.avatar',
     name_field: 'user_b.name',
     baseUrl: baseUrl,
-    navigationBarTitle: '历史匹配',
+    navigationBarTitle: '喜欢我的',
     date_field: [
-			'match',
+      'match',
 			'heart'
     ],
     userId: '',
-    orderby: 'created desc',
-    space_id: null,
+    orderby: 'modified desc',
+    space_id: loveSpaceId,
     pageSize: 50,
-	}
-
-	onLoad() {
-
 	}
 
 	wxs = {
@@ -101,15 +100,14 @@ export default class MatchHistory extends wepy.page {
 
 	getFinalExpand() {
 		console.log('[getFinalExpand....]')
-    return 'user_b($select=profile,name)';
+    return 'owner($select=profile,name)';
   }
 
 	getQueryFilter() {
     const user_id = this.$parent.globalData.user._id;
     let filter = '';
-    filter = `(owner eq '${user_id}')`;
+    filter = `(user_b eq '${user_id}' and heart eq true)`;
     return filter;
 	}
-
 }
 </script>

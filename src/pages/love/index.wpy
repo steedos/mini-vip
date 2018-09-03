@@ -121,8 +121,20 @@ export default class LoveIndex extends wepy.page {
     if(finishedNaire && finishedNaire.length > 2){
       this.answered = true;
       this.$apply();
-      wx.redirectTo({url: '/pages/love/home'});
-      return;
+
+      const user_id = this.$parent.globalData.user._id;
+      const options = {
+        $filter: `(user_b eq '${user_id}' and heart eq true)`
+      }
+      const result = await this.$parent.query('love_recommend_history', options, this.space_id);
+      if (result && result.value && result.value.length) {
+        this.is_loaded = true;
+        this.$apply();
+        wx.hideLoading();
+        wx.navigateTo({ url: `/pages/love/love_me?space_id=${this.space_id}` })
+      } else {
+        wx.redirectTo({url: '/pages/love/home'});
+      }
     }
 
 		this.is_loaded = true;

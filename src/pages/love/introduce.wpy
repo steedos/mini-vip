@@ -245,7 +245,7 @@ page {
     <view class="header">
       <view class="cover-wrapper"></view>
       <view class="space-info">
-        <view wx:if="{{!is_owner}}" class="heart {{record.heart ? 'vip_heart-light' : 'vip_heart-default'}} slds-icon slds-icon--small slds-m-left--x-small" @tap="markHeart({{record._id}},{{record.heart}})"></view>
+        <view wx:if="{{!is_owner}}" class="heart {{a_record.heart ? 'vip_heart-light' : 'vip_heart-default'}} slds-icon slds-icon--small slds-m-left--x-small" @tap="markHeart({{a_record._id}},{{a_record.heart}})"></view>
         <view class="wrapper">
           <view class="bg-image"></view>
           <view class="avatar-container">
@@ -275,7 +275,14 @@ page {
     </view>
 
     <view class="body-wrapper">
-      <view class="weui-cells" wx:if="{{object_name == 'love_friends' && record._id && !record.is_looking_for}}">
+      <view class="weui-cells" wx:if="{{b_record.heart}}">
+        <view class="weui-cell weui-cell_access">
+          <view class="weui-cell__bd">联系方式</view>
+          <view class="weui-cell__ft">{{current_customer.mobile}}</view>
+        </view>
+      </view>
+
+      <view class="weui-cells" wx:if="{{object_name == 'love_friends' && a_record._id && !a_record.is_looking_for}}">
         <navigator class="weui-cell weui-cell_access" url="/pages/love/question_list?object_name=love_looking_for&space_id={{space_id}}">
           <view class="weui-cell__bd">{{b_sex}}不符合你的筛选条件</view>
           <view class="weui-cell__ft_in-access"></view>
@@ -283,25 +290,25 @@ page {
       </view>
 
       <view class="weui-cells" wx:if="{{!is_owner}}">
-        <view class="weui-cell" @tap="goTest()" wx:if="{{object_name == 'love_friends'}}" hover-class="{{record.a_to_b ? '' : 'weui-cell_active'}}">
+        <view class="weui-cell" @tap="goTest()" wx:if="{{object_name == 'love_friends'}}" hover-class="{{a_record.a_to_b ? '' : 'weui-cell_active'}}">
           <view class="weui-cell__bd">
             <view>我喜欢{{b_sex}}</view>
           </view>
-          <view class="weui-cell__ft" wx:if="{{record.a_to_b !== undefined}}">{{util.fixed(record.a_to_b, 2)}}%</view>
+          <view class="weui-cell__ft" wx:if="{{record.a_to_b !== undefined}}">{{util.fixed(a_record.a_to_b, 2)}}%</view>
           <view class="weui-cell__ft" wx:else>?</view>
         </view>
-        <view class="weui-cell" @tap="goTest()" wx:if="{{object_name == 'love_friends'}}" hover-class="{{record.b_to_a ? '' : 'weui-cell_active'}}">
+        <view class="weui-cell" @tap="goTest()" wx:if="{{object_name == 'love_friends'}}" hover-class="{{a_record.b_to_a ? '' : 'weui-cell_active'}}">
           <view class="weui-cell__bd">
             <view>{{b_sex}}喜欢我</view>
           </view>
-          <view class="weui-cell__ft" wx:if="{{record.b_to_a !== undefined}}">{{util.fixed(record.b_to_a, 2)}}%</view>
+          <view class="weui-cell__ft" wx:if="{{a_record.b_to_a !== undefined}}">{{util.fixed(a_record.b_to_a, 2)}}%</view>
           <view class="weui-cell__ft" wx:else>?</view>
         </view>
-        <view class="weui-cell" @tap="goTest()" hover-class="{{record.match ? '' : 'weui-cell_active'}}">
+        <view class="weui-cell" @tap="goTest()" hover-class="{{a_record.match ? '' : 'weui-cell_active'}}">
           <view class="weui-cell__bd">
             <view>综合匹配度</view>
           </view>
-          <view class="weui-cell__ft" wx:if="{{record.match !== undefined}}">{{util.fixed(record.match, 2)}}%</view>
+          <view class="weui-cell__ft" wx:if="{{a_record.match !== undefined}}">{{util.fixed(a_record.match, 2)}}%</view>
           <view class="weui-cell__ft" wx:else>?</view>
         </view>
       </view>
@@ -349,7 +356,7 @@ export default class loveIntroduce extends wepy.page {
     current_customer: {},
     object_name: '',
     record_id: '',
-    record: {},
+    a_record: {},
     b_record: {},
     b_sex: '他',
     b_naire: [],
@@ -385,23 +392,51 @@ export default class loveIntroduce extends wepy.page {
   }
 
   async loadLoveFriends() {
-    if(!this.record_id){
+    if (!this.record_id) {
       return;
     }
-    const options = {
-			$expand: 'user_b($select=profile,name),owner($select=profile,name)'
-		}
-		const a_record = await this.$parent.get(this.object_name, this.record_id, this.space_id, options);
 
-		this.record = a_record;
+    if (this.record_id == '-1') {
+      const user_id = this.$parent.globalData.user._id;
+      const a_options = {
+        $filter: `(owner eq '${user_id}' and user_b eq '${this.userId}')`,
+        $expand: 'user_b($select=profile,name),owner($select=profile,name)'
+      }
+      const a_result = await this.$parent.query(this.object_name, a_options, this.space_id);
+      const a_record = a_result.value[0] || {};
+      this.a_record = a_record;
 
-    const b_options = {
-      $filter: `(owner eq '${a_record.user_b._id}' and user_b eq '${a_record.owner._id}')`
+      const b_options = {
+        $filter: `(owner eq '${this.userId}' and user_b eq '${user_id}')`,
+        $expand: 'user_b($select=profile,name),owner($select=profile,name)'
+      }
+      const b_result = await this.$parent.query(this.object_name, b_options, this.space_id);
+      const b_record = b_result.value[0] || {};
+      this.b_record = b_record;
+
+      console.log('[record -1]', a_record, b_record);
+
+      this.$apply();
+    } else {
+      const a_options = {
+        $expand: 'user_b($select=profile,name),owner($select=profile,name)'
+      }
+      const a_record = await this.$parent.get(this.object_name, this.record_id, this.space_id, a_options);
+
+      this.a_record = a_record;
+
+      const b_options = {
+        $filter: `(owner eq '${a_record.user_b._id}' and user_b eq '${a_record.owner._id}')`
+      }
+      const b_result = await this.$parent.query(this.object_name, b_options, this.space_id);
+      console.log(b_result.value[0])
+      const b_record = b_result.value[0];
+      this.b_record = b_record || {};
+
+      console.log('[record normal]', a_record, b_record);
+
+      this.$apply();
     }
-    const b_result = await this.$parent.query(this.object_name, b_options, this.space_id);
-    const b_record = b_result.value[0];
-    this.b_record = b_record || {};
-    this.$apply();
   }
   
   async onLoad(e) {
@@ -466,6 +501,8 @@ export default class loveIntroduce extends wepy.page {
     }
     const result = await this.$parent.query('vip_customers', a_options, this.space_id);
     const customer = result.value[0];
+
+    this.current_customer = customer;
 
     let b_naire = [];
     if (customer.questionnaire_progess && customer.questionnaire_progess.length) {
@@ -536,7 +573,7 @@ export default class loveIntroduce extends wepy.page {
         heart_summary = '对方关注了你';
       }
 
-      if (this.record.heart && this.b_record.heart) {
+      if (this.a_record.heart && this.b_record.heart) {
         heart_summary = '互相关注';
       }
       return heart_summary
@@ -675,7 +712,7 @@ export default class loveIntroduce extends wepy.page {
                 };
                 self.$parent.update(self.object_name, _id, values, 'common').then((res) => {
                   if(res){
-                    self.record.heart = !heart;
+                    self.a_record.heart = !heart;
                   }
                   self.$apply();
                   wx.hideNavigationBarLoading();
@@ -687,7 +724,7 @@ export default class loveIntroduce extends wepy.page {
       } else {
         let res = await this.$parent.update(this.object_name, _id, values, 'common');
         if (res) {
-          this.record.heart = !heart;
+          this.a_record.heart = !heart;
         }
         this.$apply();
       }
@@ -699,7 +736,7 @@ export default class loveIntroduce extends wepy.page {
       })
     },
     goTest(){
-      if(this.record.match){
+      if(this.a_record.match){
         return;
       }
       wx.navigateTo({
