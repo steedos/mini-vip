@@ -395,8 +395,8 @@
         const avatarRes = await wepy.downloadFile({
           url: this.$parent.globalData.user.avatar
         })
-        // let path = `pages/love/test`;
-        let path = `pages/love/introduce`
+        let path = `pages/love/test`;
+        // let path = `pages/love/introduce`
         const userId = this.$parent.globalData.user._id;
         const scene = `share_from=${userId}`;
         wepy.showLoading({
