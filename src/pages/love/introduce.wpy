@@ -137,6 +137,10 @@ page {
             }
           }
 
+          .weui-cell__ft_in-access{
+            padding-left:13px;
+          }
+
           .love-heart {
             display: flex;
             align-items: center;
@@ -255,14 +259,16 @@ page {
             <image class="love-img slds-icon slds-icon--small slds-m-left--x-small" mode="aspectFit" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/love_heart.png"></image>
             <view>{{heartSummary}}</view>
           </view>
-          <view class="name">{{name}}</view>
-          <view wx:if="{{about_me.self_introduction}}" class="introduction">{{about_me.self_introduction}}</view>
-          <view class="zodiac-constellation">
-            <view wx:if="{{about_me.sex}}">{{about_me.sex}}</view>
-            <view wx:if="{{about_me.age}}">{{about_me.age}}岁</view>
-            <view wx:if="{{about_me.height}}">{{about_me.height}}cm</view>
-            <view wx:if="{{about_me.constellation}}">{{about_me.constellation}}座</view>
-            <view wx:if="{{about_me.live}}">{{about_me.live}}</view>
+          <view class="{{is_owner ? 'weui-cell__ft_in-access' : ''}}" @tap="goMe()">
+            <view class="name">{{name}}</view>
+            <view wx:if="{{about_me.self_introduction}}" class="introduction">{{about_me.self_introduction}}</view>
+            <view class="zodiac-constellation">
+              <view wx:if="{{about_me.sex}}">{{about_me.sex}}</view>
+              <view wx:if="{{about_me.age}}">{{about_me.age}}岁</view>
+              <view wx:if="{{about_me.height}}">{{about_me.height}}cm</view>
+              <view wx:if="{{about_me.constellation}}">{{about_me.constellation}}座</view>
+              <view wx:if="{{about_me.live}}">{{about_me.live}}</view>
+            </view>
           </view>
         </view>
       </view>
@@ -700,6 +706,14 @@ export default class loveIntroduce extends wepy.page {
       }
       wx.navigateTo({
         url: `/pages/love/test?share_from=${this.userId}`
+      })
+    },
+    goMe(){
+      if(!this.is_owner){
+        return;
+      }
+      wx.navigateTo({
+        url: `/pages/love/me`
       })
     }
   }
