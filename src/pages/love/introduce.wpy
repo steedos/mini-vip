@@ -294,7 +294,7 @@ page {
           <view class="weui-cell__bd">
             <view>我喜欢{{b_sex}}</view>
           </view>
-          <view class="weui-cell__ft" wx:if="{{record.a_to_b !== undefined}}">{{util.fixed(a_record.a_to_b, 2)}}%</view>
+          <view class="weui-cell__ft" wx:if="{{a_record.a_to_b !== undefined}}">{{util.fixed(a_record.a_to_b, 2)}}%</view>
           <view class="weui-cell__ft" wx:else>?</view>
         </view>
         <view class="weui-cell" @tap="goTest()" wx:if="{{object_name == 'love_friends'}}" hover-class="{{a_record.b_to_a ? '' : 'weui-cell_active'}}">
