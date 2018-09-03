@@ -659,35 +659,33 @@ export default class loveIntroduce extends wepy.page {
       let values = {
         heart: !heart
       };
-      if (this.object_name != 'love_friends') {
-        if (!heart) {
-          wx.showModal({
-            title: '友情提示',
-            content: `点击爱心之后，系统将会发短信通知对方你对${this.b_sex}有好感`,
-            success: function(res) {
-              if (res.confirm) {
-                req.post('/api/mini/vip/like/sms', {user_id: self.userId, space_id: self.space_id}).then((res) => {
-                  if(event == undefined){
-                    event = heart;
-                    heart = false;
+      if (this.object_name != 'love_friends' && !heart) {
+        wx.showModal({
+          title: '友情提示',
+          content: `点击爱心之后，系统将会发短信通知对方你对${this.b_sex}有好感`,
+          success: function(res) {
+            if (res.confirm) {
+              req.post('/api/mini/vip/like/sms', {user_id: self.userId, space_id: self.space_id}).then((res) => {
+                if(event == undefined){
+                  event = heart;
+                  heart = false;
+                }
+                let values = {
+                  heart: !heart
+                };
+                self.$parent.update(self.object_name, _id, values, 'common').then((res) => {
+                  if(res){
+                    self.record.heart = !heart;
                   }
-                  let values = {
-                    heart: !heart
-                  };
-                  self.$parent.update(self.object_name, _id, values, self.space_id).then((res) => {
-                    if(res){
-                      self.record.heart = !heart;
-                    }
-                    self.$apply();
-                    wx.hideNavigationBarLoading();
-                  })
+                  self.$apply();
+                  wx.hideNavigationBarLoading();
                 })
-              }
+              })
             }
-          }) 
-        }
+          }
+        }) 
       } else {
-        let res = await this.$parent.update(this.object_name, _id, values, this.space_id);
+        let res = await this.$parent.update(this.object_name, _id, values, 'common');
         if (res) {
           this.record.heart = !heart;
         }
