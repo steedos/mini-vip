@@ -160,6 +160,13 @@ page {
 					</view>
 				</view>
 			</navigator>
+      <repeat for="{{recommend_lover}}" key="index" index="index" item="item">
+        <view class="avatar-container">
+          <image class="avatar" mode="aspectFill" src="{{item.owner.profile.avatar}}"></image>
+          <view wx:if="{{item.owner.name}}" class="name">{{item.owne.name}}</view>    
+
+        </view>
+      </repeat>
       <!-- <view class="tab-bar border-top-1px">  -->
         <button  class="btn-toolbar-primary" type="default" plain="true" @tap="goShare" style="color:#fff;font-size:34rpx;margin-top: 20rpx;border:none">
           生成我的交友名片
@@ -216,6 +223,7 @@ export default class LoveHome extends wepy.page {
     baseUrl: baseUrl,
     showLoveMatch: false,
     about_me: {},
+    recommend_lover:[]
   };
 
   onShareAppMessage(res) {
@@ -268,6 +276,7 @@ export default class LoveHome extends wepy.page {
     }
 
     await this.loadAboutMe();
+    await this.loadLovers();
     await this.loadGroups();
     await this.loadFriendList();
 
@@ -363,6 +372,39 @@ export default class LoveHome extends wepy.page {
     const result = await this.$parent.query('vip_customers', options, this.space_id);
     const customer = result.value[0];
     return customer;
+  }
+
+  async loadLovers(){
+    const user_id = this.$parent.globalData.user._id;
+    const query_options = {
+      $filter: `(owner eq '${user_id}')`,
+    };
+    const result = await this.$parent.query(
+      'love_looking_for',
+      query_options,
+      this.space_id
+    );
+    if (result && result.value){
+      const looking_for = result.value[0]
+      var min_age = looking_for.age-1
+      var max_age = looking_for.age_max+1
+      var min_height = looking_for.height
+      var max_height = looking_for.height_max
+      const options = {
+        $filter: `(sex eq '${looking_for.sex}' and age gt ${min_age} and age lt ${max_age} and height gt '${min_height}' and height lt '${max_height}')`,
+        $top: 6,
+        $select: 'height,hometown,live,sex,self_introduction,constellation,age,owner',
+        $expand: 'owner($select=profile,name)',
+        $orderby: 'created desc'
+        };
+      const lovers = await this.$parent.query(
+        'love_about_me',
+        options,
+        this.space_id
+      );
+      this.recommend_lover = lovers;
+      this.$apply();
+    }
   }
 
   async loadFriendList() {
