@@ -44,7 +44,7 @@ page {
     right:0px;
     border-radius:0px;
     height:50px;
-    background-color:#5f6fee;
+    background-color:#1AAD19;
     line-height:50px;
   }
 }
