@@ -124,7 +124,7 @@
   <block wx:if="{{list.length}}">
     <repeat for="{{list}}" key="index" index="index" item="post">
       <view class="post" @longpress="goDelete({{post._id}}, {{post.space._id}}, {{post.owner._id}})">
-        <navigator class="post-header" wx:if="{{showHeader}}" url="../space/index?space_id={{post.space._id}}">
+        <navigator class="post-header" wx:if="{{showHeader}}" url="../space/index?space_id={{post.space._id}}&hide_comment={{hideComment}}">
           <view class="weui-cell weui-cell_access">
             <view class="weui-cell__hd">
               <image wx:if="{{post.space.avatar}}" class="image slds-icon slds-icon--small slds-m-right--x-small" src="{{util.formatImageUrl(post.space.avatar, baseUrl)}}"></image>
@@ -212,6 +212,10 @@ export default class PostList extends wepy.component {
       default: false
     },
     showHeader: {
+      type: Boolean,
+      default: false
+    },
+    hideComment: {
       type: Boolean,
       default: false
     }

@@ -145,7 +145,7 @@
 				<view class="weui-panel__hd">{{portlet.name}}</view>
 				<view class="weui-panel__bd">
 					<repeat for="{{portlet.list}}" key="index" index="index" item="post">
-						<navigator class="{{post.featured || index % 3 == 0 ? 'post-featured' : 'post-normal'}} post weui-media-box weui-media-box_appmsg" hover-class="weui-cell_active" url="../post/view?post_id={{post._id}}&space_id={{post.space._id}}">
+						<navigator class="{{post.featured || index % 3 == 0 ? 'post-featured' : 'post-normal'}} post weui-media-box weui-media-box_appmsg" hover-class="weui-cell_active" url="/pages/post/view?post_id={{post._id}}&space_id={{post.space._id}}&hide_comment={{hideComment}}">
 							<view class="title">
 								<view class="text">{{post.name}}</view>
 								<view class="normal-info">
@@ -174,7 +174,7 @@
 			</view>
 		</repeat>
 	</block>
-	<block wx:else>
+	<block wx:if="{{!list.length && hideComment}}">
 		<view class="weui-loadmore weui-loadmore_line">
       <view class="weui-loadmore__tips weui-loadmore__tips_in-line">暂无动态</view>
     </view>
@@ -212,6 +212,10 @@ export default class simplePostList extends wepy.component {
       default: false
     },
     showHeader: {
+      type: Boolean,
+      default: false
+		},
+		hideComment: {
       type: Boolean,
       default: false
     }

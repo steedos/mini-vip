@@ -207,60 +207,60 @@ video{
 <template>
 <view class="page border-top-1px" wx:if="{{is_loaded}}">
   <view class="page__bd">
-      <navigator class="post-header body_color" url="../space/index?space_id={{space_id}}">
-        <view class="weui-cell weui-cell_access">
-          <view class="weui-cell__hd">
-            <image wx:if="{{avatar}}" class="image slds-icon slds-icon--small slds-m-right--x-small" src="{{util.formatImageUrl(avatar, baseUrl)}}"></image>
-            <view wx:else class="slds-icon-standard-channel-programs slds-icon slds-icon--small slds-m-right--x-small"></view>
-          </view>
-          <view class="weui-cell__bd">
-            <view class="space-name">{{space_name}}</view>
-            <view class="post-time">{{util.formatDate(post.created)}}</view>
-          </view>
+    <navigator class="post-header body_color" url="../space/index?space_id={{space_id}}">
+      <view class="weui-cell weui-cell_access">
+        <view class="weui-cell__hd">
+          <image wx:if="{{avatar}}" class="image slds-icon slds-icon--small slds-m-right--x-small" src="{{util.formatImageUrl(avatar, baseUrl)}}"></image>
+          <view wx:else class="slds-icon-standard-channel-programs slds-icon slds-icon--small slds-m-right--x-small"></view>
         </view>
-      </navigator>
-      <block wx:if="{{post.video}}">
-        <video src="{{post.video_url}}" objectFit="contain" class="cover"  direction= '90' custom-cache="{{false}}"></video>
-      </block>
-      <block wx:elif="{{withoutMarkdownImages && withoutMarkdownImages.length == 1}}">
-        <image src="{{util.formatImageUrl(withoutMarkdownImages[0], baseUrl)}}" mode="aspectFill" @tap="previewImage({{item}})" class="cover"/>
-      </block>
-      <view class="weui-article body_color">
-        <view class="weui-article__section article-section">
-          <view class="weui-article__c" wx:if="{{withoutMarkdownImages && withoutMarkdownImages.length>1}}">
-            <view class="flex-images-box">
-              <repeat for="{{withoutMarkdownImages}}" key="index" index="index" item="item">
-                <image src="{{util.formatImageUrl(item, baseUrl)}}" mode="aspectFill" @tap="previewImage({{item}})" class="flex-image {{(index + 1)%3 > 0 ? 'flex-image-item' : 'flex-image-last'}}"/>
-              </repeat>
-            </view>
-          </view>
-          <view class="weui-article__h1">{{post.name}}</view>
-          <view class="weui-article__p article-p">
-            <!-- <text space="emsp">{{post.description}}</text> -->
-            <import src="../../wemark/wemark.wxml"/>
-            <template is="wemark" data="{{...wemark}}"></template>
-          </view>
+        <view class="weui-cell__bd">
+          <view class="space-name">{{space_name}}</view>
+          <view class="post-time">{{util.formatDate(post.created)}}</view>
         </view>
       </view>
-      <view class="comment-area body_color">
-        <view class="comment-title">
-          评论({{post_comments.length}})
-        </view>
-        <repeat for="{{post_comments}}" key="index" index="index" item="comment">
-          <view class="comment-container">
-            <view class="avatar-container">
-              <image class="avatar" mode="aspectFill" src="{{comment.owner.profile.avatar}}"></image>
-            </view>
-            <view class="detail-container">
-              <view class="user-name">{{comment.owner.name}}</view>
-              <view class="comment-time">{{util.formatDate(comment.created)}}</view>
-              <view class="comment-detail">{{comment.name}}</view>
-            </view>
+    </navigator>
+    <block wx:if="{{post.video}}">
+      <video src="{{post.video_url}}" objectFit="contain" class="cover"  direction= '90' custom-cache="{{false}}"></video>
+    </block>
+    <block wx:elif="{{withoutMarkdownImages && withoutMarkdownImages.length == 1}}">
+      <image src="{{util.formatImageUrl(withoutMarkdownImages[0], baseUrl)}}" mode="aspectFill" @tap="previewImage({{item}})" class="cover"/>
+    </block>
+    <view class="weui-article body_color">
+      <view class="weui-article__section article-section">
+        <view class="weui-article__c" wx:if="{{withoutMarkdownImages && withoutMarkdownImages.length>1}}">
+          <view class="flex-images-box">
+            <repeat for="{{withoutMarkdownImages}}" key="index" index="index" item="item">
+              <image src="{{util.formatImageUrl(item, baseUrl)}}" mode="aspectFill" @tap="previewImage({{item}})" class="flex-image {{(index + 1)%3 > 0 ? 'flex-image-item' : 'flex-image-last'}}"/>
+            </repeat>
           </view>
-        </repeat>
+        </view>
+        <view class="weui-article__h1">{{post.name}}</view>
+        <view class="weui-article__p article-p">
+          <!-- <text space="emsp">{{post.description}}</text> -->
+          <import src="../../wemark/wemark.wxml"/>
+          <template is="wemark" data="{{...wemark}}"></template>
+        </view>
       </view>
+    </view>
+    <view wx:if="{{hide_comment}}" class="comment-area body_color">
+      <view class="comment-title">
+        评论({{post_comments.length}})
+      </view>
+      <repeat for="{{post_comments}}" key="index" index="index" item="comment">
+        <view class="comment-container">
+          <view class="avatar-container">
+            <image class="avatar" mode="aspectFill" src="{{comment.owner.profile.avatar}}"></image>
+          </view>
+          <view class="detail-container">
+            <view class="user-name">{{comment.owner.name}}</view>
+            <view class="comment-time">{{util.formatDate(comment.created)}}</view>
+            <view class="comment-detail">{{comment.name}}</view>
+          </view>
+        </view>
+      </repeat>
+    </view>
   </view>
-  <view class="tab-bar border-top-1px {{isSpaceAdmin ? 'special-tab' : ''}}">
+  <view wx:if="{{hide_comment}}" class="tab-bar border-top-1px {{isSpaceAdmin ? 'special-tab' : ''}}">
     <button plain="true" open-type="share" data-post-name="{{post.name}}" data-post-id="{{post._id}}" data-post-space="{{post.space}}" class="share action share-btn">
       <view class="vip_share-default slds-icon slds-icon--small slds-m-right--x-small"></view>
       <view class="text">转发</view>
@@ -308,6 +308,7 @@ export default class PostView extends wepy.page {
     star_id: '',
     value: '',
     post_comments: [],
+    hide_comment: false,
     isSpaceAdmin: false,
     wemark: {}
   };
@@ -321,6 +322,7 @@ export default class PostView extends wepy.page {
       mask: true
     });
     this.space_id = e.space_id;
+    this.hide_comment = e.hide_comment;
     if(e.space_id){
       const options = {
         $filter: `_id eq '${e.space_id}'`,
