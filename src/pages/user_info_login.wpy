@@ -149,7 +149,7 @@ export default class UserInfoLogin extends wepy.page {
           answeredUrl = this.next;
           object_name = 'love_test';
         }else{
-          answeredUrl = encodeURIComponent(`/pages/love/home`);
+          answeredUrl = encodeURIComponent(`/pages/love/cover_you_looking_for`);
           object_name = 'love_about_me';
         }
         wx.navigateTo({
