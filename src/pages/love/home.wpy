@@ -160,29 +160,20 @@ page {
 					</view>
 				</view>
 			</navigator>
-      <repeat for="{{recommend_lover}}" key="index" index="index" item="item">
+      <!-- <repeat for="{{recommend_lover}}" key="index" index="index" item="item">
         <view class="avatar-container">
           <image class="avatar" mode="aspectFill" src="{{item.owner.profile.avatar}}"></image>
           <view wx:if="{{item.owner.name}}" class="name">{{item.owne.name}}</view>    
 
         </view>
-      </repeat>
+      </repeat> -->
       <!-- <view class="tab-bar border-top-1px">  -->
-        <button  class="btn-toolbar-primary" type="default" plain="true" @tap="goShare" style="color:#fff;font-size:34rpx;margin-top: 20rpx;border:none">
-          生成我的交友名片
+        <!-- <button  class="btn-toolbar-primary" type="default" plain="true" @tap="goShare" style="color:#fff;font-size:34rpx;margin-top: 20rpx;border:none">
+          我的主页
+        </button> -->
+        <button  class="btn-toolbar-primary" type="default" plain="true" @tap="goDetail" style="color:#fff;font-size:34rpx;margin-top: 20rpx;border:none">
+          我的主页
         </button>
-      <!-- </view> -->
-			<!--
-			<view class="weui-cells">
-				<navigator class="weui-cell weui-cell_access" url="/pages/love/shake" hover-class="weui-cell_active">
-					<view class="weui-cell__bd">
-						每周有缘人
-					</view>
-					<view class="weui-cell__ft weui-cell__ft_in-access"></view>
-				</navigator>
-			</view>
-			-->
-
 		</view>
 	</view>
 </view>
@@ -464,6 +455,9 @@ export default class LoveHome extends wepy.page {
     },
     goShare() {
       pageRouter.navigateTo({ url: `/pages/love/share?card=true&space_id=${this.space_id}` })
+    },
+    goDetail() {
+      wx.navigateTo({ url: `/pages/love/introduce` })
     },
     userLogin(e) {
       const userInfo = e.detail.userInfo;
