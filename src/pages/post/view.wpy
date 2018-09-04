@@ -203,6 +203,13 @@ video{
     margin-bottom: 2px;
   }
 }
+
+.edit-post {
+  position: fixed;
+  bottom: 80rpx;
+  right: 20rpx;
+  filter: drop-shadow(0 0 4rpx #fff);
+}
 </style>
 <template>
 <view class="page border-top-1px" wx:if="{{is_loaded}}">
@@ -278,6 +285,9 @@ video{
       <view class="text">更多</view>
     </view>
   </view>
+  <view wx:if="{{is_owner}}" class="edit-post" @tap="editPost">
+    <view class="slds-icon-action-edit"></view>
+  </view>
 </view>
 </template>
 <script>
@@ -310,12 +320,14 @@ export default class PostView extends wepy.page {
     post_comments: [],
     hide_comment: false,
     isSpaceAdmin: false,
+    is_owner: false,
     wemark: {}
   };
 
   async onLoad(e) {
     console.log("==post/view=====onLoad================", e);
     await this.$parent.login(e);
+    const userId = this.$parent.globalData.user._id;
     this.editable = e.editable;
     wepy.showLoading({
       title: '加载中',
@@ -340,8 +352,14 @@ export default class PostView extends wepy.page {
     if(e.post_id){
       this.post_id = e.post_id;
       await this.loadPost();
-      await this.isPostStar();
-      await this.loadPostComments()
+      if (this.post.owner == userId) {
+        this.is_owner = true;
+        this.$apply();
+      }
+      if (!this.hide_comment) {
+        await this.isPostStar();
+        await this.loadPostComments();
+      }
     }
 
     this.isSpaceAdmin = this.$parent.isSpaceAdmin(this.space_id);
@@ -352,7 +370,9 @@ export default class PostView extends wepy.page {
   }
 
   async onShow() {
-    this.loadPostComments();
+    if (!this.hide_comment) {
+      await this.loadPostComments();
+    }
   }
 
   async refresh(action) {
@@ -361,7 +381,9 @@ export default class PostView extends wepy.page {
       return;
     }
     await this.loadPost();
-    await this.loadPostComments();
+    if (!this.hide_comment) {
+      await this.loadPostComments();
+    }
     wepy.stopPullDownRefresh();
   }
 
