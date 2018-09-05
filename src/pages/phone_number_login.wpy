@@ -157,6 +157,8 @@
 
         this.gender = userInfo.userInfo.gender;
 
+        this.avatarUrl = userInfo.userInfo.avatarUrl;
+
         this.$apply();
       }
 
