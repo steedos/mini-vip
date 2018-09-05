@@ -148,6 +148,11 @@ page {
   }
 }
 
+.btn-bottom {
+  display: flex;
+  justify-content: center;
+}
+
 .cover-page-bg {
   // background-image:url('https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/bg-moon.jpg');
 }
@@ -172,7 +177,7 @@ page {
       </block>
       <view class="recommend-lover">
         <repeat for="{{recommend_lover}}" key="index" index="index" item="lover">
-          <view class="lover">
+          <view class="lover" @tap="goRecommendDetail({{lover.owner._id}})">
             <view class="container">
               <image mode="aspectFit" src="{{lover.owner.profile.avatar}}"></image>
             </view>
@@ -211,9 +216,11 @@ page {
         <!-- <button  class="btn-toolbar-primary" type="default" plain="true" @tap="goShare" style="color:#fff;font-size:34rpx;margin-top: 20rpx;border:none">
           我的主页
         </button> -->
-        <button  class="btn-toolbar-primary" type="default" plain="true" @tap="goDetail" style="color:#fff;font-size:34rpx;margin-top: 20rpx;border:none">
+      <view class="btn-bottom">
+        <button class="weui-btn mini-btn button-hover btn-toolbar-primary" size="mini" type="primary" @tap="goDetail" style="color: #fff">
           我的主页
         </button>
+      </view>
 		</view>
 	</view>
 </view>
@@ -417,8 +424,8 @@ export default class LoveHome extends wepy.page {
     );
     if (result && result.value){
       const looking_for = result.value[0]
-      var min_age = looking_for.age-1
-      var max_age = looking_for.age_max+1
+      var min_age = parseInt(looking_for.age) - 1
+      var max_age = parseInt(looking_for.age_max) + 1
       var min_height = looking_for.height
       var max_height = looking_for.height_max
       const options = {
@@ -503,7 +510,7 @@ export default class LoveHome extends wepy.page {
     goDetail() {
       wx.navigateTo({ url: `/pages/love/introduce` })
     },
-    goRecommendDetail(){
+    goRecommendDetail(userId){
       wx.navigateTo({ url: `/pages/love/introduce?userId=${userId}` })
     },
     userLogin(e) {
