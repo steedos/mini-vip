@@ -435,13 +435,13 @@ export default class Matching extends wepy.page {
     let filter = '';
     const filterEnable = wepy.getStorageSync('matching_filter_enable');
     if (this.open_group_id === '-1') {
-      filter = `(owner eq '${user_id}')`;
+      filter = `(owner eq '${user_id}' and match ge 0)`;
     } else if (this.open_group_id) {
-      filter = `(owner eq '${user_id}' and open_groups eq '${
+      filter = `(owner eq '${user_id}' and match ge 0 and open_groups eq '${
         this.open_group_id
       }')`;
     } else {
-      filter = `(owner eq '${user_id}')`;
+      filter = `(owner eq '${user_id}' and match ge 0)`;
     }
     if (filterEnable) {
       filter += ' and is_looking_for eq true';
