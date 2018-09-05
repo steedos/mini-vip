@@ -4,6 +4,7 @@ page {
 }
 
 .cover-page {
+  padding-bottom: 0;
   .page__hd {
     .love-title {
       margin-top: 120rpx;
