@@ -62,10 +62,10 @@ page {
     .box {
       flex: 1;
       .title {
-        font-size: 17px;
+        font-size: 34rpx;
       }
       .desc {
-        font-size: 14px;
+        font-size: 28rpx;
       }
     }
     .weui-cell__ft {
@@ -74,6 +74,10 @@ page {
       align-items: center;
       justify-content: center;
     }
+  }
+  .recommend-title {
+    margin: 30rpx 40rpx 0;
+    color: #fff;
   }
   .recommend-lover {
     position: relative;
@@ -175,6 +179,7 @@ page {
           </view>
         </view>
       </block>
+      <view class="recommend-title">为你推荐</view>
       <view class="recommend-lover">
         <repeat for="{{recommend_lover}}" key="index" index="index" item="lover">
           <view class="lover" @tap="goRecommendDetail({{lover.owner._id}})">
