@@ -293,31 +293,31 @@ export default class VIP extends wepy.app {
       'pages/love/settings',
       'pages/love/love_question',
     ],
-    // tabBar: {
-    //   color: '#666',
-    //   selectedColor: '#1AAD19',
-    //   backgroundColor: '#fdfdfd',
-    //   borderStyle: 'black',
-    //   list: [
-    //   {
-    //     pagePath: 'pages/love/home',
-    //     selectedIconPath: './images/tabbars/apps_pressed.png',
-    //     iconPath: './images/tabbars/apps.png',
-    //     text: '无颜匹配',
-    //   },
-    //   // {
-    //   //   pagePath: 'pages/love/cp',
-    //   //   selectedIconPath: './images/tabbars/topic_pressed.png',
-    //   //   iconPath: './images/tabbars/topic.png',
-    //   //   text: '寻找有缘人',
-    //   // },
-    //   {
-    //     pagePath: 'pages/love/me',
-    //     selectedIconPath: './images/tabbars/me_pressed.png',
-    //     iconPath: './images/tabbars/me.png',
-    //     text: '我',
-    //   }]
-    // },
+    tabBar: {
+      color: '#666',
+      selectedColor: '#1AAD19',
+      backgroundColor: '#fdfdfd',
+      borderStyle: 'black',
+      list: [
+      {
+        pagePath: 'pages/love/home',
+        selectedIconPath: './images/tabbars/apps_pressed.png',
+        iconPath: './images/tabbars/apps.png',
+        text: '无颜匹配',
+      },
+      // {
+      //   pagePath: 'pages/love/matching',
+      //   selectedIconPath: './images/tabbars/topic_pressed.png',
+      //   iconPath: './images/tabbars/topic.png',
+      //   text: '缘分榜',
+      // },
+      {
+        pagePath: 'pages/love/me',
+        selectedIconPath: './images/tabbars/me_pressed.png',
+        iconPath: './images/tabbars/me.png',
+        text: '我',
+      }]
+    },
     window: {
       navigationBarBackgroundColor: '#353535',
       navigationBarTitleText: '无颜',

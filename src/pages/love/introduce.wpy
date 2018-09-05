@@ -351,7 +351,7 @@ page {
         <button class="input-btn btn-join button-hover" type="primary" @tap="goAnswer">
           测试缘分
         </button>
-        <button class="btn-love" @tap="goAnswer">想认识他</button>
+        <button class="btn-love" @tap="goAnswer">想认识{{b_sex}}</button>
       </block>
     </view>
     <view class="post-container">

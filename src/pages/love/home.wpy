@@ -166,8 +166,8 @@ page {
 <view>
   <view class="cover-page-bg" style="background-image: url({{util.formatImageUrl(cover, baseUrl)}})"></view>
 	<view class="cover-page" wx:if="{{is_loaded}}">
-    <userHeader :about_me.sync="about_me" :isAuthUserInfo.sync="isAuthUserInfo" :user.sync="user_id"/>
-		<view class="page__bd" style="margin-top: -90rpx;padding: 20rpx 0">
+    <!-- <userHeader :about_me.sync="about_me" :isAuthUserInfo.sync="isAuthUserInfo" :user.sync="user_id"/> -->
+		<view class="page__bd" style="padding: 20rpx 0">
 			<block wx:if="{{showLoveMatch}}">
         <view class="match" @tap="goCp">
           <view class="banner">
@@ -190,7 +190,7 @@ page {
           </view>
         </repeat>
       </view>
-      <navigator class="group" url="/pages/love/matching?space_id={{space_id}}&open_group_id=-1">
+      <!-- <navigator class="group" url="/pages/love/matching?space_id={{space_id}}&open_group_id=-1">
 				<view class="header">
 					<view class="group-name">
 						<view class="group-name">好友缘分榜</view>
@@ -210,21 +210,10 @@ page {
 					</view>
 				</view>
 			</navigator>
-      <!-- <repeat for="{{recommend_lover}}" key="index" index="index" item="item">
-        <view class="avatar-container">
-          <image class="avatar" mode="aspectFill" src="{{item.owner.profile.avatar}}"></image>
-          <view wx:if="{{item.owner.name}}" class="name">{{item.owne.name}}</view>    
-
-        </view>
-      </repeat> -->
-      <!-- <view class="tab-bar border-top-1px">  -->
-        <!-- <button  class="btn-toolbar-primary" type="default" plain="true" @tap="goShare" style="color:#fff;font-size:34rpx;margin-top: 20rpx;border:none">
-          我的主页
-        </button> -->
       <view class="btn-bottom">
         <button class="weui-btn mini-btn button-hover btn-toolbar-primary" size="mini" type="primary" @tap="goDetail" style="color: #fff">
           我的主页
-        </button>
+        </button> -->
       </view>
 		</view>
 	</view>
