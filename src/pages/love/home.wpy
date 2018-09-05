@@ -459,6 +459,9 @@ export default class LoveHome extends wepy.page {
     goDetail() {
       wx.navigateTo({ url: `/pages/love/introduce` })
     },
+    goRecommendDetail(){
+      wx.navigateTo({ url: `/pages/love/introduce?userId=${userId}` })
+    },
     userLogin(e) {
       const userInfo = e.detail.userInfo;
       const user = this.$parent.globalData.user;
