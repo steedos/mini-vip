@@ -67,7 +67,7 @@
 				</view>
 			</view>
 		</view>
-		<repeat for="{{groups}}" key="index" index="index" item="group">
+		<repeat for="{{groups}}" key="group_index" index="group_index" item="group">
 			<view class="group" @tap="back({{group.open_group_id}})">
 				<view class="header">
 					<view class="group-name">
@@ -76,12 +76,14 @@
 					<view class="weui-cell__ft weui-cell__ft_in-access"></view>
 				</view>
 				<view class="body">
-					<view class="count">{{group.count}}人</view>
+					<view class="count">{{groupFriendList[group.open_group_id].count}}人</view>
 					<view class="join-avatar">
-						<repeat for="{{group.users}}" key="index" index="index" item="user">
-							<view class="avatar-container" style="z-index: {{group.count - index}}">
-								<image class="image" mode="aspectFill" src="{{baseUrl + '/avatar/' + user}}"></image>
-							</view>
+						<repeat for="{{groupFriendList[group.open_group_id].value}}" key="index" index="index" item="friend">
+							<block wx:if="{{friend.user_b.name}}">
+								<view class="avatar-container">
+									<image class="image" mode="aspectFill" src="{{friend.user_b.profile.avatar}}"></image>
+								</view>
+							</block>
 						</repeat>
 					</view>
 				</view>
@@ -105,6 +107,7 @@ export default class LoveGroup extends wepy.page {
 	data = {
 		friendList: [],
 		groups: [],
+		groupFriendList: {},
 		space_id: loveSpaceId,
 		baseUrl: baseUrl
 	}
@@ -113,10 +116,25 @@ export default class LoveGroup extends wepy.page {
 		util: util
 	}
 
-	async loadFriendList() {
+  getQueryFilter(open_group_id) {
     const user_id = this.$parent.globalData.user._id;
+    let filter = '';
+    if (open_group_id === '-1') {
+      filter = `(owner eq '${user_id}' and match ge 0)`;
+    } else if (open_group_id) {
+      filter = `(owner eq '${user_id}' and match ge 0 and open_groups eq '${
+        open_group_id
+      }')`;
+    } else {
+      filter = `(owner eq '${user_id}' and match ge 0)`;
+    }
+    return filter;
+  }
+
+	async loadFriendList(open_group_id) {
+    const filter = this.getQueryFilter(open_group_id);
     const options = {
-      $filter: `(owner eq '${user_id}')`,
+      $filter: filter,
       $top: 5,
       $select: 'user_b',
       $expand: 'user_b($select=profile,name)',
@@ -126,38 +144,37 @@ export default class LoveGroup extends wepy.page {
       'love_friends',
       options,
       this.space_id
-    );
+		);
+		let friendList = [];
     if (result && result.value) {
-      this.friendList = {count: result['@odata.count'], value:result.value};
+      friendList = {count: result['@odata.count'], value:result.value};
     } else {
-			this.friendList = {count: 0, value: []};
+			friendList = {count: 0, value: []};
+		}
+		if(open_group_id){
+			this.groupFriendList[open_group_id] = friendList;
+		}
+		else{
+			this.friendList = friendList;
 		}
     this.$apply();
-    return this.friendList;
+    return friendList;
   }
 
 	async loadGroups() {
     const user_id = this.$parent.globalData.user._id;
     const options = {
       $filter: `(users eq '${user_id}')`,
-      $select: 'open_group_id,users',
+      $select: 'open_group_id',
       $orderby: 'modified desc'
     };
     const result = await this.$parent.query('vip_groups', options, 'guest');
     if (result && result.value) {
-      let groups = [];
-
-      _.forEach(result.value, (g)=>{
-        g.count = g.users.length;
-        if(g.count > 5){
-          g.users = g.users.splice(-5)
-        }
-
-        groups.push(g)
+      let groups = result.value;
+      _.forEach(groups, async (g)=>{
+				await this.loadFriendList(g.open_group_id);
       });
-
       this.groups = groups;
-
     }
     this.$apply();
     return this.groups;

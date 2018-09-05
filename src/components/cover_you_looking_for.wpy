@@ -33,7 +33,14 @@ export default class ComponentLookingFor extends wepy.component {
 
   methods = {
     next() {
-      const answeredUrl = encodeURIComponent(`/pages/love/home`);
+      let answeredUrl = '';
+      console.log("share_from=============",this.$parent.$parent.globalData.share_from)
+      let share_from = this.$parent.$parent.globalData.share_from
+      if(share_from){
+        answeredUrl = encodeURIComponent(`/pages/love/introduce?space_id=${loveSpaceId}&userId=${share_from}`);
+      }else{
+        answeredUrl = encodeURIComponent(`/pages/love/home`);
+      }
       wx.navigateTo({
         url: `/pages/love/papers_view?object_name=love_looking_for&space_id=${loveSpaceId}&required=true&answered_url=${answeredUrl}&answered_url_type=reLaunch&keep_progress`
       });

@@ -343,7 +343,17 @@ page {
         </repeat>
       </view>
     </view>
-
+    <view wx:if="{{!is_owner}}">
+      <block wx:if="{{answered}}">
+        <button class="btn-love" @tap="markHeart({{a_record._id}},{{a_record.heart}})">想认识他</button>
+      </block>
+      <block wx:else>
+        <button class="input-btn btn-join button-hover" type="primary" @tap="goAnswer">
+          测试缘分
+        </button>
+        <button class="btn-love" @tap="goAnswer">想认识他</button>
+      </block>
+    </view>
     <view class="post-container">
       <postList :list.sync="posts" :editable.sync="editable" :hideComment.sync="true" />
     </view>
@@ -389,10 +399,12 @@ export default class loveIntroduce extends wepy.page {
     name: '',
     posts: [],
     is_owner: false,
+    answered:false,
     // heart_summary: '',
     baseUrl: baseUrl,
     baseMaterialUrl: baseMaterialUrl,
     loveSpaceId: loveSpaceId,
+    share_from:'',
     settings: [{
       icon: 'slds-icon-standard-client',
       label: '关于我',
@@ -485,6 +497,7 @@ export default class loveIntroduce extends wepy.page {
     await this.$parent.login(e);
 
     this.userId = e.userId || e.share_from || this.$parent.globalData.user._id;
+    this.share_from = e.share_from
     if(!this.userId){
       wepy.showToast({
         title: "用户ID不能为空",
@@ -498,8 +511,11 @@ export default class loveIntroduce extends wepy.page {
     } else {
       this.is_owner = true;
     }
-
-    await this.loadData();
+    const finishedNaire = wx.getStorageSync('questionnaire_progess');
+    if(finishedNaire.indexOf('love_test') > -1){
+        this.answered = true
+      }
+      await this.loadData();
 
     this.is_loaded = true;
     this.$apply();
@@ -741,6 +757,7 @@ export default class loveIntroduce extends wepy.page {
       let values = {
         heart: !heart
       };
+      console.log(_id,this.object_name,heart)
       if (this.object_name != 'love_friends' && !heart) {
         wx.showModal({
           title: '友情提示',
@@ -800,6 +817,18 @@ export default class loveIntroduce extends wepy.page {
       wx.navigateTo({
         url: `/pages/record/create?object_name=post&space_id=${this.space_id}`
       })
+    },
+    goAnswer() {
+      console.log("1111111111222222222222222")
+      const user = this.$parent.globalData.user;
+      if (user.name && user.avatar) {
+         const answeredUrl = encodeURIComponent(`/pages/love/cover_about_yourself?space_id=${loveSpaceId}`)
+         wx.navigateTo({
+          url: `/pages/love/papers_view?object_name=love_test&space_id=${this.space_id}&answered_url=${answeredUrl}&keep_progress`})
+      }else {
+        const answeredUrl = encodeURIComponent(`/pages/love/cover_about_yourself?space_id=${loveSpaceId}`)
+        wx.navigateTo({url: `/pages/user_info_login?share_from=${this.share_from}&next=${answeredUrl}`})
+      }
     }
   }
 }

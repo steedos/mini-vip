@@ -445,7 +445,7 @@ export default class LoveHome extends wepy.page {
   async loadFriendList() {
     const user_id = this.$parent.globalData.user._id;
     const options = {
-      $filter: `(owner eq '${user_id}')`,
+      $filter: `(owner eq '${user_id}' and match ge 0)`,
       $top: 5,
       $select: 'user_b',
       $expand: 'user_b($select=profile,name)',
@@ -502,6 +502,9 @@ export default class LoveHome extends wepy.page {
     },
     goDetail() {
       wx.navigateTo({ url: `/pages/love/introduce` })
+    },
+    goRecommendDetail(){
+      wx.navigateTo({ url: `/pages/love/introduce?userId=${userId}` })
     },
     userLogin(e) {
       const userInfo = e.detail.userInfo;
