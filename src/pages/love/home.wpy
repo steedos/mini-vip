@@ -36,7 +36,7 @@ page {
   .match {
 		box-shadow: 0 4rpx 4rpx 0 rgba(0, 0, 0, 0.16), 0 0 0 2rpx rgba(0, 0, 0, 0.08);
     background: #1AAD19;
-    margin-top: 30rpx;
+    margin: 30rpx 40rpx;
     padding: 30rpx;
     border-radius: 0.25rem;
     .header {
@@ -75,10 +75,40 @@ page {
       justify-content: center;
     }
   }
+  .recommend-lover {
+    position: relative;
+    margin: 0 10rpx;
+    // right: 
+    .lover {
+      width: 33.33%;
+      display: inline-block;
+      // flex-direction: column;
+      .container {
+        position: relative;
+        width: 100%;
+        height: 0;
+        padding-top: 100%;
+        image {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+          box-sizing: border-box;
+          border: 30rpx solid transparent;
+        }
+      }
+      .name {
+        color: #fff;
+        text-align: center;
+      }
+    }
+  }
   .group {
 		box-shadow: #aaa 0px 0px 10px;
     background: #fff;
-    margin-top: 30rpx;
+    margin: 30rpx 40rpx;
     padding: 30rpx;
     border-radius: 0.25rem;
     .header {
@@ -128,7 +158,7 @@ page {
   <view class="cover-page-bg" style="background-image: url({{util.formatImageUrl(cover, baseUrl)}})"></view>
 	<view class="cover-page" wx:if="{{is_loaded}}">
     <userHeader :about_me.sync="about_me" :isAuthUserInfo.sync="isAuthUserInfo" :user.sync="user_id"/>
-		<view class="page__bd" style="margin-top: -90rpx">
+		<view class="page__bd" style="margin-top: -90rpx;padding: 20rpx 0">
 			<block wx:if="{{showLoveMatch}}">
         <view class="match" @tap="goCp">
           <view class="banner">
@@ -140,6 +170,16 @@ page {
           </view>
         </view>
       </block>
+      <view class="recommend-lover">
+        <repeat for="{{recommend_lover}}" key="index" index="index" item="lover">
+          <view class="lover">
+            <view class="container">
+              <image mode="aspectFit" src="{{lover.owner.profile.avatar}}"></image>
+            </view>
+            <view class="name">{{lover.owner.name}}</view>
+          </view>
+        </repeat>
+      </view>
       <navigator class="group" url="/pages/love/matching?space_id={{space_id}}&open_group_id=-1">
 				<view class="header">
 					<view class="group-name">
@@ -393,7 +433,11 @@ export default class LoveHome extends wepy.page {
         options,
         this.space_id
       );
-      this.recommend_lover = lovers;
+      if (lovers && lovers.value) {
+        this.recommend_lover = lovers.value
+      } else {
+        this.recommend_lover = [];
+      }
       this.$apply();
     }
   }
