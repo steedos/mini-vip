@@ -253,11 +253,12 @@ page {
   .tags-box{
     margin:-4rpx -10rpx;
     .love-test-tag{
-      background: #efefef;
-      color: #555;
+      background: #F8F8F8;
+      color: #777;
       margin: 10rpx;
       padding: 4rpx 10rpx;
       display:inline-block;
+      font-size:30rpx;
     }
   }
 }
