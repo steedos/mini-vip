@@ -250,6 +250,16 @@ page {
     right: 20rpx;
     filter: drop-shadow(0 0 4rpx #fff);
   }
+  .tags-box{
+    margin:-4rpx -10rpx;
+    .love-test-tag{
+      background: #efefef;
+      color: #555;
+      margin: 10rpx;
+      padding: 4rpx 10rpx;
+      display:inline-block;
+    }
+  }
 }
 </style>
 
@@ -294,6 +304,18 @@ page {
     </view>
 
     <view class="body-wrapper">
+      <view class="weui-cells" wx:if="{{current_customer.love_test_tags}}">
+        <view class="weui-cell weui-cell_access">
+          <view class="weui-cell__bd">
+            <view class="tags-box">
+              <repeat for="{{current_customer.love_test_tags}}" key="index" index="index" item="tag">
+                <view class="love-test-tag">{{tag}}</view>
+              </repeat>
+            </view>
+          </view>
+        </view>
+      </view>
+
       <view class="weui-cells" wx:if="{{b_record.heart}}">
         <view class="weui-cell weui-cell_access">
           <view class="weui-cell__bd">联系方式</view>
