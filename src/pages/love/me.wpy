@@ -55,7 +55,7 @@
   <view class="page questionnaire-list" wx:if="{{is_loaded}}">
     <view class="weui-cells">
       <block wx:if="{{isAuthUserInfo}}">
-        <view class="weui-media-box weui-media-box_appmsg" @tap="goShare">
+        <view class="weui-media-box weui-media-box_appmsg" @tap="goIntroduce">
           <view class="weui-media-box__hd weui-media-box__hd_in-appmsg" style="width: 50px; height: 50px; line-height: 50px;">
             <image class="image" mode="aspectFill" wx:if="{{isAuthUserInfo}}" src="{{avatar}}"></image>
           </view>
@@ -365,6 +365,9 @@ export default class QuestionnaireList extends wepy.page {
       }else{
         wepy.navigateTo({url:`/pages/love/invite_code_me?space_id=${this.space_id}`})
       }
+    },
+    goIntroduce() {
+      wepy.navigateTo({url: `/pages/love/introduce?userId=${this.userId}`})
     },
     goShare() {
       wepy.navigateTo({url: `/pages/love/share?card=true&space_id=${this.space_id}`})

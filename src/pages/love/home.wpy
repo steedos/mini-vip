@@ -82,7 +82,6 @@ page {
   .recommend-lover {
     position: relative;
     margin: 0 10rpx;
-    // right: 
     .lover {
       width: 33.33%;
       display: inline-block;
@@ -106,6 +105,9 @@ page {
       .name {
         color: #fff;
         text-align: center;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
     }
   }
