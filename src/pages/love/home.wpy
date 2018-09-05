@@ -78,7 +78,8 @@ page {
   }
   .recommend-title {
     margin: 30rpx 40rpx 0;
-    color: #fff;
+    color: #000;
+    font-size: 30rpx;
   }
   .recommend-lover {
     position: relative;
@@ -104,11 +105,12 @@ page {
         }
       }
       .name {
-        color: #fff;
+        color: #000;
         text-align: center;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+        font-size: 30rpx;
       }
     }
   }
@@ -167,7 +169,6 @@ page {
 
 <template>
 <view>
-  <view class="cover-page-bg" style="background-image: url({{util.formatImageUrl(cover, baseUrl)}})"></view>
 	<view class="cover-page" wx:if="{{is_loaded}}">
     <!-- <userHeader :about_me.sync="about_me" :isAuthUserInfo.sync="isAuthUserInfo" :user.sync="user_id"/> -->
 		<view class="page__bd" style="padding: 20rpx 0">
@@ -187,7 +188,7 @@ page {
         <repeat for="{{recommend_lover}}" key="index" index="index" item="lover">
           <view class="lover" @tap="goRecommendDetail({{lover.owner._id}})">
             <view class="container">
-              <image mode="aspectFit" src="{{lover.owner.profile.avatar}}"></image>
+              <image mode="aspectFit" src="{{lover.owner.profile.avatar || 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg'}}"></image>
             </view>
             <view class="name">{{lover.owner.name}}</view>
           </view>
