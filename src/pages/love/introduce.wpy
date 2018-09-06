@@ -318,36 +318,25 @@ page {
     </view>
 
     <view class="body-wrapper">
-      <view class="weui-cells" wx:if="{{current_customer.love_test_tags && current_customer.love_test_tags.length}}">
+      <view class="weui-cells" wx:if="{{(current_customer.love_test_tags && current_customer.love_test_tags.length) || (hobby && (hobby.sport || hobby.star || hobby.movie_type || hobby.game || hobby.travel || hobby.book || hobby.music))}}">
         <view class="weui-cell weui-cell_access">
           <view class="weui-cell__bd">
             <view class="tags-box">
               <repeat for="{{current_customer.love_test_tags}}" key="index" index="index" item="tag">
                 <view class="love-test-tag">{{tag}}</view>
               </repeat>
+              <view wx:if="{{hobby.sport}}" class="love-test-tag">{{hobby.sport}}</view>
+              <view wx:if="{{hobby.star}}" class="love-test-tag">{{hobby.star}}</view>
+              <view wx:if="{{hobby.movie_type}}" class="love-test-tag">{{hobby.movie_type}}</view>
+              <view wx:if="{{hobby.game}}" class="love-test-tag">{{hobby.game}}</view>
+              <view wx:if="{{hobby.travel}}" class="love-test-tag">{{hobby.travel}}</view>
+              <view wx:if="{{hobby.book}}" class="love-test-tag">{{hobby.book}}</view>
+              <view wx:if="{{hobby.music}}" class="love-test-tag">{{hobby.music}}</view>
             </view>
           </view>
           <!-- <view class="weui-cell__ft weui-cell__ft_in-access"></view> -->
         </view>
       </view>
-
-      <view class="weui-cells" wx:if="{{hobby && (hobby.sport || hobby.star || hobby.movie_type || hobby.game || hobby.travel || hobby.book || hobby.music)}}">
-        <view class="weui-cell weui-cell_access">
-            <view class="weui-cell__bd">
-              <view class="tags-box">
-                  <view class="love-test-tag">{{hobby.sport}}</view>
-                  <view class="love-test-tag">{{hobby.star}}</view>
-                  <view class="love-test-tag">{{hobby.movie_type}}</view>
-                  <view class="love-test-tag">{{hobby.game}}</view>
-                  <view class="love-test-tag">{{hobby.travel}}</view>
-                  <view class="love-test-tag">{{hobby.book}}</view>
-                  <view class="love-test-tag">{{hobby.music}}</view>
-              </view>
-            </view>
-            <!-- <view class="weui-cell__ft weui-cell__ft_in-access"></view> -->
-        </view>
-      </view>
-
 
       <view class="weui-cells" wx:if="{{b_record.heart}}">
         <view class="weui-cell weui-cell_access">
