@@ -4,7 +4,7 @@
 
 	.cover-wrapper{
 		position: relative;
-		height: 300rpx;
+		height: 150rpx;
 		background-size: cover;
 	}
 	.image{
@@ -15,7 +15,6 @@
 		text-align: center;
 		// margin: 0 20rpx;
 		// border-radius: 0.25rem;
-		top: -100rpx;
 		width: auto;
 		border: 1px solid transparent;
 		padding-bottom: 20rpx;
