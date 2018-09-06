@@ -316,7 +316,6 @@
     watch = {
       args: async function (newValue, oldValue) {
         const e = newValue;
-        console.log("==post/view=====onLoad================", e);
         this.editable = e.editable;
         wepy.showLoading({
           title: '加载中',

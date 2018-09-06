@@ -326,7 +326,6 @@ export default class PostView extends wepy.page {
   };
 
   async onLoad(e) {
-    console.log("==post/view=====onLoad================", e);
     await this.$parent.login(e);
     const userId = this.$parent.globalData.user._id;
     this.editable = e.editable;
