@@ -603,7 +603,9 @@ export default class loveIntroduce extends wepy.page {
     await this.loadHobby();
     await this.loadAboutMe();
     await this.loadPost();
-    await this.singleMatch();
+    if(!this.a_record.match && this.answered) {
+      await this.singleMatch();
+    }
   }
 
 	async onPullDownRefresh() {
