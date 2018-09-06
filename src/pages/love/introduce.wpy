@@ -713,9 +713,12 @@ export default class loveIntroduce extends wepy.page {
     this.posts = result.value;
   }
   async singleMatch() {
+    if(!this.answered){
+      return;
+    }
     const result = await req.post('/api/mini/vip/single/match', {space_id: this.space_id,user_id:this.userId}).catch(err => {
-    return {errors: err.data.errors}
-  })
+      return {errors: err.data.errors}
+    })
     console.log(this.a_record.match)
     if(!this.a_record.match){
       this.a_record = result
