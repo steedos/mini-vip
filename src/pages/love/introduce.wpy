@@ -309,6 +309,7 @@ page {
           </view>
           <button class="weui-btn btn-star" open-type="share" plain="true" type="primary" size="mini">转发</button>
           <button wx:if="{{is_owner}}" class="weui-btn btn-test" @tap="addPost" type="primary" size="mini">发布动态</button>
+          <button wx:if="{{!is_owner && showGoHome}}" class="weui-btn btn-test" @tap="goHome" type="primary" size="mini">我的名片</button>
           <!-- <block wx:if="{{!is_owner}}">
             <button class="weui-btn btn-star" type="primary" plain="true" size="mini">关注</button>
             <button wx:if="{{!answered}}" class="weui-btn btn-test" @tap="goAnswer" type="primary" size="mini">测试缘分</button>
@@ -465,6 +466,7 @@ export default class loveIntroduce extends wepy.page {
     answered:false,
     // heart_summary: '',
     baseUrl: baseUrl,
+    showGoHome: false,
     baseMaterialUrl: baseMaterialUrl,
     loveSpaceId: loveSpaceId,
     share_from:'',
@@ -590,9 +592,14 @@ export default class loveIntroduce extends wepy.page {
     }
     const finishedNaire = wx.getStorageSync('questionnaire_progess');
     if(finishedNaire.indexOf('love_test') > -1){
-        this.answered = true
-      }
-      await this.loadData();
+      this.answered = true
+    }
+
+    if(getCurrentPages().length<=1){
+      this.showGoHome = true
+    }
+
+    await this.loadData();
 
     this.is_loaded = true;
     this.$apply();
@@ -849,6 +856,11 @@ export default class loveIntroduce extends wepy.page {
           wepy.hideLoading();
         }
       }
+    },
+    goHome() {
+      wx.navigateTo({
+        url: '/pages/love/index'
+      })
     },
     async markHeart(_id, heart, event) {
       const self = this;
