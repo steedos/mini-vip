@@ -182,6 +182,8 @@ page {
           }
 
           .btn-star {
+            color: #018cc6;
+            border-color: #018cc6;
             vertical-align: middle;
             margin-right: 10rpx;
           }
@@ -293,6 +295,7 @@ page {
               <view wx:if="{{about_me.live}}">{{about_me.live}}</view>
             </view>
           </view>
+          <button class="weui-btn btn-star" open-type="share" plain="true" type="primary" size="mini">转发名片</button>
           <!-- <block wx:if="{{!is_owner}}">
             <button class="weui-btn btn-star" type="primary" plain="true" size="mini">关注</button>
             <button wx:if="{{!answered}}" class="weui-btn btn-test" @tap="goAnswer" type="primary" size="mini">测试缘分</button>
@@ -315,7 +318,7 @@ page {
         </view>
       </view>
 
-      <view class="weui-cells">
+      <view class="weui-cells" wx:if="{{hobby && (hobby.sport || hobby.star || hobby.movie_type || hobby.game || hobby.travel || hobby.book || hobby.music)}}">
         <view class="weui-cell weui-cell_access">
             <view class="weui-cell__bd">
               <view class="tags-box">
@@ -481,6 +484,20 @@ export default class loveIntroduce extends wepy.page {
   components = {
     postList: postList
   };
+
+  onShareAppMessage(res) {
+    let title;
+    if (this.about_me.self_introduction) {
+      title = this.about_me.self_introduction;
+    } else {
+      title = this.name + '的交友名片';
+    }
+    let path = `/pages/love/introduce?userId=${this.userId}`;
+    return {
+      title: title,
+      path: path
+    };
+  }
 
   async loadLoveFriends() {
     if(this.is_owner){
