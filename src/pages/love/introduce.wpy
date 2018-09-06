@@ -186,8 +186,8 @@ page {
             vertical-align: middle;
             margin-right: 10rpx;
           }
-          .btn-manage {
-            background: #018cc6;
+          .btn-test {
+            background: #1AAD19;
             color: #fff;
             vertical-align: middle;
           }
@@ -297,7 +297,7 @@ page {
           </view>
           <block wx:if="{{!is_owner}}">
             <button class="weui-btn btn-star" type="primary" plain="true" size="mini">关注</button>
-            <button class="weui-btn btn-manage" @tap="goAnswer" type="primary" size="mini">测试缘分</button>
+            <button wx:if="{{!answered}}" class="weui-btn btn-test" @tap="goAnswer" type="primary" size="mini">测试缘分</button>
           </block>
         </view>
       </view>
