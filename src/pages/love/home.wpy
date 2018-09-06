@@ -80,9 +80,8 @@ page {
   }
   .recommend-title {
     margin: 60rpx 40rpx 0;
-    color: #000;
+    color: #353535;
     font-size: 32rpx;
-    font-weight:bold;
   }
   .recommend-lover {
     position: relative;
@@ -182,14 +181,14 @@ page {
           <view class="banner">
             <view class="box">
               <view class="title">每周匹配</view>
-              <view class="desc">想认识更多人？无颜每周给你推荐双向匹配度最高的人，交换微信号。</view>
+              <view class="desc">无颜每周为你精确计算双向匹配度最高的人，交换微信号。</view>
             </view>
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
           </view>
         </view>
       </block>
       <block wx:if="{{recommend_lover.length}}">
-        <view class="recommend-title">为你推荐</view>
+        <view class="recommend-title">今日推荐</view>
         <view class="recommend-lover">
             <repeat for="{{recommend_lover}}" key="index" index="index" item="lover">
               <view class="lover" @tap="goRecommendDetail({{lover.owner._id}})">
