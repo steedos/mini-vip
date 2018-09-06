@@ -2,7 +2,7 @@
 page {
   height: 100%;
   .page {
-    padding-bottom:1.17647059em;
+    padding-bottom: 160rpx;
   }
   .ion-container {
     display: inline-block;
@@ -259,6 +259,18 @@ page {
     }
   }
 }
+
+.tab-bar {
+  display: flex;
+  position: fixed;
+  z-index: 500;
+  bottom: 0;
+  height: 50px;
+  width: 100%;
+  background-color: #F7F7FA;
+  justify-content: center;
+  align-items: center;
+}
 </style>
 
 <template>
@@ -407,9 +419,14 @@ page {
     <view class="post-container">
       <postList :list.sync="posts" :editable.sync="editable" :hideComment.sync="true" />
     </view>
-
-    <view wx:if="{{is_owner}}" class="add-post" @tap="addPost">
+    <!-- <view wx:if="{{is_owner}}" class="add-post" @tap="addPost">
       <view class="slds-icon-action-new"></view>
+    </view> -->
+
+    <view class="tab-bar border-top-1px" wx:if="{{is_owner}}">
+      <view class="button-sp-area">
+        <button class="weui-btn" type="primary" plain="true" @tap="addPost" hover-class='button-hover' style="border: none;font-size: 36rpx">发布动态</button>
+      </view>
     </view>
 
   </view>
