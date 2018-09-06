@@ -652,7 +652,7 @@ export default class loveIntroduce extends wepy.page {
       $filter: `(owner eq '${this.userId}')`,
       $expand: 'space($select=name)'
     }
-    const result = await this.$parent.query('post', options, loveSpaceId);
+    const result = await this.$parent.query('love_post', options, loveSpaceId);
     this.posts = result.value;
   }
 
@@ -839,16 +839,15 @@ export default class loveIntroduce extends wepy.page {
         return;
       }
       wx.navigateTo({
-        url: `/pages/love/me`
+        url: `/pages/love/share?card=true`
       })
     },
     addPost() {
       wx.navigateTo({
-        url: `/pages/record/create?object_name=post&space_id=${this.space_id}`
+        url: `/pages/record/create?object_name=love_post&space_id=${this.space_id}`
       })
     },
     goAnswer() {
-      console.log("1111111111222222222222222")
       const user = this.$parent.globalData.user;
       if (user.name && user.avatar) {
          const answeredUrl = encodeURIComponent(`/pages/love/cover_about_yourself?space_id=${loveSpaceId}`)

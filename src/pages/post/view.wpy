@@ -282,7 +282,7 @@ video{
     </view>
     <view class="more-action-btn action" @tap="moreAction" wx:if="{{isSpaceAdmin}}">
       <view class="vip_more slds-icon slds-icon--small slds-m-right--x-small"></view>
-      <view class="text">更多</view>
+      <view class="text">更多</view>>
     </view>
   </view>
   <view wx:if="{{is_owner}}" class="edit-post" @tap="editPost">
@@ -296,6 +296,7 @@ import req from '@/network';
 import { baseUrl } from '@/config';
 import util from '../../wxs/util.wxs';
 import wemark from '../../wemark/wemark';
+import { loveSpaceId } from '../../config/index.js';
 export default class PostView extends wepy.page {
   config = {
     navigationBarTitleText: '',
@@ -333,7 +334,7 @@ export default class PostView extends wepy.page {
       title: '加载中',
       mask: true
     });
-    this.space_id = e.space_id;
+    this.space_id = e.space_id || loveSpaceId;
     this.hide_comment = e.hide_comment;
     if(e.space_id){
       const options = {
@@ -402,7 +403,14 @@ export default class PostView extends wepy.page {
   }
 
   async loadPost(){
-    var post = await this.$parent.get("post", this.post_id, this.space_id)
+    let space_id = ''
+    let object_name = ''
+    if (loveSpaceId){
+      object_name = 'love_post'
+    }else{
+      object_name = 'post'
+    }
+    var post = await this.$parent.get(object_name, this.post_id, this.space_id)
     this.post = post;
     this.space_id = post.space;
     let postMd = this.post && this.post.description;
@@ -501,10 +509,31 @@ export default class PostView extends wepy.page {
       });
     },
     editPost() {
-      let url = `/pages/record/edit?space_id=${this.space_id}&action=edit&object_name=post&record_id=${this.post_id}&fields=name,summary,description,images,video,type`;
+      let object_name=''
+      let fields = ''
+      if(loveSpaceId){
+        object_name = 'love_post';
+        fields = 'name,images';
+      }else{
+        object_name = 'post';
+        fields = 'name,summary,description,images,video,type';
+      }
+      let url = `/pages/record/edit?space_id=${this.space_id}&action=edit&object_name=${object_name}&record_id=${this.post_id}&fields=${fields}`;
       wepy.navigateTo({
         url: url
       });
+    },
+    async removeRecord() {
+      const result = await wepy.showModal({
+        title: '确认删除',
+        confirmText: "确定",
+        content: "您确认要删除此记录吗？",
+        cancelText: "取消",
+      });
+      if (result.confirm) {
+        await this.$parent.delete('love_post', this.post_id, loveSpaceId)
+        this.goBackAfterRemove("remove");
+      }
     },
     async starPost() {
       const space_id = this.space_id;
