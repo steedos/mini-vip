@@ -214,7 +214,7 @@ video{
 <template>
 <view class="page border-top-1px" wx:if="{{is_loaded}}">
   <view class="page__bd">
-    <navigator class="post-header body_color" url="../space/index?space_id={{space_id}}">
+    <view class="post-header body_color">
       <view class="weui-cell weui-cell_access">
         <view class="weui-cell__hd">
           <image wx:if="{{avatar}}" class="image slds-icon slds-icon--small slds-m-right--x-small" src="{{util.formatImageUrl(avatar, baseUrl)}}"></image>
@@ -225,7 +225,7 @@ video{
           <view class="post-time">{{util.formatDate(post.created)}}</view>
         </view>
       </view>
-    </navigator>
+    </view>
     <block wx:if="{{post.video}}">
       <video src="{{post.video_url}}" objectFit="contain" class="cover"  direction= '90' custom-cache="{{false}}"></video>
     </block>
@@ -326,7 +326,6 @@ export default class PostView extends wepy.page {
   };
 
   async onLoad(e) {
-    console.log("==post/view=====onLoad================", e);
     await this.$parent.login(e);
     const userId = this.$parent.globalData.user._id;
     this.editable = e.editable;
@@ -351,8 +350,13 @@ export default class PostView extends wepy.page {
       }
     }
     if(loveSpaceId){
-      this.space_name = this.$parent.globalData.user.name
-      this.avatar = this.$parent.globalData.user.avatar
+      if(e.name && e.avatar){
+        this.space_name = e.name
+        this.avatar = e.avatar
+      }else{
+        this.space_name = this.$parent.globalData.user.name
+        this.avatar = this.$parent.globalData.user.avatar
+      }
     }
     if(e.post_id){
       this.post_id = e.post_id;
