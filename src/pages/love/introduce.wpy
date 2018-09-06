@@ -707,7 +707,7 @@ export default class loveIntroduce extends wepy.page {
   async loadPost() {
     const options = {
       $filter: `(owner eq '${this.userId}')`,
-      $expand: 'space($select=name)'
+      $expand: 'owner($select=name,profile)'
     }
     const result = await this.$parent.query('love_post', options, loveSpaceId);
     this.posts = result.value;
