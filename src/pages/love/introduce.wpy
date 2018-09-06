@@ -1,4 +1,4 @@
-<style lang="less">
+pipei<style lang="less">
 page {
   height: 100%;
   .page {
@@ -350,6 +350,13 @@ page {
       -->
 
       <view class="weui-cells" wx:if="{{!is_owner}}">
+        <view class="weui-cell" @tap="goTest()" hover-class="{{a_record.match ? '' : 'weui-cell_active'}}">
+          <view class="weui-cell__bd">
+            <view>匹配度</view>
+          </view>
+          <view class="weui-cell__ft" wx:if="{{a_record.match !== undefined}}">{{util.fixed(a_record.match, 2)}}%</view>
+          <view class="weui-cell__ft" wx:else>?</view>
+        </view>
         <view class="weui-cell" @tap="goTest()" wx:if="{{object_name == 'love_friends' && a_record._id && a_record.is_looking_for}}" hover-class="{{a_record.a_to_b ? '' : 'weui-cell_active'}}">
           <view class="weui-cell__bd">
             <view>我喜欢{{b_sex}}</view>
@@ -362,13 +369,6 @@ page {
             <view>{{b_sex}}喜欢我</view>
           </view>
           <view class="weui-cell__ft" wx:if="{{a_record.b_to_a !== undefined}}">{{util.fixed(a_record.b_to_a, 2)}}%</view>
-          <view class="weui-cell__ft" wx:else>?</view>
-        </view>
-        <view class="weui-cell" @tap="goTest()" hover-class="{{a_record.match ? '' : 'weui-cell_active'}}">
-          <view class="weui-cell__bd">
-            <view>综合匹配度</view>
-          </view>
-          <view class="weui-cell__ft" wx:if="{{a_record.match !== undefined}}">{{util.fixed(a_record.match, 2)}}%</view>
           <view class="weui-cell__ft" wx:else>?</view>
         </view>
       </view>
