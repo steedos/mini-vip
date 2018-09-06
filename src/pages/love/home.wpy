@@ -35,9 +35,8 @@ page {
     }
   }
   .match {
-		box-shadow: 0 4rpx 4rpx 0 rgba(0, 0, 0, 0.16), 0 0 0 2rpx rgba(0, 0, 0, 0.08);
     background: #1AAD19;
-    margin: 30rpx 40rpx;
+    margin: 30rpx;
     padding: 30rpx;
     border-radius: 0.25rem;
     .header {
@@ -174,7 +173,7 @@ page {
 <template>
 <view>
 	<view class="cover-page" wx:if="{{is_loaded}}">
-    <!-- <userHeader :about_me.sync="about_me" :isAuthUserInfo.sync="isAuthUserInfo" :user.sync="user_id"/> -->
+    <userHeader :about_me.sync="about_me" :isAuthUserInfo.sync="isAuthUserInfo" :user.sync="user_id"/> 
 		<view class="page__bd" style="padding: 20rpx 0">
 			<block wx:if="{{showLoveMatch}}">
         <view class="match" @tap="goCp">
