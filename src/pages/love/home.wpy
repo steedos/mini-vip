@@ -62,11 +62,13 @@ page {
     color: #fff;
     .box {
       flex: 1;
+      padding:0 10rpx;
       .title {
         font-size: 34rpx;
       }
       .desc {
         font-size: 28rpx;
+        padding-top:4px;
       }
     }
     .weui-cell__ft {
@@ -77,9 +79,10 @@ page {
     }
   }
   .recommend-title {
-    margin: 30rpx 40rpx 0;
+    margin: 60rpx 40rpx 0;
     color: #000;
-    font-size: 30rpx;
+    font-size: 32rpx;
+    font-weight:bold;
   }
   .recommend-lover {
     position: relative;
@@ -101,7 +104,7 @@ page {
           height: 100%;
           border-radius: 50%;
           box-sizing: border-box;
-          border: 30rpx solid transparent;
+          border: 40rpx solid transparent;
         }
       }
       .name {
@@ -111,6 +114,8 @@ page {
         text-overflow: ellipsis;
         white-space: nowrap;
         font-size: 30rpx;
+        width:180rpx;
+        margin:auto;
       }
     }
   }
@@ -176,7 +181,7 @@ page {
         <view class="match" @tap="goCp">
           <view class="banner">
             <view class="box">
-              <view class="title">每周推荐</view>
+              <view class="title">每周匹配</view>
               <view class="desc">想认识更多人？无颜每周给你推荐双向匹配度最高的人，交换微信号。</view>
             </view>
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
