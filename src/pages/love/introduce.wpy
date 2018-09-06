@@ -294,10 +294,10 @@ page {
               <view wx:if="{{about_me.live}}">{{about_me.live}}</view>
             </view>
           </view>
-          <block wx:if="{{!is_owner}}">
+          <!-- <block wx:if="{{!is_owner}}">
             <button class="weui-btn btn-star" type="primary" plain="true" size="mini">关注</button>
             <button wx:if="{{!answered}}" class="weui-btn btn-test" @tap="goAnswer" type="primary" size="mini">测试缘分</button>
-          </block>
+          </block> -->
         </view>
       </view>
     </view>
