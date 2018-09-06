@@ -191,7 +191,7 @@ page {
         <view class="recommend-title">今日推荐</view>
         <view class="recommend-lover">
             <repeat for="{{recommend_lover}}" key="index" index="index" item="lover">
-              <view class="lover" @tap="goRecommendDetail({{lover.owner._id}})">
+              <view wx:if="{{lover.owner.name}}" class="lover" @tap="goRecommendDetail({{lover.owner._id}})">
                 <view class="container">
                   <image mode="aspectFit" src="{{lover.owner.profile.avatar || 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg'}}"></image>
                 </view>
