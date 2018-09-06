@@ -177,7 +177,7 @@ page {
 	<view class="cover-page" wx:if="{{is_loaded}}">
     <!-- <userHeader :about_me.sync="about_me" :isAuthUserInfo.sync="isAuthUserInfo" :user.sync="user_id"/> -->
 		<view class="page__bd" style="padding: 20rpx 0">
-			<block wx:if="{{!showLoveMatch}}">
+			<block wx:if="{{showLoveMatch}}">
         <view class="match" @tap="goCp">
           <view class="banner">
             <view class="box">
@@ -285,6 +285,7 @@ export default class LoveHome extends wepy.page {
     await this.loadAboutMe();
     await this.loadGroups();
     await this.loadFriendList();
+    await this.loadLovers();
 		this.$apply();
 		wx.stopPullDownRefresh();
     wx.hideNavigationBarLoading()
