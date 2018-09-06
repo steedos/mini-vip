@@ -303,7 +303,7 @@ page {
     </view>
 
     <view class="body-wrapper">
-      <view class="weui-cells" wx:if="{{current_customer.love_test_tags}}">
+      <view class="weui-cells" wx:if="{{current_customer.love_test_tags && current_customer.love_test_tags.length}}">
         <navigator class="weui-cell weui-cell_access" url="/pages/love/question_list?object_name=love_test&space_id={{space_id}}&user_id={{userId}}">
           <view class="weui-cell__bd">
             <view class="tags-box">
