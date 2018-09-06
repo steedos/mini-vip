@@ -306,8 +306,6 @@ page {
               <view wx:if="{{about_me.constellation}}">{{about_me.constellation}}座</view>
               <view wx:if="{{about_me.live}}">{{about_me.live}}</view>
             </view>
-          </view>
-          
             <view class="tags-box">
               <repeat for="{{current_customer.love_test_tags}}" key="index" index="index" item="tag">
                 <view class="love-test-tag">{{tag}}</view>
@@ -707,7 +705,7 @@ export default class loveIntroduce extends wepy.page {
   async loadPost() {
     const options = {
       $filter: `(owner eq '${this.userId}')`,
-      $expand: 'owner($select=name,profile)'
+      $expand: 'space($select=name)'
     }
     const result = await this.$parent.query('love_post', options, loveSpaceId);
     this.posts = result.value;
