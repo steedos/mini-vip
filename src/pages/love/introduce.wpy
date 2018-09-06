@@ -250,10 +250,9 @@ page {
     filter: drop-shadow(0 0 4rpx #fff);
   }
   .tags-box{
-    margin:-4rpx -10rpx;
+    text-align: center;
     .love-test-tag{
       color: #777;
-      margin: 10rpx;
       padding: 4rpx 10rpx;
       display:inline-block;
       font-size:30rpx;
