@@ -112,7 +112,18 @@
         <view class="weui-cell__ft weui-cell__ft_in-access"></view>
       </navigator>
     </view>
-   <view class="weui-cells">
+    <view class="weui-cells">
+      <navigator class="weui-cell weui-cell_access" url="/pages/love/matching">
+        <view class="weui-cell__hd">
+          <view class="slds-icon-custom-custom1 slds-icon slds-icon--small slds-m-right--x-small"/>
+        </view>
+        <view class="weui-cell__bd">
+          <view>缘分榜</view>
+        </view>
+        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+      </navigator>
+    </view>
+    <view class="weui-cells">
       <navigator class="weui-cell weui-cell_access" url="/pages/love/settings?space_id={{space_id}}">
         <view class="weui-cell__hd">
           <view class="slds-icon-custom-custom67 slds-icon slds-icon--small slds-m-right--x-small"/>
