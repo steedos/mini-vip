@@ -340,12 +340,14 @@ page {
         </view>
       </view>
 
+      <!-- 不好看
       <view class="weui-cells" wx:if="{{object_name == 'love_friends' && a_record._id && a_record.match && !a_record.is_looking_for}}">
         <navigator class="weui-cell weui-cell_access" url="/pages/love/question_list?object_name=love_looking_for&space_id={{space_id}}">
           <view class="weui-cell__bd">{{b_sex}}不符合你的筛选条件</view>
           <view class="weui-cell__ft_in-access"></view>
         </navigator>
       </view>
+      -->
 
       <view class="weui-cells" wx:if="{{!is_owner}}">
         <view class="weui-cell" @tap="goTest()" wx:if="{{object_name == 'love_friends' && a_record._id && a_record.is_looking_for}}" hover-class="{{a_record.a_to_b ? '' : 'weui-cell_active'}}">

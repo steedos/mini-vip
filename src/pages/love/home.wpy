@@ -163,7 +163,7 @@ page {
   justify-content: center;
 }
 
-.cover-page-bg {background-image:url('https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/bg-moon.jpg');
+.cover-page-bg {background-image:url('https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/bg-heart.jpg');
 }
 </style>
 
@@ -183,19 +183,19 @@ page {
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
           </view>
         </view>
-      </block>
-      <block wx:if="{{recommend_lover.length}}">
-        <view class="group recommend-lover">
-          <view class="recommend-title">今日推荐</view>
-            <repeat for="{{recommend_lover}}" key="index" index="index" item="lover">
-              <view wx:if="{{lover.owner.name}}" class="lover" @tap="goRecommendDetail({{lover.owner._id}})">
-                <view class="container">
-                  <image mode="aspectFit" src="{{lover.owner.profile.avatar || 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg'}}"></image>
+        <block wx:if="{{recommend_lover.length}}">
+          <view class="group recommend-lover">
+            <view class="recommend-title">今日推荐</view>
+              <repeat for="{{recommend_lover}}" key="index" index="index" item="lover">
+                <view wx:if="{{lover.owner.name}}" class="lover" @tap="goRecommendDetail({{lover.owner._id}})">
+                  <view class="container">
+                    <image mode="aspectFit" src="{{lover.owner.profile.avatar || 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg'}}"></image>
+                  </view>
+                  <view class="name">{{lover.owner.name}}</view>
                 </view>
-                <view class="name">{{lover.owner.name}}</view>
-              </view>
-            </repeat>
-        </view>
+              </repeat>
+          </view>
+        </block>
       </block>
       <navigator class="group" url="/pages/love/matching?space_id={{space_id}}&open_group_id=-1">
 				<view class="header">
