@@ -172,7 +172,7 @@ page {
 	<view class="cover-page" wx:if="{{is_loaded}}">
     <!-- <userHeader :about_me.sync="about_me" :isAuthUserInfo.sync="isAuthUserInfo" :user.sync="user_id"/> -->
 		<view class="page__bd" style="padding: 20rpx 0">
-			<block wx:if="{{showLoveMatch}}">
+			<block wx:if="{{!showLoveMatch}}">
         <view class="match" @tap="goCp">
           <view class="banner">
             <view class="box">
@@ -183,17 +183,19 @@ page {
           </view>
         </view>
       </block>
-      <view class="recommend-title">为你推荐</view>
-      <view class="recommend-lover">
-        <repeat for="{{recommend_lover}}" key="index" index="index" item="lover">
-          <view class="lover" @tap="goRecommendDetail({{lover.owner._id}})">
-            <view class="container">
-              <image mode="aspectFit" src="{{lover.owner.profile.avatar || 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg'}}"></image>
-            </view>
-            <view class="name">{{lover.owner.name}}</view>
-          </view>
-        </repeat>
-      </view>
+      <block wx:if="{{recommend_lover.length}}">
+        <view class="recommend-title">为你推荐</view>
+        <view class="recommend-lover">
+            <repeat for="{{recommend_lover}}" key="index" index="index" item="lover">
+              <view class="lover" @tap="goRecommendDetail({{lover.owner._id}})">
+                <view class="container">
+                  <image mode="aspectFit" src="{{lover.owner.profile.avatar || 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg'}}"></image>
+                </view>
+                <view class="name">{{lover.owner.name}}</view>
+              </view>
+            </repeat>
+        </view>
+      </block>
       <!-- <navigator class="group" url="/pages/love/matching?space_id={{space_id}}&open_group_id=-1">
 				<view class="header">
 					<view class="group-name">
@@ -338,7 +340,6 @@ export default class LoveHome extends wepy.page {
         }
       }
     }
-
     this.name = user.name;
     this.avatar = user.avatar;
 
