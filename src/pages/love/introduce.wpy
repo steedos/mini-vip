@@ -841,7 +841,7 @@ export default class loveIntroduce extends wepy.page {
         return;
       }
       wx.navigateTo({
-        url: `/pages/love/me`
+        url: `/pages/love/question_list?object_name=love_about_me&space_id=${this.space_id}&required=true`
       })
     },
     addPost() {
