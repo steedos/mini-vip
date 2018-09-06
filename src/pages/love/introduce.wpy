@@ -315,6 +315,24 @@ page {
         </view>
       </view>
 
+      <view class="weui-cells">
+        <view class="weui-cell weui-cell_access">
+            <view class="weui-cell__bd">
+              <view class="tags-box">
+                  <view class="love-test-tag">{{hobby.sport}}</view>
+                  <view class="love-test-tag">{{hobby.star}}</view>
+                  <view class="love-test-tag">{{hobby.movie_type}}</view>
+                  <view class="love-test-tag">{{hobby.game}}</view>
+                  <view class="love-test-tag">{{hobby.travel}}</view>
+                  <view class="love-test-tag">{{hobby.book}}</view>
+                  <view class="love-test-tag">{{hobby.music}}</view>
+              </view>
+            </view>
+            <!-- <view class="weui-cell__ft weui-cell__ft_in-access"></view> -->
+        </view>
+      </view>
+
+
       <view class="weui-cells" wx:if="{{b_record.heart}}">
         <view class="weui-cell weui-cell_access">
           <view class="weui-cell__bd">联系方式</view>
@@ -418,6 +436,7 @@ export default class loveIntroduce extends wepy.page {
     about_me: {},
     current_customer: {},
     object_name: '',
+    hobby: {},
     record_id: '',
     a_record: {},
     b_record: {},
@@ -564,6 +583,7 @@ export default class loveIntroduce extends wepy.page {
   async loadData() {
     await this.loadLoveFriends();
     await this.loadCustomer();
+    await this.loadHobby();
     await this.loadAboutMe();
     await this.loadPost();
   }
@@ -574,7 +594,23 @@ export default class loveIntroduce extends wepy.page {
 		this.$apply();
 		wx.stopPullDownRefresh();
     wx.hideNavigationBarLoading();
-	}
+  }
+  
+  async loadHobby(){
+     const a_options = {
+      $filter: `(owner eq '${this.userId}' and space eq '${this.space_id}')`,
+    }
+
+    console.log("******************",hobby)
+
+    const result = await this.$parent.query('love_hobby', a_options, this.space_id);
+    const hobby = result.value[0];
+
+    this.hobby = hobby;
+
+    this.$apply();
+
+  }
   
   async loadCustomer() {
     const a_options = {
