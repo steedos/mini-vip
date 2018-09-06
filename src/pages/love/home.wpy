@@ -35,9 +35,8 @@ page {
     }
   }
   .match {
-		box-shadow: 0 4rpx 4rpx 0 rgba(0, 0, 0, 0.16), 0 0 0 2rpx rgba(0, 0, 0, 0.08);
     background: #1AAD19;
-    margin: 30rpx 40rpx;
+    margin: 30rpx;
     padding: 30rpx;
     border-radius: 0.25rem;
     .header {
@@ -79,9 +78,7 @@ page {
     }
   }
   .recommend-title {
-    margin: 60rpx 40rpx 0;
     color: #353535;
-    font-size: 32rpx;
   }
   .recommend-lover {
     position: relative;
@@ -119,9 +116,9 @@ page {
     }
   }
   .group {
-		box-shadow: #aaa 0px 0px 10px;
+    border:1px solid #DDD;
     background: #fff;
-    margin: 30rpx 40rpx;
+    margin: 30rpx;
     padding: 30rpx;
     border-radius: 0.25rem;
     .header {
@@ -166,15 +163,15 @@ page {
   justify-content: center;
 }
 
-.cover-page-bg {
-  // background-image:url('https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/bg-moon.jpg');
+.cover-page-bg {background-image:url('https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/bg-moon.jpg');
 }
 </style>
 
 <template>
 <view>
+  <view class="cover-page-bg"></view>
 	<view class="cover-page" wx:if="{{is_loaded}}">
-    <!-- <userHeader :about_me.sync="about_me" :isAuthUserInfo.sync="isAuthUserInfo" :user.sync="user_id"/> -->
+    <userHeader :about_me.sync="about_me" :isAuthUserInfo.sync="isAuthUserInfo" :user.sync="user_id"/> 
 		<view class="page__bd" style="padding: 20rpx 0">
 			<block wx:if="{{showLoveMatch}}">
         <view class="match" @tap="goCp">
@@ -188,8 +185,8 @@ page {
         </view>
       </block>
       <block wx:if="{{recommend_lover.length}}">
-        <view class="recommend-title">今日推荐</view>
-        <view class="recommend-lover">
+        <view class="group recommend-lover">
+          <view class="recommend-title">今日推荐</view>
             <repeat for="{{recommend_lover}}" key="index" index="index" item="lover">
               <view wx:if="{{lover.owner.name}}" class="lover" @tap="goRecommendDetail({{lover.owner._id}})">
                 <view class="container">
@@ -200,7 +197,7 @@ page {
             </repeat>
         </view>
       </block>
-      <!-- <navigator class="group" url="/pages/love/matching?space_id={{space_id}}&open_group_id=-1">
+      <navigator class="group" url="/pages/love/matching?space_id={{space_id}}&open_group_id=-1">
 				<view class="header">
 					<view class="group-name">
 						<view class="group-name">好友缘分榜</view>
@@ -220,6 +217,7 @@ page {
 					</view>
 				</view>
 			</navigator>
+      <!-- 
       <view class="btn-bottom">
         <button class="weui-btn mini-btn button-hover btn-toolbar-primary" size="mini" type="primary" @tap="goDetail" style="color: #fff">
           我的主页
