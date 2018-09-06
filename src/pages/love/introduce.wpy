@@ -2,7 +2,7 @@ pipei<style lang="less">
 page {
   height: 100%;
   .page {
-    padding-bottom: 160rpx;
+    padding-bottom: 1.17647059em;
   }
   .ion-container {
     display: inline-block;
@@ -188,7 +188,7 @@ page {
             margin-right: 10rpx;
           }
           .btn-test {
-            background: #1AAD19;
+            background: #018cc6;
             color: #fff;
             vertical-align: middle;
           }
@@ -308,6 +308,7 @@ page {
             </view>
           </view>
           <button class="weui-btn btn-star" open-type="share" plain="true" type="primary" size="mini">转发</button>
+          <button wx:if="{{is_owner}}" class="weui-btn btn-test" @tap="addPost" type="primary" size="mini">发布动态</button>
           <!-- <block wx:if="{{!is_owner}}">
             <button class="weui-btn btn-star" type="primary" plain="true" size="mini">关注</button>
             <button wx:if="{{!answered}}" class="weui-btn btn-test" @tap="goAnswer" type="primary" size="mini">测试缘分</button>
@@ -421,15 +422,6 @@ page {
     </view> -->
     <view class="post-container">
       <postList :list.sync="posts" :editable.sync="editable" :hideComment.sync="true" />
-    </view>
-    <!-- <view wx:if="{{is_owner}}" class="add-post" @tap="addPost">
-      <view class="slds-icon-action-new"></view>
-    </view> -->
-
-    <view class="tab-bar border-top-1px" wx:if="{{is_owner}}">
-      <view class="button-sp-area">
-        <button class="weui-btn" type="primary" plain="true" @tap="addPost" hover-class='button-hover' style="border: none;font-size: 36rpx">发布动态</button>
-      </view>
     </view>
 
   </view>
