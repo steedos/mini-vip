@@ -182,7 +182,6 @@ page {
           }
 
           .btn-star {
-            color: #018cc6;
             vertical-align: middle;
             margin-right: 10rpx;
           }
