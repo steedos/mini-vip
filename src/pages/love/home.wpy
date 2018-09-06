@@ -42,7 +42,6 @@ page {
     .header {
       display: flex;
       line-height: 1.41176471;
-      font-size: 17px;
       .group-name {
         flex: 1;
       }
@@ -62,9 +61,6 @@ page {
     .box {
       flex: 1;
       padding:0 10rpx;
-      .title {
-        font-size: 34rpx;
-      }
       .desc {
         font-size: 28rpx;
         padding-top:4px;
