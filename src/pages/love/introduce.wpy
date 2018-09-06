@@ -567,6 +567,7 @@ export default class loveIntroduce extends wepy.page {
     await this.loadCustomer();
     await this.loadAboutMe();
     await this.loadPost();
+    await this.singleMatch();
   }
 
 	async onPullDownRefresh() {
@@ -657,7 +658,15 @@ export default class loveIntroduce extends wepy.page {
     const result = await this.$parent.query('love_post', options, loveSpaceId);
     this.posts = result.value;
   }
-
+  async singleMatch() {
+    const result = await req.post('/api/mini/vip/single/match', {space_id: this.space_id,user_id:this.userId}).catch(err => {
+    return {errors: err.data.errors}
+  })
+    console.log(this.a_record.match)
+    if(!this.a_record.match){
+      this.a_record = result
+    }
+  }
   computed = {
     heartSummary() {
       let heart_summary = '';
