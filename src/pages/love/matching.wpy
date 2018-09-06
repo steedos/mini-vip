@@ -487,7 +487,7 @@ export default class Matching extends wepy.page {
       });
     },
     goHome() {
-      wx.navigateTo({
+      wx.switchTab({
         url: `/pages/love/home?space_id=${this.space_id}`
       });
     },

@@ -350,6 +350,10 @@ export default class PostView extends wepy.page {
         this.avatar = res.value[0].avatar
       }
     }
+    if(loveSpaceId){
+      this.space_name = this.$parent.globalData.user.name
+      this.avatar = this.$parent.globalData.user.avatar
+    }
     if(e.post_id){
       this.post_id = e.post_id;
       await this.loadPost();
