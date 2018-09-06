@@ -306,22 +306,6 @@ page {
               <view wx:if="{{about_me.constellation}}">{{about_me.constellation}}座</view>
               <view wx:if="{{about_me.live}}">{{about_me.live}}</view>
             </view>
-          </view>
-          <button class="weui-btn btn-star" open-type="share" plain="true" type="primary" size="mini">转发</button>
-          <button wx:if="{{is_owner}}" class="weui-btn btn-test" @tap="addPost" type="primary" size="mini">发布动态</button>
-          <button wx:if="{{!is_owner && showGoHome}}" class="weui-btn btn-test" @tap="goHome" type="primary" size="mini">我的名片</button>
-          <!-- <block wx:if="{{!is_owner}}">
-            <button class="weui-btn btn-star" type="primary" plain="true" size="mini">关注</button>
-            <button wx:if="{{!answered}}" class="weui-btn btn-test" @tap="goAnswer" type="primary" size="mini">测试缘分</button>
-          </block> -->
-        </view>
-      </view>
-    </view>
-
-    <view class="body-wrapper">
-      <view class="weui-cells" wx:if="{{(current_customer.love_test_tags && current_customer.love_test_tags.length) || (hobby && (hobby.sport || hobby.star || hobby.movie_type || hobby.game || hobby.travel || hobby.book || hobby.music))}}">
-        <view class="weui-cell weui-cell_access">
-          <view class="weui-cell__bd">
             <view class="tags-box">
               <repeat for="{{current_customer.love_test_tags}}" key="index" index="index" item="tag">
                 <view class="love-test-tag">{{tag}}</view>
@@ -335,9 +319,18 @@ page {
               <view wx:if="{{hobby.music}}" class="love-test-tag">{{hobby.music}}</view>
             </view>
           </view>
-          <!-- <view class="weui-cell__ft weui-cell__ft_in-access"></view> -->
+          <button class="weui-btn btn-star" open-type="share" plain="true" type="primary" size="mini">转发</button>
+          <button wx:if="{{is_owner}}" class="weui-btn btn-test" @tap="addPost" type="primary" size="mini">发布动态</button>
+          <button wx:if="{{!is_owner && showGoHome}}" class="weui-btn btn-test" @tap="goHome" type="primary" size="mini">我的名片</button>
+          <!-- <block wx:if="{{!is_owner}}">
+            <button class="weui-btn btn-star" type="primary" plain="true" size="mini">关注</button>
+            <button wx:if="{{!answered}}" class="weui-btn btn-test" @tap="goAnswer" type="primary" size="mini">测试缘分</button>
+          </block> -->
         </view>
       </view>
+    </view>
+
+    <view class="body-wrapper">
 
       <view class="weui-cells" wx:if="{{b_record.heart}}">
         <view class="weui-cell weui-cell_access">
@@ -712,7 +705,7 @@ export default class loveIntroduce extends wepy.page {
   async loadPost() {
     const options = {
       $filter: `(owner eq '${this.userId}')`,
-      $expand: 'owner($select=name,profile)'
+      $expand: 'space($select=name)'
     }
     const result = await this.$parent.query('love_post', options, loveSpaceId);
     this.posts = result.value;
@@ -913,8 +906,9 @@ export default class loveIntroduce extends wepy.page {
       if(!this.is_owner){
         return;
       }
+      
       wx.navigateTo({
-        url: `/pages/love/question_list?object_name=love_about_me&space_id=${this.space_id}&required=true`
+        url: '/pages/love/love_question'
       })
     },
     addPost() {
