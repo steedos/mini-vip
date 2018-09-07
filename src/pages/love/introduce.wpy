@@ -260,6 +260,19 @@ page {
       font-size:30rpx;
     }
   }
+  .common-groups{
+    margin-top:1.17647059em;
+    border:1px solid #DDD;
+    background: #fff;
+    padding: 30rpx;
+    border-radius: 0.25rem;
+    .common-groups-title{
+      color: #353535;
+    }
+    .common-groups-item{
+      color:#777;
+    }
+  }
 }
 
 .tab-bar {
@@ -372,6 +385,16 @@ page {
         </view>
       </view>
 
+      <block wx:if="{{common_groups.length}}">
+        <view class="common-groups">
+          <view class="common-groups-title">你们都在以下微信群</view>
+          <repeat for="{{common_groups}}" key="index" index="index" item="group">
+            <navigator class="common-groups-item weui-cell__ft_in-access" url="/pages/love/matching?open_group_id=group">
+              <open-data class="group-name" type="groupName" open-gid="{{group}}"></open-data>
+            </navigator>
+          </repeat>
+        </view>
+      </block>
       <!--
       <view class="weui-cells" wx:if="{{!is_owner}}">
         <navigator class="weui-cell weui-cell_access" url="/pages/love/cp">
@@ -419,6 +442,7 @@ import { baseMaterialUrl } from '@/config';
 import { loveSpaceId } from '@/config';
 import req from '@/network';
 import postList from '../../components/simple_post_list';
+import _ from 'underscore'
 
 export default class loveIntroduce extends wepy.page {
   config = {
@@ -439,6 +463,7 @@ export default class loveIntroduce extends wepy.page {
     b_record: {},
     b_sex: '他',
     b_naire: [],
+    common_groups: [],
     userId: '',
     cover: '',
     avatar: '',
@@ -543,6 +568,12 @@ export default class loveIntroduce extends wepy.page {
     }
     this.$apply();
   }
+
+  async loadCommonGroups() {
+    if(this.a_record.open_groups && this.b_record.open_groups){
+      this.common_groups = _.intersection(this.a_record.open_groups, this.b_record.open_groups);
+    }
+  }
   
   async onLoad(e) {
     wepy.showShareMenu({
@@ -603,6 +634,7 @@ export default class loveIntroduce extends wepy.page {
   
   async loadData() {
     await this.loadLoveFriends();
+    await this.loadCommonGroups();
     await this.loadCustomer();
     await this.loadHobby();
     await this.loadAboutMe();
