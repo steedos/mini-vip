@@ -261,11 +261,6 @@ page {
     }
   }
   .common-groups{
-    margin-top:1.17647059em;
-    border:1px solid #DDD;
-    background: #fff;
-    padding: 30rpx;
-    border-radius: 0.25rem;
     .common-groups-title{
       color: #353535;
     }
@@ -386,11 +381,18 @@ page {
       </view>
 
       <block wx:if="{{common_groups.length}}">
-        <view class="common-groups">
-          <view class="common-groups-title">你们都在以下微信群</view>
+        <view class="weui-cells common-groups">
+          <view class="weui-cell">
+            <view class="weui-cell__bd">
+              <view class="common-groups-title">你们都在以下微信群</view>
+            </view>
+          </view>
           <repeat for="{{common_groups}}" key="index" index="index" item="group">
-            <navigator class="common-groups-item weui-cell__ft_in-access" url="/pages/love/matching?open_group_id={{group}}">
-              <open-data class="group-name" type="groupName" open-gid="{{group}}"></open-data>
+            <navigator class="weui-cell common-groups-item" url="/pages/love/matching?open_group_id={{group}}">
+              <view class="weui-cell__bd">
+                <open-data type="groupName" open-gid="{{group}}"></open-data>
+              </view>
+              <view class="weui-cell__ft weui-cell__ft_in-access"></view>
             </navigator>
           </repeat>
         </view>
