@@ -389,7 +389,7 @@ page {
         <view class="common-groups">
           <view class="common-groups-title">你们都在以下微信群</view>
           <repeat for="{{common_groups}}" key="index" index="index" item="group">
-            <navigator class="common-groups-item weui-cell__ft_in-access" url="/pages/love/matching?open_group_id=group">
+            <navigator class="common-groups-item weui-cell__ft_in-access" url="/pages/love/matching?open_group_id={{group}}">
               <open-data class="group-name" type="groupName" open-gid="{{group}}"></open-data>
             </navigator>
           </repeat>
