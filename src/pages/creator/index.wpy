@@ -61,6 +61,13 @@
     };
 
     async onLoad(e){
+
+      let go = "";
+
+      if(e.go){
+        go = decodeURIComponent(e.go);
+      }
+
       wx.showNavigationBarLoading();
       await this.$parent.login();
 
@@ -84,8 +91,11 @@
 
         console.log('this.$parent.space_id',this.$parent.space._id);
 
-        this.$parent.bootstrap = await creatorClient.loadBootstrap(this.$parent.space._id)
-        pageRouter.switchTab({ url: '/pages/creator/apps' });
+        this.$parent.bootstrap = await creatorClient.loadBootstrap(this.$parent.space._id);
+        if(!go){
+          pageRouter.switchTab({ url: '/pages/creator/apps' });
+          return ;
+        }
       }
 //      else{
 ////        pageRouter.redirectTo({ url: '/pages/creator/register_space' });
@@ -93,6 +103,9 @@
 //      }
 //      console.log('Index..........................')
       wx.hideNavigationBarLoading();
+      if(go){
+        pageRouter.navigateTo({url: go})
+      }
       this.show = true;
       this.$apply()
     }

@@ -1,5 +1,13 @@
 <style>
-
+  .loading-animation{
+    background: red;
+    background-image: url(https://image.flaticon.com/icons/svg/109/109586.svg);
+    height:24px;
+    width:24px;
+    border-radius: 50%;
+    background-repeat: no-repeat;
+    margin-left: calc(50% - 12px);
+  }
 </style>
 
 <template>
@@ -21,6 +29,8 @@
       </view>
     </view>
   </view>
+  <!--<view animation="{{animationData}}" class="loading-animation" >-->
+  <!--</view>-->
 </template>
 
 <script>
@@ -45,11 +55,40 @@
       this.space_id = this.$parent.space._id;
       this.apps = this.$parent.bootstrap.apps;
       this.$apply()
+
+//      var animation = wx.createAnimation({
+//        duration: 80,
+//        timingFunction: 'linear',
+//      })
+//
+//      this.animation = animation
+//
+//      animation.scale(2,2).rotate(this.s).step()
+//
+//      this.animationData = animation.export()
+//
+//      let i = 1;
+//
+//      setInterval(function() {
+//        this.s = this.s - 2*i;
+//        if(i < 45){
+//          i++;
+//        }
+//        animation.rotate(this.s).step()
+//        this.animationData = animation.export()
+//        this.$apply()
+//
+//
+//      }.bind(this), 80)
+
+
     }
 
     data = {
+      s: 45,
       apps: [],
-      space_id: ''
+      space_id: '',
+      animationData: {}
     };
 
     methods = {};
