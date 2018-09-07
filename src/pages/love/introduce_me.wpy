@@ -1,0 +1,922 @@
+pipei<style lang="less">
+page {
+  height: 100%;
+  .page {
+    padding-bottom: 1.17647059em;
+  }
+  .ion-container {
+    display: inline-block;
+    position: absolute;
+    right: 30rpx;
+    top: 30rpx;
+    z-index: 1000;
+
+    .ion {
+      font-size: 60rpx;
+      color: #fff;
+    }
+
+    .stared {
+      color: #fcb95b;
+    }
+  }
+  .page {
+    &.is-open {
+      .header{
+        .cover-wrapper{
+          height: 300rpx;
+          &::after {
+            content: '';
+            position: absolute;
+            height: 160rpx;
+            bottom: -60rpx;
+            left: 0;
+            right: 0;
+            background-image: linear-gradient(to bottom, transparent , #efeef3 50%);
+          }
+        }
+      }
+      .weui-grids{
+        margin-top: 1.17647059em;
+      }
+    }
+
+    .image {
+      display: block;
+    }
+
+    .header {
+      position: relative;
+
+      .cover-wrapper{
+        position: relative;
+        height: 300rpx;
+        background-size: cover;
+      }
+      .image{
+        width: 100%;
+      }
+      .empty-cover {
+        position: relative;
+        height: 210px;
+        background-image: url("https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/empty.png");
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .text {
+          position: relative;
+          top: -82px;
+          color: #262626;
+          text-shadow: 1px 1px 0px #686868;
+          font-size: 20px;
+        }
+      }
+      .space-info {
+        position: relative;
+        text-align: center;
+        margin: 0 20rpx;
+        border-radius: 0.25rem;
+        top: -100rpx;
+        width: auto;
+        border: 1px solid transparent;
+        padding-bottom: 20rpx;
+        background: #fff;
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
+        z-index: 100;
+
+        .heart {
+          position: absolute;
+          right: 0;
+          width: 1.75rem;
+          height: 1.75rem;
+        }
+
+        .wrapper {
+          top: -100rpx;
+          margin-top: 155rpx;
+          padding: 0 40rpx;
+
+          .avatar-container {
+            background: #fff;
+            padding: 10rpx;
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 2px 2px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08);
+            position: absolute;
+            left: calc(~"50% - 135rpx");
+            top: -145rpx;
+
+            .avatar {
+              border-radius: 50%;
+              display: block;
+              width: 250rpx;
+              height: 250rpx;
+            }
+
+            .sex-container {
+              position: absolute;
+              width: 35rpx;
+              height: 35rpx;
+              background: #fff;
+              right: 14rpx;
+              bottom: 6rpx;
+              border-radius: 50%;
+              padding: 8rpx;
+              &.boy {
+                border: 4rpx solid #00aeef;
+              }
+              &.girl {
+                border: 4rpx solid #ec148e;
+              }
+              .sex-img {
+                display: block;
+                width: 100%;
+                height: 100%;
+              }
+            }
+          }
+
+          .weui-cell__ft_in-access{
+            padding-left:13px;
+          }
+
+          .love-heart {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #823c3d;
+            margin-bottom:10rpx;
+            font-weight: bold;
+            .love-img {
+              margin-right: 0.5rem;
+            }
+          }
+
+          .name {
+            font-size: 44rpx;
+            font-weight: bold;
+          }
+
+          .introduction {
+            font-size: 32rpx;
+            margin-top: 10rpx;
+            font-weight: bold;
+          }
+
+          .zodiac-constellation{
+            display: flex;
+            margin-top: 10rpx;
+            font-size: 30rpx;
+            color: #777;
+            justify-content: center;
+            view {
+              padding: 0 6rpx;
+            }
+          }
+
+          .star-count {
+            margin-top: 0px;
+            color: #898989;
+            display: none;
+          }
+
+          .btn-star {
+            color: #018cc6;
+            border-color: #018cc6;
+            vertical-align: middle;
+            margin-right: 10rpx;
+          }
+          .btn-test {
+            background: #018cc6;
+            color: #fff;
+            vertical-align: middle;
+          }
+        }
+      }
+    }
+
+    .weui-grids {
+      background: #fff;
+      margin-top: 0px;
+    }
+
+
+    .page__bd{
+      .need_read{
+        display:block;
+        background:#f00;
+        border-radius:50%;
+        width:0.4em;
+        height:0.4em;
+        margin-left:1.8rem;
+        margin-top:-0.2rem;
+        position:absolute;
+      }
+    }
+    .support {
+      border: none;
+      border-right:1rpx solid #d9d9d9;
+      border-bottom:1rpx solid #d9d9d9;
+      border-radius: 0;
+      line-height: inherit;
+    }
+    .post-list-wrapper{
+      margin-top: 30rpx;
+    }
+
+    .body-wrapper {
+      margin: -90rpx 20rpx 0;
+      .weui-cells {
+        border-radius: 0.25rem;
+        box-shadow: 0 4rpx 4rpx 0 rgba(0, 0, 0, 0.16), 0 0 0 2rpx rgba(0, 0, 0, 0.08);
+        &::after {
+          display: none;
+        }
+        &::before {
+          display: none;
+        }
+      }
+    }
+  }
+
+  .post-container {
+    margin: 1.17647059em 20rpx 0;
+    border-radius: 0.25rem;
+  }
+
+  .add-post {
+    position: fixed;
+    bottom: 80rpx;
+    right: 20rpx;
+    filter: drop-shadow(0 0 4rpx #fff);
+  }
+  .tags-box{
+    text-align: center;
+    .love-test-tag{
+      color: #777;
+      padding: 4rpx 10rpx;
+      display:inline-block;
+      font-size:30rpx;
+    }
+  }
+}
+
+.tab-bar {
+  display: flex;
+  position: fixed;
+  z-index: 500;
+  bottom: 0;
+  height: 50px;
+  width: 100%;
+  background-color: #F7F7FA;
+  justify-content: center;
+  align-items: center;
+}
+</style>
+
+<template>
+<view>
+  <view class="cover-page-bg" style="background-image: url({{util.formatImageUrl(cover, baseUrl)}})"></view>
+  <view class="cover-page page" wx:if="{{is_loaded}}">
+    <view class="header">
+      <view class="cover-wrapper"></view>
+      <view class="space-info">
+        <view wx:if="{{!is_owner && object_name}}" class="heart {{a_record.heart ? 'vip_heart-light' : 'vip_heart-default'}} slds-icon slds-icon--small slds-m-left--x-small" @tap="markHeart({{a_record._id}},{{a_record.heart}})"></view>
+        <view class="wrapper">
+          <view class="bg-image"></view>
+          <view class="avatar-container">
+            <image class="avatar" mode="aspectFill" src="{{util.formatImageUrl(avatar, baseUrl) || 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg'}}" @tap.stop="uploadImage()"/>
+            <view class="sex-container {{about_me.sex == '男' ? 'boy' : 'girl'}}">
+              <image wx:if="{{about_me.sex == '男'}}" class="sex-img" mode="aspectFill" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/boy.png"></image>
+              <image wx:else class="sex-img" mode="aspectFill" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/girl.png"></image>
+            </view>
+          </view>
+          <view class="love-heart" wx:if="{{heartSummary}}">
+            <image class="love-img slds-icon slds-icon--small slds-m-left--x-small" mode="aspectFit" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/love_heart.png"></image>
+            <view>{{heartSummary}}</view>
+          </view>
+          <view class="{{is_owner ? 'weui-cell__ft_in-access' : ''}}" @tap="goMe()">
+            <view class="name">{{name}}</view>
+            <view wx:if="{{about_me.self_introduction}}" class="introduction">{{about_me.self_introduction}}</view>
+            <view class="zodiac-constellation">
+              <view wx:if="{{about_me.sex}}">{{about_me.sex}}</view>
+              <view wx:if="{{about_me.age}}">{{about_me.age}}岁</view>
+              <view wx:if="{{about_me.height}}">{{about_me.height}}cm</view>
+              <view wx:if="{{about_me.constellation}}">{{about_me.constellation}}座</view>
+              <view wx:if="{{about_me.live}}">{{about_me.live}}</view>
+            </view>
+            <view class="tags-box">
+              <repeat for="{{current_customer.love_test_tags}}" key="index" index="index" item="tag">
+                <view class="love-test-tag">{{tag}}</view>
+              </repeat>
+              <view wx:if="{{hobby.sport}}" class="love-test-tag">{{hobby.sport}}</view>
+              <view wx:if="{{hobby.star}}" class="love-test-tag">{{hobby.star}}</view>
+              <view wx:if="{{hobby.movie_type}}" class="love-test-tag">{{hobby.movie_type}}</view>
+              <view wx:if="{{hobby.game}}" class="love-test-tag">{{hobby.game}}</view>
+              <view wx:if="{{hobby.travel}}" class="love-test-tag">{{hobby.travel}}</view>
+              <view wx:if="{{hobby.book}}" class="love-test-tag">{{hobby.book}}</view>
+              <view wx:if="{{hobby.music}}" class="love-test-tag">{{hobby.music}}</view>
+            </view>
+          </view>
+          <button class="weui-btn btn-star" open-type="share" plain="true" type="primary" size="mini">转发</button>
+          <button wx:if="{{is_owner}}" class="weui-btn btn-test" @tap="addPost" type="primary" size="mini">发布动态</button>
+          <button wx:if="{{!is_owner && showGoHome}}" class="weui-btn btn-test" @tap="goHome" type="primary" size="mini">我的名片</button>
+          <!-- <block wx:if="{{!is_owner}}">
+            <button class="weui-btn btn-star" type="primary" plain="true" size="mini">关注</button>
+            <button wx:if="{{!answered}}" class="weui-btn btn-test" @tap="goAnswer" type="primary" size="mini">测试缘分</button>
+          </block> -->
+        </view>
+      </view>
+    </view>
+
+    <view class="body-wrapper">
+
+      <view class="weui-cells" wx:if="{{b_record.heart}}">
+        <view class="weui-cell weui-cell_access">
+          <view class="weui-cell__bd">联系方式</view>
+          <view class="weui-cell__ft">{{current_customer.mobile}}</view>
+        </view>
+      </view>
+
+      <!-- 不好看
+      <view class="weui-cells" wx:if="{{object_name == 'love_friends' && a_record._id && a_record.match && !a_record.is_looking_for}}">
+        <navigator class="weui-cell weui-cell_access" url="/pages/love/question_list?object_name=love_looking_for&space_id={{space_id}}">
+          <view class="weui-cell__bd">{{b_sex}}不符合你的筛选条件</view>
+          <view class="weui-cell__ft_in-access"></view>
+        </navigator>
+      </view>
+      -->
+
+      <view class="weui-cells" wx:if="{{!is_owner}}">
+        <view class="weui-cell" @tap="goTest()" hover-class="{{a_record.match ? '' : 'weui-cell_active'}}">
+          <view class="weui-cell__bd">
+            <view>匹配度</view>
+          </view>
+          <view class="weui-cell__ft" wx:if="{{a_record.match !== undefined}}">{{util.fixed(a_record.match, 2)}}%</view>
+          <view class="weui-cell__ft" wx:else>?</view>
+        </view>
+        <view class="weui-cell" @tap="goTest()" wx:if="{{object_name == 'love_friends' && a_record._id && a_record.is_looking_for}}" hover-class="{{a_record.a_to_b ? '' : 'weui-cell_active'}}">
+          <view class="weui-cell__bd">
+            <view>我喜欢{{b_sex}}</view>
+          </view>
+          <view class="weui-cell__ft" wx:if="{{a_record.a_to_b !== undefined}}">{{util.fixed(a_record.a_to_b, 2)}}%</view>
+          <view class="weui-cell__ft" wx:else>?</view>
+        </view>
+        <view class="weui-cell" @tap="goTest()" wx:if="{{object_name == 'love_friends' && a_record._id && a_record.is_looking_for}}" hover-class="{{a_record.b_to_a ? '' : 'weui-cell_active'}}">
+          <view class="weui-cell__bd">
+            <view>{{b_sex}}喜欢我</view>
+          </view>
+          <view class="weui-cell__ft" wx:if="{{a_record.b_to_a !== undefined}}">{{util.fixed(a_record.b_to_a, 2)}}%</view>
+          <view class="weui-cell__ft" wx:else>?</view>
+        </view>
+      </view>
+
+      <!--
+      <view class="weui-cells" wx:if="{{!is_owner}}">
+        <navigator class="weui-cell weui-cell_access" url="/pages/love/cp">
+          <view class="weui-cell__bd">想要找到匹配度更高的人？</view>
+          <view class="weui-cell__ft_in-access"></view>
+        </navigator>
+      </view>
+      -->
+
+      <!-- <view class="weui-cells">
+        <repeat for="{{b_naire}}" key="index" index="index" item="naire">
+          <navigator class="weui-cell weui-cell_access" url="/pages/love/question_list?object_name={{naire.object_name}}&space_id={{space_id}}&user_id={{userId}}">
+            <view class="weui-cell__bd">
+              <view>{{is_owner ? "我" : b_sex}}的{{naire.label}}</view>
+            </view>
+            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+          </navigator>
+        </repeat>
+      </view> -->
+    </view>
+    <!-- <view wx:if="{{!is_owner}}">
+      <block wx:if="{{answered}}">
+        <button class="btn-love" @tap="markHeart({{a_record._id}},{{a_record.heart}})">想认识{{b_sex}}</button>
+      </block>
+      <block wx:else>
+        <button class="input-btn btn-join button-hover" type="primary" @tap="goAnswer">
+          测试缘分
+        </button>
+        <button class="btn-love" @tap="goAnswer">想认识{{b_sex}}</button>
+      </block>
+    </view> -->
+    <view class="post-container">
+      <postList :list.sync="posts" :editable.sync="editable" :hideComment.sync="true" />
+    </view>
+
+  </view>
+</view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import { baseUrl } from '@/config';
+import util from '../../wxs/util.wxs';
+import { baseMaterialUrl } from '@/config';
+import { loveSpaceId } from '@/config';
+import req from '@/network';
+import postList from '../../components/simple_post_list';
+
+export default class loveIntroduce_me extends wepy.page {
+  config = {
+    navigationBarTitleText: '交友名片',
+        enablePullDownRefresh: true
+  };
+
+  data = {
+    is_loaded: false,
+    space_id: loveSpaceId,
+    editable: false,
+    about_me: {},
+    current_customer: {},
+    object_name: '',
+    hobby: {},
+    record_id: '',
+    a_record: {},
+    b_record: {},
+    b_sex: '他',
+    b_naire: [],
+    userId: '',
+    cover: '',
+    avatar: '',
+    name: '',
+    posts: [],
+    is_owner: false,
+    answered:false,
+    // heart_summary: '',
+    baseUrl: baseUrl,
+    showGoHome: false,
+    baseMaterialUrl: baseMaterialUrl,
+    loveSpaceId: loveSpaceId,
+    share_from:''
+  }
+
+  wxs = {
+    util: util
+  }
+
+  components = {
+    postList: postList
+  };
+
+  onShareAppMessage(res) {
+    let title;
+    if (this.about_me.self_introduction) {
+      title = this.about_me.self_introduction;
+    } else {
+      title = this.name + '的交友名片';
+    }
+    let path = `/pages/love/introduce?userId=${this.userId}`;
+    return {
+      title: title,
+      path: path
+    };
+  }
+
+  async loadLoveFriends() {
+    if(this.is_owner){
+      return;
+    }
+
+    if (this.object_name) {
+      if (this.record_id == '-1' || !this.record_id) {
+        const user_id = this.$parent.globalData.user._id;
+        const a_options = {
+          $filter: `(owner eq '${user_id}' and user_b eq '${this.userId}')`,
+          $expand: 'user_b($select=profile,name),owner($select=profile,name)'
+        }
+        const a_result = await this.$parent.query(this.object_name, a_options, this.space_id);
+        const a_record = a_result.value[0] || {};
+        this.a_record = a_record;
+
+        const b_options = {
+          $filter: `(owner eq '${this.userId}' and user_b eq '${user_id}')`,
+          $expand: 'user_b($select=profile,name),owner($select=profile,name)'
+        }
+        const b_result = await this.$parent.query(this.object_name, b_options, this.space_id);
+        const b_record = b_result.value[0] || {};
+        this.b_record = b_record;
+
+        console.log('[record -1]', a_record, b_record);
+
+        this.$apply();
+      } else {
+        const a_options = {
+          $expand: 'user_b($select=profile,name),owner($select=profile,name)'
+        }
+        const a_record = await this.$parent.get(this.object_name, this.record_id, this.space_id, a_options);
+
+        this.a_record = a_record;
+
+        const b_options = {
+          $filter: `(owner eq '${a_record.user_b._id}' and user_b eq '${a_record.owner._id}')`
+        }
+        const b_result = await this.$parent.query(this.object_name, b_options, this.space_id);
+        console.log(b_result.value[0])
+        const b_record = b_result.value[0];
+        this.b_record = b_record || {};
+
+        console.log('[record normal]', a_record, b_record);
+      }
+    } else {
+      this.a_record = {};
+      this.b_record = {};
+    }
+    this.$apply();
+  }
+  
+  async onLoad(e) {
+    wepy.showShareMenu({
+      withShareTicket: true
+    });
+    wx.showLoading({ mask: true });
+    e.space_id = loveSpaceId;
+    if (e.scene) {
+      // 朋友圏二维码识别进入的，则取出scene中的share_from
+      let scene = decodeURIComponent(e.scene);
+      let scenes = scene.split('=');
+      e.love = 1;
+      e.share_from = scenes[1];
+      e.qrcode = 1;
+    }
+    this.space_id = e.space_id;
+    await this.$parent.login(e);
+
+    this.userId = e.userId || e.share_from || this.$parent.globalData.user._id;
+    this.share_from = e.share_from
+    if(!this.userId){
+      wepy.showToast({
+        title: "用户ID不能为空",
+        icon: "none"
+      });
+    }
+    this.record_id = e._id
+    this.object_name = e.object_name
+    if (this.userId != this.$parent.globalData.user._id) {
+      this.is_owner = false;
+    } else {
+      this.is_owner = true;
+    }
+    const finishedNaire = wx.getStorageSync('questionnaire_progess');
+    if(finishedNaire.indexOf('love_test') > -1){
+      this.answered = true
+    }
+
+    if(getCurrentPages().length<=1){
+      this.showGoHome = true
+    }
+
+    await this.loadData();
+
+    this.is_loaded = true;
+    this.$apply();
+    wx.hideLoading();
+  }
+
+  async onShow() {
+    if(this.is_loaded){
+      wx.showNavigationBarLoading();
+      await this.loadData();
+      this.$apply();
+      wx.hideNavigationBarLoading();
+    }
+  }
+  
+  async loadData() {
+    // await this.loadLoveFriends();
+    await this.loadCustomer();
+    await this.loadHobby();
+    await this.loadAboutMe();
+    await this.loadPost();
+  }
+
+    async onPullDownRefresh() {
+    wx.showNavigationBarLoading();
+    await this.loadData();
+        this.$apply();
+        wx.stopPullDownRefresh();
+    wx.hideNavigationBarLoading();
+  }
+  
+  async loadHobby(){
+     const a_options = {
+      $filter: `(owner eq '${this.userId}' and space eq '${this.space_id}')`,
+    }
+
+    console.log("******************",hobby)
+
+    const result = await this.$parent.query('love_hobby', a_options, this.space_id);
+    const hobby = result.value[0];
+
+    this.hobby = hobby;
+
+    this.$apply();
+
+  }
+  
+  async loadCustomer() {
+    const a_options = {
+      $filter: `(owner eq '${this.userId}' and space eq '${this.space_id}')`,
+      $expand: 'owner($select=name,profile)'
+    }
+    const result = await this.$parent.query('vip_customers', a_options, this.space_id);
+    const customer = result.value[0];
+
+    this.current_customer = customer;
+
+    let b_naire = [];
+    if (customer.questionnaire_progess && customer.questionnaire_progess.length) {
+      if (customer.questionnaire_progess.includes('love_test')) {
+        b_naire.push({
+          label: '缘分卷',
+          object_name: 'love_test'
+        })
+      }
+      if (customer.questionnaire_progess.includes('love_answer')) {
+        b_naire.push({
+          label: '玫瑰卷',
+          object_name: 'love_answer'
+        })
+      }
+      if (customer.questionnaire_progess.includes('love_test')) {
+        b_naire.push({
+          label: '蔷薇卷',
+          object_name: 'love_answer2'
+        })
+      }
+      if (customer.questionnaire_progess.includes('love_test')) {
+        b_naire.push({
+          label: '兴趣爱好',
+          object_name: 'love_hobby'
+        })
+      }
+    }
+    this.b_naire = b_naire;
+
+    this.name = customer.owner.name;
+    if (!this.cover) {
+      if (customer.cover) {
+        this.cover = customer.cover;
+      } else {
+        this.cover = 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/bg-star.jpg';
+      }
+    }
+
+    if (!this.avatar) {
+      if (customer.avatar) {
+        this.avatar = customer.avatar;
+      } else {
+        this.avatar = customer.owner.profile.avatar;
+      }
+    }
+  }
+  
+  async loadAboutMe() {
+    const b_options = {
+      $filter: `(owner eq '${this.userId}')`
+    }
+    const about_me = await this.$parent.query('love_about_me', b_options, loveSpaceId);
+    if (about_me && about_me.value && about_me.value[0]) {
+      this.about_me = about_me.value[0];
+    }
+    if (this.about_me.sex == '男') {
+      this.b_sex = '他'
+    }else{
+      this.b_sex = '她'
+    }
+  }
+
+  async loadPost() {
+    const options = {
+      $filter: `(owner eq '${this.userId}')`,
+      $expand: 'owner($select=name,profile)'
+    }
+    const result = await this.$parent.query('love_post', options, loveSpaceId);
+    this.posts = result.value;
+  }
+  async singleMatch() {
+    if(!this.answered){
+      return;
+    }
+    const result = await req.post('/api/mini/vip/single/match', {space_id: this.space_id,user_id:this.userId}).catch(err => {
+      return {errors: err.data.errors}
+    })
+    console.log(this.a_record.match)
+    if(!this.a_record.match){
+      this.a_record = result
+    }
+  }
+  computed = {
+    heartSummary() {
+      let heart_summary = '';
+      if (this.b_record.heart) {
+        heart_summary = '对方关注了你';
+      }
+
+      if (this.a_record.heart && this.b_record.heart) {
+        heart_summary = '互相关注';
+      }
+      return heart_summary
+    }
+  }
+
+  methods = {
+    async uploadImage(isCover) {
+      if (!this.is_owner) {
+        return
+      }
+
+      const title = isCover ? '更换封面' : '更换头像';
+
+      const result = await wepy.showActionSheet({
+        itemList: [title]
+      });
+      if (!result.cancel) {
+        const result2 = await wepy.chooseImage({
+          count: 1,
+          sizeType: ['compressed']
+        });
+        // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
+        const tempFilePaths = result2.tempFilePaths;
+        if (tempFilePaths.length) {
+          const authToken = this.$parent.globalData.user.auth_token;
+          const userId = this.$parent.globalData.user._id;
+          let tempSrc = "";
+          if(isCover){
+            tempSrc = this.cover;
+            this.cover = tempFilePaths[0];
+          }
+          else{
+            tempSrc = this.avatar;
+            this.avatar = tempFilePaths[0];
+          }
+          this.$apply();
+          wepy.showLoading({
+            title: '正在上传...',
+            mask: true
+          });
+          let formData = {};
+          formData.size = result2.tempFiles.length && result2.tempFiles[0].size;
+          const imageInfo = await wepy.getImageInfo({
+            src: tempFilePaths[0]
+          });
+          formData.width = imageInfo.width;
+          formData.height = imageInfo.height;
+          formData.orientation = imageInfo.orientation;
+          formData.type = imageInfo.type;
+          const fileResult = await wepy.uploadFile({
+            url: `${this.baseUrl}/s3/images`,
+            filePath: tempFilePaths[0],
+            name: 'file',
+            formData: formData,
+            header: {
+              'X-Auth-Token': authToken,
+              'X-User-Id': userId
+            }
+          }).catch((err)=>{
+            console.log("error...",err)
+          });
+          const fileData = JSON.parse(fileResult.data);
+          if (fileData.errors || fileResult.statusCode != 200) {
+            wx.showToast({
+              title: "图片上传失败，请稍后再试",
+              icon: "none"
+            });
+            if(isCover){
+              this.cover = tempSrc;
+            }
+            else{
+              this.avatar = tempSrc;
+            }
+            this.$apply();
+            wepy.hideLoading();
+            return;
+          }
+          // TODO 更新对应表的字段
+          const fileId = fileData._id;
+          let storageKey = isCover ? 'cover' : 'avatar';
+          let storageSet = {};
+          storageSet[storageKey] = fileId;
+
+          let updateSuc = await this.$parent.update("vip_customers", this.current_customer._id, storageSet, this.space_id);
+  
+          if (!updateSuc) {
+            wx.showToast({
+              title: "图片上传失败，请稍后再试",
+              icon: "none"
+            });
+            if(isCover){
+              this.cover = tempSrc;
+            }
+            else{
+              this.avatar = tempSrc;
+            }
+          } else {
+            let my_customers = this.$parent.globalData.my_customers;
+            my_customers = my_customers.map(c => {
+              if (c.space == loveSpaceId) {
+                c[storageKey] = fileId;
+              }
+              return c
+            })
+            this.$parent.globalData.my_customers = my_customers;
+          }
+          this.$apply();
+          wepy.hideLoading();
+        }
+      }
+    },
+    goHome() {
+      wx.navigateTo({
+        url: '/pages/love/index'
+      })
+    },
+    async markHeart(_id, heart, event) {
+      const self = this;
+      wx.showNavigationBarLoading();
+      if(event == undefined){
+        event = heart;
+        heart = false;
+      }
+      let values = {
+        heart: !heart
+      };
+      console.log(_id,this.object_name,heart)
+      if (this.object_name != 'love_friends' && !heart) {
+        wx.showModal({
+          title: '友情提示',
+          content: `点击爱心之后，系统将会发短信通知对方你对${this.b_sex}有好感`,
+          success: function(res) {
+            if (res.confirm) {
+              req.post('/api/mini/vip/like/sms', {user_id: self.userId, space_id: self.space_id}).then((res) => {
+                if(event == undefined){
+                  event = heart;
+                  heart = false;
+                }
+                let values = {
+                  heart: !heart
+                };
+                self.$parent.update(self.object_name, _id, values, 'common').then((res) => {
+                  if(res){
+                    self.a_record.heart = !heart;
+                  }
+                  self.$apply();
+                  wx.hideNavigationBarLoading();
+                })
+              })
+            }
+          }
+        }) 
+      } else {
+        let res = await this.$parent.update(this.object_name, _id, values, 'common');
+        if (res) {
+          this.a_record.heart = !heart;
+        }
+        this.$apply();
+      }
+      wx.hideNavigationBarLoading();
+    },
+    goLookingFor() {
+      wx.navigateTo({
+        url: `/pages/love/question_list?object_name=love_looking_for&space_id=${this.space_id}`
+      })
+    },
+    goTest(){
+      if(this.a_record.match){
+        return;
+      }
+      wx.navigateTo({
+        url: `/pages/love/test?share_from=${this.userId}`
+      })
+    },
+    goMe(){
+      if(!this.is_owner){
+        return;
+      }
+      
+      wx.navigateTo({
+        url: '/pages/love/love_question'
+      })
+    },
+    addPost() {
+      wx.navigateTo({
+        url: `/pages/record/create?object_name=love_post&space_id=${this.space_id}`
+      })
+    },
+    goAnswer() {
+      const user = this.$parent.globalData.user;
+      if (user.name && user.avatar) {
+         const answeredUrl = encodeURIComponent(`/pages/love/cover_about_yourself?space_id=${loveSpaceId}`)
+         wx.navigateTo({
+          url: `/pages/love/papers_view?object_name=love_test&space_id=${this.space_id}&answered_url=${answeredUrl}&keep_progress`})
+      }else {
+        const answeredUrl = encodeURIComponent(`/pages/love/cover_about_yourself?space_id=${loveSpaceId}`)
+        wx.navigateTo({url: `/pages/user_info_login?share_from=${this.share_from}&next=${answeredUrl}`})
+      }
+    }
+  }
+}
+</script>
