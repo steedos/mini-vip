@@ -217,11 +217,11 @@ video{
     <view class="post-header body_color">
       <view class="weui-cell weui-cell_access">
         <view class="weui-cell__hd">
-          <image wx:if="{{avatar}}" class="image slds-icon slds-icon--small slds-m-right--x-small" src="{{util.formatImageUrl(avatar, baseUrl)}}"></image>
+          <image wx:if="{{post.owner.profile.avatar}}" class="image slds-icon slds-icon--small slds-m-right--x-small" src="{{util.formatImageUrl(post.owner.profile.avatar, baseUrl)}}"></image>
           <view wx:else class="slds-icon-standard-channel-programs slds-icon slds-icon--small slds-m-right--x-small"></view>
         </view>
         <view class="weui-cell__bd">
-          <view class="space-name">{{space_name}}</view>
+          <view class="space-name">{{post.owner.name}}</view>
           <view class="post-time">{{util.formatDate(post.created)}}</view>
         </view>
       </view>
@@ -418,7 +418,10 @@ export default class PostView extends wepy.page {
     }else{
       object_name = 'post'
     }
-    var post = await this.$parent.get(object_name, this.post_id, this.space_id)
+    const query = {
+      $expand: 'owner($select=name,profile)'
+    }
+    var post = await this.$parent.get(object_name, this.post_id, this.space_id, query)
     this.post = post;
     this.space_id = post.space;
     let postMd = this.post && this.post.description;

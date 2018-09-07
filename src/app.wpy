@@ -286,6 +286,7 @@ export default class VIP extends wepy.app {
       'pages/love/invite_code_success_me',
       'pages/love/question_list',
       'pages/love/discovery',
+      'pages/love/post_recommend',
       'pages/love/cp',
       'pages/love/match_history',
       'pages/love/love_me',
@@ -306,12 +307,12 @@ export default class VIP extends wepy.app {
         iconPath: './images/tabbars/apps.png',
         text: '无颜匹配',
       },
-      // {
-      //   pagePath: 'pages/love/matching',
-      //   selectedIconPath: './images/tabbars/topic_pressed.png',
-      //   iconPath: './images/tabbars/topic.png',
-      //   text: '缘分榜',
-      // },
+      {
+        pagePath: 'pages/love/post_recommend',
+        selectedIconPath: './images/tabbars/topic_pressed.png',
+        iconPath: './images/tabbars/topic.png',
+        text: '最新动态',
+      },
       {
         pagePath: 'pages/love/introduce_me',
         selectedIconPath: './images/tabbars/me_pressed.png',
