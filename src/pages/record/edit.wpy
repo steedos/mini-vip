@@ -1,3 +1,14 @@
+<style lang="less">
+
+  .weui-navbar__item{
+    padding: 5px 0px;
+  }
+
+  .weui-navbar__slider{
+
+  }
+</style>
+
 <template>
   <view class="weui-tab">
     <view class="weui-navbar">

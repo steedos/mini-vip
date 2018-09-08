@@ -1,10 +1,15 @@
-<style>
+<style lang="less">
+
   .weui-navbar__item{
-    padding: 8px 0px;
+    padding: 5px 0px;
   }
 
   .weui-tab__panel{
     padding-top: 40px;
+  }
+
+  .weui-navbar__slider{
+
   }
 </style>
 
@@ -35,7 +40,8 @@
       list_views: [],
       activeIndex: 0,
       sliderLeft: 0,
-      sliderOffset:0
+      sliderOffset:0,
+      offsetIndex: 0,
     };
 
     props = {
@@ -59,7 +65,11 @@
 
           this.sliderLeft = (res.windowWidth / views_count - sliderWidth) / 2;
 
-          this.sliderOffset = res.windowWidth / views_count * this.activeIndex;
+          this.sliderOffset = res.windowWidth / views_count * this.offsetIndex;
+
+          if(views_count > 0){
+            this.activeIndex = _.keys(list_views)[0];
+          }
 
           this.$apply();
         }
@@ -98,10 +108,6 @@
     }
 
     getQueryFilters(list_view){
-      console.log('getQueryFilters', list_view.filters)
-
-      console.log('transformFilterToDev', this.transformFilterToDev(list_view.filters));
-
       return this.transformFilterToDev(list_view.filters);
     }
 
