@@ -17,29 +17,29 @@
 
 <template>
   <view class="page creator-index" wx:if="{{show}}">
-    <view class="page__hd">
-      <view class="page__title" >零代码开发业务系统</view>
-      <view class="page__desc" >
-        通过配置的业务表单、配置业务字段、配置权限实现快速开发业务系统。熟练的配置人员只需一天，甚至一小时，即可开发出一套手机、平板、电脑三合一的台账类业务系统
-        <navigator url="help" class="weui-footer__link" >查看详细</navigator>
-      </view>
-    </view>
-    <view class="page__bd page__bd_spacing">
+    <!--<view class="page__hd">-->
+      <!--<view class="page__title" >零代码开发业务系统</view>-->
+      <!--<view class="page__desc" >-->
+        <!--通过配置的业务表单、配置业务字段、配置权限实现快速开发业务系统。熟练的配置人员只需一天，甚至一小时，即可开发出一套手机、平板、电脑三合一的台账类业务系统-->
+        <!--<navigator url="help" class="weui-footer__link" >查看详细</navigator>-->
+      <!--</view>-->
+    <!--</view>-->
+    <!--<view class="page__bd page__bd_spacing">-->
 
 
-      <view class="weui-msg">
-        <view class="weui-msg__text-area">
-          <view class="weui-msg__title">您还没有加入任何企业</view>
-          <!--<view class="weui-msg__desc">内容详情，可根据实际需要安排，如果换行则不超过规定长度，居中展现<navigator url="" class="weui-msg__link">文字链接</navigator></view>-->
-        </view>
-        <view class="weui-msg__opr-area">
-          <view class="weui-btn-area">
-            <button class="weui-btn" type="primary" @tap.stop="registerSpage">开通企业</button>
-            <button class="weui-btn" type="default" @tap.stop="bindingAccount">原账户进行绑定</button>
-          </view>
-        </view>
-      </view>
-    </view>
+      <!--<view class="weui-msg">-->
+        <!--<view class="weui-msg__text-area">-->
+          <!--<view class="weui-msg__title">您还没有加入任何企业</view>-->
+          <!--&lt;!&ndash;<view class="weui-msg__desc">内容详情，可根据实际需要安排，如果换行则不超过规定长度，居中展现<navigator url="" class="weui-msg__link">文字链接</navigator></view>&ndash;&gt;-->
+        <!--</view>-->
+        <!--<view class="weui-msg__opr-area">-->
+          <!--<view class="weui-btn-area">-->
+            <!--<button class="weui-btn" type="primary" @tap.stop="registerSpage">开通企业</button>-->
+            <!--<button class="weui-btn" type="default" @tap.stop="bindingAccount">原账户进行绑定</button>-->
+          <!--</view>-->
+        <!--</view>-->
+      <!--</view>-->
+    <!--</view>-->
   </view>
 </template>
 
@@ -70,6 +70,8 @@
 
       wx.showNavigationBarLoading();
       await this.$parent.login();
+
+      const user = this.$parent.globalData.user
 
       const my_spaces = this.$parent.globalData.my_spaces;
 
@@ -104,7 +106,16 @@
 //      console.log('Index..........................')
       wx.hideNavigationBarLoading();
       if(go){
-        pageRouter.navigateTo({url: go})
+        pageRouter.redirectTo({url: go});
+        return;
+      }else{
+        if(user.mobile){
+          pageRouter.redirectTo({url: '/pages/creator/register_space'})
+          return ;
+        }else{
+          pageRouter.redirectTo({url: '/pages/creator/login'})
+          return ;
+        }
       }
       this.show = true;
       this.$apply()

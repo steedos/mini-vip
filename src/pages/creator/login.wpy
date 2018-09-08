@@ -1,0 +1,364 @@
+<style lang="less">
+  page{
+    height: 100%;
+    width: 100%;
+  }
+
+  .page{
+    width: 100%;
+    height: 100%;
+    /*background-color: #fbae17;*/
+    background-image: url(https://cn.steedos.com/api/files/instances/zskSK7S9yAKPJpqyK);
+    background-size: cover;
+  }
+
+  .top{
+    background-color: #FFFFFF;
+    z-index: 2;
+    /*width: 92%;*/
+    /*left: 4%;*/
+    border-radius: 5px;
+    box-shadow: #666666 0px 5px 30px;
+  }
+
+  .login-view{
+    width: 92%;
+    left: 4%;
+    position: absolute;
+    top: 65px;
+    /*transition: all .5s;*/
+    /*-webkit-transition: all .5s;*/
+  }
+
+  .bottom{
+    background-color: #FDFDFD;
+    z-index: 1;
+    /*width: 86%;*/
+    /*left: 7%;*/
+    border-radius: 5px;
+    box-shadow: #666666 0px 5px 40px;
+  }
+
+  .new-view{
+    width: 92%;
+    left: 4%;
+    position: absolute;
+    top: 120px;
+    /*transition: all .5s;*/
+    /*-webkit-transition: all .5s;*/
+
+    .weui-btn-area{
+      margin-top: 25px;
+      margin-bottom: 25px;
+    }
+  }
+
+  .new-view-title{
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 17px;
+    font-weight: bold;
+    margin-top: 55px;
+  }
+
+  .title{
+    padding: 15px;
+    font-size: 17px;
+    font-weight: bold;
+  }
+
+  .user-avatar{
+    margin-top: 25px;
+  }
+
+  .user-phone{
+    margin-top: 30px;
+  }
+
+  .weui-msg__link{
+    margin-top: 15px;
+    margin-bottom: 15px;
+    font-size: 13px;
+    display: block;
+    text-align: center;
+  }
+
+  .weui-msg__link2{
+    color:#586c94;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    font-size: 13px;
+    display: block;
+    text-align: center;
+  }
+</style>
+
+<template>
+  <view class="page">
+    <view wx:if="{{showTopTips}}" class="weui-toptips weui-toptips_warn">{{message}}</view>
+    <view class="login-view {{loginViewClass}}" @tap.stop="clickLoginView" animation="{{loginViewAnimationData}}">
+      <view class="title">登录</view>
+      <!--<view class="weui-cells__title">账户信息</view>-->
+      <block wx:if="{{usePhoneLogin}}">
+        <view class="container other">
+          <view class="weui-media-box__hd weui-media-box__hd_in-appmsg user-avatar">
+            <open-data class="weui-media-box__thumb" type="userAvatarUrl"></open-data>
+          </view>
+        </view>
+        <view class="weui-btn-area user-phone">
+          <button class="weui-btn" type="primary" plain="true" open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumberAndLogin">手机号登录</button>
+        </view>
+        <view class="weui-msg__link" @tap.stop="useUserName">用户名、密码登录</view>
+      </block>
+      <block wx:else>
+        <form bindsubmit="formSubmit" >
+        <view class="weui-cells weui-cells_after-title">
+          <view class="weui-cell weui-cell_input">
+            <view class="weui-cell__hd">
+              <view class="weui-label">用户名</view>
+            </view>
+            <view class="weui-cell__bd">
+              <input class="weui-input" placeholder="请输入用户名" name="username"/>
+            </view>
+          </view>
+          <view class="weui-cell weui-cell_input weui-cell_vcode">
+            <view class="weui-cell__hd">
+              <view class="weui-label">密码</view>
+            </view>
+            <view class="weui-cell__bd">
+              <input class="weui-input" placeholder="请输入密码" name="password" password="true"/>
+            </view>
+          </view>
+        </view>
+        <view class="weui-btn-area">
+          <button class="weui-btn" type="primary" formType="submit" plain="true" @tap.stop="void">确定</button>
+        </view>
+        <view class="weui-msg__link2" @tap.stop="useUserPhone">使用手机号登录</view>
+        </form>
+      </block>
+    </view>
+
+    <view class="new-view {{newViewClass}}" animation="{{newViewAnimationData}}" @tap.stop="clickNewView">
+      <view class="title">新建企业</view>
+      <form bindsubmit="newFormSubmit">
+        <view class="weui-cells weui-cells_after-title">
+          <view class="weui-cell weui-cell_input">
+            <view class="weui-cell__hd">
+              <view class="weui-label">企业名称</view>
+            </view>
+            <view class="weui-cell__bd">
+              <input class="weui-input" placeholder="请输入企业名称" name="spaceName"/>
+            </view>
+          </view>
+        </view>
+
+        <view class="weui-cells__title">创建人信息</view>
+        <view class="weui-cells weui-cells_after-title">
+          <view class="weui-cell weui-cell_input">
+            <view class="weui-cell__hd">
+              <view class="weui-label">创建人信息</view>
+            </view>
+            <view class="weui-cell__bd">
+              <input class="weui-input" placeholder="请输入真实姓名" name="name" value="{{name}}"/>
+            </view>
+          </view>
+        </view>
+        <view class="new-view-title" wx:if="{{showNewTitle}}">新建企业</view>
+        <view class="weui-btn-area" wx:else>
+          <button class="weui-btn" type="primary" form-type="submit" plain="true" @tap.stop="void">确定</button>
+        </view>
+      </form>
+
+    </view>
+  </view>
+</template>
+
+
+<script>
+  import wepy from 'wepy';
+  import creatorClient from '@/utils/creator_client.js'
+  import odataClient from '@/utils/odata_client.js'
+  import _ from 'underscore';
+  import pageRouter from '@/utils/pageRouter'
+  import req from '@/network';
+
+  export default class IndexNew extends wepy.page {
+    data = {
+      loginViewClass: 'top',
+      newViewClass: 'bottom',
+      loginViewAnimation: '',
+      loginViewAnimationData: '',
+      newViewAnimation: '',
+      newViewAnimationData:'',
+      showNewTitle: true,
+      usePhoneLogin: true,
+      showTopTips: false,
+      message: '',
+    };
+
+
+    async onLoad(){
+
+      await this.$parent.login();
+
+      let loginViewAnimation = wx.createAnimation({
+        transformOrigin: '50% 50% 0',
+        duration: 300,
+        timingFunction: 'linear',
+      });
+
+      this.loginViewAnimation = loginViewAnimation;
+
+      this.loginViewAnimationData = this.loginViewAnimation.export();
+
+      let newViewAnimation = wx.createAnimation({
+        transformOrigin: '50% 50% 0',
+        duration: 300,
+        timingFunction: 'linear',
+      });
+
+      this.newViewAnimation = newViewAnimation;
+
+      this.newViewAnimationData = this.newViewAnimation.export()
+
+      this.showLogin()
+    }
+
+    showLogin() {
+      this.newViewClass = 'bottom';
+      this.loginViewClass = 'top';
+      this.showNewTitle = true;
+      this.loginViewAnimation.scale3d(1, 1, 1).step()
+      this.loginViewAnimationData = this.loginViewAnimation.export()
+      this.newViewAnimation.scale3d(0.9, 0.9, 0.9).step()
+      this.newViewAnimationData = this.newViewAnimation.export()
+      this.$apply()
+    }
+
+    showNew(){
+      this.newViewClass = 'top';
+      this.loginViewClass = 'bottom';
+      this.showNewTitle = false;
+      this.loginViewAnimation.scale3d(0.9, 0.9, 0.9).step()
+      this.loginViewAnimationData = this.loginViewAnimation.export()
+      this.newViewAnimation.scale3d(1, 1, 1).step()
+      this.newViewAnimationData = this.newViewAnimation.export()
+      this.$apply()
+    }
+
+
+    methods = {
+      clickNewView: function (e) {
+        this.showTopTips = false;
+        this.showNew();
+      },
+      clickLoginView: function (e) {
+        this.showTopTips = false;
+        this.showLogin();
+      },
+      useUserName: function (e) {
+        this.showTopTips = false;
+        this.usePhoneLogin = false;
+        this.$apply();
+      },
+      useUserPhone: function (e) {
+        this.showTopTips = false;
+        this.usePhoneLogin = true;
+        this.$apply();
+      },
+      getPhoneNumberAndLogin: async function(e){
+        if (e.detail.iv || e.detail.encryptedData) {
+          try {
+            const res = await req.post('/api/account/binding_use_phone', {
+              iv: e.detail.iv,
+              encryptedData: e.detail.encryptedData
+            });
+            this.$parent.globalData.is_login = false;
+            pageRouter.redirectTo({url: '/pages/creator/index'})
+
+          } catch (ex) {
+            this.showTopTips = true;
+            this.message = ex.data.error;;
+            return;
+          }
+
+        } else {
+          this.showTopTips = true;
+          this.message = '获取手机号失败，请重新授权';
+          return;
+        }
+      },
+      formSubmit: async function(e) {
+        this.showTopTips = false;
+        const username = e.detail.value.username;
+        if(!username){
+          this.showTopTips = true;
+          this.message = '请填用户名';
+          this.$apply();
+          return;
+        }
+        const password = e.detail.value.password;
+        if(!password){
+          this.showTopTips = true;
+          this.message = '请填用密码';
+          this.$apply();
+          return;
+        }
+        try {
+          const result = await req.post('/api/account/binding', e.detail.value);
+          this.$parent.globalData.is_login = false;
+          pageRouter.redirectTo({url: '/pages/creator/index'})
+        } catch (ex) {
+          this.showTopTips = true;
+          this.message = ex.data.error;
+          this.$apply();
+        }
+      },
+      void: function () {
+
+      },
+      newFormSubmit: async function (e) {
+        console.log('fs', e.detail.value)
+        const spaceName = e.detail.value.spaceName;
+
+        if(!spaceName){
+          this.showTopTips = true;
+          this.message = '请填写企业名称';
+          this.$apply();
+          return;
+        }
+
+        const name = e.detail.value.name;
+
+        if(!name){
+          this.showTopTips = true;
+          this.message = '请输入真实姓名';
+          this.$apply();
+          return ;
+        }
+
+        if(this.name != name){
+          await req.put('/mini/vip/user', { name: name});
+        }
+
+        const res = await odataClient.insert('spaces', {name: spaceName});
+
+        if(res && res.value && res.value.length > 0){
+          const space = res.value[0];
+
+          const space2 = {name: space.name, _id: space._id, owner: space.owner};
+
+          this.$parent.globalData.my_spaces.push(space2);
+
+          wx.setStorageSync('space', space2);
+
+          console.log('space2', space2)
+
+          this.$parent.space = space2;
+
+          pageRouter.redirectTo({ url: '/pages/creator/index' });
+        }
+      }
+    }
+  }
+</script>

@@ -194,6 +194,7 @@ export default class VIP extends wepy.app {
   config = {
     pages: [
       'pages/creator/index',
+      'pages/creator/login',
       'pages/creator/help',
       'pages/creator/me',
       'pages/creator/apps',
