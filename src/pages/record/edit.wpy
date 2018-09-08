@@ -21,10 +21,10 @@
     </view>
     <view class="weui-tab__panel">
       <view class="weui-tab__content" hidden="{{activeIndex != 0}}">
-        <related :args.sync='args'/>
+        <autoform :args.sync='args'></autoform>
       </view>
       <view class="weui-tab__content" hidden="{{activeIndex != 1}}">
-        <autoform :args.sync='args'></autoform>
+        <related :args.sync='args'/>
       </view>
     </view>
   </view>
@@ -46,8 +46,8 @@
 
     data = {
       args: {},
-      tabs: ['相关', '详细信息'],
-      activeIndex: 1,
+      tabs: ['详细信息','相关'],
+      activeIndex: 0,
       sliderLeft: 0,
       sliderOffset:0
     };

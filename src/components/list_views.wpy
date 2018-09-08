@@ -11,6 +11,10 @@
   .weui-navbar__slider{
 
   }
+
+  .weui-tab{
+    margin-bottom: 20px;
+  }
 </style>
 
 <template>
