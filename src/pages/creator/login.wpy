@@ -8,7 +8,7 @@
     width: 100%;
     height: 100%;
     /*background-color: #fbae17;*/
-    background-image: url(https://cn.steedos.com/api/files/instances/zskSK7S9yAKPJpqyK);
+    background-image: url(https://lg-g1hu9g8w-1257585972.cos.ap-shanghai.myqcloud.com/20180910134202.jpg);
     background-size: cover;
   }
 
@@ -138,38 +138,38 @@
       </block>
     </view>
 
-    <view class="new-view {{newViewClass}}" animation="{{newViewAnimationData}}" @tap.stop="clickNewView">
-      <view class="title">新建企业</view>
-      <form bindsubmit="newFormSubmit">
-        <view class="weui-cells weui-cells_after-title">
-          <view class="weui-cell weui-cell_input">
-            <view class="weui-cell__hd">
-              <view class="weui-label">企业名称</view>
-            </view>
-            <view class="weui-cell__bd">
-              <input class="weui-input" placeholder="请输入企业名称" name="spaceName"/>
-            </view>
-          </view>
-        </view>
+    <!--<view class="new-view {{newViewClass}}" animation="{{newViewAnimationData}}" @tap.stop="clickNewView">-->
+      <!--<view class="title">创建企业</view>-->
+      <!--<form bindsubmit="newFormSubmit">-->
+        <!--<view class="weui-cells weui-cells_after-title">-->
+          <!--<view class="weui-cell weui-cell_input">-->
+            <!--<view class="weui-cell__hd">-->
+              <!--<view class="weui-label">企业名称</view>-->
+            <!--</view>-->
+            <!--<view class="weui-cell__bd">-->
+              <!--<input class="weui-input" placeholder="请输入企业名称" name="spaceName"/>-->
+            <!--</view>-->
+          <!--</view>-->
+        <!--</view>-->
 
-        <view class="weui-cells__title">创建人信息</view>
-        <view class="weui-cells weui-cells_after-title">
-          <view class="weui-cell weui-cell_input">
-            <view class="weui-cell__hd">
-              <view class="weui-label">创建人信息</view>
-            </view>
-            <view class="weui-cell__bd">
-              <input class="weui-input" placeholder="请输入真实姓名" name="name" value="{{name}}"/>
-            </view>
-          </view>
-        </view>
-        <view class="new-view-title" wx:if="{{showNewTitle}}">新建企业</view>
-        <view class="weui-btn-area" wx:else>
-          <button class="weui-btn" type="primary" form-type="submit" plain="true" @tap.stop="void">确定</button>
-        </view>
-      </form>
+        <!--<view class="weui-cells__title">创建人信息</view>-->
+        <!--<view class="weui-cells weui-cells_after-title">-->
+          <!--<view class="weui-cell weui-cell_input">-->
+            <!--<view class="weui-cell__hd">-->
+              <!--<view class="weui-label">真实姓名</view>-->
+            <!--</view>-->
+            <!--<view class="weui-cell__bd">-->
+              <!--<input class="weui-input" placeholder="请输入真实姓名" name="name" value="{{name}}"/>-->
+            <!--</view>-->
+          <!--</view>-->
+        <!--</view>-->
+        <!--<view class="new-view-title" wx:if="{{showNewTitle}}">新建企业</view>-->
+        <!--<view class="weui-btn-area" wx:else>-->
+          <!--<button class="weui-btn" type="primary" form-type="submit" plain="true" @tap.stop="void">确定</button>-->
+        <!--</view>-->
+      <!--</form>-->
 
-    </view>
+    <!--</view>-->
   </view>
 </template>
 
@@ -184,8 +184,8 @@
 
   export default class IndexNew extends wepy.page {
     data = {
-      loginViewClass: 'top',
-      newViewClass: 'bottom',
+      loginViewClass: '',
+      newViewClass: '',
       loginViewAnimation: '',
       loginViewAnimationData: '',
       newViewAnimation: '',
@@ -225,6 +225,10 @@
     }
 
     showLogin() {
+      if(this.loginViewClass === 'top'){
+        return;
+      }
+
       this.newViewClass = 'bottom';
       this.loginViewClass = 'top';
       this.showNewTitle = true;
@@ -236,6 +240,9 @@
     }
 
     showNew(){
+      if(this.newViewClass === 'top'){
+        return;
+      }
       this.newViewClass = 'top';
       this.loginViewClass = 'bottom';
       this.showNewTitle = false;
