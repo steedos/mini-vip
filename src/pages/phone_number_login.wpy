@@ -19,6 +19,8 @@
     .user-phone{
       margin-top: 20px;
       width: 100%;
+      position:absolute;
+      top:50%;
     }
 
     .input-btn {
@@ -102,10 +104,10 @@
       </block>
       <block wx:else>
         <view class="container other">
-          <view class="weui-media-box__hd weui-media-box__hd_in-appmsg user-avatar">
+          <!-- <view class="weui-media-box__hd weui-media-box__hd_in-appmsg user-avatar">
             <image class="weui-media-box__thumb avatar" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/noface144.png"></image>
           </view>
-          <view class="container-title">无颜</view>
+          <view class="container-title">无颜</view> -->
           <view class="user-phone" style="margin-top: 0px">
             <button class="weui-btn" type="primary" plain="true" open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumberAndLogin">使用微信账户登录</button>
           </view>
