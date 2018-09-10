@@ -167,7 +167,6 @@ page {
 <view>
   <view class="cover-page-bg"></view>
 	<view class="cover-page" wx:if="{{is_loaded}}">
-    <userHeader :about_me.sync="about_me" :isAuthUserInfo.sync="isAuthUserInfo" :user.sync="user_id"/> 
 		<view class="page__bd" style="padding: 20rpx 0">
 			<block wx:if="{{showLoveMatch}}">
         <view class="match" @tap="goCp">
@@ -258,7 +257,7 @@ export default class LoveHome extends wepy.page {
     isAuthUserInfo: false,
     baseUrl: baseUrl,
     showLoveMatch: false,
-    about_me: {},
+    // about_me: {},
     recommend_lover:[]
   };
 
@@ -275,7 +274,7 @@ export default class LoveHome extends wepy.page {
 	async onPullDownRefresh() {
     const self = this;
     wx.showNavigationBarLoading();
-    await this.loadAboutMe();
+    // await this.loadAboutMe();
     await this.loadGroups();
     await this.loadFriendList();
     await this.loadLovers();
@@ -312,7 +311,6 @@ export default class LoveHome extends wepy.page {
 			this.$apply();
     }
 
-    await this.loadAboutMe();
     await this.loadLovers();
     await this.loadGroups();
     await this.loadFriendList();
@@ -362,52 +360,6 @@ export default class LoveHome extends wepy.page {
     this.$apply();
 
     wx.hideNavigationBarLoading();
-  }
-
-  async loadAboutMe() {
-    const user_id = this.$parent.globalData.user._id;
-    const avatar = this.$parent.globalData.user.avatar;
-    const options = {
-      $filter: `(owner eq '${this.user_id}')`
-    }
-    const about_me = await wepy.$instance.query('love_about_me', options, this.space_id);
-    const customer = await this.loadCustomer();
-    if (about_me && about_me.value && about_me.value[0]) {
-      this.about_me = about_me.value[0];
-    } else {
-      this.about_me = {};
-    }
-
-    this.about_me.name = customer.owner.name;
-    if (customer.cover) {
-      this.about_me.cover = customer.cover;
-      this.cover = customer.cover;
-    } else {
-      this.cover = 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/bg-moon.jpg';
-    }
-    if (customer.avatar) {
-      this.about_me.avatar = customer.avatar;
-    } else {
-      this.about_me.avatar = avatar;
-    }
-
-    if (this.about_me.avatar && this.about_me.name) {
-      this.isAuthUserInfo = true;
-      this.$apply();
-    }
-
-    this.$apply();
-  }
-
-  async loadCustomer() {
-    const user_id = this.$parent.globalData.user._id;
-    const options = {
-      $filter: `(owner eq '${user_id}' and space eq '${this.space_id}')`,
-      $expand: 'owner($select=name,profile)'
-    }
-    const result = await this.$parent.query('vip_customers', options, this.space_id);
-    const customer = result.value[0];
-    return customer;
   }
 
   async loadLovers(){
