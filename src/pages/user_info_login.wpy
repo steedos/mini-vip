@@ -79,6 +79,7 @@ page {
 import wepy from 'wepy';
 import req from '@/network';
 import { loveSpaceId } from '@/config';
+import pageRouter from '@/utils/pageRouter'
 
 export default class UserInfoLogin extends wepy.page {
   config = {
@@ -152,7 +153,7 @@ export default class UserInfoLogin extends wepy.page {
           answeredUrl = encodeURIComponent(`/pages/love/cover_you_looking_for`);
           object_name = 'love_about_me';
         }
-        wx.navigateTo({
+        pageRouter.navigateTo({
           url: `/pages/love/papers_view?object_name=${object_name}&space_id=${this.space_id}&required=true&answered_url=${answeredUrl}&answered_url_type=reLaunch&keep_progress`
         });
         // if (!this.share) {

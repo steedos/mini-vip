@@ -306,6 +306,7 @@ page {
           </view>
           <view class="{{is_owner ? 'weui-cell__ft_in-access' : ''}}" @tap="goMe()">
             <view class="name">{{name}}</view>
+            <view wx:if="{{show_mobile}}" class="name">{{a_record.user_b.mobile}}</view>
             <view wx:if="{{about_me.self_introduction}}" class="introduction">{{about_me.self_introduction}}</view>
             <view class="zodiac-constellation">
               <view wx:if="{{about_me.sex}}">{{about_me.sex}}</view>
@@ -442,8 +443,10 @@ import { baseUrl } from '@/config';
 import util from '../../wxs/util.wxs';
 import { baseMaterialUrl } from '@/config';
 import { loveSpaceId } from '@/config';
+import pageRouter from '@/utils/pageRouter';
 import req from '@/network';
 import postList from '../../components/simple_post_list';
+
 import _ from 'underscore'
 
 export default class loveIntroduce extends wepy.page {
@@ -473,6 +476,7 @@ export default class loveIntroduce extends wepy.page {
     posts: [],
     is_owner: false,
     answered:false,
+    show_mobile:false,
     // heart_summary: '',
     baseUrl: baseUrl,
     showGoHome: false,
@@ -548,7 +552,7 @@ export default class loveIntroduce extends wepy.page {
         this.$apply();
       } else {
         const a_options = {
-          $expand: 'user_b($select=profile,name),owner($select=profile,name)'
+          $expand: 'user_b($select=profile,name,mobile),owner($select=profile,name)'
         }
         const a_record = await this.$parent.get(this.object_name, this.record_id, this.space_id, a_options);
 
@@ -590,6 +594,9 @@ export default class loveIntroduce extends wepy.page {
       e.love = 1;
       e.share_from = scenes[1];
       e.qrcode = 1;
+    }
+    if (e.show_mobile) {
+      this.show_mobile = true
     }
     this.space_id = e.space_id;
     await this.$parent.login(e);
@@ -961,14 +968,14 @@ export default class loveIntroduce extends wepy.page {
     },
     goAnswer() {
       const user = this.$parent.globalData.user;
-      if (user.name && user.avatar) {
+      // if (user.name && user.avatar) {
          const answeredUrl = encodeURIComponent(`/pages/love/cover_about_yourself?space_id=${loveSpaceId}`)
-         wx.navigateTo({
+         pageRouter.navigateTo({
           url: `/pages/love/papers_view?object_name=love_test&space_id=${this.space_id}&answered_url=${answeredUrl}&keep_progress`})
-      }else {
-        const answeredUrl = encodeURIComponent(`/pages/love/cover_about_yourself?space_id=${loveSpaceId}`)
-        wx.navigateTo({url: `/pages/user_info_login?share_from=${this.share_from}&next=${answeredUrl}`})
-      }
+      // }else {
+      //   const answeredUrl = encodeURIComponent(`/pages/love/cover_about_yourself?space_id=${loveSpaceId}`)
+      //   wx.navigateTo({url: `/pages/user_info_login?share_from=${this.share_from}&next=${answeredUrl}`})
+      // }
     }
   }
 }

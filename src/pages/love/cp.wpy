@@ -580,7 +580,7 @@ export default class LoveCP extends wepy.page {
       const cp = await this.loadCP();
     },
     goDetail() {
-      wx.navigateTo({ url: `/pages/love/introduce?_id=${this.cp._id}&space_id=${this.space_id}&userId=${this.cp.user_b._id}&object_name=love_recommend_history` })
+      wx.navigateTo({ url: `/pages/love/introduce?_id=${this.cp._id}&space_id=${this.space_id}&userId=${this.cp.user_b._id}&object_name=love_recommend_history&show_mobile=true` })
     },
     goMe() {
       wx.navigateTo({ url: '/pages/love/me' })

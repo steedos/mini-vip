@@ -91,6 +91,7 @@
 <script>
 import wepy from 'wepy';
 import { loveSpaceId } from '@/config';
+import pageRouter from '@/utils/pageRouter';
 import util from '../../wxs/util.wxs';
 
 export default class Test extends wepy.page {
@@ -223,14 +224,14 @@ export default class Test extends wepy.page {
   methods = {
     async goAnswer() {
       const user = this.$parent.globalData.user;
-      if (user.name && user.avatar) {
+      // if (user.name && user.avatar) 
          const answeredUrl = encodeURIComponent(`/pages/love/cover_about_yourself?space_id=${loveSpaceId}`)
-         wx.navigateTo({
+         pageRouter.navigateTo({
           url: `/pages/love/papers_view?object_name=love_test&space_id=${this.space_id}&answered_url=${answeredUrl}&keep_progress`})
-      } else {
-        const answeredUrl = encodeURIComponent(`/pages/love/cover_about_yourself?space_id=${loveSpaceId}`)
-        wx.navigateTo({url: `/pages/user_info_login?naire=${this.naire}&share_from=${this.share_from}&next=${answeredUrl}`})
-      }
+      // } else {
+      //   const answeredUrl = encodeURIComponent(`/pages/love/cover_about_yourself?space_id=${loveSpaceId}`)
+      //   wx.navigateTo({url: `/pages/user_info_login?naire=${this.naire}&share_from=${this.share_from}&next=${answeredUrl}`})
+      // }
     },
     goLove() {
       wx.navigateTo({url: '/pages/love/cp'})

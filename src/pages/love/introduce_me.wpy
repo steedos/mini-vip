@@ -417,6 +417,7 @@ import { baseUrl } from '@/config';
 import util from '../../wxs/util.wxs';
 import { baseMaterialUrl } from '@/config';
 import { loveSpaceId } from '@/config';
+import pageRouter from '@/utils/pageRouter';
 import req from '@/network';
 import postList from '../../components/simple_post_list';
 
@@ -910,7 +911,7 @@ export default class loveIntroduce_me extends wepy.page {
       const user = this.$parent.globalData.user;
       if (user.name && user.avatar) {
          const answeredUrl = encodeURIComponent(`/pages/love/cover_about_yourself?space_id=${loveSpaceId}`)
-         wx.navigateTo({
+         pageRouter.navigateTo({
           url: `/pages/love/papers_view?object_name=love_test&space_id=${this.space_id}&answered_url=${answeredUrl}&keep_progress`})
       }else {
         const answeredUrl = encodeURIComponent(`/pages/love/cover_about_yourself?space_id=${loveSpaceId}`)
