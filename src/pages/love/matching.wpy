@@ -545,7 +545,7 @@ export default class Matching extends wepy.page {
         return;
       }
       let url=`/pages/love/introduce?_id=${record._id}&object_name=love_friends&space_id=${record.space}&userId=${record.user_b._id}`;
-      wx.navigateTo({
+      pageRouter.navigateTo({
         url: url
       });
     },

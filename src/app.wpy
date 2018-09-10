@@ -436,6 +436,13 @@ export default class VIP extends wepy.app {
         return this.checkMobile(to)
       }
     });
+
+    pageRouter.pushEnter({
+      page: '/pages/love/introduce',
+      script: function (to) {
+        return this.checkMobile(to)
+      }
+    });
   }
 
   onHide() {

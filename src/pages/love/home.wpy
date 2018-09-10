@@ -458,10 +458,10 @@ export default class LoveHome extends wepy.page {
       pageRouter.navigateTo({ url: `/pages/love/share?card=true&space_id=${this.space_id}` })
     },
     goDetail() {
-      wx.navigateTo({ url: `/pages/love/introduce` })
+      pageRouter.navigateTo({ url: `/pages/love/introduce` })
     },
     goRecommendDetail(userId){
-      wx.navigateTo({ url: `/pages/love/introduce?userId=${userId}` })
+      pageRouter.navigateTo({ url: `/pages/love/introduce?userId=${userId}&show_mobile=true` })
     },
     userLogin(e) {
       const userInfo = e.detail.userInfo;
