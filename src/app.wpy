@@ -307,12 +307,12 @@ export default class VIP extends wepy.app {
         iconPath: './images/tabbars/apps.png',
         text: '无颜匹配',
       },
-      {
-        pagePath: 'pages/love/post_recommend',
-        selectedIconPath: './images/tabbars/topic_pressed.png',
-        iconPath: './images/tabbars/topic.png',
-        text: '最新动态',
-      },
+      // {
+      //   pagePath: 'pages/love/post_recommend',
+      //   selectedIconPath: './images/tabbars/topic_pressed.png',
+      //   iconPath: './images/tabbars/topic.png',
+      //   text: '最新动态',
+      // },
       {
         pagePath: 'pages/love/introduce_me',
         selectedIconPath: './images/tabbars/me_pressed.png',
