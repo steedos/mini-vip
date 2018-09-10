@@ -1,10 +1,28 @@
 <template>
-  <view class="page record-read  page__bd">
-    <autoform :args.sync='args'></autoform>
-    <!--<view class="btn-container">-->
-      <!--<button class="submit-btn" type="primary" @tap="removeRecord">编辑</button>-->
-      <!--<button class="submit-btn" type="warn" @tap="removeRecord">删除</button>-->
-    <!--</view>-->
+  <!--<view class="page record-read  page__bd">-->
+    <!--<autoform :args.sync='args'></autoform>-->
+    <!--&lt;!&ndash;<view class="btn-container">&ndash;&gt;-->
+      <!--&lt;!&ndash;<button class="submit-btn" type="primary" @tap="removeRecord">编辑</button>&ndash;&gt;-->
+      <!--&lt;!&ndash;<button class="submit-btn" type="warn" @tap="removeRecord">删除</button>&ndash;&gt;-->
+    <!--&lt;!&ndash;</view>&ndash;&gt;-->
+  <!--</view>-->
+  <view class="weui-tab">
+    <view class="weui-navbar">
+      <block wx:for="{{tabs}}" wx:key="*this">
+        <view id="{{index}}" class="weui-navbar__item {{activeIndex == index ? 'weui-bar__item_on' : ''}}" bindtap="tabClick">
+          <view class="weui-navbar__title">{{item}}</view>
+        </view>
+      </block>
+      <view class="weui-navbar__slider" style="left: {{sliderLeft}}px; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);"></view>
+    </view>
+    <view class="weui-tab__panel">
+      <view class="weui-tab__content" hidden="{{activeIndex != 0}}">
+        <autoform :args.sync='args'></autoform>
+      </view>
+      <view class="weui-tab__content" hidden="{{activeIndex != 1}}">
+        <related :args.sync='args'/>
+      </view>
+    </view>
   </view>
 </template>
 
@@ -14,12 +32,21 @@
       padding-bottom: 0px;
     }
   }
+
+  .weui-navbar__item{
+    padding: 5px 0px;
+  }
+
+  .weui-navbar__slider{
+
+  }
 </style>
 
 <script>
   import wepy from 'wepy';
   import req from '@/network';
   import form from '../../components/form';
+  import related from '../../components/related';
 
   export default class RecordView extends wepy.page {
 
@@ -28,7 +55,11 @@
     };
 
     data = {
-      args: {}
+      args: {},
+      tabs: ['详细信息','相关'],
+      activeIndex: 0,
+      sliderLeft: 0,
+      sliderOffset:0
     };
 
     refresh(){
@@ -37,7 +68,8 @@
     }
 
     components = {
-      autoform: form
+      autoform: form,
+      related: related
     };
 
     changeNavigationBarTitleText(title){
@@ -73,6 +105,15 @@
       }
 
       this.args = args;
+
+      const res = wx.getSystemInfoSync();
+
+      const sliderWidth = 96;
+
+      this.sliderLeft = (res.windowWidth / this.tabs.length - sliderWidth) / 2;
+
+      this.sliderOffset = res.windowWidth / this.tabs.length * this.activeIndex;
+
       this.$apply()
     }
 
@@ -100,6 +141,13 @@
           this.goBack("remove");
         }
       },
+      tabClick: function (e) {
+        if(e.currentTarget.id === this.activeIndex){
+          return;
+        }
+        this.activeIndex = e.currentTarget.id;
+        this.sliderOffset = e.currentTarget.offsetLeft;
+      }
     }
   }
 </script>

@@ -162,7 +162,8 @@ export default class RecordList extends wepy.page {
 
   data = {
     object_name: '',
-    list_views_count: 0
+    list_views_count: 0,
+    url: 'view',
   };
 
   onLoad(e){

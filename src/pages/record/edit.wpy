@@ -1,32 +1,36 @@
 <style lang="less">
 
-  .weui-navbar__item{
-    padding: 5px 0px;
-  }
+  /*.weui-navbar__item{*/
+    /*padding: 5px 0px;*/
+  /*}*/
 
-  .weui-navbar__slider{
+  /*.weui-navbar__slider{*/
 
-  }
+  /*}*/
 </style>
 
 <template>
-  <view class="weui-tab">
-    <view class="weui-navbar">
-      <block wx:for="{{tabs}}" wx:key="*this">
-        <view id="{{index}}" class="weui-navbar__item {{activeIndex == index ? 'weui-bar__item_on' : ''}}" bindtap="tabClick">
-          <view class="weui-navbar__title">{{item}}</view>
-        </view>
-      </block>
-      <view class="weui-navbar__slider" style="left: {{sliderLeft}}px; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);"></view>
-    </view>
-    <view class="weui-tab__panel">
-      <view class="weui-tab__content" hidden="{{activeIndex != 0}}">
-        <autoform :args.sync='args'></autoform>
-      </view>
-      <view class="weui-tab__content" hidden="{{activeIndex != 1}}">
-        <related :args.sync='args'/>
-      </view>
-    </view>
+  <!--<view class="weui-tab">-->
+    <!--<view class="weui-navbar">-->
+      <!--<block wx:for="{{tabs}}" wx:key="*this">-->
+        <!--<view id="{{index}}" class="weui-navbar__item {{activeIndex == index ? 'weui-bar__item_on' : ''}}" bindtap="tabClick">-->
+          <!--<view class="weui-navbar__title">{{item}}</view>-->
+        <!--</view>-->
+      <!--</block>-->
+      <!--<view class="weui-navbar__slider" style="left: {{sliderLeft}}px; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);"></view>-->
+    <!--</view>-->
+    <!--<view class="weui-tab__panel">-->
+      <!--<view class="weui-tab__content" hidden="{{activeIndex != 0}}">-->
+        <!--<autoform :args.sync='args'></autoform>-->
+      <!--</view>-->
+      <!--<view class="weui-tab__content" hidden="{{activeIndex != 1}}">-->
+        <!--<related :args.sync='args'/>-->
+      <!--</view>-->
+    <!--</view>-->
+  <!--</view>-->
+
+  <view>
+    <autoform :args.sync='args'></autoform>
   </view>
 
 </template>
@@ -99,25 +103,25 @@
 
       this.args = args;
 
-      const res = wx.getSystemInfoSync();
-
-      const sliderWidth = 96;
-
-      this.sliderLeft = (res.windowWidth / this.tabs.length - sliderWidth) / 2;
-
-      this.sliderOffset = res.windowWidth / this.tabs.length * this.activeIndex;
+//      const res = wx.getSystemInfoSync();
+//
+//      const sliderWidth = 96;
+//
+//      this.sliderLeft = (res.windowWidth / this.tabs.length - sliderWidth) / 2;
+//
+//      this.sliderOffset = res.windowWidth / this.tabs.length * this.activeIndex;
 
       this.$apply()
     }
 
-    methods = {
-      tabClick: function (e) {
-        if(e.currentTarget.id === this.activeIndex){
-          return;
-        }
-        this.activeIndex = e.currentTarget.id;
-        this.sliderOffset = e.currentTarget.offsetLeft;
-      }
-    }
+//    methods = {
+//      tabClick: function (e) {
+//        if(e.currentTarget.id === this.activeIndex){
+//          return;
+//        }
+//        this.activeIndex = e.currentTarget.id;
+//        this.sliderOffset = e.currentTarget.offsetLeft;
+//      }
+//    }
   }
 </script>
