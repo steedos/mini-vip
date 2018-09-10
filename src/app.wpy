@@ -451,7 +451,7 @@ export default class VIP extends wepy.app {
   }
 
   checkMobile(to){
-    if(this.globalData.user && this.globalData.user.mobile){
+    if(!this.globalData.love || !this.globalData.love.enabled || (this.globalData.user && this.globalData.user.mobile)){
       return true
     }else{
       let url = '/pages/phone_number_login';
