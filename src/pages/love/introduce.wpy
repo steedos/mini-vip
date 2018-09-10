@@ -362,8 +362,10 @@ page {
           <view class="weui-cell__bd">微信号</view>
           <view class="weui-cell__ft">{{a_record.user_b.mobile}}</view>
         </view>
+      </view>
+      <view class="weui-cells" wx:if="{{!is_owner}}">
         <block wx:if="{{common_groups.length}}">
-          <view class="weui-cells common-groups">
+          <view class="common-groups">
             <view class="weui-cell">
               <view class="weui-cell__bd">
                 <view class="common-groups-title">共同群</view>
@@ -380,7 +382,6 @@ page {
           </view>
         </block>
       </view>
-
     </view>
     <view class="post-container">
       <postList :list.sync="posts" :editable.sync="editable" :hideComment.sync="true" />
