@@ -532,6 +532,9 @@ export default class loveIntroduce extends wepy.page {
   async loadCommonGroups() {
     if(this.a_record.open_groups && this.b_record.open_groups){
       this.common_groups = _.intersection(this.a_record.open_groups, this.b_record.open_groups);
+      if(this.common_groups.length){
+        this.show_mobile = true
+      }
     }
   }
   
