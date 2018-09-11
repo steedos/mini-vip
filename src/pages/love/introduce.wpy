@@ -328,7 +328,7 @@ page {
             </view>
           </view>
           <button class="weui-btn btn-star" open-type="share" plain="true" type="primary" size="mini">转发</button>
-          <button wx:if="{{is_owner}}" class="weui-btn btn-test" @tap="addPost" type="primary" size="mini">发布动态</button>
+          <!-- <button wx:if="{{is_owner}}" class="weui-btn btn-test" @tap="addPost" type="primary" size="mini">发布动态</button> -->
           <button wx:if="{{!is_owner && showGoHome}}" class="weui-btn btn-test" @tap="goHome" type="primary" size="mini">我的名片</button>
           <!-- <block wx:if="{{!is_owner}}">
             <button class="weui-btn btn-star" type="primary" plain="true" size="mini">关注</button>
@@ -601,7 +601,7 @@ export default class loveIntroduce extends wepy.page {
     await this.loadCustomer();
     await this.loadHobby();
     await this.loadAboutMe();
-    await this.loadPost();
+    // await this.loadPost();
     if(!this.a_record.match && this.answered) {
       await this.singleMatch();
     }
