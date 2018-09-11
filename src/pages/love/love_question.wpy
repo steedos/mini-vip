@@ -161,10 +161,16 @@ export default class QuestionnaireList extends wepy.page {
         object_name: 'love_about_me'
       },
       {
+      icon: 'slds-icon-custom-custom3',
+      label: '筛选条件',
+      object_name: 'love_looking_for',
+      url: `/pages/love/question_list?object_name=love_looking_for&space_id=${loveSpaceId}`
+      },
+      {
       icon: 'slds-icon-standard-canvas',
       label: '兴趣爱好',
       object_name: 'love_hobby',
-      url: `/pages/love/papers_view?object_name=love_hobby&space_id=${loveSpaceId}`
+      url: `/pages/love/question_list?object_name=love_hobby&space_id=${loveSpaceId}`
       },
     ],
     experience: [
