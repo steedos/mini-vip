@@ -280,7 +280,7 @@ page {
   <view class="cover-page-bg" style="background-image: url({{util.formatImageUrl(cover, baseUrl)}})"></view>
   <view class="cover-page page" wx:if="{{is_loaded}}">
     <view class="header">
-      <view class="cover-wrapper"></view>
+      <view class="cover-wrapper" @tap="uploadImage(true)"></view>
       <view class="space-info">
         <view wx:if="{{!is_owner && object_name}}" class="heart {{a_record.heart ? 'vip_heart-light' : 'vip_heart-default'}} slds-icon slds-icon--small slds-m-left--x-small" @tap="markHeart({{a_record._id}},{{a_record.heart}})"></view>
         <view class="wrapper">
