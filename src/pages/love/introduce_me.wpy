@@ -423,7 +423,7 @@ import postList from '../../components/simple_post_list';
 
 export default class loveIntroduce_me extends wepy.page {
   config = {
-    navigationBarTitleText: '交友名片',
+    navigationBarTitleText: '我',
         enablePullDownRefresh: true
   };
 

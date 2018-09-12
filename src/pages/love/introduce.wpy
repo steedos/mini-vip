@@ -404,7 +404,7 @@ import _ from 'underscore'
 
 export default class loveIntroduce extends wepy.page {
   config = {
-    navigationBarTitleText: '交友名片',
+    navigationBarTitleText: '我',
 		enablePullDownRefresh: true
   };
 

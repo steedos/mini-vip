@@ -193,7 +193,7 @@
       </button>
       <view class="btn btn-share-friend-circle" @tap="shareToFriendCircle">
         <view class="vip_wechat_moments slds-icon slds-icon--small slds-m-right--x-small"></view>
-        <view class="text">保存交友名片</view>
+        <view class="text">保存名片</view>
       </view>
     </view>
     <view class="pop-mask" wx:if="{{showPop}}" @tap="closePop"></view>
@@ -232,7 +232,7 @@
  
   export default class LoveShare extends wepy.page {
 		config = {
-			navigationBarTitleText: '交友名片',
+			navigationBarTitleText: '我',
     };
 
     wxs = {
