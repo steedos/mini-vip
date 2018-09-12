@@ -15,7 +15,7 @@ import postList from '../../components/love_post_list';
 
 export default class PostRecommend extends wepy.page {
 	config = {
-		navigationBarTitleText: '最新动态'
+		navigationBarTitleText: '最新'
 	}
 
 	data = {

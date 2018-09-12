@@ -1,4 +1,4 @@
-<!-- 最新动态 -->
+<!-- 最新文章 -->
 <style lang="less">
 page {
   height: 100%;
@@ -155,7 +155,7 @@ const DATA_LENGTH = 10;
 
 export default class Posts extends wepy.page {
   config = {
-    navigationBarTitleText: '动态',
+    navigationBarTitleText: '文章',
     enablePullDownRefresh: true
   };
 
