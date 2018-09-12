@@ -358,7 +358,7 @@ page {
           <view class="weui-cell__ft" wx:if="{{a_record.match !== undefined}}">{{util.fixed(a_record.match, 2)}}%</view>
           <view class="weui-cell__ft" wx:else>?</view>
         </view>
-        <view class="weui-cell weui-cell_access" wx:if="{{show_mobile && a_record.user_b.mobile}}" @tap="Copy">
+        <view class="weui-cell weui-cell_access" wx:if="{{a_record.user_b.mobile}}" @tap="Copy">
           <view class="weui-cell__bd">微信号</view>
           <view class="weui-cell__ft weui-cell__ft_in-access">{{a_record.user_b.mobile}}</view>
         </view>
