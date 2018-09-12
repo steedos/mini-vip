@@ -358,9 +358,9 @@ page {
           <view class="weui-cell__ft" wx:if="{{a_record.match !== undefined}}">{{util.fixed(a_record.match, 2)}}%</view>
           <view class="weui-cell__ft" wx:else>?</view>
         </view>
-        <view class="weui-cell weui-cell_access" wx:if="{{a_record.user_b.mobile}}" @tap="Copy">
+        <view class="weui-cell weui-cell_access" wx:if="{{mobile}}" @tap="Copy">
           <view class="weui-cell__bd">微信号</view>
-          <view class="weui-cell__ft weui-cell__ft_in-access">{{a_record.user_b.mobile}}</view>
+          <view class="weui-cell__ft weui-cell__ft_in-access">{{mobile}}</view>
         </view>
       </view>
       <view class="weui-cells" wx:if="{{!is_owner}}">
@@ -428,6 +428,7 @@ export default class loveIntroduce extends wepy.page {
     avatar: '',
     name: '',
     posts: [],
+    mobile:'',
     is_owner: false,
     answered:false,
     show_mobile:false,
@@ -487,12 +488,14 @@ export default class loveIntroduce extends wepy.page {
         const user_id = this.$parent.globalData.user._id;
         const a_options = {
           $filter: `(owner eq '${user_id}' and user_b eq '${this.userId}')`,
-          $expand: 'user_b($select=profile,name),owner($select=profile,name)'
+          $expand: 'user_b($select=profile,name,mobile),owner($select=profile,name)'
         }
         const a_result = await this.$parent.query(this.object_name, a_options, this.space_id);
         const a_record = a_result.value[0] || {};
         this.a_record = a_record;
-
+        if (a_record.user_b.mobile){
+          this.mobile = a_record.user_b.mobile;
+        }
         const b_options = {
           $filter: `(owner eq '${this.userId}' and user_b eq '${user_id}')`,
           $expand: 'user_b($select=profile,name),owner($select=profile,name)'
@@ -511,7 +514,9 @@ export default class loveIntroduce extends wepy.page {
         const a_record = await this.$parent.get(this.object_name, this.record_id, this.space_id, a_options);
 
         this.a_record = a_record;
-
+        if(a_record.user_b.mobile){
+          this.mobile = a_record.user_b.mobile;
+        }
         const b_options = {
           $filter: `(owner eq '${a_record.user_b._id}' and user_b eq '${a_record.owner._id}')`
         }
@@ -696,7 +701,8 @@ export default class loveIntroduce extends wepy.page {
   
   async loadAboutMe() {
     const b_options = {
-      $filter: `(owner eq '${this.userId}')`
+      $filter: `(owner eq '${this.userId}')`,
+      $expand: 'owner($select=profile,name,mobile)'
     }
     const about_me = await this.$parent.query('love_about_me', b_options, loveSpaceId);
     if (about_me && about_me.value && about_me.value[0]) {
@@ -707,6 +713,10 @@ export default class loveIntroduce extends wepy.page {
     }else{
       this.b_sex = '她'
     }
+    if (this.about_me.owner) {
+      this.mobile = this.about_me.owner.mobile
+    }
+    
   }
 
   async loadPost() {
@@ -856,7 +866,7 @@ export default class loveIntroduce extends wepy.page {
     },
     Copy() {
       wx.setClipboardData({
-        data: this.a_record.user_b.mobile,
+        data: this.mobile,
         success: function(res) {
           wx.getClipboardData({
             success: function(res) {
