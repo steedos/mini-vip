@@ -1,7 +1,7 @@
-// export const baseUrl = 'https://vip-test.steedos.com:8443'
+export const baseUrl = 'https://vip-test.steedos.com:8443'
 // export const baseUrl = 'http://steedos.ticp.net:3086'
 // export const baseUrl = 'https://vip.steedos.com'
-export const baseUrl = 'http://192.168.3.2:5000';
+// export const baseUrl = 'http://192.168.3.2:5000';
 export const demoSpaceId = 'hSGPc2fsMAp9NDcHy';
 export const demoStoreId = 'B2k7E62gWg8DXBztn';
 export const appId = 'wxf7d7403acb34334b';
