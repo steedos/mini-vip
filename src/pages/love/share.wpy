@@ -10,8 +10,8 @@
     font-weight:bold;
     text-align:center;
     .image {
-      width: 100%;//270
-      height: 100%;//240
+      width: 100%;
+      height: 100%;
     }
   }
   .page__bd{
@@ -20,20 +20,6 @@
     font-size:45rpx;
     padding-bottom: 80px;
     text-align:center;
-    .zodiac-constellation{
-      display: flex;
-      margin-top: 10rpx;
-      font-size: 40rpx;
-      color: #777;
-      justify-content: center;
-      view {
-        padding: 0 6rpx;
-      }
-    }
-    .test {
-      padding:40rpx;
-      font-size: 30rpx;
-    }
   }
 
   .pop-mask {
@@ -63,8 +49,8 @@
       right: 40rpx;
       padding:0 0 40rpx 40rpx;
       .vip_close {
-        width: 50rpx;
-        height: 50rpx;
+        width: 30rpx;
+        height: 30rpx;
       }
     }
     &.show {
@@ -78,7 +64,7 @@
     box-sizing: border-box;
     z-index: 500;
     bottom: 0;
-    height: auto;
+    height: 100rpx;
     width: 100%;
     background-color: #fff;
     color: #6d6d78;
@@ -91,7 +77,7 @@
       font-size:15px;
       line-height:inherit;
       width:auto;
-      height:auto;
+      height:100rpx;
       border: none!important;
       line-height:50px;
       display: flex;
@@ -111,8 +97,7 @@
     }
     .slds-icon {
       display: inline-block;
-      margin-bottom:-13px;
-      margin-top:8px;
+      margin-top:-20rpx;
     }
     .text {
       display: inline-block;
@@ -166,34 +151,24 @@
   </block>
   <block wx:else>
     <view class="page__hd">
-      <block wx:if="{{share_card}}">
-        <image wx:if="{{card_url}}" class="image" mode="widthFix" src="{{card_url}}" @error="cardImageLoadFailed"/>
-        <button wx:if="{{is_card_load_failed}}" type="primary" class="btn-share-again" @tap="tryLoadCardAgain">
-          加载名片失败，点击再试一次
-        </button>
+      <block wx:if="{{card_url}}">
+        <image mode="widthFix" class="image" src="{{card_url}}"/>
       </block>
       <block wx:else>
         {{title}}
       </block>
     </view>
-    <view class="page__bd">
-      <view class="zodiac-constellation">
-        <view wx:if="{{about_me.sex}}">{{about_me.sex}}</view>
-        <view wx:if="{{about_me.age}}">{{about_me.age}}岁</view>
-        <view wx:if="{{about_me.height}}">{{about_me.height}}cm</view>
-        <view wx:if="{{about_me.constellation}}">{{about_me.constellation}}座</view>
-        <view wx:if="{{about_me.live}}">{{about_me.live}}</view>
-      </view>
-      <view class="test">扫描测试我们之间的匹配度</view>
+    <view class="page__bd" wx:if="{{!card_url}}">
+      {{description}}
     </view>
     <view class="tab-bar border-top-1px">
       <button open-type="share" class="btn btn-share-wexin" type="default" plain="{{true}}">
         <view class="vip_wechat slds-icon slds-icon--small slds-m-right--x-small"></view>
-        <view class="text">转发微信</view>
+        <view class="text"></view>
       </button>
       <view class="btn btn-share-friend-circle" @tap="shareToFriendCircle">
         <view class="vip_wechat_moments slds-icon slds-icon--small slds-m-right--x-small"></view>
-        <view class="text">保存名片</view>
+        <view class="text"></view>
       </view>
     </view>
     <view class="pop-mask" wx:if="{{showPop}}" @tap="closePop"></view>
@@ -202,7 +177,7 @@
         <view class="vip_close"></view>
       </view>
       <view class="share-friend-circle-box">
-        <view class="share-friend-circle-title">交友海报</view>
+        <view class="share-friend-circle-title">缘分测试</view>
         <image class="image" mode="widthFix" src="{{friend_circle_image_url}}" @load="friendCircleImageLoaded" @error="friendCircleImageLoadFailed"/>
         <block wx:if="{{showOpenSetting}}">
           <button type="primary" open-type="openSetting" class="btn-save-image" @opensetting="openSetting">
@@ -227,12 +202,11 @@
   import { baseUrl, appId } from '@/config';
   import { baseMaterialUrl } from '@/config';
   import util from '../../wxs/util.wxs';
-  var utilJs = require('../../utils/util.js')
   import { loveSpaceId } from '@/config';
  
   export default class LoveShare extends wepy.page {
-		config = {
-			navigationBarTitleText: '我',
+    config = {
+      navigationBarTitleText: '缘分测试',
     };
 
     wxs = {
@@ -254,9 +228,7 @@
       title:'',
       description:'',
       share_card:false,
-      card_url:'',
-      about_me:{},
-      is_card_load_failed: false
+      card_url:''
     }
 
     async onLoad (e) {
@@ -269,8 +241,7 @@
         e.space_id = loveSpaceId;
       }
       if(e.card){
-        await this.generateFriendCard();
-        await this.loadAboutMe();
+        await this.generateFriendCard()
         this.showPop = false
         // this.description = '分享给好友，找到隐藏在好友中的“另一半”吧。'
         this.share_card = true
@@ -347,13 +318,12 @@
 
     getSharePath(){
       let path = '';
-      const userId = this.$parent.globalData.user._id;
       if(this.share_card){
-        path = `pages/love/introduce?space_id=${this.space_id}&userId=${userId}`
-        // path = `pages/love/test?space_id=${this.space_id}`
+        path = `pages/love/introduce?space_id=${this.space_id}&user_id=${this.user_id}`
       }else{
         path = `pages/love/find?space_id=${this.space_id}`
       }
+      const userId = this.$parent.globalData.user._id;
       path += `&share_from=${userId}`;
       if(this.share_id){
         path += `&share_id=${this.share_id}`;
@@ -363,7 +333,7 @@
 
     // 分享
     onShareAppMessage(res) {
-      let title = "我们的缘分榜，快来打榜！";
+      let title = "我们是天生一对吗？";
       let imageUrl = ''
       if(!this.share_card){
         imageUrl = 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/love_share_bg.jpg';
@@ -376,27 +346,27 @@
       };
     }
 
-    async loadAboutMe() {
-      const user_id = this.$parent.globalData.user._id;
-      const options = {
-        $filter: `(owner eq '${user_id}')`
-      }
-      const about_me = await wepy.$instance.query('love_about_me', options, loveSpaceId);
-      if (about_me && about_me.value && about_me.value[0]) {
-        this.about_me = about_me.value[0];
-      } else {
-        this.about_me = {};
-      }
-      this.$apply();
-    }
-    
     async generateFriendCard() {
       if(this.$parent.globalData.user.avatar) {
+        const imageUrl = `https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/share_me.png`;
+        const imgRes = await wepy.downloadFile({
+          url: imageUrl
+        }).catch((err)=>{
+          console.log("err====downloadFile==========imgRes=====", err);
+          this.$apply();
+          return false;
+        });
+        if(!imgRes){
+          wepy.showToast({
+            title: "分享图片下载失败",
+            icon: "none"
+          });
+          return;
+        }
         const avatarRes = await wepy.downloadFile({
           url: this.$parent.globalData.user.avatar
         })
-        let path = `pages/love/test`;
-        // let path = `pages/love/introduce`
+        let path = `pages/love/introduce`;
         const userId = this.$parent.globalData.user._id;
         const scene = `share_from=${userId}`;
         wepy.showLoading({
@@ -421,24 +391,24 @@
         }
         console.log("codeImgRes===========",codeImgRes.tempFilePath)
         console.log("avatarRes===============",avatarRes.tempFilePath)
-        // console.log("imgRes===============",imgRes.tempFilePath)
+        console.log("imgRes===============",imgRes.tempFilePath)
         if(codeImgRes && avatarRes){
           const self = this
-          const width = wepy.getSystemInfoSync().windowWidth
           const ctx = wepy.createCanvasContext('myCanvas')
-          ctx.drawImage(codeImgRes.tempFilePath, 0, 0, width, width)
+          ctx.drawImage(imgRes.tempFilePath, 0, 0, 750, 1000)
           ctx.save()
           ctx.restore();
           const position_x = 0
           const position_y = 0
+          const width = 750
           await this.$parent.generateQrCode(ctx,codeImgRes.tempFilePath,avatarRes.tempFilePath, position_x, position_y, width, width,'white')
           ctx.draw(true, async ()=>{
             let x = self;
             const res = await wepy.canvasToTempFilePath({
-              width:width,
-              height:width,
-              destWidth:width,
-              destHeight:width,
+              width:750,
+              height:1000,
+              destWidth:750,
+              destHeight:1000,
               canvasId: 'myCanvas',
               fileType: 'jpeg'
             }).catch((err)=>{
@@ -448,23 +418,6 @@
             if(res){
               self.card_url = res.tempFilePath
               // self.friend_circle_image_url = res.tempFilePath
-              const authToken = self.$parent.globalData.user.auth_token;
-              const userId = self.$parent.globalData.user._id;
-              const name = this.$parent.globalData.user.name;
-              const fileResult = await wepy.uploadFile({
-                url: `${self.baseUrl}/s3/images`,
-                filePath: res.tempFilePath,
-                name: 'file',
-                // formData: formData,
-                header: {
-                  'X-Auth-Token': authToken,
-                  'X-User-Id': userId
-                }
-              })
-              const fileData = JSON.parse(fileResult.data);
-              const url = '/mini/vip/user';
-              console.log('fileData====',fileData['_id'])
-              req.put(url, {name: name, qrcode: fileData['_id']});
               self.$apply();
             }
             else{
@@ -475,15 +428,14 @@
             }
           });
           this.$apply();
+          }
         }
-      }
-      else{
-        wepy.showToast({
+       else{
+         wepy.showToast({
           title: "请先授权获取微信头像",
           icon: "none"
         });
-      }
-      this.$apply()
+       }
     }
     
     async generateFriendCircleImage() {
@@ -552,6 +504,7 @@
         }).catch((err)=>{
           return false;
         });
+        console.log("res.tempFilePath================", res.tempFilePath);
         if(res){
           self.friend_circle_image_url = res.tempFilePath;
           self.$apply();
@@ -569,9 +522,13 @@
     methods = {
       async shareToFriendCircle(){
         if(this.share_card){
-          this.friend_circle_image_url = this.card_url;
-          this.showPop = true;
-          this.$apply();
+          if(this.card_url){
+            this.friend_circle_image_url = this.card_url
+            this.showPop = true;
+            this.$apply();
+          }else{
+            await this.generateFriendCard()
+          }
         }else{
           if(this.friend_circle_image_url){
             this.showPop = true;
@@ -594,22 +551,9 @@
           icon: "none"
         });
       },
-      cardImageLoadFailed(){
-        this.is_card_load_failed = true;
-      },
       closePop() {
         this.showPop = false;
         this.$apply();
-      },
-      async tryLoadCardAgain(){
-        this.is_card_load_failed = false;
-        wepy.showLoading({
-          title: '加载中',
-          mask: true
-        });
-        await this.generateFriendCard();
-        this.$apply();
-        wepy.hideLoading();
       },
       async tryShareAgain(){
         wepy.showLoading({

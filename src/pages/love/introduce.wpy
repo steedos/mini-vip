@@ -328,11 +328,10 @@ page {
             </view>
           </view>
           <button class="weui-btn btn-star" open-type="share" plain="true" type="primary" size="mini">转发</button>
-          <button wx:if="{{!is_owner && showGoHome}}" class="weui-btn btn-test" @tap="goHome" type="primary" size="mini">我的名片</button>
-          <!-- <block wx:if="{{!is_owner}}">
-            <button class="weui-btn btn-star" type="primary" plain="true" size="mini">关注</button>
+          <block wx:if="{{is_owner}}">
             <button wx:if="{{!answered}}" class="weui-btn btn-test" @tap="goAnswer" type="primary" size="mini">测试缘分</button>
-          </block> -->
+            <button wx:if="{{answered && showGoHome}}" class="weui-btn btn-test" @tap="goHome" type="primary" size="mini">我的名片</button>
+          </block>
         </view>
       </view>
     </view>
@@ -404,7 +403,7 @@ import _ from 'underscore'
 
 export default class loveIntroduce extends wepy.page {
   config = {
-    navigationBarTitleText: '我',
+    navigationBarTitleText: '名片',
 		enablePullDownRefresh: true
   };
 

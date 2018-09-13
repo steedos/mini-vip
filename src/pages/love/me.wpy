@@ -64,7 +64,7 @@
               {{name}}
             </view>
             <view class="weui-media-box__desc" style="margin-top: 6rpx;">
-              我的交友名片
+              
             </view>
             <view class="weui-cell__ft weui-cell__ft_in-access">
             </view>
@@ -81,7 +81,7 @@
               {{name}}
             </view>
             <view class="weui-media-box__desc" style="margin-top: 6rpx;">
-              测试好友缘分
+              
             </view>
           </view>
         </button>
@@ -112,19 +112,19 @@
         <view class="weui-cell__ft weui-cell__ft_in-access"></view>
       </navigator>
     </view>
-    <!--
+
     <view class="weui-cells">
-      <navigator class="weui-cell weui-cell_access" url="/pages/love/matching">
+      <navigator class="weui-cell weui-cell_access" @tap="goShare">
         <view class="weui-cell__hd">
           <view class="slds-icon-custom-custom1 slds-icon slds-icon--small slds-m-right--x-small"/>
         </view>
         <view class="weui-cell__bd">
-          <view>缘分榜</view>
+          <view>缘分测试</view>
         </view>
         <view class="weui-cell__ft weui-cell__ft_in-access"></view>
       </navigator>
     </view>
-    -->
+    <!--
     <view class="weui-cells">
       <navigator class="weui-cell weui-cell_access" url="/pages/love/settings?space_id={{space_id}}">
         <view class="weui-cell__hd">
@@ -136,6 +136,7 @@
         <view class="weui-cell__ft weui-cell__ft_in-access"></view>
       </navigator>
     </view>
+    -->
   </view>
 </template>
 
@@ -379,11 +380,14 @@ export default class QuestionnaireList extends wepy.page {
         wepy.navigateTo({url:`/pages/love/invite_code_me?space_id=${this.space_id}`})
       }
     },
-    goIntroduce() {
-      wepy.navigateTo({url: `/pages/love/introduce?userId=${this.userId}`})
-    },
     goShare() {
-      wepy.navigateTo({url: `/pages/love/share?card=true&space_id=${this.space_id}`})
+      wepy.navigateTo({url: `/pages/love/share?card=true&userId=${this.userId}`})
+    },
+    goIntroduce() {
+      const love = this.$parent.globalData.love;
+      if (love && love.enabled) {
+        wepy.navigateTo({url: `/pages/love/introduce_me?space_id=${this.space_id}`})
+      }
     }
   };
 

@@ -212,12 +212,13 @@ page {
 					</view>
 				</view>
 			</navigator>
-      <!-- 
+      <!--
       <view class="btn-bottom">
-        <button class="weui-btn mini-btn button-hover btn-toolbar-primary" size="mini" type="primary" @tap="goDetail" style="color: #fff">
-          我的主页
-        </button> -->
+        <button class="weui-btn button-hover btn-toolbar-primary" type="primary" @tap="goDetail" style="color: #fff;width:100%;margin:15px;">
+          缘分测试
+        </button>
       </view>
+      -->
 		</view>
 	</view>
 </view>
@@ -458,7 +459,7 @@ export default class LoveHome extends wepy.page {
       pageRouter.navigateTo({ url: `/pages/love/share?card=true&space_id=${this.space_id}` })
     },
     goDetail() {
-      pageRouter.navigateTo({ url: `/pages/love/introduce` })
+      wepy.navigateTo({url: `/pages/love/share?card=true&space_id=${this.space_id}`})
     },
     goRecommendDetail(userId){
       pageRouter.navigateTo({ url: `/pages/love/introduce?userId=${userId}&show_mobile=true` })
