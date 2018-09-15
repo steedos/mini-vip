@@ -283,7 +283,7 @@ export default class LoveHome extends wepy.page {
 		wx.stopPullDownRefresh();
     wx.hideNavigationBarLoading()
 	}
-  
+
   components = {
     userHeader: userHeader
   }
@@ -364,40 +364,8 @@ export default class LoveHome extends wepy.page {
   }
 
   async loadLovers(){
-    const user_id = this.$parent.globalData.user._id;
-    const query_options = {
-      $filter: `(owner eq '${user_id}')`,
-    };
-    const result = await this.$parent.query(
-      'love_looking_for',
-      query_options,
-      this.space_id
-    );
-    if (result && result.value){
-      const looking_for = result.value[0]
-      var min_age = parseInt(looking_for.age) - 1
-      var max_age = parseInt(looking_for.age_max) + 1
-      var min_height = looking_for.height
-      var max_height = looking_for.height_max
-      const options = {
-        $filter: `(sex eq '${looking_for.sex}' and age gt ${min_age} and age lt ${max_age} and height gt '${min_height}' and height lt '${max_height}')`,
-        $top: 6,
-        $select: 'height,hometown,live,sex,self_introduction,constellation,age,owner',
-        $expand: 'owner($select=profile,name)',
-        $orderby: 'created desc'
-        };
-      const lovers = await this.$parent.query(
-        'love_about_me',
-        options,
-        this.space_id
-      );
-      if (lovers && lovers.value) {
-        this.recommend_lover = lovers.value
-      } else {
-        this.recommend_lover = [];
-      }
-      this.$apply();
-    }
+    this.recommend_lover = await this.$parent.invokeMethod('love_about_me', 'all', {}, this.space_id, 'dailyRecommend');
+    this.$apply();
   }
 
   async loadFriendList() {
