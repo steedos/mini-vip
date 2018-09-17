@@ -2,46 +2,65 @@
 </style>
 
 <template>
-  <view class="page" wx:if="{{is_loaded}}">
-    <view class="page__bd">
-      <view class="weui-grids">
-        <!-- <repeat for="{{options}}" index="index" key="index" item="option">
-          <navigator url="{{option.url}}" class="weui-grid" hover-class="weui-grid_active">
-            <view class="slds-icon-{{option.icon}} weui-grid__icon slds-icon"></view>
-            <view class="weui-grid__label">{{option.label}}</view>
-          </navigator>
-        </repeat> -->
-      </view>
-    </view>
+	<view class="page" wx:if="{{is_loaded}}">
+		<view class="page__bd">
+			<view class="weui-grids">
+				<!-- <repeat for="{{options}}" index="index" key="index" item="option">
+					<navigator url="{{option.url}}" class="weui-grid" hover-class="weui-grid_active">
+						<view class="slds-icon-{{option.icon}} weui-grid__icon slds-icon"></view>
+						<view class="weui-grid__label">{{option.label}}</view>
+					</navigator>
+				</repeat> -->
+			</view>
+		</view>
 
-  </view>
+	</view>
 </template>
 
 <script>
-  import wepy from 'wepy';
+	import wepy from 'wepy';
 
-  export default class VisitingCardIndex extends wepy.page {
-    config = {
-      navigationBarTitleText: '名片'
-    };
+	export default class VisitingCardIndex extends wepy.page {
+		config = {
+			navigationBarTitleText: '名片'
+		};
 
-    data = {
-      is_loaded: false
-    };
+		data = {
+			is_loaded: false,
+			space_id: "BqM3BsP8KKW4cH2Cu",
+			card_user_id: "rq7QQoozBMLgfHwpX",
+			space_user: {}
+		};
 
-    async onPullDownRefresh() {
-       wepy.stopPullDownRefresh();
-    }
+		async onPullDownRefresh() {
+			 wepy.stopPullDownRefresh();
+		}
 
-    async onLoad() {
-      wepy.showLoading({
-        title: '加载中',
-        mask: true
-      });
-      await this.$parent.login();
-      this.is_loaded = true;
-      this.$apply()
-      wepy.hideLoading();
-    }
-  }
+		async onLoad() {
+			wepy.showLoading({
+				title: '加载中',
+				mask: true
+			});
+			await this.$parent.login();
+			await this.loadData();
+			this.is_loaded = true;
+			this.$apply()
+			wepy.hideLoading();
+		}
+
+		async loadData() {
+			await this.loadSpaceUser();
+		}
+  
+		async loadSpaceUser() {
+			const options = {
+				$filter: `(user eq '${this.card_user_id}' and space eq '${this.space_id}')`,
+				$expand: 'user($select=profile,name,mobile)'
+			}
+			const space_user = await this.$parent.query('space_users', options, this.space_id);
+			if (space_user && space_user.value && space_user.value[0]) {
+				this.space_user = space_user.value[0];
+			}
+		}
+	}
 </script>

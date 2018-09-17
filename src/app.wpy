@@ -317,9 +317,14 @@ export default class VIP extends wepy.app {
       },
       {
         pagePath: 'pages/space/index',
+        selectedIconPath: './images/tabbars/topic_pressed.png',
+        iconPath: './images/tabbars/topic.png',
+        text: '官网',
+      },{
+        pagePath: 'pages/me',
         selectedIconPath: './images/tabbars/me_pressed.png',
         iconPath: './images/tabbars/me.png',
-        text: '官网',
+        text: '我',
       }]
     },
     window: {
