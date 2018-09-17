@@ -1,0 +1,457 @@
+<style lang="less">
+page {
+  padding-bottom: 30px !important;
+}
+
+.cover-page {
+  padding-bottom: 0;
+  .page__hd {
+    .love-title {
+      margin-top: 120rpx;
+    }
+
+    .love-avatar {
+      width: 160rpx;
+      height: 160rpx;
+      margin: 30rpx auto 0;
+
+      view {
+        width: 100%;
+        height: 100%;
+
+        .image {
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+        }
+      }
+
+      .user-active {
+        border: none;
+        width: 100%;
+        height: 100%;
+        padding: 0;
+      }
+    }
+  }
+  .match {
+    background: #1AAD19;
+    margin: 30rpx;
+    padding: 30rpx;
+    border-radius: 0.25rem;
+    .header {
+      display: flex;
+      line-height: 1.41176471;
+      .group-name {
+        flex: 1;
+      }
+    }
+    .body {
+      display: flex;
+      margin-top: 16rpx;
+      .count {
+        color: #999;
+        flex: 1;
+      }
+    }
+  }
+  .banner {
+    display: flex;
+    color: #fff;
+    .box {
+      flex: 1;
+      padding:0 10rpx;
+      .desc {
+        font-size: 28rpx;
+        padding-top:4px;
+      }
+    }
+    .weui-cell__ft {
+      display: flex;
+      color: #fff;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+  .recommend-title {
+    color: #353535;
+  }
+  .recommend-lover {
+    position: relative;
+    margin: 0 10rpx;
+    .lover {
+      width: 33.33%;
+      display: inline-block;
+      // flex-direction: column;
+      .container {
+        position: relative;
+        width: 100%;
+        height: 0;
+        padding-top: 100%;
+        image {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+          box-sizing: border-box;
+          border: 40rpx solid transparent;
+        }
+      }
+      .name {
+        color: #000;
+        text-align: center;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 30rpx;
+        width:180rpx;
+        margin:auto;
+      }
+    }
+  }
+  .group {
+    border:1px solid #DDD;
+    background: #fff;
+    margin: 30rpx;
+    padding: 30rpx;
+    border-radius: 0.25rem;
+    .header {
+      display: flex;
+      line-height: 1.41176471;
+      font-size: 17px;
+      .group-name {
+        flex: 1;
+      }
+    }
+    .body {
+      display: flex;
+      margin-top: 16rpx;
+      .count {
+        color: #999;
+        flex: 1;
+      }
+      .join-avatar {
+        display: flex;
+        align-items: center;
+        .avatar-container {
+          width: 50rpx;
+          height: 50rpx;
+          border-radius: 50%;
+          border: 1px solid #fff;
+          image {
+            border-radius: 50%;
+            width: 100%;
+            height: 100%;
+          }
+        }
+        .avatar-container:not(:last-of-type) {
+					margin-right: -16rpx;
+        }
+      }
+    }
+  }
+}
+
+.btn-bottom {
+  display: flex;
+  justify-content: center;
+}
+
+.cover-page-bg {background-image:url('https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/bg-heart.jpg');
+}
+</style>
+
+<template>
+<view>
+  <view class="cover-page-bg"></view>
+	<view class="cover-page" wx:if="{{is_loaded}}">
+		<view class="page__bd" style="padding: 20rpx 0">
+			<block wx:if="{{showLoveMatch}}">
+        <view class="match" @tap="goCp">
+          <view class="banner">
+            <view class="box">
+              <view class="title">每周匹配</view>
+              <view class="desc">无颜每周为你精确计算双向匹配度最高的人，交换微信号。</view>
+            </view>
+            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+          </view>
+        </view>
+        <block wx:if="{{recommend_lover.length}}">
+          <view class="group recommend-lover">
+            <view class="recommend-title">今日推荐</view>
+              <repeat for="{{recommend_lover}}" key="index" index="index" item="lover">
+                <view wx:if="{{lover.owner.name}}" class="lover" @tap="goRecommendDetail({{lover.owner._id}})">
+                  <view class="container">
+                    <image mode="aspectFit" src="{{lover.owner.profile.avatar || 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg'}}"></image>
+                  </view>
+                  <view class="name">{{lover.owner.name}}</view>
+                </view>
+              </repeat>
+          </view>
+        </block>
+      </block>
+      <navigator class="group" url="/pages/love/matching?space_id={{space_id}}&open_group_id=-1">
+				<view class="header">
+					<view class="group-name">
+						<view class="group-name">好友缘分榜</view>
+					</view>
+					<view class="weui-cell__ft weui-cell__ft_in-access"></view>
+				</view>
+				<view class="body">
+					<view class="count">{{friendList.count}}人</view>
+					<view class="join-avatar">
+						<repeat for="{{friendList.value}}" key="index" index="index" item="friend">
+							<block wx:if="{{friend.user_b.name}}">
+								<view class="avatar-container">
+									<image class="image" mode="aspectFill" src="{{friend.user_b.profile.avatar}}"></image>
+								</view>
+							</block>
+						</repeat>
+					</view>
+				</view>
+			</navigator>
+      <!--
+      <view class="btn-bottom">
+        <button class="weui-btn button-hover btn-toolbar-primary" type="primary" @tap="goDetail" style="color: #fff;width:100%;margin:15px;">
+          缘分测试
+        </button>
+      </view>
+      -->
+		</view>
+	</view>
+</view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import { loveSpaceId } from '../../config/index.js';
+import req from '@/network';
+import _ from 'underscore'
+import { baseUrl } from '@/config';
+import pageRouter from '@/utils/pageRouter'
+import userHeader from '../../components/user_header';
+import util from '../../wxs/util.wxs';
+
+export default class LoveHome extends wepy.page {
+  config = {
+		navigationBarTitleText: '无颜匹配',
+		enablePullDownRefresh: true
+  };
+
+  wxs = {
+    util: util
+  }
+
+  data = {
+    navigationBarTitle: '无颜匹配',
+    user_id: '',
+    is_loaded: false,
+    space_id: null,
+    friendList: [],
+    groups: [],
+    cover: '',
+    avatar: '',
+    name: '',
+    group_friends: {},
+    isAuthUserInfo: false,
+    baseUrl: baseUrl,
+    showLoveMatch: false,
+    // about_me: {},
+    recommend_lover:[]
+  };
+
+  onShareAppMessage(res) {
+    const user_id = this.$parent.globalData.user._id;
+    let title = '茫茫人海，你该和谁谈恋爱？';
+    let path = `/pages/love/index?share_from=${user_id}`;
+    return {
+      title: title,
+      path: path
+    };
+	}
+
+	async onPullDownRefresh() {
+    const self = this;
+    wx.showNavigationBarLoading();
+    // await this.loadAboutMe();
+    await this.loadGroups();
+    await this.loadFriendList();
+    await this.loadLovers();
+		this.$apply();
+		wx.stopPullDownRefresh();
+    wx.hideNavigationBarLoading()
+	}
+
+  components = {
+    userHeader: userHeader
+  }
+
+  async onLoad(e) {
+    wepy.showShareMenu({
+      withShareTicket: true
+    });
+    wx.showNavigationBarLoading();
+    const self = this;
+    e.space_id = loveSpaceId;
+    if (e.scene) {
+      // 朋友圏二维码识别进入的，则取出scene中的share_from
+      let scene = decodeURIComponent(e.scene);
+      let scenes = scene.split('=');
+      e.love = 1;
+      e.share_from = scenes[1];
+      e.qrcode = 1;
+    }
+    this.space_id = e.space_id;
+    await this.$parent.login(e);
+    this.user_id = this.$parent.globalData.user._id;
+    const love = this.$parent.globalData.love;
+    if (love && love.enabled) {
+			this.showLoveMatch = true;
+			this.$apply();
+    }
+
+    await this.loadLovers();
+    await this.loadGroups();
+    await this.loadFriendList();
+
+    let user = this.$parent.globalData.user;
+    const spaceId = this.space_id;
+    const userId = user._id;
+
+    if (!user.name || !user.avatar) {
+      const query_options = {
+        $filter: `owner eq '${userId}'`,
+        $expand: 'owner($select=profile,name)'
+      };
+
+      const user_result = await this.$parent.query(
+        'vip_customers',
+        query_options,
+        spaceId
+      );
+      if (user_result && user_result.value[0]) {
+        user.name = user_result.value[0].owner.name;
+        if (user_result.value[0].owner.profile) {
+          user.avatar = user_result.value[0].owner.profile.avatar;
+        }
+      }
+    }
+    this.name = user.name;
+    this.avatar = user.avatar;
+
+    if (!this.name || !this.avatar) {
+      const setting = await wepy.getSetting();
+      if (setting.authSetting['scope.userInfo']) {
+        const info = await wepy.getUserInfo();
+        const userInfo = info.userInfo;
+        this.$parent.globalData.userInfo = userInfo;
+        this.name = userInfo.nickName;
+        this.avatar = userInfo.avatarUrl;
+        this.isAuthUserInfo = true;
+      } else {
+        this.isAuthUserInfo = false;
+      }
+    } else {
+      this.isAuthUserInfo = true;
+    }
+
+    this.is_loaded = true;
+    this.$apply();
+
+    wx.hideNavigationBarLoading();
+  }
+
+  async loadLovers(){
+    this.recommend_lover = await this.$parent.invokeMethod('love_about_me', 'all', {}, this.space_id, 'dailyRecommend');
+    this.$apply();
+  }
+
+  async loadFriendList() {
+    const user_id = this.$parent.globalData.user._id;
+    const options = {
+      $filter: `(owner eq '${user_id}' and match ge 0)`,
+      $top: 5,
+      $select: 'user_b',
+      $expand: 'user_b($select=profile,name)',
+      $orderby: 'created desc'
+    };
+    const result = await this.$parent.query(
+      'love_friends',
+      options,
+      this.space_id
+    );
+    if (result && result.value) {
+      this.friendList = {count: result['@odata.count'], value:result.value};
+    } else {
+			this.friendList = {count: 0, value: []};
+		}
+    this.$apply();
+    return this.friendList;
+  }
+
+  async loadGroups() {
+    const user_id = this.$parent.globalData.user._id;
+    const options = {
+      $filter: `(users eq '${user_id}')`,
+      $select: 'open_group_id,users',
+      $orderby: 'modified desc'
+    };
+    const result = await this.$parent.query('vip_groups', options, 'guest');
+    if (result && result.value) {
+      let groups = [];
+
+      _.forEach(result.value, (g)=>{
+        g.count = g.users.length;
+        if(g.count > 5){
+          g.users = g.users.splice(-5)
+        }
+
+        groups.push(g)
+      });
+
+      this.groups = groups;
+
+    }
+    this.$apply();
+    return this.groups;
+  }
+
+
+  methods = {
+    goCp() {
+      pageRouter.navigateTo({ url: '/pages/love/cp' })
+    },
+    goShare() {
+      pageRouter.navigateTo({ url: `/pages/love/share?card=true&space_id=${this.space_id}` })
+    },
+    goDetail() {
+      wepy.navigateTo({url: `/pages/love/share?card=true&space_id=${this.space_id}`})
+    },
+    goRecommendDetail(userId){
+      pageRouter.navigateTo({ url: `/pages/love/introduce?userId=${userId}&show_mobile=true` })
+    },
+    userLogin(e) {
+      const userInfo = e.detail.userInfo;
+      const user = this.$parent.globalData.user;
+      if (userInfo) {
+        const name = user.name || userInfo.nickName;
+        const sex = userInfo.gender ? '男' : '女';
+        const avatar = userInfo.avatarUrl;
+
+        this.userInfo = userInfo;
+        this.isAuthUserInfo = true;
+        this.name = name;
+        this.avatar = userInfo.avatarUrl;
+        this.$parent.globalData.userInfo = userInfo;
+        this.$parent.globalData.user.sex = sex;
+        this.$apply();
+
+        const url = '/mini/vip/user';
+        req.put(url, { name: name, sex: sex, avatar: avatar });
+      }
+    }
+  };
+}
+</script>

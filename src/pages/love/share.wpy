@@ -1,0 +1,606 @@
+<style lang="less">
+  page{
+    height: 100%;
+    background-color: #fff;
+  }
+  .page__hd{
+    padding:40rpx;
+    color:#003971;
+    font-size:65rpx;
+    font-weight:bold;
+    text-align:center;
+    .image {
+      width: 100%;
+      height: 100%;
+    }
+  }
+  .page__bd{
+    padding:40rpx;
+    color:#003971;
+    font-size:45rpx;
+    padding-bottom: 80px;
+    text-align:center;
+  }
+
+  .pop-mask {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(16, 16, 16, 0.6);
+  }
+
+  .attr-pop {
+    position: fixed;
+    transform: translateY(101%);
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+    min-height: 200rpx;
+    padding: 31.25rpx;
+    background: #fff;
+    z-index:1000;
+    transition: all .3s linear;
+    box-sizing: border-box;
+    .close {
+      position: absolute;
+      right: 40rpx;
+      padding:0 0 40rpx 40rpx;
+      .vip_close {
+        width: 30rpx;
+        height: 30rpx;
+      }
+    }
+    &.show {
+      transform: translateY(0);
+    }
+  }
+  .tab-bar {
+    font-size: 15px;
+    display: flex;
+    position: fixed;
+    box-sizing: border-box;
+    z-index: 500;
+    bottom: 0;
+    height: 100rpx;
+    width: 100%;
+    background-color: #fff;
+    color: #6d6d78;
+    align-items: center;
+
+    .btn {
+      flex-direction:column;
+      flex: 1;
+      padding:0 30rpx;
+      font-size:15px;
+      line-height:inherit;
+      width:auto;
+      height:100rpx;
+      border: none!important;
+      line-height:50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .slds-icon {
+        width: 1rem;
+        height: 1rem;
+        margin-right: 0px!important;
+        background-color:#3ca134;
+        border-radius:50%;
+        padding:8px;
+        background-size:20px;
+        background-position:center;
+      }
+    }
+    .slds-icon {
+      display: inline-block;
+      margin-top:-20rpx;
+    }
+    .text {
+      display: inline-block;
+      color: #6d6d78;
+      font-size:11px;
+      margin-bottom:-12px;
+    }
+  }
+  .share-friend-circle-box{
+    padding: 20rpx 0;
+    .share-friend-circle-title{
+      text-align:center;
+      color:#777;
+    }
+    .image{
+      width: 70%;
+      display: block;
+      margin: 30rpx auto 50rpx;
+      box-shadow:0px 0px 60rpx #ccc;
+      padding:3%;
+    }
+  }
+  .page{
+    height: 100%;
+    .canvas {
+      width: 750px;
+      height: 1037px;
+      top:-10000px;
+      position: absolute;
+    }
+  }
+  .btn-save-image{
+    width: 77%;
+  }
+  .btn-share-again{
+    margin-top:60rpx
+  }
+</style>
+<template>
+<view class="page" wx:if="{{is_loaded}}">
+  <block wx:if="{{share_failed}}">
+    <view class="page__hd">
+      分享失败
+    </view>
+    <view class="page__bd">
+      请检查您的设备网络连接是否正常。
+      <button type="primary" class="btn-share-again" @tap="tryShareAgain">
+        再试一次
+      </button>
+    </view>
+  </block>
+  <block wx:else>
+    <view class="page__hd">
+      <block wx:if="{{card_url}}">
+        <image mode="widthFix" class="image" src="{{card_url}}"/>
+      </block>
+      <block wx:else>
+        {{title}}
+      </block>
+    </view>
+    <view class="page__bd" wx:if="{{!card_url}}">
+      {{description}}
+    </view>
+    <view class="tab-bar border-top-1px">
+      <button open-type="share" class="btn btn-share-wexin" type="default" plain="{{true}}">
+        <view class="vip_wechat slds-icon slds-icon--small slds-m-right--x-small"></view>
+        <view class="text"></view>
+      </button>
+      <view class="btn btn-share-friend-circle" @tap="shareToFriendCircle">
+        <view class="vip_wechat_moments slds-icon slds-icon--small slds-m-right--x-small"></view>
+        <view class="text"></view>
+      </view>
+    </view>
+    <view class="pop-mask" wx:if="{{showPop}}" @tap="closePop"></view>
+    <view class="attr-pop {{showPop ? 'show' : ''}}">
+      <view class="close" @tap="closePop">
+        <view class="vip_close"></view>
+      </view>
+      <view class="share-friend-circle-box">
+        <view class="share-friend-circle-title">缘分测试</view>
+        <image class="image" mode="widthFix" src="{{friend_circle_image_url}}" @load="friendCircleImageLoaded" @error="friendCircleImageLoadFailed"/>
+        <block wx:if="{{showOpenSetting}}">
+          <button type="primary" open-type="openSetting" class="btn-save-image" @opensetting="openSetting">
+            保存失败，请点击授权
+          </button>
+        </block>
+        <block wx:else>
+          <button type="primary" class="btn-save-image" @tap="saveImageToPhotosAlbum">
+            保存图片
+          </button>
+        </block>
+      </view>
+    </view>
+    <canvas canvas-id="myCanvas" class="canvas"/>
+  </block>
+</view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import req from '@/network'
+  import { baseUrl, appId } from '@/config';
+  import { baseMaterialUrl } from '@/config';
+  import util from '../../wxs/util.wxs';
+  import { loveSpaceId } from '@/config';
+ 
+  export default class LoveShare extends wepy.page {
+    config = {
+      navigationBarTitleText: '缘分测试',
+    };
+
+    wxs = {
+      util: util
+    }
+
+    data = {
+      baseUrl: baseUrl,
+      baseMaterialUrl: baseMaterialUrl,
+      space_id: null,
+      is_loaded: false,
+      share_failed: false,
+      share_id: null,
+      showPop: false,
+      responses: [],
+      cash_back_total: 0,
+      friend_circle_image_url: '',
+      showOpenSetting: false,
+      title:'',
+      description:'',
+      share_card:false,
+      card_url:''
+    }
+
+    async onLoad (e) {
+      wepy.showShareMenu({
+        withShareTicket: true
+      });
+      console.log("onLoad=======share==e===", e);
+      if(!e.space_id){
+        // 保证一进入就新建space对应的vip_customers记录
+        e.space_id = loveSpaceId;
+      }
+      if(e.card){
+        await this.generateFriendCard()
+        this.showPop = false
+        // this.description = '分享给好友，找到隐藏在好友中的“另一半”吧。'
+        this.share_card = true
+        this.$apply()
+      }else{
+        this.title = '拯救单身狗'
+        this.description = '转发“无颜”这位聪明又勤快的智能机器人给身边的朋友，让它每周推荐与他“相互匹配”值最高的有缘人给他吧。'
+      }
+      this.space_id = e.space_id;
+      console.log("this.space_id============", this.space_id);
+      await this.$parent.login(e);
+      if(!this.space_id){
+        wx.showToast({
+          title: "未配置工作区ID",
+          icon: "none"
+        });
+        return;
+      }
+      wepy.showLoading({
+        title: '加载中',
+        mask: true
+      });
+      await this.addShare();
+      this.is_loaded = true;
+      this.$apply();
+      wepy.hideLoading();
+    }
+
+    async addShare(){
+      const userId = this.$parent.globalData.user._id;
+      const name = this.$parent.globalData.user.name;
+      console.log("===============addShare============", userId, name);
+      const query_options = {
+        $select: 'name'
+      };
+      query_options.$filter = `other eq 'love' and owner eq '${userId}'`;
+      let share = await this.$parent.query("vip_share", query_options, this.space_id);
+      let values = {
+        name: name,
+        other: 'love'
+      };
+      if(share && share.value && share.value.length){
+        console.log("===============addShare============update");
+        // 只是修改其modified，记住其最后一次分享时间
+        await this.$parent.update("vip_share", share.value[0]._id, values, this.space_id);
+      }
+      else{
+        console.log("===============addShare============insert");
+        // share = await this.$parent.insert("vip_share", values, this.space_id).catch((err)=>{
+        //   console.log("sssssss",err.data)
+        //   return false
+        // });
+        const url = '/api/odata/v4/' + this.space_id + '/' + "vip_share";
+        share = await req.post(url, values).catch((err)=>{
+          console.log("error...",err)
+          return err.data;
+        });
+      }
+      if(share && share.value && share.value.length){
+        this.share_id = share.value[0]._id;
+        this.share_failed = false;
+      }
+      else{
+        console.log("============share=======error==============", share);
+        if (!share || share.error.error !== "repeat") {
+          wx.showToast({
+            title: "分享失败",
+            icon: "none"
+          });
+          this.share_failed = true;
+        }
+      }
+    }
+
+    getSharePath(){
+      let path = '';
+      if(this.share_card){
+        path = `pages/love/introduce?space_id=${this.space_id}&user_id=${this.user_id}`
+      }else{
+        path = `pages/love/find?space_id=${this.space_id}`
+      }
+      const userId = this.$parent.globalData.user._id;
+      path += `&share_from=${userId}`;
+      if(this.share_id){
+        path += `&share_id=${this.share_id}`;
+      }
+      return path;
+    }
+
+    // 分享
+    onShareAppMessage(res) {
+      let title = "我们是天生一对吗？";
+      let imageUrl = ''
+      if(!this.share_card){
+        imageUrl = 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/love_share_bg.jpg';
+      }
+      let path = this.getSharePath();
+      return {
+        title: title,
+        path: path,
+        imageUrl: imageUrl
+      };
+    }
+
+    async generateFriendCard() {
+      if(this.$parent.globalData.user.avatar) {
+        const imageUrl = `https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/share_me.png`;
+        const imgRes = await wepy.downloadFile({
+          url: imageUrl
+        }).catch((err)=>{
+          console.log("err====downloadFile==========imgRes=====", err);
+          this.$apply();
+          return false;
+        });
+        if(!imgRes){
+          wepy.showToast({
+            title: "分享图片下载失败",
+            icon: "none"
+          });
+          return;
+        }
+        const avatarRes = await wepy.downloadFile({
+          url: this.$parent.globalData.user.avatar
+        })
+        let path = `pages/love/introduce`;
+        const userId = this.$parent.globalData.user._id;
+        const scene = `share_from=${userId}`;
+        wepy.showLoading({
+          title: '生成海报中',
+          mask: true
+        });
+        const width = 750
+        const is_hyaline = true
+        const url = `/api/steedos/weixin/code?appid=${appId}&scene=${scene}&page=${path}&width=${width}&is_hyaline=${is_hyaline}`;
+        const codeImgRes = await wepy.downloadFile({
+          url: this.baseUrl + url
+        }).catch((err)=>{
+          this.$apply();
+          return false;
+        });
+        if(!codeImgRes){
+          wepy.showToast({
+            title: "小程序码生成失败",
+            icon: "none"
+          });
+          return;
+        }
+        console.log("codeImgRes===========",codeImgRes.tempFilePath)
+        console.log("avatarRes===============",avatarRes.tempFilePath)
+        console.log("imgRes===============",imgRes.tempFilePath)
+        if(codeImgRes && avatarRes){
+          const self = this
+          const ctx = wepy.createCanvasContext('myCanvas')
+          ctx.drawImage(imgRes.tempFilePath, 0, 0, 750, 1000)
+          ctx.save()
+          ctx.restore();
+          const position_x = 0
+          const position_y = 0
+          const width = 750
+          await this.$parent.generateQrCode(ctx,codeImgRes.tempFilePath,avatarRes.tempFilePath, position_x, position_y, width, width,'white')
+          ctx.draw(true, async ()=>{
+            let x = self;
+            const res = await wepy.canvasToTempFilePath({
+              width:750,
+              height:1000,
+              destWidth:750,
+              destHeight:1000,
+              canvasId: 'myCanvas',
+              fileType: 'jpeg'
+            }).catch((err)=>{
+              return false;
+            });
+            console.log("res.tempFilePath================", res.tempFilePath);
+            if(res){
+              self.card_url = res.tempFilePath
+              // self.friend_circle_image_url = res.tempFilePath
+              self.$apply();
+            }
+            else{
+              wepy.showToast({
+                title: "生成图片失败，请再试一次",
+                icon: "none"
+              });
+            }
+          });
+          this.$apply();
+          }
+        }
+       else{
+         wepy.showToast({
+          title: "请先授权获取微信头像",
+          icon: "none"
+        });
+       }
+    }
+    
+    async generateFriendCircleImage() {
+      let path = `pages/love/find`;
+      const userId = this.$parent.globalData.user._id;
+      const scene = `share_from=${userId}`;
+      wepy.showLoading({
+        title: '获取小程序码',
+        mask: true
+      });
+      const url = `/api/steedos/weixin/code?appid=${appId}&scene=${scene}&page=${path}`;
+      console.log("codeImgRes======url=========", this.baseUrl + url);
+      const codeImgRes = await wepy.downloadFile({
+        url: this.baseUrl + url
+      }).catch((err)=>{
+        console.log("err====downloadFile====codeImgRes===========", err);
+        this.$apply();
+        return false;
+      });
+      if(!codeImgRes){
+        wepy.showToast({
+          title: "小程序码生成失败",
+          icon: "none"
+        });
+        return;
+      }
+      wepy.hideLoading();
+      wepy.showLoading({
+        title: '分享图片下载中',
+        mask: true
+      });
+      let imageUrl = `https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/love_share_bg.jpg`;
+      const imgRes = await wepy.downloadFile({
+        url: imageUrl
+      }).catch((err)=>{
+        console.log("err====downloadFile==========imgRes=====", err);
+        this.$apply();
+        return false;
+      });
+      if(!imgRes){
+        wepy.showToast({
+          title: "分享图片下载失败",
+          icon: "none"
+        });
+        return;
+      }
+      wepy.hideLoading();
+      console.log('codeImgRes....',codeImgRes.tempFilePath)
+      const self = this
+      const ctx = wepy.createCanvasContext('myCanvas')
+      const width = 750;
+      const height = 1037;
+      console.log("=======imgRes.tempFilePath=====1===", imgRes.tempFilePath);
+      ctx.drawImage(imgRes.tempFilePath, 0, 0, width, height)
+      ctx.drawImage(codeImgRes.tempFilePath, 275, 710, 200, 200);
+      ctx.restore();
+      ctx.draw(true, async ()=>{
+        let x = self;
+        const res = await wepy.canvasToTempFilePath({
+          width:width,
+          height:height,
+          destWidth:width,
+          destHeight:height,
+          canvasId: 'myCanvas',
+          fileType: 'jpeg'
+        }).catch((err)=>{
+          return false;
+        });
+        console.log("res.tempFilePath================", res.tempFilePath);
+        if(res){
+          self.friend_circle_image_url = res.tempFilePath;
+          self.$apply();
+        }
+        else{
+          wepy.showToast({
+            title: "生成图片失败，请再试一次",
+            icon: "none"
+          });
+        }
+      });
+      this.$apply();
+    }
+
+    methods = {
+      async shareToFriendCircle(){
+        if(this.share_card){
+          if(this.card_url){
+            this.friend_circle_image_url = this.card_url
+            this.showPop = true;
+            this.$apply();
+          }else{
+            await this.generateFriendCard()
+          }
+        }else{
+          if(this.friend_circle_image_url){
+            this.showPop = true;
+            this.$apply();
+          }else{
+            await this.generateFriendCircleImage();
+          }
+        }
+      },
+      friendCircleImageLoaded(){
+        console.log("==========friendCircleImageLoaded====1======");
+        this.showPop = true;
+        this.$apply();
+      },
+      friendCircleImageLoadFailed(){
+        console.log("==========friendCircleImageLoadFailed======2====");
+        this.friend_circle_image_url = "";
+        wepy.showToast({
+          title: "图片加载失败，请再试一次",
+          icon: "none"
+        });
+      },
+      closePop() {
+        this.showPop = false;
+        this.$apply();
+      },
+      async tryShareAgain(){
+        wepy.showLoading({
+          title: '加载中',
+          mask: true
+        });
+        await this.addShare();
+        this.$apply();
+        wepy.hideLoading();
+      },
+      async saveImageToPhotosAlbum(){
+        let imageUrl = ''
+        imageUrl = this.friend_circle_image_url;     
+        const saveRes = await wepy.saveImageToPhotosAlbum({
+          filePath: imageUrl
+        }).catch((err)=>{
+          return false;
+        });
+        if(saveRes){
+          wepy.showToast({
+            title: "已保存至相册",
+            icon: "none"
+          });
+        }
+        else{
+          wepy.showToast({
+            title: "保存失败",
+            icon: "none"
+          });
+          wepy.showLoading({
+            title: '加载中',
+            mask: true
+          });
+          const setting = await wepy.getSetting();
+          if(setting.authSetting["scope.writePhotosAlbum"] === false){
+            this.showOpenSetting = true;
+            this.$apply();
+          }
+          wepy.hideLoading();
+        }
+      },
+      async openSetting(e){
+        if(e.detail.authSetting["scope.writePhotosAlbum"]){
+          this.showOpenSetting = false;
+          this.$apply();
+        }
+      }
+    }
+  }
+</script>

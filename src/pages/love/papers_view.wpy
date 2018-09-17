@@ -1,0 +1,97 @@
+<style lang="less">
+  .userinfo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .userinfo-avatar {
+    width: 80rpx;
+    height: 80rpx;
+    border-radius: 50%;
+  }
+
+  .userinfo-nickname {
+    color: #aaa;
+  }
+
+  /*.page{*/
+    /*background-color: #FFFFFF;*/
+  /*}*/
+</style>
+<template>
+  <questionView :args.sync='args'></questionView>
+</template>
+
+<script>
+  import wepy from 'wepy'
+
+  import QuestionView from '@/components/question_view' // alias example
+
+  export default class PapersView extends wepy.page {
+    config = {
+      navigationBarTitleText: '',
+      navigationBarBackgroundColor: '#f6f7f8',
+      navigationBarTextStyle: 'black',
+    };
+
+    components = {
+      questionView: QuestionView
+    };
+
+    changeNavigationBarTitleText(title){
+      wx.setNavigationBarTitle({title:title})
+    }
+
+    data = {
+      args: {}
+    };
+
+    async onLoad(e){
+      console.log("record view", e)
+      let args = {};
+
+      if(e && e.object_name){
+        args.object_name = e.object_name
+      }else{
+        throw new Error("缺少参数：object_name")
+      }
+
+      if(e && e.title){
+        args.title = e.title
+      }
+
+      if(e && e.space_id){
+        args.space_id = e.space_id
+      }
+
+      if(e && e.required){
+        args.required = true;
+      }
+
+      if(e && e.answered_url){
+        args.answered_url = decodeURIComponent(e.answered_url);
+      }
+
+      if(e && e.answered_url_type){
+        args.answered_url_type = e.answered_url_type
+      }
+
+      if(e && e.keep_progress){
+        args.keep_progress = e.keep_progress;
+      }
+
+      //直接定位到此问题
+      if(e && e.question_name){
+        args.question_name = e.question_name
+      }
+
+      if(e && e.fields){
+        args.fields = e.fields.split(',')
+      }
+
+      this.args = args;
+      this.$apply()
+    }
+  }
+</script>

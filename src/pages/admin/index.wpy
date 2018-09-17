@@ -95,7 +95,7 @@ export default class AdminIndex extends wepy.page {
       [{title: '预览',icon:'standard-channel-programs', url: `../space/index?space_id=${this.space_id}`}],
       [
         {title: '栏目',icon:'standard-timesheet', url: `../record/list?space_id=${this.space_id}&object_name=post_category`},
-        {title: '动态', icon:'standard-news', url: `../record/list?space_id=${this.space_id}&object_name=post&avatar_field=owner.profile.avatar&description_field=summary&date_field=modified`},
+        {title: '文章', icon:'standard-news', url: `../record/list?space_id=${this.space_id}&object_name=post&avatar_field=owner.profile.avatar&description_field=summary&date_field=modified`},
         {title: '活动', icon:'standard-event', url: `../record/list?space_id=${this.space_id}&object_name=vip_event`}
       ],
       [

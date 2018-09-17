@@ -1,0 +1,20 @@
+
+
+<template>
+  <view class="section" @tap="selectCity">
+    选择城市
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+
+  export default class CitySelect extends wepy.component {
+
+      methods = {
+        selectCity: function (e) {
+          wepy.navigateTo({url: '/pages/edit/city_select'})
+        }
+      }
+  }
+</script>

@@ -106,6 +106,73 @@ page {
       border:none;
   }
 }
+
+.cover-page-bg {
+  position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background-image:url('https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/bg-hands.jpg');
+	background-position: bottom center;
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-color: #fdfdfd;
+	z-index: 1;
+}
+
+
+.cover-page {
+  background: transparent;
+  position: relative;
+  z-index: 10;
+  padding-bottom: 100px;
+
+  .page__hd{
+    padding:20rpx 40rpx;
+    .love-title{
+      margin-top:80rpx;
+      color:#00396b;
+      font-size:65rpx;
+      font-weight:bold;
+      text-align: center;
+    }
+  }
+  .page__bd{
+    padding:20rpx 40rpx;
+    .love-summary{
+      color:#00396b;
+      font-size:45rpx;
+      margin-bottom:40rpx;
+      text-align: center;
+    }
+    .love-attention{
+      color: #00396b;
+      font-size:35rpx;
+      margin-bottom:40rpx;
+      text-align: center;
+    }
+  }
+
+  .btn-join{
+    background:#1AAD19;
+    padding:6px;
+    color:#fff;
+    font-weight:bold;
+    margin-top:120rpx;
+  }
+  .btn-love {
+    padding:6px;
+    font-weight:bold;
+    color:#353535;
+    margin-top:30rpx;
+  }
+  .love-licence{
+    color:#fff;
+    font-size:32rpx;
+    text-align:center;
+  }
+}
 </style>
 
 <script>
@@ -116,7 +183,7 @@ import { setStore, getStore } from 'wepy-redux'
 import configStore from './store'
 import req from '@/network'
 import * as interceptor from '@/network/interceptor'
-import { baseUrl, appId } from '@/config'
+import { baseUrl, appId, loveSpaceId } from '@/config'
 import _ from 'underscore'
 import { serverAPI } from '@/server';
 import pageRouter from '@/utils/pageRouter'
@@ -127,8 +194,13 @@ setStore(store)
 export default class VIP extends wepy.app {
   config = {
     pages: [
-//      'pages/tabbar_index',
       'pages/home/store',
+      'pages/love/index',
+      'pages/love/home',
+//      'pages/tabbar_index',
+      'pages/love/shake',
+      'pages/love/share',
+      // 'pages/home/store',
       'pages/index',
       'pages/apps',
       'pages/me',
@@ -176,6 +248,7 @@ export default class VIP extends wepy.app {
       'pages/consuming_records',
       'pages/home/post',
       'pages/phone_number_login',
+      'pages/user_info_login',
       'pages/empty_page',
       'pages/404',
       'pages/record/view',
@@ -190,7 +263,38 @@ export default class VIP extends wepy.app {
       'pages/address/list',
       'pages/order/list',
       'pages/share',
-      'pages/love/questionnaire_list'
+      'pages/love/me',
+      'pages/love/invite_code',
+      'pages/love/invite_code_success',
+      'pages/love/invite_code_fail',
+      'pages/love/find',
+      'pages/love/test',
+      'pages/love/matching',
+      'pages/love/matching_filter',
+      'pages/love/matching_result',
+      'pages/love/papers_view',
+      'pages/love/papers_summary',
+      'pages/love/navigation_qusestion',
+      'pages/love/cover_about_yourself',
+      'pages/love/cover_you_looking_for',
+      'pages/love/cover_answer_questions',
+      'pages/love/cover',
+      'pages/love/detail',
+      'pages/edit/city_select',
+      'pages/love/introduce',
+      'pages/love/introduce_me',
+      'pages/love/invite_code_me',
+      'pages/love/invite_code_success_me',
+      'pages/love/question_list',
+      'pages/love/discovery',
+      'pages/love/post_recommend',
+      'pages/love/cp',
+      'pages/love/match_history',
+      'pages/love/love_me',
+      'pages/love/group',
+      'pages/love/privacy_protection',
+      'pages/love/settings',
+      'pages/love/love_question',
     ],
     tabBar: {
       color: '#666',
@@ -204,6 +308,12 @@ export default class VIP extends wepy.app {
         iconPath: './images/tabbars/home.png',
         text: '首页',
       },
+      // {
+      //   pagePath: 'pages/love/post_recommend',
+      //   selectedIconPath: './images/tabbars/topic_pressed.png',
+      //   iconPath: './images/tabbars/topic.png',
+      //   text: '最新',
+      // },
       {
         pagePath: 'pages/me',
         selectedIconPath: './images/tabbars/me_pressed.png',
@@ -228,7 +338,8 @@ export default class VIP extends wepy.app {
     storeInfo: null,
     launchOptions: null,
     is_login: false,
-    objects: {}
+    objects: {},
+    shareTicket: null
   }
 
   constructor () {
@@ -238,6 +349,9 @@ export default class VIP extends wepy.app {
   }
 
   onShow(options){
+    console.log('onShow', options);
+    this.globalData.shareTicket = options.shareTicket;
+
     //通过分享直接进入page
 //    if(options.path == 'pages/space/invite_user'){
 //      this.checkMobile()
@@ -302,6 +416,34 @@ export default class VIP extends wepy.app {
         return this.checkMobile(to)
       }
     });
+
+    pageRouter.pushEnter({
+      page: '/pages/love/invite_code',
+      script: function (to) {
+        return this.checkMobile(to)
+      }
+    });
+
+    pageRouter.pushEnter({
+      page: '/pages/love/cp',
+      script: function (to) {
+        return this.checkMobile(to)
+      }
+    });
+
+    pageRouter.pushEnter({
+      page: '/pages/love/papers_view',
+      script: function (to) {
+        return this.checkMobile(to)
+      }
+    });
+
+    pageRouter.pushEnter({
+      page: '/pages/love/introduce',
+      script: function (to) {
+        return this.checkMobile(to)
+      }
+    });
   }
 
   onHide() {
@@ -323,11 +465,14 @@ export default class VIP extends wepy.app {
     })
   }
 
-  checkMobile(){
-    if(this.globalData.user && this.globalData.user.mobile){
+  checkMobile(to){
+    if(!this.globalData.love || !this.globalData.love.enabled || (this.globalData.user && this.globalData.user.mobile)){
       return true
     }else{
       let url = '/pages/phone_number_login';
+      if (to) {
+        url = url + '?to=' + encodeURIComponent(to);
+      }
       wepy.navigateTo({url: url});
       return false
     }
@@ -358,10 +503,15 @@ export default class VIP extends wepy.app {
   }
 
   async login(e) {
+    if(!e){
+      e = {}
+    }
     const self = this
     let globalData = self.globalData
     let needs_login = false
-
+    if(e.share_from) {
+      globalData.share_from = e.share_from//记录分享来源share_from
+    }
     if (!globalData.userInfo) {
       const setting = await wepy.getSetting()
       if (setting.authSetting['scope.userInfo']) {
@@ -373,7 +523,6 @@ export default class VIP extends wepy.app {
     if (!globalData.user) {
       globalData.user = {}
     }
-
     if (!globalData.user._id || !globalData.user.auth_token) {
       needs_login = true
     }
@@ -388,23 +537,53 @@ export default class VIP extends wepy.app {
         needs_login = true
       }
     } catch (error) {
+      needs_login = true
       console.log(error)
     }
 
     // needs_login = true;
 
+    let space_id = e.space_id, share_id = e.share_id, share_from = e.share_from;
+    if(share_id || share_from){
+      needs_login = true;
+      if(!space_id){
+        wx.showToast({
+          title: "分享链接未传入工作区ID",
+          icon: "none"
+        });
+      }
+    }
     if (needs_login) {
-
+      console.log("=========needs_login============");
       const data = await wepy.login()
       const old_user_id = globalData.user._id || ''
       const old_auth_token = globalData.user.auth_token || ''
       let url = `${serverAPI.LOGIN}?code=${data.code}&old_user_id=${old_user_id}&old_auth_token=${old_auth_token}`
 
-      // if (space_id) {
-      //   url = `${url}&space_id=${space_id}`
-      // }
+      if (space_id) {
+        url += `&space_id=${space_id}`
+      }
+      if (share_id) {
+        url += `&share_id=${share_id}`
+      }
+      if (share_from) {
+        url += `&share_from=${share_from}`
+      }
 
-      const res = await req.post(url).catch((err) => {
+      let ssoData = {};
+      let shareTicket = this.globalData.shareTicket;
+      if(shareTicket){
+        let shareInfo = await wepy.getShareInfo({
+          shareTicket: shareTicket
+        });
+        console.log("==========shareInfo=============", shareInfo);
+        ssoData = {
+          encryptedData: shareInfo.encryptedData,
+          iv: shareInfo.iv
+        };
+      }
+
+      const res = await req.post(url, ssoData).catch((err) => {
         console.log("cache error...", err);
         return {}
       })
@@ -417,14 +596,23 @@ export default class VIP extends wepy.app {
       globalData.user._id = res.user_id
       globalData.user.auth_token = res.auth_token
       globalData.user.open_id = res.open_id
+      globalData.user.open_group_id = res.open_group_id
       globalData.user.name = res.name
       globalData.user.mobile = res.mobile
       globalData.user.sex = res.sex
       globalData.user.birthdate = res.birthdate
+      globalData.user.avatar = res.avatar
+      globalData.user.qrcode = res.qrcode
       globalData.my_spaces = res.my_spaces
       globalData.my_customers = res.my_customers
+      globalData.love = res.love
       console.log("===============login============globalData.my_customers", globalData.my_customers);
 
+      for (let customer of res.my_customers) {
+        if (customer.space == loveSpaceId) {
+          wx.setStorageSync("questionnaire_progess", customer.questionnaire_progess);
+        }
+      }
 
       req.header(header)
 
@@ -446,10 +634,11 @@ export default class VIP extends wepy.app {
       }
       req.header(header)
     }
-    await this.respondShare(e);
+    // await this.respondShare(e);
   }
 
   async respondShare(e) {
+    console.log("===============respondShare==========e=====", e);
     console.log("===============respondShare==========globalData=====", this.globalData);
     if(!e || !e.space_id){
       return;
@@ -472,7 +661,7 @@ export default class VIP extends wepy.app {
       if(e.share_id){
         values.share = e.share_id;
       }
-      else if(e.share_from){
+      if(e.share_from){
         values.from = e.share_from;
       }
       console.log("===============respondShare============values", values);
@@ -480,6 +669,19 @@ export default class VIP extends wepy.app {
       if(customer && customer.value && customer.value.length){
         this.globalData.my_customers.push(customer.value[0]);
       }
+    }
+
+    // 往vip_invites中插入数据
+    if(e.naire && e.share_from && e.share_from != userId) {
+      const url = '/api/odata/v4/' + e.space_id + '/' + "vip_invites";
+      const val = {
+        from: e.share_from,
+        name: '分享'
+      }
+      await req.post(url, val).catch((err)=>{
+        console.log("[vip_invites error]", err)
+        return err.data;
+      });
     }
   }
 
@@ -673,6 +875,11 @@ export default class VIP extends wepy.app {
       return this.globalData.objects[key];
     }
     const object = await this.get('objects', object_name, space_id);
+
+    if(_.isEmpty(object)){
+      return {}
+    }
+
     this.globalData.objects[key] = object;
     return object;
   }
@@ -714,5 +921,22 @@ export default class VIP extends wepy.app {
     }
     return (object.allowDelete && object.modifyAllRecords) || (object.allowDelete && owner === this.globalData.user._id);
   }
+
+  async generateQrCode(ctx,src1,src2,dx,dy,dWidth,dHeight,color) {
+    ctx.drawImage(src1, dx, dy, dWidth, dHeight)
+    const radius = dWidth * 105/430
+    ctx.arc(dx+dWidth/2, dy+dWidth/2, radius, 0, 2 * Math.PI)
+    ctx.setFillStyle(color)
+    ctx.fill()
+    const avatar_radius = radius-6
+    ctx.save()
+    ctx.beginPath()
+    ctx.arc(dx+dWidth/2, dy+dWidth/2, avatar_radius, 0, 2 * Math.PI)
+    ctx.setFillStyle('white')
+    ctx.fill()
+    ctx.clip()
+    ctx.drawImage(src2, dx+dWidth/2-avatar_radius, dy+dWidth/2-avatar_radius, 2*avatar_radius, 2*avatar_radius)
+    ctx.restore();
+    }
 }
 </script>

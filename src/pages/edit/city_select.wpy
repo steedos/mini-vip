@@ -1,0 +1,429 @@
+<template>
+  <view class="main city-select">
+    <!-- 搜索框 -->
+    <view class="search-bar">
+      <input type="text"
+             class="search"
+             @focus="onFocus()"
+             @input="onInput({{$event}})"
+             confirm-type="search"
+             placeholder="搜索"/>
+      <text wx:if="{{showSearch}}"
+            class="search-cancel"
+            @tap="hideSearchResult()">取消
+      </text>
+    </view>
+    <!-- 搜索结果 -->
+    <view wx:if="{{showSearch}}"
+          class="mask"
+          style="height: calc(100vh - 40px)">
+      <scroll-view wx:if="{{searchResult.length}}"
+                   style="height: 100%; width: 100%; background-color: white"
+                   scroll-y>
+        <repeat for="{{searchResult}}">
+          <view class="city-item"
+                @tap="onSelected({{item}})">
+            {{ item.name }}
+          </view>
+        </repeat>
+      </scroll-view>
+    </view>
+    <!-- 列表 -->
+    <scroll-view class="fit scroll"
+                 scroll-y
+                 scroll-into-view="{{scrollIntoId}}">
+      <view id="top"
+            class="city-letter">当前定位城市：
+      </view>
+      <view wx:if="{{showOpenSetting}}" class="city-item">
+        <button open-type="openSetting" class="weui-btn city-select-open-settings" plain="true" bindopensetting="openSetting">定位失败，请点击授权</button>
+      </view>
+      <view wx:elif="{{locationFail}}"
+            class="city-item">定位失败
+      </view>
+      <view wx:else
+            class="city-item"
+            @tap="onLocationTaped()">
+        {{ location ? location : '定位中...' }}
+      </view>
+      <view class="city-letter">热门城市</view>
+      <repeat for="{{hotCitys}}">
+        <view class="city-item"
+              @tap="onSelected({{item}})">
+          {{item.name}}
+        </view>
+      </repeat>
+
+      <repeat for="{{citys}}"
+              key="letter.letter"
+              item="letter">
+        <view>
+          <view class="city-letter" id="{{letter.letter}}">{{ letter.letter }}</view>
+          <repeat for="{{letter.cityInfo}}"
+                  key="city.id"
+                  item="city">
+            <view class="city-item"
+                  @tap="onSelected({{city}})">{{ city.name }}
+            </view>
+          </repeat>
+        </view>
+      </repeat>
+      <view class="index-list">
+        <repeat for="{{letters}}">
+          <view class="index-list-item"
+                data-letter="{{item}}"
+                @touchstart.stop="onListTouchStart"
+                @touchmove.stop="onListTouchMove"
+                @touchend.stop="onListTouchEnd">{{ item }}
+          </view>
+        </repeat>
+      </view>
+      <view wx:if="{{currentLetter}}" class="letter-notify">{{ currentLetter }}</view>
+    </scroll-view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  import citys from './city'
+  import req from '@/network'
+  import {txMapsKey} from '@/config'
+
+  const hotCode = ['110100', '310000', '310100', '440100', '440300', '330100', '320100']
+
+  export default class CitySelect extends wepy.page {
+    config = {
+      navigationBarTitleText: '选择城市'
+    }
+    data = {
+      citys: [],
+      hotCitys: [],
+      letters: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'W', 'X', 'Y', 'Z'],
+      scrollIntoId: '',
+      currentLetter: '',
+      location: '',
+      locationFail: false,
+      letterHeight: 18,
+      startPageY: 0,
+      timer: null,
+      showSearch: false,
+      searchResult: [],
+      key: '',
+      showOpenSetting: false
+    };
+
+    setParentValue(key, value, item){
+      const pages = getCurrentPages();
+      const prevPage = pages[pages.length - 2];
+      prevPage.changeCity(key, value, item);
+      wepy.navigateBack({
+        delta: 1
+      })
+    }
+
+    methods = {
+      onListTouchStart({currentTarget, touches}) {
+        const letter = currentTarget.dataset.letter
+        this.onLetterTaped(letter)
+        this.startPageY = touches[0].pageY
+      },
+      onListTouchMove({currentTarget, touches}) {
+        const letter = currentTarget.dataset.letter
+        const index = this.letters.indexOf(letter)
+        const pageY = touches[0].pageY
+        let dist = ~~(Math.abs(this.startPageY - pageY) / this.letterHeight)
+        let isUp = false
+        if (this.startPageY - pageY > 0) {
+          isUp = true
+        }
+        if (dist) {
+          let i = isUp ? index - dist : index + dist
+          i < 0 && (i = 0)
+          i > this.letters.length - 1 && (i = this.letters.length - 1)
+          this.onLetterTaped(this.letters[i])
+        }
+      },
+      onListTouchEnd() {
+        if (this.timer) {
+          clearTimeout(this.timer)
+        }
+        this.timer = setTimeout(() => {
+          clearTimeout(this.timer)
+          this.currentLetter = ''
+          this.timer = null
+          this.$apply()
+        }, 750)
+      },
+      onFocus() {
+        this.showSearch = true
+      },
+      hideSearchResult() {
+        this.showSearch = false
+        // this.searchResult = []
+        // this.$apply()
+      },
+      onInput({detail: {value}}) {
+        if (!value.trim()) {
+          return []
+        }
+        const reg = new RegExp(value, 'ig')
+        // console.log(value)
+        this.searchResult = citys.filter(i => {
+          return reg.test(i.name) || reg.test(i.search)
+        })
+      },
+      onSelected(item, e) {
+        wx.showToast({
+          title: item.name
+        });
+
+        this.setParentValue(this.key, item.name, item)
+      },
+      onLocationTaped() {
+        if (!this.location.trim()) {
+          return
+        }
+        wx.showToast({
+          title: this.location
+        })
+
+        this.setParentValue(this.key, this.location)
+      },
+      openSetting: async function(e){
+        self = this;
+        if(e.detail.authSetting["scope.userLocation"]){
+          this.showOpenSetting = false;
+          const location = await this.getLocation();
+          const ret = await this.getCityNameFromTX(location.latitude, location.longitude)
+          this.location = ret;
+          this.locationFail = false;
+          this.showOpenSetting = false;
+          self.$apply();
+        }
+      },
+    };
+
+
+
+    async onLoad(e) {
+      this.citys = this.getLetterCity()
+      this.hotCitys = this.getHotCity()
+      this.key = e.key;
+      wx.showLoading({
+        title: '加载中'
+      });
+
+      const setting = await wepy.getSetting()
+      if(setting.authSetting["scope.userLocation"] === false){
+        this.showOpenSetting = true;
+      }
+
+      try {
+        const location = await this.getLocation()
+        const ret = await this.getCityNameFromTX(location.latitude, location.longitude)
+        this.location = ret
+        this.$apply()
+      } catch (error) {
+        console.log('error', error)
+        this.locationFail = true;
+        this.showOpenSetting = true;
+        this.$apply()
+      } finally {
+        wx.hideLoading()
+      }
+    }
+
+    // 获取经纬度
+    getLocation() {
+      return new Promise((resolve, reject) => {
+        wx.getLocation({
+          type: 'wgs84',
+          success: resolve,
+          fail: reject
+        })
+      })
+    }
+
+    onLetterTaped(letter) {
+      this.scrollIntoId = letter === '#' ? 'top' : letter
+      this.currentLetter = letter
+    }
+
+
+    async getCityNameFromTX(latitude, longitude) {
+
+      const url = `https://apis.map.qq.com/ws/geocoder/v1/?location=${latitude},${longitude}&key=${txMapsKey}`;
+
+      const res = await wepy.request({url: url, method: 'GET'}).catch((err)=>{
+        console.log("error...",err.data);
+        return {}
+      });
+      return res.data.result.ad_info.city;
+    }
+
+    getLetterCity() {
+      let tempObj = []
+      // letters.shift()
+      for (let i = 0; i < this.letters.length; i++) {
+        let letter = this.letters[i]
+        let cityInfo = []
+        let tempArr = {}
+        tempArr.letter = letter
+        for (let j = 0; j < citys.length; j++) {
+          if (letter == citys[j].letter) {
+            cityInfo.push(citys[j])
+          }
+        }
+        tempArr.cityInfo = cityInfo
+        tempObj.push(tempArr)
+      }
+      return tempObj
+    }
+
+    getHotCity() {
+      const cityInfo = []
+      for (let item of citys) {
+        if (hotCode.indexOf(item.code) !== -1) {
+          cityInfo.push(item)
+        }
+      }
+      this.letters.unshift('#')
+      return cityInfo.sort((a, b) => a.code > b.code)
+    }
+  }
+</script>
+<style lang="less">
+
+  .city-select{
+    .city-select-open-settings{
+      padding-left:0px;
+      text-align:left;
+      display:inherit;
+      font-size: 14px;
+      border-radius: 0px;
+      width: auto;
+      height: 50px;
+      line-height: 50px;
+      border: none
+    }
+  }
+
+  .main {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .search-bar {
+    height: 40px;
+    display: flex;
+    flex-direction: row;
+  }
+
+  .search {
+    flex: 1;
+    width: 0;
+    height: 40px;
+    padding: 0 10px;
+    border-bottom: 1px solid #ddd;
+    background-color: white;
+    box-sizing: border-box;
+  }
+
+  .search-cancel {
+    color: #666;
+    line-height: 40px;
+    padding: 0 8px;
+    font-size: 14px;
+  }
+
+  .mask {
+    // height: 100vh;
+    width: 100vw;
+    background-color: rgba(0, 0, 0, .7);
+    position: fixed;
+    top: 40px;
+    left: 0;
+    z-index: 1;
+  }
+
+  .scroll {
+    flex: 1;
+    height: 0;
+    width: 100%;
+    background-color: #eee
+  }
+
+  .city-letter {
+    text-indent: 28px;
+    height: 30px;
+    line-height: 30px;
+  }
+
+  .city-item {
+    height: 50px;
+    line-height: 50px;
+    background-color: white;
+    text-indent: 28px;
+    font-size: 14px;
+    position: relative;
+    &::after {
+      content: ' ';
+      display: block;
+      height: 1px;
+      width: 90%;
+      position: absolute;
+      left: 5%;
+      bottom: 0;
+      background-color: #DDD;
+      transform: scaleY(.5)
+    }
+    &:active {
+      opacity: .7;
+    }
+  }
+
+  .index-list {
+    height: 414px;
+    width: 30px;
+    // background-color: red;
+    position: fixed;
+    right: 0px;
+    top: 50%;
+    margin-top: -187px;
+    // top: calc(10vh + 40px);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .index-list-item {
+    width: 100%;
+    // flex: 1;
+    height: 10px;
+    line-height: 2;
+    font-size: 12px;
+    display: flex;
+    padding-left: 5px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .letter-notify {
+    height: 80px;
+    width: 80px;
+    background-color: rgba(0, 0, 0, .7);
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-top: -40px;
+    margin-left: -40px;
+    border-radius: 5px;
+    color: white;
+    line-height: 80px;
+    font-size: 50px;
+    text-align: center;
+  }
+</style>
+

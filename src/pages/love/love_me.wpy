@@ -1,0 +1,113 @@
+<style lang="less">
+.weui-cell__bd {
+	font-size: 0;
+	height: 80rpx;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	.name {
+		font-size: 36rpx;
+	}
+	.group-name {
+		font-size: 28rpx;
+		line-height: 28rpx;
+		height: 28rpx;
+		color: #aaa;
+	}
+}
+.avatar-field {
+  border-radius: 50%;
+  margin-right: 16rpx;
+  vertical-align: middle;
+  width: 80rpx;
+  height: 80rpx;
+}
+.record-container {
+	.heart {
+		height: 80rpx;
+		margin: 0;
+		width: 1.75rem;
+		border-right: 15px solid transparent;
+		border-left: 0.5rem solid transparent;
+	}
+}
+</style>
+
+<template>
+	<view class="cover-page page" wx:if="{{is_loaded}}">
+		<block wx:if="{{record_list.length}}">
+			<view class="weui-cells">
+				<repeat for="{{record_list}}" key="index" index="index" item="record">
+					<block wx:if="{{record.owner.name}}">
+						<navigator class="record-container weui-cell weui-cell_access"  data-item-id="{{record._id}}" hover-class="weui-cell_active" url="/pages/love/introduce?_id=-1&space_id={{record.space}}&userId={{record.owner._id}}&object_name=love_recommend_history">
+							<view class="weui-cell__hd">
+								<image src="{{record.owner.profile.avatar}}" class='avatar-field' />
+							</view>
+							<view class="weui-cell__bd">
+								<view class="name">{{record.owner.name}}</view>
+							</view>
+							<view class="weui-cell__ft record-match weui-cell__ft_in-access" style="font-size: 36rpx">{{util.fixed(record.match,2)}}%</view>
+						</navigator>
+					</block>
+				</repeat>
+			</view>
+		</block>
+	</view>	
+</template>
+
+<script>
+import wepy from 'wepy';
+import { baseUrl } from '@/config';
+import util from '../../wxs/util.wxs';
+import recordList from '../../mixins/record_list';
+import { baseMaterialUrl } from '@/config';
+import { loveSpaceId } from '@/config';
+import pageRouter from '@/utils/pageRouter';
+import req from '@/network';
+import _ from 'underscore';
+
+export default class LoveMe extends wepy.page  {
+	config = {
+		enablePullDownRefresh: true
+	}
+
+	onLoad() {
+
+	}
+
+	data = {
+		object_name: 'love_recommend_history',
+		filter: '',
+		avatar_field: 'user_b.profile.avatar',
+    name_field: 'user_b.name',
+    baseUrl: baseUrl,
+    navigationBarTitle: '喜欢我的',
+    date_field: [
+      'match',
+			'heart'
+    ],
+    userId: '',
+    orderby: 'modified desc',
+    space_id: loveSpaceId,
+    pageSize: 50,
+	}
+
+	wxs = {
+		util: util
+	}
+
+	mixins = [recordList];
+
+	getFinalExpand() {
+		console.log('[getFinalExpand....]')
+    return 'owner($select=profile,name)';
+  }
+
+	getQueryFilter() {
+    const user_id = this.$parent.globalData.user._id;
+    let filter = '';
+    filter = `(user_b eq '${user_id}' and heart eq true)`;
+    return filter;
+	}
+}
+</script>

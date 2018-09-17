@@ -16,7 +16,7 @@ function formatEventStatus(status) {
 }
 
 // 日期格式化
-function formatDate(value, joiner) {
+function formatDate(value, joiner, type) {
   if (!value) {
     return '';
   }
@@ -31,6 +31,10 @@ function formatDate(value, joiner) {
     var date = value.getDate() + '日';
   }
   console.log('[date]', date)
+
+  if(type === 'date'){
+    return year + month + date
+  }
 
   var hours = value.getHours();
   var minutes = value.getMinutes();
@@ -213,7 +217,7 @@ function formatImageUrl(src, baseUrl) {
     return baseUrl + "/api/files/images/" + src;
   }
   else{
-    return "https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/empty.png";
+    return "";
   }
 }
 
@@ -389,8 +393,24 @@ function transformFieldValue(field, value){
     }
 
     return year + month + date + ' ' + hours_str + ':' + minutes
+  }else if(field.type === 'date'){
+    return formatDate(value, '', 'date')
   }
   return value
+}
+
+function includes(arr, item) {
+  if(arr){
+    return arr.indexOf(item) > -1
+  }
+  return false;
+}
+
+// fix数据
+
+function fixed(num, length) {
+  var num = num * 100;
+  return num.toFixed(length);
 }
 
 
@@ -405,5 +425,7 @@ module.exports = {
   getEmptyImageUrl:getEmptyImageUrl,
   transformFieldValue: transformFieldValue,
   formatDateMini: formatDateMini,
-  showRequired: showRequired
+  showRequired: showRequired,
+  includes: includes,
+  fixed: fixed
 }

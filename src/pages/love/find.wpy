@@ -1,0 +1,162 @@
+<style lang="less">
+.loading-container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #66ceff;
+  .loading {
+    width: 100%;
+    height: 100%;
+    background: url(https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/loading.gif);
+    background-position: center center;
+    background-repeat: no-repeat;
+  }
+}
+
+.btn-index {
+  margin: 30rpx 0;
+}
+
+.about-me-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  .about-me {
+    padding: 20px 30px;
+    color: #ccc;
+    display: inline-block;
+    margin-bottom: 6px;
+    font-size: 14px;
+  }
+}
+</style>
+
+<template>
+  <view class="page cover-page" wx:if="{{is_loaded}}">
+    <view class="page__hd">
+      <view class="love-title">寻找你的理想对象</view>
+    </view>
+    <view class="page__bd">
+      <view class="love-summary">“无颜”是一位聪明又勤快的智能机器人，他精心设计了各种情感问题，根据你的喜好和对方喜好，执行海量的数据计算，为你找到“相互喜欢”值最高的有缘人。</view>
+      <button class="btn-join" @tap="join">下一步</button>
+      <view class="love-licence"></view>
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import { loveSpaceId } from '@/config';
+import pageRouter from '@/utils/pageRouter';
+
+export default class InviteIndex extends wepy.page {
+
+  config = {
+    navigationBarTitleText: '无颜',
+  };
+
+  data = {
+    is_loaded: false,
+    space_id: '',
+    showLoveBtn: false,
+    naire: '',
+    share_from: '',
+    load_page: ''
+  }
+
+  onShareAppMessage(res) {
+    const user_id = this.$parent.globalData.user._id;
+    let title = '我们是天生一对吗？';
+    let path = `/pages/love/find?share_from=${user_id}`
+    return {
+      title: title,
+      path: path
+    };
+  }
+
+  async onLoad(e) {
+    wepy.showShareMenu({
+      withShareTicket: true
+    });
+    console.log("e==============",e)
+    wx.showLoading({mask: true});
+    e.space_id = loveSpaceId;
+    this.space_id = e.space_id;
+    if(e.scene){
+			// 朋友圏二维码识别进入的，则取出scene中的share_from
+			let scene = decodeURIComponent(e.scene);
+			let scenes = scene.split('=');
+      e.share_from = scenes[1];
+      e.qrcode = 1
+		}
+    await this.$parent.login(e);
+    const love = this.$parent.globalData.love;
+		if (love && love.enabled) {
+			this.showLoveBtn = true;
+			this.$apply();
+    }
+    
+    if(!this.space_id){
+      wx.showToast({
+        title: "未配置工作区ID",
+        icon: "none"
+      });
+      return;
+    }
+    let index = 0;
+    let my_customers = this.$parent.globalData.my_customers;
+		let current_customer = my_customers.find((customer, i) => {
+			if (customer.space == this.space_id) {
+				index = i;
+				return customer
+			}
+    });
+    if (current_customer.is_member) {
+			let finishedNaire = wx.getStorageSync('questionnaire_progess');
+			if (finishedNaire.indexOf('love_hobby') > -1) {
+				finishedNaire.splice(finishedNaire.indexOf('love_hobby'), 1);
+			}
+			if (finishedNaire.indexOf('love_answer2') > -1) {
+				finishedNaire.splice(finishedNaire.indexOf('love_answer2'), 1);
+			}
+			if (finishedNaire && finishedNaire.constructor === Array && finishedNaire.length > 0) {
+				if (finishedNaire.length == 1 && finishedNaire.includes('love_about_me')) {
+					self.load_page = 'home';
+				} else if (finishedNaire.length == 2 && finishedNaire.includes('love_about_me') && finishedNaire.includes('love_looking_for')) {
+					self.load_page = 'cover_answer_questions';
+				} else if (finishedNaire.length == 3 && finishedNaire.includes('love_about_me') && finishedNaire.includes('love_looking_for') && finishedNaire.includes('love_answer')) {
+					wx.switchTab({url: `/pages/love/shake`});
+				} else {
+					this.load_page = 'cover_about_yourself'
+				}
+			} else {
+        this.load_page = 'cover_about_yourself'
+      }
+		} else {
+			if(e.love) {
+				this.load_page = 'love_disabled'
+			} else {
+				this.load_page = 'love_disabled';
+			}
+    }
+    
+    this.is_loaded = true;
+    this.$apply();
+    
+    wx.hideLoading();
+  }
+
+  methods = {
+    join() {
+      pageRouter.navigateTo({url: `/pages/love/invite_code?space_id=${this.space_id}`});
+    },
+    goLove() {
+			wx.navigateTo({url: '/pages/love/index?love=1'})
+		},
+  }
+}
+</script>

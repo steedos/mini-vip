@@ -1,0 +1,50 @@
+<style lang="less">
+</style>
+
+<template>
+  <view>
+    <view class="cover-page-bg"></view>
+    <view class="page cover-page">
+      <view class="page__hd">
+        <view class="love-title">遇见对的人</view>
+      </view>
+      <view class="page__bd">
+        <view class="love-summary">
+          说说你对理想伴侣的要求，
+          “无颜”会为你筛选你喜欢的人。
+          </view>
+
+        <button class="btn-join" @tap="next">下一步</button>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import { loveSpaceId } from '@/config';
+export default class ComponentLookingFor extends wepy.component {
+  props = {
+		spaceId: {
+      type: String,
+      default: ''
+    },
+	}
+
+  methods = {
+    next() {
+      let answeredUrl = '';
+      console.log("share_from=============",this.$parent.$parent.globalData.share_from)
+      let share_from = this.$parent.$parent.globalData.share_from
+      if(share_from){
+        answeredUrl = encodeURIComponent(`/pages/love/introduce?space_id=${loveSpaceId}&userId=${share_from}`);
+      }else{
+        answeredUrl = encodeURIComponent(`/pages/love/home`);
+      }
+      wx.navigateTo({
+        url: `/pages/love/papers_view?object_name=love_looking_for&space_id=${loveSpaceId}&required=true&answered_url=${answeredUrl}&answered_url_type=reLaunch&keep_progress`
+      });
+    }
+  };
+}
+</script>

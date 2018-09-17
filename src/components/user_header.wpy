@@ -1,0 +1,338 @@
+<style lang="less">
+.header {
+	position: relative;
+
+	.cover-wrapper{
+		position: relative;
+		height: 150rpx;
+		background-size: cover;
+	}
+	.image{
+		width: 100%;
+	}
+	.space-info {
+		position: relative;
+		text-align: center;
+		// margin: 0 20rpx;
+		// border-radius: 0.25rem;
+		width: auto;
+		border: 1px solid transparent;
+		padding-bottom: 20rpx;
+		background: #fff;
+		box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
+		z-index: 100;
+
+		.heart {
+			position: absolute;
+			right: 0;
+			top: -64rpx;
+			width: 1.75rem;
+			height: 1.75rem;
+		}
+
+		.wrapper {
+			top: -100rpx;
+			margin-top: 115rpx;
+			padding: 0 40rpx;
+
+			.avatar-container {
+				background: #fff;
+				padding: 10rpx;
+				border-radius: 50%;
+				display: inline-block;
+				box-shadow: 0 4rpx 4rpx 0 rgba(0, 0, 0, 0.16), 0 0 0 2rpx rgba(0, 0, 0, 0.08);
+				position: absolute;
+				left: calc(~"50% - 110rpx");
+				top: -115rpx;
+
+				.avatar {
+					border-radius: 50%;
+					display: block;
+					width: 200rpx;
+					height: 200rpx;
+				}
+
+				.sex-container {
+					position: absolute;
+					width: 35rpx;
+					height: 35rpx;
+					background: #fff;
+					right: 14rpx;
+					bottom: 6rpx;
+					border-radius: 50%;
+					padding: 8rpx;
+					&.boy {
+						border: 4rpx solid #00aeef;
+					}
+					&.girl {
+						border: 4rpx solid #ec148e;
+					}
+					.sex-img {
+						display: block;
+						width: 100%;
+						height: 100%;
+					}
+				}
+			}
+
+			.love-heart {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				color: #823c3d;
+				margin-bottom:10rpx;
+				font-weight: bold;
+				.love-img {
+					margin-right: 0.5rem;
+				}
+			}
+
+			.name.weui-cell__ft_in-access {
+				font-size: 44rpx;
+				font-weight: bold;
+				padding-left:13px;
+			}
+
+			.introduction {
+				font-size: 32rpx;
+				margin-top: 10rpx;
+				font-weight: bold;
+			}
+
+			.zodiac-constellation{
+				display: flex;
+				margin-top: 10rpx;
+				font-size: 30rpx;
+				color: #777;
+				justify-content: center;
+				view {
+					padding: 0 6rpx;
+				}
+			}
+
+			.star-count {
+				margin-top: 0px;
+				color: #898989;
+				display: none;
+			}
+
+			.btn-star {
+				color: #018cc6;
+			}
+			.btn-manage {
+				background: #018cc6;
+				color: #fff;
+			}
+		}
+	}
+}
+</style>
+<template>
+	<view class="wepy-list">
+		<view class="header">
+			<view class="cover-wrapper" @tap="uploadImage(true)"></view>
+			<view class="space-info">
+				<view class="wrapper" @tap="goIntroduce">
+					<view class="bg-image"></view>
+					<block wx:if="{{isAuthUserInfo}}">
+						<view class="avatar-container">
+							<image class="avatar" mode="aspectFill" src="{{util.formatImageUrl(about_me.avatar, baseUrl)}}"/>
+							<view class="sex-container {{about_me.sex == '男' ? 'boy' : 'girl'}}">
+								<image wx:if="{{about_me.sex == '男'}}" class="sex-img" mode="aspectFill" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/boy.png"></image>
+								<image wx:else class="sex-img" mode="aspectFill" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/girl.png"></image>
+							</view>
+						</view>
+					</block>
+					<block wx:else>
+						<button open-type="getUserInfo" bindgetuserinfo="userLogin" plain="true" class="avatar-container" style="border: none">
+							<image class="avatar" mode="aspectFill" src="https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/avatar.png"></image>
+						</button>
+					</block>
+					<block wx:if="{{about_me.owner==user}}">
+						<view wx:if="{{about_me.name}}" class="name weui-cell__ft_in-access">{{about_me.name}}</view>    
+						<view wx:else class="name">未登录</view>
+          </block>
+					<block wx:else>
+						<view wx:if="{{about_me.name}}" class="name">{{about_me.name}}</view>    
+						<view wx:else class="name">未登录</view>
+					</block>
+					<!-- <view wx:if="{{about_me.self_introduction}}" class="introduction">{{about_me.self_introduction}}</view> -->
+					<view class="zodiac-constellation">
+						<view wx:if="{{about_me.sex}}">{{about_me.sex}}</view>
+						<view wx:if="{{about_me.age}}">{{about_me.age}}岁</view>
+						<view wx:if="{{about_me.height}}">{{about_me.height}}cm</view>
+						<view wx:if="{{about_me.constellation}}">{{about_me.constellation}}座</view>
+						<view wx:if="{{about_me.live}}">{{about_me.live}}</view>
+					</view>
+				</view>
+			</view>
+		</view>
+	</view>
+</template>
+<script>
+import wepy from 'wepy';
+import util from '../wxs/util.wxs';
+import req from '@/network';
+import { baseUrl } from '@/config';
+import { loveSpaceId } from '@/config';
+
+export default class UserHeader extends wepy.component {
+	props = {
+		about_me: {
+			type: Object,
+			default: {}
+		},
+		isAuthUserInfo: {
+			type: Boolean,
+			default: false
+    },
+    user: {
+			type: String,
+			default: ''
+		}
+	}
+
+  data = {
+		baseUrl: baseUrl,
+		space_id: loveSpaceId,
+    avatar: ''
+	};
+
+	async onLoad() {
+  }
+	
+  methods = {
+		async uploadImage(isCover) {
+      const title = isCover ? '更换背景' : '更换头像';
+
+      const result = await wepy.showActionSheet({
+        itemList: [title]
+      });
+      if (!result.cancel) {
+        const result2 = await wepy.chooseImage({
+          count: 1,
+          sizeType: ['compressed']
+        });
+        // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
+        const tempFilePaths = result2.tempFilePaths;
+        if (tempFilePaths.length) {
+          const authToken = wepy.$instance.globalData.user.auth_token;
+          const userId = wepy.$instance.globalData.user._id;
+          let tempSrc = "";
+          if(isCover){
+            tempSrc = this.cover;
+            this.cover = tempFilePaths[0];
+          }
+          else{
+            tempSrc = this.avatar;
+            this.avatar = tempFilePaths[0];
+          }
+          this.$apply();
+          wepy.showLoading({
+            title: '正在上传...',
+            mask: true
+          });
+          let formData = {};
+          formData.size = result2.tempFiles.length && result2.tempFiles[0].size;
+          const imageInfo = await wepy.getImageInfo({
+            src: tempFilePaths[0]
+          });
+          formData.width = imageInfo.width;
+          formData.height = imageInfo.height;
+          formData.orientation = imageInfo.orientation;
+          formData.type = imageInfo.type;
+          const fileResult = await wepy.uploadFile({
+            url: `${this.baseUrl}/s3/images`,
+            filePath: tempFilePaths[0],
+            name: 'file',
+            formData: formData,
+            header: {
+              'X-Auth-Token': authToken,
+              'X-User-Id': userId
+            }
+          }).catch((err)=>{
+            console.log("error...",err)
+          });
+          const fileData = JSON.parse(fileResult.data);
+          if (fileData.errors || fileResult.statusCode != 200) {
+            wx.showToast({
+              title: "图片上传失败，请稍后再试",
+              icon: "none"
+            });
+            if(isCover){
+              this.cover = tempSrc;
+            }
+            else{
+              this.avatar = tempSrc;
+            }
+            this.$apply();
+            wepy.hideLoading();
+            return;
+          }
+          // TODO 更新对应表的字段
+          const fileId = fileData._id;
+          let storageKey = isCover ? 'cover' : 'avatar';
+          let storageSet = {};
+					storageSet[storageKey] = fileId;
+					
+					let current_customer = wepy.$instance.globalData.my_customers.find((c) => {
+						return c.space == loveSpaceId;
+					})
+
+          let updateSuc = await wepy.$instance.update("vip_customers", current_customer._id, storageSet, this.space_id);
+  
+          if (!updateSuc) {
+            wx.showToast({
+              title: "图片上传失败，请稍后再试",
+              icon: "none"
+            });
+            if(isCover){
+              this.cover = tempSrc;
+            }else{
+              this.avatar = tempSrc;
+            }
+          } else {
+						this.$parent.cover = tempFilePaths[0];
+						this.$parent.$apply();
+          }
+          this.$apply();
+          wepy.hideLoading();
+        }
+      }
+    },
+    async userLogin(e) {
+      const userInfo = e.detail.userInfo;
+      if (userInfo) {
+				this.$parent.$parent.globalData.user.avatar = userInfo.avatarUrl;
+				this.$parent.$parent.globalData.user.name = userInfo.nickName;
+        this.$apply();
+        console.log("currentUser=============",this.currentUser )
+        const url = '/mini/vip/user';
+				const name = userInfo.nickName;
+				const sex = userInfo.sex;
+				const avatar = userInfo.avatarUrl;
+        await req.put(url, { name: name, sex: sex, avatar: avatar });
+				this.$parent.loadAboutMe();
+      }
+		},
+		goMe() {
+			if (this.about_me.owner == this.user) {
+				wx.navigateTo({
+					url: `/pages/love/me?space_id=${loveSpaceId}`
+				})
+			}
+		},
+		goIntroduce() {
+			if (this.about_me.owner == this.user) {
+				wx.navigateTo({
+					url: `/pages/love/introduce`
+				})
+			}
+		}
+  };
+
+	wxs = {
+		util: util
+	}
+}
+</script>

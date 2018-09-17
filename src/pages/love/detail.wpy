@@ -1,0 +1,207 @@
+<style lang="less">
+.user-info {
+	padding: 15px;
+	.title {
+		font-size: 16px;
+		font-weight: bold;
+		margin-bottom: 10px;
+	}
+	.detail {
+		.row {
+			display: flex;
+			padding: 10px 10px;
+			.column {
+				flex: 1;
+				display: flex;
+				flex-wrap:wrap;
+				.label {
+					font-size: 15px;
+					color: #333;
+				}
+				.result {
+					font-size: 16px;
+				}
+			}
+		}
+	}
+}
+
+.summary {
+	.title {
+		padding: 5px 15px 5px;
+		font-size: 16px;
+		font-weight: bold;
+	}
+	.column {
+		padding-left: 10px
+	}
+	.weui-cell::before {
+		display: none;
+	}
+}
+
+
+.tab-bar {
+	font-size: 15px;
+	display: flex;
+	position: fixed;
+	box-sizing: border-box;
+	z-index: 500;
+	bottom: 0;
+	height: 100rpx;
+	width: 100%;
+	background-color: #1AAD19;
+	color: #fff;
+	align-items: center;
+
+	.btn {
+		flex-direction:column;
+		flex: 1;
+		padding:0 30rpx;
+		font-size:15px;
+		line-height:inherit;
+		width:auto;
+		height:100rpx;
+		border: none!important;
+		line-height:50px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: #fff !important;
+
+		.slds-icon {
+			width: 1rem;
+			height: 1rem;
+			margin-right: 0px!important;
+			background-color:#3ca134;
+			border-radius:50%;
+			padding:8px;
+			background-size:20px;
+			background-position:center;
+		}
+	}
+	.slds-icon {
+		display: inline-block;
+		margin-top:-20rpx;
+	}
+	.text {
+		display: inline-block;
+		color: #6d6d78;
+		font-size:11px;
+		margin-bottom:-12px;
+	}
+}
+</style>
+
+<template>
+	<view>
+		<view class="user-info">
+			<view class="title">个人资料：</view>
+			<view class="detail">
+				<repeat for="{{introduce}}" key="index" index="index" item="row">
+					<view class="row">
+						<repeat for="{{row}}" key="_index" index="_index" item="column">
+							<view class="column">
+								<view class="label">{{column.label}}：</view>
+								  <block wx:if="{{about_me[column.key]}}">
+                    <view class="result">{{about_me[column.key]}}</view>
+                  </block>
+							</view>
+						</repeat>
+					</view>
+				</repeat>
+			</view>
+		</view>
+		<view class="summary">
+			<view class="title">匹配详情：</view>
+			<view class="weui-cell">
+				<view class="weui-cell__bd column">
+					<view>我对他的匹配度</view>
+				</view>
+				<view class="weui-cell__ft">{{util.fixed(record.a_to_b, 2)}}%</view>
+			</view>
+			<view class="weui-cell">
+				<view class="weui-cell__bd column">
+					<view>他对我的匹配度</view>
+				</view>
+				<view class="weui-cell__ft">{{util.fixed(record.b_to_a, 2)}}%</view>
+			</view>
+			<view class="weui-cell">
+				<view class="weui-cell__bd column">
+					<view>综合匹配度</view>
+				</view>
+				<view class="weui-cell__ft">{{util.fixed(record.match, 2)}}%</view>
+			</view>
+		</view>
+		<!-- <view class="qrcode">
+			<image class="qrcode-img" mode="aspectfill" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/qrcode.jpg"></image>
+		</view> -->
+		<view class="tab-bar border-top-1px">
+	  <button open-type="share" class="btn btn-share-wexin" type="default" plain="true">
+				分享到群
+			</button>
+	</view>
+	</view>
+</template>
+
+<script>
+import wepy from "wepy";
+import util from '../../wxs/util.wxs';
+
+
+export default class LoveDetail extends wepy.page {
+	config = {
+		navigationBarTitleText: ''
+	}
+
+	data = {
+		score: undefined,
+		record: {},
+		about_me: {},
+		title: '',
+		introduce: [
+			[{label: '昵称', key: 'name'}, {label: '性别', key: 'sex'}],
+			[{label: '身高', key: 'height'}, {label: '年龄', key: 'age'}],
+			[{label: '生肖', key: 'zodiac'}, {label: '星座', key: 'constellation'}],
+			[{label: '家乡', key: 'hometown'}, {label: '现居地', key: 'live'}],
+		],
+		summary: ''
+	}
+
+	async onLoad(e) {
+		const record_id = e._id;
+		const space_id = e.space_id;
+		const options = {
+			$expand: 'user_b($select=profile,name),owner($select=profile,name)'
+		}
+		const record = await this.$parent.get('love_friends', record_id, space_id, options);
+		wx.setNavigationBarTitle({ title: '缘分匹配' });
+
+		this.record = record;
+
+		const b_options = {
+			$filter: `(owner eq '${record.user_b._id}')`,
+		}
+
+		const about_me = await this.$parent.query('love_about_me', b_options, space_id);
+		this.about_me = about_me.value[0] || {};
+		this.about_me.name = record.user_b.name;
+    if(this.about_me.self_introduction) {
+      this.introduce.push([{label: '交友宣言', key: 'self_introduction'}])
+    }
+		this.$apply();
+	}
+
+	wxs = {
+		util: util
+	}
+
+	methods = {
+		goIntroduce(e) {
+			console.log('[goIntroduce]', e);
+			const userId = e.currentTarget.dataset.userId;
+			wx.navigateTo({ url: `./introduce?userId=${userId}` })
+		}
+	}
+}
+</script>

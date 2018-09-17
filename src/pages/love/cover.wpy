@@ -1,0 +1,87 @@
+<style lang="less">
+</style>
+
+<template>
+  <view>
+    <view class="cover-page-bg"></view>
+    <view class="page cover-page">
+      <view class="page__hd">
+        <view class="love-title">{{options[object_name].title}}</view>
+      </view>
+      <view class="page__bd">
+        <view class="love-summary">{{options[object_name].summary}}</view>
+        <view class="love-attention">{{options[object_name].attention}}</view>
+        <button class="btn-join" @tap="next">下一步</button>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import { loveSpaceId } from '@/config';
+
+export default class Cover extends wepy.page {
+  config = {
+    navigationBarTitleText: '无颜',
+  };
+
+  data = {
+    space_id: '',
+    object_name: '',
+    options: {
+      love_about_me: {
+        title: '说说你的情况',
+        summary: '“无颜”会根据你填写的资料，匹配喜欢你的人。',
+        attention: '匹配成功后，对方可以看到你的资料。'
+      },
+      love_looking_for: {
+        title: '只遇见对的人',
+        summary: '请填写你的筛选条件，“无颜”只会为你选择符合要求的人。',
+        attention: '你的筛选条件，其他人都不会看到。'
+      },
+      love_answer: {
+        title: '问卷匹配',
+        summary: '回答下面的问卷，我们的人工智能算法将根据你的答案，计算匹配度。',
+        attention: '你回答的越认真，“无颜”匹配的越精准。'
+      }
+    }
+  }
+
+  onLoad(e) {
+    this.space_id = e.space_id;
+    this.object_name = e.object_name;
+    this.$apply();
+  }
+
+  methods = {
+    next() {
+      const object_name = this.object_name;
+      switch (object_name) {
+        case 'love_about_me':
+          // var answeredUrl = encodeURIComponent(`/pages/love/cover_you_looking_for?space_id=${this.spaceId}`);
+          // wx.navigateTo({
+          //   url: `/pages/love/papers_view?object_name=love_about_me&space_id=${this.spaceId}&required=true&answered_url=${answeredUrl}&answered_url_type=reLaunch`
+          // });
+          wx.navigateTo({url:`/pages/love/home`})
+          break;
+
+        case 'love_looking_for':
+          var answeredUrl = encodeURIComponent(`/pages/love/cover_about_yourself?space_id=${this.spaceId}`);
+          wx.navigateTo({
+            url: `/pages/love/papers_view?object_name=love_looking_for&space_id=${this.spaceId}&required=true&answered_url=${answeredUrl}&answered_url_type=reLaunch`
+          });
+
+        case 'love_answer':
+          var answeredUrl = encodeURIComponent(`/pages/love/papers_summary?space_id=${this.spaceId}`);
+          wx.navigateTo({
+            url: `/pages/love/papers_view?object_name=love_answer&space_id=${this.spaceId}&answered_url=${answeredUrl}&answered_url_type=reLaunch`
+          });
+
+        default:
+          break;
+      }
+    }
+  };
+}
+</script>

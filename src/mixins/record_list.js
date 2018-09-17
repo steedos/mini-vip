@@ -24,7 +24,9 @@ export default class recordList extends wepy.mixin {
     allowCreate: false,
     filter: '',
     url: '/pages/record/edit',
-    add_url: '/pages/record/create'
+    add_url: '/pages/record/create',
+    navigationBarTitle: '',
+    orderby: '',
   };
 
   dataRefresh() {
@@ -48,6 +50,11 @@ export default class recordList extends wepy.mixin {
     this.allow_load = true;
     this.current_skip = 0;
     this.loadRecords(searchValue);
+  }
+
+  //onLoad之前做一些初始化
+  async init() {
+
   }
 
   //点击单条记录时，跳转的页面
@@ -88,6 +95,10 @@ export default class recordList extends wepy.mixin {
 
   async getQueryFilter(e){
     return e.filter || this.filter
+  }
+
+  getFinalExpand(expand) {
+    return expand.join(',')
   }
 
   getQueryOptions(searchValue){
@@ -141,7 +152,11 @@ export default class recordList extends wepy.mixin {
       keys.push(this.price_field);
     }
     if (expand.length > 0) {
-      options.$expand = expand.join(',')
+      options.$expand = this.getFinalExpand(expand);
+    }
+
+    if (this.orderby) {
+      options.$orderby = this.orderby;
     }
 
     console.log('this.fields', this.fields);
@@ -164,11 +179,11 @@ export default class recordList extends wepy.mixin {
 
   async onLoad(e) {
     console.log('mixin onLoad...', this.object_name, this.baseUrl, e);
-
-    wepy.showLoading({
-      title: '加载中',
-      mask: true
-    });
+    if (this.beforeOnLoad) {
+      console.log('mixin beforeOnLoad...', e);
+      await this.beforeOnLoad(e);
+    }
+    wx.showNavigationBarLoading();
 
     if(!e){
       throw new Error('缺少参数:space_id,object_name')
@@ -180,14 +195,16 @@ export default class recordList extends wepy.mixin {
 
     this.space_id = e.space_id;
     this.object_name = e.object_name || this.object_name;
-    this.avatar_field = e.avatar_field;
-    this.name_field = e.name_field || 'name';
+    this.avatar_field = e.avatar_field || this.avatar_field;
+    this.name_field = e.name_field || this.name_field || 'name';
     this.description_field = e.description_field;
-    this.date_field = e.date_field;
+    this.date_field = e.date_field || this.date_field;
     this.price_field = e.price_field;
     this.url = this.getRecordUrl(e);
 
     this.add_url = this.getAddUrl(e);
+
+    await this.init();
 
     this.filter = await this.getQueryFilter(e);
 
@@ -199,15 +216,15 @@ export default class recordList extends wepy.mixin {
     } else if (e.allow_create === 'false'){
       this.allowCreate = false
     }
-    this.searchPlaceholder = '搜索' + object.label;
+    this.searchPlaceholder = '搜索'; // + object.label;
 
     wx.setNavigationBarTitle({
-      title: object.label
+      title: this.navigationBarTitle || object.label
     });
     await this.loadRecords()
     this.is_loaded = true
     this.$apply()
-    wepy.hideLoading();
+    wx.hideNavigationBarLoading();
   }
 
   methods = {

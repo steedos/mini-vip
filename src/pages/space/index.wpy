@@ -1,4 +1,4 @@
-<!-- 最新动态 -->
+<!-- 最新文章 -->
 <style lang="less">
 page {
   height: 100%;
@@ -539,7 +539,7 @@ export default class Posts extends wepy.page {
     this.enabled_objects = []
     const objects_list = {
       post: {
-        label: '动态',
+        label: '文章',
         icon: 'standard-news',
         is_default_menu: true,
         url: `../post/index?space_id=${this.space_id}${this.is_space_admin ? '&editable=true' : ''}&title=${space.name}`

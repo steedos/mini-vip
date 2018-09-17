@@ -1,0 +1,141 @@
+<style lang="less">
+page {
+  height: 100% !important;
+  .page {
+    height: 100%;
+    .btn-filter{
+      width:500rpx;
+    }
+  }
+}
+</style>
+
+<template>
+  <view class="page">
+    <view class="page__bd">
+      <view class="weui-cells">
+        <view class="weui-cell">
+          <view class="weui-cell__bd">
+            <view>启用榜单筛选条件</view>
+          </view>
+          <view class="weui-cell__ft">
+            <switch name="enable-filter" @change="switchChange" checked="{{is_filter_enable}}"></switch>
+          </view>
+        </view>
+      </view>
+      
+      <view class="weui-cells">
+        <repeat for="{{questionnaire}}" key="index" index="index" item="naire">
+          <navigator class="weui-cell weui-cell_access" url="{{naire.url}}">
+            <view class="weui-cell__hd">
+              <view class="{{naire.icon}}  slds-icon slds-icon--small slds-m-right--x-small"/>
+            </view>
+            <view class="weui-cell__bd">
+              <view>{{naire.label}}</view>
+            </view>
+            <view wx:if="{{progress[naire.object_name]}}" class="weui-cell__ft" style="padding-right: 13px">
+              <icon type="success_no_circle" size="14"></icon>
+            </view>
+            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+          </navigator>
+        </repeat>
+      </view>
+      <view class="weui-cells">
+        <navigator class="weui-cell weui-cell_access" url="/pages/love/love_question?space_id={{space_id}}">
+          <view class="weui-cell__hd">
+            <view class="slds-icon-custom-custom37 slds-icon slds-icon--small slds-m-right--x-small"/>
+          </view>
+          <view class="weui-cell__bd">
+            <view>问答匹配</view>
+          </view>
+          <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+        </navigator>
+      </view>
+      <button class="weui-btn btn-filter" type="primary" @tap="goBack">
+        确定
+      </button>
+    </view>
+  </view>
+</template>
+<script>
+import wepy from 'wepy';
+import { loveSpaceId } from '@/config';
+
+export default class MatchingFilter extends wepy.page {
+  config = {
+    navigationBarTitleText: '筛选条件'
+  }
+
+  data = {
+    is_filter_enable: false,
+    questionnaire: [
+      {
+        icon: 'slds-icon-standard-client',
+        label: '关于我',
+        url: `/pages/love/question_list?object_name=love_about_me&space_id=${loveSpaceId}&required=true`,
+        object_name: 'love_about_me'
+      },
+      {
+        icon: 'slds-icon-standard-campaign',
+        label: '筛选条件',
+        url: `/pages/love/question_list?object_name=love_looking_for&space_id=${loveSpaceId}`,
+        object_name: 'love_looking_for'
+      },
+    ],
+    progress: {}
+  }
+
+  async onLoad(e) {
+    this.space_id = loveSpaceId;
+    const filterEnable = wepy.getStorageSync('matching_filter_enable');
+    this.is_filter_enable = filterEnable;
+    this.$apply();
+  }
+
+  onUnload() {
+    const pages = getCurrentPages();
+    const prevPage = pages[pages.length - 2];
+    if (prevPage.dataRefresh) {
+      prevPage.dataRefresh()
+    }
+  }
+
+  async onShow() {
+    const finishedNaire = wx.getStorageSync('questionnaire_progess');
+    for (let naire of finishedNaire) {
+      this.progress[naire] = true;
+    }
+  }
+
+  methods = {
+    goLookingFor(event) {
+      wx.navigateTo({
+        url: `/pages/love/papers_view?object_name=love_looking_for&space_id=${this.space_id}`
+      })
+    },
+    goBack(event) {
+      wepy.navigateBack({
+        delta: 1
+      })
+    },
+    async switchChange(event) {
+      wepy.showLoading({
+        title: '加载中',
+        mask: true
+      });
+      try {
+        wepy.setStorageSync('matching_filter_enable', event.detail.value);
+        this.is_filter_enable = event.detail.value;
+      } catch (e) {	
+        this.is_filter_enable = !event.detail.value;
+        wx.showToast({
+          title: "设置失败",
+          icon: "none"
+        });
+      }
+      this.$apply();
+      wepy.hideLoading();
+    }
+  }
+}
+</script> 

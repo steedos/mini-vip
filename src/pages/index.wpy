@@ -93,7 +93,7 @@
 </style>
 
 <template>
-  <view class="page-index" wx:if="{{is_loaded}}">
+  <view class="cover-pagepage-index" wx:if="{{is_loaded}}">
 
     <view class="page__bd">
       <view class="weui-grids">
@@ -126,7 +126,7 @@
       is_loaded: false,
       options: [
         {label: '微站', url: 'home/store', icon: 'standard-channel-programs'},
-        {label: '动态', url: 'home/post', icon: 'standard-news'},
+        {label: '文章', url: 'home/post', icon: 'standard-news'},
         {label: '活动', url: 'event/list?featured=true', icon: 'standard-event'},
         {label: '招聘', url: './404', icon: 'standard-person-account'},
       ]

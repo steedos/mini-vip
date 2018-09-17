@@ -1,0 +1,132 @@
+<style lang="less" scoped>
+.top_spacing {
+  margin-top: 32px;
+}
+.bottom_spacing {
+  margin-bottom: 20px;
+}
+.background {
+  background:#5f6fee;
+}
+</style>
+
+<template>
+  <view class="page">
+    <view class="weui-toptips weui-toptips_warn" wx:if="{{showTopTips}}">{{message}}</view>
+    <view class="page__bd">
+      <view class="top_spacing bottom_spacing">
+        <view class="weui-cells weui-cells_after-title">
+            <view class="weui-cell weui-cell_input">
+                <view class="weui-cell__hd">
+                    <view class="weui-label">邀请码</view>
+                </view>
+                <view class="weui-cell__bd">
+                    <input class="weui-input" placeholder="请输入邀请码" type="number" bindinput="bindKeyInput" value="{{code}}"/>
+                </view>
+            </view>
+        </view>
+         <!--<view class="weui-cells__tips">如果没有邀请码，请直接点击跳过</view> -->
+      </view>
+
+      <view class="page__bd_spacing">
+        <button class="weui-btn background" type="primary" @tap="confirm">确定</button>
+        <button class="weui-btn" type="default" @tap="cancel">跳过</button>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+
+export default class InviteCode extends wepy.page {
+  config = {
+    navigationBarTitleText: '邀请码'
+  };
+
+  data = {
+    space_id: '',
+    code: '',
+    showTopTips: false,
+    message: ''
+  };
+
+  async onLoad(e) {
+    console.log('===============onLoad======InviteCode===========', e);
+    await this.$parent.login(e);
+    this.space_id = e.space_id;
+    this.$apply();
+  }
+
+  onShow() {
+    this.showTopTips = false;
+    this.message = '';
+    this.$apply();
+  }
+
+  methods = {
+    bindKeyInput(e) {
+      this.code = e.detail.value;
+      this.$apply();
+    },
+    async confirm() {
+      const code = this.code.trim();
+      if (!code) {
+        this.showTopTips = true;
+        this.message = '请填写邀请码';
+        return;
+      }
+      wx.showLoading({
+        title: '加载中',
+        mask: true
+      });
+
+      const spaceId = this.space_id;
+
+      const options = {
+        $filter: `code eq '${code}'`
+      };
+
+      const result = await this.$parent.query(
+        'love_invite_codes',
+        options,
+        spaceId
+      );
+
+      let my_customers = this.$parent.globalData.my_customers;
+      let current_customer = my_customers.find(customer => {
+        return customer.space == spaceId;
+      });
+
+      if (
+        result.value &&
+        result.value.length &&
+        new Date() < new Date(result.value[0].expired) &&
+        current_customer
+      ) {
+        await this.$parent.update(
+          'vip_customers',
+          current_customer._id,
+          { invite_code: code },
+          spaceId
+        );
+
+        wx.hideLoading();
+        wx.redirectTo({
+          url: `/pages/love/invite_code_success_me?space_id=${spaceId}&card_rule=${result.value[0].card_rule}`
+        });
+      } else {
+        wx.hideLoading();
+        wx.navigateTo({
+          url: '/pages/love/invite_code_fail'
+        });
+      }
+    },
+     cancel() {
+       wx.navigateTo({url:`/pages/card/select?space_id=${this.space_id}`});
+     }
+  };
+
+  computed = {};
+}
+</script>

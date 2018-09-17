@@ -1,0 +1,31 @@
+<style lang="less">
+</style>
+
+<template>
+  <ComponentQuestions :spaceId.sync="space_id" />
+</template>
+
+<script>
+import wepy from 'wepy';
+import ComponentQuestions from '@/components/cover_answer_questions';
+
+export default class CoverAnswerQuestions extends wepy.page {
+  config = {
+    navigationBarTitleText: '无颜匹配', 
+  };
+
+  data = {
+    space_id: ''
+  };
+
+  async onLoad(e) {
+    this.space_id = e.space_id;
+    this.$apply();
+  }
+
+  components = {
+    ComponentQuestions: ComponentQuestions
+  };
+
+}
+</script>

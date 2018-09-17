@@ -1,0 +1,396 @@
+<style lang="less" scoped>
+.page {
+  padding-bottom: 20px !important;
+}
+.user-active {
+  border: none;
+  text-align: left;
+  font-size: 17px;
+}
+.questionnaire-list {
+  .image {
+    width: 100%;
+    height: 100%;
+    border-radius: 0.15rem;
+  }
+  .weui-cell__hd {
+    height: 1.5rem;
+    .ion {
+      text-align: center;
+      line-height: 1.5rem;
+      border-radius: 0.25rem;
+      color: #fff;
+      background: #fcb95b;
+    }
+  }
+  .weui-cell__bd {
+    .nav-btn::after {
+      border-radius: 0;
+    }
+    .nav-btn {
+      border-radius: 0;
+      background-color: white;
+      text-align: left;
+      border: none;
+      margin: 0;
+      padding: 0;
+      padding-left: 14px;
+      height: 45px;
+      font-size: 17px;
+      .content {
+        .text {
+          float: left;
+        }
+        .weui-cell__ft_in-access {
+          padding-bottom: 45px;
+          margin-right: 15px;
+        }
+      }
+    }
+  }
+}
+</style>
+
+<template>
+  <view class="page questionnaire-list" wx:if="{{is_loaded}}">
+    <view class="weui-cells">
+      <block wx:if="{{isAuthUserInfo}}">
+        <view class="weui-media-box weui-media-box_appmsg" @tap="goIntroduce">
+          <view class="weui-media-box__hd weui-media-box__hd_in-appmsg" style="width: 50px; height: 50px; line-height: 50px;">
+            <image class="image" mode="aspectFill" wx:if="{{isAuthUserInfo}}" src="{{avatar}}"></image>
+          </view>
+          <view class="weui-media-box__bd weui-media-box__bd_in-appmsg" style="display: flex; align-items: center;">
+            <view class="weui-media-box__title" style="flex: 1;">
+              {{name}}
+            </view>
+            <view class="weui-media-box__desc" style="margin-top: 6rpx;">
+              
+            </view>
+            <view class="weui-cell__ft weui-cell__ft_in-access">
+            </view>
+          </view>
+        </view>
+      </block>
+      <block wx:else>
+        <button open-type="getUserInfo" bindgetuserinfo="userLogin" plain="true" class="user-active weui-media-box weui-media-box_appmsg">
+          <view class="weui-media-box__hd weui-media-box__hd_in-appmsg" style="width: 50px; height: 50px; line-height: 50px;">
+            <image class="image" mode="aspectFill" src="https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/avatar.png"></image>
+          </view>
+          <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
+            <view class="weui-media-box__title" style="line-height: 30px;">
+              {{name}}
+            </view>
+            <view class="weui-media-box__desc" style="margin-top: 6rpx;">
+              
+            </view>
+          </view>
+        </button>
+      </block>
+    </view>
+    <view class="weui-cells">
+      <repeat for="{{questionnaire}}" key="index" index="index" item="naire">
+        <navigator class="weui-cell weui-cell_access" url="{{naire.url}}">
+          <view class="weui-cell__hd">
+            <view class="{{naire.icon}}  slds-icon slds-icon--small slds-m-right--x-small"/>
+          </view>
+          <view class="weui-cell__bd">
+            <view>{{naire.label}}</view>
+          </view>
+          <view wx:if="{{progress[naire.object_name]}}" class="weui-cell__ft" style="padding-right: 13px">
+            <icon type="success_no_circle" size="14"></icon>
+          </view>
+          <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+        </navigator>
+      </repeat>
+      <navigator class="weui-cell weui-cell_access" url="/pages/love/love_question?space_id={{space_id}}">
+        <view class="weui-cell__hd">
+          <view class="slds-icon-custom-custom37 slds-icon slds-icon--small slds-m-right--x-small"/>
+        </view>
+        <view class="weui-cell__bd">
+          <view>问答匹配</view>
+        </view>
+        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+      </navigator>
+    </view>
+
+    <view class="weui-cells">
+      <navigator class="weui-cell weui-cell_access" @tap="goShare">
+        <view class="weui-cell__hd">
+          <view class="slds-icon-custom-custom1 slds-icon slds-icon--small slds-m-right--x-small"/>
+        </view>
+        <view class="weui-cell__bd">
+          <view>缘分测试</view>
+        </view>
+        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+      </navigator>
+    </view>
+    <!--
+    <view class="weui-cells">
+      <navigator class="weui-cell weui-cell_access" url="/pages/love/settings?space_id={{space_id}}">
+        <view class="weui-cell__hd">
+          <view class="slds-icon-custom-custom67 slds-icon slds-icon--small slds-m-right--x-small"/>
+        </view>
+        <view class="weui-cell__bd">
+          <view>设置</view>
+        </view>
+        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+      </navigator>
+    </view>
+    -->
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import { loveSpaceId } from '../../config/index.js';
+import req from '@/network';
+
+export default class QuestionnaireList extends wepy.page {
+  config = {
+    navigationBarTitleText: '我',
+    enablePullDownRefresh: false
+  };
+
+  data = {
+    space_id: null,
+    name: '',
+    avatar: '',
+    userInfo: null,
+    is_loaded: false,
+    is_member: false,
+    isAuthUserInfo: false,
+    card_rule: null,
+    showFind: false,
+    userId: '',
+    options: [
+      {
+        label: '年龄',
+        value: '23'
+      },
+      {
+        label: '身高',
+        value: '187'
+      },
+      {
+        label: '体重',
+        value: '80'
+      }
+    ],
+    questionnaire: [
+      {
+        icon: 'slds-icon-standard-client',
+        label: '关于我',
+        url: `/pages/love/question_list?object_name=love_about_me&space_id=${loveSpaceId}&required=true`,
+        object_name: 'love_about_me'
+      },
+      {
+        icon: 'slds-icon-standard-campaign',
+        label: '筛选条件',
+        url: `/pages/love/question_list?object_name=love_looking_for&space_id=${loveSpaceId}`,
+        object_name: 'love_looking_for'
+      },
+    ],
+    progress: {}
+  };
+
+  // 分享
+  onShareAppMessage(res) {
+    const user_id = this.$parent.globalData.user._id;
+    let title = '茫茫人海，你该和谁谈恋爱？';
+    let path = `/pages/love/index?share_from=${user_id}`
+    return {
+      title: title,
+      path: path
+    };
+  }
+
+  async getProgress(object_name) {
+    const object = await this.$parent.getObject(object_name);
+    const user_id = this.$parent.globalData.user._id;
+    const space_id = this.space_id;
+    const fields = Object.keys(object.fields);
+    const options = {
+      $filter: `owner eq '${user_id}'`
+    };
+    const res = await this.$parent.query(object_name, options, space_id);
+    if (res && res.value && res.value[0]) {
+      const result = res.value[0];
+      return fields.every(key => {
+        // 对'是否重要类型字段进行过滤, eg:astrological_i'
+        return result[key] != undefined || /^\w+(_i)$/.test(key);
+      });
+    } else {
+      return false;
+    }
+  }
+
+  async onLoad(e) {
+    wepy.showShareMenu({
+      withShareTicket: true
+    });
+    wx.showNavigationBarLoading();
+    if (!e.space_id) {
+      // 保证一进入就新建space对应的vip_customers记录
+      e.space_id = loveSpaceId;
+    }
+    this.space_id = e.space_id;
+    await this.$parent.login(e);
+    if (!this.space_id) {
+      wx.showToast({
+        title: '未配置工作区ID',
+        icon: 'none'
+      });
+    }
+
+    this.userId = this.$parent.globalData.user._id;
+    this.is_loaded = true;
+    this.$apply();
+    wx.hideNavigationBarLoading()
+  }
+
+  async onShow() {
+    wx.showNavigationBarLoading();
+    let user = this.$parent.globalData.user;
+    const spaceId = this.space_id;
+    const userId = user._id;
+    const setting = await wepy.getSetting();
+
+    if (!user.name || !user.avatar) {
+      const query_options = {
+        $filter: `owner eq '${userId}'`,
+        $expand: 'owner($select=profile,name)'
+      };
+      const user_result = await this.$parent.query('vip_customers', query_options, spaceId);
+      user.name = user_result.value[0].owner.name;
+      user.avatar = user_result.value[0].owner.profile ? user_result.value[0].owner.profile.avatar : '';
+    }
+
+    if (user.name && user.avatar) {
+      this.name = user.name;
+      this.avatar = user.avatar;
+      this.isAuthUserInfo = true;
+    } else {
+      this.isAuthUserInfo = false;
+      if (!user.name) {
+        this.name = '未登录'
+      }
+    }
+
+    this.$apply();
+
+    const finishedNaire = wx.getStorageSync('questionnaire_progess');
+
+    if (finishedNaire.indexOf('love_about_me') < 0 || finishedNaire.indexOf('love_looking_for') < 0 || finishedNaire.indexOf('love_answer') < 0) {
+      this.showFind = true;
+    } else {
+      this.showFind = false;
+    }
+
+    for (let naire of finishedNaire) {
+      this.progress[naire] = true;
+    }
+
+    const options = {
+      $filter: `owner eq '${userId}'`,
+      $select: 'is_member,invite_code'
+    };
+
+    const customer = await this.$parent.query(
+      'vip_customers',
+      options,
+      spaceId
+    );
+
+    if (customer && customer.value && customer.value[0]) {
+      this.is_member = customer.value[0].is_member;
+
+      const love_invite_code = await this.$parent.query(
+        'love_invite_codes',
+        {$filter: `code eq '${customer.value[0].invite_code}'`},
+        spaceId
+      );
+
+      if (love_invite_code.value && love_invite_code.value.length && new Date() < new Date(love_invite_code.value[0].expired)) {
+        this.card_rule = love_invite_code.value[0].card_rule
+      }
+
+    }
+
+
+    const card_options = {
+      $filter: `owner eq '${userId}'`,
+      $select: '_id,card_name,is_actived'
+    };
+
+    const vip_card = await this.$parent.query(
+      'vip_card',
+      card_options,
+      spaceId
+    );
+
+
+    if (vip_card && vip_card.value && vip_card.value[0]) {
+      this.vip_card = vip_card.value[0];
+    }else{
+      this.vip_card = null;
+    }
+
+
+    this.$apply();
+    wx.hideNavigationBarLoading()
+    // console.log('[progress]', progress_love_about_me, progress_love_looking_for, progress_love_answer)
+  }
+
+  methods = {
+    userLogin(e) {
+      const self = this;
+      const userInfo = e.detail.userInfo;
+      const user = this.$parent.globalData.user;
+      if (userInfo) {
+        const name = user.name || userInfo.nickName;
+        const sex = userInfo.gender ? '男' : '女';
+        const avatar = userInfo.avatarUrl;
+
+        this.userInfo = userInfo;
+        this.isAuthUserInfo = true;
+        this.name = name;
+        this.sex = sex;
+        this.avatar = userInfo.avatarUrl;
+        this.$parent.globalData.userInfo = userInfo;
+        this.$parent.globalData.user.sex = sex;
+        this.$apply();
+
+        const url = '/mini/vip/user';
+        req.put(url, { name: name, sex: sex, avatar: avatar });
+      }
+    },
+    clickAvatar: function (e) {
+      if(this.is_member){
+        if(this.vip_card){
+          console.log('this.vip_card', this.vip_card);
+          if(this.vip_card.is_actived){
+            wepy.navigateTo({url:`/pages/card?space_id=${this.space_id}&card_id=${this.vip_card._id}&category_id=${this.vip_card.card_name}`})
+          }else{
+            wepy.navigateTo({url:`/pages/card_activate?space_id=${this.space_id}&card_id=${this.vip_card._id}&category_id=${this.vip_card.card_name}`})
+          }
+        }else{
+          wepy.navigateTo({url:`/pages/card_activate?space_id=${this.space_id}&category_id=${this.card_rule}`})
+        }
+      }else{
+        wepy.navigateTo({url:`/pages/love/invite_code_me?space_id=${this.space_id}`})
+      }
+    },
+    goShare() {
+      wepy.navigateTo({url: `/pages/love/share?card=true&userId=${this.userId}`})
+    },
+    goIntroduce() {
+      const love = this.$parent.globalData.love;
+      if (love && love.enabled) {
+        wepy.navigateTo({url: `/pages/love/introduce_me?space_id=${this.space_id}`})
+      }
+    }
+  };
+
+  computed = {};
+}
+</script>

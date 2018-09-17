@@ -478,7 +478,7 @@
                 title = '商户';
               }
               if (action === 'create') {
-                title = '创建' + title;
+                title = '新增' + title;
               } else if (action === 'edit') {
                 title = '编辑' + title;
               }
@@ -1166,6 +1166,9 @@
             break;
           case 'textarea':
             url = '/pages/edit/textarea';
+            break;
+          case 'date':
+            url = '/pages/edit/date';
             break;
           case 'datetime':
             url = '/pages/edit/datetime';

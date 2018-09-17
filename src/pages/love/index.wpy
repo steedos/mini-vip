@@ -1,0 +1,185 @@
+<style lang="less">
+  .loading-container {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #66ceff;
+    .loading {
+      width: 100%;
+      height: 100%;
+      background: url(https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/loading.gif);
+      background-position: center center;
+      background-repeat: no-repeat;
+    }
+	}
+
+	.btn-index {
+		margin: 30rpx 0;
+	}
+
+  .about-me-container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align:center;
+    .about-me {
+      padding:20px 30px;
+      color:#ccc;
+      display:inline-block;
+      margin-bottom:6px;
+      font-size:14px;
+    }
+  }
+</style>
+
+<template>
+  <view wx:if="{{is_loaded}}">
+		<view class="cover-page-bg"></view>
+		<view class="page cover-page">
+			<view class="page">
+				<view class="page__hd">
+					<view class="love-title">你该和谁谈恋爱？</view>
+				</view>
+				<view class="page__bd">
+					<view class="love-summary">根据你的喜好和对方喜好，精确计算“互相匹配度”，帮你找到心意相通的恋爱对象。</view>
+          <button wx:if="{{answered}}" class="btn-join" @tap="goHome">进入首页</button>
+          <button wx:else class="btn-join" @tap="goLove">开始匹配</button>
+					<button wx:if="{{showLoveBtn}}" class="btn-index btn-love" @tap="goAbout">关于无颜</button>
+					<view class="love-licence"></view>
+				</view>
+			</view>
+		</view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import { baseUrl } from '@/config';
+import { baseMaterialUrl } from '@/config';
+import { loveSpaceId } from '@/config';
+import pageRouter from '@/utils/pageRouter';
+import ComponentCoverYourself from '@/components/cover_about_yourself';
+import ComponentQuestions from '@/components/cover_answer_questions';
+import ComponentLookingFor from '@/components/cover_you_looking_for';
+
+export default class LoveIndex extends wepy.page {
+  config = {
+    navigationBarTitleText: '无颜匹配',
+  };
+
+  data = {
+    baseUrl: baseUrl,
+    baseMaterialUrl: baseMaterialUrl,
+    space_id: null,
+    answered: false,
+    load_page: '',
+		is_loaded: false,
+		finishHobby: false,
+		showLoveBtn: false,
+		naire: '',
+		share_from: ''
+  };
+
+  async onLoad (e) {
+    wepy.showShareMenu({
+      withShareTicket: true
+    });
+    wx.showLoading({mask: true});
+    const self = this;
+		// 保证一进入就新建space对应的vip_customers记录
+		e.space_id = loveSpaceId;
+		if(e.scene){
+			// 朋友圏二维码识别进入的，则取出scene中的share_from
+			let scene = decodeURIComponent(e.scene);
+			let scenes = scene.split('=');
+			e.love = 1;
+			e.share_from = scenes[1];
+			e.qrcode = 1
+		}
+    this.space_id = e.space_id;
+    console.log("this.space_id============", this.space_id);
+		await this.$parent.login(e);
+
+		const love = this.$parent.globalData.love;
+		if (love && love.enabled) {
+			this.showLoveBtn = true;
+			this.$apply();
+		}
+
+    if(!this.space_id){
+      wx.showToast({
+        title: "未配置工作区ID",
+        icon: "none"
+      });
+      return;
+		}
+
+    let finishedNaire = wx.getStorageSync('questionnaire_progess');
+    if(finishedNaire && finishedNaire.length > 2){
+      this.answered = true;
+      this.$apply();
+      wx.switchTab({url: '/pages/love/home'});
+
+      // const user_id = this.$parent.globalData.user._id;
+      // const options = {
+      //   $filter: `(user_b eq '${user_id}' and heart eq true)`
+      // }
+      // const result = await this.$parent.query('love_recommend_history', options, this.space_id);
+      // if (result && result.value && result.value.length) {
+      //   this.is_loaded = true;
+      //   this.$apply();
+      //   wx.hideLoading();
+      //   wx.navigateTo({ url: `/pages/love/love_me?space_id=${this.space_id}` })
+      // } else {
+      //   wx.switchTab({url: '/pages/love/home'});
+      // }
+    }
+
+		this.is_loaded = true;
+    this.$apply();
+    wx.hideLoading();
+	}
+
+
+  // 分享
+  onShareAppMessage(res) {
+    const userId = this.$parent.globalData.user._id;
+    let title = "茫茫人海，你该和谁谈恋爱？";
+    return {
+      title: title,
+      path: `pages/love/index?share_from=${userId}&love=1`,
+    };
+  }
+
+  methods = {
+    goAbout() {
+      wx.navigateTo({url: `/pages/space/index?space_id=${this.space_id}`})
+		},
+		goLove() {
+      const answeredUrl = encodeURIComponent(`/pages/love/cover_about_yourself?space_id=${this.space_id}`);
+      pageRouter.navigateTo({
+        url: `/pages/love/papers_view?object_name=love_test&space_id=${this.space_id}&answered_url=${answeredUrl}&answered_url_type=reLaunch&keep_progress`
+      });
+			// wx.navigateTo({url: '/pages/love/cover_answer_questions'})
+		},
+		goTest() {
+		  wx.navigateTo({url: '/pages/love/test'})
+		},
+		goHome() {
+			wx.switchTab({url: '/pages/love/home'})
+		},
+		goMatching() {
+			wx.navigateTo({url: '/pages/love/matching?space_id={{this.space_id}}&open_group_id=-1'})
+		}
+  };
+
+  components = {
+    ComponentCoverYourself: ComponentCoverYourself,
+    ComponentQuestions: ComponentQuestions,
+    ComponentLookingFor: ComponentLookingFor
+  };
+}
+</script>

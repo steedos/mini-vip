@@ -1,0 +1,85 @@
+<style>
+  .live_chat {
+    line-height:inherit;
+    font-size:inherit;
+    background-color:transparent;
+    text-align:left;
+  }
+</style>
+
+
+<template>
+  <view class="page">
+
+    <view class="weui-cells">
+      <navigator class="weui-cell weui-cell_access" url="matching?space_id={{space_id}}">
+        <view class="weui-cell__hd">
+          <view class="slds-icon-standard-reward slds-icon slds-icon--small slds-m-right--x-small"/>
+        </view>
+        <view class="weui-cell__bd">
+          <view>缘分榜</view>
+        </view>
+        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+      </navigator>
+    </view>
+    <view class="weui-cells">
+      <navigator class="weui-cell weui-cell_access" url="share?card=true&space_id={{space_id}}">
+        <view class="weui-cell__hd">
+          <view class="slds-icon-standard-link slds-icon slds-icon--small slds-m-right--x-small"/>
+        </view>
+        <view class="weui-cell__bd">
+          <view>测试好友缘分</view>
+        </view>
+        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+      </navigator>
+      <button open-type="contact" plain="true" class="weui-cell weui-cell_access live_chat" hover-class="weui-cell_active">
+        <view class="weui-cell__hd">
+          <view class="slds-icon-standard-live-chat weui-grid__icon slds-icon slds-icon--small slds-m-right--x-small"/>
+        </view>
+        <view class="weui-cell__bd">在线客服</view>
+        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+      </button>
+    </view>
+
+    <!-- <view class="weui-cells">
+      <navigator class="weui-cell weui-cell_access" url="/pages/space/index?space_id={{space_id}}">
+        <view class="weui-cell__hd">
+          <view class="slds-icon-custom-custom1 slds-icon slds-icon--small slds-m-right--x-small"/>
+        </view>
+        <view class="weui-cell__bd">
+          <view>关于无颜</view>
+        </view>
+        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+      </navigator>
+    </view> -->
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import { loveSpaceId } from '@/config';
+
+  export default class Discovery extends wepy.page {
+    config = {
+      navigationBarTitleText: '发现',
+      enablePullDownRefresh: false
+    };
+
+    data = {
+      space_id: null,
+      showFind: false
+    };
+
+    onLoad(e) {
+      this.space_id = loveSpaceId;
+      let finishedNaire = wx.getStorageSync('questionnaire_progess');
+
+      if(finishedNaire.indexOf('love_about_me') < 0 || finishedNaire.indexOf('love_looking_for') < 0 || finishedNaire.indexOf('love_answer') < 0){
+        this.showFind = true
+      }
+
+      this.$apply();
+
+    }
+  }
+</script>

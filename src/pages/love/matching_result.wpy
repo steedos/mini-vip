@@ -1,0 +1,157 @@
+<style lang="less">
+page {
+  height: 100% !important;
+  .page {
+    height: 100%;
+    .user-login {
+      position: relative;
+      width: 100%;
+      height: 50%;
+      .info {
+        padding: 30rpx;
+        font-size: 40rpx;
+        position: absolute;
+        top: 40%;
+        text-align: center;
+      }
+      .input-btn {
+        position: absolute;
+        left: 30rpx;
+        right: 30rpx;
+        bottom: 0;
+      }
+    }
+    .love-result {
+      position: relative;
+      width: 100%;
+      height: 50%;
+      .result-container {
+        padding: 30rpx;
+        font-size: 40rpx;
+        position: absolute;
+        box-sizing: border-box;
+        width: 100%;
+        top: 40%;
+        display: flex;
+        .user-avatar {
+          height: 120rpx;
+          width: 120rpx;
+          border-radius: 50%;
+          image {
+            width: 100%;
+            height: 100%;
+          }
+        }
+        .result {
+          text-align: center;
+          font-size: 48rpx;
+          font-weight: bold;
+          color: #179B16;
+          flex: 1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      }
+      .input-btn {
+        position: absolute;
+        left: 30rpx;
+        right: 30rpx;
+        bottom: 0;
+      }
+    }
+  }
+}
+</style>
+
+<template>
+  <view class="page">
+    <block wx:if="{{!isAuthUserInfo}}">
+      <view class="user-login">
+        <view class="info">授权身份信息之后即可查看你与好友的匹配分数</view>
+        <button class="input-btn weui-btn button-hover" type="primary" open-type="getUserInfo" bindgetuserinfo="getUserInfo">
+          微信登录
+        </button>
+      </view>
+    </block>
+    <block wx:else>
+      <view class="love-result">
+        <view class="result-container">
+          <view class="user-avatar">
+            <image mode="aspectFill" src="{{userA_avatar}}">
+            </image>
+          </view>
+          <view class="result">
+            75%
+          </view>
+          <view class="user-avatar">
+            <image mode="aspectFill" src="{{userB_avatar}}">
+            </image>
+          </view>
+        </view>
+        <button class="input-btn weui-btn button-hover" type="primary" open-type="share">
+          测试好友缘分值
+        </button>
+      </view>
+    </block>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+
+export default class MatchingResult extends wepy.page {
+  config = {
+    navigationBarTitleText: '匹配结果',
+    enablePullDownRefresh: true
+  }
+
+  data = {
+    is_loaded: false,
+    isAuthUserInfo: false,
+    userA_avatar: '',
+    userB_avatar: ''
+  }
+
+  async onLoad(e) {
+
+    console.log('[matching result]', e)
+
+    const setting = await wepy.getSetting();
+    if (setting.authSetting['scope.userInfo']) {
+      const info = await wepy.getUserInfo();
+      this.isAuthUserInfo = true;
+      this.userA_avatar = info.userInfo.avatarUrl;
+      this.$apply();
+    }
+
+    if (this.isAuthUserInfo) {
+      const user_id = this.$parent.globalData.user._id;
+      const shareFrom = e.share_from;
+      const options = {
+        $filter:  `(owner eq '${user_id}' and from eq '${shareFrom}')`,
+        $expand: 'from($select=profile,name)'
+      };
+      const invite = await this.$parent.query('vip_invites', options, e.space_id);
+      if (invite && invite.value && invite.value[0]) {
+        console.log('[invite.value[0].from]', invite.value[0].from)
+        this.userB_avatar = invite.value[0].from.profile.avatar;
+        this.$apply();        
+      }
+    }
+
+
+    this.$apply();
+  }
+
+  methods = {
+    getUserInfo(e) {
+      if (e.detail.userInfo) {
+        this.isAuthUserInfo = true;
+        this.$apply();
+      }
+    }
+  }
+}
+
+</script>

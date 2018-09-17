@@ -180,7 +180,7 @@
             <image wx:else class="avatar" mode="aspectFill" src="{{emptyImageUrlForAvatar}}" @tap.stop="uploadImage()"/>
           </view>
           <!--<view class="store-name">{{store_info.name}}</view>-->
-          <view class="message" wx:if="{{introducer}}">{{introducer_name}}邀请您加入<b>{{store_info.name}}</b></view>
+          <view class="message" wx:if="{{introducer}}">{{introducer_name}}邀请你加入<b>{{store_info.name}}</b></view>
           <view class="message" wx:else>
             <view class="explanation">点击下面的按钮，邀请用户加入<b>{{store_info.name}}</b></view>
             <view class="explanation">此邀请的有效期为：24小时</view>
@@ -217,7 +217,7 @@
       const introducer = this.$parent.globalData.user._id;
       const temp_token = this.token.temp_token
       return {
-        title: `${this.$parent.globalData.user.name}邀请您加入${this.store_info.name}`,
+        title: `${this.$parent.globalData.user.name}邀请你加入${this.store_info.name}`,
         path: `/pages/space/invite_user?space_id=${space_id}&store_id=${store_id}&introducer=${introducer}&token=${temp_token}&introducer_name=${encodeURI(this.introducer_name)}`
       };
     }

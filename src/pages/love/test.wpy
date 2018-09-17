@@ -1,0 +1,255 @@
+<style lang="less">
+.love-result {
+  padding: 60rpx;
+  margin-top: 40rpx;
+  .result-container {
+    font-size: 40rpx;
+    box-sizing: border-box;
+    width: 100%;
+    display: flex;
+    .user-avatar {
+      height: 200rpx;
+      width: 200rpx;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 2px solid #fff;
+      .image {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+      }
+    }
+    .result {
+      text-align: center;
+      font-size: 48rpx;
+      font-weight: bold;
+      color: #00396b;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+  .input-btn {
+    margin-top: 140rpx;
+    margin-bottom: 40rpx;
+  }
+  .btn-share {
+    padding: 6px;
+  }
+}
+</style>
+
+<template>
+<view wx:if="{{is_loaded}}">
+  <view class="cover-page-bg"></view>
+  <view class="page cover-page">
+    <view class="page__hd">
+      <view class="love-title">我们是天生一对吗？</view>
+    </view>
+
+    <view class="love-result">
+      <view class="result-container">
+        <view class="user-avatar">
+          <open-data class="image" type="userAvatarUrl"></open-data>
+        </view>
+        <view class="result">
+          <view wx:if="{{score == undefined}}">?</view>
+          <view wx:else>{{util.fixed(score, 2)}}%</view>
+        </view>
+        <view class="user-avatar">
+          <image wx:if="{{userB_avatar}}" class="image" mode="aspectFill" src="{{userB_avatar}}"></image>
+          <image wx:else mode="aspectFill" class="image" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg"></image>
+        </view>
+      </view>
+      <block wx:if="{{isAuthUserInfo && answered}}">
+        <button class="input-btn btn-join button-hover" type="primary" @tap="goLove">
+          想要找到匹配度更高的人？
+        </button>
+        <button class="btn-love" @tap="goShare">我也要玩</button>
+        <button class="btn-love" @tap="goHome">进入首页</button>
+      </block>
+      <block wx:else>
+         <button class="input-btn btn-join button-hover" type="primary" @tap="goAnswer">
+          开始答题
+        </button>
+      </block>
+    </view>
+
+    <!-- <view class="page__hd">
+      <view class="love-title">测试好友缘分</view>
+    </view>
+    <view class="page__bd">
+      <view class="love-summary">邀请好友一起回答有趣的问卷，测试你们的“相互”匹配度。</view>
+      <button class="btn-join" @tap="goAnswer">开始答题</button>
+      <view class="love-licence"></view>
+    </view> -->
+  </view>
+</view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import { loveSpaceId } from '@/config';
+import pageRouter from '@/utils/pageRouter';
+import util from '../../wxs/util.wxs';
+
+export default class Test extends wepy.page {
+
+  config = {
+    navigationBarTitleText: '缘分测试',
+  };
+
+  data = {
+    is_loaded: false,
+    isAuthUserInfo: false,
+    space_id: '',
+    showLoveBtn: false,
+    userB_avatar: '',
+    naire: '',
+    share_from: '',
+    score: undefined,
+    answered: false
+  }
+
+  wxs = {
+    util: util
+  }
+
+  onShareAppMessage(res) {
+    const user_id = this.$parent.globalData.user._id;
+    let title = '我们的缘分榜，快来打榜！';
+    let path = `/pages/love/test?naire=love_answer&share_from=${user_id}`
+    return {
+      title: title,
+      path: path
+    };
+  }
+
+  async onLoad(e) {
+    wepy.showShareMenu({
+      withShareTicket: true
+    });
+    console.log("e========test==========",e)
+    wx.showLoading({ mask: true });
+    e.space_id = loveSpaceId;
+    this.space_id = e.space_id;
+    if (e.scene){
+			// 朋友圏二维码识别进入的，则取出scene中的share_from
+			let scene = decodeURIComponent(e.scene);
+			let scenes = scene.split('=');
+      e.share_from = scenes[1];
+      e.qrcode = 1
+    }
+    await this.$parent.login(e);
+    const love = this.$parent.globalData.love;
+    const user_id = this.$parent.globalData.user._id;
+    if (love && love.enabled) {
+      this.showLoveBtn = true;
+      this.$apply();
+    }
+    if(!e.share_from){
+      e.share_from = this.$parent.globalData.share_from
+    }
+    console.log("share_from================",this.$parent.globalData.share_from)
+    if (e.share_from && e.share_from != user_id) {
+      this.share_from = e.share_from || this.$parent.globalData.share_from
+      console.log("this.share_from==============",this.share_from)
+      this.$apply();
+      const options = {
+        $filter: `(user_b eq '${e.share_from}' and owner eq '${user_id}')`,
+        $select: 'owner,user_b,a_to_b,b_to_a,match',
+        $expand: 'user_b($select=profile)'
+      }
+      const result = await this.$parent.query('love_friends', options, this.space_id);
+      if (result && result.value && result.value[0]) {
+        this.userB_avatar = result.value[0].user_b.profile.avatar;
+        this.score = result.value[0].match;
+      }
+    }
+
+    const setting = await wepy.getSetting();
+    if (setting.authSetting['scope.userInfo']) {
+      this.isAuthUserInfo = true;
+      this.$apply();
+    }else if(this.$parent.globalData.user.name && this.$parent.globalData.user.avatar){
+      this.isAuthUserInfo = true;
+      this.$apply();
+    }
+
+
+
+    if(!this.space_id){
+      wx.showToast({
+        title: "未配置工作区ID",
+        icon: "none"
+      });
+      return;
+    }
+
+    this.is_loaded = true;
+
+    const finishedNaire = wx.getStorageSync('questionnaire_progess');
+
+    if(finishedNaire.indexOf('love_test') > -1){
+      this.answered = true
+    }
+
+    this.$apply();
+
+    wx.hideLoading();
+  }
+
+  async onShow() {
+    const finishedNaire = wx.getStorageSync('questionnaire_progess');
+    if(finishedNaire.indexOf('love_test') > -1){
+      this.answered = true
+    }
+    if (this.share_from) {
+      const user_id = this.$parent.globalData.user._id;
+      const options = {
+        $filter: `(user_b eq '${this.share_from}' and owner eq '${user_id}')`,
+        $select: 'owner,user_b,a_to_b,b_to_a,match',
+        $expand: 'user_b($select=profile)'
+      }
+      const result = await this.$parent.query('love_friends', options, this.space_id);
+      if (result && result.value && result.value[0]) {
+        this.userB_avatar = result.value[0].user_b.profile.avatar;
+        this.score = result.value[0].match;
+        this.$apply();
+      }
+    }
+  }
+
+  methods = {
+    async goAnswer() {
+      const user = this.$parent.globalData.user;
+      // if (user.name && user.avatar) 
+         const answeredUrl = encodeURIComponent(`/pages/love/cover_about_yourself?space_id=${loveSpaceId}`)
+         pageRouter.navigateTo({
+          url: `/pages/love/papers_view?object_name=love_test&space_id=${this.space_id}&answered_url=${answeredUrl}&keep_progress`})
+      // } else {
+      //   const answeredUrl = encodeURIComponent(`/pages/love/cover_about_yourself?space_id=${loveSpaceId}`)
+      //   wx.navigateTo({url: `/pages/user_info_login?naire=${this.naire}&share_from=${this.share_from}&next=${answeredUrl}`})
+      // }
+    },
+    goLove() {
+      wx.navigateTo({url: '/pages/love/cp'})
+    },
+    goShare() {
+      const user = this.$parent.globalData.user;
+      if (user.name && user.avatar) {
+        wx.navigateTo({url: `/pages/love/share?card=true&space_id=${this.space_id}`});
+      } else {
+        wx.navigateTo({url: `/pages/user_info_login?share=true`})
+      }
+    },
+    goMatching() {
+      wx.navigateTo({url: `/pages/love/home?space_id=${this.space_id}`})
+    },
+    goHome(){
+      wx.navigateTo({url: '/pages/love/home'})
+    }
+  }
+}
+</script>

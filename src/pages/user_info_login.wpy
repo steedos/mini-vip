@@ -1,0 +1,173 @@
+<style lang="less">
+page {
+  height: 100%;
+}
+.page.love {
+  background-color: #fff;
+  height: 100%;
+  .name {
+    padding-top:20px;
+    padding-left:20px;
+    padding-right:45px;
+  }
+  .body {
+    margin:0 40rpx;
+    padding-top:20%;
+    padding-bottom:40rpx;
+    .weui-input {
+      height:56px;
+      line-height:56px;
+      background-color:#fff;
+      color:#2a2f35;
+      box-sizing:border-box;
+      border:0px;
+      padding-left:13px;
+      border-radius:4px;
+    }
+    .shadow {
+      box-shadow:#aaa 0px 0px 10px;
+    }
+    .btn-info {
+      color: #ccc;
+    }
+    .warn {
+      color: #e64340;
+      text-align: center;
+      font-size:14px;
+      padding: 5px;
+    }
+  }
+  .submit {
+    left:0px;
+    position:absolute;
+    bottom:0px;
+    right:0px;
+    border-radius:0px;
+    height:50px;
+    background-color:#1AAD19;
+    line-height:50px;
+  }
+}
+</style>
+
+<template>
+	<view class="page phone-login love">
+    <view class="name">
+      <view class="page__title">你的昵称？</view>
+    </view>
+    <view class="body">
+      <input wx:if="{{nickName}}" class="weui-input shadow" name="name" value="{{nickName}}"></input>
+      <button wx:else class="btn-info weui-input shadow" plain="true" open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo">点击获取昵称</button>
+      <view wx:if="{{showTopTips}}" class="warn">{{message}}</view>
+    </view>
+    <!-- <view class="page__bd page__bd_spacing">
+			<view class="container other">
+				<view class="weui-media-box__hd weui-media-box__hd_in-appmsg user-avatar">
+					<image wx:if="{{userAvatarUrl}}" class="weui-media-box__thumb" mode="aspectFill" src="{{userAvatarUrl}}"></image>
+					<image wx:else mode="aspectFill" class="weui-media-box__thumb" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg"></image>
+				</view>
+				<view wx:if="{{nickName}}" class="container-title">{{nickName}}</view>
+				<view wx:else class="container-title">未登录</view>
+				<button class="weui-btn" type="primary" plain="true" open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo">获取微信昵称</button>
+			</view>
+    </view> -->
+    <button class="weui-btn submit" type="primary" @tap="goNext">下一步</button>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import req from '@/network';
+import { loveSpaceId } from '@/config';
+import pageRouter from '@/utils/pageRouter'
+
+export default class UserInfoLogin extends wepy.page {
+  config = {
+    navigationBarTitleText: '关于我',
+    navigationBarBackgroundColor: '#f6f7f8',
+    navigationBarTextStyle: 'black',
+  };
+
+  data = {
+    isAuthUserInfo: false,
+    nickName: '',
+    userAvatarUrl: '',
+    showTopTips: false,
+    share: '',
+		next: '',
+		message: '',
+    space_id: loveSpaceId,
+  };
+
+  async onLoad(e) {
+		console.log(e)
+    if (e) {
+			this.next = e.next;
+			this.naire = e.naire;
+      this.share_from = e.share_from;
+      this.share = e.share;
+			this.$apply();
+    }
+  }
+
+  methods = {
+    bindGetUserInfo(e) {
+      console.log('[this.next]', this.next);
+      if (e.detail.userInfo) {
+        const userInfo = e.detail.userInfo;
+        const name = userInfo.nickName;
+        const sex = userInfo.gender ? '男' : '女';
+        const avatar = userInfo.avatarUrl;
+        const url = '/mini/vip/user';
+        const next = decodeURIComponent(this.next);
+        this.isAuthUserInfo = true;
+        this.nickName = name;
+        this.userAvatarUrl = avatar;
+        this.$parent.globalData.user.name = name;
+        this.$parent.globalData.user.avatar = avatar;
+        this.showTopTips = false;
+        this.message = '';
+        req.put(url, { name: name, sex: sex, avatar: avatar });
+        // if (this.share_from && e.naire) {
+        // 	wx.redirectTo({url: next});
+        // } else {
+        // 	wx.redirectTo({url: `${next}&answered_url_type=redirectTo&answered_url=${encodeURIComponent(`/pages/love/matching?space_id=${this.space_id}`)}`});
+        // }
+      }
+      this.$apply();
+    },
+    goNext() {
+      console.log('[this.naire]', this.naire)
+      if (!this.isAuthUserInfo) {
+        console.log('[goNext]')
+        this.showTopTips = true;
+        this.message = '请在获取昵称之后再点击下一步';
+        this.$apply();
+      } else {
+        let object_name = '';
+        let answeredUrl = '';
+        if(this.next) {
+          answeredUrl = this.next;
+          object_name = 'love_test';
+        }else{
+          answeredUrl = encodeURIComponent(`/pages/love/cover_you_looking_for`);
+          object_name = 'love_about_me';
+        }
+        pageRouter.navigateTo({
+          url: `/pages/love/papers_view?object_name=${object_name}&space_id=${this.space_id}&required=true&answered_url=${answeredUrl}&answered_url_type=reLaunch&keep_progress`
+        });
+        // if (!this.share) {
+        //   const next = decodeURIComponent(this.next);
+        //   wx.redirectTo({
+        //     url: `${next}`
+        //   })
+        // } else {
+        //   wx.redirectTo({
+        //     url: `/pages/love/share?card=true&space_id=${this.space_id}`
+        //   })
+        // }
+      }
+    }
+  }
+}
+</script>

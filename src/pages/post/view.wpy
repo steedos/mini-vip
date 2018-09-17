@@ -203,64 +203,71 @@ video{
     margin-bottom: 2px;
   }
 }
+
+.edit-post {
+  position: fixed;
+  bottom: 80rpx;
+  right: 20rpx;
+  filter: drop-shadow(0 0 4rpx #fff);
+}
 </style>
 <template>
 <view class="page border-top-1px" wx:if="{{is_loaded}}">
   <view class="page__bd">
-      <navigator class="post-header body_color" url="../space/index?space_id={{space_id}}">
-        <view class="weui-cell weui-cell_access">
-          <view class="weui-cell__hd">
-            <image wx:if="{{avatar}}" class="image slds-icon slds-icon--small slds-m-right--x-small" src="{{util.formatImageUrl(avatar, baseUrl)}}"></image>
-            <view wx:else class="slds-icon-standard-channel-programs slds-icon slds-icon--small slds-m-right--x-small"></view>
-          </view>
-          <view class="weui-cell__bd">
-            <view class="space-name">{{space_name}}</view>
-            <view class="post-time">{{util.formatDate(post.created)}}</view>
-          </view>
+    <view class="post-header body_color">
+      <view class="weui-cell weui-cell_access">
+        <view class="weui-cell__hd">
+          <image wx:if="{{post.owner.profile.avatar}}" class="image slds-icon slds-icon--small slds-m-right--x-small" src="{{util.formatImageUrl(post.owner.profile.avatar, baseUrl)}}"></image>
+          <view wx:else class="slds-icon-standard-channel-programs slds-icon slds-icon--small slds-m-right--x-small"></view>
         </view>
-      </navigator>
-      <block wx:if="{{post.video}}">
-        <video src="{{post.video_url}}" objectFit="contain" class="cover"  direction= '90' custom-cache="{{false}}"></video>
-      </block>
-      <block wx:elif="{{withoutMarkdownImages && withoutMarkdownImages.length == 1}}">
-        <image src="{{util.formatImageUrl(withoutMarkdownImages[0], baseUrl)}}" mode="aspectFill" @tap="previewImage({{item}})" class="cover"/>
-      </block>
-      <view class="weui-article body_color">
-        <view class="weui-article__section article-section">
-          <view class="weui-article__c" wx:if="{{withoutMarkdownImages && withoutMarkdownImages.length>1}}">
-            <view class="flex-images-box">
-              <repeat for="{{withoutMarkdownImages}}" key="index" index="index" item="item">
-                <image src="{{util.formatImageUrl(item, baseUrl)}}" mode="aspectFill" @tap="previewImage({{item}})" class="flex-image {{(index + 1)%3 > 0 ? 'flex-image-item' : 'flex-image-last'}}"/>
-              </repeat>
-            </view>
-          </view>
-          <view class="weui-article__h1">{{post.name}}</view>
-          <view class="weui-article__p article-p">
-            <!-- <text space="emsp">{{post.description}}</text> -->
-            <import src="../../wemark/wemark.wxml"/>
-            <template is="wemark" data="{{...wemark}}"></template>
-          </view>
+        <view class="weui-cell__bd">
+          <view class="space-name">{{post.owner.name}}</view>
+          <view class="post-time">{{util.formatDate(post.created)}}</view>
         </view>
       </view>
-      <view class="comment-area body_color">
-        <view class="comment-title">
-          评论({{post_comments.length}})
-        </view>
-        <repeat for="{{post_comments}}" key="index" index="index" item="comment">
-          <view class="comment-container">
-            <view class="avatar-container">
-              <image class="avatar" mode="aspectFill" src="{{comment.owner.profile.avatar}}"></image>
-            </view>
-            <view class="detail-container">
-              <view class="user-name">{{comment.owner.name}}</view>
-              <view class="comment-time">{{util.formatDate(comment.created)}}</view>
-              <view class="comment-detail">{{comment.name}}</view>
-            </view>
+    </view>
+    <block wx:if="{{post.video}}">
+      <video src="{{post.video_url}}" objectFit="contain" class="cover"  direction= '90' custom-cache="{{false}}"></video>
+    </block>
+    <block wx:elif="{{withoutMarkdownImages && withoutMarkdownImages.length == 1}}">
+      <image src="{{util.formatImageUrl(withoutMarkdownImages[0], baseUrl)}}" mode="aspectFill" @tap="previewImage({{item}})" class="cover"/>
+    </block>
+    <view class="weui-article body_color">
+      <view class="weui-article__section article-section">
+        <view class="weui-article__c" wx:if="{{withoutMarkdownImages && withoutMarkdownImages.length>1}}">
+          <view class="flex-images-box">
+            <repeat for="{{withoutMarkdownImages}}" key="index" index="index" item="item">
+              <image src="{{util.formatImageUrl(item, baseUrl)}}" mode="aspectFill" @tap="previewImage({{item}})" class="flex-image {{(index + 1)%3 > 0 ? 'flex-image-item' : 'flex-image-last'}}"/>
+            </repeat>
           </view>
-        </repeat>
+        </view>
+        <view class="weui-article__h1">{{post.name}}</view>
+        <view class="weui-article__p article-p">
+          <!-- <text space="emsp">{{post.description}}</text> -->
+          <import src="../../wemark/wemark.wxml"/>
+          <template is="wemark" data="{{...wemark}}"></template>
+        </view>
       </view>
+    </view>
+    <view wx:if="{{hide_comment}}" class="comment-area body_color">
+      <view class="comment-title">
+        评论({{post_comments.length}})
+      </view>
+      <repeat for="{{post_comments}}" key="index" index="index" item="comment">
+        <view class="comment-container">
+          <view class="avatar-container">
+            <image class="avatar" mode="aspectFill" src="{{comment.owner.profile.avatar}}"></image>
+          </view>
+          <view class="detail-container">
+            <view class="user-name">{{comment.owner.name}}</view>
+            <view class="comment-time">{{util.formatDate(comment.created)}}</view>
+            <view class="comment-detail">{{comment.name}}</view>
+          </view>
+        </view>
+      </repeat>
+    </view>
   </view>
-  <view class="tab-bar border-top-1px {{isSpaceAdmin ? 'special-tab' : ''}}">
+  <view wx:if="{{hide_comment}}" class="tab-bar border-top-1px {{isSpaceAdmin ? 'special-tab' : ''}}">
     <button plain="true" open-type="share" data-post-name="{{post.name}}" data-post-id="{{post._id}}" data-post-space="{{post.space}}" class="share action share-btn">
       <view class="vip_share-default slds-icon slds-icon--small slds-m-right--x-small"></view>
       <view class="text">转发</view>
@@ -275,8 +282,11 @@ video{
     </view>
     <view class="more-action-btn action" @tap="moreAction" wx:if="{{isSpaceAdmin}}">
       <view class="vip_more slds-icon slds-icon--small slds-m-right--x-small"></view>
-      <view class="text">更多</view>
+      <view class="text">更多</view>>
     </view>
+  </view>
+  <view wx:if="{{is_owner}}" class="edit-post" @tap="editPost">
+    <view class="slds-icon-action-edit"></view>
   </view>
 </view>
 </template>
@@ -286,6 +296,7 @@ import req from '@/network';
 import { baseUrl } from '@/config';
 import util from '../../wxs/util.wxs';
 import wemark from '../../wemark/wemark';
+import { loveSpaceId } from '../../config/index.js';
 export default class PostView extends wepy.page {
   config = {
     navigationBarTitleText: '',
@@ -308,19 +319,22 @@ export default class PostView extends wepy.page {
     star_id: '',
     value: '',
     post_comments: [],
+    hide_comment: false,
     isSpaceAdmin: false,
+    is_owner: false,
     wemark: {}
   };
 
   async onLoad(e) {
-    console.log("==post/view=====onLoad================", e);
     await this.$parent.login(e);
+    const userId = this.$parent.globalData.user._id;
     this.editable = e.editable;
     wepy.showLoading({
       title: '加载中',
       mask: true
     });
-    this.space_id = e.space_id;
+    this.space_id = e.space_id || loveSpaceId;
+    this.hide_comment = e.hide_comment;
     if(e.space_id){
       const options = {
         $filter: `_id eq '${e.space_id}'`,
@@ -335,11 +349,26 @@ export default class PostView extends wepy.page {
         this.avatar = res.value[0].avatar
       }
     }
+    if(loveSpaceId){
+      if(e.name && e.avatar){
+        this.space_name = e.name
+        this.avatar = e.avatar
+      }else{
+        this.space_name = this.$parent.globalData.user.name
+        this.avatar = this.$parent.globalData.user.avatar
+      }
+    }
     if(e.post_id){
       this.post_id = e.post_id;
       await this.loadPost();
-      await this.isPostStar();
-      await this.loadPostComments()
+      if (this.post.owner == userId) {
+        this.is_owner = true;
+        this.$apply();
+      }
+      if (!this.hide_comment) {
+        await this.isPostStar();
+        await this.loadPostComments();
+      }
     }
 
     this.isSpaceAdmin = this.$parent.isSpaceAdmin(this.space_id);
@@ -350,7 +379,9 @@ export default class PostView extends wepy.page {
   }
 
   async onShow() {
-    this.loadPostComments();
+    if (!this.hide_comment) {
+      await this.loadPostComments();
+    }
   }
 
   async refresh(action) {
@@ -359,7 +390,9 @@ export default class PostView extends wepy.page {
       return;
     }
     await this.loadPost();
-    await this.loadPostComments();
+    if (!this.hide_comment) {
+      await this.loadPostComments();
+    }
     wepy.stopPullDownRefresh();
   }
 
@@ -378,7 +411,17 @@ export default class PostView extends wepy.page {
   }
 
   async loadPost(){
-    var post = await this.$parent.get("post", this.post_id, this.space_id)
+    let space_id = ''
+    let object_name = ''
+    if (loveSpaceId){
+      object_name = 'love_post'
+    }else{
+      object_name = 'post'
+    }
+    const query = {
+      $expand: 'owner($select=name,profile)'
+    }
+    var post = await this.$parent.get(object_name, this.post_id, this.space_id, query)
     this.post = post;
     this.space_id = post.space;
     let postMd = this.post && this.post.description;
@@ -477,10 +520,31 @@ export default class PostView extends wepy.page {
       });
     },
     editPost() {
-      let url = `/pages/record/edit?space_id=${this.space_id}&action=edit&object_name=post&record_id=${this.post_id}&fields=name,summary,description,images,video,type`;
+      let object_name=''
+      let fields = ''
+      if(loveSpaceId){
+        object_name = 'love_post';
+        fields = 'name,images';
+      }else{
+        object_name = 'post';
+        fields = 'name,summary,description,images,video,type';
+      }
+      let url = `/pages/record/edit?space_id=${this.space_id}&action=edit&object_name=${object_name}&record_id=${this.post_id}&fields=${fields}`;
       wepy.navigateTo({
         url: url
       });
+    },
+    async removeRecord() {
+      const result = await wepy.showModal({
+        title: '确认删除',
+        confirmText: "确定",
+        content: "您确认要删除此记录吗？",
+        cancelText: "取消",
+      });
+      if (result.confirm) {
+        await this.$parent.delete('love_post', this.post_id, loveSpaceId)
+        this.goBackAfterRemove("remove");
+      }
     },
     async starPost() {
       const space_id = this.space_id;

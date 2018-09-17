@@ -16,6 +16,20 @@ const formatTime = (date, joiner, hideSecond) => {
     }
   };
 
+const formatDate = (date, joiner)=>{
+  if(!date){
+    return ''
+  }
+
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  if(!joiner){
+    joiner = '-'
+  }
+  return [year, month, day].map(formatNumber).join(joiner)
+};
+
   const formatNumber = n => {
     n = n.toString();
     return n[1] ? n : '0' + n
@@ -50,5 +64,6 @@ const formatTime = (date, joiner, hideSecond) => {
     formatTime: formatTime,
     formatImageUrl: formatImageUrl,
     isTempFile: isTempFile,
-    formatVideoUrl: formatVideoUrl
+    formatVideoUrl: formatVideoUrl,
+    formatDate: formatDate
   };

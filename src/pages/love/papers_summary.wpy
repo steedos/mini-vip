@@ -1,0 +1,78 @@
+<style lang="less">
+  .page__hd{
+    padding:40rpx;
+    .love-title{
+      margin-top:40rpx;
+      color:#353535;
+      font-size:65rpx;
+      font-weight:bold;
+      text-align: center;
+    }
+  }
+  .page__bd{
+    padding:40rpx;
+    .answer-summary{
+      color:#353535;
+      font-size:45rpx;
+      margin-bottom:100rpx;
+    }
+  }
+  .btn-continue{
+    background:#5f6fee;
+    padding:6px;
+    color:#fff;
+    font-weight:bold;
+    margin:30rpx 0;
+  }
+</style>
+<template>
+<view class="page">
+  <view class="page__hd">
+    <view class="love-title">众里寻他千百度</view>
+  </view>
+  <view class="page__bd">
+    <view class="answer-summary">
+      “无颜”正在努力匹配你的有缘人，匹配成功后，我们将短信通知到你。
+    </view>
+    <view class="answer-summary">
+      想知道你们的兴趣爱好是否相同？试试补充其他资料，让你的匹配更加精准。
+    </view>
+    <button class="btn-continue" @tap="continue">确定</button>
+  </view>
+</view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import { baseUrl } from '@/config';
+import { baseMaterialUrl } from '@/config';
+import { loveSpaceId } from '@/config';
+import pageRouter from '@/utils/pageRouter';
+import util from '../../wxs/util.wxs';
+export default class PapersSummary extends wepy.page {
+	config = {
+		navigationBarTitleText: '资料完成'
+  };
+
+  wxs = {
+    util: util
+  }
+
+  data = {
+    space_id: null
+  }
+
+  async onLoad (e) {
+    if (e.space_id) {
+      this.space_id = e.space_id;
+      this.$apply();
+    }
+  }
+
+  methods = {
+    async continue(){
+      pageRouter.reLaunch({url: `/pages/love/me?space_id=${this.space_id}`})
+    }
+  }
+};
+</script>

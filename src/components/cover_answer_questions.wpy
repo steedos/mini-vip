@@ -1,0 +1,48 @@
+<style lang="less">
+</style>
+
+<template>
+  <view>
+    <view class="cover-page-bg"></view>
+    <view class="page cover-page">
+      <view class="page__hd">
+        <view class="love-title">缘分测试</view>
+      </view>
+      <view class="page__bd">
+        <view class="love-summary">
+          根据你的喜好和对方喜好，无颜可以精确计算你与好友的“互相匹配度”。
+        </view>
+        <button class="btn-join" @tap="next">开始答题</button>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import { loveSpaceId } from '@/config';
+export default class ComponentQuestions extends wepy.component {
+
+  props = {
+		spaceId: {
+      type: String,
+      default: ''
+    },
+	}
+
+  methods = {
+    next() {
+      // const answeredUrl = encodeURIComponent(`/pages/love/shake?space_id=${this.spaceId}`);
+      // wx.navigateTo({
+      //   url: `/pages/love/papers_view?object_name=love_answer&space_id=${this.spaceId}&answered_url=${answeredUrl}&answered_url_type=switchTab`
+      // });
+
+      const answeredUrl = encodeURIComponent(`/pages/love/cover_about_yourself?space_id=${loveSpaceId}`);
+      console.log("answeredUrl===============",answeredUrl)
+      wx.navigateTo({
+        url: `/pages/love/papers_view?object_name=love_test&space_id=${loveSpaceId}&answered_url=${answeredUrl}&answered_url_type=reLaunch&keep_progress`
+      });
+    }
+  };
+}
+</script>

@@ -15,7 +15,7 @@
 	const DATA_LENGTH = 10;
   export default class HomePost extends wepy.page {
 		config = {
-      navigationBarTitleText: '动态',
+      navigationBarTitleText: '文章',
       enablePullDownRefresh: true
     };
 

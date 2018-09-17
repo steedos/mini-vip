@@ -1,0 +1,366 @@
+<style lang="less" scoped>
+.page-shake {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background:#353535;
+  // .bg {
+  //   width: 100%;
+  //   height: 100%;
+  //   background: url(https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/loading1.gif);
+  //   background-position: center center;
+  //   background-repeat: no-repeat;
+  //   background-size: 120%;
+  // }
+  .top {
+    position: absolute;
+    top: 0;
+    bottom: 50%;
+    left: 0;
+    right: 0;
+    overflow: hidden;
+    transition: all 1s linear;
+    z-index: 10;
+    background:#353535;
+    .top-shake-container {
+      position: relative;
+      bottom: -135rpx;
+      width: 100%;
+      height: 100%;
+      background: url(https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/shake.png );
+      background-size: 40%;
+      background-repeat: no-repeat;
+      background-position: bottom center;
+    }
+  }
+  .bottom {
+    position: absolute;
+    top: 50%;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow: hidden;
+    z-index: 10;
+    background:#353535;
+    .bottom-shake-container {
+      position: relative;
+      top: -173rpx;
+      width: 100%;
+      height: 100%;
+      background: url(https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/shake.png);
+      background-size: 40%;
+      background-repeat: no-repeat;
+      background-position: top center;
+    }
+  }
+  .border {
+    position: absolute;
+    width: 100%;
+    height: 6rpx;
+    background: #46494f;
+    z-index: 1;
+  }
+  .top-border {
+    top: 50%;
+    box-shadow: 0 -2px 2px 0 rgba(0, 0, 0, 0.78);
+  }
+  .bottom-border {
+    bottom: 50%;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.78);
+  }
+
+  .result {
+    position: absolute;
+    top: 80rpx;
+    color: #a1a1a1;
+    z-index:100;
+    left: 30rpx;
+    right: 30rpx;
+    padding: 30rpx;
+    border-radius: 0.25rem;
+    display: flex;
+    flex-direction: row;
+    .fail-info {
+      flex: 1;
+      text-align: center;
+    }
+  }
+
+  .tips, .success-result {
+    position: absolute;
+    bottom: 80rpx;
+    background: #46494f;
+    color: #a1a1a1;
+    border:1px solid #191919;
+    z-index:100;
+    left: 30rpx;
+    right: 30rpx;
+    padding: 30rpx;
+    border-radius: 0.25rem;
+    display: flex;
+    flex-direction: row;
+    .avatar-container {
+      width: 120rpx;
+      height: 120rpx;
+      margin-right: 30rpx;
+      .avatar {
+        width: 100%;
+        height: 100%;
+      }
+    }
+    .tips-info {
+      flex: 1;
+      text-align: center;
+    }
+  }
+}
+</style>
+
+<template>
+  <view class="page page-shake">
+    <!-- <view class="bg"></view> -->
+    <view class="border top-border" animation="{{topAnimationData}}"></view>
+    <view class="border bottom-border" animation="{{bottomAnimationData}}"></view>
+    <block wx:if="{{noMatching}}">
+      <view class="result">
+        <view class="fail-info">茫茫人海中，相爱的概率只有0.00053。本周有缘人与你擦肩而过，请期待下周的邂逅。</view>
+      </view>
+    </block>
+    <view class="top" animation="{{topAnimationData}}">
+      <view class="top-shake-container"></view>
+    </view>
+    <view class="bottom" animation="{{bottomAnimationData}}">
+      <view class="bottom-shake-container"></view>
+    </view>
+    <block wx:if="{{matching}}">
+      <view class="success-result">
+        <view class="avatar-container">
+          <image class="avatar" mode="aspectFill" src="https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/avatar.png"></image>
+        </view>
+        <view class="name">{{matching.BName}}</view>
+      </view>
+    </block>
+    <block wx:if="{{noMatching}}">
+      <view class="tips" @tap="share">
+        <view class="tips-info">{{tips[tipsIndex % 3]}}</view>
+      </view>
+    </block>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import { baseUrl } from '@/config';
+import { baseMaterialUrl } from '@/config';
+import { loveSpaceId } from '@/config';
+
+const X_THRESHOLD = 0.55;
+const Y_THRESHOLD = 0.18;
+const Z_THRESHOLD = 0.18;
+
+export default class LoveShake extends wepy.page {
+  config = {
+    navigationBarBackgroundColor: '#353535',
+    navigationBarTextStyle: 'white',
+    navigationBarTitleText: '交换缘分圈'
+  };
+
+  data = {
+    baseUrl: baseUrl,
+    baseMaterialUrl: baseMaterialUrl,
+    space_id: null,
+    loading: '没在加载',
+    loveSpaceId: loveSpaceId,
+    topAnimationData: {},
+    bottomAnimationData: {},
+    text: '还没匹配',
+    matching: null,
+    noMatching: false,
+    shakeData: {
+      x: 0,
+      y: 0,
+      z: 0
+    },
+    isLoading: false,
+    tips: [
+      '你与有缘人的距离，也许只隔了一个共同好友，让更多的朋友加入“无颜”吧。',
+      '你习惯向左走，我习惯向右走，却始终不曾相遇。邀请更多好友匹配，也许缘分就在你的身边。',
+      '我们生活在同一个城市，但从不认识彼此。邀请更多朋友加入“无颜”吧。'
+    ],
+    tipsIndex: 0
+  };
+
+  getDelFlag(current_x, old_x) {
+    return Math.abs(current_x - old_x);
+  }
+
+  setTopAnimation() {
+    let animation = wx.createAnimation({
+      duration: 500,
+      timingFunction: 'ease',
+    });
+
+    animation.translateY(-70).step();
+    animation.translateY(0).step({delay: 100});
+    this.topAnimationData = animation.export();
+    this.$apply();
+    wx.stopAccelerometer();
+  }
+
+  setBottomAnimation() {
+    let animation = wx.createAnimation({
+      duration: 500,
+      timingFunction: 'ease',
+    });
+
+    animation.translateY(70).step();
+    animation.translateY(0).step({delay: 100});
+    this.bottomAnimationData = animation.export();
+    this.$apply();
+  }
+
+  clearAnimation() {
+    this.topAnimationData = {};
+    this.bottomAnimationData = {};
+    this.$apply();
+    this.shakeData = {
+      x: 0,
+      y: 0,
+      z: 0
+    };
+    setTimeout(() => {
+      wx.startAccelerometer({
+        interval: 'normal'
+      });
+    }, 1100);
+  }
+
+  async onLoad (e) {
+    wepy.showShareMenu({
+      withShareTicket: true
+    });
+    if(!e.space_id){
+      // 保证一进入就新建space对应的vip_customers记录
+      e.space_id = loveSpaceId;
+    }
+    this.space_id = e.space_id;
+    console.log("this.space_id============", this.space_id);
+    await this.$parent.login(e);
+    if(!this.space_id){
+      wx.showToast({
+        title: "未配置工作区ID",
+        icon: "none"
+      });
+      return;
+    }
+
+    this.$apply();
+  }
+
+  async onShow () {
+    wx.startAccelerometer({
+      interval: 'normal'
+    });
+    const self = this;
+
+    const shakeAudioContext = wx.createInnerAudioContext();
+    // shakeAudioContext.obeyMuteSwitch = true;
+    // shakeAudioContext.autoplay = true;
+    // shakeAudioContext.stop();
+    shakeAudioContext.src = 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/shake.mp3';
+
+    const successAudioContext = wx.createInnerAudioContext();
+    // successAudioContext.obeyMuteSwitch = true;
+    // successAudioContext.autoplay = true;
+    // successAudioContext.stop();
+    successAudioContext.src = 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/success.mp3'
+
+    wx.onAccelerometerChange(res => {
+      var x = res.x.toFixed(4);
+      var y = res.y.toFixed(4);
+      var z = res.z.toFixed(4);
+      var flagX = self.getDelFlag(x, self.shakeData.x);
+      var flagY = self.getDelFlag(y, self.shakeData.y);
+      var flagZ = self.getDelFlag(z, self.shakeData.z);
+
+      self.shakeData = {
+        x: x,
+        y: y,
+        z: z
+      }
+
+      const user_id = this.$parent.globalData.user._id;
+
+      if (flagX >= X_THRESHOLD && flagY >= Y_THRESHOLD && flagZ >= Z_THRESHOLD) {
+        if (!self.isLoading) {
+          const user_id = self.$parent.globalData.user._id;
+          shakeAudioContext.play();
+          self.text = '正在匹配';
+          self.matching = null;
+          self.noMatching = false;
+          self.isLoading = true;
+          self.setTopAnimation();
+          self.setBottomAnimation();
+          self.$apply();
+          const options = {
+            $filter: `userA eq '${user_id}'`,
+            $select: 'owner,userA,scoreA_B,scoreB_A,score,space'
+          }
+          self.$parent.query('love_result', options, self.space_id).then( res => {
+            if (res && res.value && res.value[0] && res.value[0].score && res.value[0].score[0]) {
+              setTimeout(() => {
+                successAudioContext.play();
+              }, 1100);
+              setTimeout(() => {
+                self.matching = res.value[0].score[0];
+                self.noMatching = false;
+                self.$apply();
+              }, 1400);
+            } else {
+              setTimeout(() => {
+                console.log('===============noMatching', self.noMatching)
+                self.tipsIndex = self.tipsIndex + 1;
+                self.noMatching = true;
+                self.$apply();
+              }, 1100);
+            }
+            self.clearAnimation();
+            self.isLoading = false;
+            self.loading = '加载完了'
+            self.$apply();
+            console.log(res)
+          })
+        } else {
+          self.loading = '加载数据';
+          self.$apply();
+        }
+      }
+    })
+  };
+
+  onHide() {
+    wx.stopAccelerometer();
+  }
+
+  // 分享
+  onShareAppMessage(res) {
+    const userId = this.$parent.globalData.user._id;
+    let title = "我们是天生一对吗？";
+    return {
+      title: title,
+      path: `pages/love/find?share_from=${userId}`,
+      imageUrl: `https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/love_share_bg.jpg`
+    };
+  }
+
+  methods = {
+    share() {
+      wx.navigateTo({
+        url: `/pages/love/share?space_id=${this.space_id}`
+      })
+    }
+  };
+}
+</script>
