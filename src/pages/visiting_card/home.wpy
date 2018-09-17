@@ -1,20 +1,133 @@
 <style lang="less">
+page{
+  background: linear-gradient(top,#DFDFDF,#fff);
+}
+.page-card-container{
+  margin: 40rpx;
+  padding: 30rpx;
+  border-radius: 20rpx;
+  box-shadow:0rpx 0rpx 10rpx grey;
+  background-color: #fff;
+}
+
+.card-title{
+  float: left;
+
+  .card-title-logo{
+    display: inline-block;
+    .image{
+      width: 40rpx;
+      height: 40rpx;
+      display: block;
+    }
+  }
+    
+    .card-tittle-company{
+      display: inline-block;
+      margin-left: 20rpx;
+      overflow: hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+      width:340rpx;
+      font-size: 26rpx;
+    }
+
+    .card-title-name{
+      margin-top: 30rpx;
+      font-size: 40rpx;
+    }
+}
+
+.card-photo{
+  float: right;
+  .image{
+    width: 200rpx;
+    height: 200rpx;
+    border-radius: 100%;
+  }
+}
+
+.card-content{
+  font-size:28rpx;
+	line-height: 60rpx;
+
+	.slds-icon--small{
+		// display: inline-block;
+		width: 30rpx;
+		height: 30rpx;
+		float: left;
+		line-height: 30rpx;
+	}
+	.card-content-tel, .card-content-email, .card-content-address{
+		// display:inline-block;
+		width:560rpx;
+		float: left;
+		height: 30rpx;
+		line-height: 30rpx;
+	}
+	.card-content-address{
+		line-height: 40rpx;
+	}
+}
+
+.clear{
+	clear: both;
+}
+
+.card-content-item{
+	clear: both;
+	margin: 30rpx 0;
+}
+
 </style>
 
 <template>
-	<view class="page" wx:if="{{is_loaded}}">
-		<view class="page__bd">
-			<view class="weui-grids">
-				<!-- <repeat for="{{options}}" index="index" key="index" item="option">
-					<navigator url="{{option.url}}" class="weui-grid" hover-class="weui-grid_active">
-						<view class="slds-icon-{{option.icon}} weui-grid__icon slds-icon"></view>
-						<view class="weui-grid__label">{{option.label}}</view>
-					</navigator>
-				</repeat> -->
-			</view>
-		</view>
-
-	</view>
+  <view class="page" wx:if="{{is_loaded}}">
+    <view class="page__bd">
+      <view class="weui-grids">
+        <!-- <repeat for="{{options}}" index="index" key="index" item="option">
+          <navigator url="{{option.url}}" class="weui-grid" hover-class="weui-grid_active">
+            <view class="slds-icon-{{option.icon}} weui-grid__icon slds-icon"></view>
+            <view class="weui-grid__label">{{option.label}}</view>
+          </navigator>
+        </repeat> -->
+        <view class="page-card">
+          <view class="page-card-container">
+            <view class="card-title">
+              <view class="card-title-logo">
+               <image class="image" mode="aspectFill" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1537182472993&di=1c6dd612f2ccdfcb21278de981703870&imgtype=0&src=http%3A%2F%2Fd.hiphotos.baidu.com%2Fbaike%2Fpic%2Fitem%2F1f178a82b9014a902df55272a1773912b21bee32.jpg"/>
+              </view>
+              <view class="card-tittle-company">上海华炎软件科技有限公司</view>
+              <view class="card-title-name">范冰冰</view>
+              <view class="card-title-job">CEO</view>
+            </view>
+            <view class="card-photo">
+               <image class="image" mode="aspectFill" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1537182472993&di=1c6dd612f2ccdfcb21278de981703870&imgtype=0&src=http%3A%2F%2Fd.hiphotos.baidu.com%2Fbaike%2Fpic%2Fitem%2F1f178a82b9014a902df55272a1773912b21bee32.jpg"/>
+            </view>
+            <view style="margin-bottom:30rpx;clear:both;"></view>
+            <view class="card-content">
+							<view class="card-content-item">
+								<view class="slds-icon-standard-call slds-icon slds-icon--small slds-m-right--x-small"/>
+                <view class="card-content-tel">13568525698</view>
+								<view class="clear">	</view>
+							</view>
+							<view class="card-content-item">
+								<view class="slds-icon-standard-email slds-icon slds-icon--small slds-m-right--x-small"/>
+                <view class="card-content-email">fanbingbing@hotoa.com</view>
+								<view class="clear"></view>
+							</view>
+							<view class="card-content-item">
+								<view class="slds-icon-standard-address slds-icon slds-icon--small slds-m-right--x-small"/>
+                <view class="card-content-address">上海市松江区九亭镇九新公路76号嘉和阳光大厦505市华炎软件</view>
+								<view class="clear"></view>
+							</view>
+							<view class="clear"></view>
+            </view>   
+        </view>
+        </view>
+      </view>
+    </view>
+  </view>
 </template>
 
 <script>
