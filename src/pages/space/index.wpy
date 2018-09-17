@@ -357,7 +357,7 @@ export default class Posts extends wepy.page {
       mask: true
     });
     console.log("onLoad==============space_index===================", e.space_id);
-    this.space_id = e.space_id || scene_space_id;
+    this.space_id = e.space_id || scene_space_id || "Lnre96ro35Wf9b3gA";
     this.$parent.saveRecentSites(this.space_id);
     await this.$parent.login(e);
     // await this.loadCardInfo();

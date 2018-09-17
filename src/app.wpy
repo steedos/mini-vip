@@ -310,13 +310,13 @@ export default class VIP extends wepy.app {
         text: '名片',
       },
       {
-        pagePath: 'pages/love/post_recommend',
+        pagePath: 'pages/product/list',
         selectedIconPath: './images/tabbars/topic_pressed.png',
         iconPath: './images/tabbars/topic.png',
         text: '商城',
       },
       {
-        pagePath: 'pages/me',
+        pagePath: 'pages/space/index',
         selectedIconPath: './images/tabbars/me_pressed.png',
         iconPath: './images/tabbars/me.png',
         text: '官网',
