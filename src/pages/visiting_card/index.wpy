@@ -1,0 +1,47 @@
+<style lang="less">
+</style>
+
+<template>
+  <view class="page" wx:if="{{is_loaded}}">
+    <view class="page__bd">
+      <view class="weui-grids">
+        <!-- <repeat for="{{options}}" index="index" key="index" item="option">
+          <navigator url="{{option.url}}" class="weui-grid" hover-class="weui-grid_active">
+            <view class="slds-icon-{{option.icon}} weui-grid__icon slds-icon"></view>
+            <view class="weui-grid__label">{{option.label}}</view>
+          </navigator>
+        </repeat> -->
+      </view>
+    </view>
+
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+
+  export default class VisitingCardIndex extends wepy.page {
+    config = {
+      navigationBarTitleText: '名片列表'
+    };
+
+    data = {
+      is_loaded: false
+    };
+
+    async onPullDownRefresh() {
+       wepy.stopPullDownRefresh();
+    }
+
+    async onLoad() {
+      wepy.showLoading({
+        title: '加载中',
+        mask: true
+      });
+      await this.$parent.login();
+      this.is_loaded = true;
+      this.$apply()
+      wepy.hideLoading();
+    }
+  }
+</script>

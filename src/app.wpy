@@ -194,13 +194,14 @@ setStore(store)
 export default class VIP extends wepy.app {
   config = {
     pages: [
-      'pages/home/store',
+      'pages/visiting_card/home',
+      'pages/visiting_card/index',
       'pages/love/index',
       'pages/love/home',
 //      'pages/tabbar_index',
       'pages/love/shake',
       'pages/love/share',
-      // 'pages/home/store',
+      'pages/home/store',
       'pages/index',
       'pages/apps',
       'pages/me',
@@ -303,22 +304,22 @@ export default class VIP extends wepy.app {
       borderStyle: 'black',
       list: [
       {
-        pagePath: 'pages/home/store',
+        pagePath: 'pages/visiting_card/home',
         selectedIconPath: './images/tabbars/home_pressed.png',
         iconPath: './images/tabbars/home.png',
-        text: '首页',
+        text: '名片',
       },
-      // {
-      //   pagePath: 'pages/love/post_recommend',
-      //   selectedIconPath: './images/tabbars/topic_pressed.png',
-      //   iconPath: './images/tabbars/topic.png',
-      //   text: '最新',
-      // },
+      {
+        pagePath: 'pages/love/post_recommend',
+        selectedIconPath: './images/tabbars/topic_pressed.png',
+        iconPath: './images/tabbars/topic.png',
+        text: '商城',
+      },
       {
         pagePath: 'pages/me',
         selectedIconPath: './images/tabbars/me_pressed.png',
         iconPath: './images/tabbars/me.png',
-        text: '我的',
+        text: '官网',
       }]
     },
     window: {
