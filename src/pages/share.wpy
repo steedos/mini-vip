@@ -263,7 +263,7 @@
   import { baseUrl } from '@/config';
   import util from '../wxs/util.wxs';
  
-  export default class ProductShare extends wepy.page {
+  export default class Share extends wepy.page {
 		config = {
 			navigationBarTitleText: '分享返现'
     };
