@@ -1,11 +1,11 @@
 <style lang="less">
 page{
-	background: linear-gradient(top,#DFDFDF,#fff);
+	background: #fff;
 }
 .page-card-container{
 	margin: 40rpx;
 	padding: 30rpx 50rpx;
-	border-radius: 20rpx;
+	border-radius: 5rpx;
 	box-shadow:0rpx 0rpx 30rpx #888;
 	background-color: #fff;
 	background: url(https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/card3.png) no-repeat;
@@ -86,6 +86,69 @@ page{
 	clear: both;
 }
 
+.page-card-more{
+	text-align:center;
+	color:#999;
+	font-size:28rpx;
+
+	.page-card-more-title{
+		display: inline-block;
+	}
+	.switch-group-open {
+		margin-left: 16rpx;
+		height: 20rpx;
+		display: inline-block;
+	}
+	.switch-group-open::after {
+		transform: rotate(135deg);
+	}
+	.switch-group-close {
+		margin-left: 16rpx;
+		height: 20rpx;
+		display: inline-block;
+	}
+	.switch-group-close::after {
+		transform: rotate(-45deg);
+	}
+}
+.page-btn{
+	text-align: center;
+	font-size: 34rpx!important;
+	margin:0 rpx 40rpx;
+	.weui-btn{
+		width: 320rpx;
+		height:90rpx;
+		font-size:32rpx;
+		line-height:90rpx;
+
+
+	}
+	.btn-contact {
+		margin-left: 40rpx;
+		background-color: #1AAD19!important;
+		color: #fff!important;
+	}
+
+}
+.page-card-more-detail{
+	margin-top:10px;
+	background:#F7F7F7;
+	padding:40rpx 40rpx;
+	.page-card-more-detail-item{
+		text-align:left;
+		line-height:80rpx;
+		.detail-item-title{
+			display:inline-block;
+			color:#A6A6A6;
+		}
+		.detail-item-contant{
+			display:inline-block;
+			margin-left:50rpx;
+			color:#414141;
+		}
+	}
+}
+
 </style>
 
 <template>
@@ -128,7 +191,43 @@ page{
 							</view>
 							<view class="clear"></view>
 						</view>   
-				</view>
+					</view>
+					<view class="page-card-more">
+						<view wx:if="{{!is_detail}}">
+							<view class="page-card-more-title" @tap="goDetail">展开全部名片信息</view>
+							<view class="weui-cell__ft switch-group-open weui-cell__ft_in-access"></view>
+						</view>
+						<view  wx:if="{{is_detail}}">
+							<view class="page-card-more-title" @tap="closeDetail">收起以下名片信息</view>
+							<view class="weui-cell__ft switch-group-close weui-cell__ft_in-access"></view>
+						</view>
+						<view class="page-card-more-detail" wx:if="{{is_detail}}">
+							<view class="page-card-more-detail-item">
+									<view class="detail-item-title">电话</view>
+									<view class="detail-item-contant">{{card_info.mobile}}</view>
+							</view>
+							<view class="page-card-more-detail-item">
+									<view class="detail-item-title">微信</view>
+									<view class="detail-item-contant">{{card_info.mobile}}</view>
+							</view>
+							<view class="page-card-more-detail-item">
+									<view class="detail-item-title">邮箱</view>
+									<view class="detail-item-contant">{{card_info.email}}</view>
+							</view>
+							<view class="page-card-more-detail-item">
+									<view class="detail-item-title">公司</view>
+									<view class="detail-item-contant">{{card_info.space.name}}</view>
+							</view>
+							<view class="page-card-more-detail-item">
+									<view class="detail-item-title">地址</view>
+									<view class="detail-item-contant">{{card_info.space.location.address}}</view>
+							</view>
+						</view>
+					</view>
+					<view class="page-btn">
+						<button class="weui-btn" open-type="share" plain="true"  type="primary" size="mini">分享名片</button>
+						<button class="weui-btn btn-contact"  plain="true" type="primary" size="mini">存入手机通讯录</button>
+					</view>
 				</view>
 			</view>
 		</view>
@@ -148,6 +247,7 @@ page{
 
 		data = {
 			is_loaded: false,
+			is_detail: false,
 			space_id: "PxSfmWR7Ds4qLrd2g",
 			card_user_id: "FjwgnbtbRwouHCtua",
 			card_info: {},
@@ -190,5 +290,15 @@ page{
 				this.card_info = vip_customer.value[0];
 			}
 		}
+		methods = {
+			goDetail(){
+				this.is_detail = true;
+				this.$apply();
+			 },
+			 closeDetail(){
+				this.is_detail = false;
+				this.$apply();
+ 			},
+		};
 	}
 </script>
