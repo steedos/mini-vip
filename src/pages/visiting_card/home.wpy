@@ -24,28 +24,28 @@ page{
 		}
 	}
 		
-		.card-tittle-company{
-			display: inline-block;
-			margin-left: 20rpx;
-			overflow: hidden;
-			text-overflow:ellipsis;
-			white-space:nowrap;
-			width:340rpx;
-			font-size: 26rpx;
-		}
+	.card-tittle-company{
+		display: inline-block;
+		margin-left: 20rpx;
+		overflow: hidden;
+		text-overflow:ellipsis;
+		white-space:nowrap;
+		width:340rpx;
+		font-size: 26rpx;
+	}
 
-		.card-title-name{
-			margin-top: 30rpx;
-			font-size: 40rpx;
-		}
-		
-		.card-title-job{
-			width:200px;
-			text-overflow:ellipsis;
-			white-space:nowrap;
-			overflow:hidden;
+	.card-title-name{
+		margin-top: 30rpx;
+		font-size: 40rpx;
+	}
+	
+	.card-title-job{
+		width:200px;
+		text-overflow:ellipsis;
+		white-space:nowrap;
+		overflow:hidden;
 
-		}
+	}
 }
 
 .card-photo{
