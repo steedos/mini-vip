@@ -250,6 +250,7 @@ page{
 			is_detail: false,
 			space_id: "PxSfmWR7Ds4qLrd2g",
 			card_user_id: "FjwgnbtbRwouHCtua",
+			baseUrl: baseUrl,
 			card_info: {},
 			default_avatar: 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg'
 		};
