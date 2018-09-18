@@ -95,38 +95,35 @@ page{
 				<view class="page-card">
 					<view class="page-card-container">
 						<view class="card-title">
-							<view wx:if="{{space_user.space.avatar}}" class="card-title-logo">
-								<image class="image" mode="aspectFill" src="{{util.formatImageUrl(space_user.space.avatar, baseUrl)}}"/>
-							</view>
-							<view class="card-tittle-company">{{space_user.space.name}}</view>
-							<view class="card-title-name">{{space_user.name}}</view>
-							<view class="card-title-job">{{space_user.position}}</view>
+							<view class="card-tittle-company">{{card_info.space.name}}</view>
+							<view class="card-title-name">{{card_info.name}}</view>
+							<view class="card-title-job">{{card_info.position}}</view>
 						</view>
 						<view class="card-photo">
-							<image wx:if="{{space_user.avatar}}" class="image" mode="aspectFill" src="{{util.formatImageUrl(space_user.avatar, baseUrl)}}"/>
-							<image wx:else class="image" mode="aspectFill" src="{{util.formatImageUrl(space_user.user.profile.avatar, baseUrl) || default_avatar}}"/>
+							<image wx:if="{{card_info.avatar}}" class="image" mode="aspectFill" src="{{util.formatImageUrl(card_info.avatar, baseUrl)}}"/>
+							<image wx:else class="image" mode="aspectFill" src="{{util.formatImageUrl(card_info.user.profile.avatar, baseUrl) || default_avatar}}"/>
 						</view>
 						<view class="clear"></view>
 						<view class="card-content">
-							<view class="card-content-item" wx:if="{{space_user.mobile}}">
+							<view class="card-content-item" wx:if="{{card_info.mobile}}">
 								<view class="card-content-icon">
 									<view class="slds-icon-standard-call slds-icon slds-icon--small slds-m-right--x-small"/>
 								</view>
-								<view class="card-content-tel">{{space_user.mobile}}</view>
+								<view class="card-content-tel">{{card_info.mobile}}</view>
 								<view class="clear"></view>
 							</view>
-							<view class="card-content-item" wx:if="{{space_user.email}}">
+							<view class="card-content-item" wx:if="{{card_info.email}}">
 								<view class="card-content-icon">
 									<view class="slds-icon-standard-email slds-icon slds-icon--small slds-m-right--x-small"/>
 								</view>
-								<view class="card-content-email">{{space_user.email}}</view>
+								<view class="card-content-email">{{card_info.email}}</view>
 								<view class="clear"></view>
 							</view>
-							<view class="card-content-item" wx:if="{{space_user.space.location.address}}">
+							<view class="card-content-item" wx:if="{{card_info.space.location.address}}">
 								<view class="card-content-icon">
 									<view class="slds-icon-standard-address slds-icon slds-icon--small slds-m-right--x-small"/>
 								</view>
-								<view class="card-content-address">{{space_user.space.location.address}}</view>
+								<view class="card-content-address">{{card_info.space.location.address}}</view>
 								<view class="clear"></view>
 							</view>
 							<view class="clear"></view>
@@ -142,6 +139,7 @@ page{
 	import wepy from 'wepy';
 	import { baseUrl } from '@/config';
 	import util from '../../wxs/util.wxs';
+	import { loveSpaceId } from '@/config';
 
 	export default class VisitingCardHome extends wepy.page {
 		config = {
@@ -152,7 +150,7 @@ page{
 			is_loaded: false,
 			space_id: "PxSfmWR7Ds4qLrd2g",
 			card_user_id: "FjwgnbtbRwouHCtua",
-			space_user: {},
+			card_info: {},
 			default_avatar: 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg'
 		};
 
@@ -165,6 +163,7 @@ page{
 		}
 
 		async onLoad() {
+			this.space_id = loveSpaceId;
 			wepy.showLoading({
 				title: '加载中',
 				mask: true
@@ -182,13 +181,13 @@ page{
 	
 		async loadSpaceUser() {
 			const options = {
-				$filter: `(user eq '${this.card_user_id}' and space eq '${this.space_id}')`,
-				$select: 'name,position,mobile,email,work_phone,user,wechat,avatar,photos,self_introduction,space',
-				$expand: 'user($select=profile/avatar),space($select=name,avatar,location)'
+				$filter: `(owner eq '${this.card_user_id}' and space eq '${this.space_id}')`,
+				$select: 'name,position,mobile,email,work_phone,owner,wechat,avatar,photos,signature,space',
+				$expand: 'owner($select=profile/avatar),space($select=name,avatar,location)'
 			}
-			const space_user = await this.$parent.query('space_users', options, this.space_id);
-			if (space_user && space_user.value && space_user.value[0]) {
-				this.space_user = space_user.value[0];
+			const vip_customer = await this.$parent.query('vip_customers', options, this.space_id);
+			if (vip_customer && vip_customer.value && vip_customer.value[0]) {
+				this.card_info = vip_customer.value[0];
 			}
 		}
 	}
