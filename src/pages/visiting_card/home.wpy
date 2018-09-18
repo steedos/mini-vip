@@ -268,7 +268,7 @@ page{
 
 	export default class VisitingCardHome extends wepy.page {
 		config = {
-			navigationBarTitleText: '名片'
+			navigationBarTitleText: ''
 		};
 
 		data = {
@@ -299,6 +299,7 @@ page{
 			await this.loadData();
 			this.is_loaded = true;
 			this.$apply()
+			wx.setNavigationBarTitle({title: this.card_info.name +'的名片'})
 			wepy.hideLoading();
 		}
 
