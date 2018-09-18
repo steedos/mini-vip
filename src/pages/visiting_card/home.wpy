@@ -1,10 +1,9 @@
 <style lang="less">
 page{
-	background: #fff;
 	font-family: 黑体;
 }
 .page-card-container{
-	margin: 40rpx;
+	margin:40rpx 0;
 	padding: 30rpx 50rpx;
 	// border-radius: 5rpx;
 	box-shadow:5rpx 5rpx 15rpx #888;
@@ -120,9 +119,9 @@ page{
 .page-btn{
 	text-align: center;
 	font-size: 34rpx!important;
-	margin:0 rpx 40rpx;
+	// margin:0rpx 40rpx;
 	.weui-btn{
-		width: 320rpx;
+		width: 280rpx;
 		height:90rpx;
 		font-size:32rpx;
 		line-height:90rpx;
@@ -137,7 +136,7 @@ page{
 
 }
 .page-card-more-detail{
-	margin-top:10px;
+	margin:20rpx -40rpx;
 	background:#F7F7F7;
 	padding:40rpx 40rpx;
 	.page-card-more-detail-item{
@@ -156,6 +155,10 @@ page{
 }
 
 .panel-box{
+	&.panel-top-box{
+		margin-top: -40rpx;
+	}
+	background: #fff;
 	padding: 40rpx;
 	margin: 40rpx 0;
 	.panel-box-title{
@@ -172,76 +175,78 @@ page{
 <template>
 	<view class="page" wx:if="{{is_loaded}}">
 		<view class="page__bd">
-			<view class="page-card-container">
-				<view class="card-title">
-					<view class="card-tittle-company">{{card_info.company}}</view>
-					<view class="card-title-name">{{card_info.name}}</view>
-					<view class="card-title-job">{{card_info.position}}</view>
-				</view>
-				<view class="card-avatar">
-					<image wx:if="{{card_info.avatar}}" class="image" mode="aspectFill" src="{{util.formatImageUrl(card_info.avatar, baseUrl) || default_avatar}}"/>
-				</view>
-				<view class="clear"></view>
-				<view class="card-content">
-					<view class="card-content-item" wx:if="{{card_info.mobile}}">
-						<view class="card-content-icon">
-							<view class="slds-icon-standard-call slds-icon slds-icon--small slds-m-right--x-small"/>
-						</view>
-						<view class="card-content-tel">{{card_info.mobile}}</view>
-						<view class="clear"></view>
+			<view class="panel-box panel-top-box">
+				<view class="page-card-container">
+					<view class="card-title">
+						<view class="card-tittle-company">{{card_info.company}}</view>
+						<view class="card-title-name">{{card_info.name}}</view>
+						<view class="card-title-job">{{card_info.position}}</view>
 					</view>
-					<view class="card-content-item" wx:if="{{card_info.email}}">
-						<view class="card-content-icon">
-							<view class="slds-icon-standard-email slds-icon slds-icon--small slds-m-right--x-small"/>
-						</view>
-						<view class="card-content-email">{{card_info.email}}</view>
-						<view class="clear"></view>
-					</view>
-					<view class="card-content-item" wx:if="{{card_info.location.address}}">
-						<view class="card-content-icon">
-							<view class="slds-icon-standard-address slds-icon slds-icon--small slds-m-right--x-small"/>
-						</view>
-						<view class="card-content-address">{{card_info.location.address}}</view>
-						<view class="clear"></view>
+					<view class="card-avatar">
+						<image wx:if="{{card_info.avatar}}" class="image" mode="aspectFill" src="{{util.formatImageUrl(card_info.avatar, baseUrl) || default_avatar}}"/>
 					</view>
 					<view class="clear"></view>
-				</view>   
-			</view>
-			<view class="page-card-more">
-				<view wx:if="{{!is_detail}}">
-					<view class="page-card-more-title" @tap="goDetail">展开全部名片信息</view>
-					<view class="weui-cell__ft switch-group-open weui-cell__ft_in-access"></view>
+					<view class="card-content">
+						<view class="card-content-item" wx:if="{{card_info.mobile}}">
+							<view class="card-content-icon">
+								<view class="slds-icon-standard-call slds-icon slds-icon--small slds-m-right--x-small"/>
+							</view>
+							<view class="card-content-tel">{{card_info.mobile}}</view>
+							<view class="clear"></view>
+						</view>
+						<view class="card-content-item" wx:if="{{card_info.email}}">
+							<view class="card-content-icon">
+								<view class="slds-icon-standard-email slds-icon slds-icon--small slds-m-right--x-small"/>
+							</view>
+							<view class="card-content-email">{{card_info.email}}</view>
+							<view class="clear"></view>
+						</view>
+						<view class="card-content-item" wx:if="{{card_info.location.address}}">
+							<view class="card-content-icon">
+								<view class="slds-icon-standard-address slds-icon slds-icon--small slds-m-right--x-small"/>
+							</view>
+							<view class="card-content-address">{{card_info.location.address}}</view>
+							<view class="clear"></view>
+						</view>
+						<view class="clear"></view>
+					</view>   
 				</view>
-				<view  wx:if="{{is_detail}}">
-					<view class="page-card-more-title" @tap="closeDetail">收起以下名片信息</view>
-					<view class="weui-cell__ft switch-group-close weui-cell__ft_in-access"></view>
+				<view class="page-card-more">
+					<view wx:if="{{!is_detail}}">
+						<view class="page-card-more-title" @tap="goDetail">展开全部名片信息</view>
+						<view class="weui-cell__ft switch-group-open weui-cell__ft_in-access"></view>
+					</view>
+					<view  wx:if="{{is_detail}}">
+						<view class="page-card-more-title" @tap="closeDetail">收起以下名片信息</view>
+						<view class="weui-cell__ft switch-group-close weui-cell__ft_in-access"></view>
+					</view>
+					<view class="page-card-more-detail" wx:if="{{is_detail}}">
+						<view class="page-card-more-detail-item">
+								<view class="detail-item-title">电话</view>
+								<view class="detail-item-contant">{{card_info.mobile}}</view>
+						</view>
+						<view class="page-card-more-detail-item">
+								<view class="detail-item-title">微信</view>
+								<view class="detail-item-contant">{{card_info.mobile}}</view>
+						</view>
+						<view class="page-card-more-detail-item">
+								<view class="detail-item-title">邮箱</view>
+								<view class="detail-item-contant">{{card_info.email}}</view>
+						</view>
+						<view class="page-card-more-detail-item">
+								<view class="detail-item-title">公司</view>
+								<view class="detail-item-contant">{{card_info.company}}</view>
+						</view>
+						<view class="page-card-more-detail-item">
+								<view class="detail-item-title">地址</view>
+								<view class="detail-item-contant">{{card_info.location.address}}</view>
+						</view>
+					</view>
 				</view>
-				<view class="page-card-more-detail" wx:if="{{is_detail}}">
-					<view class="page-card-more-detail-item">
-							<view class="detail-item-title">电话</view>
-							<view class="detail-item-contant">{{card_info.mobile}}</view>
-					</view>
-					<view class="page-card-more-detail-item">
-							<view class="detail-item-title">微信</view>
-							<view class="detail-item-contant">{{card_info.mobile}}</view>
-					</view>
-					<view class="page-card-more-detail-item">
-							<view class="detail-item-title">邮箱</view>
-							<view class="detail-item-contant">{{card_info.email}}</view>
-					</view>
-					<view class="page-card-more-detail-item">
-							<view class="detail-item-title">公司</view>
-							<view class="detail-item-contant">{{card_info.company}}</view>
-					</view>
-					<view class="page-card-more-detail-item">
-							<view class="detail-item-title">地址</view>
-							<view class="detail-item-contant">{{card_info.location.address}}</view>
-					</view>
+				<view class="page-btn">
+					<button class="weui-btn" open-type="share" plain="true"  type="primary" size="mini">分享名片</button>
+					<button class="weui-btn btn-contact"  plain="true" type="primary" size="mini">存入手机通讯录</button>
 				</view>
-			</view>
-			<view class="page-btn">
-				<button class="weui-btn" open-type="share" plain="true"  type="primary" size="mini">分享名片</button>
-				<button class="weui-btn btn-contact"  plain="true" type="primary" size="mini">存入手机通讯录</button>
 			</view>
 			<view class="self-introduction panel-box">
 				<view class="panel-box-title">
