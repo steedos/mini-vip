@@ -10,6 +10,7 @@ page{
 	background-color: #fff;
 	background: url(https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/card3.png) no-repeat;
 	background-size: cover;
+	min-height:320rpx;
 }
 
 .card-title{
@@ -51,7 +52,7 @@ page{
 	}
 }
 
-.card-photo{
+.card-avatar{
 	float: right;
 	.image{
 		width: 160rpx;
@@ -158,13 +159,12 @@ page{
 				<view class="page-card">
 					<view class="page-card-container">
 						<view class="card-title">
-							<view class="card-tittle-company">{{card_info.space.name}}</view>
+							<view class="card-tittle-company">{{card_info.company}}</view>
 							<view class="card-title-name">{{card_info.name}}</view>
 							<view class="card-title-job">{{card_info.position}}</view>
 						</view>
-						<view class="card-photo">
-							<image wx:if="{{card_info.avatar}}" class="image" mode="aspectFill" src="{{util.formatImageUrl(card_info.avatar, baseUrl)}}"/>
-							<image wx:else class="image" mode="aspectFill" src="{{util.formatImageUrl(card_info.user.profile.avatar, baseUrl) || default_avatar}}"/>
+						<view class="card-avatar">
+							<image wx:if="{{card_info.avatar}}" class="image" mode="aspectFill" src="{{util.formatImageUrl(card_info.avatar, baseUrl) || default_avatar}}"/>
 						</view>
 						<view class="clear"></view>
 						<view class="card-content">
@@ -182,11 +182,11 @@ page{
 								<view class="card-content-email">{{card_info.email}}</view>
 								<view class="clear"></view>
 							</view>
-							<view class="card-content-item" wx:if="{{card_info.space.location.address}}">
+							<view class="card-content-item" wx:if="{{card_info.location.address}}">
 								<view class="card-content-icon">
 									<view class="slds-icon-standard-address slds-icon slds-icon--small slds-m-right--x-small"/>
 								</view>
-								<view class="card-content-address">{{card_info.space.location.address}}</view>
+								<view class="card-content-address">{{card_info.location.address}}</view>
 								<view class="clear"></view>
 							</view>
 							<view class="clear"></view>
@@ -216,11 +216,11 @@ page{
 							</view>
 							<view class="page-card-more-detail-item">
 									<view class="detail-item-title">公司</view>
-									<view class="detail-item-contant">{{card_info.space.name}}</view>
+									<view class="detail-item-contant">{{card_info.company}}</view>
 							</view>
 							<view class="page-card-more-detail-item">
 									<view class="detail-item-title">地址</view>
-									<view class="detail-item-contant">{{card_info.space.location.address}}</view>
+									<view class="detail-item-contant">{{card_info.location.address}}</view>
 							</view>
 						</view>
 					</view>
@@ -256,13 +256,14 @@ page{
 
 		wxs = {
 			util: util
-		}
+		};
 
 		async onPullDownRefresh() {
 			 wepy.stopPullDownRefresh();
 		}
 
 		async onLoad() {
+			console.log("=======baseUrl========", baseUrl);
 			this.space_id = loveSpaceId;
 			wepy.showLoading({
 				title: '加载中',
@@ -282,8 +283,8 @@ page{
 		async loadSpaceUser() {
 			const options = {
 				$filter: `(owner eq '${this.card_user_id}' and space eq '${this.space_id}')`,
-				$select: 'name,position,mobile,email,work_phone,owner,wechat,avatar,photos,signature,space',
-				$expand: 'owner($select=profile/avatar),space($select=name,avatar,location)'
+				$select: 'name,position,mobile,email,work_phone,owner,wechat,avatar,photos,signature,company,location',
+				// $expand: 'owner($select=profile/avatar),space($select=name,avatar,location)'
 			}
 			const vip_customer = await this.$parent.query('vip_customers', options, this.space_id);
 			if (vip_customer && vip_customer.value && vip_customer.value[0]) {
