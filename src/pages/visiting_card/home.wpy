@@ -150,6 +150,18 @@ page{
 	}
 }
 
+.panel-box{
+	padding: 40rpx;
+	margin: 40rpx 0;
+	.panel-box-title{
+		color: #000;
+	}
+	.panel-box-content{
+		color:#999;
+		margin-top:10rpx;
+	}
+}
+
 </style>
 
 <template>
@@ -228,6 +240,14 @@ page{
 						<button class="weui-btn" open-type="share" plain="true"  type="primary" size="mini">分享名片</button>
 						<button class="weui-btn btn-contact"  plain="true" type="primary" size="mini">存入手机通讯录</button>
 					</view>
+					<view class="self-introduction panel-box">
+						<view class="panel-box-title">
+							我的个人简介
+						</view>
+						<view class="panel-box-content">
+							{{card_info.self_introduction}}
+						</view>
+					</view>
 				</view>
 			</view>
 		</view>
@@ -264,7 +284,6 @@ page{
 		}
 
 		async onLoad() {
-			console.log("=======baseUrl========", baseUrl);
 			this.space_id = loveSpaceId;
 			wepy.showLoading({
 				title: '加载中',
@@ -284,8 +303,7 @@ page{
 		async loadSpaceUser() {
 			const options = {
 				$filter: `(owner eq '${this.card_user_id}' and space eq '${this.space_id}')`,
-				$select: 'name,position,mobile,email,work_phone,owner,wechat,avatar,photos,signature,company,location',
-				// $expand: 'owner($select=profile/avatar),space($select=name,avatar,location)'
+				$select: 'name,position,mobile,email,work_phone,owner,wechat,avatar,photos,self_introduction,company,location',
 			}
 			const vip_customer = await this.$parent.query('vip_customers', options, this.space_id);
 			if (vip_customer && vip_customer.value && vip_customer.value[0]) {
