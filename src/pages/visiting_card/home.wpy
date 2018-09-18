@@ -1,42 +1,42 @@
 <style lang="less">
 page{
-  background: linear-gradient(top,#DFDFDF,#fff);
+	background: linear-gradient(top,#DFDFDF,#fff);
 }
 .page-card-container{
-  margin: 40rpx;
-  padding: 30rpx;
-  border-radius: 20rpx;
-  box-shadow:0rpx 0rpx 60rpx #888;
+	margin: 40rpx;
+	padding: 30rpx;
+	border-radius: 20rpx;
+	box-shadow:0rpx 0rpx 60rpx #888;
 	background-color: #fff;
 	background: url(https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/card3.png) no-repeat;
 	background-size: cover;
 }
 
 .card-title{
-  float: left;
+	float: left;
 
-  .card-title-logo{
-    display: inline-block;
-    .image{
-      width: 40rpx;
-      height: 40rpx;
-      display: block;
-    }
-  }
-    
-    .card-tittle-company{
-      display: inline-block;
-      margin-left: 20rpx;
-      overflow: hidden;
-      text-overflow:ellipsis;
-      white-space:nowrap;
-      width:340rpx;
-      font-size: 26rpx;
-    }
+	.card-title-logo{
+		display: inline-block;
+		.image{
+			width: 40rpx;
+			height: 40rpx;
+			display: block;
+		}
+	}
+		
+		.card-tittle-company{
+			display: inline-block;
+			margin-left: 20rpx;
+			overflow: hidden;
+			text-overflow:ellipsis;
+			white-space:nowrap;
+			width:340rpx;
+			font-size: 26rpx;
+		}
 
-    .card-title-name{
-      margin-top: 30rpx;
-      font-size: 40rpx;
+		.card-title-name{
+			margin-top: 30rpx;
+			font-size: 40rpx;
 		}
 		
 		.card-title-job{
@@ -49,16 +49,16 @@ page{
 }
 
 .card-photo{
-  float: right;
-  .image{
-    width: 200rpx;
-    height: 200rpx;
-    border-radius: 100%;
-  }
+	float: right;
+	.image{
+		width: 200rpx;
+		height: 200rpx;
+		border-radius: 100%;
+	}
 }
 
 .card-content{
-  font-size:28rpx;
+	font-size:28rpx;
 	line-height: 60rpx;
 
 	.slds-icon--small{
@@ -92,53 +92,47 @@ page{
 </style>
 
 <template>
-  <view class="page" wx:if="{{is_loaded}}">
-    <view class="page__bd">
-      <view class="weui-grids">
-        <!-- <repeat for="{{options}}" index="index" key="index" item="option">
-          <navigator url="{{option.url}}" class="weui-grid" hover-class="weui-grid_active">
-            <view class="slds-icon-{{option.icon}} weui-grid__icon slds-icon"></view>
-            <view class="weui-grid__label">{{option.label}}</view>
-          </navigator>
-        </repeat> -->
-        <view class="page-card">
-          <view class="page-card-container">
-            <view class="card-title">
-              <view wx:if="{{space_user.space.avatar}}" class="card-title-logo">
+	<view class="page" wx:if="{{is_loaded}}">
+		<view class="page__bd">
+			<view class="weui-grids">
+				<view class="page-card">
+					<view class="page-card-container">
+						<view class="card-title">
+							<view wx:if="{{space_user.space.avatar}}" class="card-title-logo">
 								<image class="image" mode="aspectFill" src="{{util.formatImageUrl(space_user.space.avatar, baseUrl)}}"/>
-              </view>
-              <view class="card-tittle-company">{{space_user.space.name}}</view>
-              <view class="card-title-name">{{space_user.name}}</view>
-              <view class="card-title-job">{{space_user.position}}</view>
-            </view>
-            <view class="card-photo">
+							</view>
+							<view class="card-tittle-company">{{space_user.space.name}}</view>
+							<view class="card-title-name">{{space_user.name}}</view>
+							<view class="card-title-job">{{space_user.position}}</view>
+						</view>
+						<view class="card-photo">
 							<image wx:if="{{space_user.avatar}}" class="image" mode="aspectFill" src="{{util.formatImageUrl(space_user.avatar, baseUrl)}}"/>
 							<image wx:else class="image" mode="aspectFill" src="{{util.formatImageUrl(space_user.user.profile.avatar, baseUrl) || default_avatar}}"/>
-            </view>
-            <view style="margin-bottom:30rpx;clear:both;"></view>
-            <view class="card-content">
+						</view>
+						<view style="margin-bottom:30rpx;clear:both;"></view>
+						<view class="card-content">
 							<view class="card-content-item" wx:if="{{space_user.mobile}}">
 								<view class="slds-icon-standard-call slds-icon slds-icon--small slds-m-right--x-small"/>
-                <view class="card-content-tel">{{space_user.mobile}}</view>
+								<view class="card-content-tel">{{space_user.mobile}}</view>
 								<view class="clear"></view>
 							</view>
 							<view class="card-content-item" wx:if="{{space_user.email}}">
 								<view class="slds-icon-standard-email slds-icon slds-icon--small slds-m-right--x-small"/>
-                <view class="card-content-email">{{space_user.email}}</view>
+								<view class="card-content-email">{{space_user.email}}</view>
 								<view class="clear"></view>
 							</view>
 							<view class="card-content-item" wx:if="{{space_user.space.location.address}}">
 								<view class="slds-icon-standard-address slds-icon slds-icon--small slds-m-right--x-small"/>
-                <view class="card-content-address">{{space_user.space.location.address}}</view>
+								<view class="card-content-address">{{space_user.space.location.address}}</view>
 								<view class="clear"></view>
 							</view>
 							<view class="clear"></view>
-            </view>   
-        </view>
-        </view>
-      </view>
-    </view>
-  </view>
+						</view>   
+				</view>
+				</view>
+			</view>
+		</view>
+	</view>
 </template>
 
 <script>
@@ -182,7 +176,7 @@ page{
 		async loadData() {
 			await this.loadSpaceUser();
 		}
-  
+	
 		async loadSpaceUser() {
 			const options = {
 				$filter: `(user eq '${this.card_user_id}' and space eq '${this.space_id}')`,
