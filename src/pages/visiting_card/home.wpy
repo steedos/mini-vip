@@ -6,8 +6,10 @@ page{
   margin: 40rpx;
   padding: 30rpx;
   border-radius: 20rpx;
-  box-shadow:0rpx 0rpx 10rpx grey;
-  background-color: #fff;
+  box-shadow:0rpx 0rpx 60rpx #888;
+	background-color: #fff;
+	background: url(https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/card3.png) no-repeat;
+	background-size: cover;
 }
 
 .card-title{
@@ -35,7 +37,15 @@ page{
     .card-title-name{
       margin-top: 30rpx;
       font-size: 40rpx;
-    }
+		}
+		
+		.card-title-job{
+			width:200px;
+			text-overflow:ellipsis;
+			white-space:nowrap;
+			overflow:hidden;
+
+		}
 }
 
 .card-photo{
