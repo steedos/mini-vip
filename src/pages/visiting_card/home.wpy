@@ -94,31 +94,32 @@ page{
         <view class="page-card">
           <view class="page-card-container">
             <view class="card-title">
-              <view class="card-title-logo">
-               <image class="image" mode="aspectFill" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1537182472993&di=1c6dd612f2ccdfcb21278de981703870&imgtype=0&src=http%3A%2F%2Fd.hiphotos.baidu.com%2Fbaike%2Fpic%2Fitem%2F1f178a82b9014a902df55272a1773912b21bee32.jpg"/>
+              <view wx:if="{{space_user.space.avatar}}" class="card-title-logo">
+								<image class="image" mode="aspectFill" src="{{util.formatImageUrl(space_user.space.avatar, baseUrl)}}"/>
               </view>
-              <view class="card-tittle-company">上海华炎软件科技有限公司</view>
-              <view class="card-title-name">范冰冰</view>
-              <view class="card-title-job">CEO</view>
+              <view class="card-tittle-company">{{space_user.space.name}}</view>
+              <view class="card-title-name">{{space_user.name}}</view>
+              <view class="card-title-job">{{space_user.position}}</view>
             </view>
             <view class="card-photo">
-               <image class="image" mode="aspectFill" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1537182472993&di=1c6dd612f2ccdfcb21278de981703870&imgtype=0&src=http%3A%2F%2Fd.hiphotos.baidu.com%2Fbaike%2Fpic%2Fitem%2F1f178a82b9014a902df55272a1773912b21bee32.jpg"/>
+							<image wx:if="{{space_user.avatar}}" class="image" mode="aspectFill" src="{{util.formatImageUrl(space_user.avatar, baseUrl)}}"/>
+							<image wx:else class="image" mode="aspectFill" src="{{util.formatImageUrl(space_user.user.profile.avatar, baseUrl) || default_avatar}}"/>
             </view>
             <view style="margin-bottom:30rpx;clear:both;"></view>
             <view class="card-content">
-							<view class="card-content-item">
+							<view class="card-content-item" wx:if="{{space_user.mobile}}">
 								<view class="slds-icon-standard-call slds-icon slds-icon--small slds-m-right--x-small"/>
-                <view class="card-content-tel">13568525698</view>
-								<view class="clear">	</view>
-							</view>
-							<view class="card-content-item">
-								<view class="slds-icon-standard-email slds-icon slds-icon--small slds-m-right--x-small"/>
-                <view class="card-content-email">fanbingbing@hotoa.com</view>
+                <view class="card-content-tel">{{space_user.mobile}}</view>
 								<view class="clear"></view>
 							</view>
-							<view class="card-content-item">
+							<view class="card-content-item" wx:if="{{space_user.email}}">
+								<view class="slds-icon-standard-email slds-icon slds-icon--small slds-m-right--x-small"/>
+                <view class="card-content-email">{{space_user.email}}</view>
+								<view class="clear"></view>
+							</view>
+							<view class="card-content-item" wx:if="{{space_user.space.location.address}}">
 								<view class="slds-icon-standard-address slds-icon slds-icon--small slds-m-right--x-small"/>
-                <view class="card-content-address">上海市松江区九亭镇九新公路76号嘉和阳光大厦505市华炎软件</view>
+                <view class="card-content-address">{{space_user.space.location.address}}</view>
 								<view class="clear"></view>
 							</view>
 							<view class="clear"></view>
@@ -132,8 +133,10 @@ page{
 
 <script>
 	import wepy from 'wepy';
+	import { baseUrl } from '@/config';
+	import util from '../../wxs/util.wxs';
 
-	export default class VisitingCardIndex extends wepy.page {
+	export default class VisitingCardHome extends wepy.page {
 		config = {
 			navigationBarTitleText: '名片'
 		};
@@ -142,8 +145,13 @@ page{
 			is_loaded: false,
 			space_id: "PxSfmWR7Ds4qLrd2g",
 			card_user_id: "FjwgnbtbRwouHCtua",
-			space_user: {}
+			space_user: {},
+			default_avatar: 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg'
 		};
+
+		wxs = {
+			util: util
+		}
 
 		async onPullDownRefresh() {
 			 wepy.stopPullDownRefresh();
@@ -168,7 +176,8 @@ page{
 		async loadSpaceUser() {
 			const options = {
 				$filter: `(user eq '${this.card_user_id}' and space eq '${this.space_id}')`,
-				$expand: 'user($select=profile,name,mobile)'
+				$select: 'name,position,mobile,email,work_phone,user,wechat,avatar,photos,self_introduction,space',
+				$expand: 'user($select=profile/avatar),space($select=name,avatar,location)'
 			}
 			const space_user = await this.$parent.query('space_users', options, this.space_id);
 			if (space_user && space_user.value && space_user.value[0]) {
