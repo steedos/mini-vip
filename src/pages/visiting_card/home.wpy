@@ -193,6 +193,7 @@ page{
 		image{
 			width: 100%;
 			margin-top: 20rpx;
+			display:block;
 		}
 	}
 }
@@ -298,7 +299,7 @@ page{
 				</view>
 				<view class="panel-box-content panel-box-img">
 					<repeat for="{{card_info.photos}}" key="index" index="index" item="item">
-              <image src="{{util.formatImageUrl(item, baseUrl)}}" mode="widthFix" @tap="previewImage({{item}})" class="flex-image {{(index + 1)%3 > 0 ? 'flex-image-item' : 'flex-image-last'}}"/>
+            <image src="{{util.formatImageUrl(item, baseUrl)}}" mode="widthFix" @tap="previewImage({{item}})"/>
           </repeat>
 				</view>
 			</view>
