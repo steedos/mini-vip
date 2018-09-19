@@ -207,8 +207,7 @@ page{
 				</view>
 			</view>
 			<view class="panel-box panel-top-box">
-				
-				<view class="page-card-container">
+				<view class="page-card-container" @tap="goEdit">
 					<view class="card-title">
 						<view class="card-tittle-company">{{card_info.company}}</view>
 						<view class="card-title-name">{{card_info.name}}</view>
@@ -218,7 +217,7 @@ page{
 						<image wx:if="{{card_info.avatar}}" class="image" mode="aspectFill" src="{{util.formatImageUrl(card_info.avatar, baseUrl) || default_avatar}}"/>
 					</view>
 					<view class="clear"></view>
-					<view class="card-content">
+					<view class="card-content {{is_owner ? 'weui-cell__ft_in-access' : ''}}">
 						<view class="card-content-item" wx:if="{{card_info.mobile}}">
 							<view class="card-content-icon">
 								<view class="slds-icon-standard-call slds-icon slds-icon--small slds-m-right--x-small"/>
@@ -327,6 +326,7 @@ page{
 			card_user_id: null,
 			baseUrl: baseUrl,
 			card_info: {},
+			is_owner: false,
 			default_avatar: 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg'
 		};
 
@@ -357,6 +357,9 @@ page{
 			await this.$parent.login(e);
 			this.user_id = this.$parent.globalData.user._id;
 			this.card_user_id = "FjwgnbtbRwouHCtua";
+			if(this.user_id == this.card_user_id){
+				this.is_owner = true;
+			}
 			await this.loadData();
 			this.is_loaded = true;
 			this.$apply()
@@ -389,11 +392,16 @@ page{
 		}
 
 		methods = {
+			goEdit(){
+				let url = `../record/edit?space_id=${this.space_id}&object_name=vip_customers&action=edit&record_id=${this.card_user_id}`;
+				console.log("========goEdit====url========", url);
+				wepy.navigateTo({url: url});
+ 			},
 			goDetail(){
 				this.is_detail = true;
 				this.$apply();
-			 },
-			 closeDetail(){
+			},
+			closeDetail(){
 				this.is_detail = false;
 				this.$apply();
  			},

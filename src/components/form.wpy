@@ -491,6 +491,9 @@
               let thisFields = {}
               for (let field_name in fields) {
                 let field = fields[field_name];
+                if(field.omit && (action === 'create' || action === 'edit')){
+                  continue;
+                }
                 if(!field.label){
                   field.label = field_name
                 }
