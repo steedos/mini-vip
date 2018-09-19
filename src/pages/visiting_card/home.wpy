@@ -297,7 +297,7 @@ page{
 					我的照片
 				</view>
 				<view class="panel-box-content panel-box-img">
-					<repeat for="{{card_info.images}}" key="index" index="index" item="item">
+					<repeat for="{{card_info.photos}}" key="index" index="index" item="item">
               <image src="{{util.formatImageUrl(item, baseUrl)}}" mode="widthFix" @tap="previewImage({{item}})" class="flex-image {{(index + 1)%3 > 0 ? 'flex-image-item' : 'flex-image-last'}}"/>
           </repeat>
 				</view>
@@ -384,7 +384,7 @@ page{
 		async loadCardInfo() {
 			const options = {
 				$filter: `(owner eq '${this.card_user_id}' and space eq '${this.space_id}')`,
-				$select: 'name,position,mobile,email,work_phone,owner,wechat,avatar,photos,self_introduction,company,images,location',
+				$select: 'name,position,mobile,email,work_phone,owner,wechat,avatar,photos,self_introduction,company,photos,location',
 			}
 			const vip_customer = await this.$parent.query('vip_customers', options, this.space_id);
 			if (vip_customer && vip_customer.value && vip_customer.value[0]) {
@@ -400,7 +400,7 @@ page{
 			previewImage(image, event){
 				var baseUrl = this.baseUrl;
 				var current = `${baseUrl}/api/files/images/${image}`;
-				var urls = this.card_info.images.map((n)=>{
+				var urls = this.card_info.photos.map((n)=>{
 					return  `${baseUrl}/api/files/images/${n}`;
 				});
 				wx.previewImage({
