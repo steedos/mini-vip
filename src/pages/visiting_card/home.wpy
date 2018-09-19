@@ -188,6 +188,13 @@ page{
 		color:#999;
 		margin-top:10rpx;
 	}
+	.panel-box-img{
+		margin:0 -20rpx;
+		image{
+			width: 100%;
+			margin-top: 20rpx;
+		}
+	}
 }
 
 </style>
@@ -290,9 +297,9 @@ page{
 				<view class="panel-box-title">
 					我的照片
 				</view>
-				<view class="panel-box-content">
+				<view class="panel-box-content panel-box-img">
 					<repeat for="{{card_info.images}}" key="index" index="index" item="item">
-              <image src="{{util.formatImageUrl(item, baseUrl)}}" mode="aspectFill" @tap="previewImage({{item}})" class="flex-image {{(index + 1)%3 > 0 ? 'flex-image-item' : 'flex-image-last'}}"/>
+              <image src="{{util.formatImageUrl(item, baseUrl)}}" mode="widthFix" @tap="previewImage({{item}})" class="flex-image {{(index + 1)%3 > 0 ? 'flex-image-item' : 'flex-image-last'}}"/>
           </repeat>
 				</view>
 			</view>
@@ -349,7 +356,7 @@ page{
 			this.space_id = e.space_id;
 			await this.$parent.login(e);
 			this.user_id = this.$parent.globalData.user._id;
-			this.card_user_id = e.card_user_id || this.user_id;
+			this.card_user_id = "FjwgnbtbRwouHCtua";
 			await this.loadData();
 			this.is_loaded = true;
 			this.$apply()
