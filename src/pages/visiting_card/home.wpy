@@ -393,7 +393,8 @@ page{
 
 		methods = {
 			goEdit(){
-				let url = `../record/edit?space_id=${this.space_id}&object_name=vip_customers&action=edit&record_id=${this.card_user_id}`;
+				let url = `../record/edit?space_id=${this.space_id}&object_name=vip_customers&action=edit&record_id=${this.card_info._id}`;
+				console.log("=========goEdit=======", url);
 				wepy.navigateTo({url: url});
  			},
 			previewImage(image, event){
