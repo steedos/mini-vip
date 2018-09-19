@@ -133,21 +133,21 @@ page{
 .page-btn{
 	text-align: center;
 	font-size: 34rpx!important;
-	// margin:0rpx 40rpx;
-	.weui-btn{
+	margin-top:40rpx;
+	.btn-share, .btn-contact{
+		margin: 0px;
+		padding:0;
+		display: inline-block;
 		width: 280rpx;
 		height:90rpx;
 		font-size:32rpx;
 		line-height:90rpx;
-
-
 	}
 	.btn-contact {
 		margin-left: 40rpx;
 		background-color: #1AAD19!important;
 		color: #fff!important;
 	}
-
 }
 .page-card-more-detail{
 	margin:20rpx -40rpx;
@@ -263,8 +263,8 @@ page{
 					</view>
 				</view>
 				<view class="page-btn">
-					<button class="weui-btn" open-type="share" plain="true"  type="primary" size="mini">分享名片</button>
-					<button class="weui-btn btn-contact"  plain="true" type="primary" size="mini">存入手机通讯录</button>
+					<button class="btn-share" open-type="share" plain="true"  type="primary">分享名片</button>
+					<button class="btn-contact"  plain="true" type="primary">存入手机通讯录</button>
 				</view>
 			</view>
 			<view class="self-introduction panel-box">
