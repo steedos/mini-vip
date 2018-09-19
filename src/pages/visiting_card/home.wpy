@@ -268,7 +268,8 @@ page{
 
 	export default class VisitingCardHome extends wepy.page {
 		config = {
-			navigationBarTitleText: ''
+			navigationBarTitleText: '',
+			enablePullDownRefresh: true
 		};
 
 		data = {
@@ -286,7 +287,8 @@ page{
 		};
 
 		async onPullDownRefresh() {
-			 wepy.stopPullDownRefresh();
+			this.loadData();
+			wepy.stopPullDownRefresh();
 		}
 
 		async onLoad() {
@@ -304,10 +306,10 @@ page{
 		}
 
 		async loadData() {
-			await this.loadSpaceUser();
+			await this.loadCardInfo();
 		}
 	
-		async loadSpaceUser() {
+		async loadCardInfo() {
 			const options = {
 				$filter: `(owner eq '${this.card_user_id}' and space eq '${this.space_id}')`,
 				$select: 'name,position,mobile,email,work_phone,owner,wechat,avatar,photos,self_introduction,company,location',
