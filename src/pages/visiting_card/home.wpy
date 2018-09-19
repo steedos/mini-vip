@@ -335,7 +335,8 @@ page{
 		};
 
 		async onPullDownRefresh() {
-			this.loadData();
+			await this.loadData();
+			this.$apply();
 			wepy.stopPullDownRefresh();
 		}
 
@@ -362,7 +363,7 @@ page{
 			}
 			await this.loadData();
 			this.is_loaded = true;
-			this.$apply()
+			this.$apply();
 			wx.setNavigationBarTitle({title: this.card_info.name +'的名片'})
 			wepy.hideLoading();
 		}
