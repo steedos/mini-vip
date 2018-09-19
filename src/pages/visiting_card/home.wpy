@@ -155,7 +155,7 @@ page{
 	}
 }
 .page-card-more-detail{
-	margin:20rpx -40rpx;
+	margin:20rpx -20rpx;
 	background:#F7F7F7;
 	padding:40rpx 40rpx;
 	.page-card-more-detail-item{
@@ -167,9 +167,9 @@ page{
 		}
 		.detail-item-contant{
 			float: left;
-			height: 30rpx;
-			line-height: 30rpx;
-			width: calc(~"100% - 50rpx");
+			color: #000;
+			margin-left: 50rpx;
+			width: calc(~"100% - 150rpx");
 		}
 	}
 }
@@ -208,7 +208,7 @@ page{
 						<view class="card-title-job">{{card_info.position}}</view>
 					</view>
 					<view class="card-avatar">
-						<image wx:if="{{card_info.avatar}}" class="image" mode="aspectFill" src="{{util.formatImageUrl(card_info.avatar, baseUrl) || default_avatar}}"/>
+						<image wx:if="{{card_info.avatar}}" class="image" mode="aspectFit" src="{{util.formatImageUrl(card_info.avatar, baseUrl) || default_avatar}}"/>
 					</view>
 					<view class="clear"></view>
 					<view class="card-content">
@@ -284,6 +284,16 @@ page{
 				</view>
 				<view class="panel-box-content">
 					{{card_info.self_introduction}}
+				</view>
+			</view>
+			<view class="self-photo panel-box">
+				<view class="panel-box-title">
+					我的照片
+				</view>
+				<view class="panel-box-content">
+					<repeat for="{{card_info.images}}" key="index" index="index" item="item">
+              <image src="{{util.formatImageUrl(item, baseUrl)}}" mode="aspectFill" @tap="previewImage({{item}})" class="flex-image {{(index + 1)%3 > 0 ? 'flex-image-item' : 'flex-image-last'}}"/>
+          </repeat>
 				</view>
 			</view>
 		</view>
@@ -362,7 +372,7 @@ page{
 		async loadCardInfo() {
 			const options = {
 				$filter: `(owner eq '${this.card_user_id}' and space eq '${this.space_id}')`,
-				$select: 'name,position,mobile,email,work_phone,owner,wechat,avatar,photos,self_introduction,company,location',
+				$select: 'name,position,mobile,email,work_phone,owner,wechat,avatar,photos,self_introduction,company,images,location',
 			}
 			const vip_customer = await this.$parent.query('vip_customers', options, this.space_id);
 			if (vip_customer && vip_customer.value && vip_customer.value[0]) {
