@@ -275,7 +275,7 @@ page{
 				</view>
 				<view class="page-btn">
 					<button class="btn-share" open-type="share" plain="true"  type="primary">分享名片</button>
-					<button class="btn-contact"  plain="true" type="primary">存入手机通讯录</button>
+					<button class="btn-contact"  plain="true" type="primary" @tap="addPhoneContact">存入手机通讯录</button>
 				</view>
 			</view>
 			<view class="self-introduction panel-box">
@@ -379,6 +379,24 @@ page{
 				this.is_detail = false;
 				this.$apply();
  			},
+			async addPhoneContact(){
+				wx.addPhoneContact({
+					firstName: this.card_info.name,
+					organization: this.card_info.company,
+					title: this.card_info.position,
+					mobilePhoneNumber: this.card_info.mobile,
+					weChatNumber: this.card_info.wechat,
+					email: this.card_info.email,
+					workPhoneNumber: this.card_info.work_phone,
+					addressStreet: this.card_info.location.address,
+					success: ()=>{
+						wepy.showToast({
+							title: "添加成功",
+							icon: "none"
+						});
+					}
+				});
+ 			}
 		};
 	}
 </script>
