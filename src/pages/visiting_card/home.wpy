@@ -306,8 +306,8 @@ page{
 		data = {
 			is_loaded: false,
 			is_detail: false,
-			space_id: "PxSfmWR7Ds4qLrd2g",
-			card_user_id: "FjwgnbtbRwouHCtua",
+			space_id: null,
+			card_user_id: null,
 			baseUrl: baseUrl,
 			card_info: {},
 			default_avatar: 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg'
@@ -322,18 +322,38 @@ page{
 			wepy.stopPullDownRefresh();
 		}
 
-		async onLoad() {
-			this.space_id = loveSpaceId;
-			wepy.showLoading({
-				title: '加载中',
-				mask: true
+		async onLoad(e) {
+			wepy.showShareMenu({
+				withShareTicket: true
 			});
-			await this.$parent.login();
+			wx.showLoading({ mask: true });
+			e.space_id = loveSpaceId;
+			if (e.scene) {
+				// 朋友圏二维码识别进入的，则取出scene中的share_from
+				let scene = decodeURIComponent(e.scene);
+				let scenes = scene.split('=');
+				e.love = 1;
+				e.share_from = scenes[1];
+				e.qrcode = 1;
+			}
+			this.space_id = e.space_id;
+			this.card_user_id = e.card_user_id || "FjwgnbtbRwouHCtua";
+
+			await this.$parent.login(e);
 			await this.loadData();
 			this.is_loaded = true;
 			this.$apply()
 			wx.setNavigationBarTitle({title: this.card_info.name +'的名片'})
 			wepy.hideLoading();
+		}
+		
+		onShareAppMessage() {
+			let title = `你好，我是${this.card_info.name}，这是我的电子名片。`;
+			let url = `pages/visiting_card/home?space_id=${this.space_id}&card_user_id=${this.card_user_id}`;
+			return {
+				title: title,
+				path: url
+			};
 		}
 
 		async loadData() {
@@ -350,6 +370,7 @@ page{
 				this.card_info = vip_customer.value[0];
 			}
 		}
+
 		methods = {
 			goDetail(){
 				this.is_detail = true;
