@@ -389,6 +389,17 @@ page{
 		}
 
 		methods = {
+			previewImage(image, event){
+				var baseUrl = this.baseUrl;
+				var current = `${baseUrl}/api/files/images/${image}`;
+				var urls = this.card_info.images.map((n)=>{
+					return  `${baseUrl}/api/files/images/${n}`;
+				});
+				wx.previewImage({
+					current: current,
+					urls: urls
+				});
+			},
 			goDetail(){
 				this.is_detail = true;
 				this.$apply();
