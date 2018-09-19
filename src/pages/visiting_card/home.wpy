@@ -121,6 +121,8 @@ page{
 	font-size: 34rpx!important;
 	margin-top:40rpx;
 	.btn-share, .btn-contact{
+		margin: 0px;
+		padding:0;
 		display: inline-block;
 		width: 280rpx;
 		height:90rpx;
