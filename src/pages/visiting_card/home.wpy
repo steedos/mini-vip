@@ -11,6 +11,20 @@ page{
 	// background: url(https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/card3.png) no-repeat;
 	// background-size: cover;
 	min-height:320rpx;
+	position:relative;
+}
+.panel-bg-box{
+	position:relative;
+
+	.bg-circle{
+		position:absolute;
+		background:#353535;
+		height:750rpx;
+		width:850rpx;
+		left:-25px;
+		top:-200px;
+		border-radius:25%;
+	}
 }
 
 .card-title{
@@ -175,7 +189,12 @@ page{
 <template>
 	<view class="page" wx:if="{{is_loaded}}">
 		<view class="page__bd">
+			<view class="panel-bg-box">
+				<view class="bg-circle">
+				</view>
+			</view>
 			<view class="panel-box panel-top-box">
+				
 				<view class="page-card-container">
 					<view class="card-title">
 						<view class="card-tittle-company">{{card_info.company}}</view>
