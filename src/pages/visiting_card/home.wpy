@@ -3,7 +3,7 @@ page{
 	font-family: 黑体;
 }
 .page-card-container{
-	margin:40rpx 0;
+	margin: 20rpx 0 40rpx 0;
 	padding: 30rpx 50rpx;
 	// border-radius: 5rpx;
 	box-shadow:5rpx 5rpx 15rpx #888;
@@ -15,15 +15,20 @@ page{
 }
 .panel-bg-box{
 	position:relative;
+	width:100%;
+	height:280rpx;
+	overflow:hidden;
+
 
 	.bg-circle{
 		position:absolute;
 		background:#353535;
-		height:750rpx;
-		width:850rpx;
-		left:-25px;
-		top:-200px;
-		border-radius:25%;
+		height:2000rpx;
+		width:2000rpx;
+		left:50%;
+		bottom:0;
+		border-radius:100%;
+		margin-left:-1000rpx;
 	}
 }
 
@@ -170,7 +175,7 @@ page{
 
 .panel-box{
 	&.panel-top-box{
-		margin-top: -40rpx;
+		margin-top:-280rpx;
 	}
 	background: #fff;
 	padding: 40rpx;
@@ -231,12 +236,12 @@ page{
 					</view>   
 				</view>
 				<view class="page-card-more">
-					<view wx:if="{{!is_detail}}">
-						<view class="page-card-more-title" @tap="goDetail">展开全部名片信息</view>
+					<view wx:if="{{!is_detail}}" @tap="goDetail">
+						<view class="page-card-more-title">展开全部名片信息</view>
 						<view class="weui-cell__ft switch-group-open weui-cell__ft_in-access"></view>
 					</view>
-					<view  wx:if="{{is_detail}}">
-						<view class="page-card-more-title" @tap="closeDetail">收起以下名片信息</view>
+					<view  wx:if="{{is_detail}}" @tap="closeDetail">
+						<view class="page-card-more-title">收起以下名片信息</view>
 						<view class="weui-cell__ft switch-group-close weui-cell__ft_in-access"></view>
 					</view>
 					<view class="page-card-more-detail" wx:if="{{is_detail}}">
