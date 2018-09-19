@@ -143,7 +143,7 @@ page{
 		margin: 0px;
 		padding:0;
 		display: inline-block;
-		width: 280rpx;
+		width: 320rpx;
 		height:90rpx;
 		font-size:32rpx;
 		line-height:90rpx;
@@ -208,7 +208,7 @@ page{
 						<view class="card-title-job">{{card_info.position}}</view>
 					</view>
 					<view class="card-avatar">
-						<image wx:if="{{card_info.avatar}}" class="image" mode="aspectFit" src="{{util.formatImageUrl(card_info.avatar, baseUrl) || default_avatar}}"/>
+						<image wx:if="{{card_info.avatar}}" class="image" mode="aspectFill" src="{{util.formatImageUrl(card_info.avatar, baseUrl) || default_avatar}}"/>
 					</view>
 					<view class="clear"></view>
 					<view class="card-content">
