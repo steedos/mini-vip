@@ -358,7 +358,7 @@ page{
 			this.space_id = e.space_id;
 			await this.$parent.login(e);
 			this.user_id = this.$parent.globalData.user._id;
-			this.card_user_id = "FjwgnbtbRwouHCtua";
+			this.card_user_id = this.user_id;
 			if(this.user_id == this.card_user_id){
 				this.is_owner = true;
 			}
@@ -426,7 +426,7 @@ page{
 					weChatNumber: this.card_info.wechat,
 					email: this.card_info.email,
 					workPhoneNumber: this.card_info.work_phone,
-					addressStreet: this.card_info.location.address,
+					addressStreet: this.card_info.location ? this.card_info.location.address : "",
 					success: ()=>{
 						wepy.showToast({
 							title: "添加成功",
