@@ -171,7 +171,6 @@ page{
 			line-height: 30rpx;
 			width: calc(~"100% - 50rpx");
 		}
-		}
 	}
 }
 
@@ -180,8 +179,8 @@ page{
 		margin-top:-280rpx;
 	}
 	background: #fff;
-	padding: 40rpx;
-	margin: 40rpx 0;
+	padding: 20rpx;
+	margin-bottom: 20rpx;
 	.panel-box-title{
 		color: #000;
 	}
