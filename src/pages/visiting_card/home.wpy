@@ -148,10 +148,14 @@ page{
 		font-size:32rpx;
 		line-height:90rpx;
 	}
+	.btn-share{
+		float:left;
+	}
 	.btn-contact {
-		margin-left: 40rpx;
+		// margin-left: 40rpx;
 		background-color: #1AAD19!important;
 		color: #fff!important;
+		float:right;
 	}
 }
 .page-card-more-detail{
@@ -179,7 +183,7 @@ page{
 		margin-top:-280rpx;
 	}
 	background: #fff;
-	padding: 20rpx;
+	padding: 40rpx;
 	margin-bottom: 20rpx;
 	.panel-box-title{
 		color: #000;
@@ -189,7 +193,7 @@ page{
 		margin-top:10rpx;
 	}
 	.panel-box-img{
-		margin:0 -20rpx;
+		margin:0 -40rpx;
 		image{
 			width: 100%;
 			margin-top: 20rpx;
@@ -283,6 +287,7 @@ page{
 				<view class="page-btn">
 					<button class="btn-share" open-type="share" plain="true"  type="primary">分享名片</button>
 					<button class="btn-contact"  plain="true" type="primary" @tap="addPhoneContact">存入手机通讯录</button>
+					<view class="clear"></view>
 				</view>
 			</view>
 			<view class="self-introduction panel-box">
