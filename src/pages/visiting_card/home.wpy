@@ -316,6 +316,7 @@ page{
 			is_loaded: false,
 			is_detail: false,
 			space_id: null,
+			user_id: null,
 			card_user_id: null,
 			baseUrl: baseUrl,
 			card_info: {},
@@ -346,9 +347,9 @@ page{
 				e.qrcode = 1;
 			}
 			this.space_id = e.space_id;
-			this.card_user_id = e.card_user_id || "FjwgnbtbRwouHCtua";
-
 			await this.$parent.login(e);
+			this.user_id = this.$parent.globalData.user._id;
+			this.card_user_id = e.card_user_id || this.user_id;
 			await this.loadData();
 			this.is_loaded = true;
 			this.$apply()
