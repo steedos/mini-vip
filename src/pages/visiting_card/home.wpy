@@ -183,7 +183,7 @@ page{
 		margin-top:-280rpx;
 	}
 	background: #fff;
-	padding: 40rpx;
+	padding: 20rpx  40rpx;
 	margin-bottom: 20rpx;
 	.panel-box-title{
 		color: #000;
@@ -194,6 +194,7 @@ page{
 	}
 	.panel-box-img{
 		margin:0 -40rpx;
+		background:#EFEEF3;
 		image{
 			width: 100%;
 			margin-top: 20rpx;
