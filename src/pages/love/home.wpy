@@ -37,7 +37,6 @@ page {
   .match {
     background: #1AAD19;
     padding: 30rpx;
-    border-radius: 0.25rem;
     .header {
       display: flex;
       line-height: 1.41176471;
@@ -110,10 +109,8 @@ page {
     }
   }
   .group {
-    border:1px solid #DDD;
     background: #fff;
     padding: 30rpx;
-    border-radius: 0.25rem;
     .header {
       display: flex;
       line-height: 1.41176471;
