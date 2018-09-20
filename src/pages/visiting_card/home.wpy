@@ -362,7 +362,6 @@ page{
 				e.share_from = scenes[1];
 				e.qrcode = 1;
 			}
-			this.share_from = e.share_from;
 			this.space_id = e.space_id;
 			await this.$parent.login(e);
 			this.user_id = this.$parent.globalData.user._id;
@@ -379,7 +378,7 @@ page{
 		
 		onShareAppMessage() {
 			let title = `你好，我是${this.card_info.name}，这是我的电子名片。`;
-			let url = `pages/visiting_card/home?space_id=${this.space_id}&card_user_id=${this.card_user_id}&share_from=${this.share_from}`;
+			let url = `pages/visiting_card/home?space_id=${this.space_id}&card_user_id=${this.card_user_id}&share_from=${this.user_id}`;
 			return {
 				title: title,
 				path: url
