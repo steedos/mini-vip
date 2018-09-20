@@ -331,6 +331,7 @@ page{
 			space_id: null,
 			user_id: null,
 			card_user_id: null,
+			share_from: null,
 			baseUrl: baseUrl,
 			card_info: {},
 			is_owner: false,
@@ -348,6 +349,7 @@ page{
 		}
 
 		async onLoad(e) {
+			console.log("=====onLoad====e====1==", e);
 			wepy.showShareMenu({
 				withShareTicket: true
 			});
@@ -364,7 +366,7 @@ page{
 			this.space_id = e.space_id;
 			await this.$parent.login(e);
 			this.user_id = this.$parent.globalData.user._id;
-			this.card_user_id = this.user_id;
+			this.card_user_id = e.card_user_id || this.user_id;
 			if(this.user_id == this.card_user_id){
 				this.is_owner = true;
 			}
@@ -377,7 +379,7 @@ page{
 		
 		onShareAppMessage() {
 			let title = `你好，我是${this.card_info.name}，这是我的电子名片。`;
-			let url = `pages/visiting_card/home?space_id=${this.space_id}&card_user_id=${this.card_user_id}`;
+			let url = `pages/visiting_card/home?space_id=${this.space_id}&card_user_id=${this.card_user_id}&share_from=${this.user_id}`;
 			return {
 				title: title,
 				path: url
