@@ -240,7 +240,7 @@ export default class LoveCard extends wepy.component {
 
   methods = {
     goEdit(){
-      let url = `../record/edit?space_id=${this.space_id}&object_name=vip_customers&action=edit&record_id=${this.card_info._id}&title=编辑名片`;
+      let url = `../record/edit?space_id=${this.space_id}&object_name=users&action=edit&record_id=${this.card_info._id}&title=编辑名片`;
       wepy.navigateTo({url: url});
     },
     openDetail(){

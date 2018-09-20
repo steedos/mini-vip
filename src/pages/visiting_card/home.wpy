@@ -196,10 +196,10 @@ page{
 	
 		async loadCardInfo() {
 			const options = {
-				$filter: `(owner eq '${this.card_user_id}' and space eq '${this.space_id}')`,
+				$filter: `(_id eq '${this.card_user_id}')`,
 				$select: 'name,position,mobile,email,work_phone,owner,wechat,avatar,photos,self_introduction,company,photos,location',
 			}
-			const vip_customer = await this.$parent.query('vip_customers', options, this.space_id);
+			const vip_customer = await this.$parent.query('users', options, this.space_id);
 			if (vip_customer && vip_customer.value && vip_customer.value[0]) {
 				this.card_info = vip_customer.value[0];
 			}
