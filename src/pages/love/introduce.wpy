@@ -227,16 +227,6 @@ page {
 
     .body-wrapper {
       margin: -90rpx 20rpx 0;
-      .weui-cells {
-        border-radius: 0.25rem;
-        box-shadow: 0 4rpx 4rpx 0 rgba(0, 0, 0, 0.16), 0 0 0 2rpx rgba(0, 0, 0, 0.08);
-        &::after {
-          display: none;
-        }
-        &::before {
-          display: none;
-        }
-      }
     }
   }
 
@@ -252,10 +242,9 @@ page {
     filter: drop-shadow(0 0 4rpx #fff);
   }
   .tags-box{
-    text-align: center;
     .love-test-tag{
       color: #777;
-      padding: 4rpx 10rpx;
+      padding: 4rpx 10rpx 0 0;
       display:inline-block;
       font-size:30rpx;
     }
@@ -315,9 +304,6 @@ page {
               <view wx:if="{{about_me.live}}">{{about_me.live}}</view>
             </view>
             <view class="tags-box">
-              <repeat for="{{current_customer.love_test_tags}}" key="index" index="index" item="tag">
-                <view class="love-test-tag">{{tag}}</view>
-              </repeat>
               <view wx:if="{{hobby.sport}}" class="love-test-tag">{{hobby.sport}}</view>
               <view wx:if="{{hobby.star}}" class="love-test-tag">{{hobby.star}}</view>
               <view wx:if="{{hobby.movie_type}}" class="love-test-tag">{{hobby.movie_type}}</view>
@@ -351,16 +337,31 @@ page {
       <view class="weui-cells" wx:if="{{!is_owner}}">
         <view class="weui-cell" @tap="goTest()" hover-class="{{a_record.match ? '' : 'weui-cell_active'}}">
           <view class="weui-cell__bd">
-            <view>匹配度</view>
+            <view>我们的匹配度</view>
           </view>
           <view class="weui-cell__ft" wx:if="{{a_record.match !== undefined}}">{{util.fixed(a_record.match, 2)}}%</view>
           <view class="weui-cell__ft" wx:else>?</view>
         </view>
-        <view class="weui-cell weui-cell_access" wx:if="{{mobile}}" @tap="Copy">
-          <view class="weui-cell__bd">微信号</view>
+        <navigator class="weui-cell weui-cell_access" url="/pages/love/question_list?object_name=love_test&space_id={{space_id}}">
+          <view class="weui-cell__bd">缘分卷
+            <view class="tags-box">
+              <repeat for="{{current_customer.love_test_tags}}" key="index" index="index" item="tag">
+                <view class="love-test-tag">{{tag}}</view>
+              </repeat>
+            </view>
+          </view>
+          <view class="weui-cell__ft_in-access">
+          </view>
+        </navigator>
+      </view>
+
+      <view class="weui-cells" wx:if="{{mobile}}">
+        <view class="weui-cell weui-cell_access"  @tap="Copy">
+          <view class="weui-cell__bd">{{b_sex}}的微信（点击复制）</view>
           <view class="weui-cell__ft weui-cell__ft_in-access">{{mobile}}</view>
         </view>
       </view>
+
       <view class="weui-cells" wx:if="{{!is_owner}}">
         <block wx:if="{{common_groups.length}}">
           <view class="common-groups">
@@ -403,7 +404,7 @@ import _ from 'underscore'
 
 export default class loveIntroduce extends wepy.page {
   config = {
-    navigationBarTitleText: '名片',
+    navigationBarTitleText: '缘分测试报告',
 		enablePullDownRefresh: true
   };
 

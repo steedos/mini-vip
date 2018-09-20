@@ -65,19 +65,6 @@
       </repeat>
     </view>
     <view class="weui-cells">
-      <repeat for="{{experience}}" key="index" index="index" item="other_naire">
-        <navigator class="weui-cell weui-cell_access" url="{{other_naire.url}}&filter=(owner eq '{{userId}}')">
-          <view class="weui-cell__hd">
-            <view class="{{other_naire.icon}} slds-icon slds-icon--small slds-m-right--x-small"/>
-          </view>
-          <view class="weui-cell__bd">
-            <view>{{other_naire.label}}</view>
-          </view>
-          <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-        </navigator>
-      </repeat>
-    </view>
-    <view class="weui-cells">
       <repeat for="{{other_questionnaire}}" key="index" index="index" item="other_naire">
         <navigator class="weui-cell weui-cell_access" url="{{other_naire.url}}&filter=(owner eq '{{userId}}')">
           <view class="weui-cell__hd">
@@ -88,6 +75,20 @@
           </view>
           <view wx:if="{{progress[other_naire.object_name]}}" class="weui-cell__ft" style="padding-right: 13px">
             <icon type="success_no_circle" size="14"></icon>
+          </view>
+          <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+        </navigator>
+      </repeat>
+    </view>
+    
+    <view class="weui-cells">
+      <repeat for="{{experience}}" key="index" index="index" item="other_naire">
+        <navigator class="weui-cell weui-cell_access" url="{{other_naire.url}}&filter=(owner eq '{{userId}}')">
+          <view class="weui-cell__hd">
+            <view class="{{other_naire.icon}} slds-icon slds-icon--small slds-m-right--x-small"/>
+          </view>
+          <view class="weui-cell__bd">
+            <view>{{other_naire.label}}</view>
           </view>
           <view class="weui-cell__ft weui-cell__ft_in-access"></view>
         </navigator>
@@ -134,6 +135,12 @@ export default class QuestionnaireList extends wepy.page {
     ],
     other_questionnaire: [
       {
+      icon: 'slds-icon-standard-canvas',
+      label: '兴趣爱好',
+      object_name: 'love_hobby',
+      url: `/pages/love/question_list?object_name=love_hobby&space_id=${loveSpaceId}`
+      },
+      {
         icon: 'slds-icon-standard-skill',
         label: '缘分卷',
         url: `/pages/love/papers_view?object_name=love_test&space_id=${loveSpaceId}`,
@@ -165,12 +172,6 @@ export default class QuestionnaireList extends wepy.page {
       label: '筛选条件',
       object_name: 'love_looking_for',
       url: `/pages/love/question_list?object_name=love_looking_for&space_id=${loveSpaceId}`
-      },
-      {
-      icon: 'slds-icon-standard-canvas',
-      label: '兴趣爱好',
-      object_name: 'love_hobby',
-      url: `/pages/love/question_list?object_name=love_hobby&space_id=${loveSpaceId}`
       },
     ],
     experience: [

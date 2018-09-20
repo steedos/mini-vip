@@ -154,6 +154,17 @@ page {
     }
   }
 
+  .weui-cells {
+    border-radius: 0.25rem;
+    box-shadow: 0 4rpx 4rpx 0 rgba(0, 0, 0, 0.16), 0 0 0 2rpx rgba(0, 0, 0, 0.08);
+    &::after {
+      display: none;
+    }
+    &::before {
+      display: none;
+    }
+  }
+
   .btn-join{
     background:#1AAD19;
     padding:6px;
@@ -307,12 +318,6 @@ export default class VIP extends wepy.app {
         iconPath: './images/tabbars/apps.png',
         text: '无颜匹配',
       },
-      // {
-      //   pagePath: 'pages/love/post_recommend',
-      //   selectedIconPath: './images/tabbars/topic_pressed.png',
-      //   iconPath: './images/tabbars/topic.png',
-      //   text: '最新',
-      // },
       {
         pagePath: 'pages/love/me',
         selectedIconPath: './images/tabbars/me_pressed.png',

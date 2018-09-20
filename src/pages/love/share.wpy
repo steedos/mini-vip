@@ -240,7 +240,7 @@
         // 保证一进入就新建space对应的vip_customers记录
         e.space_id = loveSpaceId;
       }
-      if(e.card){
+      if(e.card || true){
         await this.generateFriendCard()
         this.showPop = false
         // this.description = '分享给好友，找到隐藏在好友中的“另一半”吧。'
