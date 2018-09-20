@@ -7,7 +7,7 @@ page {
   padding-bottom: 0;
   .page__hd {
     .love-title {
-      margin-top: 120rpx;
+      margin-top: 60rpx;
     }
 
     .love-avatar {
@@ -168,6 +168,9 @@ page {
     <userHeader :about_me.sync="about_me" :isAuthUserInfo.sync="isAuthUserInfo" :user.sync="user_id"/> 
     -->
 
+    <view class="page__hd">
+      <view class="love-title">人工智能匹配度测试</view>
+    </view>
 		<view class="page__bd">
 			<block wx:if="{{showLoveMatch}}">
         <view class="weui-cells match" @tap="goCp">
@@ -213,17 +216,10 @@ page {
 					</view>
 				</view>
 			</navigator>
-      <!--
-      <view class="btn-bottom">
-        <button class="weui-btn button-hover btn-toolbar-primary" type="primary" @tap="goDetail" style="color: #fff;width:100%;margin:15px;">
-          缘分测试
-        </button>
-      </view>
-      -->
 
       <view class="weui-cells">
         <view class="weui-cell weui-cell_access" @tap="goDetail">
-          <view class="weui-cell__bd">缘分测试</view>
+          <view class="weui-cell__bd">邀请好友测试</view>
           <view class="weui-cell__ft_in-access"></view>
         </view>
       </view>

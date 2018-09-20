@@ -342,17 +342,15 @@ page {
           <view class="weui-cell__ft" wx:if="{{a_record.match !== undefined}}">{{util.fixed(a_record.match, 2)}}%</view>
           <view class="weui-cell__ft" wx:else>?</view>
         </view>
-        <navigator class="weui-cell weui-cell_access" url="/pages/love/question_list?object_name=love_test&space_id={{space_id}}&user_id={{userId}}">
+        <view class="weui-cell">
           <view class="weui-cell__bd">缘分卷
             <view class="tags-box">
               <repeat for="{{current_customer.love_test_tags}}" key="index" index="index" item="tag">
                 <view class="love-test-tag">{{tag}}</view>
               </repeat>
             </view>
-          </view>
-          <view class="weui-cell__ft_in-access">
-          </view>
-        </navigator>
+          </view> 
+        </view>
       </view>
 
       <view class="weui-cells" wx:if="{{mobile}}">
