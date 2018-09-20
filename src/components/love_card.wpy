@@ -1,0 +1,256 @@
+<style lang="less">
+.clear{
+	clear: both;
+}
+.card-container{
+	margin: 20rpx 0 40rpx 0;
+	padding: 30rpx 50rpx;
+	// border-radius: 5rpx;
+	box-shadow:5rpx 5rpx 15rpx #888;
+	background-color: #fff;
+	// background: url(https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/card3.png) no-repeat;
+	// background-size: cover;
+	min-height:320rpx;
+	position:relative;
+}
+
+.card-avatar{
+	float: right;
+	.image{
+		width: 160rpx;
+		height: 160rpx;
+		border-radius: 100%;
+	}
+}
+.card-content{
+	font-size:28rpx;
+	margin-top:30rpx;
+	font-size: 26rpx;
+	color: #888;
+	.card-content-item{
+		margin: 15rpx 0;
+		.card-content-icon{
+			float: left;
+			.slds-icon--small{
+				width: 30rpx;
+				height: 30rpx;
+				line-height: 30rpx;
+				background-color:#ccc!important;
+			}
+		}
+		.card-content-tel, .card-content-email, .card-content-address{
+			float: left;
+			height: 30rpx;
+			line-height: 30rpx;
+			width: calc(~"100% - 50rpx");
+		}
+	}
+}
+.card-title{
+	float: left;
+	width:400rpx;
+	overflow:hidden;
+
+	.card-title-logo{
+		margin-right: 10rpx;
+		display: inline-block;
+		.image{
+			width: 40rpx;
+			height: 40rpx;
+			display: block;
+		}
+	}
+		
+	.card-tittle-company{
+		margin-bottom: 16rpx;
+		overflow: hidden;
+		text-overflow:ellipsis;
+		white-space:nowrap;
+		width:100%;
+		font-size: 26rpx;
+	}
+	
+	.card-title-name,.card-title-job{
+		width:100%;
+		text-overflow:ellipsis;
+		white-space:nowrap;
+		overflow:hidden;
+	}
+
+	.card-title-name{
+		font-size: 40rpx;
+	}
+	.card-title-job{
+		font-size:32rpx;
+	}
+}
+.card-more{
+	text-align:center;
+	color:#999;
+	font-size:28rpx;
+
+	.card-more-title{
+		display: inline-block;
+	}
+	.switch-group-open {
+		margin-left: 16rpx;
+		height: 20rpx;
+		display: inline-block;
+	}
+	.switch-group-open::after {
+		transform: rotate(135deg);
+	}
+	.switch-group-close {
+		margin-left: 16rpx;
+		height: 20rpx;
+		display: inline-block;
+	}
+	.switch-group-close::after {
+		transform: rotate(-45deg);
+	}
+}
+.card-more-detail{
+	margin:20rpx -20rpx;
+	background:#F7F7F7;
+	padding:40rpx 40rpx;
+	.card-more-detail-item{
+		text-align:left;
+		line-height:80rpx;
+		.detail-item-title{
+			float: left;
+			color:#A6A6A6;
+		}
+		.detail-item-contant{
+			float: left;
+			color: #000;
+			margin-left: 50rpx;
+			width: calc(~"100% - 150rpx");
+		}
+	}
+}
+</style>
+<template>
+  <view class="love-card">
+    <view class="card-container" @tap="goEdit">
+      <view class="card-title">
+        <view class="card-tittle-company">{{card_info.company}}</view>
+        <view class="card-title-name">{{card_info.name}}</view>
+        <view class="card-title-job">{{card_info.position}}</view>
+      </view>
+      <view class="card-avatar">
+        <image wx:if="{{card_info.avatar}}" class="image" mode="aspectFill" src="{{util.formatImageUrl(card_info.avatar, baseUrl) || default_avatar}}"/>
+      </view>
+      <view class="clear"></view>
+      <view class="card-content {{is_owner ? 'weui-cell__ft_in-access' : ''}}">
+        <view class="card-content-item" wx:if="{{card_info.mobile}}">
+          <view class="card-content-icon">
+            <view class="slds-icon-standard-call slds-icon slds-icon--small slds-m-right--x-small"/>
+          </view>
+          <view class="card-content-tel">{{card_info.mobile}}</view>
+          <view class="clear"></view>
+        </view>
+        <view class="card-content-item" wx:if="{{card_info.email}}">
+          <view class="card-content-icon">
+            <view class="slds-icon-standard-email slds-icon slds-icon--small slds-m-right--x-small"/>
+          </view>
+          <view class="card-content-email">{{card_info.email}}</view>
+          <view class="clear"></view>
+        </view>
+        <view class="card-content-item" wx:if="{{card_info.location.address}}">
+          <view class="card-content-icon">
+            <view class="slds-icon-standard-address slds-icon slds-icon--small slds-m-right--x-small"/>
+          </view>
+          <view class="card-content-address">{{card_info.location.address}}</view>
+          <view class="clear"></view>
+        </view>
+        <view class="clear"></view>
+      </view>   
+    </view>
+    <view class="card-more">
+      <view wx:if="{{!is_detail}}" @tap="openDetail">
+        <view class="page-card-more-title">展开全部名片信息</view>
+        <view class="weui-cell__ft switch-group-open weui-cell__ft_in-access"></view>
+      </view>
+      <view  wx:if="{{is_detail}}" @tap="closeDetail">
+        <view class="page-card-more-title">收起以下名片信息</view>
+        <view class="weui-cell__ft switch-group-close weui-cell__ft_in-access"></view>
+      </view>
+      <view class="card-more-detail" wx:if="{{is_detail}}">
+        <view class="card-more-detail-item">
+            <view class="detail-item-title">电话</view>
+            <view class="detail-item-contant">{{card_info.mobile}}</view>
+            <view class="clear"></view>
+        </view>
+        <view class="card-more-detail-item">
+            <view class="detail-item-title">微信</view>
+            <view class="detail-item-contant">{{card_info.mobile}}</view>
+            <view class="clear"></view>
+        </view>
+        <view class="card-more-detail-item">
+            <view class="detail-item-title">邮箱</view>
+            <view class="detail-item-contant">{{card_info.email}}</view>
+            <view class="clear"></view>
+        </view>
+        <view class="card-more-detail-item">
+            <view class="detail-item-title">公司</view>
+            <view class="detail-item-contant">{{card_info.company}}</view>
+            <view class="clear"></view>
+        </view>
+        <view class="card-more-detail-item">
+            <view class="detail-item-title">地址</view>
+            <view class="detail-item-contant">{{card_info.location.address}}</view>
+            <view class="clear"></view>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import { baseUrl } from '@/config';
+import util from '../wxs/util.wxs'
+
+export default class LoveCard extends wepy.component {
+  onLoad() {}
+
+  props = {
+    card_info: {
+      type: Object,
+      default: {}
+    },
+    is_owner: {
+      type: Boolean,
+      default: false
+    },
+    space_id: {
+      type: String,
+      default: ""
+    }
+  }
+
+  data = {
+    baseUrl: baseUrl,
+    is_detail: false
+  };
+
+  wxs = {
+    util: util
+  };
+
+  methods = {
+    goEdit(){
+      let url = `../record/edit?space_id=${this.space_id}&object_name=vip_customers&action=edit&record_id=${this.card_info._id}&title=编辑名片`;
+      wepy.navigateTo({url: url});
+    },
+    openDetail(){
+      this.is_detail = true;
+      this.$apply();
+    },
+    closeDetail(){
+      this.is_detail = false;
+      this.$apply();
+    }
+  };
+}
+</script>
