@@ -510,7 +510,7 @@ async loadAboutMe() {
       pageRouter.navigateTo({ url: `/pages/love/share?card=true&space_id=${this.space_id}` })
     },
     goDetail() {
-      wepy.navigateTo({url: `/pages/love/test?space_id=${this.space_id}`})
+      wepy.navigateTo({url: `/pages/love/share?space_id=${this.space_id}`})
     },
     goRecommendDetail(userId){
       pageRouter.navigateTo({ url: `/pages/love/introduce?userId=${userId}&show_mobile=true` })
