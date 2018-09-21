@@ -297,36 +297,36 @@ export default class VIP extends wepy.app {
       'pages/love/settings',
       'pages/love/love_question',
     ],
-    tabBar: {
-      color: '#666',
-      selectedColor: '#5e9bf4',
-      backgroundColor: '#fff',
-      borderStyle: 'black',
-      list: [
-      {
-        pagePath: 'pages/visiting_card/home',
-        selectedIconPath: './images/tabbars/home_pressed.png',
-        iconPath: './images/tabbars/home.png',
-        text: '名片',
-      },
-      {
-        pagePath: 'pages/product/list',
-        selectedIconPath: './images/tabbars/topic_pressed.png',
-        iconPath: './images/tabbars/topic.png',
-        text: '商城',
-      },
-      {
-        pagePath: 'pages/space/index',
-        selectedIconPath: './images/tabbars/topic_pressed.png',
-        iconPath: './images/tabbars/topic.png',
-        text: '官网',
-      },{
-        pagePath: 'pages/me',
-        selectedIconPath: './images/tabbars/me_pressed.png',
-        iconPath: './images/tabbars/me.png',
-        text: '我',
-      }]
-    },
+    // tabBar: {
+    //   color: '#666',
+    //   selectedColor: '#5e9bf4',
+    //   backgroundColor: '#fff',
+    //   borderStyle: 'black',
+    //   list: [
+    //   {
+    //     pagePath: 'pages/visiting_card/home',
+    //     selectedIconPath: './images/tabbars/home_pressed.png',
+    //     iconPath: './images/tabbars/home.png',
+    //     text: '名片',
+    //   },
+    //   {
+    //     pagePath: 'pages/product/list',
+    //     selectedIconPath: './images/tabbars/topic_pressed.png',
+    //     iconPath: './images/tabbars/topic.png',
+    //     text: '商城',
+    //   },
+    //   {
+    //     pagePath: 'pages/space/index',
+    //     selectedIconPath: './images/tabbars/topic_pressed.png',
+    //     iconPath: './images/tabbars/topic.png',
+    //     text: '官网',
+    //   },{
+    //     pagePath: 'pages/me',
+    //     selectedIconPath: './images/tabbars/me_pressed.png',
+    //     iconPath: './images/tabbars/me.png',
+    //     text: '我',
+    //   }]
+    // },
     window: {
       navigationBarBackgroundColor: '#353535',
       navigationBarTitleText: '华炎客服',
