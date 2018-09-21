@@ -231,7 +231,8 @@ export default class LoveCard extends wepy.component {
 
   data = {
     baseUrl: baseUrl,
-    is_detail: false
+    is_detail: false,
+    default_avatar: 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg',
   };
 
   wxs = {
@@ -240,6 +241,9 @@ export default class LoveCard extends wepy.component {
 
   methods = {
     goEdit(){
+      if(!this.is_owner){
+        return;
+      }
       let url = `../record/edit?space_id=${this.space_id}&object_name=users&action=edit&record_id=${this.card_info._id}&title=编辑名片`;
       wepy.navigateTo({url: url});
     },

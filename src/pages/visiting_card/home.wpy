@@ -73,6 +73,50 @@ page{
 		}
 	}
 }
+.friend-list-box{
+	position:relative;
+	display:flex;
+	align-items:center;
+	margin-top:40rpx;
+	.friend-list{
+		flex:1;
+		.join-avatar {
+			display: flex;
+			align-items: center;
+			.avatar-container {
+				width: 50rpx;
+				height: 50rpx;
+				border-radius: 50%;
+				border: 1px solid #fff;
+				image {
+					border-radius: 50%;
+					width: 100%;
+					height: 100%;
+					border:solid 1px #ddd;
+				}
+			}
+			.avatar-container:not(:last-of-type) {
+				margin-right: -16rpx;
+			}
+		}
+		.count{
+			color:#999;
+			font-size:26rpx;
+		}
+	}
+	.btn-heart{
+		text-align:right;
+		color:#999;
+		.slds-icon{
+			width: 50rpx;
+			height: 50rpx;
+		}
+		.btn-heart-label{
+			font-size:26rpx;
+			text-align:center;
+		}
+	}
+}
 </style>
 
 <template>
@@ -88,6 +132,24 @@ page{
 					<button class="btn-share" open-type="share" plain="true"  type="primary">分享名片</button>
 					<button class="btn-contact"  plain="true" type="primary" @tap="addPhoneContact">存入手机通讯录</button>
 					<view class="clear"></view>
+				</view>
+				<view class="friend-list-box">
+					<view class="friend-list">
+						<view class="join-avatar">
+							<repeat for="{{friends.value}}" key="index" index="index" item="friend">
+								<view class="avatar-container">
+									<image class="image" mode="aspectFill" src="{{util.formatImageUrl(friend.user_b.avatar, baseUrl) || default_avatar}}" />
+								</view>
+							</repeat>
+						</view>
+						<view class="count">
+							{{friends["@odata.count"]}}人浏览
+						</view>
+					</view>
+					<view class="btn-heart" @tap="toggleStar">
+						<view class="slds-icon vip_endorsement-{{my_friend.heart ? 'dark' : 'default'}}"></view>
+						<view class="btn-heart-label">靠谱</view>
+					</view>
 				</view>
 			</view>
 			<view class="self-introduction panel-box" wx:if="{{card_info.self_introduction}}">
@@ -137,8 +199,10 @@ page{
 			share_from: null,
 			baseUrl: baseUrl,
 			card_info: {},
+			my_friend: {},
 			is_owner: false,
-			default_avatar: 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg'
+			default_avatar: 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg',
+			friends: { value: [], "@odata.count":0}
 		};
 
 		wxs = {
@@ -156,7 +220,7 @@ page{
 			wepy.showShareMenu({
 				withShareTicket: true
 			});
-			wx.showLoading({ mask: true });
+			wepy.showLoading({ mask: true });
 			e.space_id = loveSpaceId;
 			if (e.scene) {
 				// 朋友圏二维码识别进入的，则取出scene中的share_from
@@ -170,10 +234,10 @@ page{
 			await this.$parent.login(e);
 			this.user_id = this.$parent.globalData.user._id;
 			this.card_user_id = e.card_user_id || this.user_id;
+			// this.card_user_id = "PGcaKBCZPdFBKiQcx";
 			if(this.user_id == this.card_user_id){
 				this.is_owner = true;
 			}
-			console.log("=========is_owner=================", this.is_owner);
 			await this.loadData();
 			this.is_loaded = true;
 			this.$apply();
@@ -192,6 +256,8 @@ page{
 
 		async loadData() {
 			await this.loadCardInfo();
+			await this.loadMyFriend();
+			await this.loadFriends();
 		}
 	
 		async loadCardInfo() {
@@ -199,9 +265,52 @@ page{
 				$filter: `(_id eq '${this.card_user_id}')`,
 				$select: 'name,position,mobile,email,work_phone,owner,wechat,avatar,photos,self_introduction,company,photos,location',
 			}
-			const vip_customer = await this.$parent.query('users', options, this.space_id);
-			if (vip_customer && vip_customer.value && vip_customer.value[0]) {
-				this.card_info = vip_customer.value[0];
+			const records = await this.$parent.query('users', options, this.space_id);
+			if (records && records.value && records.value[0]) {
+				this.card_info = records.value[0];
+			}
+		}
+	
+		async loadMyFriend() {
+			if(this.is_owner){
+				return;
+			}
+			const options = {
+				$filter: `(owner eq '${this.user_id}' and user_b eq '${this.card_user_id}')`,
+				$select: 'heart,star',
+			}
+			const records = await this.$parent.query('love_friends', options, this.space_id);
+			if (records && records.value && records.value.length) {
+				this.my_friend = records.value[0];
+			}
+			else{
+				let values = {
+					user_b: this.card_user_id,
+					owner: this.user_id
+				};
+				let result = await this.$parent.insert("love_friends", values, this.space_id);
+				if(result && result.value && result.value.length){
+					this.my_friend = result.value[0];
+				}
+				values = {
+					user_b: this.user_id,
+					owner: this.card_user_id
+				};
+				result = await this.$parent.insert("love_friends", values, this.space_id);
+			}
+		}
+	
+		async loadFriends() {
+			const options = {
+				$filter: `(owner eq '${this.card_user_id}')`,
+				$top: 6,
+				$select: 'user_b',
+				$expand: 'user_b($select=avatar,name)',
+				$orderby: 'created desc'
+			}
+			const records = await this.$parent.query('love_friends', options, this.space_id);
+			if (records && records.value) {
+				this.friends = records;
 			}
 		}
 
@@ -234,7 +343,26 @@ page{
 						});
 					}
 				});
- 			}
+ 			},
+			async toggleStar(){
+				if(this.is_owner || !this.my_friend._id){
+					return;
+				}
+				wepy.showLoading({ mask: true });
+				let set = { heart:  !!!this.my_friend.heart};
+				let updateSuc = await this.$parent.update("love_friends", this.my_friend._id, set, this.space_id);
+				if (updateSuc) {
+					this.my_friend.heart = set.heart;
+					this.$apply();
+				}
+				else{
+					wx.showToast({
+						title: "操作失败，请稍后再试",
+						icon: "none"
+					});
+				}
+				wepy.hideLoading();
+			}
 		};
 	}
 </script>
