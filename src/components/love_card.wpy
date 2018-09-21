@@ -3,7 +3,7 @@
 	clear: both;
 }
 .card-container{
-	margin: 20rpx 0 40rpx 0;
+	margin: 20rpx 0 30rpx 0;
 	padding: 30rpx 50rpx;
 	// border-radius: 5rpx;
 	box-shadow:5rpx 5rpx 15rpx #888;
@@ -94,7 +94,8 @@
 	}
 	.switch-group-open {
 		margin-left: 16rpx;
-		height: 20rpx;
+		height: 30rpx;
+		line-height: 30rpx;
 		display: inline-block;
 	}
 	.switch-group-open::after {
@@ -102,8 +103,10 @@
 	}
 	.switch-group-close {
 		margin-left: 16rpx;
-		height: 20rpx;
+		height: 30rpx;
+		line-height: 30rpx;
 		display: inline-block;
+		margin-bottom:-8rpx;
 	}
 	.switch-group-close::after {
 		transform: rotate(-45deg);
@@ -130,80 +133,80 @@
 }
 </style>
 <template>
-  <view class="love-card">
-    <view class="card-container" @tap="goEdit">
-      <view class="card-title">
-        <view class="card-tittle-company">{{card_info.company}}</view>
-        <view class="card-title-name">{{card_info.name}}</view>
-        <view class="card-title-job">{{card_info.position}}</view>
-      </view>
-      <view class="card-avatar">
-        <image wx:if="{{card_info.avatar}}" class="image" mode="aspectFill" src="{{util.formatImageUrl(card_info.avatar, baseUrl) || default_avatar}}"/>
-      </view>
-      <view class="clear"></view>
-      <view class="card-content {{is_owner ? 'weui-cell__ft_in-access' : ''}}">
-        <view class="card-content-item" wx:if="{{card_info.mobile}}">
-          <view class="card-content-icon">
-            <view class="slds-icon-standard-call slds-icon slds-icon--small slds-m-right--x-small"/>
-          </view>
-          <view class="card-content-tel">{{card_info.mobile}}</view>
-          <view class="clear"></view>
-        </view>
-        <view class="card-content-item" wx:if="{{card_info.email}}">
-          <view class="card-content-icon">
-            <view class="slds-icon-standard-email slds-icon slds-icon--small slds-m-right--x-small"/>
-          </view>
-          <view class="card-content-email">{{card_info.email}}</view>
-          <view class="clear"></view>
-        </view>
-        <view class="card-content-item" wx:if="{{card_info.location.address}}">
-          <view class="card-content-icon">
-            <view class="slds-icon-standard-address slds-icon slds-icon--small slds-m-right--x-small"/>
-          </view>
-          <view class="card-content-address">{{card_info.location.address}}</view>
-          <view class="clear"></view>
-        </view>
-        <view class="clear"></view>
-      </view>   
-    </view>
-    <view class="card-more">
-      <view wx:if="{{!is_detail}}" @tap="openDetail">
-        <view class="page-card-more-title">展开全部名片信息</view>
-        <view class="weui-cell__ft switch-group-open weui-cell__ft_in-access"></view>
-      </view>
-      <view  wx:if="{{is_detail}}" @tap="closeDetail">
-        <view class="page-card-more-title">收起以下名片信息</view>
-        <view class="weui-cell__ft switch-group-close weui-cell__ft_in-access"></view>
-      </view>
-      <view class="card-more-detail" wx:if="{{is_detail}}">
-        <view class="card-more-detail-item">
-            <view class="detail-item-title">电话</view>
-            <view class="detail-item-contant">{{card_info.mobile}}</view>
-            <view class="clear"></view>
-        </view>
-        <view class="card-more-detail-item">
-            <view class="detail-item-title">微信</view>
-            <view class="detail-item-contant">{{card_info.mobile}}</view>
-            <view class="clear"></view>
-        </view>
-        <view class="card-more-detail-item">
-            <view class="detail-item-title">邮箱</view>
-            <view class="detail-item-contant">{{card_info.email}}</view>
-            <view class="clear"></view>
-        </view>
-        <view class="card-more-detail-item">
-            <view class="detail-item-title">公司</view>
-            <view class="detail-item-contant">{{card_info.company}}</view>
-            <view class="clear"></view>
-        </view>
-        <view class="card-more-detail-item">
-            <view class="detail-item-title">地址</view>
-            <view class="detail-item-contant">{{card_info.location.address}}</view>
-            <view class="clear"></view>
-        </view>
-      </view>
-    </view>
-  </view>
+	<view class="love-card">
+		<view class="card-container" @tap="goEdit">
+			<view class="card-title">
+				<view class="card-tittle-company">{{card_info.company}}</view>
+				<view class="card-title-name">{{card_info.name}}</view>
+				<view class="card-title-job">{{card_info.position}}</view>
+			</view>
+			<view class="card-avatar">
+				<image wx:if="{{card_info.avatar}}" class="image" mode="aspectFill" src="{{util.formatImageUrl(card_info.avatar, baseUrl) || default_avatar}}"/>
+			</view>
+			<view class="clear"></view>
+			<view class="card-content {{is_owner ? 'weui-cell__ft_in-access' : ''}}">
+				<view class="card-content-item" wx:if="{{card_info.mobile}}">
+					<view class="card-content-icon">
+						<view class="slds-icon-standard-call slds-icon slds-icon--small slds-m-right--x-small"/>
+					</view>
+					<view class="card-content-tel">{{card_info.mobile}}</view>
+					<view class="clear"></view>
+				</view>
+				<view class="card-content-item" wx:if="{{card_info.email}}">
+					<view class="card-content-icon">
+						<view class="slds-icon-standard-email slds-icon slds-icon--small slds-m-right--x-small"/>
+					</view>
+					<view class="card-content-email">{{card_info.email}}</view>
+					<view class="clear"></view>
+				</view>
+				<view class="card-content-item" wx:if="{{card_info.location.address}}">
+					<view class="card-content-icon">
+						<view class="slds-icon-standard-address slds-icon slds-icon--small slds-m-right--x-small"/>
+					</view>
+					<view class="card-content-address">{{card_info.location.address}}</view>
+					<view class="clear"></view>
+				</view>
+				<view class="clear"></view>
+			</view>   
+		</view>
+		<view class="card-more">
+			<view wx:if="{{!is_detail}}" @tap="openDetail">
+				<view class="card-more-title">展开全部名片信息</view>
+				<view class="weui-cell__ft switch-group-open weui-cell__ft_in-access"></view>
+			</view>
+			<view  wx:if="{{is_detail}}" @tap="closeDetail">
+				<view class="card-more-title">收起以下名片信息</view>
+				<view class="weui-cell__ft switch-group-close weui-cell__ft_in-access"></view>
+			</view>
+			<view class="card-more-detail" wx:if="{{is_detail}}">
+				<view class="card-more-detail-item">
+					<view class="detail-item-title">电话</view>
+					<view class="detail-item-contant">{{card_info.mobile}}</view>
+					<view class="clear"></view>
+				</view>
+				<view class="card-more-detail-item">
+					<view class="detail-item-title">微信</view>
+					<view class="detail-item-contant">{{card_info.mobile}}</view>
+					<view class="clear"></view>
+				</view>
+				<view class="card-more-detail-item">
+					<view class="detail-item-title">邮箱</view>
+					<view class="detail-item-contant">{{card_info.email}}</view>
+					<view class="clear"></view>
+				</view>
+				<view class="card-more-detail-item">
+					<view class="detail-item-title">公司</view>
+					<view class="detail-item-contant">{{card_info.company}}</view>
+					<view class="clear"></view>
+				</view>
+				<view class="card-more-detail-item">
+					<view class="detail-item-title">地址</view>
+					<view class="detail-item-contant">{{card_info.location.address}}</view>
+					<view class="clear"></view>
+				</view>
+			</view>
+		</view>
+	</view>
 </template>
 
 <script>
@@ -212,49 +215,49 @@ import { baseUrl } from '@/config';
 import util from '../wxs/util.wxs'
 
 export default class LoveCard extends wepy.component {
-  onLoad() {}
+	onLoad() {}
 
-  props = {
-    card_info: {
-      type: Object,
-      default: {}
-    },
-    is_owner: {
-      type: Boolean,
-      default: false
-    },
-    space_id: {
-      type: String,
-      default: ""
-    }
-  }
+	props = {
+		card_info: {
+			type: Object,
+			default: {}
+		},
+		is_owner: {
+			type: Boolean,
+			default: false
+		},
+		space_id: {
+			type: String,
+			default: ""
+		}
+	}
 
-  data = {
-    baseUrl: baseUrl,
-    is_detail: false,
-    default_avatar: 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg',
-  };
+	data = {
+		baseUrl: baseUrl,
+		is_detail: false,
+		default_avatar: 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg',
+	};
 
-  wxs = {
-    util: util
-  };
+	wxs = {
+		util: util
+	};
 
-  methods = {
-    goEdit(){
-      if(!this.is_owner){
-        return;
-      }
-      let url = `../record/edit?space_id=${this.space_id}&object_name=users&action=edit&record_id=${this.card_info._id}&title=编辑名片`;
-      wepy.navigateTo({url: url});
-    },
-    openDetail(){
-      this.is_detail = true;
-      this.$apply();
-    },
-    closeDetail(){
-      this.is_detail = false;
-      this.$apply();
-    }
-  };
+	methods = {
+		goEdit(){
+			if(!this.is_owner){
+				return;
+			}
+			let url = `../record/edit?space_id=${this.space_id}&object_name=users&action=edit&record_id=${this.card_info._id}&title=编辑名片`;
+			wepy.navigateTo({url: url});
+		},
+		openDetail(){
+			this.is_detail = true;
+			this.$apply();
+		},
+		closeDetail(){
+			this.is_detail = false;
+			this.$apply();
+		}
+	};
 }
 </script>
