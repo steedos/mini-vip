@@ -81,29 +81,18 @@ export default class VisitingCardList extends wepy.page {
   };
 
   data = {
-    isAuthUserInfo: false,
     name: '',
     avatar: '',
-    match_index: 0,
     object_name: 'love_friends',
     filter: '',
     avatar_field: 'user_b.avatar',
     name_field: 'user_b.name',
     baseUrl: baseUrl,
     navigationBarTitle: '名片夹',
-    // date_field: [
-    //   'user_b'
-    // ],
-    userId: '',
     share_from: '',
     orderby: 'created desc',
     space_id: null,
-    pageSize: 50,
-    open_group_id: '',
-    answered: false,
-    matching_filter_enable: false,
-    collectBackImage: '/static/images/ic_menu_choice_nor.png',
-    showGoHome:false
+    pageSize: 50
   };
 
   async beforeOnLoad(e) {
@@ -111,7 +100,6 @@ export default class VisitingCardList extends wepy.page {
   }
 
   async onLoad(e) {
-    console.log("=========list===========onLoad==========loveSpaceId=====", loveSpaceId);
     this.space_id = loveSpaceId;
     this.user_id = this.$parent.globalData.user._id;
     this.$apply();
@@ -127,19 +115,6 @@ export default class VisitingCardList extends wepy.page {
     return `(owner eq '${this.user_id}')`;
   }
 
-  onShareAppMessage(res) {
-    const user_id = this.$parent.globalData.user._id;
-    console.log('onShareAppMessage', user_id);
-    let title = '我们的缘分榜，快来打榜！';
-    let path = `/pages/love/matching?space_id=${
-      this.space_id
-    }&share_from=${user_id}&open_group_id=-1`;
-    return {
-      title: title,
-      path: path
-    };
-  }
-
   wxs = {
     util: util
   };
@@ -151,22 +126,6 @@ export default class VisitingCardList extends wepy.page {
   mixins = [recordList];
 
   methods = {
-    goShare() {
-      wx.navigateTo({
-        url: `/pages/love/share?card=true&space_id=${this.space_id}`
-      });
-    },
-    goHome() {
-      wx.switchTab({
-        url: `/pages/love/home?space_id=${this.space_id}`
-      });
-    },
-    goLove() {
-      const answeredUrl = encodeURIComponent(`/pages/love/cover_about_yourself?space_id=${this.space_id}`);
-      pageRouter.navigateTo({
-        url: `/pages/love/papers_view?object_name=love_test&space_id=${this.space_id}&answered_url=${answeredUrl}&answered_url_type=reLaunch&keep_progress`
-      });
-		}
   };
 }
 </script>

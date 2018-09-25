@@ -909,9 +909,6 @@ export default class VIP extends wepy.app {
   async recordAllowDelete(object_name, owner, space_id){
     space_id = space_id ? space_id : 'guest';
     const object = await this.getObject(object_name, space_id);
-    console.log("recordAllowDelete=========object_name==========", object_name);
-    console.log("recordAllowDelete=========owner==========", owner);
-    console.log("recordAllowDelete=========object==========", object);
     if(!object){
       throw new Error('未在globalData中找到对象：' + object_name);
     }
