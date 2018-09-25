@@ -57,7 +57,7 @@ page{
 	padding: 20rpx  40rpx;
 	margin-bottom: 20rpx;
 	.panel-box-title{
-		color: #000;
+		color: #fff;
 	}
 	.panel-box-content{
 		color:#999;
