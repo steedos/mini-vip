@@ -1,0 +1,225 @@
+<style lang="less">
+page{
+	font-family: 黑体;
+	background: #fff;
+}
+
+.clear{
+	clear: both;
+}
+
+.page-btn{
+	text-align: center;
+	font-size: 34rpx!important;
+	margin-top:40rpx;
+	.btn-share, .btn-edit{
+		margin: 0px;
+		padding:0;
+		display: inline-block;
+		width: 320rpx;
+		height:90rpx;
+		font-size:32rpx;
+		line-height:90rpx;
+	}
+	.btn-edit{
+		float:left;
+	}
+	.btn-share {
+		// margin-left: 40rpx;
+		background-color: #1AAD19!important;
+		color: #fff!important;
+		float:right;
+	}
+}
+
+.panel-box{
+	background: #fff;
+	padding: 20rpx  40rpx;
+	margin-bottom: 20rpx;
+	.panel-box-title{
+		color: #000;
+	}
+	.panel-box-content{
+		color:#999;
+		margin-top:10rpx;
+	}
+}
+
+.weui-cells{
+	border-bottom: none;
+	&:before{
+		border-top: none;
+	}
+	&:after{
+		border-bottom: none;
+	}
+	.weui-cell{
+		padding: 10px 0px;
+		&:before{
+			border-top: none;
+		}
+	}
+}
+</style>
+
+<template>
+	<view class="page" wx:if="{{is_loaded}}">
+		<view class="page__bd">
+			<bg_circle />
+			<view class="panel-box panel-top-box">
+				<love_card :card_info.sync="card_info" :is_owner.sync="is_owner" :space_id.sync="space_id" />
+				<view class="page-btn">
+					<button class="btn-edit"  plain="true" type="primary" @tap="goEdit">编辑名片</button>
+					<!-- <button class="btn-contact"  plain="true" type="primary" @tap="addPhoneContact">存入手机通讯录</button> -->
+					<button class="btn-share" open-type="share" plain="true"  type="primary">发名片</button>
+					<view class="clear"></view>
+				</view>
+				
+				<view class="weui-cells">
+					<navigator url="./space/list" class="weui-cell weui-cell_access">
+						<view class="weui-cell__bd">
+							<view>预览名片</view>
+						</view>
+						<view class="weui-cell__ft weui-cell__ft_in-access"></view>
+					</navigator>
+					<navigator url="./space/list" class="weui-cell weui-cell_access">
+						<view class="weui-cell__bd">
+							<view>名片二维码</view>
+						</view>
+						<view class="weui-cell__ft weui-cell__ft_in-access"></view>
+					</navigator>
+				</view>
+				<view class="weui-cells">
+					<navigator url="./space/list" class="weui-cell weui-cell_access">
+						<view class="weui-cell__bd">
+							<view>在线客服</view>
+						</view>
+						<view class="weui-cell__ft weui-cell__ft_in-access"></view>
+					</navigator>
+					<navigator url="./space/list" class="weui-cell weui-cell_access">
+						<view class="weui-cell__bd">
+							<view>设置</view>
+						</view>
+						<view class="weui-cell__ft weui-cell__ft_in-access"></view>
+					</navigator>
+				</view>
+			</view>
+		</view>
+	</view>
+</template>
+
+<script>
+	import wepy from 'wepy';
+	import { baseUrl } from '@/config';
+	import util from '../../wxs/util.wxs';
+	import { loveSpaceId } from '@/config';
+	import love_card from '../../components/love_card';
+	import bg_circle from '../../components/bg_circle';
+
+	export default class VisitingCardMe extends wepy.page {
+		config = {
+			navigationBarTitleText: '我的名片',
+			enablePullDownRefresh: true
+		};
+
+		components = {
+			love_card: love_card,
+			bg_circle: bg_circle
+		};
+
+		data = {
+			is_loaded: false,
+			space_id: null,
+			user_id: null,
+			card_user_id: null,
+			share_from: null,
+			baseUrl: baseUrl,
+			card_info: {},
+			my_friend: {},
+			is_owner: false,
+			default_avatar: 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg',
+			friends: { value: [], "@odata.count":0}
+		};
+
+		wxs = {
+			util: util
+		};
+
+		async onPullDownRefresh() {
+			await this.loadData();
+			this.$apply();
+			wepy.stopPullDownRefresh();
+		}
+
+		async onLoad(e) {
+			console.log("=====onLoad====e====1==", e);
+			wepy.showShareMenu({
+				withShareTicket: true
+			});
+			wepy.showLoading({ mask: true });
+			e.space_id = loveSpaceId;
+			this.space_id = e.space_id;
+			await this.$parent.login(e);
+			this.user_id = this.$parent.globalData.user._id;
+			this.card_user_id = this.user_id;
+			this.is_owner = true;
+			// this.card_user_id = "PGcaKBCZPdFBKiQcx";
+			await this.loadData();
+			this.is_loaded = true;
+			this.$apply();
+			wepy.hideLoading();
+		}
+		
+		onShareAppMessage() {
+			let title = `你好，我是${this.card_info.name}，这是我的电子名片。`;
+			let url = `pages/visiting_card/home?space_id=${this.space_id}&card_user_id=${this.card_user_id}&share_from=${this.user_id}`;
+			return {
+				title: title,
+				path: url
+			};
+		}
+
+		async loadData() {
+			await this.loadCardInfo();
+		}
+	
+		async loadCardInfo() {
+			const options = {
+				$filter: `(_id eq '${this.card_user_id}')`,
+				$select: 'name,position,mobile,email,work_phone,owner,wechat,avatar,photos,self_introduction,company,photos,location',
+			}
+			const records = await this.$parent.query('users', options, this.space_id);
+			if (records && records.value && records.value[0]) {
+				this.card_info = records.value[0];
+			}
+		}
+
+		methods = {
+			goEdit(){
+				if(!this.is_owner){
+					return;
+				}
+				let url = `../record/edit?space_id=${this.space_id}&object_name=users&action=edit&record_id=${this.card_info._id}&title=编辑名片`;
+				wepy.navigateTo({url: url});
+			},
+			async addPhoneContact(){
+				wx.addPhoneContact({
+					firstName: this.card_info.name,
+					organization: this.card_info.company,
+					title: this.card_info.position,
+					mobilePhoneNumber: this.card_info.mobile,
+					weChatNumber: this.card_info.wechat,
+					email: this.card_info.email,
+					workPhoneNumber: this.card_info.work_phone,
+					addressStreet: this.card_info.location ? this.card_info.location.address : "",
+					success: ()=>{
+						wepy.showToast({
+							title: "添加成功",
+							icon: "none"
+						});
+					}
+				});
+ 			}
+		};
+	}
+</script>
