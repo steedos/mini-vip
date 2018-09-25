@@ -117,6 +117,9 @@ page{
 		}
 	}
 }
+.weui-cells_after-title{
+	margin: 0 -40rpx;
+}
 </style>
 
 <template>
@@ -128,7 +131,7 @@ page{
 				<love_card :card_info.sync="card_info" :is_owner.sync="is_owner" :space_id.sync="space_id" />
 				<view class="page-btn">
 					<button class="btn-share" open-type="share" plain="true"  type="primary">分享名片</button>
-					<button class="btn-contact"  plain="true" type="primary" @tap="addPhoneContact">存入手机通讯录</button>
+					<button class="btn-contact"  plain="true" type="primary" >存入我的名片夹</button>
 					<view class="clear"></view>
 				</view>
 				<view class="friend-list-box">
@@ -167,6 +170,15 @@ page{
             <image src="{{util.formatImageUrl(item, baseUrl)}}" mode="widthFix" @tap="previewImage({{item}})"/>
           </repeat>
 				</view>
+				
+				<view class="weui-cells__title"></view>
+        <view class="weui-cells weui-cells_after-title" @tap="addPhoneContact">
+            <view class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+                <view class="weui-cell__bd">存入手机通讯录</view>
+                <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+            </view>
+        </view>
+
 			</view>
 		</view>
 	</view>
