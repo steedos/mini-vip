@@ -301,14 +301,14 @@ export default class VIP extends wepy.app {
     ],
     tabBar: {
       color: '#666',
-      selectedColor: '#5e9bf4',
+      selectedColor: '#1AAD19',
       backgroundColor: '#fff',
       borderStyle: 'black',
       list: [
       {
         pagePath: 'pages/visiting_card/list',
-        selectedIconPath: './images/tabbars/home_pressed.png',
-        iconPath: './images/tabbars/home.png',
+        selectedIconPath: './images/tabbars/topic_pressed.png',
+        iconPath: './images/tabbars/topic.png',
         text: '名片夹',
       },{
         pagePath: 'pages/visiting_card/me',
