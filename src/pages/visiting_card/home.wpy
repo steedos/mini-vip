@@ -238,6 +238,8 @@ page{
 		}
 
 		async onLoad(e) {
+			this.is_loaded = true;
+			this.$apply();
 			console.log("=====onLoad====e====1==", e);
 			wepy.showShareMenu({
 				withShareTicket: true
