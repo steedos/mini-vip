@@ -2,24 +2,6 @@
 page{
 	font-family: 黑体;
 }
-.panel-bg-box{
-	position:relative;
-	width:100%;
-	height:280rpx;
-	overflow:hidden;
-
-
-	.bg-circle{
-		position:absolute;
-		background:#353535;
-		height:2000rpx;
-		width:2000rpx;
-		left:50%;
-		bottom:0;
-		border-radius:100%;
-		margin-left:-1000rpx;
-	}
-}
 
 .clear{
 	clear: both;
@@ -50,9 +32,6 @@ page{
 }
 
 .panel-box{
-	&.panel-top-box{
-		margin-top:-280rpx;
-	}
 	background: #fff;
 	padding: 20rpx  40rpx;
 	margin-bottom: 20rpx;
@@ -122,10 +101,7 @@ page{
 <template>
 	<view class="page" wx:if="{{is_loaded}}">
 		<view class="page__bd">
-			<view class="panel-bg-box">
-				<view class="bg-circle">
-				</view>
-			</view>
+			<bg_circle />
 			<view class="panel-box panel-top-box">
 				<love_card :card_info.sync="card_info" :is_owner.sync="is_owner" :space_id.sync="space_id" />
 				<view class="page-btn">
@@ -180,6 +156,7 @@ page{
 	import util from '../../wxs/util.wxs';
 	import { loveSpaceId } from '@/config';
 	import love_card from '../../components/love_card';
+	import bg_circle from '../../components/bg_circle';
 
 	export default class VisitingCardHome extends wepy.page {
 		config = {
@@ -188,7 +165,8 @@ page{
 		};
 
 		components = {
-			love_card: love_card
+			love_card: love_card,
+			bg_circle: bg_circle
 		};
 
 		data = {
