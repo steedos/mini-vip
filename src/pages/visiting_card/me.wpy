@@ -65,8 +65,7 @@ page{
 	line-height:1.41176471;
 	font-size:17px;
 	font-family:黑体;
-	color:#000;
-
+	color:#000!important;
 }
 </style>
 
