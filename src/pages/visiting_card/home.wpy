@@ -123,8 +123,6 @@ page{
 	<view class="page" wx:if="{{is_loaded}}">
 		<view class="page__bd">
 			<view class="panel-bg-box">
-				<view class="bg-circle">
-				</view>
 			</view>
 			<view class="panel-box panel-top-box">
 				<love_card :card_info.sync="card_info" :is_owner.sync="is_owner" :space_id.sync="space_id" />

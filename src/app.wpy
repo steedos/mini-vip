@@ -4,7 +4,7 @@
 @import "../lib/slds/slds_margin.less";
 @import "../lib/vip/vip.less";
 page {
-  background-color: #efeef3;
+  background-color: #fdfdfd;
   font-size: 16px;
   font-family: -apple-system-font,Helvetica Neue,Helvetica,sans-serif;
 }
@@ -328,10 +328,10 @@ export default class VIP extends wepy.app {
     //   }]
     // },
     window: {
-      navigationBarBackgroundColor: '#353535',
+      navigationBarBackgroundColor: '#ffffff',
       navigationBarTitleText: '华炎客服',
-      navigationBarTextStyle: 'white',
-      backgroundColor: "#efeef3",
+      navigationBarTextStyle: 'black',
+      backgroundColor: "#ffffff",
       backgroundTextStyle: 'dark',
     }
   }
