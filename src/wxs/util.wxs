@@ -305,6 +305,15 @@ function showRequired(action, field, value) {
   return false
 }
 
+function isRequired(action, field) {
+  if(action === 'edit' || action === 'create'){
+    if(field.required){
+      return true
+    }
+  }
+  return false
+}
+
 function transformFieldValue(field, value){
   if(!value){
     return "";
@@ -427,5 +436,6 @@ module.exports = {
   formatDateMini: formatDateMini,
   showRequired: showRequired,
   includes: includes,
-  fixed: fixed
+  fixed: fixed,
+  isRequired: isRequired
 }

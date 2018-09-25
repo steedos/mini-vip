@@ -27,6 +27,7 @@ export default class recordList extends wepy.mixin {
     add_url: '/pages/record/create',
     navigationBarTitle: '',
     orderby: '',
+    extra_fields: '',
   };
 
   dataRefresh() {
@@ -166,6 +167,10 @@ export default class recordList extends wepy.mixin {
 
     options.$select = keys.join(",");
 
+    if(this.extra_fields){
+      options.$select = options.$select + ',' + this.extra_fields
+    }
+
     return options;
   }
 
@@ -197,7 +202,7 @@ export default class recordList extends wepy.mixin {
     this.object_name = e.object_name || this.object_name;
     this.avatar_field = e.avatar_field || this.avatar_field;
     this.name_field = e.name_field || this.name_field || 'name';
-    this.description_field = e.description_field;
+    this.description_field = e.description_field || this.description_field;
     this.date_field = e.date_field || this.date_field;
     this.price_field = e.price_field;
     this.url = this.getRecordUrl(e);
