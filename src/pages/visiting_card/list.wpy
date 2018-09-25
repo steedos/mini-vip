@@ -1,0 +1,312 @@
+<style lang="less">
+.friend-list {
+  .weui-cell__bd {
+    font-size: 0;
+    height: 80rpx;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    .name {
+      font-size: 36rpx;
+    }
+    .group-name {
+      font-size: 28rpx;
+      line-height: 28rpx;
+      height: 28rpx;
+      color: #aaa;
+    }
+  }
+  .record-container {
+    // padding-right: 0;  
+
+    .heart {
+      height: 80rpx;
+      margin: 0;
+      width: 1.75rem;
+      border-right: 15px solid transparent;
+      border-left: 0.5rem solid transparent;
+    }
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  .switch-group {
+    margin-left: 16rpx;
+    height: 80rpx;
+  }
+  .switch-group::after {
+    transform: rotate(135deg);
+  }
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  border-radius: 0.15rem;
+}
+
+.avatar-field {
+  border-radius: 50%;
+  margin-right: 16rpx;
+  vertical-align: middle;
+  width: 80rpx;
+  height: 80rpx;
+}
+.record-index {
+  margin-right: 30rpx;
+}
+.record-match {
+  color: #fa8b15;
+}
+
+.tab-bar {
+  font-size: 15px;
+  display: flex;
+  position: fixed;
+  box-sizing: border-box;
+  z-index: 500;
+  bottom: 0;
+  height: 100rpx;
+  width: 100%;
+  background-color: #fff;
+  color: #6d6d78;
+  align-items: center;
+
+  .btn-toolbar-primary {
+    flex-direction: column;
+    flex: 1;
+    padding: 0 30rpx;
+    font-size: 15px;
+    width: auto;
+    height: 100rpx;
+    border: none !important;
+    line-height: 100rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #1aad19 !important;
+    color: #fff !important;
+    border-radius: 0;
+  }
+}
+.light {
+  width: 50px;
+  height: 50px;
+}
+.page-else .page__bd {
+  padding: 20% 5%;
+  text-align: center;
+  color: #00396b;
+  font-size: 18px;
+}
+.page-index {
+  position: relative;
+  z-index: 10;
+  .page__hd {
+    padding: 20rpx 40rpx;
+    .love-title {
+      margin-top: 80rpx;
+      color: #00396b;
+      font-size: 65rpx;
+      font-weight: bold;
+      text-align: center;
+    }
+  }
+  .page__bd {
+    padding: 20rpx 40rpx;
+    .love-summary {
+      color: #00396b;
+      font-size: 45rpx;
+      margin-bottom: 40rpx;
+      text-align: center;
+    }
+    .btn-join {
+      background: #1aad19;
+      padding: 6px;
+      color: #fff;
+      font-weight: bold;
+      margin-top: 120rpx;
+    }
+  }
+}
+.user-active {
+  border: none !important;
+  text-align: left;
+  font-size: 17px;
+}
+.weui-cells {
+  position: relative;
+  z-index: 10;
+}
+.btn-filter {
+  position: relative;
+  .filter-light-dot {
+    position: absolute;
+    background: red;
+    width: 20rpx;
+    height: 20rpx;
+    border-radius: 50%;
+    top: -6rpx;
+    right: -6rpx;
+  }
+}
+.btn-answer {
+  color: #fff;
+  font-size: 15px;
+}
+.l-collect {
+  width: 130rpx;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #fff;
+  image {
+    display: block;
+    height: 46rpx;
+    width: 46rpx;
+  }
+}
+</style>
+
+<template>
+  <view class="page friend-list" wx:if="{{is_loaded}}">
+    <view class="page__bd">
+      <block wx:if="{{record_list.length}}">
+        <view class="weui-cells">
+          <repeat for="{{record_list}}" key="index" index="index" item="record">
+            <block wx:if="{{record.user_b.name}}">
+              <navigator url="./home?card_user_id{{record.user_b._id}}" class="record-container weui-cell weui-cell_access" hover-class="weui-cell_active">
+                <view class="weui-cell__hd">
+                  <image src="{{util.formatImageUrl(record.user_b.avatar, baseUrl)}}" mode="widthFix" class='avatar-field'/>
+                </view>
+                <view class="weui-cell__bd">
+                  <view class="name">{{record.user_b.name}}</view>
+                </view>
+                <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+              </navigator>
+            </block>
+          </repeat>
+        </view>
+      </block>
+      <block wx:else>
+        <view class="page cover-page page-else">
+          <view class="page__bd">
+            <image class="light" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/light.png"/>
+            <text style="display:block;">点击屏幕下方的按钮，</text>
+            <text  style="display:block;">邀请好友一起答题，就可以测试缘分啦~</text>
+          </view>
+        </view>
+      </block>
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import { baseUrl } from '@/config';
+import util from '../../wxs/util.wxs';
+import recordList from '../../mixins/record_list';
+import { loveSpaceId } from '@/config';
+import pageRouter from '@/utils/pageRouter';
+import req from '@/network';
+import _ from 'underscore';
+
+export default class VisitingCardList extends wepy.page {
+  config = {
+    navigationBarTitleText: '名片夹',
+    enablePullDownRefresh: true
+  };
+
+  data = {
+    isAuthUserInfo: false,
+    name: '',
+    avatar: '',
+    match_index: 0,
+    object_name: 'love_friends',
+    filter: '',
+    avatar_field: 'user_b.avatar',
+    name_field: 'user_b.name',
+    baseUrl: baseUrl,
+    navigationBarTitle: '名片夹',
+    // date_field: [
+    //   'user_b'
+    // ],
+    userId: '',
+    share_from: '',
+    orderby: 'created desc',
+    space_id: null,
+    pageSize: 50,
+    open_group_id: '',
+    answered: false,
+    matching_filter_enable: false,
+    collectBackImage: '/static/images/ic_menu_choice_nor.png',
+    showGoHome:false
+  };
+
+  async beforeOnLoad(e) {
+    e.space_id = loveSpaceId;
+  }
+
+  async onLoad(e) {
+    console.log("=========list===========onLoad==========loveSpaceId=====", loveSpaceId);
+    this.space_id = loveSpaceId;
+    this.user_id = this.$parent.globalData.user._id;
+    this.$apply();
+  }
+
+  async onShow() {
+  }
+
+  async init() {
+  }
+
+  getQueryFilter() {
+    return `(owner eq '${this.user_id}')`;
+  }
+
+  onShareAppMessage(res) {
+    const user_id = this.$parent.globalData.user._id;
+    console.log('onShareAppMessage', user_id);
+    let title = '我们的缘分榜，快来打榜！';
+    let path = `/pages/love/matching?space_id=${
+      this.space_id
+    }&share_from=${user_id}&open_group_id=-1`;
+    return {
+      title: title,
+      path: path
+    };
+  }
+
+  wxs = {
+    util: util
+  };
+
+  getFinalExpand() {
+    return 'user_b($select=avatar,name)';
+  }
+
+  mixins = [recordList];
+
+  methods = {
+    goShare() {
+      wx.navigateTo({
+        url: `/pages/love/share?card=true&space_id=${this.space_id}`
+      });
+    },
+    goHome() {
+      wx.switchTab({
+        url: `/pages/love/home?space_id=${this.space_id}`
+      });
+    },
+    goLove() {
+      const answeredUrl = encodeURIComponent(`/pages/love/cover_about_yourself?space_id=${this.space_id}`);
+      pageRouter.navigateTo({
+        url: `/pages/love/papers_view?object_name=love_test&space_id=${this.space_id}&answered_url=${answeredUrl}&answered_url_type=reLaunch&keep_progress`
+      });
+		}
+  };
+}
+</script>

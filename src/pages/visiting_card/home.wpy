@@ -130,8 +130,8 @@ page{
 			<view class="panel-box panel-top-box">
 				<love_card :card_info.sync="card_info" :is_owner.sync="is_owner" :space_id.sync="space_id" />
 				<view class="page-btn">
-					<button class="btn-share" open-type="share" plain="true"  type="primary">分享名片</button>
-					<button class="btn-contact"  plain="true" type="primary" >存入我的名片夹</button>
+					<button class="btn-share" open-type="share" plain="true" type="primary">分享名片</button>
+					<button class="btn-contact" plain="true" type="primary" @tap="goList">存入我的名片夹</button>
 					<view class="clear"></view>
 				</view>
 				<view class="friend-list-box">
@@ -372,6 +372,10 @@ page{
 					});
 				}
 				wepy.hideLoading();
+			},
+			async goList(){
+				let url = `list`;
+				wepy.switchTab({url: url});
 			}
 		};
 	}
