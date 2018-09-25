@@ -117,8 +117,21 @@ page{
 		}
 	}
 }
-.weui-cells_after-title{
-	margin: 0 -40rpx;
+
+.weui-cells{
+	border-bottom: none;
+	&:before{
+		border-top: none;
+	}
+	&:after{
+		border-bottom: none;
+	}
+	.weui-cell{
+		padding: 10px 0px;
+		&:before{
+			border-top: none;
+		}
+	}
 }
 </style>
 
