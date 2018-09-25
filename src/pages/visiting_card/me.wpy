@@ -60,6 +60,14 @@ page{
 		}
 	}
 }
+.live_chat{
+	text-align: left;
+	line-height:1.41176471;
+	font-size:17px;
+	font-family:黑体;
+	color:#000;
+
+}
 </style>
 
 <template>
@@ -90,12 +98,12 @@ page{
 					</navigator>
 				</view>
 				<view class="weui-cells">
-					<navigator url="./space/list" class="weui-cell weui-cell_access">
+					<button open-type="contact" plain="true" class="weui-cell weui-cell_access live_chat" hover-class="weui-cell_active">
 						<view class="weui-cell__bd">
 							<view>在线客服</view>
 						</view>
 						<view class="weui-cell__ft weui-cell__ft_in-access"></view>
-					</navigator>
+					</button>
 					<navigator url="./space/list" class="weui-cell weui-cell_access">
 						<view class="weui-cell__bd">
 							<view>设置</view>
