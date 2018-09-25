@@ -328,9 +328,9 @@ export default class VIP extends wepy.app {
     //   }]
     // },
     window: {
-      navigationBarBackgroundColor: '#ffffff',
-      navigationBarTitleText: '华炎客服',
-      navigationBarTextStyle: 'black',
+      navigationBarBackgroundColor: '#353535',
+      navigationBarTitleText: '华炎名片',
+      navigationBarTextStyle: 'white',
       backgroundColor: "#ffffff",
       backgroundTextStyle: 'dark',
     }
