@@ -484,6 +484,10 @@
               }
             }
 
+            if (object_name === 'users') {
+              this.args.undeletable = true;
+            }
+
             this.$apply();
 
             if (object.fields) {
