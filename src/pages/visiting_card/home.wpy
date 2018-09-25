@@ -164,8 +164,8 @@ page{
 				</view>
 				<view class="panel-box-content panel-box-img">
 					<repeat for="{{card_info.photos}}" key="index" index="index" item="item">
-            <image src="{{util.formatImageUrl(item, baseUrl)}}" mode="widthFix" @tap="previewImage({{item}})"/>
-          </repeat>
+						<image src="{{util.formatImageUrl(item, baseUrl)}}" mode="widthFix" @tap="previewImage({{item}})"/>
+					</repeat>
 				</view>
 			</view>
 		</view>
@@ -235,6 +235,8 @@ page{
 			// this.card_user_id = "PGcaKBCZPdFBKiQcx";
 			if(this.user_id == this.card_user_id){
 				this.is_owner = true;
+				wx.redirectTo({url:'me'});
+				return;
 			}
 			await this.loadData();
 			this.is_loaded = true;
