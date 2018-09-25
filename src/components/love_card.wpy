@@ -32,17 +32,17 @@
 		.card-content-icon{
 			float: left;
 			.slds-icon{
-				width:40rpx;
-				height:40rpx;
-				line-height:40rpx;
-				margin-right:0.43em;
+				width:30rpx;
+				height:30rpx;
+				line-height:30rpx;
+				margin-right:0.5em;
 			}
 		}
 		.card-content-tel, .card-content-email, .card-content-address{
 			float: left;
 			height: 30rpx;
 			line-height: 30rpx;
-			width: calc(~"100% - 60rpx");
+			width: calc(~"100% - 50rpx");
 		}
 	}
 }
