@@ -21,6 +21,9 @@
   text-align: left;
   font-size: 17px;
 }
+.weui-loadmore__tips_in-line{
+  background-color: #fff;
+}
 </style>
 
 <template>
@@ -28,7 +31,7 @@
     <view class="page__hd" style="display:none">
       <searchbar :placeholder.sync="searchPlaceholder" @confirm.user="searchRecords" />
     </view>
-    <view class="page__bd">
+    <view class="page__bd">  
       <block wx:if="{{record_list.length}}">
         <view class="weui-cells">
           <repeat for="{{record_list}}" key="index" index="index" item="record">
@@ -46,13 +49,9 @@
           </repeat>
         </view>
       </block>
-      <block wx:else>
-        <view class="page cover-page page-else">
-          <view class="page__bd">
-            <image class="light" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/light.png"/>
-            <text style="display:block;">点击屏幕下方的按钮，</text>
-            <text  style="display:block;">邀请好友一起答题，就可以测试缘分啦~</text>
-          </view>
+      <block  wx:else>
+        <view class="weui-loadmore weui-loadmore_line">
+          <view class="weui-loadmore__tips weui-loadmore__tips_in-line">名片夹空空如也</view>
         </view>
       </block>
     </view>
