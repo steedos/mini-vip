@@ -31,18 +31,18 @@
 		margin: 15rpx 0;
 		.card-content-icon{
 			float: left;
-			.slds-icon--small{
-				width: 30rpx;
-				height: 30rpx;
-				line-height: 30rpx;
-				background-color:#ccc!important;
+			.slds-icon{
+				width:40rpx;
+				height:40rpx;
+				line-height:40rpx;
+				margin-right:0.43em;
 			}
 		}
 		.card-content-tel, .card-content-email, .card-content-address{
 			float: left;
 			height: 30rpx;
 			line-height: 30rpx;
-			width: calc(~"100% - 50rpx");
+			width: calc(~"100% - 60rpx");
 		}
 	}
 }
@@ -147,21 +147,21 @@
 			<view class="card-content {{is_owner ? 'weui-cell__ft_in-access' : ''}}">
 				<view class="card-content-item" wx:if="{{card_info.mobile}}">
 					<view class="card-content-icon">
-						<view class="slds-icon-standard-call slds-icon slds-icon--small slds-m-right--x-small"/>
+						<view class="vip-call-dark slds-icon slds-icon--small"/>
 					</view>
 					<view class="card-content-tel">{{card_info.mobile}}</view>
 					<view class="clear"></view>
 				</view>
 				<view class="card-content-item" wx:if="{{card_info.email}}">
 					<view class="card-content-icon">
-						<view class="slds-icon-standard-email slds-icon slds-icon--small slds-m-right--x-small"/>
+						<view class="vip-email-dark slds-icon slds-icon--small"/>
 					</view>
 					<view class="card-content-email">{{card_info.email}}</view>
 					<view class="clear"></view>
 				</view>
 				<view class="card-content-item" wx:if="{{card_info.location.address}}">
 					<view class="card-content-icon">
-						<view class="slds-icon-standard-address slds-icon slds-icon--small slds-m-right--x-small"/>
+						<view class="vip-address-dark slds-icon slds-icon--small"/>
 					</view>
 					<view class="card-content-address">{{card_info.location.address}}</view>
 					<view class="clear"></view>

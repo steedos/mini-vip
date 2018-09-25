@@ -172,7 +172,6 @@ page{
 				</view>	
 			</view>
 			<view class="panel-box"  @tap="addPhoneContact"  wx:if="{{card_info.mobile}}">
-				<view class="weui-cells__title"></view>
 				<view class="weui-cells weui-cells_after-title">
 					<view class="weui-cell weui-cell_access" hover-class="weui-cell_active">
 						<view class="weui-cell__bd">存入手机通讯录</view>
