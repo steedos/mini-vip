@@ -16,6 +16,8 @@ class PageRouter{
 
   _app;
 
+  callBack = null;
+
   go(type, object){
     for(let e of this._enter){
       if(e.page === object.url || object.url.startsWith(e.page + '?')){
@@ -25,6 +27,7 @@ class PageRouter{
         }
       }
     }
+    this.callBack = object.callBack;
     return wepy[type](object)
   }
 

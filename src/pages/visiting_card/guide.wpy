@@ -1,0 +1,69 @@
+<style lang="less">
+page{
+	font-family: 黑体;
+	background: #fff;
+}
+.page__bd{
+	text-align: center;
+	margin:55% 40rpx 0 40rpx;
+	padding: 0;
+}
+.title{
+	color:#888;
+	font-size:36rpx;
+}
+.btn-create {
+	background-color: #1AAD19!important;
+	color: #fff!important;
+	margin-top:40rpx;
+	font-size:36rpx;
+}
+</style>
+
+<template>
+	<view class="page">
+		<view class="page__bd">
+			<view class="title">你还没有名片</view>
+			<button class="btn-create" plain="true" type="primary" @tap="goEdit">创建我的名片</button>
+		</view>
+	</view>
+</template>
+
+<script>
+	import wepy from 'wepy';
+	import { baseUrl } from '@/config';
+	import { loveSpaceId } from '@/config';
+	import pageRouter from '@/utils/pageRouter'
+
+	export default class VisitingCardGuide extends wepy.page {
+		config = {
+			navigationBarTitleText: '创建名片'
+		};
+
+		data = {
+			space_id: null,
+			user_id: null
+		};
+
+		async onLoad(e) {
+			this.user_id = this.$parent.globalData.user._id;
+			this.space_id = loveSpaceId;
+			this.$apply();
+		}
+
+		methods = {
+			goEdit(){
+				let fields = "avatar,name,company,position,mobile,wechat,email,location,self_introduction,photos";
+				let url = `../record/edit?space_id=${this.space_id}&object_name=users&action=edit&record_id=${this.user_id}&title=创建名片&fields=${fields}`;
+				pageRouter.navigateTo({
+					url: url,
+					callBack: ()=>{
+						wepy.redirectTo({
+							url: "/pages/visiting_card/home"
+						});
+					}
+				});
+			}
+		};
+	}
+</script>

@@ -395,6 +395,7 @@
   import { baseUrl, appId } from '@/config'
   import util from '../wxs/util.wxs'
   const utilJs = require('../utils/util.js');
+	import pageRouter from '@/utils/pageRouter'
 
   import _ from 'underscore'
 
@@ -958,9 +959,15 @@
       if (prevPage.refresh) {
         prevPage.refresh(action, record_id)
       }
-      wepy.navigateBack({
-        delta: 1
-      })
+      if(pageRouter.callBack && typeof pageRouter.callBack == "function"){
+        pageRouter.callBack();
+        pageRouter.callBack = null;
+      }
+      else{
+        wepy.navigateBack({
+          delta: 1
+        })
+      }
     }
 
     events = {

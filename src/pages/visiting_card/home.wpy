@@ -238,7 +238,7 @@ page{
 		}
 
 		async onLoad(e) {
-			this.is_loaded = true;
+			this.is_loaded = false;
 			this.$apply();
 			console.log("=====onLoad====e====1==", e);
 			wepy.showShareMenu({
@@ -262,7 +262,10 @@ page{
 			if(this.user_id == this.card_user_id){
 				this.is_owner = true;
 			}
-			await this.loadData();
+			let isSuc = await this.loadData();
+			if(!isSuc){
+				return;
+			}
 			this.is_loaded = true;
 			this.$apply();
 			wx.setNavigationBarTitle({title: this.card_info.name +'的名片'})
@@ -279,9 +282,15 @@ page{
 		}
 
 		async loadData() {
-			await this.loadCardInfo();
-			await this.loadMyFriend();
-			await this.loadFriends();
+			let isSuc = await this.loadCardInfo();
+			if(isSuc){
+				await this.loadMyFriend();
+				await this.loadFriends();
+				return true;
+			}
+			else{
+				return false;	
+			}
 		}
 	
 		async loadCardInfo() {
@@ -292,7 +301,15 @@ page{
 			const records = await this.$parent.query('users', options, this.space_id);
 			if (records && records.value && records.value[0]) {
 				this.card_info = records.value[0];
+				if(this.is_owner &&!this.card_info.name){
+					// 没有姓名就判定为没有名片，跳转到引导界面让用户创建自己的名片
+					wepy.redirectTo({
+						url: "guide"
+					});
+					return false;
+				}
 			}
+			return true;
 		}
 	
 		async loadMyFriend() {
