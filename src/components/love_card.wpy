@@ -169,7 +169,7 @@
 				<view class="clear"></view>
 			</view>   
 		</view>
-		<view wx:if="{{!is_owner}}" class="card-more">
+		<view class="card-more">
 			<view wx:if="{{!is_detail}}" @tap="openDetail">
 				<view class="card-more-title">展开全部名片信息</view>
 				<view class="weui-cell__ft switch-group-open weui-cell__ft_in-access"></view>
