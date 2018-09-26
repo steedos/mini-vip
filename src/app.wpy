@@ -194,7 +194,7 @@ setStore(store)
 export default class VIP extends wepy.app {
   config = {
     pages: [
-      'pages/visiting_card/home',
+      'pages/visiting_card/view',
       'pages/visiting_card/index',
       'pages/visiting_card/me',
       'pages/visiting_card/list',

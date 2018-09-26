@@ -59,7 +59,7 @@ page{
 					url: url,
 					callBack: ()=>{
 						wepy.redirectTo({
-							url: "/pages/visiting_card/home"
+							url: "/pages/visiting_card/view"
 						});
 					}
 				});

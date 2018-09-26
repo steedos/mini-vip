@@ -36,7 +36,7 @@
         <view class="weui-cells">
           <repeat for="{{record_list}}" key="index" index="index" item="record">
             <block wx:if="{{record.user_b.name}}">
-              <navigator url="./home?card_user_id={{record.user_b._id}}" class="record-container weui-cell weui-cell_access" hover-class="weui-cell_active">
+              <navigator url="./view?card_user_id={{record.user_b._id}}" class="record-container weui-cell weui-cell_access" hover-class="weui-cell_active">
                 <view class="weui-cell__hd">
                   <image src="{{util.formatImageUrl(record.user_b.avatar, baseUrl)}}" class='avatar-field'/>
                 </view>

@@ -82,7 +82,7 @@ page{
 				</view>
 				
 				<view class="weui-cells">
-					<navigator url="./home?card_user_id{{card_user_id}}" class="weui-cell weui-cell_access">
+					<navigator url="./view?card_user_id{{card_user_id}}" class="weui-cell weui-cell_access">
 						<view class="weui-cell__bd">
 							<view>预览名片</view>
 						</view>
@@ -178,7 +178,7 @@ page{
 		
 		onShareAppMessage() {
 			let title = `你好，我是${this.card_info.name}，这是我的电子名片。`;
-			let url = `pages/visiting_card/home?card_user_id=${this.card_user_id}&share_from=${this.user_id}`;
+			let url = `pages/visiting_card/view?card_user_id=${this.card_user_id}&share_from=${this.user_id}`;
 			return {
 				title: title,
 				path: url
