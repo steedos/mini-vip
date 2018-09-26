@@ -19,7 +19,6 @@
     .user-phone{
       margin-top: 20px;
       width: 100%;
-      position:absolute;
       top:50%;
     }
 
@@ -108,7 +107,7 @@
             <image class="weui-media-box__thumb avatar" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/noface144.png"></image>
           </view>
           <view class="container-title">无颜</view> -->
-          <view class="user-phone" style="margin-top: 0px">
+          <view class="user-phone" style="margin-top: 0px;position:absolute;">
             <button class="weui-btn" type="primary" plain="true" open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumberAndLogin">使用微信账户登录</button>
           </view>
         </view>
