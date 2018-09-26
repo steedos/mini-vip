@@ -9,3 +9,5 @@ export const baseMaterialUrl = 'https://lg-769qcuso-1253849369.cos.ap-shanghai.m
 export const loveSpaceId = 'Lnre96ro35Wf9b3gA';
 export const txMapsKey = 'GJOBZ-YSX66-K3SSM-E3MJM-IWPRV-BFFIO';
 export const phoneLoginShowNickName = true;
+
+export const chatNewMessagePollingInterval = 15 * 1000;

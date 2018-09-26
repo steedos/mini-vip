@@ -91,8 +91,13 @@ function formatDateMini(value) {
     hours_str = '晚上' + (hours - 12);
   }
   console.log('formatDateMini 77');
-  if(value.getFullYear() < now.getFullYear() || value.getMonth() < now.getMonth() || value.getDate() < now.getDate()){
+  if(value.getFullYear() === now.getFullYear() && (value.getMonth() < now.getMonth() || value.getDate() < now.getDate())){
     console.log('formatDateMini if');
+    return month + date;
+  }
+
+  if(value.getFullYear() < now.getFullYear() || value.getMonth() < now.getMonth() || value.getDate() < now.getDate()){
+    console.log('formatDateMini if2');
     return year + month + date;
   }else{
     console.log('formatDateMini else');
@@ -421,7 +426,6 @@ function fixed(num, length) {
   var num = num * 100;
   return num.toFixed(length);
 }
-
 
 module.exports = {
   formatDate: formatDate,

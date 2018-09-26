@@ -1,0 +1,72 @@
+<style type="less">
+  .page_chat {
+    height: 100%;
+    background-color: #ededed;
+  }
+</style>
+<template>
+  <view class="body page_chat">
+    <chartboard/>
+    <myinput/>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+
+  import Input from '../../components/chat_input';
+  import Chartboard from '../../components/chart_board';
+
+  export default class ChatMessages extends wepy.page {
+    config = {
+
+    };
+    components = {
+      myinput: Input,
+      chartboard: Chartboard
+    };
+
+    data = {
+      currentTab: 0
+    };
+    methods = {};
+
+    changeTab(idx) {
+      this.currentTab = +idx;
+      this.$apply();
+    }
+
+    setNavigationBarTitle(title){
+      wx.setNavigationBarTitle({title: title});
+    }
+
+    onLoad(p) {
+      console.log('chat load...');
+      if (!p){
+        p = {}
+      }
+
+      if(p.title){
+        this.setNavigationBarTitle(p.title);
+      }
+
+      this.$invoke('chartboard', 'loadMessage', p.space_id, p.room_id, p.to_user);
+    }
+
+    onShow(){
+      this.$invoke('chartboard', 'receivingMessage')
+    }
+
+    onHide(){
+      this.$invoke('chartboard', 'stopReceivingMessage')
+    }
+
+    async onUnload(){
+      this.$invoke('chartboard', 'stopReceivingMessage')
+      await this.$invoke('chartboard', 'resetUnread')
+      const pages = getCurrentPages();
+      const page = pages[pages.length - 1];
+      page.refresh()
+    }
+  }
+</script>

@@ -27,7 +27,7 @@ class Request {
   }
 
   request(params) {
-    console.log(this._header)
+    // console.log(this._header)
     const { url, method, header, data } = this.interceptors.request ? this.interceptors.request(params) : params
     return wepy.request({
       url: (this._baseUrl || '') + url,
