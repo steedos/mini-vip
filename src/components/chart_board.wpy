@@ -1,0 +1,393 @@
+<style type="less">
+  page{
+    height: 100%;
+  }
+  .chartboard {
+    height: calc(~"100% - 48px");
+    background-color: #ededed;
+    &.fixed {
+      position:fixed;
+      left:0;
+      right:0;
+      overflow-y:scroll;
+    }
+    .bubble-container {
+      position: relative;
+      display: flex;
+      padding: 20rpx;
+    }
+    .content {
+      max-width: 55%;
+      background-color: #d8d8d8;
+      border-radius: 4px;
+      padding: 9rpx 20rpx;
+      word-break: break-all;
+      font-size: 14px;
+    }
+    .icon {
+      width: 36px;
+      height: 36px;
+      position: relative;
+      margin-right: 28rpx;
+    }
+    .caret-left {
+      width: 0;
+      height: 0;
+      border-width: 12rpx;
+      border-color: transparent #d8d8d8 transparent transparent;
+      border-style: solid;
+      position: absolute;
+      right: -28rpx;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .container-right {
+      position: relative;
+      display: flex;
+      justify-content: flex-end;
+      padding: 20rpx;
+    }
+    .content-right {
+      max-width: 55%;
+      background-color: #005fb2;
+      color: #fff;
+      border-radius: 4px;
+      padding: 6px 10px;
+      word-break: break-all;
+      font-size: 14px;
+    }
+    .content > text, .content-right > text {
+      line-height: 24px;
+    }
+    .icon-right {
+      width: 36px;
+      height: 36px;
+      position: relative;
+      margin-left: 28rpx;
+    }
+    .photo {
+      width: 36px;
+      height: 36px;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .caret-right {
+      width: 0;
+      height: 0;
+      border-width: 12rpx;
+      border-color: transparent transparent transparent #005fb2;
+      border-style: solid;
+      position: absolute;
+      left: -28rpx;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 1;
+    }
+  }
+
+
+  @loadingColor: #cccccc;
+
+  .loading-view{
+    width: 100%;
+    text-align: center;
+  }
+
+  .lds-ring {
+    display: inline-block;
+    position: relative;
+    width: 32px;
+    height: 32px;
+  }
+  .lds-ring view {
+    box-sizing: border-box;
+    display: block;
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    margin: 3px;
+    border: 3px solid @loadingColor;
+    border-radius: 50%;
+    animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    border-color: @loadingColor transparent transparent transparent;
+  }
+  .lds-ring view:nth-child(1) {
+    animation-delay: -0.45s;
+  }
+  .lds-ring view:nth-child(2) {
+    animation-delay: -0.3s;
+  }
+  .lds-ring view:nth-child(3) {
+    animation-delay: -0.15s;
+  }
+  @keyframes lds-ring {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+</style>
+<template>
+  <scroll-view scroll-y="1" upper-threshold="50" scroll-with-animation="{{scrollAnimation}}" scroll-into-view="i_{{toView}}" class="chartboard{{focus ? ' fixed' : ''}}" @scrolltoupper="loadHMessage" @scroll="scroll" @scrolltolower="scrolltolower">
+    <view class="loading-view" wx:if="{{loading}}"><view class="lds-ring"><view></view><view></view><view></view><view></view></view></view>
+    <block wx:for="{{messages}}" wx:key="index" wx:for-index="index" wx:for-item="item">
+      <view id="i_{{item._id}}" class="bubble-container" wx:if="{{ item.owner._id != user._id }}">
+        <view class="icon">
+          <view class="caret-left"></view>
+          <view class="photo">
+            <image src="{{ item.owner.profile.avatar }}" style="width:36px;height:36px;"></image>
+          </view>
+        </view>
+        <view class="content">
+          <text>{{item.name}}</text>
+        </view>
+      </view>
+      <view id="i_{{item._id}}" class="container-right" wx:else>
+        <view class="content-right">
+          <text>{{item.name}}</text>
+        </view>
+        <view class="icon-right">
+          <view class="photo">
+            <image src="{{ item.owner.profile.avatar }}" style="width:36px;height:36px;"></image>
+          </view>
+          <view class="caret-right"></view>
+        </view>
+      </view>
+    </block>
+  </scroll-view>
+</template>
+<script>
+  import wepy from 'wepy';
+  import _ from 'underscore'
+  import chat from '../common/chat';
+
+  import {chatNewMessagePollingInterval} from '@/config'
+
+  const global = {}
+
+  export default class ChartBoard extends wepy.component {
+
+    data = {
+      loading: false,
+      messages: [],
+      waitingShowMessages: [],
+      focus: false,
+      user: {},
+      toView: '',
+      setInterval: null,
+      timestamp: null,
+      room_id: null,
+      historyTimestamp: null,
+      loadedLastMesssage: false,
+      scrollAnimation: true
+    };
+
+    mWebSocket() {
+      wepy.connectSocket({
+        url: 'ws://192.168.3.2:5000/sockjs/866/zkisvub0/websocket'
+        , header: {
+          'content-type': 'application/json',
+          'Cookie': 'X-User-Id=RD4WEiyPzq3bHduSH; X-Auth-Token=KSb2jvEQEa_HH8H_TdOETO_kEwgkv4WdANYGqqh8Btf'
+        }
+      })
+
+      wepy.onSocketOpen(function (res) {
+        console.log('WebSocket连接已打开！')
+
+      })
+      wepy.onSocketError(function (res) {
+        console.log('WebSocket连接打开失败，请检查！')
+      })
+
+      wx.onSocketMessage((res) => {
+        console.log('收到服务器内容：' + res.data)
+        if (!this.one) {
+          wx.sendSocketMessage({
+            data: '["{\\"msg\\":\\"sub\\",\\"id\\":\\"Tdvy2WkHgsJFqcxSP\\",\\"name\\":\\"event-need-action\\",\\"params\\":[\\"Re9udc2LDMFwrRWDx\\"]}"]'
+          })
+        }
+
+        this.one = true
+      })
+
+//          wepy.onSocketOpen(function(res) {
+//            socketOpen = true
+//            wx.sendSocketMessage({
+//              data:{a:1,b:2}
+//            })
+////            for (var i = 0; i < socketMsgQueue.length; i++){
+////              sendSocketMessage(socketMsgQueue[i])
+////            }
+////            socketMsgQueue = []
+//          })
+    }
+
+    methods = {};
+
+    onLoad() {
+    }
+
+    fixPosition(focus) {
+      this.focus = focus;
+      this.$apply();
+    }
+
+    stopReceivingMessage(){
+      if(this.setInterval){
+        clearInterval(this.setInterval)
+      }
+      this.setInterval = null
+    }
+
+    receivingMessage(){
+      if(!this.setInterval){
+        this.setInterval = setInterval(async ()=>{
+          const newMessage = (await chat.getNewMessage(this.room_id, this.space_id, this.timestamp)).value.reverse();
+          this.messages = _.uniq(this.messages.concat(newMessage), true, (a)=>{
+            return a._id
+          })
+          if(newMessage.length > 0){
+            if(this.scrollAnimation){
+              this.toView = _.last(newMessage)._id;
+            }
+            this.timestamp = _.last(newMessage).created;
+          }
+          this.$apply();
+        }, chatNewMessagePollingInterval || 15 * 1000)
+      }
+    }
+
+    async resetUnread(){
+      await chat.resetUnread(this.room_id, this.user._id, this.space_id)
+    }
+
+//    resetUnread(room_id, user_id, space_id){
+//      chat.resetUnread(room_id, user_id, space_id)
+//    }
+
+    async loadMessage(space_id, room_id, to) {
+      this.loading = true;
+      this.$apply();
+      this.space_id = space_id;
+      this.user = this.$parent.$parent.globalData.user;
+
+      if(this.user._id && to && this.user._id === to){
+        throw new Error('不支持与自己聊天')
+      }
+
+      if(room_id){
+        this.room_id = room_id;
+      }else{
+        this.to = to;
+        const room = await chat.getRoom(this.user._id, space_id, [this.to, this.user._id]);
+        this.room_id = room._id;
+      }
+
+      await this.resetUnread();
+
+      let messages;
+      try {
+        messages = (await chat.getHistory(this.room_id, space_id)).value.reverse();
+        console.log('messages', messages)
+      } catch (e) {
+        messages = null;
+        console.error('getHistory fail');
+        console.log(e);
+      }
+      if (messages) {
+        this.messages = messages;
+
+        if(messages.length > 0){
+          this.toView = _.last(messages)._id;
+          this.timestamp = _.last(messages).created;
+          this.historyTimestamp = _.first(messages).created;
+        }
+
+        this.space_id = space_id;
+        this.$apply();
+      }
+
+      this.receivingMessage()
+
+      this.loading = false;
+      this.$apply();
+    }
+
+    async sendMessage(msg) {
+      let msgObj = await chat.sendMsg(this.room_id, msg, 'text',this.space_id, this.user._id);
+      msgObj.owner = {
+        _id: this.user._id,
+        name: this.user.name,
+        profile: {
+          avatar: this.user.avatar
+        }
+      }
+      this.toView = msgObj._id
+      this.messages.push(msgObj);
+      this.$apply();
+      this.$invoke('../myinput', 'clear');
+//            let randomReply = await api.getRandomReply(id);
+//            this.replyMessage(randomReply);
+    }
+
+    async replyMessage(msg) {
+      let id = this.to;
+      let contact = global.getContact(id);
+      let msgObj = await api.replyMsg(id, msg);
+      msgObj.name = contact.name;
+      msgObj.icon = contact.icon;
+
+      this.messages.push(msgObj);
+      this.$apply();
+    }
+
+
+    methods = {
+      loadHMessage: async function (e) {
+        console.log('loadHMessage......')
+        if(this.loadedLastMesssage){
+          return ;
+        }
+
+        this.loading = true;
+        this.$apply();
+
+        const messages = (await chat.getHistory(this.room_id, this.space_id, 10, `created lt ${this.historyTimestamp}`)).value.reverse();
+//        this.toView = _.first(this.messages)._id;
+        if (messages) {
+          this.messages.splice(0, 0, ...messages);
+          this.messages = _.uniq(this.messages, true, (a)=>{
+            return a._id
+          });
+          if(messages.length > 0){
+            this.toView = _.last(messages)._id;
+            this.historyTimestamp = _.first(messages).created;
+          }
+
+          if(messages.length === 0){
+            this.loadedLastMesssage = true
+          }
+        }
+
+
+        this.loading = false;
+        this.$apply();
+      },
+
+      scrolltolower: function (e) {
+        this.scrollAnimation = true;
+        this.$apply();
+      },
+
+      scroll: function (e) {
+        if(e.detail.deltaY > 0){
+          this.scrollAnimation = false;
+        }
+        this.$apply()
+      }
+    }
+  }
+</script>

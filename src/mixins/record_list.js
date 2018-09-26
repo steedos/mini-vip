@@ -315,10 +315,10 @@ export default class recordList extends wepy.mixin {
   }
 
   async loadRecords(searchValue) {
-    wepy.showLoading({
-      title: '加载中',
-      mask: true
-    });
+    // wepy.showLoading({
+    //   title: '加载中',
+    //   mask: true
+    // });
     const skip = this.current_skip;
     const object_name = this.object_name;
 

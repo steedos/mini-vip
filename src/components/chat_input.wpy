@@ -1,0 +1,109 @@
+<style type="less">
+    .input {
+        color: #7b7b7b;
+        position: fixed;
+        bottom: 0;
+        height: 100rpx;
+        width: 100%;
+        border-top: 1px solid #d8d8d8;
+        background-color: #ffffff;
+        font-size: 22rpx;
+        .input_layout {
+            position: relative;
+            margin-top: 3px;
+            margin-left: 5px;
+          .input_icon {
+                position: absolute;
+                width: 90rpx;
+                height: 90rpx;
+                &.voice {
+                    left: 20rpx;
+                }
+                &.face {
+                    right: 120rpx;
+                }
+                &.plus {
+                    right: 20rpx;
+                }
+            }
+            .input_text {
+                border-bottom: 1px solid #d8d8d8;
+                padding-left: 20rpx;
+                margin-right: 110rpx;
+                height: 80rpx;
+                font-size: 32rpx;
+                /*border-radius: 10rpx;*/
+                color: #000;
+                &.focus {
+                    border-bottom: 1px solid #005fb2;
+                }
+            }
+            .send {
+                background-color: #005fb2;
+                display: inline-block;
+                box-sizing: border-box;
+                position: absolute;
+                border: 1px solid #005fb2;
+                border-radius: 5rpx;
+                right:10rpx;
+                width:90rpx;
+                height: 74rpx;
+                line-height: 72rpx;
+                color: white;
+                text-align: center;
+                font-size: 30rpx;
+                margin-top:8rpx;
+                &.hidden {
+                    display: none;
+                }
+            }
+        }
+    }
+</style>
+<template>
+    <view class="input">
+        <view class="input_layout">
+          <!--<image class="input_icon voice" src="../images/voice.png"></image>-->
+          <!--<image class="input_icon face" src="../images/face.png"></image>-->
+          <!--<image class="input_icon plus" src="../images/plus.png"></image>-->
+            <view class="send" @tap="send">发送</view>
+            <input @input="input" value="{{readyToSend}}" class="input_text{{focusFlag ? ' focusFlag' : ''}}" @focus="focus" @blur="blur" @type="input"></input>
+        </view>
+    </view>
+</template>
+<script>
+    import wepy from 'wepy';
+
+    export default class ChatInput extends wepy.component {
+
+        data = {
+            focusFlag: false,
+            readyToSend: ''
+        };
+
+        methods = {
+            send (evt) {
+                if (this.readyToSend) {
+                    this.$invoke('../chartboard', 'sendMessage', this.readyToSend);
+                }
+            },
+            input (evt) {
+                this.readyToSend = evt.detail.value;
+            },
+            focus (evt) {
+                this.focusFlag = true;
+                this.$invoke('../chartboard', 'fixPosition', this.focusFlag);
+            },
+            blur (evt) {
+                this.focusFlag = false;
+                this.$invoke('../chartboard', 'fixPosition', this.focusFlag);
+            },
+            clear () {
+                this.readyToSend = '';
+            }
+        };
+
+        onLoad () {
+        }
+    }
+</script>
