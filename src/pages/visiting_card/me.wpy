@@ -88,27 +88,27 @@ page{
 						</view>
 						<view class="weui-cell__ft weui-cell__ft_in-access"></view>
 					</navigator>
-					<navigator url="./space/list" class="weui-cell weui-cell_access">
+					<!-- <navigator url="./space/list" class="weui-cell weui-cell_access">
 						<view class="weui-cell__bd">
 							<view>名片二维码</view>
 						</view>
 						<view class="weui-cell__ft weui-cell__ft_in-access"></view>
-					</navigator>
+					</navigator> -->
 				</view>
-				<view class="weui-cells">
+				<!-- <view class="weui-cells">
 					<button open-type="contact" plain="true" class="weui-cell weui-cell_access live_chat" hover-class="weui-cell_active">
 						<view class="weui-cell__bd">
 							<view>在线客服</view>
 						</view>
 						<view class="weui-cell__ft weui-cell__ft_in-access"></view>
 					</button>
-					<!-- <navigator url="./space/list" class="weui-cell weui-cell_access">
+					<navigator url="./space/list" class="weui-cell weui-cell_access">
 						<view class="weui-cell__bd">
 							<view>设置</view>
 						</view>
 						<view class="weui-cell__ft weui-cell__ft_in-access"></view>
-					</navigator> -->
-				</view>
+					</navigator>
+				</view> -->
 			</view>
 		</view>
 	</view>
