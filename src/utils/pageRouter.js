@@ -16,6 +16,19 @@ class PageRouter{
 
   _app;
 
+  /**
+   * 跳转url中可以传入callBack函数作为回调
+    pageRouter.navigateTo({
+      url: url,
+      callBack: () => {
+        wepy.redirectTo({
+          url: "/pages/visiting_card/home"
+        });
+      }
+    });
+   * 目标界面可以在保存按钮事件中识别这个callBack属性，存在时就执行这个callBack函数
+   */
+  // 
   callBack = null;
 
   go(type, object){
