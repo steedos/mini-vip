@@ -233,6 +233,7 @@ page{
 
 		async onPullDownRefresh() {
 			await this.loadData();
+			wx.setNavigationBarTitle({title: this.card_info.name +'的名片'});
 			this.$apply();
 			wepy.stopPullDownRefresh();
 		}
