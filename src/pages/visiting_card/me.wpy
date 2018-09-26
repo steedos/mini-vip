@@ -54,7 +54,9 @@ page{
 		border-bottom: none;
 	}
 	.weui-cell{
-		padding: 10px 0px;
+		padding: 20rpx 40rpx;
+		margin:0 -40rpx;
+
 		&:before{
 			border-top: none;
 		}
