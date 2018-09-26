@@ -25,10 +25,14 @@ page{
 		float:left;
 	}
 	.btn-share {
-		// margin-left: 40rpx;
 		background-color: #1AAD19!important;
 		color: #fff!important;
 		float:right;
+	}
+	.btn-login-wx{
+		background-color: #1AAD19!important;
+		color: #fff!important;
+		border:none;
 	}
 }
 
@@ -78,9 +82,14 @@ page{
 			<view class="panel-box panel-top-box">
 				<love_card :card_info.sync="card_info" :is_owner.sync="is_owner" :space_id.sync="space_id" />
 				<view class="page-btn">
-					<button class="btn-edit"  plain="true" type="primary" @tap="goEdit">编辑名片</button>
-					<button class="btn-share" open-type="share" plain="true"  type="primary">发名片</button>
-					<view class="clear"></view>
+					<block wx:if="{{isAuthUserInfo}}">
+						<button class="btn-edit"  plain="true" type="primary" @tap="goEdit">编辑名片</button>
+						<button class="btn-share" open-type="share" plain="true"  type="primary">发名片</button>
+						<view class="clear"></view>
+					</block>
+					<block wx:else>
+						<button open-type="getUserInfo" bindgetuserinfo="userLogin" plain="true" class="btn-login-wx">登录微信后编辑名片</button>
+					</block>
 				</view>
 				
 				<view class="weui-cells">
@@ -124,6 +133,7 @@ page{
 	import love_card from '../../components/love_card';
 	import bg_circle from '../../components/bg_circle';
 	import pageRouter from '@/utils/pageRouter'
+	import req from '@/network';
 
 	export default class VisitingCardMe extends wepy.page {
 		config = {
@@ -137,6 +147,7 @@ page{
 		};
 
 		data = {
+			isAuthUserInfo: false,
 			is_loaded: false,
 			space_id: null,
 			user_id: null,
@@ -169,9 +180,15 @@ page{
 			e.space_id = loveSpaceId;
 			this.space_id = e.space_id;
 			await this.$parent.login(e);
-			this.user_id = this.$parent.globalData.user._id;
+			let user = this.$parent.globalData.user;
+			this.user_id = user._id;
 			this.card_user_id = this.user_id;
 			// this.card_user_id = "PGcaKBCZPdFBKiQcx";
+			if (user.name && user.avatar) {
+				this.isAuthUserInfo = true;
+			} else {
+				this.isAuthUserInfo = false;
+			}
 			await this.loadData();
 			this.is_loaded = true;
 			this.$apply();
@@ -203,6 +220,28 @@ page{
 		}
 
 		methods = {
+			userLogin(e) {
+				const self = this;
+				const userInfo = e.detail.userInfo;
+				const user = this.$parent.globalData.user;
+				if (userInfo) {
+					const name = user.name || userInfo.nickName;
+					const sex = userInfo.gender ? '男' : '女';
+					const avatar = userInfo.avatarUrl;
+
+					this.userInfo = userInfo;
+					this.isAuthUserInfo = true;
+					this.name = name;
+					this.sex = sex;
+					this.avatar = userInfo.avatarUrl;
+					this.$parent.globalData.userInfo = userInfo;
+					this.$parent.globalData.user.sex = sex;
+					this.$apply();
+
+					const url = '/mini/vip/user';
+					req.put(url, { name: name, sex: sex, avatar: avatar });
+				}
+			},
 			goEdit(){
 				if(!this.is_owner){
 					return;
