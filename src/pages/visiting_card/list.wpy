@@ -80,6 +80,7 @@ export default class VisitingCardList extends wepy.page {
   };
 
   data = {
+    is_loaded: false,
     name: '',
     avatar: '',
     object_name: 'love_friends',
@@ -95,13 +96,15 @@ export default class VisitingCardList extends wepy.page {
   };
 
   async beforeOnLoad(e) {
+    wx.showNavigationBarLoading();
     e.space_id = loveSpaceId;
+    this.space_id = e.space_id;
+    await this.$parent.login(e);
+    this.user_id = this.$parent.globalData.user._id;
+    this.$apply();
   }
 
   async onLoad(e) {
-    this.space_id = loveSpaceId;
-    this.user_id = this.$parent.globalData.user._id;
-    this.$apply();
   }
 
   async onShow() {
