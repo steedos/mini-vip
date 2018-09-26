@@ -48,7 +48,7 @@
 }
 .card-title{
 	float: left;
-	width:400rpx;
+	width:360rpx;
 	overflow:hidden;
 
 	.card-title-logo{
@@ -113,7 +113,7 @@
 	}
 }
 .card-more-detail{
-	margin:20rpx -20rpx;
+	margin:20rpx -40rpx;
 	background:#F7F7F7;
 	padding:40rpx 40rpx;
 	.card-more-detail-item{
@@ -135,7 +135,7 @@
 <template>
 	<view class="love-card">
 		<view class="card-container" @tap="goEdit">
-			<view class="card-title">
+			<view class="card-title {{is_owner ? 'weui-cell__ft_in-access' : ''}}">
 				<view class="card-tittle-company">{{card_info.company}}</view>
 				<view class="card-title-name">{{card_info.name}}</view>
 				<view class="card-title-job">{{card_info.position}}</view>
@@ -144,7 +144,7 @@
 				<image wx:if="{{card_info.avatar}}" class="image" mode="aspectFill" src="{{util.formatImageUrl(card_info.avatar, baseUrl) || default_avatar}}"/>
 			</view>
 			<view class="clear"></view>
-			<view class="card-content {{is_owner ? 'weui-cell__ft_in-access' : ''}}">
+			<view class="card-content">
 				<view class="card-content-item" wx:if="{{card_info.mobile}}">
 					<view class="card-content-icon">
 						<view class="vip-call-dark slds-icon slds-icon--small"/>
