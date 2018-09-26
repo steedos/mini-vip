@@ -77,7 +77,6 @@ page{
 				<love_card :card_info.sync="card_info" :is_owner.sync="is_owner" :space_id.sync="space_id" />
 				<view class="page-btn">
 					<button class="btn-edit"  plain="true" type="primary" @tap="goEdit">编辑名片</button>
-					<!-- <button class="btn-contact"  plain="true" type="primary" @tap="addPhoneContact">存入手机通讯录</button> -->
 					<button class="btn-share" open-type="share" plain="true"  type="primary">发名片</button>
 					<view class="clear"></view>
 				</view>
@@ -122,6 +121,7 @@ page{
 	import { loveSpaceId } from '@/config';
 	import love_card from '../../components/love_card';
 	import bg_circle from '../../components/bg_circle';
+	import pageRouter from '@/utils/pageRouter'
 
 	export default class VisitingCardMe extends wepy.page {
 		config = {
@@ -206,7 +206,9 @@ page{
 					return;
 				}
 				let url = `../record/edit?space_id=${this.space_id}&object_name=users&action=edit&record_id=${this.card_info._id}&title=编辑名片&fields=avatar,name,company,position,mobile,wechat,email,location,self_introduction,photos`;
-				wepy.navigateTo({url: url});
+				pageRouter.navigateTo({
+					url: url
+				});
 			},
 			async addPhoneContact(){
 				wx.addPhoneContact({
