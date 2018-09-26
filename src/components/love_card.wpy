@@ -43,6 +43,12 @@
 			height: 30rpx;
 			line-height: 30rpx;
 			width: calc(~"100% - 50rpx");
+			word-break: break-all;
+			text-overflow: ellipsis;
+			display: -webkit-box;
+			-webkit-box-orient: vertical;
+			-webkit-line-clamp: 1;
+			overflow: hidden;
 		}
 	}
 }
