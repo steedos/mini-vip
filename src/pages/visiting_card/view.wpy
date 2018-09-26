@@ -133,6 +133,10 @@ page{
 		}
 	}
 }
+
+.btn-create{
+	width:60%;
+}
 </style>
 
 <template>
@@ -144,7 +148,7 @@ page{
 				<love_card :card_info.sync="card_info" :is_owner.sync="is_owner" :space_id.sync="space_id" />
 				<view class="page-btn">
 					<button class="btn-share" open-type="share" plain="true" type="primary">分享名片</button>
-					<button class="btn-contact" plain="true" type="primary" @tap="goList">我的名片夹</button>
+					<button class="btn-contact" plain="true" type="primary" @tap="addPhoneContact">存入手机通讯录</button>
 					<view class="clear"></view>
 				</view>
 				<view class="friend-list-box">
@@ -184,14 +188,20 @@ page{
 					</repeat>
 				</view>	
 			</view>
-			<view class="panel-box"  @tap="addPhoneContact"  wx:if="{{card_info.mobile}}">
+			<!-- <view class="panel-box"  @tap="addPhoneContact"  wx:if="{{card_info.mobile}}">
 				<view class="weui-cells weui-cells_after-title">
 					<view class="weui-cell weui-cell_access" hover-class="weui-cell_active">
 						<view class="weui-cell__bd">存入手机通讯录</view>
 						<view class="weui-cell__ft weui-cell__ft_in-access"></view>
 					</view>
 				</view>
+			</view> -->
+
+			<view class="page-btn">
+				<button class="btn-create" plain="true" type="primary" @tap="goCard">创建/查看我的名片</button>
+				<view class="clear"></view>
 			</view>
+
 		</view>
 	</view>
 </template>
@@ -233,7 +243,12 @@ page{
 
 		async onPullDownRefresh() {
 			await this.loadData();
-			wx.setNavigationBarTitle({title: this.card_info.name +'的名片'});
+			let title = this.card_info.name;
+			if(title){
+				wx.setNavigationBarTitle({title: this.card_info.name +'的名片'});
+			}else{
+				wx.setNavigationBarTitle({title: '预览我的名片'});
+			};
 			this.$apply();
 			wepy.stopPullDownRefresh();
 		}
@@ -266,7 +281,12 @@ page{
 			await this.loadData();
 			this.is_loaded = true;
 			this.$apply();
-			wx.setNavigationBarTitle({title: this.card_info.name +'的名片'})
+			let title = this.card_info.name;
+			if(title){
+				wx.setNavigationBarTitle({title: this.card_info.name +'的名片'});
+			}else{
+				wx.setNavigationBarTitle({title: '预览我的名片'});
+			};
 			wepy.hideLoading();
 		}
 		
@@ -368,7 +388,11 @@ page{
 						});
 					}
 				});
- 			},
+			 },
+			async goCard(){
+				let url = `me`;
+				wepy.switchTab({url: url});
+			},
 			async toggleStar(){
 				if(this.is_owner || !this.my_friend._id){
 					return;
