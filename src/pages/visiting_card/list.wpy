@@ -38,7 +38,9 @@
             <block wx:if="{{record.user_b.name}}">
               <navigator url="./view?card_user_id={{record.user_b._id}}" class="record-container weui-cell weui-cell_access" hover-class="weui-cell_active">
                 <view class="weui-cell__hd">
-                  <image src="{{util.formatImageUrl(record.user_b.avatar, baseUrl)}}" class='avatar-field'/>
+                  <image wx:if="{{record.user_b.avatar}}" src="{{util.formatImageUrl(record.user_b.avatar, baseUrl)}}" class='avatar-field'/>
+                  <image wx:elif="{{record.user_b.profile.avatar}}" src="{{record.user_b.profile.avatar}}" class="avatar-field"/>
+                  <image wx:else src="{{default_avatar}}" class="avatar-field"/>
                 </view>
                 <view class="weui-cell__bd">
                   <view class="name">{{record.user_b.name}}</view>
@@ -92,7 +94,8 @@ export default class VisitingCardList extends wepy.page {
     share_from: '',
     orderby: 'created desc',
     space_id: null,
-    pageSize: 50
+    pageSize: 50,
+		default_avatar: 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg'
   };
 
   async beforeOnLoad(e) {
@@ -122,7 +125,7 @@ export default class VisitingCardList extends wepy.page {
   };
 
   getFinalExpand() {
-    return 'user_b($select=avatar,name)';
+    return 'user_b($select=avatar,name,profile/avatar)';
   }
 
   mixins = [recordList];
