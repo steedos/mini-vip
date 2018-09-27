@@ -11,6 +11,10 @@
       }
     }
 
+    .slds-icon-action-close{
+      padding: 0.4rem;
+    }
+
     .weui-cell__ft_in-access{
       display: none;
     }
