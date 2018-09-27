@@ -122,24 +122,26 @@
 	margin:20rpx -40rpx;
 	background:#F7F7F7;
 	padding:40rpx 40rpx;
+	display: table;
+	width:100%;
 	.card-more-detail-item{
-		text-align:left;
-		line-height:80rpx;
+		display: table-row;
+		text-align: left;
+		line-height: 80rpx;
 		.detail-item-title{
-			float: left;
-			color:#A6A6A6;
+			display: table-cell;
+			color: #A6A6A6;
+			width: 100rpx;
 		}
-		.detail-item-contant{
-			float: left;
+		.detail-item-contant, .detail-item-contant-null{
+			display: table-cell;
 			color: #000;
 			margin-left: 50rpx;
+			line-height: 50rpx;
 			width: calc(~"100% - 150rpx");
 		}
 		.detail-item-contant-null{
 			color:#A6A6A6;
-			float: left;
-			margin-left: 50rpx;
-			width: calc(~"100% - 150rpx");
 		}
 	}
 }
@@ -208,31 +210,26 @@
 					<view class="detail-item-title">电话</view>
 					<view class="detail-item-contant" wx:if="{{card_info.mobile}}">{{card_info.mobile}}</view>
 					<view class="detail-item-contant-null" wx:else>未填写</view>
-					<view class="clear"></view>
 				</view>
 				<view class="card-more-detail-item">
 					<view class="detail-item-title">微信</view>
 					<view class="detail-item-contant" wx:if="{{card_info.wechat}}">{{card_info.wechat}}</view>
 					<view class="detail-item-contant-null" wx:else>未填写</view>
-					<view class="clear"></view>
 				</view>
 				<view class="card-more-detail-item">
 					<view class="detail-item-title">邮箱</view>
 					<view class="detail-item-contant"  wx:if="{{card_info.email}}">{{card_info.email}}</view>
 					<view class="detail-item-contant-null"  wx:else>未填写</view>
-					<view class="clear"></view>
 				</view>
 				<view class="card-more-detail-item">
 					<view class="detail-item-title">公司</view>
 					<view class="detail-item-contant" wx:if="{{card_info.company}}">{{card_info.company}}</view>
 					<view class="detail-item-contant-null" wx:else>未填写</view>
-					<view class="clear"></view>
 				</view>
 				<view class="card-more-detail-item">
 					<view class="detail-item-title">地址</view>
 					<view class="detail-item-contant" wx:if="{{card_info.location.address}}">{{card_info.location.address}}</view>
 					<view class="detail-item-contant-null" wx:else>未填写</view>
-					<view class="clear"></view>
 				</view>
 			</view>
 		</view>
