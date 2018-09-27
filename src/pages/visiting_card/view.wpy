@@ -196,12 +196,19 @@ page{
 					</view>
 				</view>
 			</view> -->
-
+			
 			<view class="page-btn">
-				<button class="btn-create" plain="true" type="primary" @tap="goCard">创建/查看我的名片</button>
-				<view class="clear"></view>
+				<view wx:if="{{!is_owner}}">
+					<view wx:if="{{user.name}}">
+						<button class="btn-create" plain="true" type="primary" @tap="goCard">查看我的名片</button>
+						<view class="clear"></view>
+					</view>
+					<view wx:else>
+						<button class="btn-create" plain="true" type="primary" @tap="goCard">创建我的名片</button>
+						<view class="clear"></view>
+					</view>
+				</view>
 			</view>
-
 		</view>
 	</view>
 </template>
@@ -227,6 +234,7 @@ page{
 			is_loaded: false,
 			space_id: null,
 			user_id: null,
+			user: null,
 			card_user_id: null,
 			share_from: null,
 			baseUrl: baseUrl,
@@ -273,6 +281,7 @@ page{
 			}
 			this.space_id = e.space_id;
 			await this.$parent.login(e);
+			this.user = this.$parent.globalData.user;
 			this.user_id = this.$parent.globalData.user._id;
 			this.card_user_id = e.card_user_id || this.user_id;
 			// this.card_user_id = "PGcaKBCZPdFBKiQcx";
