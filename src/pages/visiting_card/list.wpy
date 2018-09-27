@@ -127,24 +127,11 @@ export default class VisitingCardList extends wepy.page {
     await this.$parent.login(e);
     this.user = this.$parent.globalData.user;
     this.user_id = this.user._id;
-    // await this.loadUserData();
     this.$apply();
   }
 
   async onLoad(e) {
   }
-
-  // async loadUserData(){
-  //   const options = {
-  //     $filter: `(_id eq '${this.user_id}')`,
-  //     $select: 'avatar,name,mobile,profile/avatar',
-  //   }
-  //   const res = await this.$parent.query('users', options, this.space_id);
-  //   if (res.value[0]) {
-  //     this.user = res.value[0];
-  //   }
-  //   console.log("********",this.user)
-  // }
 
   async onShow() {
   }

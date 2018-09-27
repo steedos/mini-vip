@@ -200,6 +200,18 @@ page{
 				this.isAuthUserInfo = false;
 			}
 		}
+
+		async refresh(){
+			// 编辑名片后，重新刷新界面数据
+			wepy.showNavigationBarLoading();
+			await this.loadData();
+			this.$apply();
+			if(this.card_info.avatar){
+				this.$parent.globalData.user.name = this.card_info.name;
+				this.$parent.globalData.user.avatar = this.card_info.avatar;
+			}
+			wepy.hideNavigationBarLoading();
+		}
 		
 		onShareAppMessage() {
 			let title = `我是${this.card_info.name}，这是我的名片，请惠存。`;
