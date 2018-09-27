@@ -39,10 +39,10 @@ page{
     </view>
     <view class="page__bd">
       <view class="weui-cells">
-        <view @tap="goDetail" class="record-container weui-cell weui-cell_access" hover-class="weui-cell_active">
+        <view @tap="goCurrentUserCard" class="record-container weui-cell weui-cell_access" hover-class="weui-cell_active">
           <view class="weui-cell__hd">
             <image wx:if="{{user.avatar}}" src="{{util.formatImageUrl(user.avatar, baseUrl)}}" class='avatar-field'/>
-            <image wx:elif="{{user.profile.avatar}}" src="{{user.profile.avatar}}" class="avatar-field"/>
+            <!-- <image wx:elif="{{user.profile.avatar}}" src="{{user.profile.avatar}}" class="avatar-field"/> -->
             <image wx:else src="{{default_avatar}}" class="avatar-field"/>
           </view>
           <view class="weui-cell__bd">
@@ -108,7 +108,7 @@ export default class VisitingCardList extends wepy.page {
     avatar: '',
     object_name: 'love_friends',
     filter: '',
-    user:'',
+    user: null,
     avatar_field: 'user_b.avatar',
     name_field: 'user_b.name',
     baseUrl: baseUrl,
@@ -125,25 +125,26 @@ export default class VisitingCardList extends wepy.page {
     e.space_id = loveSpaceId;
     this.space_id = e.space_id;
     await this.$parent.login(e);
-    this.user_id = this.$parent.globalData.user._id;
-    await this.loadUserData();
+    this.user = this.$parent.globalData.user;
+    this.user_id = this.user._id;
+    // await this.loadUserData();
     this.$apply();
   }
 
   async onLoad(e) {
   }
 
-  async loadUserData(){
-    const options = {
-      $filter: `(_id eq '${this.user_id}')`,
-      $select: 'avatar,name,mobile,profile/avatar',
-    }
-    const res = await this.$parent.query('users', options, this.space_id);
-    if (res.value[0]) {
-      this.user = res.value[0];
-    }
-    console.log("********",this.user)
-  }
+  // async loadUserData(){
+  //   const options = {
+  //     $filter: `(_id eq '${this.user_id}')`,
+  //     $select: 'avatar,name,mobile,profile/avatar',
+  //   }
+  //   const res = await this.$parent.query('users', options, this.space_id);
+  //   if (res.value[0]) {
+  //     this.user = res.value[0];
+  //   }
+  //   console.log("********",this.user)
+  // }
 
   async onShow() {
   }
@@ -166,11 +167,11 @@ export default class VisitingCardList extends wepy.page {
   mixins = [recordList];
 
   methods = {
-    goDetail(){
+    goCurrentUserCard(){
       if(this.user.name){
-        wx.navigateTo({url: './view?card_user_id={{user_id}}'});
+        wepy.navigateTo({url: `./view?card_user_id=${this.user_id}`});
       }else{
-        wx.switchTab({url: './me?card_user_id={{user_id}}'});
+        wepy.switchTab({url: './me'});
       }
     },
   };
