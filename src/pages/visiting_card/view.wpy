@@ -313,6 +313,9 @@ page{
 			const records = await this.$parent.query('users', options, this.space_id);
 			if (records && records.value && records.value[0]) {
 				this.card_info = records.value[0];
+				if(!this.card_info.avatar){
+					this.card_info.avatar = this.$parent.globalData.user.avatar;
+				}
 			}
 		}
 	

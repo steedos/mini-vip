@@ -54,7 +54,7 @@
 }
 .card-title{
 	float: left;
-	width:360rpx;
+	width:320rpx;
 	overflow:hidden;
 
 	.card-title-logo{
