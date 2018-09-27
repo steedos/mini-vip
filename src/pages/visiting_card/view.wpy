@@ -110,10 +110,15 @@ page{
 		.slds-icon{
 			width: 50rpx;
 			height: 50rpx;
+			margin:auto;
 		}
 		.btn-heart-label{
 			font-size:26rpx;
 			text-align:center;
+		}
+		.btn-heart-count{
+			display: inline;
+			color:#333;
 		}
 	}
 }
@@ -166,7 +171,10 @@ page{
 					</view>
 					<view class="btn-heart" @tap="toggleStar">
 						<view class="slds-icon vip_endorsement-{{my_friend.heart ? 'dark' : 'default'}}"></view>
-						<view class="btn-heart-label">靠谱</view>
+						<view class="btn-heart-label">
+							靠谱
+							<view class="btn-heart-count">{{card_info.heart_count_label}}</view>
+						</view>
 					</view>
 				</view>
 			</view>
@@ -331,7 +339,7 @@ page{
 		async loadCardInfo() {
 			const options = {
 				$filter: `(_id eq '${this.card_user_id}')`,
-				$select: `${this.card_fields},profile/avatar`,
+				$select: `${this.card_fields},heart_count,profile/avatar`,
 			}
 			const records = await this.$parent.query('users', options, this.space_id);
 			if (records && records.value && records.value[0]) {
@@ -339,6 +347,22 @@ page{
 				if(!this.card_info.avatar && this.card_info.profile){
 					this.card_info.avatar = this.card_info.profile.avatar;
 				}
+				this.computeHeartCountLabel();
+			}
+		}
+		
+		computeHeartCountLabel(){
+			let heart_count = this.card_info.heart_count;
+			if(heart_count){
+				if(heart_count < 1000){
+					this.card_info.heart_count_label = heart_count;
+				}
+				else{
+					this.card_info.heart_count_label = `${(heart_count/1000).toFixed(2)}k`
+				}
+			}
+			else{
+				this.card_info.heart_count_label = 0;
 			}
 		}
 	
@@ -424,10 +448,21 @@ page{
 					return;
 				}
 				wepy.showLoading({ mask: true });
-				let set = { heart:  !!!this.my_friend.heart};
+				let heart = !!!this.my_friend.heart;
+				let set = { heart:  heart};
 				let updateSuc = await this.$parent.update("love_friends", this.my_friend._id, set, this.space_id);
 				if (updateSuc) {
 					this.my_friend.heart = set.heart;
+					if(heart){
+						if(!this.card_info.heart_count){
+							this.card_info.heart_count = 0;
+						}
+						this.card_info.heart_count += 1;
+					}
+					else{
+						this.card_info.heart_count -= 1;
+					}
+					this.computeHeartCountLabel();
 					this.$apply();
 				}
 				else{
