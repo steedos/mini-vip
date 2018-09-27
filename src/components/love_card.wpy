@@ -147,7 +147,7 @@
 <template>
 	<view class="love-card">
 		<view class="card-container" @tap="goEdit">
-			<view class="card-title {{is_owner ? 'weui-cell__ft_in-access' : ''}}">
+			<view class="card-title {{is_owner && card_info.name ? 'weui-cell__ft_in-access' : ''}}">
 				<view>
 					<view class="card-tittle-company" wx:if="{{card_info.company}}">{{card_info.company}}</view>
 					<view class="card-tittle-company" wx:else>未填写公司</view>
@@ -280,6 +280,9 @@ export default class LoveCard extends wepy.component {
 	methods = {
 		goEdit(){
 			if(!this.is_owner){
+				return;
+			}
+			if(!this.card_info.name){
 				return;
 			}
 			let url = `/pages/record/edit?space_id=${this.space_id}&object_name=users&action=edit&record_id=${this.card_info._id}&title=编辑名片&fields=${this.card_fields}`;
