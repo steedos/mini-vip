@@ -1,5 +1,19 @@
 <style lang="less">
   .record-form{
+    .weui-cells{
+
+      &:before{
+        border-top: 0px;
+      }
+
+      &:after{
+        border-bottom: 0px;
+      }
+    }
+
+    .weui-cell__ft_in-access{
+      display: none;
+    }
     .weui-media-box__desc{
       text-overflow:unset;
       overflow:visible;
@@ -140,17 +154,29 @@
     .weui-cell__required:before{
       content:"*";
       color:red;
+      padding-left: 3px;
     }
 
+    .weui-uploader__title{
+      padding-left: 6px;
+    }
+
+    .weui-cell_switch,.field-textarea{
+      .weui-cell__bd{
+        padding-left: 6px;
+      }
+    }
 
     .weui-cell__bd{
       color:#999;
       .weui-cell__ft{
         color: #000000;
+        text-align: left;
       }
     }
 
     .weui-cell__hd{
+      padding-left: 6px;
       .weui-label{
         color:#999;
       }
@@ -160,11 +186,13 @@
       margin: 0px;
       height: 57px;
       width: 57px;
+      border-radius: 5px;
     }
 
     .weui-uploader__img{
       height: 59px;
       width: 59px;
+      border-radius: 5px;
     }
 
   }
@@ -330,7 +358,7 @@
                   </view>
                 </block>
                 <block wx:else>
-                  <view class='weui-cell weui-cell_access' hover-class='weui-grid_active' data-value="{{values[item.name]}}" data-edit="{{!(item.readonly || !_record_allowEdit || args.action === 'read')}}" @tap.stop="navigateTo({{item}})">
+                  <view class='weui-cell weui-cell_access field-textarea' hover-class='weui-grid_active' data-value="{{values[item.name]}}" data-edit="{{!(item.readonly || !_record_allowEdit || args.action === 'read')}}" @tap.stop="navigateTo({{item}})">
                     <block wx:if="{{item.type === 'textarea'}}">
                       <block wx:if="{{item.is_wide}}">
                         <view class="weui-cell__bd">
@@ -369,7 +397,8 @@
                         </block>
                       </view>
                       <block wx:if="{{!(item.readonly || !_record_allowEdit || args.action === 'read') || item.type === 'location'}}">
-                        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+                        <view wx:if="{{item.type === 'location'}}" class="weui-cell__ft utility-location slds-icon slds-icon--small" style="line-height: 1.5;"></view>
+                        <view wx:else class="weui-cell__ft weui-cell__ft_in-access"></view>
                       </block>
                     </block>
                   </view>

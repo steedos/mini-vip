@@ -3,6 +3,7 @@
 @import "../lib/slds/slds_icons.less";
 @import "../lib/slds/slds_margin.less";
 @import "../lib/vip/vip.less";
+@import "../lib/icon/utility.less";
 page {
   background-color: #fafafa;
   font-size: 16px;
