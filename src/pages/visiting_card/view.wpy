@@ -145,7 +145,7 @@ page{
 			<view class="panel-bg-box">
 			</view>
 			<view class="panel-box panel-top-box">
-				<love_card :card_info.sync="card_info" :is_owner.sync="is_owner" :space_id.sync="space_id" />
+				<love_card :card_info.sync="card_info" :card_fields.sync="card_fields" :is_owner.sync="is_owner" :space_id.sync="space_id" />
 				<view class="page-btn">
 					<button class="btn-share" open-type="share" plain="true" type="primary">分享名片</button>
 					<button class="btn-contact" plain="true" type="primary" @tap="addPhoneContact">存入手机通讯录</button>
@@ -234,7 +234,8 @@ page{
 			my_friend: {},
 			is_owner: false,
 			default_avatar: 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg',
-			friends: { value: [], "@odata.count":0}
+			friends: { value: [], "@odata.count":0},
+			card_fields: "avatar,name,company,position,mobile,wechat,email,location,self_introduction,photos"
 		};
 
 		wxs = {
@@ -308,7 +309,7 @@ page{
 		async loadCardInfo() {
 			const options = {
 				$filter: `(_id eq '${this.card_user_id}')`,
-				$select: 'name,position,mobile,email,work_phone,owner,wechat,avatar,photos,self_introduction,company,photos,location',
+				$select: `${this.card_fields}`,
 			}
 			const records = await this.$parent.query('users', options, this.space_id);
 			if (records && records.value && records.value[0]) {

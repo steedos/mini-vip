@@ -80,7 +80,7 @@ page{
 		<view class="page__bd">
 			<bg_circle />
 			<view class="panel-box panel-top-box">
-				<love_card :card_info.sync="card_info" :is_owner.sync="is_owner" :space_id.sync="space_id" />
+				<love_card :card_info.sync="card_info" :card_fields.sync="card_fields" :is_owner.sync="is_owner" :space_id.sync="space_id" />
 				<view class="page-btn">
 					<block wx:if="{{isAuthUserInfo}}">
 						<button class="btn-edit"  plain="true" type="primary" @tap="goEdit">编辑名片</button>
@@ -160,7 +160,8 @@ page{
 			my_friend: {},
 			is_owner: true,
 			default_avatar: 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg',
-			friends: { value: [], "@odata.count":0}
+			friends: { value: [], "@odata.count":0},
+			card_fields: "avatar,name,company,position,mobile,wechat,email,location,self_introduction,photos"
 		};
 
 		wxs = {
@@ -216,7 +217,7 @@ page{
 		async loadCardInfo() {
 			const options = {
 				$filter: `(_id eq '${this.card_user_id}')`,
-				$select: 'name,position,mobile,email,work_phone,owner,wechat,avatar,photos,self_introduction,company,photos,location',
+				$select: `${this.card_fields}`,
 			}
 			const records = await this.$parent.query('users', options, this.space_id);
 			if (records && records.value && records.value[0]) {
@@ -253,7 +254,7 @@ page{
 				if(!this.is_owner){
 					return;
 				}
-				let url = `/pages/record/edit?space_id=${this.space_id}&object_name=users&action=edit&record_id=${this.card_info._id}&title=编辑名片&fields=avatar,name,company,position,mobile,wechat,email,location,self_introduction,photos`;
+				let url = `/pages/record/edit?space_id=${this.space_id}&object_name=users&action=edit&record_id=${this.card_info._id}&title=编辑名片&fields=${this.card_fields}`;
 				pageRouter.navigateTo({
 					url: url
 				});

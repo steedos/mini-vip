@@ -243,6 +243,7 @@
 import wepy from 'wepy';
 import { baseUrl } from '@/config';
 import util from '../wxs/util.wxs'
+import pageRouter from '@/utils/pageRouter'
 
 export default class LoveCard extends wepy.component {
 	onLoad() {}
@@ -251,6 +252,10 @@ export default class LoveCard extends wepy.component {
 		card_info: {
 			type: Object,
 			default: {}
+		},
+		card_fields: {
+			type: String,
+			default: ""
 		},
 		is_owner: {
 			type: Boolean,
@@ -277,8 +282,10 @@ export default class LoveCard extends wepy.component {
 			if(!this.is_owner){
 				return;
 			}
-			let url = `../record/edit?space_id=${this.space_id}&object_name=users&action=edit&record_id=${this.card_info._id}&title=编辑名片&fields=avatar,name,company,position,mobile,wechat,email,location,self_introduction,photos`;
-			wepy.navigateTo({url: url});
+			let url = `/pages/record/edit?space_id=${this.space_id}&object_name=users&action=edit&record_id=${this.card_info._id}&title=编辑名片&fields=${this.card_fields}`;
+			pageRouter.navigateTo({
+				url: url
+			});
 		},
 		openDetail(){
 			this.is_detail = true;
