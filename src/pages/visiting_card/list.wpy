@@ -9,6 +9,7 @@ page{
   width: 100%;
   height: 100%;
   border-radius: 0.15rem;
+  border:solid 1px #ddd;
 }
 
 .avatar-field {
@@ -41,9 +42,9 @@ page{
       <view class="weui-cells">
         <view @tap="goCurrentUserCard" class="record-container weui-cell weui-cell_access" hover-class="weui-cell_active">
           <view class="weui-cell__hd">
-            <image wx:if="{{user.avatar}}" src="{{util.formatImageUrl(user.avatar, baseUrl)}}" class='avatar-field'/>
+            <image wx:if="{{user.avatar}}" mode="aspectFill" src="{{util.formatImageUrl(user.avatar, baseUrl)}}" class='avatar-field'/>
             <!-- <image wx:elif="{{user.profile.avatar}}" src="{{user.profile.avatar}}" class="avatar-field"/> -->
-            <image wx:else src="{{default_avatar}}" class="avatar-field"/>
+            <image wx:else  mode="aspectFill" src="{{default_avatar}}" class="avatar-field"/>
           </view>
           <view class="weui-cell__bd">
             <view class="name">{{user.name}}</view>
@@ -59,9 +60,9 @@ page{
             <block wx:if="{{record.user_b.name}}">
               <navigator url="./view?card_user_id={{record.user_b._id}}" class="record-container weui-cell weui-cell_access" hover-class="weui-cell_active">
                 <view class="weui-cell__hd">
-                  <image wx:if="{{record.user_b.avatar}}" src="{{util.formatImageUrl(record.user_b.avatar, baseUrl)}}" class='avatar-field'/>
-                  <image wx:elif="{{record.user_b.profile.avatar}}" src="{{record.user_b.profile.avatar}}" class="avatar-field"/>
-                  <image wx:else src="{{default_avatar}}" class="avatar-field"/>
+                  <image wx:if="{{record.user_b.avatar}}"  mode="aspectFill" src="{{util.formatImageUrl(record.user_b.avatar, baseUrl)}}" class='avatar-field'/>
+                  <image wx:elif="{{record.user_b.profile.avatar}}" mode="aspectFill" src="{{record.user_b.profile.avatar}}" class="avatar-field"/>
+                  <image wx:else src="{{default_avatar}}"  mode="aspectFill" class="avatar-field"/>
                 </view>
                 <view class="weui-cell__bd">
                   <view class="name">{{record.user_b.name}}</view>

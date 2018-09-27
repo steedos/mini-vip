@@ -20,6 +20,7 @@
 		width: 160rpx;
 		height: 160rpx;
 		border-radius: 100%;
+		border:solid 1px #ddd;
 	}
 }
 .card-content{
