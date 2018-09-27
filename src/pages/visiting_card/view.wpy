@@ -284,11 +284,24 @@ page{
 			this.$apply();
 			let title = this.card_info.name;
 			if(title){
-				wx.setNavigationBarTitle({title: this.card_info.name +'的名片'});
+				title = this.card_info.name +'的名片';
 			}else{
-				wx.setNavigationBarTitle({title: '预览我的名片'});
+				title = '预览我的名片';
 			};
+			wepy.setNavigationBarTitle({title: title});
 			wepy.hideLoading();
+		}
+
+		async refresh(){
+			// 编辑名片后，重新刷新界面数据
+			wepy.showNavigationBarLoading();
+			await this.loadData();
+			this.$apply();
+			if(this.card_info.avatar){
+				this.$parent.globalData.user.name = this.card_info.name;
+				this.$parent.globalData.user.avatar = this.card_info.avatar;
+			}
+			wepy.hideNavigationBarLoading();
 		}
 		
 		onShareAppMessage() {
