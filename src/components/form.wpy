@@ -503,6 +503,9 @@
       _changeValue: {}
     };
 
+    /*
+    * 只读时，只显示有值的字段
+    * */
     getGroupFields(fields, action, values){
 
       let fields_new = [];
