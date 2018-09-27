@@ -182,19 +182,22 @@ page{
 			e.space_id = loveSpaceId;
 			this.space_id = e.space_id;
 			await this.$parent.login(e);
-			let user = this.$parent.globalData.user;
-			this.user_id = user._id;
+			this.user_id = this.$parent.globalData.user._id;
 			this.card_user_id = this.user_id;
 			// this.card_user_id = "PGcaKBCZPdFBKiQcx";
+			await this.loadData();
+			this.is_loaded = true;
+			this.$apply();
+			wepy.hideLoading();
+		}
+
+		async onShow() {
+			let user = this.$parent.globalData.user;
 			if (user.name && user.avatar) {
 				this.isAuthUserInfo = true;
 			} else {
 				this.isAuthUserInfo = false;
 			}
-			await this.loadData();
-			this.is_loaded = true;
-			this.$apply();
-			wepy.hideLoading();
 		}
 		
 		onShareAppMessage() {
@@ -237,6 +240,7 @@ page{
 					this.card_info.avatar = avatar;
 					this.card_info.name = name;
 					this.$parent.globalData.userInfo = userInfo;
+					this.$parent.globalData.user.name = name;
 					this.$parent.globalData.user.avatar = avatar;
 					this.$parent.globalData.user.sex = sex;
 					this.$apply();
