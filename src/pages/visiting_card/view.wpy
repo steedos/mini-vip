@@ -309,13 +309,13 @@ page{
 		async loadCardInfo() {
 			const options = {
 				$filter: `(_id eq '${this.card_user_id}')`,
-				$select: `${this.card_fields}`,
+				$select: `${this.card_fields},profile/avatar`,
 			}
 			const records = await this.$parent.query('users', options, this.space_id);
 			if (records && records.value && records.value[0]) {
 				this.card_info = records.value[0];
-				if(!this.card_info.avatar){
-					this.card_info.avatar = this.$parent.globalData.user.avatar;
+				if(!this.card_info.avatar && this.card_info.profile){
+					this.card_info.avatar = this.card_info.profile.avatar;
 				}
 			}
 		}
