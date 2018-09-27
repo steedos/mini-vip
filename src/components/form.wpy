@@ -504,7 +504,8 @@
     };
 
     /*
-    * 只读时，只显示有值的字段
+    * 根据字段的group、inlineHelpText属性，对字段进行分组
+    * 注意：只读时，只显示有值的字段
     * */
     getGroupFields(fields, action, values){
 
