@@ -1,8 +1,10 @@
 <style lang="less">
+page{
+  background-color: #F0F0F1;
+}
 .page__hd {
   padding: 0px;
 }
-
 .image {
   width: 100%;
   height: 100%;
@@ -22,7 +24,11 @@
   font-size: 17px;
 }
 .weui-loadmore__tips_in-line{
-  background-color: #fff;
+  background-color: #F0F0F1;
+}
+.mine{
+  font-size:26rpx;
+  color:#999;
 }
 </style>
 
@@ -31,9 +37,24 @@
     <view class="page__hd" style="display:none">
       <searchbar :placeholder.sync="searchPlaceholder" @confirm.user="searchRecords" />
     </view>
-    <view class="page__bd">  
+    <view class="page__bd">
+      <view class="weui-cells">
+        <navigator url="./view?card_user_id={{user_id}}" class="record-container weui-cell weui-cell_access" hover-class="weui-cell_active">
+          <view class="weui-cell__hd">
+            <image wx:if="{{user.avatar}}" src="{{util.formatImageUrl(user.avatar, baseUrl)}}" class='avatar-field'/>
+            <image wx:elif="{{user.profile.avatar}}" src="{{user.profile.avatar}}" class="avatar-field"/>
+            <image wx:else src="{{default_avatar}}" class="avatar-field"/>
+          </view>
+          <view class="weui-cell__bd">
+            <view class="name">{{user.name}}</view>
+            <view class="mine">我的名片</view>
+          </view>
+          <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+        </navigator>
+      </view>  
       <block wx:if="{{record_list.length}}">
-        <view class="weui-cells">
+        <view class="weui-cells__title">收到的名片</view>
+        <view class="weui-cells  weui-cells_after-title">
           <repeat for="{{record_list}}" key="index" index="index" item="record">
             <block wx:if="{{record.user_b.name}}">
               <navigator url="./view?card_user_id={{record.user_b._id}}" class="record-container weui-cell weui-cell_access" hover-class="weui-cell_active">
@@ -87,6 +108,7 @@ export default class VisitingCardList extends wepy.page {
     avatar: '',
     object_name: 'love_friends',
     filter: '',
+    user:'',
     avatar_field: 'user_b.avatar',
     name_field: 'user_b.name',
     baseUrl: baseUrl,
@@ -104,10 +126,23 @@ export default class VisitingCardList extends wepy.page {
     this.space_id = e.space_id;
     await this.$parent.login(e);
     this.user_id = this.$parent.globalData.user._id;
+    await this.loadUserData();
     this.$apply();
   }
 
   async onLoad(e) {
+  }
+
+  async loadUserData(){
+    const options = {
+      $filter: `(_id eq '${this.user_id}')`,
+      $select: 'avatar,name,mobile,profile/avatar',
+    }
+    const res = await this.$parent.query('users', options, this.space_id);
+    if (res.value[0]) {
+      this.user = res.value[0];
+    }
+    console.log("********",this.user)
   }
 
   async onShow() {
