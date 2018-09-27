@@ -93,12 +93,14 @@ page{
 				</view>
 				
 				<view class="weui-cells">
-					<navigator url="./view?card_user_id{{card_user_id}}" class="weui-cell weui-cell_access">
-						<view class="weui-cell__bd">
-							<view>预览名片</view>
-						</view>
-						<view class="weui-cell__ft weui-cell__ft_in-access"></view>
-					</navigator>
+					<block wx:if="{{isAuthUserInfo}}">
+						<navigator url="./view?card_user_id{{card_user_id}}" class="weui-cell weui-cell_access">
+							<view class="weui-cell__bd">
+								<view>预览名片</view>
+							</view>
+							<view class="weui-cell__ft weui-cell__ft_in-access"></view>
+						</navigator>
+					</block>
 					<!-- <navigator url="./space/list" class="weui-cell weui-cell_access">
 						<view class="weui-cell__bd">
 							<view>名片二维码</view>
@@ -196,7 +198,7 @@ page{
 		}
 		
 		onShareAppMessage() {
-			let title = `你好，我是${this.card_info.name}，这是我的电子名片。`;
+			let title = `我是${this.card_info.name}，这是我的名片，请惠存。`;
 			let url = `pages/visiting_card/view?card_user_id=${this.card_user_id}&share_from=${this.user_id}`;
 			return {
 				title: title,
