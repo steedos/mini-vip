@@ -445,6 +445,10 @@ page{
 			},
 			async toggleStar(){
 				if(this.is_owner || !this.my_friend._id){
+					wepy.showToast({
+						title: "其他人可以点赞你的名片",
+						icon: "none"
+					});
 					return;
 				}
 				wepy.showLoading({ mask: true });
