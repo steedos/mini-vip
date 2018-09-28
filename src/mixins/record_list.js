@@ -31,10 +31,10 @@ export default class recordList extends wepy.mixin {
   };
 
   dataRefresh() {
-    this.record_list = [];
+    // this.record_list = [];
     this.allow_load = true;
     this.current_skip = 0;
-    this.loadRecords();
+    this.loadRecords('', true);
   }
 
   onPullDownRefresh() {
@@ -314,7 +314,7 @@ export default class recordList extends wepy.mixin {
     }
   }
 
-  async loadRecords(searchValue) {
+  async loadRecords(searchValue, refresh) {
     // wepy.showLoading({
     //   title: '加载中',
     //   mask: true
@@ -336,7 +336,11 @@ export default class recordList extends wepy.mixin {
           this.style_list[record._id] = {positionX: 0, offsetX: 0}
           records.push(record          )
         }
-        this.record_list = this.record_list.concat(records)
+        if(refresh){
+          this.record_list = records
+        }else{
+          this.record_list = this.record_list.concat(records)
+        }
       }
       this.current_skip = skip + result.value.length;
       if (this.current_skip === result['@odata.count']) {
