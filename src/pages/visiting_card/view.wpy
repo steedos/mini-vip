@@ -194,7 +194,7 @@ page{
 					<repeat for="{{card_info.photos}}" key="index" index="index" item="item">
 						<image src="{{util.formatImageUrl(item, baseUrl)}}" mode="widthFix" @tap="previewImage({{item}})"/>
 					</repeat>
-				</view>	
+				</view>
 			</view>
 			<!-- <view class="panel-box"  @tap="addPhoneContact"  wx:if="{{card_info.mobile}}">
 				<view class="weui-cells weui-cells_after-title">
@@ -204,7 +204,7 @@ page{
 					</view>
 				</view>
 			</view> -->
-			
+
 			<view class="page-btn">
 				<view wx:if="{{!is_owner}}">
 					<view wx:if="{{user.name}}">
@@ -314,13 +314,13 @@ page{
 			wepy.showNavigationBarLoading();
 			await this.loadData();
 			this.$apply();
-			if(this.card_info.avatar){
+			if(this.card_info.avatar && this.card_info._id === this.user_id){
 				this.$parent.globalData.user.name = this.card_info.name;
 				this.$parent.globalData.user.avatar = this.card_info.avatar;
 			}
 			wepy.hideNavigationBarLoading();
 		}
-		
+
 		onShareAppMessage() {
 			let title = `我是${this.card_info.name}，这是我的名片，请惠存。`;
 			let url = `pages/visiting_card/view?card_user_id=${this.card_user_id}&share_from=${this.user_id}`;
@@ -335,7 +335,7 @@ page{
 			await this.loadMyFriend();
 			await this.loadFriends();
 		}
-	
+
 		async loadCardInfo() {
 			const options = {
 				$filter: `(_id eq '${this.card_user_id}')`,
@@ -350,7 +350,7 @@ page{
 				this.computeHeartCountLabel();
 			}
 		}
-		
+
 		computeHeartCountLabel(){
 			let heart_count = this.card_info.heart_count;
 			if(heart_count){
@@ -365,7 +365,7 @@ page{
 				this.card_info.heart_count_label = 0;
 			}
 		}
-	
+
 		async loadMyFriend() {
 			if(this.is_owner){
 				return;
@@ -394,7 +394,7 @@ page{
 				result = await this.$parent.insert("love_friends", values, this.space_id);
 			}
 		}
-	
+
 		async loadFriends() {
 			const options = {
 				$filter: `(owner eq '${this.card_user_id}')`,
