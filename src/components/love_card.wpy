@@ -73,12 +73,12 @@
 		overflow: hidden;
 		text-overflow:ellipsis;
 		white-space:nowrap;
-		width:100%;
+		max-width:100%;
 		font-size: 26rpx;
 	}
 	
 	.card-title-name,.card-title-job{
-		width:100%;
+		max-width:100%;
 		text-overflow:ellipsis;
 		white-space:nowrap;
 		overflow:hidden;
@@ -86,6 +86,10 @@
 
 	.card-title-name{
 		font-size: 40rpx;
+		display: inline-block;
+		&.weui-cell__ft_in-access{
+			padding-right:40rpx;
+		}
 	}
 	.card-title-job{
 		font-size:32rpx;
@@ -150,18 +154,18 @@
 <template>
 	<view class="love-card">
 		<view class="card-container" @tap="goEdit">
-			<view class="card-title {{is_owner && card_info.name ? 'weui-cell__ft_in-access' : ''}}">
-				<view>
-					<view class="card-tittle-company" wx:if="{{card_info.company}}">{{card_info.company}}</view>
-					<view class="card-tittle-company" wx:else>未填写公司</view>
+			<view class="card-title">
+				<view class="card-tittle-company">
+					<block wx:if="{{card_info.company}}">{{card_info.company}}</block>
+					<block wx:else>未填写公司</block>
 				</view>
-				<view>
-					<view class="card-title-name" wx:if="{{card_info.name}}">{{card_info.name}}</view>
-					<view class="card-tittle-company" wx:else>未填写姓名</view>
+				<view class="card-title-name {{is_owner && card_info.name ? 'weui-cell__ft_in-access' : ''}}">
+					<block wx:if="{{card_info.name}}">{{card_info.name}}</block>
+					<block wx:else>未填写姓名</block>
 				</view>
-				<view>
-					<view class="card-title-job" wx:if="{{card_info.position}}">{{card_info.position}}</view>
-					<view class="card-tittle-company" wx:else>未填写职位</view>
+				<view class="card-title-job">
+					<block wx:if="{{card_info.position}}">{{card_info.position}}</block>
+					<block wx:else>未填写职位</block>
 				</view>
 			</view>
 			<view class="card-avatar">
