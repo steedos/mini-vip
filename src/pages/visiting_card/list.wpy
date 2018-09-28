@@ -1,6 +1,5 @@
 <style lang="less">
 page{
-  background-color: #F0F0F1;
 }
 .page__hd {
   padding: 0px;

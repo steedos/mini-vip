@@ -1,7 +1,5 @@
 <style lang="less">
 page{
-	font-family: 黑体;
-	background: #fff;
 }
 .page__bd{
 	text-align: center;
