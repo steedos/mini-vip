@@ -168,7 +168,7 @@
 
   const global = {}
 
-  export default class ChartBoard extends wepy.component {
+  export default class ChatBoard extends wepy.component {
 
     data = {
       baseUrl: baseUrl,

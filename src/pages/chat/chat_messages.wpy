@@ -6,7 +6,7 @@
 </style>
 <template>
   <view class="body page_chat">
-    <chartboard/>
+    <chatboard/>
     <myinput/>
   </view>
 </template>
@@ -15,7 +15,7 @@
   import wepy from 'wepy';
 
   import Input from '../../components/chat_input';
-  import Chartboard from '../../components/chart_board';
+  import Chatboard from '../../components/chat_board';
 
   export default class ChatMessages extends wepy.page {
     config = {
@@ -23,7 +23,7 @@
     };
     components = {
       myinput: Input,
-      chartboard: Chartboard
+      chatboard: Chatboard
     };
 
     data = {
