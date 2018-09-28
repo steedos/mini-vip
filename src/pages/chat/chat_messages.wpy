@@ -1,7 +1,6 @@
 <style type="less">
   .page_chat {
     height: 100%;
-    background-color: #ededed;
   }
 </style>
 <template>

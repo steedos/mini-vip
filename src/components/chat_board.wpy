@@ -49,7 +49,7 @@
     }
     .content-right {
       max-width: 55%;
-      background-color: #005fb2;
+      background-color: #1aad19;
       color: #fff;
       border-radius: 4px;
       padding: 6px 10px;
@@ -75,7 +75,7 @@
       width: 0;
       height: 0;
       border-width: 12rpx;
-      border-color: transparent transparent transparent #005fb2;
+      border-color: transparent transparent transparent #1aad19;
       border-style: solid;
       position: absolute;
       left: -28rpx;

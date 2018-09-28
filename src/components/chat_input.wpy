@@ -27,7 +27,7 @@
                 }
             }
             .input_text {
-                border-bottom: 1px solid #d8d8d8;
+                border-bottom: none;
                 padding-left: 20rpx;
                 margin-right: 110rpx;
                 height: 80rpx;
@@ -35,15 +35,15 @@
                 /*border-radius: 10rpx;*/
                 color: #000;
                 &.focus {
-                    border-bottom: 1px solid #005fb2;
+                    border-bottom: none;
                 }
             }
             .send {
-                background-color: #005fb2;
+                background-color: #1aad19;
                 display: inline-block;
                 box-sizing: border-box;
                 position: absolute;
-                border: 1px solid #005fb2;
+                border: 1px solid #1aad19;
                 border-radius: 5rpx;
                 right:10rpx;
                 width:90rpx;
