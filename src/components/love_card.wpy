@@ -20,7 +20,8 @@
 		width: 160rpx;
 		height: 160rpx;
 		border-radius: 100%;
-		border:solid 1px #ddd;
+		border: solid 1px #ddd;
+		display: block;
 	}
 }
 .card-content{
@@ -161,7 +162,7 @@
 				</view>
 				<view class="card-title-name {{is_owner && card_info.name && previewable ? 'weui-cell__ft_in-access' : ''}}">
 					<block wx:if="{{card_info.name}}">{{card_info.name}}</block>
-					<block wx:else>未填写姓名</block>
+					<block wx:else><open-data type="userNickName"></open-data></block>
 				</view>
 				<view class="card-title-job">
 					<block wx:if="{{card_info.position}}">{{card_info.position}}</block>
@@ -170,7 +171,7 @@
 			</view>
 			<view class="card-avatar">
 				<image wx:if="{{card_info.avatar}}" class="image" mode="aspectFill" src="{{util.formatImageUrl(card_info.avatar, baseUrl) || default_avatar}}"/>
-				<image wx:if="{{!card_info.avatar}}" class="image" mode="aspectFill" src="{{default_avatar}}"/>
+				<open-data class="image" wx:else type="userAvatarUrl"></open-data>
 			</view>
 			<view class="clear"></view>
 			<view class="card-content">
