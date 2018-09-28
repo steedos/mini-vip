@@ -198,7 +198,7 @@ export default class recordList extends wepy.mixin {
       throw new Error('缺少参数:object_name')
     }
 
-    this.space_id = e.space_id;
+    this.space_id = e.space_id || this.space_id;
     this.object_name = e.object_name || this.object_name;
     this.avatar_field = e.avatar_field || this.avatar_field;
     this.name_field = e.name_field || this.name_field || 'name';
@@ -213,7 +213,7 @@ export default class recordList extends wepy.mixin {
 
     this.filter = await this.getQueryFilter(e);
 
-    const object = await this.$parent.getObject(this.object_name, e.space_id);
+    const object = await this.$parent.getObject(this.object_name, this.space_id);
 
     this.allowCreate = object.allowCreate;
     if(e.allow_create === 'true'){
