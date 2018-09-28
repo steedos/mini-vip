@@ -1,15 +1,5 @@
 <style lang="less">
   .record-form{
-    .weui-cells{
-
-      &:before{
-        border-top: 0px;
-      }
-
-      &:after{
-        border-bottom: 0px;
-      }
-    }
 
     .slds-icon-action-close{
       padding: 0.4rem;
