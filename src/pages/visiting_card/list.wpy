@@ -75,7 +75,7 @@ page{
       </block>
       <block  wx:else>
         <view class="weui-loadmore weui-loadmore_line">
-          <view class="weui-loadmore__tips weui-loadmore__tips_in-line">名片夹空空如也</view>
+          <view class="weui-loadmore__tips weui-loadmore__tips_in-line">您暂时还没收到其他名片</view>
         </view>
       </block>
     </view>
