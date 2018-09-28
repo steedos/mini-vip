@@ -346,6 +346,11 @@ export default class recordList extends wepy.mixin {
       if (this.current_skip === result['@odata.count']) {
         this.allow_load = false
       }
+
+      if(this.loadRecordsAfter && _.isFunction(this.loadRecordsAfter)){
+        this.loadRecordsAfter()
+      }
+
       this.$apply();
     }
     wepy.hideLoading();

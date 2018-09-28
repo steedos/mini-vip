@@ -193,6 +193,12 @@ export default class RecordList extends wepy.page {
     }
 
     this.user_id = this.$parent.globalData.user._id;
+
+    this.pageInit = true;
+    this.$apply()
+  }
+
+  async loadRecordsAfter(){
     let queryOptions = {
       $filter: `members eq '${this.user_id}'`,
       $select: '_id,name,space,members',
@@ -205,7 +211,7 @@ export default class RecordList extends wepy.page {
       rooms[r._id] = r
     });
     this.rooms = rooms;
-    this.pageInit = true;
+
     this.$apply()
   }
 
