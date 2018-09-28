@@ -16,6 +16,7 @@ page{
   vertical-align: middle;
   width: 80rpx;
   height: 80rpx;
+  display: block;
 }
 
 .user-active {
@@ -42,11 +43,13 @@ page{
         <view @tap="goCurrentUserCard" class="record-container weui-cell weui-cell_access" hover-class="weui-cell_active">
           <view class="weui-cell__hd">
             <image wx:if="{{user.avatar}}" mode="aspectFill" src="{{util.formatImageUrl(user.avatar, baseUrl)}}" class='avatar-field'/>
-            <!-- <image wx:elif="{{user.profile.avatar}}" src="{{user.profile.avatar}}" class="avatar-field"/> -->
-            <image wx:else  mode="aspectFill" src="{{default_avatar}}" class="avatar-field"/>
+            <open-data wx:else class="avatar-field" type="userAvatarUrl"></open-data>
           </view>
           <view class="weui-cell__bd">
-            <view class="name">{{user.name}}</view>
+            <view class="name">
+              <block wx:if="{{user.name}}">{{user.name}}</block>
+              <block wx:else><open-data type="userNickName"></open-data></block>
+            </view>
             <view class="mine">我的名片</view>
           </view>
           <view class="weui-cell__ft weui-cell__ft_in-access"></view>
