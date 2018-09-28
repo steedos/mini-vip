@@ -50,20 +50,20 @@
         this.setNavigationBarTitle(p.title);
       }
 
-      this.$invoke('chartboard', 'loadMessage', p.space_id, p.room_id, p.to_user);
+      this.$invoke('chatboard', 'loadMessage', p.space_id, p.room_id, p.to_user);
     }
 
     onShow(){
-      this.$invoke('chartboard', 'receivingMessage')
+      this.$invoke('chatboard', 'receivingMessage')
     }
 
     onHide(){
-      this.$invoke('chartboard', 'stopReceivingMessage')
+      this.$invoke('chatboard', 'stopReceivingMessage')
     }
 
     async onUnload(){
-      this.$invoke('chartboard', 'stopReceivingMessage')
-      await this.$invoke('chartboard', 'resetUnread')
+      this.$invoke('chatboard', 'stopReceivingMessage')
+      await this.$invoke('chatboard', 'resetUnread')
       const pages = getCurrentPages();
       const page = pages[pages.length - 1];
       page.refresh()
