@@ -145,17 +145,17 @@
     </view>
 
 
-    <view class="weui-cells">
-      <navigator url="./chat/list?object_name=chat_subscriptions&space_id=common&title=消息" class="weui-cell weui-cell_access">
-        <view class="weui-cell__hd">
-          <view class="slds-icon-standard-live-chat slds-icon slds-icon--small slds-m-right--x-small"/>
-        </view>
-        <view class="weui-cell__bd">
-          <view>消息</view>
-        </view>
-        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-      </navigator>
-    </view>
+    <!--<view class="weui-cells">-->
+      <!--<navigator url="./chat/list?object_name=chat_subscriptions&space_id=common&title=消息" class="weui-cell weui-cell_access">-->
+        <!--<view class="weui-cell__hd">-->
+          <!--<view class="slds-icon-standard-live-chat slds-icon slds-icon&#45;&#45;small slds-m-right&#45;&#45;x-small"/>-->
+        <!--</view>-->
+        <!--<view class="weui-cell__bd">-->
+          <!--<view>消息</view>-->
+        <!--</view>-->
+        <!--<view class="weui-cell__ft weui-cell__ft_in-access"></view>-->
+      <!--</navigator>-->
+    <!--</view>-->
 
   </view>
 </template>

@@ -427,6 +427,10 @@ function fixed(num, length) {
   return num.toFixed(length);
 }
 
+function getUserAvatar(userId, baseUrl) {
+  return baseUrl + '/avatar/' + userId
+}
+
 module.exports = {
   formatDate: formatDate,
   formatStartEnd: formatStartEnd,
@@ -441,5 +445,6 @@ module.exports = {
   showRequired: showRequired,
   includes: includes,
   fixed: fixed,
-  isRequired: isRequired
+  isRequired: isRequired,
+  getUserAvatar: getUserAvatar
 }
