@@ -153,13 +153,13 @@
 </style>
 <template>
 	<view class="love-card">
-		<view class="card-container" @tap="goEdit">
+		<view class="card-container" @tap="goPreview">
 			<view class="card-title">
 				<view class="card-tittle-company">
 					<block wx:if="{{card_info.company}}">{{card_info.company}}</block>
 					<block wx:else>未填写公司</block>
 				</view>
-				<view class="card-title-name {{is_owner && card_info.name ? 'weui-cell__ft_in-access' : ''}}">
+				<view class="card-title-name {{is_owner && card_info.name && previewable ? 'weui-cell__ft_in-access' : ''}}">
 					<block wx:if="{{card_info.name}}">{{card_info.name}}</block>
 					<block wx:else>未填写姓名</block>
 				</view>
@@ -266,6 +266,10 @@ export default class LoveCard extends wepy.component {
 		space_id: {
 			type: String,
 			default: ""
+		},
+		previewable: {
+			type: Boolean,
+			default: false
 		}
 	}
 
@@ -280,14 +284,17 @@ export default class LoveCard extends wepy.component {
 	};
 
 	methods = {
-		goEdit(){
+		goPreview(){
 			if(!this.is_owner){
+				return;
+			}
+			if(!this.previewable){
 				return;
 			}
 			if(!this.card_info.name){
 				return;
 			}
-			let url = `/pages/visiting_card/view?card_user_id{{card_user_id}}`;
+			let url = `/pages/visiting_card/view`;
 			pageRouter.navigateTo({
 				url: url
 			});

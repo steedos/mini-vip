@@ -80,7 +80,7 @@ page{
 		<view class="page__bd">
 			<bg_circle />
 			<view class="panel-box panel-top-box">
-				<love_card :card_info.sync="card_info" :card_fields.sync="card_fields" :is_owner.sync="is_owner" :space_id.sync="space_id" />
+				<love_card :card_info.sync="card_info" :card_fields.sync="card_fields" :is_owner.sync="is_owner" :space_id.sync="space_id"  :previewable="previewable"/>
 				<view class="page-btn">
 					<block wx:if="{{isAuthUserInfo}}">
 						<button class="btn-edit"  plain="true" type="primary" @tap="goEdit">编辑名片</button>
@@ -161,7 +161,8 @@ page{
 			is_owner: true,
 			default_avatar: 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg',
 			friends: { value: [], "@odata.count":0},
-			card_fields: "avatar,name,company,position,mobile,wechat,email,location,self_introduction,photos"
+			card_fields: "avatar,name,company,position,mobile,wechat,email,location,self_introduction,photos",
+			previewable: true
 		};
 
 		wxs = {
