@@ -200,6 +200,7 @@ export default class VIP extends wepy.app {
       'pages/visiting_card/index',
       'pages/visiting_card/me',
       'pages/visiting_card/guide',
+      'pages/visiting_card/chat_list',
       'pages/love/index',
       'pages/love/home',
 //      'pages/tabbar_index',
@@ -309,6 +310,12 @@ export default class VIP extends wepy.app {
       backgroundColor: '#fff',
       borderStyle: 'black',
       list: [
+      {
+        pagePath: 'pages/visiting_card/chat_list',
+        selectedIconPath: './images/tabbars/topic_pressed.png',
+        iconPath: './images/tabbars/topic.png',
+        text: '访客留言',
+      },
       {
         pagePath: 'pages/visiting_card/list',
         selectedIconPath: './images/tabbars/topic_pressed.png',

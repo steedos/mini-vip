@@ -1,0 +1,67 @@
+<style lang="less">
+  .to-chat-view{
+    /*background-color: red;*/
+    width: 46px;
+    height: 46px;
+    border-radius: 23px;
+    line-height: 46px;
+    position: absolute;
+    box-shadow: #aaa 5rpx 5rpx 5rpx;
+    text-align: center;
+
+  .slds-icon-standard-live-chat{
+    margin-left: 8px;
+    margin-top: 8px;
+    width: 30px;
+    height: 30px;
+    border-radius: 15px;
+  }
+  }
+</style>
+
+<template>
+  <view class="to-chat-view" @tap="toChat" wx:if="{{show}}"><view class="slds-icon-standard-live-chat slds-icon slds-icon--small"/></view>
+</template>
+
+
+<script>
+  import wepy from 'wepy'
+  import pageRouter from '@/utils/pageRouter'
+
+  export default class toChatWith extends wepy.component {
+
+    props = {
+      with_user: {
+        type: Object
+      }
+    };
+
+    data = {
+      space_id: null,
+      show: false,
+    };
+
+    watch = {
+      with_user: function (newValue, oldValue) {
+        if(newValue){
+          let user_id = null;
+          if(this.$parent.$parent.globalData){
+            user_id = this.$parent.$parent.globalData.user._id;
+          }else{
+            user_id = this.$parent.$parent.$parent.globalData.user._id;
+          }
+          this.show = newValue._id != user_id;
+          this.$apply();
+        }
+      }
+    };
+
+    methods = {
+      toChat(){
+        pageRouter.navigateTo({
+          url: `/pages/chat/chat_messages?space_id=${this.space_id}&to_user=${this.with_user._id}&title=${this.with_user.name}`
+        });
+      }
+    };
+  }
+</script>
