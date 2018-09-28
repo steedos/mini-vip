@@ -205,7 +205,11 @@ page{
 			</view> -->
 
 			<view class="page-btn">
-				<view wx:if="{{!is_owner}}">
+				<view wx:if="{{is_owner}}">
+						<button class="btn-create" plain="true" type="primary" @tap="goEdit">编辑我的名片</button>
+						<view class="clear"></view>
+				</view>
+				<view wx:else>
 					<view wx:if="{{user.name}}">
 						<button class="btn-create" plain="true" type="primary" @tap="goCard">查看我的名片</button>
 						<view class="clear"></view>
@@ -215,6 +219,7 @@ page{
 						<view class="clear"></view>
 					</view>
 				</view>
+
 			</view>
 		</view>
 	</view>
@@ -418,6 +423,15 @@ page{
 				wx.previewImage({
 					current: current,
 					urls: urls
+				});
+			},
+			goEdit(){
+				if(!this.is_owner){
+					return;
+				}
+				let url = `/pages/record/edit?space_id=${this.space_id}&object_name=users&action=edit&record_id=${this.card_info._id}&title=编辑名片&fields=${this.card_fields}`;
+				wepy.navigateTo({
+					url: url
 				});
 			},
 			async addPhoneContact(){
