@@ -84,7 +84,7 @@
         methods = {
             send (evt) {
                 if (this.readyToSend) {
-                    this.$invoke('../chartboard', 'sendMessage', this.readyToSend);
+                    this.$invoke('../chatboard', 'sendMessage', this.readyToSend);
                 }
             },
             input (evt) {
@@ -92,11 +92,11 @@
             },
             focus (evt) {
                 this.focusFlag = true;
-                this.$invoke('../chartboard', 'fixPosition', this.focusFlag);
+                this.$invoke('../chatboard', 'fixPosition', this.focusFlag);
             },
             blur (evt) {
                 this.focusFlag = false;
-                this.$invoke('../chartboard', 'fixPosition', this.focusFlag);
+                this.$invoke('../chatboard', 'fixPosition', this.focusFlag);
             },
             clear () {
                 this.readyToSend = '';
