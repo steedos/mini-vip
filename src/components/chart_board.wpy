@@ -296,7 +296,6 @@
       let messages;
       try {
         messages = (await chat.getHistory(this.room_id, space_id)).value.reverse();
-        console.log('messages', messages)
       } catch (e) {
         messages = null;
         console.error('getHistory fail');
