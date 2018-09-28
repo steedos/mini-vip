@@ -42,7 +42,7 @@ page{
       <view class="weui-cells">
         <view @tap="goCurrentUserCard" class="record-container weui-cell weui-cell_access" hover-class="weui-cell_active">
           <view class="weui-cell__hd">
-            <image wx:if="{{user.avatar}}" mode="aspectFill" src="{{util.formatImageUrl(user.avatar, baseUrl)}}" class='avatar-field'/>
+            <image wx:if="{{user.name}}" mode="aspectFill" src="{{util.getUserAvatar(user._id, baseUrl)}}" class='avatar-field'/>
             <open-data wx:else class="avatar-field" type="userAvatarUrl"></open-data>
           </view>
           <view class="weui-cell__bd">
@@ -62,8 +62,7 @@ page{
             <block wx:if="{{record.user_b.name}}">
               <navigator url="./view?card_user_id={{record.user_b._id}}" class="record-container weui-cell weui-cell_access" hover-class="weui-cell_active">
                 <view class="weui-cell__hd">
-                  <image wx:if="{{record.user_b.avatar}}"  mode="aspectFill" src="{{util.formatImageUrl(record.user_b.avatar, baseUrl)}}" class='avatar-field'/>
-                  <image wx:elif="{{record.user_b.profile.avatar}}" mode="aspectFill" src="{{record.user_b.profile.avatar}}" class="avatar-field"/>
+                  <image wx:if="{{record.user_b.name}}"  mode="aspectFill" src="{{util.getUserAvatar(record.user_b._id, baseUrl)}}" class='avatar-field'/>
                   <image wx:else src="{{default_avatar}}"  mode="aspectFill" class="avatar-field"/>
                 </view>
                 <view class="weui-cell__bd">
@@ -151,7 +150,7 @@ export default class VisitingCardList extends wepy.page {
   };
 
   getFinalExpand() {
-    return 'user_b($select=avatar,name,profile/avatar)';
+    return 'user_b($select=name)';
   }
 
   mixins = [recordList];
