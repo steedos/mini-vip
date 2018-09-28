@@ -20,7 +20,7 @@
 </style>
 
 <template>
-  <view class="to-chat-view" @tap="toChat" wx:if="{{show}}"><view class="slds-icon-standard-live-chat slds-icon slds-icon--small"/></view>
+  <view class="to-chat-view" @tap="toChat" wx:if="{{show}}" hover-class='button-hover'><view class="slds-icon-standard-live-chat slds-icon slds-icon--small"/></view>
 </template>
 
 
