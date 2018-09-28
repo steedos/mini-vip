@@ -27,7 +27,7 @@
                 }
             }
             .input_text {
-                border-bottom: 1px solid #d8d8d8;
+                border-bottom: none;
                 padding-left: 20rpx;
                 margin-right: 110rpx;
                 height: 80rpx;
@@ -35,15 +35,15 @@
                 /*border-radius: 10rpx;*/
                 color: #000;
                 &.focus {
-                    border-bottom: 1px solid #005fb2;
+                    border-bottom: none;
                 }
             }
             .send {
-                background-color: #005fb2;
+                background-color: #1aad19;
                 display: inline-block;
                 box-sizing: border-box;
                 position: absolute;
-                border: 1px solid #005fb2;
+                border: 1px solid #1aad19;
                 border-radius: 5rpx;
                 right:10rpx;
                 width:90rpx;
@@ -84,7 +84,7 @@
         methods = {
             send (evt) {
                 if (this.readyToSend) {
-                    this.$invoke('../chartboard', 'sendMessage', this.readyToSend);
+                    this.$invoke('../chatboard', 'sendMessage', this.readyToSend);
                 }
             },
             input (evt) {
@@ -92,11 +92,11 @@
             },
             focus (evt) {
                 this.focusFlag = true;
-                this.$invoke('../chartboard', 'fixPosition', this.focusFlag);
+                this.$invoke('../chatboard', 'fixPosition', this.focusFlag);
             },
             blur (evt) {
                 this.focusFlag = false;
-                this.$invoke('../chartboard', 'fixPosition', this.focusFlag);
+                this.$invoke('../chatboard', 'fixPosition', this.focusFlag);
             },
             clear () {
                 this.readyToSend = '';

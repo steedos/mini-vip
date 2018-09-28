@@ -5,7 +5,7 @@
 @import "../lib/vip/vip.less";
 @import "../lib/icon/utility.less";
 page {
-  background-color: #fafafa;
+  background: linear-gradient(#ffffff, #fafafa);
   font-size: 16px;
   font-family: -apple-system-font,Helvetica Neue,Helvetica,sans-serif;
 }
@@ -329,10 +329,10 @@ export default class VIP extends wepy.app {
       }]
     },
     window: {
-      navigationBarBackgroundColor: '#353535',
+      navigationBarBackgroundColor: '#ffffff',
       navigationBarTitleText: '华炎名片',
-      navigationBarTextStyle: 'white',
-      backgroundColor: "#fafafa",
+      navigationBarTextStyle: 'black',
+      backgroundColor: "#f9f9f9",
       backgroundTextStyle: 'dark',
     }
   }
