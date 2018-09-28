@@ -34,10 +34,10 @@
       margin: 15px 15px 0;
     }
 
-    .save-btn{
-      background: #1B9AF7;
-      color: #fff;
-    }
+    /*.save-btn{*/
+      /*background: #1B9AF7;*/
+      /*color: #fff;*/
+    /*}*/
 
     /*先注释掉此样式，否则一行显示的特别高*/
     /*.weui-cell__ft{*/
@@ -453,7 +453,7 @@
         </repeat>
 
         <view class="btn-container" wx:if="!hiddenBtn">
-          <button class="submit-btn save-btn" form-type="submit" disabled="{{submitDisabled}}" wx:if="{{args.action === 'edit' || args.action === 'create'}}">保存</button>
+          <button class="submit-btn save-btn" type="primary" form-type="submit" disabled="{{submitDisabled}}" wx:if="{{args.action === 'edit' || args.action === 'create'}}">保存</button>
           <!--<button class="submit-btn remove-btn" wx:if="{{!args.undeletable && _record_allowDelte}}"  @tap="removeRecord">删除</button>-->
           <button class="submit-btn" type="primary" @tap="goEdit" wx:if="{{_record_allowEdit && args.action === 'read'}}">编辑</button>
           <button class="submit-btn remove-btn" wx:if="{{!args.undeletable && _record_allowDelte}}"  @tap="removeRecord">删除</button>
@@ -504,6 +504,10 @@
       _changeValue: {}
     };
 
+    /*
+    * 根据字段的group、inlineHelpText属性，对字段进行分组
+    * 注意：只读时，只显示有值的字段
+    * */
     getGroupFields(fields, action, values){
 
       let fields_new = [];
