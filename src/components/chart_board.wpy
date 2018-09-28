@@ -138,7 +138,7 @@
         <view class="icon">
           <view class="caret-left"></view>
           <view class="photo">
-            <image src="{{ item.owner.profile.avatar }}" style="width:36px;height:36px;"></image>
+            <image src="{{util.getUserAvatar(item.owner._id, baseUrl)}}" style="width:36px;height:36px;"></image>
           </view>
         </view>
         <view class="content">
@@ -151,7 +151,7 @@
         </view>
         <view class="icon-right">
           <view class="photo">
-            <image src="{{ item.owner.profile.avatar }}" style="width:36px;height:36px;"></image>
+            <image src="{{util.getUserAvatar(item.owner._id, baseUrl)}}" style="width:36px;height:36px;"></image>
           </view>
           <view class="caret-right"></view>
         </view>
@@ -163,14 +163,15 @@
   import wepy from 'wepy';
   import _ from 'underscore'
   import chat from '../common/chat';
-
-  import {chatNewMessagePollingInterval} from '@/config'
+  import util from '../wxs/util.wxs'
+  import {baseUrl, chatNewMessagePollingInterval} from '@/config'
 
   const global = {}
 
   export default class ChartBoard extends wepy.component {
 
     data = {
+      baseUrl: baseUrl,
       loading: false,
       messages: [],
       waitingShowMessages: [],
@@ -183,6 +184,10 @@
       historyTimestamp: null,
       loadedLastMesssage: false,
       scrollAnimation: true
+    };
+
+    wxs = {
+      util: util,
     };
 
     mWebSocket() {

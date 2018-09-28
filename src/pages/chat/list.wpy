@@ -115,7 +115,7 @@
               <view class="record">
                 <view class="weui-cell__hd" style="position:relative;">
                   <repeat for="{{rooms[record.related_to.ids[0]].members}}" item="member">
-                    <image src="{{util.formatAvatarImageUrl(member.profile.avatar, baseUrl)}}" class='avatar-field' wx:if="{{user_id != member._id}}"></image>
+                    <image src="{{util.getUserAvatar(member._id, baseUrl)}}" class='avatar-field' wx:if="{{user_id != member._id}}"></image>
                   </repeat>
                   <!--<view class="message-dot"></view>群聊-->
                   <view class="weui-badge" style="position: absolute;top: -.4em;right: 0.2em;" wx:if="{{record.unread > 0}}">{{record.unread}}</view>
@@ -192,7 +192,7 @@ export default class RecordList extends wepy.page {
     let queryOptions = {
       $filter: `members eq '${this.user_id}'`,
       $select: '_id,name,space,members',
-      $expand: 'members($select=name,profile)'
+      $expand: 'members($select=name)'
     };
 
     const res = await ODataClinet.query('chat_rooms', queryOptions, e.space_id);
