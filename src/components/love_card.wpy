@@ -283,7 +283,7 @@ export default class LoveCard extends wepy.component {
 			if(!this.card_info.name){
 				return;
 			}
-			let url = `/pages/record/edit?space_id=${this.space_id}&object_name=users&action=edit&record_id=${this.card_info._id}&title=编辑名片&fields=${this.card_fields}`;
+			let url = `/pages/visiting_card/view?card_user_id{{card_user_id}}`;
 			pageRouter.navigateTo({
 				url: url
 			});

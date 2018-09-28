@@ -156,12 +156,8 @@ export default class VisitingCardList extends wepy.page {
 
   methods = {
     goCurrentUserCard(){
-      if(this.user.name){
-        wepy.navigateTo({url: `./view?card_user_id=${this.user_id}`});
-      }else{
-        wepy.switchTab({url: './me'});
-      }
-    },
+      wepy.switchTab({url: './me'});
+    }
   };
 }
 </script>
