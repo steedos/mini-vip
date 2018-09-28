@@ -216,7 +216,7 @@
           <view class="weui-cells {{groupField._cellsClass}}">
             <repeat for="{{groupField.fields}}" key="index" index="index" item="item">
               <block wx:if="{{!item.hidden && !item.omit}}">
-                <block wx:if="{{item.type === 'image' || item.type === 'video' || item.type === 'audio'}}">
+                <block wx:if="{{item.type === 'image' || item.type === 'video' || item.type === 'audio' || item.type === 'avatar'}}">
                   <block wx:if="{{item.multiple}}">
                     <block wx:if="{{item.readonly || !_record_allowEdit || args.action === 'read'}}">
                       <block wx:if="{{!item._top}}">
@@ -265,7 +265,7 @@
                             <view class="weui-uploader__bd" style="padding-top: 10px">
                               <view class="weui-uploader__files" id="uploaderFiles">
                                 <repeat for="{{values[item.name]}}" key="*this" item="file" index="index">
-                                  <view class="weui-uploader__file" wx:if="{{item.type === 'image'}}" bindtap="previewImage"
+                                  <view class="weui-uploader__file" wx:if="{{item.type === 'image' || item.type === 'avatar'}}" bindtap="previewImage"
                                         id="{{file}}" data-key="{{item.name}}" style="position:relative;">
                                     <image class="weui-uploader__img" src="{{util.formatImageUrl(file, baseUrl)}}"
                                            mode="aspectFill" data-key="{{item.name}}"/>
@@ -298,7 +298,7 @@
                   <block wx:else>
                     <block wx:if="{{!item._top}}">
 
-                      <block wx:if="{{item.type === 'image'}}">
+                      <block wx:if="{{item.type === 'image' || item.type === 'avatar'}}">
                         <block wx:if="{{!(item.readonly || !_record_allowEdit || args.action === 'read')}}">
                           <view class='weui-cell weui-cell_access' data-value="{{values[item.name]}}" bindtap="chooseFile({{item}})">
                             <view class="weui-cell__required" wx:if="{{util.isRequired(args.action, item)}}"></view>
@@ -342,12 +342,12 @@
                           </view>
                           <view class="weui-cell__bd" style="text-align:right;">
                             <block wx:if="{{values[item.name]}}">
-                              <image mode="aspectFill" src="{{util.formatImageUrl(values[item.name], baseUrl)}}" class="weui-uploader__img" style="display:block;float:right" wx:if="{{item.type === 'image' && values[item.name]}}" bindtap="chooseFile({{item}})"
+                              <image mode="aspectFill" src="{{util.formatImageUrl(values[item.name], baseUrl)}}" class="weui-uploader__img" style="display:block;float:right" wx:if="{{(item.type === 'image' || item.type === 'avatar') && values[item.name]}}" bindtap="chooseFile({{item}})"
                                      id="{{values[item.name]}}" data-key="{{item.name}}"/>
                               <video src="{{util.formatVideoUrl(values[item.name], baseUrl)}}" class="weui-uploader__img" style="display:block;float:right" wx:if="{{item.type === 'video' && values[item.name]}}">{{values[item.name]}}</video>
                             </block>
                             <block wx:else>
-                              <view class="weui-cell__ft weui-uploader__input-box" style="display:block;float:right" wx:if="{{item.type === 'image'}}">
+                              <view class="weui-cell__ft weui-uploader__input-box" style="display:block;float:right" wx:if="{{item.type === 'image' || item.type === 'avatar'}}">
                                 <view class="weui-uploader__input" bindtap="chooseFile({{item}})" ></view>
                               </view>
                             </block>
@@ -524,7 +524,7 @@
         field._top = false;
 
         if(action === 'read'){
-          if(field.type === 'image' && !_.isEmpty(values[key]) && !foo){
+          if((field.type === 'image' || field.type === 'avatar') && !_.isEmpty(values[key]) && !foo){
 
             field.inlineHelpText = '  ';
             field.group = '';
@@ -833,7 +833,7 @@
       }
     }
 
-    async uploadImage(filePath, field_name, record_id){
+    async uploadImage(filePath, field_name, record_id, field_type){
       const imageInfo = await wepy.getImageInfo({
         src: filePath
       });
@@ -849,7 +849,7 @@
       const authToken = this.$parent.$parent.globalData.user.auth_token;
       const userId = this.$parent.$parent.globalData.user._id;
       const fileResult = await wepy.uploadFile({
-        url: `${baseUrl}/s3/images`,
+        url: `${baseUrl}/s3/${field_type}s`,
         filePath: filePath,
         name: 'file',
         formData: formData,
@@ -876,14 +876,14 @@
       const fields = this.fields;
       for (let k in fields) {
         let f = fields[k]
-        if(f.type === 'image'){
+        if(f.type === 'image' || f.type === 'avatar'){
           if(f.multiple){
             let fv = this.values[k];
             if(_.isArray(fv)){
               let new_fv = []
               for (let v of fv){
                 if(this.isTempFile(v)){
-                  const image = await this.uploadImage(v, k, record_id);
+                  const image = await this.uploadImage(v, k, record_id, f.type);
                   if(image){
                     new_fv.push(image._id)
                   }
@@ -897,7 +897,7 @@
             let fv = this.values[k];
             if(fv){
               if(this.isTempFile(fv)){
-                const image = await this.uploadImage(fv, k, record_id);
+                const image = await this.uploadImage(fv, k, record_id, f.type);
                 if(image){
                   this.values[k] = image._id
                 }
@@ -927,7 +927,7 @@
       const fields = this.fields;
       for (let k in fields) {
         let f = fields[k]
-        if(f.type === 'image'){
+        if(f.type === 'image' || f.type === 'avatar'){
           if(f.multiple){
             let fv = this.values[k];
             if(_.isArray(fv)){
@@ -1157,7 +1157,7 @@
         const key = e._key;
         const multiple = e.multiple || false
         const type = e.type;
-        if (type === 'image') {
+        if (type === 'image' || type === 'avatar') {
           let options = {
             sizeType: ['original', 'compressed'],
             sourceType: ['album', 'camera'],
