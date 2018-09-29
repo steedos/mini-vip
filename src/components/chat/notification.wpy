@@ -1,0 +1,106 @@
+<style lang="less">
+  .chat-notification{
+    z-index: 999;
+    position: fixed;
+    top: 5px;
+    box-shadow: 0px 0px 3px 3px rgba(170, 170, 170, 0.15);
+    border: solid 1px #FFFFFF;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.75);
+    min-height: 50px;
+    left: 10px;
+    width: calc(~"100% - 20px");
+
+    .weui-cells{
+      margin-top: 0px;
+      background-color: rgba(255, 255, 255, 0.75);
+    }
+
+    .weui-cells:after{
+      border: 0px;
+    }
+
+    .weui-cells:before{
+      border: 0px;
+    }
+
+  }
+
+  .avatar-field{
+    /*margin-top: 15px;*/
+    /*margin-bottom: 15px;*/
+    /*margin-left: 15px;*/
+    border-radius: 0.15rem;
+    margin-right: 15px;
+    vertical-align: middle;
+    width: 35px;
+    height: 35px;
+  }
+
+  .item-body {
+    width: 55%;
+    height: 100%;
+  }
+
+  .description-field {
+    text-overflow: ellipsis;
+    width: 85%;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 13px;
+    color: #888888;
+  }
+
+  .name-field {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    flex: 1;
+    min-height: 24px;
+  }
+
+  .item-body-1 {
+    display: flex;
+    align-items: center;
+  }
+
+  .record {
+    width: 100%;
+    display: flex;
+    align-items: center;
+  }
+</style>
+
+<template>
+  <view class="chat-notification">
+    <view class="weui-cells">
+      <view class="weui-cell">
+        <view class="record">
+          <view class="weui-cell__hd" style="position:relative;">
+            <image mode="aspectFill" class="avatar-field weui-media-box__thumb" src="https://vip-test.steedos.com:8443/api/files/avatars/HNjRDQgAx3ZkDbsxs" />
+            <!--<view class="message-dot"></view>群聊-->
+            <view class="weui-badge" style="position: absolute;top: -.4em;right: 0.2em;" wx:if="{{record.unread > 0}}">{{record.unread}}</view>
+          </view>
+          <view class="weui-cell__bd item-body">
+            <view class="item-body-1">
+              <view class="name-field">
+                庄建国
+              </view>
+            </view>
+            <view class="description-field">你好, 欢迎使用审批王。</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import _ from 'underscore'
+  import chat from '../../common/chat';
+
+  export default class ChatNotification extends wepy.component {
+
+  }
+</script>

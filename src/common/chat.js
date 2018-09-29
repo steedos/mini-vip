@@ -19,6 +19,14 @@ class ChatAPI {
     }
   }
 
+  getSubscriptions(user_id, space_id){
+    let queryOptions = {
+      $filter: `(related_to/o eq 'chat_rooms') and owner eq '${user_id}'`,
+      $select: 'last_message_text, unread',
+    };
+    ODataClinet.query('chat_subscriptions', queryOptions,space_id)
+  }
+
   async getRoom(user_id, space, room_members){
     let filter = [];
 
