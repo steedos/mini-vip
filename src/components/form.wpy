@@ -275,7 +275,7 @@
                                   </view>
                                 </repeat>
                               </view>
-                              <view class="weui-uploader__input-box" wx:if="{{!item.max || values[item.name].length < item.max}}">
+                              <view class="weui-uploader__input-box" wx:if="{{!item.max || !values[item.name] || values[item.name].length < item.max}}">
                                 <view class="weui-uploader__input" bindtap="chooseFile({{item}})" ></view>
                               </view>
                             </view>
