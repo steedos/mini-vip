@@ -144,7 +144,17 @@
 			color: #000;
 			margin-left: 50rpx;
 			line-height: 50rpx;
-			width: calc(~"100% - 150rpx");
+			// width: calc(~"100% - 150rpx");
+		}
+		.detail-item-btn{
+			display: table-cell;
+			text-align:right;
+			width:160rpx;
+			.detail-item-btn-right{
+				vertical-align:middle;
+				height:50rpx;
+				line-height:50rpx;
+			}
 		}
 		.detail-item-contant-null{
 			color:#A6A6A6;
@@ -206,7 +216,7 @@
 				<view class="clear"></view>
 			</view>
 		</view>
-    <view class="card-more" style="position:relative;">
+    <view class="card-more" style="position:relative;" wx:if="{{card_info.mobile||card_info.wechat||card_info.email||card_info.company||card_info.location.address}}">
       <to_chat_with :space_id.sync="space_id" :with_user.sync="card_info"></to_chat_with>
       <view wx:if="{{!is_detail}}" @tap="openDetail">
 				<view class="card-more-title">展开全部名片信息</view>
@@ -217,30 +227,40 @@
 				<view class="weui-cell__ft switch-group-close weui-cell__ft_in-access"></view>
 			</view>
 			<view class="card-more-detail" wx:if="{{is_detail}}">
-				<view class="card-more-detail-item">
+				<view class="card-more-detail-item"  @tap="phoneCall('{{card_info.mobile}}')" wx:if="{{card_info.mobile}}">
 					<view class="detail-item-title">电话</view>
-					<view class="detail-item-contant" wx:if="{{card_info.mobile}}">{{card_info.mobile}}</view>
-					<view class="detail-item-contant-null" wx:else>未填写</view>
+					<view class="detail-item-contant">{{card_info.mobile}}</view>
+					<view class="detail-item-btn">
+						<button class="detail-item-btn-right" plain="true" type="primary" size="mini">拨打</button>
+					</view>
 				</view>
-				<view class="card-more-detail-item">
+				<view class="card-more-detail-item"  @tap="Copy('{{card_info.wechat}}')" wx:if="{{card_info.wechat}}">
 					<view class="detail-item-title">微信</view>
-					<view class="detail-item-contant" wx:if="{{card_info.wechat}}">{{card_info.wechat}}</view>
-					<view class="detail-item-contant-null" wx:else>未填写</view>
+					<view class="detail-item-contant">{{card_info.wechat}}</view>
+					<view class="detail-item-btn">
+						<button class="detail-item-btn-right" plain="true" type="primary" size="mini">复制</button>
+					</view>
 				</view>
-				<view class="card-more-detail-item">
+				<view class="card-more-detail-item"   @tap="Copy('{{card_info.email}}')"  wx:if="{{card_info.email}}">
 					<view class="detail-item-title">邮箱</view>
-					<view class="detail-item-contant"  wx:if="{{card_info.email}}">{{card_info.email}}</view>
-					<view class="detail-item-contant-null"  wx:else>未填写</view>
+					<view class="detail-item-contant">{{card_info.email}}</view>
+					<view class="detail-item-btn">
+						<button class="detail-item-btn-right" plain="true" type="primary" size="mini">复制</button>
+					</view>
 				</view>
-				<view class="card-more-detail-item">
+				<view class="card-more-detail-item"  @tap="Copy('{{card_info.company}}')" wx:if="{{card_info.company}}">
 					<view class="detail-item-title">公司</view>
-					<view class="detail-item-contant" wx:if="{{card_info.company}}">{{card_info.company}}</view>
-					<view class="detail-item-contant-null" wx:else>未填写</view>
+					<view class="detail-item-contant">{{card_info.company}}</view>
+					<view class="detail-item-btn">
+						<button class="detail-item-btn-right" plain="true" type="primary" size="mini">复制</button>
+					</view>
 				</view>
-				<view class="card-more-detail-item">
+				<view class="card-more-detail-item"  @tap="Copy('{{card_info.location.address}}')"  wx:if="{{card_info.location.address}}">
 					<view class="detail-item-title">地址</view>
-					<view class="detail-item-contant" wx:if="{{card_info.location.address}}">{{card_info.location.address}}</view>
-					<view class="detail-item-contant-null" wx:else>未填写</view>
+					<view class="detail-item-contant">{{card_info.location.address}}</view>
+					<view class="detail-item-btn">
+						<button class="detail-item-btn-right" plain="true" type="primary" size="mini">复制</button>
+					</view>
 				</view>
 			</view>
 		</view>
@@ -317,7 +337,28 @@ export default class LoveCard extends wepy.component {
 		closeDetail(){
 			this.is_detail = false;
 			this.$apply();
-		}
+		},
+		Copy(e) {
+      wx.setClipboardData({
+				data: e,
+        success: function(res) {
+          wx.getClipboardData({
+            success: function(res) {
+              wx.showToast({
+                title: '已复制到剪贴板',
+                icon: 'success',
+                duration: 3000
+              })
+						}
+          })
+        }
+      })
+		},
+		phoneCall(number) {
+			wepy.makePhoneCall({
+				phoneNumber: number
+			});
+		},
 	};
 }
 </script>
