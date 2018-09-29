@@ -143,7 +143,7 @@ page{
 			is_owner: true,
 			default_avatar: 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg',
 			friends: { value: [], "@odata.count":0},
-			card_fields: "avatar,name,company,position,mobile2,wechat,email2,location,self_introduction,photos,work_phone",
+			card_fields: "avatar,name,company,position,mobile2,work_phone,wechat,email2,location,self_introduction,photos",
 			previewable: true
 		};
 
