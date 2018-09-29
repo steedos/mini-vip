@@ -196,7 +196,7 @@ page{
 					</repeat>
 				</view>
 			</view>
-			<!-- <view class="panel-box"  @tap="addPhoneContact"  wx:if="{{card_info.mobile}}">
+			<!-- <view class="panel-box"  @tap="addPhoneContact"  wx:if="{{card_info.mobile2}}">
 				<view class="weui-cells weui-cells_after-title">
 					<view class="weui-cell weui-cell_access" hover-class="weui-cell_active">
 						<view class="weui-cell__bd">存入手机通讯录</view>
@@ -258,7 +258,7 @@ page{
 			is_owner: false,
 			default_avatar: 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg',
 			friends: { value: [], "@odata.count":0},
-			card_fields: "avatar,name,company,position,mobile,wechat,email,location,self_introduction,photos"
+			card_fields: "avatar,name,company,position,mobile2,wechat,email2,location,self_introduction,photos"
 		};
 
 		wxs = {
@@ -440,9 +440,9 @@ page{
 					firstName: this.card_info.name,
 					organization: this.card_info.company,
 					title: this.card_info.position,
-					mobilePhoneNumber: this.card_info.mobile,
+					mobilePhoneNumber: this.card_info.mobile2,
 					weChatNumber: this.card_info.wechat,
-					email: this.card_info.email,
+					email: this.card_info.email2,
 					workPhoneNumber: this.card_info.work_phone,
 					addressStreet: this.card_info.location ? this.card_info.location.address : "",
 					success: ()=>{

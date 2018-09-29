@@ -189,7 +189,7 @@
 					<view class="card-content-icon">
 						<view class="vip-call-dark slds-icon slds-icon--small"/>
 					</view>
-					<view class="card-content-tel"  wx:if="{{card_info.mobile}}">{{card_info.mobile}}</view>
+					<view class="card-content-tel"  wx:if="{{card_info.mobile2}}">{{card_info.mobile2}}</view>
 					<view class="card-content-tel"  wx:else>未填写手机号码</view>
 					<view class="clear"></view>
 				</view>
@@ -197,7 +197,7 @@
 					<view class="card-content-icon">
 						<view class="vip-email-dark slds-icon slds-icon--small"/>
 					</view>
-					<view class="card-content-email"  wx:if="{{card_info.email}}">{{card_info.email}}</view>
+					<view class="card-content-email"  wx:if="{{card_info.email2}}">{{card_info.email2}}</view>
 					<view class="card-content-email"  wx:else>未填写邮件</view>
 					<view class="clear"></view>
 				</view>
@@ -212,7 +212,7 @@
 				<view class="clear"></view>
 			</view>
 		</view>
-    <view class="card-more" style="position:relative;" wx:if="{{card_info.mobile||card_info.wechat||card_info.email||card_info.company||card_info.location.address}}">
+    <view class="card-more" style="position:relative;" wx:if="{{card_info.mobile2||card_info.wechat||card_info.email2||card_info.company||card_info.location.address}}">
       <view wx:if="{{!is_detail}}" @tap="openDetail">
 				<view class="card-more-title">展开全部名片信息</view>
 				<view class="weui-cell__ft switch-group-open weui-cell__ft_in-access"></view>
@@ -222,9 +222,9 @@
 				<view class="weui-cell__ft switch-group-close weui-cell__ft_in-access"></view>
 			</view>
 			<view class="card-more-detail" wx:if="{{is_detail}}">
-				<view class="card-more-detail-item"  @tap="phoneCall('{{card_info.mobile}}')" wx:if="{{card_info.mobile}}">
+				<view class="card-more-detail-item"  @tap="phoneCall('{{card_info.mobile2}}')" wx:if="{{card_info.mobile2}}">
 					<view class="detail-item-title">电话</view>
-					<view class="detail-item-contant">{{card_info.mobile}}</view>
+					<view class="detail-item-contant">{{card_info.mobile2}}</view>
 					<view class="detail-item-btn">
 						<button class="detail-item-btn-right" plain="true" type="primary" size="mini">拨打</button>
 					</view>
@@ -236,9 +236,9 @@
 						<button class="detail-item-btn-right" plain="true" type="primary" size="mini">复制</button>
 					</view>
 				</view>
-				<view class="card-more-detail-item"   @tap="Copy('{{card_info.email}}')"  wx:if="{{card_info.email}}">
+				<view class="card-more-detail-item"   @tap="Copy('{{card_info.email2}}')"  wx:if="{{card_info.email2}}">
 					<view class="detail-item-title">邮箱</view>
-					<view class="detail-item-contant">{{card_info.email}}</view>
+					<view class="detail-item-contant">{{card_info.email2}}</view>
 					<view class="detail-item-btn">
 						<button class="detail-item-btn-right" plain="true" type="primary" size="mini">复制</button>
 					</view>
