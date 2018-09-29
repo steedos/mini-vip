@@ -334,7 +334,7 @@ export default class VIP extends wepy.app {
         pagePath: 'pages/visiting_card/chat_list',
         selectedIconPath: './images/tabbars/chat_pressed.png',
         iconPath: './images/tabbars/chat.png',
-        text: '访客留言',
+        text: '留言',
       },{
         pagePath: 'pages/visiting_card/me',
         selectedIconPath: './images/tabbars/me_pressed.png',
@@ -343,9 +343,9 @@ export default class VIP extends wepy.app {
       }]
     },
     window: {
-      navigationBarBackgroundColor: '#ffffff',
+      navigationBarBackgroundColor: '#353535',
       navigationBarTitleText: '华炎名片',
-      navigationBarTextStyle: 'black',
+      navigationBarTextStyle: 'white',
       backgroundColor: "#f9f9f9",
       backgroundTextStyle: 'dark',
     }
