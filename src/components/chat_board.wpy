@@ -138,7 +138,7 @@
         <view class="icon">
           <view class="caret-left"></view>
           <view class="photo">
-            <image src="{{util.formatAvatarImageUrl(item.owner.avatarUrl, baseUrl)}}" style="width:36px;height:36px;"></image>
+            <image src="{{util.formatAvatarImageUrl(item.owner.avatarUrl, baseUrl)}}" mode="aspectFill" style="width:36px;height:36px;"></image>
           </view>
         </view>
         <view class="content">
@@ -151,7 +151,7 @@
         </view>
         <view class="icon-right">
           <view class="photo">
-            <image src="{{util.formatAvatarImageUrl(item.owner.avatarUrl, baseUrl)}}" style="width:36px;height:36px;"></image>
+            <image src="{{util.formatAvatarImageUrl(item.owner.avatarUrl, baseUrl)}}" mode="aspectFill" style="width:36px;height:36px;"></image>
           </view>
           <view class="caret-right"></view>
         </view>
