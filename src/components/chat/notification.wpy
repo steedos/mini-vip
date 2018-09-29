@@ -1,5 +1,6 @@
 <style lang="less">
   .chat-notification{
+    transition: all 0.3s linear;
     z-index: 999;
     position: fixed;
     top: 5px;
@@ -72,7 +73,7 @@
 </style>
 
 <template>
-  <view class="chat-notification">
+  <view class="chat-notification" @tap="clickNotification" style="{{close ? 'top:-100px':''}}">
     <view class="weui-cells">
       <view class="weui-cell">
         <view class="record">
@@ -102,5 +103,15 @@
 
   export default class ChatNotification extends wepy.component {
 
+    data = {
+      close: false,
+    };
+
+    methods = {
+      clickNotification: function (e) {
+        this.close = true;
+        this.$apply();
+      }
+    }
   }
 </script>
