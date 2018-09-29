@@ -63,7 +63,7 @@ class ChatAPI {
       $filter: `(related_to/o eq 'chat_rooms') and (related_to/ids eq '${room_id}')`,
       $orderby: 'created desc',
       $select: 'name,type,created,owner',
-      $expand: 'owner($select=name,profile)'
+      $expand: 'owner($select=name,avatarUrl)'
     };
 
     if(filter){
@@ -78,7 +78,7 @@ class ChatAPI {
       $filter: `(related_to/o eq 'chat_rooms') and (related_to/ids eq '${room_id}') and created gt ${timestamp}`,
       $orderby: 'created desc',
       $select: 'name,type,created,owner',
-      $expand: 'owner($select=name,profile)'
+      $expand: 'owner($select=name,avatarUrl)'
     };
     return ODataClinet.query('chat_messages', queryOptions, space)
   }
