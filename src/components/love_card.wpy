@@ -210,7 +210,7 @@
 				<view class="clear"></view>
 			</view>
 		</view>
-    <view class="card-more" style="position:relative;" wx:if="{{card_info.mobile2||card_info.wechat||card_info.email2||card_info.company||card_info.location.address}}">
+    <view class="card-more" style="position:relative;" wx:if="{{card_info.mobile2||card_info.wechat||card_info.email2||card_info.company||card_info.location.address||card_info.work_phone}}">
       <view wx:if="{{!is_detail}}" @tap="openDetail">
 				<view class="card-more-title">展开全部名片信息</view>
 				<view class="weui-cell__ft switch-group-open weui-cell__ft_in-access"></view>
@@ -223,6 +223,13 @@
 				<view class="card-more-detail-item"  @tap="phoneCall('{{card_info.mobile2}}')" wx:if="{{card_info.mobile2}}">
 					<view class="detail-item-title">电话</view>
 					<view class="detail-item-contant">{{card_info.mobile2}}</view>
+					<view class="detail-item-btn">
+						<button class="detail-item-btn-right" plain="true" type="primary" size="mini">拨打</button>
+					</view>
+				</view>
+				<view class="card-more-detail-item"  @tap="phoneCall('{{card_info.work_phone}}')" wx:if="{{card_info.work_phone}}">
+					<view class="detail-item-title">工作电话</view>
+					<view class="detail-item-contant">{{card_info.work_phone}}</view>
 					<view class="detail-item-btn">
 						<button class="detail-item-btn-right" plain="true" type="primary" size="mini">拨打</button>
 					</view>
