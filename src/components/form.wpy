@@ -221,7 +221,7 @@
                                   <view class="weui-uploader__file" bindtap="previewImage"
                                         id="{{image_id}}" data-key="{{item.name}}">
                                     <image class="weui-uploader__img" mode="aspectFill"
-                                           src="{{util.formatImageUrl(image_id, baseUrl)}}" data-key="{{item.name}}"/>
+                                           src="{{util.formatImageUrl(image_id, baseUrl, item.type)}}" data-key="{{item.name}}"/>
                                   </view>
                                 </repeat>
                               </view>
@@ -236,7 +236,7 @@
                             interval="3000" duration="500">
                             <repeat for="{{values[item.name]}}" item="image_id">
                               <swiper-item>
-                                <image class="swiper-item" src="{{util.formatImageUrl(image_id, baseUrl)}}"/>
+                                <image class="swiper-item" src="{{util.formatImageUrl(image_id, baseUrl, item.type)}}"/>
                               </swiper-item>
                             </repeat>
                           </swiper>
@@ -257,7 +257,7 @@
                                 <repeat for="{{values[item.name]}}" key="*this" item="file" index="index">
                                   <view class="weui-uploader__file" wx:if="{{item.type === 'image' || item.type === 'avatar'}}" bindtap="previewImage"
                                         id="{{file}}" data-key="{{item.name}}" style="position:relative;">
-                                    <image class="weui-uploader__img" src="{{util.formatImageUrl(file, baseUrl)}}"
+                                    <image class="weui-uploader__img" src="{{util.formatImageUrl(file, baseUrl, item.type)}}"
                                            mode="aspectFill" data-key="{{item.name}}"/>
                                     <view style="position: absolute;top: -.4em;right: -.4em;" @tap.stop="clearImage" data-key="{{item.name}}">
                                       <view class="slds-icon-action-close" style="width: 4px;height: 4px" data-index="{{index}}" data-key="{{item.name}}"></view>
@@ -265,12 +265,12 @@
                                   </view>
                                   <view class="weui-uploader__file" wx:elif="{{item.type === 'video'}}" bindtap="previewImage"
                                         id="{{file}}">
-                                    <image class="weui-uploader__img" src="{{util.formatImageUrl(file, baseUrl)}}"
+                                    <image class="weui-uploader__img" src="{{util.formatImageUrl(file, baseUrl, item.type)}}"
                                            mode="aspectFill"/>
                                   </view>
                                   <view class="weui-uploader__file" wx:elif="{{item.type === 'audio'}}" bindtap="previewImage"
                                         id="{{file}}">
-                                    <image class="weui-uploader__img" src="{{util.formatImageUrl(file, baseUrl)}}"
+                                    <image class="weui-uploader__img" src="{{util.formatImageUrl(file, baseUrl, item.type)}}"
                                            mode="aspectFill"/>
                                   </view>
                                 </repeat>
@@ -297,7 +297,7 @@
                             </view>
                             <view class="weui-cell__bd" style="text-align:right;">
                               <block wx:if="{{values[item.name]}}">
-                                <image mode="aspectFill" src="{{util.formatImageUrl(values[item.name], baseUrl)}}" class="weui-uploader__img" style="display:block;float:right"
+                                <image mode="aspectFill" src="{{util.formatImageUrl(values[item.name], baseUrl, item.type)}}" class="weui-uploader__img" style="display:block;float:right"
                                        id="{{values[item.name]}}" data-key="{{item.name}}"/>
                               </block>
                               <block wx:else>
@@ -316,7 +316,7 @@
                             </view>
                             <view class="weui-cell__bd" style="text-align:right;">
                               <block wx:if="{{values[item.name]}}">
-                                <image mode="aspectFill" src="{{util.formatImageUrl(values[item.name], baseUrl)}}" class="weui-uploader__img" style="display:block;float:right"
+                                <image mode="aspectFill" src="{{util.formatImageUrl(values[item.name], baseUrl, item.type)}}" class="weui-uploader__img" style="display:block;float:right"
                                        id="{{values[item.name]}}" data-key="{{item.name}}"/>
                               </block>
                             </view>
@@ -332,7 +332,7 @@
                           </view>
                           <view class="weui-cell__bd" style="text-align:right;">
                             <block wx:if="{{values[item.name]}}">
-                              <image mode="aspectFill" src="{{util.formatImageUrl(values[item.name], baseUrl)}}" class="weui-uploader__img" style="display:block;float:right" wx:if="{{(item.type === 'image' || item.type === 'avatar') && values[item.name]}}" bindtap="chooseFile({{item}})"
+                              <image mode="aspectFill" src="{{util.formatImageUrl(values[item.name], baseUrl, item.type)}}" class="weui-uploader__img" style="display:block;float:right" wx:if="{{(item.type === 'image' || item.type === 'avatar') && values[item.name]}}" bindtap="chooseFile({{item}})"
                                      id="{{values[item.name]}}" data-key="{{item.name}}"/>
                               <video src="{{util.formatVideoUrl(values[item.name], baseUrl)}}" class="weui-uploader__img" style="display:block;float:right" wx:if="{{item.type === 'video' && values[item.name]}}">{{values[item.name]}}</video>
                             </block>
@@ -348,7 +348,7 @@
                     </block>
                     <block wx:else>
                       <view class="weui-cell weui-cell_image">
-                        <image class="cover" mode="aspectFill" wx:if="{{values[item.name]}}" src="{{util.formatImageUrl(values[item.name], baseUrl)}}" bindtap="previewImage"
+                        <image class="cover" mode="aspectFill" wx:if="{{values[item.name]}}" src="{{util.formatImageUrl(values[item.name], baseUrl, item.type)}}" bindtap="previewImage"
                                id="{{values[item.name]}}" data-key="{{item.name}}"/>
                       </view>
                     </block>

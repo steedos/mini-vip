@@ -210,7 +210,7 @@ function formatStartEnd(start, end, isAllDay) {
 }
 
 // 图片地址转换
-function formatImageUrl(src, baseUrl) {
+function formatImageUrl(src, baseUrl, type) {
   if (getRegExp("^\w+:\/\/").test(src)) {
     // http:// 或 wxfile:// 等完整路径直接返回
     return src;
@@ -219,7 +219,12 @@ function formatImageUrl(src, baseUrl) {
     return "https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/faild.png";
   }
   else if(src){
-    return baseUrl + "/api/files/images/" + src;
+    if(type && type === "avatar"){
+      return baseUrl + "/api/files/avatars/" + src;
+    }
+    else{
+      return baseUrl + "/api/files/images/" + src;
+    }
   }
   else{
     return "";
