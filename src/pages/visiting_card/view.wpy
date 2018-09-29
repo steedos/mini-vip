@@ -52,7 +52,6 @@ page{
 	&.panel-top-box{
 		margin-top:-280rpx;
 	}
-	background: #fff;
 	padding: 20rpx  40rpx;
 	margin-bottom: 20rpx;
 	.panel-box-title{
