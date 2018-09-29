@@ -6,6 +6,8 @@
 @import "../lib/icon/utility.less";
 page {
   background: linear-gradient(#ffffff, #f0f0f0);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   font-size: 16px;
   font-family: -apple-system-font,Helvetica Neue,Helvetica,sans-serif;
 }
@@ -13,7 +15,7 @@ page {
     padding: 40px;
 }
 .page__bd {
-    margin-bottom: 40px;
+  padding-bottom: 40px;
 }
 .page__bd_spacing {
     padding-left: 15px;
