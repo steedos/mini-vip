@@ -53,14 +53,17 @@ page{
 	font-family:黑体;
 	color:#000!important;
 }
+
+.love-card {
+	margin-top: 60rpx;
+}
 </style>
 
 <template>
 	<view class="page" wx:if="{{is_loaded}}">
 		<view class="page__bd">
-			<bg_circle />
+			<love_card :card_info.sync="card_info" :card_fields.sync="card_fields" :is_owner.sync="is_owner" :space_id.sync="space_id"  :previewable="previewable"/>
 			<view class="panel-box panel-top-box">
-				<love_card :card_info.sync="card_info" :card_fields.sync="card_fields" :is_owner.sync="is_owner" :space_id.sync="space_id"  :previewable="previewable"/>
 				<view class="page-btn">
 					<block wx:if="{{isAuthUserInfo}}">
 						<button class="btn-edit"  plain="true" type="primary" @tap="goEdit">编辑名片</button>

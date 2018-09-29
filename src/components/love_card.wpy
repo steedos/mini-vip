@@ -3,14 +3,14 @@
 	clear: both;
 }
 .card-container{
-	margin: 20rpx 0 30rpx 0;
+	margin: 20rpx;
 	padding: 30rpx 50rpx;
 	// border-radius: 5rpx;
 	box-shadow:5rpx 5rpx 15rpx #888;
 	background-color: #fff;
 	// background: url(https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/card3.png) no-repeat;
 	// background-size: cover;
-	min-height:320rpx;
+	min-height:360rpx;
 	position:relative;
 }
 
@@ -125,11 +125,9 @@
 	}
 }
 .card-more-detail{
-	margin:20rpx -40rpx;
 	background:#F7F7F7;
 	padding:40rpx 40rpx;
 	display: table;
-	width:100%;
 	.card-more-detail-item{
 		display: table-row;
 		text-align: left;
