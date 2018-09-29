@@ -108,6 +108,20 @@ page {
   }
 }
 
+.weui-search-bar {
+  background-color: #ffffff;
+  border-top: none;
+  border-bottom: none;
+  .weui-search-bar__form {
+    background-color: #e9eaee;
+    border: none;
+  }
+  .weui-search-bar__label {
+    background-color: #e9eaee;
+    border: none;
+  }
+}
+
 .cover-page-bg {
   position: fixed;
 	top: 0;
@@ -305,9 +319,9 @@ export default class VIP extends wepy.app {
       'pages/chat/chat_messages',
     ],
     tabBar: {
-      color: '#666',
+      color: '#a1a1a1',
       selectedColor: '#1AAD19',
-      backgroundColor: '#fff',
+      backgroundColor: '#f8f8f8',
       borderStyle: 'black',
       list: [
       {
