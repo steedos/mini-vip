@@ -234,13 +234,22 @@ function formatImageUrl(src, baseUrl, type) {
 
 // 头像地址转换
 function formatAvatarImageUrl(src, baseUrl) {
-  console.log("===src, baseUrl===",src, baseUrl)
   if (getRegExp("^\w+:\/\/").test(src)) {
     // http:// 或 wxfile:// 等完整路径直接返回
     return src;
   }
-  else if(src && src != "load_faild"){
-    return baseUrl + "/api/files/images/" + src;
+  else if(src == "load_faild"){
+    return "https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/avatar.png";
+  }
+  else if(src){
+    if (getRegExp("^\/").test(src)) {
+      //src为附件相对路径，以/符号开头
+      return baseUrl + src;
+    }
+    else{
+      //src为附件id
+      return baseUrl + "/api/files/images/" + src;
+    }
   }
   else{
     return "https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/avatar.png";

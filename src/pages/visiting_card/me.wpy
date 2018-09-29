@@ -208,6 +208,7 @@ page{
 			if(this.card_info.avatar){
 				this.$parent.globalData.user.name = this.card_info.name;
 				this.$parent.globalData.user.avatar = this.card_info.avatar;
+				this.$parent.globalData.user.avatarUrl = this.card_info.avatarUrl;
 			}
 			wepy.hideNavigationBarLoading();
 		}
@@ -228,14 +229,11 @@ page{
 		async loadCardInfo() {
 			const options = {
 				$filter: `(_id eq '${this.card_user_id}')`,
-				$select: `${this.card_fields}`,
+				$select: `${this.card_fields},avatarUrl`,
 			}
 			const records = await this.$parent.query('users', options, this.space_id);
 			if (records && records.value && records.value[0]) {
 				this.card_info = records.value[0];
-				if(!this.card_info.avatar){
-					this.card_info.avatar = this.$parent.globalData.user.avatar;
-				}
 			}
 		}
 
@@ -250,10 +248,12 @@ page{
 					const avatar = userInfo.avatarUrl;
 					this.isAuthUserInfo = true;
 					this.card_info.avatar = avatar;
+					this.card_info.avatarUrl = avatar;
 					this.card_info.name = name;
 					this.$parent.globalData.userInfo = userInfo;
 					this.$parent.globalData.user.name = name;
 					this.$parent.globalData.user.avatar = avatar;
+					this.$parent.globalData.user.avatarUrl = avatar;
 					this.$parent.globalData.user.sex = sex;
 					this.$apply();
 

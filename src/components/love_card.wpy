@@ -180,7 +180,7 @@
 				</view>
 			</view>
 			<view class="card-avatar">
-				<image wx:if="{{card_info.name}}" class="image" mode="aspectFill" src="{{util.getUserAvatar(card_info._id, baseUrl)}}"/>
+				<image wx:if="{{card_info.name}}" class="image" mode="aspectFill" src="{{util.formatAvatarImageUrl(card_info.avatarUrl, baseUrl)}}"/>
 				<open-data class="image" wx:else type="userAvatarUrl"></open-data>
 			</view>
 			<view class="clear"></view>
