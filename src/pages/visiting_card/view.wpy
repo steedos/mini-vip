@@ -161,7 +161,7 @@ page{
 						<view class="join-avatar">
 							<repeat for="{{friends.value}}" key="index" index="index" item="friend">
 								<view class="avatar-container">
-									<image class="image" mode="aspectFill" src="{{util.formatImageUrl(friend.user_b.avatar, baseUrl) || default_avatar}}" />
+									<image class="image" mode="aspectFill" src="{{util.formatAvatarImageUrl(friend.user_b.avatarUrl, baseUrl) || default_avatar}}" />
 								</view>
 							</repeat>
 						</view>
@@ -405,7 +405,7 @@ page{
 				$filter: `(owner eq '${this.card_user_id}')`,
 				$top: 6,
 				$select: 'user_b',
-				$expand: 'user_b($select=avatar,name)',
+				$expand: 'user_b($select=avatarUrl,name)',
 				$orderby: 'created desc'
 			}
 			const records = await this.$parent.query('love_friends', options, this.space_id);
