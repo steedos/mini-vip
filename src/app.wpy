@@ -13,7 +13,7 @@ page {
     padding: 40px;
 }
 .page__bd {
-    padding-bottom: 40px;
+    margin-bottom: 40px;
 }
 .page__bd_spacing {
     padding-left: 15px;
@@ -345,7 +345,7 @@ export default class VIP extends wepy.app {
       navigationBarBackgroundColor: '#353535',
       navigationBarTitleText: '华炎名片',
       navigationBarTextStyle: 'white',
-      backgroundColor: "#f9f9f9",
+      backgroundColor: "#f0f0f0",
       backgroundTextStyle: 'dark',
     }
   }
