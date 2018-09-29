@@ -213,7 +213,6 @@ export default class VIP extends wepy.app {
       'pages/visiting_card/view',
       'pages/visiting_card/index',
       'pages/visiting_card/me',
-      'pages/visiting_card/guide',
       'pages/visiting_card/chat_list',
       'pages/love/index',
       'pages/love/home',
