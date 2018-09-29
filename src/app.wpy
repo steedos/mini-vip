@@ -332,8 +332,8 @@ export default class VIP extends wepy.app {
       },
       {
         pagePath: 'pages/visiting_card/chat_list',
-        selectedIconPath: './images/tabbars/topic_pressed.png',
-        iconPath: './images/tabbars/topic.png',
+        selectedIconPath: './images/tabbars/chat_pressed.png',
+        iconPath: './images/tabbars/chat.png',
         text: '访客留言',
       },{
         pagePath: 'pages/visiting_card/me',
