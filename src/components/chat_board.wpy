@@ -325,9 +325,7 @@
       msgObj.owner = {
         _id: this.user._id,
         name: this.user.name,
-        profile: {
-          avatar: this.user.avatar
-        }
+        avatarUrl:this.user.avatarUrl
       }
       this.toView = msgObj._id
       this.messages.push(msgObj);
