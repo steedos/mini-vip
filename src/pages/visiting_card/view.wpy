@@ -145,7 +145,8 @@ page{
 
 <template>
 	<view class="page" wx:if="{{is_loaded}}">
-		<view class="page__bd">
+    <to_chat_with :space_id.sync="space_id" :with_user.sync="card_info"></to_chat_with>
+    <view class="page__bd">
 			<view class="panel-bg-box">
 			</view>
 			<view class="panel-box panel-top-box">
@@ -231,6 +232,7 @@ page{
 	import util from '../../wxs/util.wxs';
 	import { loveSpaceId } from '@/config';
 	import love_card from '../../components/love_card';
+  import to_chat_with from '@/components/to_chat_with';
 
 	export default class VisitingCardView extends wepy.page {
 		config = {
@@ -239,7 +241,8 @@ page{
 		};
 
 		components = {
-			love_card: love_card
+			love_card: love_card,
+      to_chat_with: to_chat_with
 		};
 
 		data = {

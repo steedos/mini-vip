@@ -1,26 +1,46 @@
 <style lang="less">
   .to-chat-view{
-    /*background-color: red;*/
+    background-color: rgba(255, 255, 255, 0.85);
     width: 46px;
     height: 46px;
     border-radius: 23px;
     line-height: 46px;
-    position: absolute;
-    box-shadow: #aaa 5rpx 5rpx 5rpx;
+    position: fixed;
+    /*box-shadow: #aaa 5rpx 5rpx 5rpx;*/
     text-align: center;
+    z-index: 6666;
+    bottom: 20%;
+    right:20px;
+    border: solid 1px #DEDEDE;
 
-  .slds-icon-standard-live-chat{
-    margin-left: 8px;
-    margin-top: 8px;
-    width: 30px;
-    height: 30px;
-    border-radius: 15px;
+    .utility-icon-message{
+      margin-left: 13px;
+      margin-top: 6px;
+      width: 20px;
+      height: 20px;
+    }
+
+    .label2{
+      padding-left: 4px;
+      margin-top: 3px;
+      font-size: 12px;
+      height: 12px;
+      line-height: 12px;
+      letter-spacing: 3px;
+    }
   }
+
+  .to-chat-view-hover{
+    color:rgba(0, 0, 0, 0.6);
+    background-color: #DEDEDE !important;
   }
 </style>
 
 <template>
-  <view class="to-chat-view" @tap="toChat" wx:if="{{show}}" hover-class='button-hover'><view class="slds-icon-standard-live-chat slds-icon slds-icon--small"/></view>
+  <view class="to-chat-view" @tap="toChat" wx:if="{{show}}" hover-class='to-chat-view-hover'>
+    <view class="utility-icon-message slds-icon slds-icon--small"></view>
+    <view class="label2">留言</view>
+  </view>
 </template>
 
 
