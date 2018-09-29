@@ -35,11 +35,11 @@ page{
 
 <template>
   <view class="page friend-list" wx:if="{{is_loaded}}">
-    <view class="page__hd" style="display:none">
+    <view class="page__hd">
       <searchbar :placeholder.sync="searchPlaceholder" @confirm.user="searchRecords" />
     </view>
     <view class="page__bd">
-      <view class="weui-cells">
+      <view class="weui-cells  weui-cells_after-title">
         <view @tap="goCurrentUserCard" class="record-container weui-cell weui-cell_access" hover-class="weui-cell_active">
           <view class="weui-cell__hd">
             <image wx:if="{{user.name}}" mode="aspectFill" src="{{util.getUserAvatar(user._id, baseUrl)}}" class='avatar-field'/>
@@ -96,7 +96,7 @@ import _ from 'underscore';
 
 export default class VisitingCardList extends wepy.page {
   config = {
-    navigationBarTitleText: '名片夹',
+    navigationBarTitleText: '通讯录',
     enablePullDownRefresh: true
   };
 
@@ -114,7 +114,7 @@ export default class VisitingCardList extends wepy.page {
     avatar_field: 'user_b.avatar',
     name_field: 'user_b.name',
     baseUrl: baseUrl,
-    navigationBarTitle: '名片夹',
+    navigationBarTitle: '通讯录',
     share_from: '',
     orderby: 'created desc',
     space_id: null,
@@ -157,7 +157,7 @@ export default class VisitingCardList extends wepy.page {
 
   methods = {
     goCurrentUserCard(){
-      wepy.switchTab({url: './me'});
+      wepy.navigateTo({url: './me'});
     }
   };
 }

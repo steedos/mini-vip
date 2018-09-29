@@ -47,23 +47,6 @@ page{
 	}
 }
 
-.weui-cells{
-	border-bottom: none;
-	&:before{
-		border-top: none;
-	}
-	&:after{
-		border-bottom: none;
-	}
-	.weui-cell{
-		padding: 20rpx 40rpx;
-		margin:0 -40rpx;
-
-		&:before{
-			border-top: none;
-		}
-	}
-}
 .live_chat{
 	text-align: left;
 	line-height:1.41176471;
@@ -89,24 +72,26 @@ page{
 						<button open-type="getUserInfo" bindgetuserinfo="userLogin" plain="true" class="btn-login-wx">登录微信后编辑名片</button>
 					</block>
 				</view>
-				
-				<!-- <view class="weui-cells">
-					<block wx:if="{{isAuthUserInfo}}">
-						<navigator url="./view?card_user_id{{card_user_id}}" class="weui-cell weui-cell_access">
-							<view class="weui-cell__bd">
-								<view>预览名片</view>
-							</view>
-							<view class="weui-cell__ft weui-cell__ft_in-access"></view>
-						</navigator>
-					</block>
-					<navigator url="./space/list" class="weui-cell weui-cell_access">
+
+			</view>
+
+
+			<!--
+				<view class="weui-cells">
+					<navigator url="./chat_list" class="weui-cell weui-cell_access">
 						<view class="weui-cell__bd">
-							<view>名片二维码</view>
+							<view>访客留言</view>
 						</view>
 						<view class="weui-cell__ft weui-cell__ft_in-access"></view>
 					</navigator>
-				</view> -->
-				<!-- <view class="weui-cells">
+					<navigator url="./list" class="weui-cell weui-cell_access">
+						<view class="weui-cell__bd">
+							<view>名片夹</view>
+						</view>
+						<view class="weui-cell__ft weui-cell__ft_in-access"></view>
+					</navigator>
+				</view>
+				<view class="weui-cells">
 					<button open-type="contact" plain="true" class="weui-cell weui-cell_access live_chat" hover-class="weui-cell_active">
 						<view class="weui-cell__bd">
 							<view>在线客服</view>
@@ -119,8 +104,8 @@ page{
 						</view>
 						<view class="weui-cell__ft weui-cell__ft_in-access"></view>
 					</navigator>
-				</view> -->
-			</view>
+				</view>
+			-->
 		</view>
 	</view>
 </template>
