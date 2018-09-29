@@ -219,7 +219,7 @@
                               <view class="weui-uploader__bd">
                                 <repeat for="{{values[item.name]}}" item="image_id">
                                   <view class="weui-uploader__file" bindtap="previewImage"
-                                        id="{{image_id}}" data-key="{{item.name}}">
+                                        id="{{image_id}}" data-key="{{item.name}}" data-type="{{item.type}}">
                                     <image class="weui-uploader__img" mode="aspectFill"
                                            src="{{util.formatImageUrl(image_id, baseUrl, item.type)}}" data-key="{{item.name}}"/>
                                   </view>
@@ -256,7 +256,7 @@
                               <view class="weui-uploader__files" id="uploaderFiles">
                                 <repeat for="{{values[item.name]}}" key="*this" item="file" index="index">
                                   <view class="weui-uploader__file" wx:if="{{item.type === 'image' || item.type === 'avatar'}}" bindtap="previewImage"
-                                        id="{{file}}" data-key="{{item.name}}" style="position:relative;">
+                                        id="{{file}}" data-key="{{item.name}}" data-type="{{item.type}}" style="position:relative;">
                                     <image class="weui-uploader__img" src="{{util.formatImageUrl(file, baseUrl, item.type)}}"
                                            mode="aspectFill" data-key="{{item.name}}"/>
                                     <view style="position: absolute;top: -.4em;right: -.4em;" @tap.stop="clearImage" data-key="{{item.name}}">
@@ -309,7 +309,7 @@
                           </view>
                         </block>
                         <block wx:else>
-                          <view class='weui-cell weui-cell_access' data-value="{{values[item.name]}}" bindtap="previewImage" data-key="{{item.name}}">
+                          <view class='weui-cell weui-cell_access' data-value="{{values[item.name]}}" bindtap="previewImage" data-key="{{item.name}}" data-type="{{item.type}}">
                             <view class="weui-cell__required" wx:if="{{util.isRequired(args.action, item)}}"></view>
                             <view class="weui-cell__hd" >
                               <view class="weui-label">{{item.label}}</view>
@@ -349,7 +349,7 @@
                     <block wx:else>
                       <view class="weui-cell weui-cell_image">
                         <image class="cover" mode="aspectFill" wx:if="{{values[item.name]}}" src="{{util.formatImageUrl(values[item.name], baseUrl, item.type)}}" bindtap="previewImage"
-                               id="{{values[item.name]}}" data-key="{{item.name}}"/>
+                               id="{{values[item.name]}}" data-key="{{item.name}}" data-type="{{item.type}}"/>
                       </view>
                     </block>
                   </block>
@@ -1192,21 +1192,22 @@
       },
       previewImage: function (e) {
         const key = e.currentTarget.dataset.key;
+        const type = e.currentTarget.dataset.type;
         let urls = [];
 
         let fValue = this.values[key];
         console.log('previewImage', key, fValue)
         if(_.isArray(fValue)){
           this.values[key].forEach(function (f) {
-            urls.push(utilJs.formatImageUrl(f, baseUrl))
+            urls.push(utilJs.formatImageUrl(f, baseUrl, type))
           });
         }else{
-          urls.push(utilJs.formatImageUrl(fValue, baseUrl))
+          urls.push(utilJs.formatImageUrl(fValue, baseUrl, type))
         }
 
 
         wx.previewImage({
-          current: utilJs.formatImageUrl(e.currentTarget.id, baseUrl), // 当前显示图片的http链接
+          current: utilJs.formatImageUrl(e.currentTarget.id, baseUrl, type), // 当前显示图片的http链接
           urls: urls // 需要预览的图片http链接列表
         })
       },
