@@ -161,10 +161,6 @@
 		}
 	}
 }
-.to-chat-view{
-  right: 20px;
-  top: -15px;
-}
 </style>
 <template>
 	<view class="love-card">
@@ -217,7 +213,6 @@
 			</view>
 		</view>
     <view class="card-more" style="position:relative;" wx:if="{{card_info.mobile||card_info.wechat||card_info.email||card_info.company||card_info.location.address}}">
-      <to_chat_with :space_id.sync="space_id" :with_user.sync="card_info"></to_chat_with>
       <view wx:if="{{!is_detail}}" @tap="openDetail">
 				<view class="card-more-title">展开全部名片信息</view>
 				<view class="weui-cell__ft switch-group-open weui-cell__ft_in-access"></view>
@@ -272,14 +267,9 @@ import wepy from 'wepy';
 import { baseUrl } from '@/config';
 import util from '../wxs/util.wxs'
 import pageRouter from '@/utils/pageRouter'
-import to_chat_with from '@/components/to_chat_with';
 
 export default class LoveCard extends wepy.component {
 	onLoad() {}
-
-  components = {
-    to_chat_with: to_chat_with
-  };
 
 	props = {
 		card_info: {
