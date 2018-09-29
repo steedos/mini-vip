@@ -157,7 +157,7 @@ export default class VisitingCardList extends wepy.page {
 
   methods = {
     goCurrentUserCard(){
-      wepy.navigateTo({url: './me'});
+      wepy.switchTab({url: './me'});
     }
   };
 }
