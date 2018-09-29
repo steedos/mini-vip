@@ -39,6 +39,7 @@ page{
       <searchbar :placeholder.sync="searchPlaceholder" @confirm.user="searchRecords" />
     </view>
     <view class="page__bd">
+        <view class="weui-cells__title">我的名片</view>
       <view class="weui-cells  weui-cells_after-title">
         <view @tap="goCurrentUserCard" class="record-container weui-cell weui-cell_access" hover-class="weui-cell_active">
           <view class="weui-cell__hd">
@@ -50,7 +51,7 @@ page{
               <block wx:if="{{user.name}}">{{user.name}}</block>
               <block wx:else><open-data type="userNickName"></open-data></block>
             </view>
-            <view class="mine">我的名片</view>
+            <view class="mine"></view>
           </view>
           <view class="weui-cell__ft weui-cell__ft_in-access"></view>
         </view>

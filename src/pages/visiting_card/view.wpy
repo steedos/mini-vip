@@ -122,22 +122,6 @@ page{
 	}
 }
 
-.weui-cells{
-	border-bottom: none;
-	&:before{
-		border-top: none;
-	}
-	&:after{
-		border-bottom: none;
-	}
-	.weui-cell{
-		padding: 10px 0px;
-		&:before{
-			border-top: none;
-		}
-	}
-}
-
 .btn-create{
 	width:60%;
 }
@@ -205,24 +189,23 @@ page{
 				</view>
 			</view> -->
 
-			<view class="page-btn">
-				<view wx:if="{{is_owner}}">
-						<button class="btn-create" plain="true" type="primary" @tap="goEdit">编辑我的名片</button>
-						<view class="clear"></view>
-				</view>
-				<view wx:else>
-					<view wx:if="{{user.name}}">
-						<button class="btn-create" plain="true" type="primary" @tap="goCard">查看我的名片</button>
-						<view class="clear"></view>
+			<view class="weui-cells">
+				<navigator wx:if="{{is_owner}}" @tap="goEdit" class="weui-cell weui-cell_access">
+					<view class="weui-cell__bd">
+						<view>编辑我的名片</view>
 					</view>
-					<view wx:else>
-						<button class="btn-create" plain="true" type="primary" @tap="goCard">创建我的名片</button>
-						<view class="clear"></view>
+					<view class="weui-cell__ft weui-cell__ft_in-access"></view>
+				</navigator>
+				<navigator @tap="goList" class="weui-cell weui-cell_access">
+					<view class="weui-cell__bd">
+						<view>我的名片夹</view>
 					</view>
-				</view>
-
+					<view class="weui-cell__ft weui-cell__ft_in-access"></view>
+				</navigator>
 			</view>
+
 		</view>
+
 	</view>
 </template>
 
@@ -455,6 +438,10 @@ page{
 			 },
 			async goCard(){
 				let url = `me`;
+				wepy.switchTab({url: url});
+			},
+			async goList(){
+				let url = `list`;
 				wepy.switchTab({url: url});
 			},
 			async toggleStar(){
