@@ -128,6 +128,7 @@
 	background:#F7F7F7;
 	padding:40rpx 0;
 	display: table;
+	width:100%;
 	.card-more-detail-item{
 		display: table-row;
 		text-align: left;
