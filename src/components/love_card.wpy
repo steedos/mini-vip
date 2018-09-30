@@ -221,15 +221,8 @@
 			</view>
 			<view class="card-more-detail" wx:if="{{is_detail}}">
 				<view class="card-more-detail-item"  @tap="phoneCall('{{card_info.mobile2}}')" wx:if="{{card_info.mobile2}}">
-					<view class="detail-item-title">电话</view>
+					<view class="detail-item-title">手机</view>
 					<view class="detail-item-contant">{{card_info.mobile2}}</view>
-					<view class="detail-item-btn">
-						<button class="detail-item-btn-right" plain="true" type="primary" size="mini">拨打</button>
-					</view>
-				</view>
-				<view class="card-more-detail-item"  @tap="phoneCall('{{card_info.work_phone}}')" wx:if="{{card_info.work_phone}}">
-					<view class="detail-item-title">工作电话</view>
-					<view class="detail-item-contant">{{card_info.work_phone}}</view>
 					<view class="detail-item-btn">
 						<button class="detail-item-btn-right" plain="true" type="primary" size="mini">拨打</button>
 					</view>
@@ -239,6 +232,13 @@
 					<view class="detail-item-contant">{{card_info.wechat}}</view>
 					<view class="detail-item-btn">
 						<button class="detail-item-btn-right" plain="true" type="primary" size="mini">复制</button>
+					</view>
+				</view>
+				<view class="card-more-detail-item"  @tap="phoneCall('{{card_info.work_phone}}')" wx:if="{{card_info.work_phone}}">
+					<view class="detail-item-title">座机</view>
+					<view class="detail-item-contant">{{card_info.work_phone}}</view>
+					<view class="detail-item-btn">
+						<button class="detail-item-btn-right" plain="true" type="primary" size="mini">拨打</button>
 					</view>
 				</view>
 				<view class="card-more-detail-item"   @tap="Copy('{{card_info.email2}}')"  wx:if="{{card_info.email2}}">
