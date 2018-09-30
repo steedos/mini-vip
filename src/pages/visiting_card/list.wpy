@@ -161,7 +161,12 @@ export default class VisitingCardList extends wepy.page {
       this.searchRecords(searchValue, evt);
     },
     goCurrentUserCard(){
-      wepy.switchTab({url: './me'});
+      if(this.user.name){
+        wepy.navigateTo({url: './view'});
+      }
+      else{
+        wepy.switchTab({url: './me'});
+      }
     }
   };
 }
