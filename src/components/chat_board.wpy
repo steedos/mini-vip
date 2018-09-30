@@ -290,6 +290,9 @@
         const room = await chat.getRoom(this.user._id, space_id, [this.to, this.user._id]);
         this.room_id = room._id;
       }
+      const pages = getCurrentPages();
+      const page = pages[pages.length - 1];
+      page.setRoom_id(this.room_id);
 
       await this.resetUnread();
 

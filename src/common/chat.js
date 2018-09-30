@@ -1,8 +1,13 @@
 import wepy from 'wepy'
 import ODataClinet from '@/utils/odata_client'
 import _ from 'underscore'
+import {chatNewMessagePollingInterval} from '@/config'
 
 class ChatAPI {
+
+  unreadSubscriptions = [];
+
+  _setInterval = null;
 
   async resetUnread(room_id, user_id, space_id){
     const queryOptions = {
@@ -19,12 +24,28 @@ class ChatAPI {
     }
   }
 
+  receivingSubscriptions(user_id, space_id){
+    console.log('receivingSubscriptions', user_id, space_id);
+    if(!this._setInterval){
+      clearInterval(this._setInterval)
+    }
+    this._setInterval = setInterval(async ()=>{
+      this.getSubscriptions(user_id, space_id).then(res=>{
+        const unreadSubscriptions = _.filter(res.value, (s)=>{
+          return s.unread > 0 && s.modified_by._id != user_id
+        });
+        this.unreadSubscriptions = unreadSubscriptions;
+      })
+    }, chatNewMessagePollingInterval || 15 * 1000)
+  }
+
   getSubscriptions(user_id, space_id){
     let queryOptions = {
       $filter: `(related_to/o eq 'chat_rooms') and owner eq '${user_id}'`,
-      $select: 'last_message_text, unread',
+      $select: 'last_message_text,unread,modified_by,related_to',
+      $expand: 'modified_by($select=name,avatarUrl)'
     };
-    ODataClinet.query('chat_subscriptions', queryOptions,space_id)
+    return ODataClinet.query('chat_subscriptions', queryOptions, space_id)
   }
 
   async getRoom(user_id, space, room_members){

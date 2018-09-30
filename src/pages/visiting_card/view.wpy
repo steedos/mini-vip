@@ -227,6 +227,18 @@ page{
 			card_fields: "avatar,name,company,position,mobile2,wechat,work_phone,email2,location,self_introduction,photos"
 		};
 
+    onShow(){
+      this.$invoke('to_chat_with', 'receivingSubscription')
+    }
+
+    onHide(){
+      this.$invoke('to_chat_with', 'stopReceivingSubscription')
+    }
+
+    async onUnload(){
+      this.$invoke('to_chat_with', 'stopReceivingSubscription')
+    }
+
 		wxs = {
 			util: util
 		};

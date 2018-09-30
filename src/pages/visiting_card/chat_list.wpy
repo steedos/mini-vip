@@ -105,6 +105,7 @@
 
 <template>
   <view class="page record-list" wx:if="{{is_loaded}}">
+    <chatNotification :args.sync="args"></chatNotification>
     <view class="page__hd">
       <searchbar :placeholder.sync="searchPlaceholder" @confirm.user="searchRecords" />
     </view>
@@ -156,6 +157,8 @@ import searchbar from '../../components/searchbar';
 import recordList from '../../mixins/record_list';
 import ODataClinet from '@/utils/odata_client'
 import _ from 'underscore'
+import chatNotification from '../../components/chat/notification';
+import chatNotificationMixin from '../../mixins/chat_notification';
 
 export default class RecordList extends wepy.page {
   config = {
@@ -164,8 +167,11 @@ export default class RecordList extends wepy.page {
   };
 
   components = {
-    searchbar: searchbar
+    searchbar: searchbar,
+    chatNotification: chatNotification
   };
+
+  mixins = [recordList, chatNotificationMixin];
 
   wxs = {
     util: util
@@ -219,8 +225,6 @@ export default class RecordList extends wepy.page {
   getQueryFilter(){
     return `(related_to/o eq 'chat_rooms') and (owner eq '${this.$parent.globalData.user._id}')`
   }
-
-  mixins = [recordList];
 
   refresh() {
     this.dataRefresh();

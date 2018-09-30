@@ -7,7 +7,7 @@
     box-shadow: 0px 0px 3px 3px rgba(170, 170, 170, 0.15);
     border: solid 1px #FFFFFF;
     border-radius: 5px;
-    background-color: rgba(255, 255, 255, 0.75);
+    background-color: rgba(255, 255, 255, 0.85);
     min-height: 50px;
     left: 10px;
     width: calc(~"100% - 20px");
@@ -25,73 +25,77 @@
       border: 0px;
     }
 
+    .n-avatar-field{
+      /*margin-top: 15px;*/
+      /*margin-bottom: 15px;*/
+      /*margin-left: 15px;*/
+      border-radius: 0.15rem;
+      margin-right: 15px;
+      vertical-align: middle;
+      width: 35px;
+      height: 35px;
+    }
+
+    .n-item-body {
+      width: 55%;
+      height: 100%;
+    }
+
+    .n-description-field {
+      text-overflow: ellipsis;
+      width: 85%;
+      overflow: hidden;
+      white-space: nowrap;
+      font-size: 13px;
+      color: #888888;
+    }
+
+    .n-name-field {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      flex: 1;
+      min-height: 24px;
+    }
+
+    .n-item-body-1 {
+      display: flex;
+      align-items: center;
+    }
+
+    .n-record {
+      width: 100%;
+      display: flex;
+      align-items: center;
+    }
   }
 
-  .avatar-field{
-    /*margin-top: 15px;*/
-    /*margin-bottom: 15px;*/
-    /*margin-left: 15px;*/
-    border-radius: 0.15rem;
-    margin-right: 15px;
-    vertical-align: middle;
-    width: 35px;
-    height: 35px;
-  }
-
-  .item-body {
-    width: 55%;
-    height: 100%;
-  }
-
-  .description-field {
-    text-overflow: ellipsis;
-    width: 85%;
-    overflow: hidden;
-    white-space: nowrap;
-    font-size: 13px;
-    color: #888888;
-  }
-
-  .name-field {
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-    flex: 1;
-    min-height: 24px;
-  }
-
-  .item-body-1 {
-    display: flex;
-    align-items: center;
-  }
-
-  .record {
-    width: 100%;
-    display: flex;
-    align-items: center;
-  }
 </style>
 
 <template>
-  <view class="chat-notification" @tap="clickNotification" style="{{close ? 'top:-100px':''}}">
+  <view class="chat-notification" style="{{close ? 'top:-200px':''}}">
     <view class="weui-cells">
-      <view class="weui-cell">
-        <view class="record">
-          <view class="weui-cell__hd" style="position:relative;">
-            <image mode="aspectFill" class="avatar-field weui-media-box__thumb" src="https://vip-test.steedos.com:8443/api/files/avatars/HNjRDQgAx3ZkDbsxs" />
-            <!--<view class="message-dot"></view>群聊-->
-            <view class="weui-badge" style="position: absolute;top: -.4em;right: 0.2em;" wx:if="{{record.unread > 0}}">{{record.unread}}</view>
-          </view>
-          <view class="weui-cell__bd item-body">
-            <view class="item-body-1">
-              <view class="name-field">
-                庄建国
-              </view>
+      <repeat for="{{unreadSubscriptions}}" key="index" index="index" item="record">
+        <view class="weui-cell" @tap="clickNotification({{record}})">
+          <view class="n-record">
+            <view class="weui-cell__hd" style="position:relative;">
+              <image mode="aspectFill" class="n-avatar-field weui-media-box__thumb" src="{{util.formatAvatarImageUrl(record.modified_by.avatarUrl, baseUrl)}}" />
+              <!--<view class="message-dot"></view>群聊-->
             </view>
-            <view class="description-field">你好, 欢迎使用审批王。</view>
+            <view class="weui-cell__bd n-item-body">
+              <view class="n-item-body-1">
+                <view class="n-name-field">
+                  {{record.modified_by.name}}
+                </view>
+              </view>
+              <view class="n-description-field">{{record.last_message_text}}</view>
+            </view>
+            <view class="weui-cell__ft">
+              <view class="n-badge-field"><view class="weui-badge">{{record.unread}}</view></view>
+            </view>
           </view>
         </view>
-      </view>
+      </repeat>
     </view>
   </view>
 </template>
@@ -100,15 +104,106 @@
   import wepy from 'wepy';
   import _ from 'underscore'
   import chat from '../../common/chat';
+  import { baseUrl, chatNewMessagePollingInterval } from '@/config';
+  import util from '../../wxs/util.wxs';
+  import pageRouter from '@/utils/pageRouter'
 
   export default class ChatNotification extends wepy.component {
 
     data = {
-      close: false,
+      baseUrl: baseUrl,
+      close: true,
+      unreadSubscriptions: [],
+      user_id: null,
+      space_id: null,
+      room_id: null,
+      setInterval: null,
+    };
+
+    props = {
+      args: {
+        type: Object
+      }
+    };
+
+    wxs = {
+      util: util
+    };
+
+    stopReceivingSubscriptions(){
+      console.log('stopReceivingSubscriptions...........');
+      if(this.setInterval){
+        clearInterval(this.setInterval)
+        console.log('stopReceivingSubscriptions.....clearInterval......');
+      }
+      this.setInterval = null
+    }
+
+    receivingSubscriptions(){
+      if(this.user_id){
+        console.log('receivingSubscriptions...........');
+        this.stopReceivingSubscriptions()
+        this.setInterval = setInterval(async ()=>{
+          console.log('getSubscriptions -> this.room_id', this.room_id);
+          const unreadSubscriptions = _.filter(chat.unreadSubscriptions, (s)=>{
+            if(this.room_id && s.related_to.ids.length > 0){
+              return s.unread > 0 && s.modified_by._id != this.user_id && s.related_to.ids[0] != this.room_id
+            }else{
+              return s.unread > 0 && s.modified_by._id != this.user_id
+            }
+          });
+          this.unreadSubscriptions = unreadSubscriptions;
+          this.$apply()
+        }, chatNewMessagePollingInterval || 15 * 1000)
+      }
+    }
+
+    onLoad(){
+
+    }
+
+    watch = {
+      unreadSubscriptions: function (newValue, oldValue) {
+        if(newValue.length > 0){
+          this.close = false;
+          this.$apply();
+        }
+      },
+      args: function (newValue, oldValue) {
+        if(!_.isEmpty(newValue)){
+          this.space_id = newValue.space_id;
+          this.room_id = newValue.room_id;
+          console.log('onLoad space_id', this.space_id);
+          console.log('onLoad room_id', this.room_id);
+          let user_id = null;
+          if(this.$parent.$parent.globalData){
+            user_id = this.$parent.$parent.globalData.user._id;
+          }else{
+            user_id = this.$parent.$parent.$parent.globalData.user._id;
+          }
+          this.user_id = user_id;
+          setTimeout(()=>{
+            this.receivingSubscriptions()
+          }, 3 * 1000)
+        }
+      }
     };
 
     methods = {
-      clickNotification: function (e) {
+      clickNotification: function (notification) {
+
+        console.log('notification', notification)
+
+        const related_to =notification.related_to;
+
+        if(related_to.o === 'chat_rooms'){
+          if(related_to.ids && related_to.ids.length > 0){
+            pageRouter.navigateTo({
+              url: `/pages/chat/chat_messages?space_id=${this.space_id}&title=${notification.modified_by.name}&room_id=${related_to.ids[0]}`
+            });
+          }
+        }
+
         this.close = true;
         this.$apply();
       }
