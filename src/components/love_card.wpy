@@ -257,11 +257,11 @@
 						<button class="detail-item-btn-right" plain="true" type="primary" size="mini">复制</button>
 					</view>
 				</view>
-				<view class="card-more-detail-item" hover-class="weui-cell_active" @tap="copy('{{card_info.location.address}}', '地址')"  wx:if="{{card_info.location.address}}">
+				<view class="card-more-detail-item" hover-class="weui-cell_active" @tap="openMap()" wx:if="{{card_info.location.address}}">
 					<view class="detail-item-title">地址</view>
 					<view class="detail-item-contant">{{card_info.location.address}}</view>
 					<view class="detail-item-btn">
-						<button class="detail-item-btn-right" plain="true" type="primary" size="mini">复制</button>
+						<button class="detail-item-btn-right" plain="true" type="primary" size="mini">地图</button>
 					</view>
 				</view>
 			</view>
@@ -355,6 +355,21 @@ export default class LoveCard extends wepy.component {
 					})
 				}
 			})
+		},
+		openMap() {
+			var name = this.card_info.name;
+			if (this.card_info.location) {
+				var latitude = this.card_info.location.latitude || 31.02241;
+				var longitude = this.card_info.location.longitude || 121.21654;
+				var address = this.card_info.location.address || this.card_info.address;
+				wx.openLocation({
+					latitude: latitude,
+					longitude: longitude,
+					scale: 18,
+					name: name,
+					address: address
+				});
+			}
 		},
 		phoneCall(number) {
 			wepy.makePhoneCall({
