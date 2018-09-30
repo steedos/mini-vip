@@ -142,7 +142,8 @@
       color:red;
       position:absolute;
       left: 5px;
-      top: 14px;
+      top:50%;
+      margin-top:-10px;
     }
 
     .weui-cell__required:before{
