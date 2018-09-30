@@ -157,6 +157,9 @@ export default class VisitingCardList extends wepy.page {
   mixins = [recordList];
 
   methods = {
+    searchRecords(searchValue, evt) {
+      this.searchRecords(searchValue, evt);
+    },
     goCurrentUserCard(){
       wepy.switchTab({url: './me'});
     }
