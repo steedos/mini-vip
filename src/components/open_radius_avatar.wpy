@@ -1,0 +1,42 @@
+<style lang="less">
+	.open-radius-box{
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		margin-top: 6rpx;
+		height: 160rpx;
+		width: 160rpx;
+		position: relative;
+		.image{
+			width: 160rpx;
+			height: 160rpx;
+			border-radius: 100%;
+			display: block;
+			position: absolute;
+			border: 34rpx solid #fff!important;
+		}
+	}
+</style>
+<template>
+	<view wx:else class="open-radius-box">
+		<open-data class="image" type="userAvatarUrl"></open-data>
+		<view class="image"></view>
+	</view>
+</template>
+
+<script>
+import wepy from 'wepy';
+
+export default class OpenRadiusAvatar extends wepy.component {
+	onLoad() {}
+
+	props = {
+	}
+
+	data = {
+	};
+
+	methods = {
+	};
+}
+</script>

@@ -179,7 +179,8 @@
 			</view>
 			<view class="card-avatar">
 				<image wx:if="{{card_info.name}}" class="image" mode="aspectFill" src="{{util.formatAvatarImageUrl(card_info.avatarUrl, baseUrl)}}"/>
-				<open-data class="image" wx:else type="userAvatarUrl"></open-data>
+				<!-- <open-data class="image" wx:else type="userAvatarUrl"></open-data> -->
+				<open_radius_avatar />
 			</view>
 			<view class="clear"></view>
 			<view class="card-content">
@@ -269,6 +270,7 @@ import wepy from 'wepy';
 import { baseUrl } from '@/config';
 import util from '../wxs/util.wxs'
 import pageRouter from '@/utils/pageRouter'
+import open_radius_avatar from '../components/open_radius_avatar';
 
 export default class LoveCard extends wepy.component {
 	onLoad() {}
@@ -300,6 +302,10 @@ export default class LoveCard extends wepy.component {
 		baseUrl: baseUrl,
 		is_detail: false,
 		default_avatar: 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg',
+	};
+
+	components = {
+		open_radius_avatar: open_radius_avatar
 	};
 
 	wxs = {
