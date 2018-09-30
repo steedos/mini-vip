@@ -223,9 +223,10 @@ export default class recordList extends wepy.mixin {
     }
     this.searchPlaceholder = '搜索'; // + object.label;
 
-    wx.setNavigationBarTitle({
-      title: this.navigationBarTitle || object.label
-    });
+    if (this.navigationBarTitle)
+      wx.setNavigationBarTitle({
+        title: this.navigationBarTitle
+      });
     await this.loadRecords()
     this.is_loaded = true
     this.$apply()

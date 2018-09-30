@@ -98,7 +98,7 @@ import _ from 'underscore';
 
 export default class VisitingCardList extends wepy.page {
   config = {
-    navigationBarTitleText: '通讯录',
+    navigationBarTitleText: '名片夹',
     enablePullDownRefresh: true
   };
 
@@ -116,7 +116,6 @@ export default class VisitingCardList extends wepy.page {
     avatar_field: 'user_b.avatar',
     name_field: 'user_b.name',
     baseUrl: baseUrl,
-    navigationBarTitle: '通讯录',
     share_from: '',
     orderby: 'created desc',
     space_id: null,
