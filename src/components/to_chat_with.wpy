@@ -9,7 +9,7 @@
     /*box-shadow: #aaa 5rpx 5rpx 5rpx;*/
     text-align: center;
     z-index: 6666;
-    bottom: 20%;
+    bottom: 20px;
     right:20px;
     border: solid 1px #DEDEDE;
 
