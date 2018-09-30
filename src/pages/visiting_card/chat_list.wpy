@@ -60,11 +60,12 @@
   }
 
   .avatar-field {
-    border-radius: 0.15rem;
     margin-right: 5px;
     vertical-align: middle;
     width: 40px;
     height: 40px;
+    display: block;
+    border-radius:50%;
   }
 
   .record-container {

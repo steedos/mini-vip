@@ -17,6 +17,7 @@ page{
   width: 80rpx;
   height: 80rpx;
   display: block;
+  border-radius:50%;
 }
 
 .user-active {

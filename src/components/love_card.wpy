@@ -183,28 +183,25 @@
 			</view>
 			<view class="clear"></view>
 			<view class="card-content">
-				<view class="card-content-item">
+				<view class="card-content-item" wx:if="{{card_info.mobile2}}">
 					<view class="card-content-icon">
 						<view class="vip-call-dark slds-icon slds-icon--small"/>
 					</view>
-					<view class="card-content-tel"  wx:if="{{card_info.mobile2}}">{{card_info.mobile2}}</view>
-					<view class="card-content-tel"  wx:else>未填写手机号码</view>
+					<view class="card-content-tel">{{card_info.mobile2}}</view>
 					<view class="clear"></view>
 				</view>
-				<view class="card-content-item">
+				<view class="card-content-item" wx:if="{{card_info.email2}}">
 					<view class="card-content-icon">
 						<view class="vip-email-dark slds-icon slds-icon--small"/>
 					</view>
-					<view class="card-content-email"  wx:if="{{card_info.email2}}">{{card_info.email2}}</view>
-					<view class="card-content-email"  wx:else>未填写邮件</view>
+					<view class="card-content-email">{{card_info.email2}}</view>
 					<view class="clear"></view>
 				</view>
-				<view class="card-content-item">
+				<view class="card-content-item" wx:if="{{card_info.location.address}}">
 					<view class="card-content-icon">
 						<view class="vip-address-dark slds-icon slds-icon--small"/>
 					</view>
-					<view class="card-content-address"  wx:if="{{card_info.location.address}}">{{card_info.location.address}}</view>
-					<view class="card-content-address"  wx:else>未填写地址信息</view>
+					<view class="card-content-address">{{card_info.location.address}}</view>
 					<view class="clear"></view>
 				</view>
 				<view class="clear"></view>
