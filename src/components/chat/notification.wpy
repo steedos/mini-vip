@@ -184,6 +184,9 @@
 //          console.log('onLoad room_id', this.room_id);
           let user_id = null;
           if(this.$parent.$parent.globalData){
+            if(!this.$parent.$parent.globalData.user){
+              return ;
+            }
             user_id = this.$parent.$parent.globalData.user._id;
           }else{
             user_id = this.$parent.$parent.$parent.globalData.user._id;

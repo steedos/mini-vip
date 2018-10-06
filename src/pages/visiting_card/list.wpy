@@ -36,6 +36,7 @@ page{
 
 <template>
   <view class="page friend-list" wx:if="{{is_loaded}}">
+    <chatNotification :args.sync="args"></chatNotification>
     <view class="page__hd">
       <searchbar :placeholder.sync="searchPlaceholder" @confirm.user="searchRecords" />
     </view>
@@ -56,7 +57,7 @@ page{
           </view>
           <view class="weui-cell__ft weui-cell__ft_in-access"></view>
         </view>
-      </view>  
+      </view>
       <block wx:if="{{record_list.length}}">
         <view class="weui-cells__title">收到的名片</view>
         <view class="weui-cells  weui-cells_after-title">
@@ -95,6 +96,8 @@ import { loveSpaceId } from '@/config';
 import pageRouter from '@/utils/pageRouter';
 import req from '@/network';
 import _ from 'underscore';
+import chatNotification from '../../components/chat/notification';
+import chatNotificationMixin from '../../mixins/chat_notification';
 
 export default class VisitingCardList extends wepy.page {
   config = {
@@ -103,8 +106,11 @@ export default class VisitingCardList extends wepy.page {
   };
 
   components = {
-    searchbar: searchbar
+    searchbar: searchbar,
+    chatNotification: chatNotification
   };
+
+  mixins = [recordList, chatNotificationMixin];
 
   data = {
     is_loaded: false,
@@ -130,6 +136,12 @@ export default class VisitingCardList extends wepy.page {
     await this.$parent.login(e);
     this.user = this.$parent.globalData.user;
     this.user_id = this.user._id;
+
+    this.args = {
+      space_id: this.space_id,
+      user: this.user
+    };
+
     this.$apply();
   }
 
@@ -153,8 +165,6 @@ export default class VisitingCardList extends wepy.page {
   getFinalExpand() {
     return 'user_b($select=name,avatarUrl)';
   }
-
-  mixins = [recordList];
 
   methods = {
     searchRecords(searchValue, evt) {
