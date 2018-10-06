@@ -112,6 +112,7 @@ page{
 
 <template>
 	<view class="page" wx:if="{{is_loaded}}">
+    <chatNotification :args.sync="args"></chatNotification>
     <to_chat_with :space_id.sync="space_id" :with_user.sync="card_info"></to_chat_with>
     <view class="page__bd">
 
@@ -199,6 +200,8 @@ page{
 	import { loveSpaceId } from '@/config';
 	import love_card from '../../components/love_card';
   import to_chat_with from '@/components/chat/to_chat_with';
+  import chatNotification from '../../components/chat/notification';
+  import chatNotificationMixin from '../../mixins/chat_notification';
 
 	export default class VisitingCardView extends wepy.page {
 		config = {
@@ -208,8 +211,11 @@ page{
 
 		components = {
 			love_card: love_card,
-      to_chat_with: to_chat_with
+      to_chat_with: to_chat_with,
+      chatNotification: chatNotification
 		};
+
+    mixins = [chatNotificationMixin];
 
 		data = {
 			is_loaded: false,

@@ -78,7 +78,7 @@
       if(this.with_user){
         this.stopReceivingSubscription()
         this.setInterval = setInterval(async ()=>{
-          console.log('stopReceivingSubscription this.with_user', this.with_user);
+//          console.log('receivingSubscription this.with_user', this.with_user);
           const unreadSubscriptions = _.filter(chat.unreadSubscriptions, (s)=>{
             return s.unread > 0 && s.modified_by._id === this.with_user._id
           });
