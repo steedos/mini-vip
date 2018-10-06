@@ -118,6 +118,7 @@
       space_id: null,
       room_id: null,
       setInterval: null,
+      setTimeout: null,
     };
 
     props = {
@@ -166,6 +167,12 @@
       unreadSubscriptions: function (newValue, oldValue) {
         if(newValue.length > 0){
           this.close = false;
+          clearTimeout(this.setTimeout);
+          this.setTimeout = setTimeout(()=>{
+            this.close = true;
+            this.$apply();
+          }, 1000 * 6);
+
           this.$apply();
         }
       },
@@ -173,8 +180,8 @@
         if(!_.isEmpty(newValue)){
           this.space_id = newValue.space_id;
           this.room_id = newValue.room_id;
-          console.log('onLoad space_id', this.space_id);
-          console.log('onLoad room_id', this.room_id);
+//          console.log('onLoad space_id', this.space_id);
+//          console.log('onLoad room_id', this.room_id);
           let user_id = null;
           if(this.$parent.$parent.globalData){
             user_id = this.$parent.$parent.globalData.user._id;
@@ -192,15 +199,21 @@
     methods = {
       clickNotification: function (notification) {
 
-        console.log('notification', notification)
+//        console.log('notification', notification, this.room_id)
 
         const related_to =notification.related_to;
 
         if(related_to.o === 'chat_rooms'){
           if(related_to.ids && related_to.ids.length > 0){
-            pageRouter.navigateTo({
-              url: `/pages/chat/chat_messages?space_id=${this.space_id}&title=${notification.modified_by.name}&room_id=${related_to.ids[0]}`
-            });
+            if(this.room_id){
+              pageRouter.redirectTo({
+                url: `/pages/chat/chat_messages?space_id=${this.space_id}&title=${notification.modified_by.name}&room_id=${related_to.ids[0]}`
+              });
+            }else{
+              pageRouter.navigateTo({
+                url: `/pages/chat/chat_messages?space_id=${this.space_id}&title=${notification.modified_by.name}&room_id=${related_to.ids[0]}`
+              });
+            }
           }
         }
 
