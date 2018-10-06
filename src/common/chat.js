@@ -8,11 +8,11 @@ class ChatAPI {
   unreadSubscriptions = [];
 
   _setInterval = null;
-
+  //重置未读数量为0
   async resetUnread(room_id, user_id, space_id){
     const queryOptions = {
       $top: 1,
-      $filter: `(related_to/o eq 'chat_rooms') and (related_to/ids eq '${room_id}') and owner eq '${user_id}'`,
+      $filter: `(related_to/o eq 'chat_rooms') and (related_to/ids eq '${room_id}') and owner eq '${user_id}' and unread gt 0`,
       $select: '_id',
     };
 
@@ -24,6 +24,7 @@ class ChatAPI {
     }
   }
 
+  //定时接收通知
   receivingSubscriptions(user_id, space_id){
     console.log('receivingSubscriptions', user_id, space_id);
     if(!this._setInterval){
