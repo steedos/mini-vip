@@ -96,7 +96,9 @@
       await this.$invoke('chatboard', 'resetUnread')
       const pages = getCurrentPages();
       const page = pages[pages.length - 1];
-      page.refresh()
+      if(page.refresh){
+        page.refresh()
+      }
     }
   }
 </script>
