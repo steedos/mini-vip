@@ -181,19 +181,20 @@ export default class RecordList extends wepy.page {
     rooms: {},
     fields: ['related_to'],
     user_id: '',
-    date_field: 'modified',
+    date_field: 'last_message_date',
     description_field: 'last_message_text',
     extra_fields: 'unread',
     pageInit: false,
     pageSize: 30,
     space_id: loveSpaceId,
     object_name: 'chat_subscriptions',
+    orderby: 'last_message_date desc'
   };
 
 
   async onLoad(e){
 
-    this.navigationBarTitle = "消息"
+    this.navigationBarTitle = "消息";
 
     if(e.space_id){
       this.space_id = e.space_id;
