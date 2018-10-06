@@ -5,6 +5,8 @@
   .chartboard {
     height: calc(~"100% - 48px");
     background-color: #ededed;
+    /*background-image: url("http://img1.3lian.com/2015/w13/67/d/7.jpg");*/
+    /*background-size: cover;*/
     &.fixed {
       position:fixed;
       left:0;
@@ -129,11 +131,33 @@
     }
   }
 
+  .chat-event{
+    align-items: center;
+    color: #3e3e3c;
+    display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    font-size: 12px;
+    line-height: 12px;
+    text-align: center;
+    width: 100%;
+    .board-time{
+      padding: 5px 8px;
+      align-items: center;
+      display: flex;
+      background-color: rgba(255, 255, 255, 0.85);
+    }
+  }
+
+
 </style>
 <template>
   <scroll-view scroll-y="1" upper-threshold="50" scroll-with-animation="{{scrollAnimation}}" scroll-into-view="i_{{toView}}" class="chartboard{{focus ? ' fixed' : ''}}" @scrolltoupper="loadHMessage" @scroll="scroll" @scrolltolower="scrolltolower">
     <view class="loading-view" wx:if="{{loading}}"><view class="lds-ring"><view></view><view></view><view></view><view></view></view></view>
     <block wx:for="{{messages}}" wx:key="index" wx:for-index="index" wx:for-item="item">
+      <view class="chat-event" wx:if="{{item.display_time}}">
+        <view class="board-time">{{util.formatDateMini(item.created)}}</view>
+      </view>
       <view id="i_{{item._id}}" class="bubble-container" wx:if="{{ item.owner._id != user._id }}">
         <view class="icon">
           <view class="caret-left"></view>
@@ -323,19 +347,29 @@
       this.$apply();
     }
 
+    getDisplayTime(){
+      const difference = (new Date()).getTime() - new Date(this.timestamp).getTime();
+      console.log("getDisplayTime difference->", difference)
+      return difference > 5 * 60 * 1000
+    }
+
     async sendMessage(msg) {
-      let msgObj = await chat.sendMsg(this.room_id, msg, 'text',this.space_id, this.user._id);
+
+      let display_time = this.getDisplayTime();
+
+      let msgObj = await chat.sendMsg(this.room_id, msg, 'text',this.space_id, this.user._id, display_time);
       msgObj.owner = {
         _id: this.user._id,
         name: this.user.name,
         avatarUrl:this.user.avatarUrl
-      }
-      this.toView = msgObj._id
+      };
+      this.toView = msgObj._id;
       this.messages.push(msgObj);
       this.$apply();
       this.$invoke('../myinput', 'clear');
 //            let randomReply = await api.getRandomReply(id);
 //            this.replyMessage(randomReply);
+
     }
 
     async replyMessage(msg) {

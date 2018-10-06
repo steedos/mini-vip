@@ -82,8 +82,8 @@ class ChatAPI {
     }
   }
 
-  sendMsg(room_id, msg, type = 'text', space, user_id) {
-    return this.msg(room_id, msg, type, space, user_id);
+  sendMsg(room_id, msg, type = 'text', space, user_id, messageShowTime) {
+    return this.msg(room_id, msg, type, space, user_id, messageShowTime);
   }
 
   getHistory(room_id, space, top, filter){
@@ -92,7 +92,7 @@ class ChatAPI {
       $top: top || 15,
       $filter: `(related_to/o eq 'chat_rooms') and (related_to/ids eq '${room_id}')`,
       $orderby: 'created desc',
-      $select: 'name,type,created,owner',
+      $select: 'name,type,created,owner,display_time',
       $expand: 'owner($select=name,avatarUrl)'
     };
 
@@ -107,13 +107,13 @@ class ChatAPI {
     let queryOptions = {
       $filter: `(related_to/o eq 'chat_rooms') and (related_to/ids eq '${room_id}') and created gt ${timestamp}`,
       $orderby: 'created desc',
-      $select: 'name,type,created,owner',
+      $select: 'name,type,created,owner,display_time',
       $expand: 'owner($select=name,avatarUrl)'
     };
     return ODataClinet.query('chat_messages', queryOptions, space)
   }
 
-  async msg(room_id, msg, type = 'text', space, user_id) {
+  async msg(room_id, msg, type = 'text', space, user_id, display_time) {
     let data = {
       related_to: {
         o: "chat_rooms",
@@ -121,12 +121,14 @@ class ChatAPI {
       },
       name: msg,
       type: 'text',
-      owner: user_id
+      owner: user_id,
+      display_time: display_time
     };
 
     const res = await ODataClinet.insert('chat_messages', data, space);
 
-    data._id = res.value[0]._id;
+    // data._id = res.value[0]._id;
+    data = res.value[0];
 
     return data;
 
