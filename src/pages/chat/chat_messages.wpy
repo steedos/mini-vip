@@ -14,8 +14,8 @@
 <script>
   import wepy from 'wepy';
 
-  import Input from '../../components/chat_input';
-  import Chatboard from '../../components/chat_board';
+  import Input from '../../components/chat/chat_input';
+  import Chatboard from '../../components/chat/chat_board';
   import chatNotification from '../../components/chat/notification';
   import chatNotificationMixin from '../../mixins/chat_notification';
 

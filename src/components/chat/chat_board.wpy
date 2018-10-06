@@ -162,8 +162,8 @@
 <script>
   import wepy from 'wepy';
   import _ from 'underscore'
-  import chat from '../common/chat';
-  import util from '../wxs/util.wxs'
+  import chat from '../../common/chat';
+  import util from '../../wxs/util.wxs'
   import {baseUrl, chatNewMessagePollingInterval} from '@/config'
 
   const global = {}

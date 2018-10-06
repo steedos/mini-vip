@@ -198,7 +198,7 @@ page{
 	import util from '../../wxs/util.wxs';
 	import { loveSpaceId } from '@/config';
 	import love_card from '../../components/love_card';
-  import to_chat_with from '@/components/to_chat_with';
+  import to_chat_with from '@/components/chat/to_chat_with';
 
 	export default class VisitingCardView extends wepy.page {
 		config = {
