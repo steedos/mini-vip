@@ -26,8 +26,7 @@ class ChatAPI {
 
   //定时接收通知
   receivingSubscriptions(user_id, space_id){
-    console.log('receivingSubscriptions', user_id, space_id);
-    if(!this._setInterval){
+    if(this._setInterval){
       clearInterval(this._setInterval)
     }
     this._setInterval = setInterval(async ()=>{
