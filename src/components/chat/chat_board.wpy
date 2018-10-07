@@ -348,7 +348,10 @@
     }
 
     getDisplayTime(){
-      const difference = (new Date()).getTime() - new Date(this.timestamp).getTime();
+      if(this.messages.length < 1){
+       return true;
+      }
+      const difference = (new Date()).getTime() - new Date(_.last(this.messages).created).getTime();
       console.log("getDisplayTime difference->", difference)
       return difference > 5 * 60 * 1000
     }
