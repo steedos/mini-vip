@@ -188,6 +188,10 @@
 //    }
 
     async phoneLogin(){
+      wepy.showLoading({
+        title: '登录中，请稍后',
+        mask: true
+      });
       const data = await req.post('/api/steedos/weixin/phone_login', {phone_number: this.phoneNumber, nickName: this.nickName, gender: this.gender, avatarUrl: this.avatarUrl});
       if(data){
         if(data.mobile){
@@ -215,8 +219,8 @@
           this.$parent.globalData.user.birthdate = data.birthdate
         }
       }
-      console.log('phoneLogin', data)
-
+//      console.log('phoneLogin', data)
+      wx.hideLoading()
 //        wepy.redirectTo({url: this.from})
       if (this.to) {
         wepy.redirectTo({url: this.to})
