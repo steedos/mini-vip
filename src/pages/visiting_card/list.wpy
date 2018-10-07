@@ -88,7 +88,7 @@ page{
 
 <script>
 import wepy from 'wepy';
-import { baseUrl } from '@/config';
+import { baseUrl,appId } from '@/config';
 import util from '../../wxs/util.wxs';
 import recordList from '../../mixins/record_list';
 import searchbar from '../../components/searchbar';
@@ -155,7 +155,7 @@ export default class VisitingCardList extends wepy.page {
   }
 
   getQueryFilter() {
-    return `(owner eq '${this.user_id}')`;
+    return `(owner eq '${this.user_id}') and (mini_app_id eq '${appId}')`;
   }
 
   wxs = {

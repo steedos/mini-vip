@@ -180,6 +180,8 @@ page{
 
 		async onShow() {
 			let user = this.$parent.globalData.user;
+      this.user_id = this.$parent.globalData.user._id;
+      this.card_user_id = this.user_id;
 			if (user.name && user.avatar) {
 				this.isAuthUserInfo = true;
 			} else {
@@ -199,7 +201,7 @@ page{
 			}
 			wepy.hideNavigationBarLoading();
 		}
-		
+
 		onShareAppMessage() {
 			let title = `我是${this.card_info.name}，这是我的名片，请惠存。`;
 			let url = `pages/visiting_card/view?card_user_id=${this.card_user_id}&share_from=${this.user_id}`;
@@ -212,7 +214,7 @@ page{
 		async loadData() {
 			await this.loadCardInfo();
 		}
-	
+
 		async loadCardInfo() {
 			const options = {
 				$filter: `(_id eq '${this.card_user_id}')`,

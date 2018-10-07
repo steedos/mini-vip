@@ -194,8 +194,13 @@
           this.$parent.globalData.user.mobile = data.mobile
         }
 
-        if(data._id){
-          this.$parent.globalData.user._id = data._id
+        if(data.user_id){
+          if(this.$parent.globalData.user._id != data.user_id){
+            this.$parent.globalData.is_login = false;
+            await this.$parent.login();
+          }
+
+          this.$parent.globalData.user._id = data.user_id
         }
 
         if(data.name){
