@@ -3,48 +3,48 @@
 	clear: both;
 }
 .card-container{
-	margin: 20rpx;
-	padding: 30rpx 50rpx;
-	// border-radius: 5rpx;
-	box-shadow:5rpx 5rpx 15rpx #888;
+	margin: 10px;
+	padding: 15px 25px;
+	// border-radius: 3px;
+	box-shadow:3px 3px 8px #888;
 	background-color: #fff;
 	// background: url(https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/card3.png) no-repeat;
 	// background-size: cover;
-	min-height:360rpx;
+	min-height: 180px;
 	position:relative;
 }
 
 .card-avatar{
 	float: right;
 	.image{
-		width: 160rpx;
-		height: 160rpx;
+		width: 80px;
+		height: 80px;
 		border-radius: 100%;
 		border: solid 1px #ddd;
 		display: block;
 	}
 }
 .card-content{
-	font-size:28rpx;
-	margin-top:30rpx;
-	font-size: 26rpx;
+	font-size: 14px;
+	margin-top: 15px;
+	font-size: 13px;
 	color: #888;
 	.card-content-item{
-		margin: 15rpx 0;
+		margin: 8px 0;
 		.card-content-icon{
 			float: left;
 			.slds-icon{
-				width:30rpx;
-				height:30rpx;
-				line-height:30rpx;
+				width:15px;
+				height:15px;
+				line-height:15px;
 				margin-right:0.5em;
 			}
 		}
 		.card-content-tel, .card-content-email, .card-content-address{
 			float: left;
-			height: 30rpx;
-			line-height: 30rpx;
-			width: calc(~"100% - 50rpx");
+			height: 15px;
+			line-height: 15px;
+			width: calc(~"100% - 25px");
 			word-break: break-all;
 			text-overflow: ellipsis;
 			display: -webkit-box;
@@ -56,26 +56,26 @@
 }
 .card-title{
 	float: left;
-	width:320rpx;
+	width: 160px;
 	overflow:hidden;
 
 	.card-title-logo{
-		margin-right: 10rpx;
+		margin-right: 5px;
 		display: inline-block;
 		.image{
-			width: 40rpx;
-			height: 40rpx;
+			width: 20px;
+			height: 20px;
 			display: block;
 		}
 	}
 
 	.card-tittle-company{
-		margin-bottom: 16rpx;
+		margin-bottom: 8px;
 		overflow: hidden;
 		text-overflow:ellipsis;
 		white-space:nowrap;
 		max-width:100%;
-		font-size: 26rpx;
+		font-size: 13px;
 	}
 
 	.card-title-name,.card-title-job{
@@ -86,39 +86,39 @@
 	}
 
 	.card-title-name{
-		font-size: 40rpx;
+		font-size: 20px;
 		display: inline-block;
 		&.weui-cell__ft_in-access{
-			padding-right:40rpx;
+			padding-right: 20px;
 		}
 	}
 	.card-title-job{
-		font-size:32rpx;
+		font-size: 16px;
 	}
 }
 .card-more{
 	text-align:center;
 	color:#999;
-	font-size:28rpx;
+	font-size: 14px;
 
 	.card-more-title{
 		display: inline-block;
 	}
 	.switch-group-open {
-		margin-left: 16rpx;
-		height: 30rpx;
-		line-height: 30rpx;
+		margin-left: 8px;
+		height: 15px;
+		line-height: 15px;
 		display: inline-block;
 	}
 	.switch-group-open::after {
 		transform: rotate(135deg);
 	}
 	.switch-group-close {
-		margin-left: 16rpx;
-		height: 30rpx;
-		line-height: 30rpx;
+		margin-left: 8px;
+		height: 15px;
+		line-height: 15px;
 		display: inline-block;
-		margin-bottom:-8rpx;
+		margin-bottom:-4px;
 	}
 	.switch-group-close::after {
 		transform: rotate(-45deg);
@@ -126,35 +126,35 @@
 }
 .card-more-detail{
 	background:#F7F7F7;
-	padding:40rpx 0;
+	padding: 20px 0;
 	display: table;
 	width:100%;
 	.card-more-detail-item{
 		display: table-row;
 		text-align: left;
-		line-height: 80rpx;
+		line-height: 40px;
 		.detail-item-title{
 			display: table-cell;
 			color: #A6A6A6;
-			width: 100rpx;
-			padding-left:40rpx;
+			width: 50px;
+			padding-left: 20px;
 		}
 		.detail-item-contant, .detail-item-contant-null{
 			display: table-cell;
 			color: #000;
-			margin-left: 50rpx;
-			line-height: 50rpx;
-			// width: calc(~"100% - 150rpx");
+			margin-left: 25px;
+			line-height: 25px;
+			// width: calc(~"100% - 75px");
 		}
 		.detail-item-btn{
 			display: table-cell;
 			text-align:right;
-			width:160rpx;
-			padding-right:40rpx;
+			width: 80px;
+			padding-right: 20px;
 			.detail-item-btn-right{
 				vertical-align:middle;
-				height:50rpx;
-				line-height:50rpx;
+				height: 25px;
+				line-height: 25px;
 			}
 		}
 		.detail-item-contant-null{
