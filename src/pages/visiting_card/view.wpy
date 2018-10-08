@@ -199,9 +199,9 @@ page{
 	import util from '../../wxs/util.wxs';
 	import { loveSpaceId } from '@/config';
 	import love_card from '../../components/love_card';
-  import to_chat_with from '@/components/chat/to_chat_with';
-  import chatNotification from '../../components/chat/notification';
-  import chatNotificationMixin from '../../mixins/chat_notification';
+	import to_chat_with from '@/components/chat/to_chat_with';
+	import chatNotification from '../../components/chat/notification';
+	import chatNotificationMixin from '../../mixins/chat_notification';
 
 	export default class VisitingCardView extends wepy.page {
 		config = {
@@ -211,8 +211,8 @@ page{
 
 		components = {
 			love_card: love_card,
-      to_chat_with: to_chat_with,
-      chatNotification: chatNotification
+			to_chat_with: to_chat_with,
+			chatNotification: chatNotification
 		};
 
     mixins = [chatNotificationMixin];
@@ -288,6 +288,7 @@ page{
 				this.is_owner = true;
 			}
 			await this.loadData();
+			await this.updateRecentViewed();
 			this.is_loaded = true;
 			this.$apply();
 			let title = this.card_info.name;
@@ -353,6 +354,14 @@ page{
 			else{
 				this.card_info.heart_count_label = 0;
 			}
+		}
+
+		async updateRecentViewed(){
+			if(this.is_owner){
+				return;
+			}
+			await this.$parent.invokeMethod('object_recent_viewed', 'all', {object_name:"users", record_id:this.card_user_id}, this.space_id, 'inc');
+			this.$apply();
 		}
 
 		async loadMyFriend() {
