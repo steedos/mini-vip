@@ -106,9 +106,11 @@
 <template>
   <view class="page record-list" wx:if="{{is_loaded}}">
     <chatNotification :args.sync="args"></chatNotification>
+    <!--
     <view class="page__hd">
       <searchbar :placeholder.sync="searchPlaceholder" @confirm.user="searchRecords" />
     </view>
+    -->
     <view class="page__bd">
       <block wx:if="{{record_list.length}}">
         <view class="weui-cells weui-cells_after-title">
