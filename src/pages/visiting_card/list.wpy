@@ -37,9 +37,11 @@ page{
 <template>
   <view class="page friend-list" wx:if="{{is_loaded}}">
     <chatNotification :args.sync="args"></chatNotification>
+    <!--
     <view class="page__hd">
       <searchbar :placeholder.sync="searchPlaceholder" @confirm.user="searchRecords" />
     </view>
+    -->
     <view class="page__bd">
         <view class="weui-cells__title">我的名片</view>
       <view class="weui-cells  weui-cells_after-title">
@@ -77,11 +79,13 @@ page{
           </repeat>
         </view>
       </block>
+      <!--
       <block  wx:else>
         <view class="weui-loadmore weui-loadmore_line">
           <view class="weui-loadmore__tips weui-loadmore__tips_in-line">您暂时还没收到其他名片</view>
         </view>
       </block>
+      -->
     </view>
   </view>
 </template>
@@ -101,7 +105,7 @@ import chatNotificationMixin from '../../mixins/chat_notification';
 
 export default class VisitingCardList extends wepy.page {
   config = {
-    navigationBarTitleText: '名片夹',
+    navigationBarTitleText: '智能名片',
     enablePullDownRefresh: true
   };
 
