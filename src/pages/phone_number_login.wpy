@@ -220,7 +220,6 @@
         }
 
         if(data.avatar){
-          this.$parent.globalData.user.avatar = data.avatar
           this.$parent.globalData.user.avatarUrl = data.avatar
         }
       }
