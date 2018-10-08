@@ -8,16 +8,16 @@ page{
 
 .page-btn{
 	text-align: center;
-	font-size: 34rpx!important;
-	margin-top:40rpx;
+	font-size: 17px!important;
+	margin-top: 20px;
 	.btn-share, .btn-edit{
 		margin: 0px;
 		padding:0;
 		display: inline-block;
-		width: 320rpx;
-		height:90rpx;
-		font-size:32rpx;
-		line-height:90rpx;
+		width: 45%;
+		height: 40px;
+		font-size: 16px;
+		line-height: 45px;
 	}
 	.btn-edit{
 		float:left;
@@ -35,27 +35,27 @@ page{
 }
 
 .panel-box{
-	padding: 20rpx  40rpx;
-	margin-bottom: 20rpx;
+	padding: 10px  20px;
+	margin-bottom: 10px;
 	.panel-box-title{
 		color: #000;
 	}
 	.panel-box-content{
 		color:#999;
-		margin-top:10rpx;
+		margin-top: 5px;
 	}
 }
 
 .live_chat{
 	text-align: left;
 	line-height:1.41176471;
-	font-size:17px;
+	font-size: 17px;
 	font-family:黑体;
 	color:#000!important;
 }
 
 .love-card {
-	margin-top: 60rpx;
+	margin-top: 30px;
 }
 </style>
 
