@@ -127,11 +127,18 @@ page{
 				<view class="friend-list-box">
 					<view class="friend-list">
 						<view class="join-avatar">
-							<repeat for="{{recent_vieweds.value}}" key="index" index="index" item="recent_viewed">
+							<block wx:if="{{recent_vieweds.value && recent_vieweds.value.length}}">
+								<repeat for="{{recent_vieweds.value}}" key="index" index="index" item="recent_viewed">
+									<view class="avatar-container">
+										<image class="image" mode="aspectFill" src="{{util.formatAvatarImageUrl(recent_viewed.owner.avatarUrl, baseUrl) || default_avatar}}" />
+									</view>
+								</repeat>
+							</block>
+							<block wx:else>
 								<view class="avatar-container">
-									<image class="image" mode="aspectFill" src="{{util.formatAvatarImageUrl(recent_viewed.owner.avatarUrl, baseUrl) || default_avatar}}" />
+									<image class="image" mode="aspectFill" src="{{default_avatar}}" />
 								</view>
-							</repeat>
+							</block>
 						</view>
 						<view class="count">
 							{{recent_vieweds["@odata.count"]}}人浏览
