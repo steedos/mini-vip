@@ -127,14 +127,14 @@ page{
 				<view class="friend-list-box">
 					<view class="friend-list">
 						<view class="join-avatar">
-							<repeat for="{{friends.value}}" key="index" index="index" item="friend">
+							<repeat for="{{recent_vieweds.value}}" key="index" index="index" item="recent_viewed">
 								<view class="avatar-container">
-									<image class="image" mode="aspectFill" src="{{util.formatAvatarImageUrl(friend.user_b.avatarUrl, baseUrl) || default_avatar}}" />
+									<image class="image" mode="aspectFill" src="{{util.formatAvatarImageUrl(recent_viewed.owner.avatarUrl, baseUrl) || default_avatar}}" />
 								</view>
 							</repeat>
 						</view>
 						<view class="count">
-							{{friends["@odata.count"]}}人浏览
+							{{recent_vieweds["@odata.count"]}}人浏览
 						</view>
 					</view>
 					<view class="btn-heart" @tap="toggleStar">
@@ -229,7 +229,7 @@ page{
 			my_friend: {},
 			is_owner: false,
 			default_avatar: 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg',
-			friends: { value: [], "@odata.count":0},
+			recent_vieweds: { value: [], "@odata.count":0},
 			card_fields: "avatar,name,company,position,mobile2,wechat,work_phone,email2,location,self_introduction,photos"
 		};
 
@@ -326,7 +326,7 @@ page{
 		async loadData() {
 			await this.loadCardInfo();
 			await this.loadMyFriend();
-			await this.loadFriends();
+			await this.loadRecentVieweds();
 		}
 
 		async loadCardInfo() {
@@ -393,17 +393,17 @@ page{
 			}
 		}
 
-		async loadFriends() {
+		async loadRecentVieweds() {
 			const options = {
-				$filter: `(owner eq '${this.card_user_id}')`,
+				$filter: `(record/o eq 'users' and record/ids eq '${this.card_user_id}')`,
 				$top: 6,
-				$select: 'user_b',
-				$expand: 'user_b($select=avatarUrl,name)',
-				$orderby: 'created desc'
+				$select: 'owner',
+				$expand: 'owner($select=avatarUrl,name)',
+				$orderby: 'modified desc'
 			}
-			const records = await this.$parent.query('love_friends', options, this.space_id);
+			const records = await this.$parent.query('object_recent_viewed', options, this.space_id);
 			if (records && records.value) {
-				this.friends = records;
+				this.recent_vieweds = records;
 			}
 		}
 
