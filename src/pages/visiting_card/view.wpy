@@ -303,7 +303,7 @@ page{
 			if(title){
 				title = this.card_info.name +'的名片';
 			}else{
-				title = '预览我的名片';
+				title = '我的名片';
 			};
 			wepy.setNavigationBarTitle({title: title});
 			wepy.hideLoading();
