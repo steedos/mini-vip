@@ -26,7 +26,7 @@ page{
   font-size: 17px;
 }
 .weui-loadmore__tips_in-line{
-  background-color: #F0F0F1;
+  background-color: #FAFAFA;
 }
 .mine{
   font-size:26rpx;
