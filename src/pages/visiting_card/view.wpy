@@ -260,7 +260,7 @@ page{
 		async onPullDownRefresh() {
 			await this.loadData();
 			wepy.stopPullDownRefresh();
-		}*
+		}
 
 		async onLoad(e) {
 			this.is_loaded = false;
