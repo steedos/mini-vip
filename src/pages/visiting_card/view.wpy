@@ -127,14 +127,21 @@ page{
 				<view class="friend-list-box">
 					<view class="friend-list">
 						<view class="join-avatar">
-							<repeat for="{{friends.value}}" key="index" index="index" item="friend">
+							<block wx:if="{{recent_vieweds.value && recent_vieweds.value.length}}">
+								<repeat for="{{recent_vieweds.value}}" key="index" index="index" item="recent_viewed">
+									<view class="avatar-container">
+										<image class="image" mode="aspectFill" src="{{util.formatAvatarImageUrl(recent_viewed.owner.avatarUrl, baseUrl) || default_avatar}}" />
+									</view>
+								</repeat>
+							</block>
+							<block wx:else>
 								<view class="avatar-container">
-									<image class="image" mode="aspectFill" src="{{util.formatAvatarImageUrl(friend.user_b.avatarUrl, baseUrl) || default_avatar}}" />
+									<image class="image" mode="aspectFill" src="{{default_avatar}}" />
 								</view>
-							</repeat>
+							</block>
 						</view>
 						<view class="count">
-							{{friends["@odata.count"]}}人浏览
+							{{recent_vieweds["@odata.count"]}}人浏览
 						</view>
 					</view>
 					<view class="btn-heart" @tap="toggleStar">
@@ -230,7 +237,7 @@ page{
 			my_friend: {},
 			is_owner: false,
 			default_avatar: 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg',
-			friends: { value: [], "@odata.count":0},
+			recent_vieweds: { value: [], "@odata.count":0},
 			card_fields: "avatar,name,company,position,mobile2,wechat,work_phone,email2,location,self_introduction,photos"
 		};
 
@@ -256,7 +263,7 @@ page{
 			if(title){
 				wx.setNavigationBarTitle({title: this.card_info.name +'的名片'});
 			}else{
-				wx.setNavigationBarTitle({title: '预览我的名片'});
+				wx.setNavigationBarTitle({title: '我的名片'});
 			};
 			this.$apply();
 			wepy.stopPullDownRefresh();
@@ -296,7 +303,7 @@ page{
 			if(title){
 				title = this.card_info.name +'的名片';
 			}else{
-				title = '预览我的名片';
+				title = '我的名片';
 			};
 			wepy.setNavigationBarTitle({title: title});
 			wepy.hideLoading();
@@ -327,7 +334,7 @@ page{
 		async loadData() {
 			await this.loadCardInfo();
 			await this.loadMyFriend();
-			await this.loadFriends();
+			await this.loadRecentVieweds();
 		}
 
 		async loadCardInfo() {
@@ -394,17 +401,17 @@ page{
 			}
 		}
 
-		async loadFriends() {
+		async loadRecentVieweds() {
 			const options = {
-				$filter: `(owner eq '${this.card_user_id}')`,
+				$filter: `(record/o eq 'users' and record/ids eq '${this.card_user_id}')`,
 				$top: 6,
-				$select: 'user_b',
-				$expand: 'user_b($select=avatarUrl,name)',
-				$orderby: 'created desc'
+				$select: 'owner',
+				$expand: 'owner($select=avatarUrl,name)',
+				$orderby: 'modified desc'
 			}
-			const records = await this.$parent.query('love_friends', options, this.space_id);
+			const records = await this.$parent.query('object_recent_viewed', options, this.space_id);
 			if (records && records.value) {
-				this.friends = records;
+				this.recent_vieweds = records;
 			}
 		}
 
