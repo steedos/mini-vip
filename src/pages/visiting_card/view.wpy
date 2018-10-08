@@ -259,15 +259,8 @@ page{
 
 		async onPullDownRefresh() {
 			await this.loadData();
-			let title = this.card_info.name;
-			if(title){
-				wx.setNavigationBarTitle({title: this.card_info.name +'的名片'});
-			}else{
-				wx.setNavigationBarTitle({title: '我的名片'});
-			};
-			this.$apply();
 			wepy.stopPullDownRefresh();
-		}
+		}*
 
 		async onLoad(e) {
 			this.is_loaded = false;
@@ -299,10 +292,8 @@ page{
 			await this.updateRecentViewed();
 			this.is_loaded = true;
 			this.$apply();
-			let title = this.card_info.name;
-			if(title){
-				title = this.card_info.name +'的名片';
-			}else{
+			let title = '名片';
+			if(this.is_owner){
 				title = '我的名片';
 			};
 			wepy.setNavigationBarTitle({title: title});
@@ -323,7 +314,7 @@ page{
 		}
 
 		onShareAppMessage() {
-			let title = `我是${this.card_info.name}，这是我的名片，请惠存。`;
+			let title = `${this.card_info.name}的名片，请惠存。`;
 			let url = `pages/visiting_card/view?card_user_id=${this.card_user_id}&share_from=${this.user_id}`;
 			return {
 				title: title,
