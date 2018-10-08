@@ -180,8 +180,8 @@ page{
 
 		async onShow() {
 			let user = this.$parent.globalData.user;
-      this.user_id = this.$parent.globalData.user._id;
-      this.card_user_id = this.user_id;
+			this.user_id = this.$parent.globalData.user._id;
+			this.card_user_id = this.user_id;
 			if (user.name && user.avatar) {
 				this.isAuthUserInfo = true;
 			} else {
