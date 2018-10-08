@@ -7,22 +7,22 @@ page{
 
 .page-btn{
 	text-align: center;
-	font-size: 34rpx!important;
-	margin-top:40rpx;
+	font-size: 17px!important;
+	margin-top:20px;
 	.btn-share, .btn-contact{
 		margin: 0px;
 		padding:0;
 		display: inline-block;
-		width: 320rpx;
-		height:90rpx;
-		font-size:32rpx;
-		line-height:90rpx;
+		width: 45%;
+		height: 45px;
+		font-size: 16px;
+		line-height: 45px;
 	}
 	.btn-share{
 		float:left;
 	}
 	.btn-contact {
-		// margin-left: 40rpx;
+		// margin-left: 20px;
 		background-color: #1AAD19!important;
 		color: #fff!important;
 		float:right;
@@ -32,21 +32,21 @@ page{
 .panel-box{
 	&.panel-top-box{
 	}
-	padding: 20rpx  40rpx;
-	margin-bottom: 20rpx;
+	padding: 10px  20px;
+	margin-bottom: 10px;
 	.panel-box-title{
 		color: #000;
 	}
 	.panel-box-content{
 		color:#999;
-		margin-top:10rpx;
+		margin-top: 5px;
 	}
 	.panel-box-img{
-		margin:0 -40rpx;
+		margin:0 -20px;
 		background:#EFEEF3;
 		image{
 			width: 100%;
-			margin-top: 20rpx;
+			margin-top: 10px;
 			display:block;
 		}
 	}
@@ -55,43 +55,43 @@ page{
 	position:relative;
 	display:flex;
 	align-items:center;
-	margin-top:40rpx;
+	margin-top: 20px;
 	.friend-list{
 		flex:1;
 		.join-avatar {
 			display: flex;
 			align-items: center;
 			.avatar-container {
-				width: 50rpx;
-				height: 50rpx;
-				border-radius: 16rpx;
+				width: 25px;
+				height: 25px;
+				border-radius: 8px;
 				border: 1px solid #fff;
 				image {
-					border-radius: 16rpx;
+					border-radius: 8px;
 					width: 100%;
 					height: 100%;
 					border:solid 1px #ddd;
 				}
 			}
 			.avatar-container:not(:last-of-type) {
-				margin-right: 6rpx;
+				margin-right: 3px;
 			}
 		}
 		.count{
 			color:#999;
-			font-size:26rpx;
+			font-size: 13px;
 		}
 	}
 	.btn-heart{
 		text-align:right;
 		color:#999;
 		.slds-icon{
-			width: 50rpx;
-			height: 50rpx;
+			width: 25px;
+			height: 25px;
 			margin:auto;
 		}
 		.btn-heart-label{
-			font-size:26rpx;
+			font-size: 13px;
 			text-align:center;
 		}
 		.btn-heart-count{
@@ -106,7 +106,7 @@ page{
 }
 
 .love-card {
-	margin-top: 60rpx;
+	margin-top: 30px;
 }
 </style>
 
@@ -223,7 +223,7 @@ page{
 			chatNotification: chatNotification
 		};
 
-    mixins = [chatNotificationMixin];
+		mixins = [chatNotificationMixin];
 
 		data = {
 			is_loaded: false,
@@ -241,17 +241,17 @@ page{
 			card_fields: "avatar,name,company,position,mobile2,wechat,work_phone,email2,location,self_introduction,photos"
 		};
 
-    onShow(){
-      this.$invoke('to_chat_with', 'receivingSubscription')
-    }
+		onShow(){
+		this.$invoke('to_chat_with', 'receivingSubscription')
+		}
 
-    onHide(){
-      this.$invoke('to_chat_with', 'stopReceivingSubscription')
-    }
+		onHide(){
+		this.$invoke('to_chat_with', 'stopReceivingSubscription')
+		}
 
-    async onUnload(){
-      this.$invoke('to_chat_with', 'stopReceivingSubscription')
-    }
+		async onUnload(){
+		this.$invoke('to_chat_with', 'stopReceivingSubscription')
+		}
 
 		wxs = {
 			util: util

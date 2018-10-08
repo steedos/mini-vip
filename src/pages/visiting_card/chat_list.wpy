@@ -92,11 +92,11 @@
   }
 
   .message-dot {
-    width: 16rpx;
-    height: 16rpx;
+    width: 8px;
+    height: 8px;
     position: absolute;
-    top: -4rpx;
-    right: 2rpx;
+    top: -2px;
+    right: 1px;
     background-color: red;
     border-radius: 50%;
   }
