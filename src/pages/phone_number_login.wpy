@@ -218,6 +218,11 @@
         if(data.birthdate){
           this.$parent.globalData.user.birthdate = data.birthdate
         }
+
+        if(data.avatar){
+          this.$parent.globalData.user.avatar = data.avatar
+          this.$parent.globalData.user.avatarUrl = data.avatar
+        }
       }
 //      console.log('phoneLogin', data)
       wx.hideLoading()
