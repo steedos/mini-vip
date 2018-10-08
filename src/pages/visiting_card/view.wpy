@@ -276,7 +276,7 @@ page{
 			wepy.showShareMenu({
 				withShareTicket: true
 			});
-			wepy.showLoading({ mask: true });
+			wepy.showLoading();
 			e.space_id = loveSpaceId;
 			if (e.scene) {
 				// 朋友圏二维码识别进入的，则取出scene中的share_from
@@ -470,7 +470,7 @@ page{
 					});
 					return;
 				}
-				wepy.showLoading({ mask: true });
+				wepy.showLoading();
 				let heart = !!!this.my_friend.heart;
 				let set = { heart:  heart};
 				let updateSuc = await this.$parent.update("love_friends", this.my_friend._id, set, this.space_id);

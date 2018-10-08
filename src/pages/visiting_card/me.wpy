@@ -165,7 +165,7 @@ page{
 			wepy.showShareMenu({
 				withShareTicket: true
 			});
-			wepy.showLoading({ mask: true });
+			wepy.showLoading();
 			e.space_id = loveSpaceId;
 			this.space_id = e.space_id;
 			await this.$parent.login(e);
