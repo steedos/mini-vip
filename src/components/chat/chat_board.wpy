@@ -16,13 +16,13 @@
     .bubble-container {
       position: relative;
       display: flex;
-      padding: 20rpx;
+      padding: 10px;
     }
     .content {
       max-width: 55%;
       background-color: #d8d8d8;
       border-radius: 4px;
-      padding: 9rpx 20rpx;
+      padding: 5px 10px;
       word-break: break-all;
       font-size: 14px;
     }
@@ -30,16 +30,16 @@
       width: 36px;
       height: 36px;
       position: relative;
-      margin-right: 28rpx;
+      margin-right: 14x;
     }
     .caret-left {
       width: 0;
       height: 0;
-      border-width: 12rpx;
+      border-width: 6px;
       border-color: transparent #d8d8d8 transparent transparent;
       border-style: solid;
       position: absolute;
-      right: -28rpx;
+      right: -14px;
       top: 50%;
       transform: translateY(-50%);
     }
@@ -47,7 +47,7 @@
       position: relative;
       display: flex;
       justify-content: flex-end;
-      padding: 20rpx;
+      padding: 10px;
     }
     .content-right {
       max-width: 55%;
@@ -65,7 +65,7 @@
       width: 36px;
       height: 36px;
       position: relative;
-      margin-left: 28rpx;
+      margin-left: 14px;
     }
     .photo {
       width: 36px;
@@ -76,11 +76,11 @@
     .caret-right {
       width: 0;
       height: 0;
-      border-width: 12rpx;
+      border-width: 6px;
       border-color: transparent transparent transparent #1aad19;
       border-style: solid;
       position: absolute;
-      left: -28rpx;
+      left: -14px;
       top: 50%;
       transform: translateY(-50%);
       z-index: 1;
