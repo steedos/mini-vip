@@ -325,6 +325,40 @@
                         </block>
 
                       </block>
+                      <block wx:elif="{{item.type === 'audio'}}">
+                        <block wx:if="{{!(item.readonly || !_record_allowEdit || args.action === 'read')}}">
+                          <view class='weui-cell weui-cell_access' data-value="{{values[item.name]}}">
+                            <view class="weui-cell__required" wx:if="{{util.isRequired(args.action, item)}}"></view>
+                            <view class="weui-cell__hd" >
+                              <view class="weui-label">{{item.label}}</view>
+                            </view>
+                            <view class="weui-cell__bd" style="text-align:right;">
+                              <block wx:if="{{values[item.name]}}">
+                                已经有录音了
+                              </block>
+                              <block wx:else>
+                                <view class="weui-cell__ft weui-uploader__input-box" bindlongtap="startRecord" bindtouchend="stopRecord" bindtouchcancel="stopRecord" style="display:block;float:right" >
+                                  <view class="weui-uploader__input"></view>
+                                </view>
+                              </block>
+                            </view>
+                          </view>
+                        </block>
+                        <block wx:else>
+                          <view class='weui-cell weui-cell_access' data-value="{{values[item.name]}}" bindtap="previewImage" data-key="{{item.name}}" data-type="{{item.type}}">
+                            <view class="weui-cell__required" wx:if="{{util.isRequired(args.action, item)}}"></view>
+                            <view class="weui-cell__hd" >
+                              <view class="weui-label">{{item.label}}</view>
+                            </view>
+                            <view class="weui-cell__bd" style="text-align:right;">
+                              <block wx:if="{{values[item.name]}}">
+                                <image mode="aspectFill" src="{{util.formatImageUrl(values[item.name], baseUrl, item.type)}}" class="weui-uploader__img" style="display:block;float:right"
+                                       id="{{values[item.name]}}" data-key="{{item.name}}"/>
+                              </block>
+                            </view>
+                          </view>
+                        </block>
+                      </block>
                       <block wx:else>
                         <view class='weui-cell weui-cell_access' data-value="{{values[item.name]}}" data-edit="{{!(item.readonly || !_record_allowEdit || args.action === 'read')}}" @tap.stop="navigateTo({{item}})">
                           <view class="weui-cell__required" wx:if="{{util.isRequired(args.action, item)}}"></view>
@@ -492,7 +526,9 @@
       groupFields: [],
       submitDisabled: false,
       hiddenBtn: false,
-      _changeValue: {}
+      _changeValue: {},
+      isRecording: false,
+      recorderManager: null
     };
 
     /*
@@ -1341,9 +1377,6 @@
           case 'select':
             url = '/pages/edit/select';
             break;
-//          case 'image':
-//            url = '/pages/edit/image';
-//            break;
           case 'number':
             url = '/pages/edit/number';
             break;
@@ -1397,6 +1430,40 @@
         }
         console.log('url', {url: '/pages/record/edit?' + url_args});
         wepy.navigateTo({url: '/pages/record/edit?' + url_args});
+      },
+      async startRecord() {
+        console.log("=========startRecord=============");
+        if(!this.recorderManager){
+          this.recorderManager = wepy.getRecorderManager();
+        }
+        this.$apply();
+        this.recorderManager.onStart(() => {
+          this.isRecording = true;
+          this.$apply();
+          console.log('recorder start============1')
+        });
+        this.recorderManager.onStop((res) => {
+          this.isRecording = false;
+          console.log('recorder stop============2', res)
+          const { tempFilePath } = res
+          console.log('===========tempFilePath=========', tempFilePath)
+          this.$apply();
+        });
+        this.recorderManager.start({
+          duration: 10000,
+          sampleRate: 44100,
+          numberOfChannels: 1,
+          encodeBitRate: 192000,
+          format: 'aac',
+          frameSize: 50
+        });
+      },
+      async stopRecord() {
+        console.log("=========stopRecord===========0==");
+        if(this.recorderManager){
+          console.log("=========stopRecord===========1==");
+          this.recorderManager.stop();
+        }
       }
     }
   }

@@ -237,7 +237,7 @@ page{
 			is_owner: false,
 			default_avatar: 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg',
 			recent_vieweds: { value: [], "@odata.count":0},
-			card_fields: "avatar,name,company,position,mobile2,wechat,work_phone,email2,location,self_introduction,photos"
+			card_fields: "avatar,name,company,position,mobile2,wechat,work_phone,email2,location,voice,self_introduction,photos"
 		};
 
 		onShow(){
