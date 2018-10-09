@@ -202,9 +202,8 @@ page{
 
 <script>
 	import wepy from 'wepy';
-	import { baseUrl } from '@/config';
+	import { baseUrl, appId, loveSpaceId } from '@/config';
 	import util from '../../wxs/util.wxs';
-	import { loveSpaceId } from '@/config';
 	import love_card from '../../components/love_card';
 	import to_chat_with from '@/components/chat/to_chat_with';
 	import chatNotification from '../../components/chat/notification';
@@ -367,29 +366,10 @@ page{
 			if(this.is_owner){
 				return;
 			}
-			const options = {
-				$filter: `(owner eq '${this.user_id}' and user_b eq '${this.card_user_id}')`,
-				$select: 'heart,star',
-			}
-			const records = await this.$parent.query('love_friends', options, this.space_id);
-			if (records && records.value && records.value.length) {
-				this.my_friend = records.value[0];
-			}
-			else{
-				let values = {
-					user_b: this.card_user_id,
-					owner: this.user_id
-				};
-				let result = await this.$parent.insert("love_friends", values, this.space_id);
-				if(result && result.value && result.value.length){
-					this.my_friend = result.value[0];
-				}
-				values = {
-					user_b: this.user_id,
-					owner: this.card_user_id
-				};
-				result = await this.$parent.insert("love_friends", values, this.space_id);
-			}
+			let options = {user_b: this.card_user_id, mini_app_id: appId};
+			options.fields = {heart:1,star:1};
+			this.my_friend = await this.$parent.invokeMethod('love_friends', 'all', options, this.space_id, 'getMyFriend');
+			this.$apply();
 		}
 
 		async loadRecentVieweds() {
