@@ -5,7 +5,7 @@
 @import "../lib/vip/vip.less";
 @import "../lib/icon/utility.less";
 page {
-  background: linear-gradient(#ffffff, #fafafa);
+  background: linear-gradient(#ffffff, #f8f8f8);
   background-repeat: no-repeat;
   background-attachment: fixed;
   font-size: 16px;
