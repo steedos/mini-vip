@@ -48,7 +48,7 @@
                 right:5px;
                 width:45px;
                 height: 37px;
-                line-height: 36rpx;
+                line-height: 36px;
                 color: white;
                 text-align: center;
                 font-size: 15px;

@@ -30,7 +30,7 @@
       width: 36px;
       height: 36px;
       position: relative;
-      margin-right: 14x;
+      margin-right: 14px;
     }
     .caret-left {
       width: 0;
