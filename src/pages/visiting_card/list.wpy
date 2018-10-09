@@ -128,7 +128,7 @@ export default class VisitingCardList extends wepy.page {
     baseUrl: baseUrl,
     share_from: '',
     orderby: 'created desc',
-    space_id: null,
+    space_id: loveSpaceId,
     pageSize: 50,
 		default_avatar: 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg'
   };

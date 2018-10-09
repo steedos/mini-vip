@@ -136,7 +136,7 @@ page{
 		data = {
 			isAuthUserInfo: false,
 			is_loaded: false,
-			space_id: null,
+			space_id: loveSpaceId,
 			user_id: null,
 			card_user_id: null,
 			share_from: null,

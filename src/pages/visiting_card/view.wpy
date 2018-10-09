@@ -226,7 +226,7 @@ page{
 
 		data = {
 			is_loaded: false,
-			space_id: null,
+			space_id: loveSpaceId,
 			user_id: null,
 			user: null,
 			card_user_id: null,
