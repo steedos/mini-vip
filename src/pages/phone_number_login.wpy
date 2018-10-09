@@ -80,7 +80,7 @@
               </view>
             </view>
           </view>
-          <view class="weui-cell weui-cell_input">
+          <view class="weui-cell weui-cell_input" wx:if="{{enabledPhoneLogin}}">
             <view class="weui-cell__hd">
               <view class="weui-label">手机号</view>
             </view>
@@ -136,10 +136,15 @@
       avatarUrl: '',
       gender:'',
       canIUse: wx.canIUse('button.open-type.getUserInfo'),
-      phoneLoginShowNickName: false
+      phoneLoginShowNickName: false,
+			enabledPhoneLogin: false
     };
 
     async onLoad(e){
+
+    	if(this.$parent.globalData.love && this.$parent.globalData.love.enabled){
+				this.enabledPhoneLogin = true;
+			}
 
       this.phoneLoginShowNickName = phoneLoginShowNickName;
 
@@ -269,7 +274,7 @@
           }
         }
 
-        if(!this.phoneNumber){
+        if(!this.phoneNumber && this.enabledPhoneLogin){
           this.showTopTips = true;
           this.message = '请填写手机号';
           return;
