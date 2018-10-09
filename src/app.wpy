@@ -462,6 +462,12 @@ export default class VIP extends wepy.app {
         return this.checkMobile(to)
       }
     });
+		pageRouter.pushEnter({
+			page: '/pages/chat/chat_messages',
+			script: function (to) {
+				return this.checkMobile(to)
+			}
+		});
   }
 
   onHide() {
