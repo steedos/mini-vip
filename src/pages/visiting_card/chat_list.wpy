@@ -233,6 +233,12 @@ export default class RecordList extends wepy.page {
     this.dataRefresh();
   }
 
+  async onShow() {
+    if(this.is_loaded){
+      this.dataRefresh();
+    }
+  }
+
   methods = {
     searchRecords(searchValue, evt) {
       this.searchRecords(searchValue, evt);

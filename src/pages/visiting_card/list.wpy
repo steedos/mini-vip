@@ -153,6 +153,9 @@ export default class VisitingCardList extends wepy.page {
   }
 
   async onShow() {
+    if(this.is_loaded){
+      this.dataRefresh();
+    }
   }
 
   async init() {
