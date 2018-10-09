@@ -17,8 +17,8 @@
 .card-avatar{
 	float: right;
 	.image{
-		width: 80px;
-		height: 80px;
+		width: 70px;
+		height: 70px;
 		border-radius: 100%;
 		border: solid 1px #ddd;
 		display: block;
