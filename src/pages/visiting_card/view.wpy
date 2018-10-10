@@ -118,7 +118,7 @@ page{
 
 			<love_card :card_info.sync="card_info" :card_fields.sync="card_fields" :is_owner.sync="is_owner" :space_id.sync="space_id"/>
 
-			<view class="panel-box panel-top-box" wx:if="{{card_info.name}}">
+			<view class="panel-box panel-top-box" wx:if="{{card_info.company}}">
 				<view class="page-btn">
 					<button class="btn-share" open-type="share" plain="true" type="primary">分享名片</button>
 					<button class="btn-contact" plain="true" type="primary" @tap="addPhoneContact">存入手机通讯录</button>
