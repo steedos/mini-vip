@@ -18,7 +18,7 @@
 	}
 </style>
 <template>
-	<view wx:else class="open-radius-box">
+	<view class="open-radius-box">
 		<open-data class="image" type="userAvatarUrl"></open-data>
 		<view class="image"></view>
 	</view>
