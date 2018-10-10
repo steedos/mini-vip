@@ -57,11 +57,15 @@
     props = {
       with_user: {
         type: Object
-      }
+      },
+			space_id: {
+				type: String,
+				default: ""
+			},
     };
 
     data = {
-      space_id: null,
+//      space_id: null,
       show: false,
       unreadSubscription: null,
       setInterval: null

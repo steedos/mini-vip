@@ -64,10 +64,10 @@ page{
         <view class="weui-cells__title">收到的名片</view>
         <view class="weui-cells  weui-cells_after-title">
           <repeat for="{{record_list}}" key="index" index="index" item="record">
-            <block wx:if="{{record.user_b.name}}">
+            <block wx:if="{{record.user_b.company && record.user_b._id != user._id}}">
               <navigator url="./view?card_user_id={{record.user_b._id}}" class="record-container weui-cell weui-cell_access" hover-class="weui-cell_active">
                 <view class="weui-cell__hd">
-                  <image wx:if="{{record.user_b.name}}"  mode="aspectFill" src="{{util.formatAvatarImageUrl(record.user_b.avatarUrl, baseUrl)}}" class='avatar-field'/>
+                  <image wx:if="{{record.user_b.avatarUrl}}"  mode="aspectFill" src="{{util.formatAvatarImageUrl(record.user_b.avatarUrl, baseUrl)}}" class='avatar-field'/>
                   <image wx:else src="{{default_avatar}}"  mode="aspectFill" class="avatar-field"/>
                 </view>
                 <view class="weui-cell__bd">
@@ -170,7 +170,7 @@ export default class VisitingCardList extends wepy.page {
   };
 
   getFinalExpand() {
-    return 'user_b($select=name,avatarUrl)';
+    return 'user_b($select=name,company,avatarUrl)';
   }
 
   methods = {

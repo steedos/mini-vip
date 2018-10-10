@@ -181,8 +181,9 @@
 				</view>
 			</view>
 			<view class="card-avatar">
-				<image wx:if="{{card_info.name}}" class="image" mode="aspectFill" src="{{util.formatAvatarImageUrl(card_info.avatarUrl, baseUrl)}}"/>
-				<open_radius_avatar />
+				<image wx:if="{{card_info.avatarUrl}}" class="image" mode="aspectFill" src="{{util.formatAvatarImageUrl(card_info.avatarUrl, baseUrl)}}"/>
+				<open_radius_avatar wx:elif="{{is_owner}}" />
+				<image wx:else class="image" mode="aspectFill" src="{{default_avatar}}"/>
 			</view>
 			<view class="clear"></view>
 			<view class="card-content">
