@@ -8,8 +8,9 @@ class ChatAPI {
   unreadSubscriptions = [];
 
   _setInterval = null;
+
   //重置未读数量为0
-  async resetUnread(room_id, user_id, space_id){
+  async resetUnread(room_id, user_id, space_id) {
     const queryOptions = {
       $top: 1,
       $filter: `(related_to/o eq 'chat_rooms') and (related_to/ids eq '${room_id}') and owner eq '${user_id}' and unread gt 0`,
@@ -18,20 +19,20 @@ class ChatAPI {
 
     const result = await ODataClinet.query('chat_subscriptions', queryOptions, space_id);
 
-    if(result.value.length > 0){
+    if (result.value.length > 0) {
       const sId = result.value[0]._id;
       ODataClinet.update('chat_subscriptions', sId, {unread: 0}, space_id)
     }
   }
 
   //定时接收通知
-  receivingSubscriptions(user_id, space_id){
-    if(this._setInterval){
+  receivingSubscriptions(user_id, space_id) {
+    if (this._setInterval) {
       clearInterval(this._setInterval)
     }
-    this._setInterval = setInterval(async ()=>{
-      this.getSubscriptions(user_id, space_id).then(res=>{
-        const unreadSubscriptions = _.filter(res.value, (s)=>{
+    this._setInterval = setInterval(async () => {
+      this.getSubscriptions(user_id, space_id).then(res => {
+        const unreadSubscriptions = _.filter(res.value, (s) => {
           return s.unread > 0 && s.modified_by._id != user_id
         });
         this.unreadSubscriptions = unreadSubscriptions;
@@ -39,7 +40,7 @@ class ChatAPI {
     }, chatNewMessagePollingInterval || 15 * 1000)
   }
 
-  getSubscriptions(user_id, space_id){
+  getSubscriptions(user_id, space_id) {
     let queryOptions = {
       $filter: `(related_to/o eq 'chat_rooms') and owner eq '${user_id}'`,
       $select: 'last_message_text,unread,modified_by,related_to',
@@ -48,10 +49,10 @@ class ChatAPI {
     return ODataClinet.query('chat_subscriptions', queryOptions, space_id)
   }
 
-  async getRoom(user_id, space, room_members){
+  async getRoom(user_id, space, room_members) {
     let filter = [];
 
-    _.forEach(room_members, (m)=>{
+    _.forEach(room_members, (m) => {
       filter.push(`(members eq '${m}')`)
     });
 
@@ -63,9 +64,9 @@ class ChatAPI {
     const room = await ODataClinet.query('chat_rooms', queryOptions, space);
 
     console.log('getRoom room', room);
-    if(room.value.length > 0){
+    if (room.value.length > 0) {
       return room.value[0]
-    }else{
+    } else {
 
       const room_data = {
         type: 'private',
@@ -75,9 +76,10 @@ class ChatAPI {
       };
       const insert_room = await ODataClinet.insert('chat_rooms', room_data, space);
       console.log('getRoom insert_room', insert_room);
-      if(insert_room.value.length > 0){
+      if (insert_room.value.length > 0) {
         return insert_room.value[0]
-      };
+      }
+      ;
     }
   }
 
@@ -85,7 +87,7 @@ class ChatAPI {
     return this.msg(room_id, msg, type, space, user_id, messageShowTime);
   }
 
-  getHistory(room_id, space, top, filter){
+  getHistory(room_id, space, top, filter) {
 
     let queryOptions = {
       $top: top || 15,
@@ -95,14 +97,14 @@ class ChatAPI {
       $expand: 'owner($select=name,avatarUrl)'
     };
 
-    if(filter){
+    if (filter) {
       queryOptions.$filter = `${queryOptions.$filter} and ${filter}`
     }
 
     return ODataClinet.query('chat_messages', queryOptions, space)
   }
 
-  getNewMessage(room_id, space, timestamp){
+  getNewMessage(room_id, space, timestamp) {
     let queryOptions = {
       $filter: `(related_to/o eq 'chat_rooms') and (related_to/ids eq '${room_id}') and created gt ${timestamp}`,
       $orderby: 'created desc',
@@ -139,9 +141,9 @@ class ChatAPI {
     //   from: frm,
     //   time: +new Date()
     // };
-	//
+    //
     // history.push(msgObj);
-	//
+    //
     // return new Promise((resolve, reject) => {
     //   wepy.setStorage({key: '_wechat_history_', data: history}).then(() => {
     //     resolve(msgObj);
