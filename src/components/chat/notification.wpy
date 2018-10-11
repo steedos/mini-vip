@@ -73,7 +73,7 @@
 </style>
 
 <template>
-  <view class="chat-notification" style="{{close ? 'top:-200px':''}}">
+  <view class="chat-notification" style="{{close ? 'top:-200px':''}}" wx:if="{{loaded}}">
     <view class="weui-cells">
       <repeat for="{{unreadSubscriptions}}" key="index" index="index" item="record">
         <view class="weui-cell" @tap="clickNotification({{record}})">
@@ -119,6 +119,7 @@
       room_id: null,
       setInterval: null,
       setTimeout: null,
+			loaded: false
     };
 
     props = {
@@ -160,11 +161,13 @@
     }
 
     onLoad(){
-
+			this.loaded = true;
+			this.$apply()
     }
 
     watch = {
       unreadSubscriptions: function (newValue, oldValue) {
+//      	console.log('watch ---> unreadSubscriptions', newValue.length);
         if(newValue.length > 0){
           this.close = false;
           clearTimeout(this.setTimeout);
