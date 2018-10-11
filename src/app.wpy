@@ -664,8 +664,8 @@ export default class VIP extends wepy.app {
 
       self.globalData = globalData
 
-      console.log('chat.receivingSubscriptions。。。');
-      chat.receivingSubscriptions(globalData.user._id, loveSpaceId);
+      // console.log('chat.receivingSubscriptions。。。');
+      // chat.receivingSubscriptions(globalData.user._id, loveSpaceId);
 
     } else {
       const header = {
