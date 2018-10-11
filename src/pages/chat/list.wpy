@@ -1,0 +1,242 @@
+<style lang="less">
+.record-list {
+  overflow: hidden;
+  .image {
+    display: block;
+  }
+  .page__bd {
+    padding-bottom: 50px;
+  }
+  .tab-bar {
+    display: flex;
+    position: fixed;
+    z-index: 500;
+    bottom: 0;
+    height: 50px;
+    width: 100%;
+    background-color: #f7f7fa;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .item-body {
+    width: 55%;
+    height: 100%;
+  }
+
+  .description-field {
+    text-overflow: ellipsis;
+    width: 85%;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 13px;
+    color: #888888;
+  }
+
+  .name-field {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    flex: 1;
+    min-height: 24px;
+  }
+
+  .date-field {
+    font-size: 13px;
+    color: #888888;
+  }
+
+  .item-body-1 {
+    display: flex;
+    align-items: center;
+  }
+
+  .page__hd {
+    padding: 0px;
+  }
+
+  .weui-search-bar {
+    border-bottom: 0px;
+  }
+
+  .avatar-field {
+    border-radius: 0.15rem;
+    margin-right: 5px;
+    vertical-align: middle;
+    width: 40px;
+    height: 40px;
+  }
+
+  .record-container {
+    transition: all 0.2s linear;
+    position: relative;
+    .record {
+      width: 100%;
+      display: flex;
+      align-items: center;
+    }
+    .delete {
+      position: absolute;
+      width: 60px;
+      background: #b4282d;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      right: 0;
+      top: 0;
+      transform: translateX(60px);
+    }
+  }
+
+  .message-dot {
+    width: 16rpx;
+    height: 16rpx;
+    position: absolute;
+    top: -4rpx;
+    right: 2rpx;
+    background-color: red;
+    border-radius: 50%;
+  }
+}
+</style>
+
+<template>
+  <view class="page record-list" wx:if="{{is_loaded}}">
+    <view class="page__hd">
+      <searchbar :placeholder.sync="searchPlaceholder" @confirm.user="searchRecords" />
+    </view>
+    <view class="page__bd">
+      <block wx:if="{{record_list.length}}">
+        <view class="weui-cells weui-cells_after-title">
+          <repeat for="{{record_list}}" key="index" index="index" item="record">
+            <view wx:if="{{rooms[record.related_to.ids[0]]}}" @tap.stop="navigateTo({{record}})" class="record-container weui-cell weui-cell_access" style="transform: translateX({{style_list[record._id].offsetX}}px)" data-item-id="{{record._id}}" hover-class="weui-cell_active">
+              <view class="record">
+                <view class="weui-cell__hd" style="position:relative;">
+                  <repeat for="{{rooms[record.related_to.ids[0]].members}}" item="member">
+                    <image src="{{util.formatAvatarImageUrl(member.avatarUrl, baseUrl)}}" class='avatar-field' wx:if="{{user_id != member._id}}"></image>
+                  </repeat>
+                  <!--<view class="message-dot"></view>群聊-->
+                  <view class="weui-badge" style="position: absolute;top: -.4em;right: 0.2em;" wx:if="{{record.unread > 0}}">{{record.unread}}</view>
+                </view>
+                <view class="weui-cell__bd item-body">
+                  <view class="item-body-1">
+                    <view class="name-field">
+                    <repeat for="{{rooms[record.related_to.ids[0]].members}}" item="member">
+                      <block wx:if="{{user_id != member._id}}">{{member.name}}</block>
+                    </repeat>
+                    </view>
+                    <view class="date-field" wx:if="{{record[date_field]}}">{{util.formatDateMini(record[date_field])}}</view>
+                  </view>
+
+                  <view class="description-field" wx:if="{{record[description_field]}}">{{record[description_field]}}</view>
+                </view>
+                <!--<view class="weui-cell__ft">-->
+                  <!--<view class="weui-cell__ft_in-access"></view>-->
+                <!--</view>-->
+              </view>
+              <view class="delete" @tap.stop="deleteRecord" wx:if="{{record.allow_delete}}" data-record-space="{{record.space}}"  data-allow-delete="{{record.allow_delete}}" data-record-id="{{record._id}}">
+                删除
+              </view>
+            </view>
+          </repeat>
+        </view>
+      </block>
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import { baseUrl } from '@/config';
+import util from '../../wxs/util.wxs';
+import searchbar from '../../components/searchbar';
+import recordList from '../../mixins/record_list';
+import ODataClinet from '@/utils/odata_client'
+import _ from 'underscore'
+
+export default class RecordList extends wepy.page {
+  config = {
+    navigationBarTitleText: '',
+    enablePullDownRefresh: true,
+  };
+
+  components = {
+    searchbar: searchbar
+  };
+
+  wxs = {
+    util: util
+  };
+
+  data = {
+    rooms: {},
+    fields: ['related_to'],
+    user_id: '',
+    date_field: 'modified',
+    description_field: 'last_message_text',
+    extra_fields: 'unread',
+    pageInit: false,
+    pageSize: 30
+  };
+
+
+  async onLoad(e){
+
+    if(e.title){
+      this.navigationBarTitle = e.title
+    }
+
+    this.user_id = this.$parent.globalData.user._id;
+    let queryOptions = {
+      $filter: `members eq '${this.user_id}'`,
+      $select: '_id,name,space,members',
+      $expand: 'members($select=name,avatarUrl)'
+    };
+
+    const res = await ODataClinet.query('chat_rooms', queryOptions, e.space_id);
+    let rooms = {};
+    _.forEach(res.value, (r)=>{
+      rooms[r._id] = r
+    });
+    this.rooms = rooms;
+    this.pageInit = true;
+    this.$apply()
+  }
+
+  getQueryFilter(){
+    return `(related_to/o eq 'chat_rooms') and (owner eq '${this.$parent.globalData.user._id}')`
+  }
+
+  mixins = [recordList];
+
+  refresh() {
+    this.dataRefresh();
+  }
+
+  methods = {
+    searchRecords(searchValue, evt) {
+      this.searchRecords(searchValue, evt);
+    },
+
+    navigateTo(record, e){
+
+      let url = `/pages/chat/chat_messages?room_id=${record.related_to.ids[0]}&space_id=${record.space}`;
+
+      let title = '';
+
+      _.forEach(this.rooms[record.related_to.ids[0]].members, (member)=>{
+        if(this.user_id != member._id){
+          title = member.name;
+        }
+      });
+
+      url =`${url}&title=${title}`;
+
+      wepy.navigateTo({url: url});
+    }
+
+  };
+}
+</script>

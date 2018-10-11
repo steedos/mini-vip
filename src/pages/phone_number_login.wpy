@@ -19,7 +19,6 @@
     .user-phone{
       margin-top: 20px;
       width: 100%;
-      position:absolute;
       top:50%;
     }
 
@@ -81,7 +80,7 @@
               </view>
             </view>
           </view>
-          <view class="weui-cell weui-cell_input">
+          <view class="weui-cell weui-cell_input" wx:if="{{enabledPhoneLogin}}">
             <view class="weui-cell__hd">
               <view class="weui-label">手机号</view>
             </view>
@@ -108,7 +107,7 @@
             <image class="weui-media-box__thumb avatar" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/noface144.png"></image>
           </view>
           <view class="container-title">无颜</view> -->
-          <view class="user-phone" style="margin-top: 0px">
+          <view class="user-phone" style="margin-top: 0px;position:absolute;">
             <button class="weui-btn" type="primary" plain="true" open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumberAndLogin">使用微信账户登录</button>
           </view>
         </view>
@@ -137,10 +136,15 @@
       avatarUrl: '',
       gender:'',
       canIUse: wx.canIUse('button.open-type.getUserInfo'),
-      phoneLoginShowNickName: false
+      phoneLoginShowNickName: false,
+			enabledPhoneLogin: false
     };
 
     async onLoad(e){
+
+    	if(this.$parent.globalData.love && this.$parent.globalData.love.enabled){
+				this.enabledPhoneLogin = true;
+			}
 
       this.phoneLoginShowNickName = phoneLoginShowNickName;
 
@@ -189,14 +193,23 @@
 //    }
 
     async phoneLogin(){
+      wepy.showLoading({
+        title: '登录中，请稍后',
+        mask: true
+      });
       const data = await req.post('/api/steedos/weixin/phone_login', {phone_number: this.phoneNumber, nickName: this.nickName, gender: this.gender, avatarUrl: this.avatarUrl});
       if(data){
         if(data.mobile){
           this.$parent.globalData.user.mobile = data.mobile
         }
 
-        if(data._id){
-          this.$parent.globalData.user._id = data._id
+        if(data.user_id){
+          if(this.$parent.globalData.user._id != data.user_id){
+            this.$parent.globalData.is_login = false;
+            await this.$parent.login();
+          }
+
+          this.$parent.globalData.user._id = data.user_id
         }
 
         if(data.name){
@@ -210,9 +223,13 @@
         if(data.birthdate){
           this.$parent.globalData.user.birthdate = data.birthdate
         }
-      }
-      console.log('phoneLogin', data)
 
+        if(data.avatar){
+          this.$parent.globalData.user.avatarUrl = data.avatar
+        }
+      }
+//      console.log('phoneLogin', data)
+      wx.hideLoading()
 //        wepy.redirectTo({url: this.from})
       if (this.to) {
         wepy.redirectTo({url: this.to})
@@ -257,7 +274,7 @@
           }
         }
 
-        if(!this.phoneNumber){
+        if(!this.phoneNumber && this.enabledPhoneLogin){
           this.showTopTips = true;
           this.message = '请填写手机号';
           return;

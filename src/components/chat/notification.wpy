@@ -1,0 +1,231 @@
+<style lang="less">
+  .chat-notification{
+    transition: all 0.3s linear;
+    z-index: 999;
+    position: fixed;
+    top: 5px;
+    box-shadow: 0px 0px 3px 3px rgba(170, 170, 170, 0.15);
+    border: solid 1px #FFFFFF;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.85);
+    min-height: 50px;
+    left: 10px;
+    width: calc(~"100% - 20px");
+
+    .weui-cells{
+      margin-top: 0px;
+      background-color: rgba(255, 255, 255, 0.75);
+    }
+
+    .weui-cells:after{
+      border: 0px;
+    }
+
+    .weui-cells:before{
+      border: 0px;
+    }
+
+    .n-avatar-field{
+      /*margin-top: 15px;*/
+      /*margin-bottom: 15px;*/
+      /*margin-left: 15px;*/
+      border-radius: 0.15rem;
+      margin-right: 15px;
+      vertical-align: middle;
+      width: 35px;
+      height: 35px;
+    }
+
+    .n-item-body {
+      width: 55%;
+      height: 100%;
+    }
+
+    .n-description-field {
+      text-overflow: ellipsis;
+      width: 85%;
+      overflow: hidden;
+      white-space: nowrap;
+      font-size: 13px;
+      color: #888888;
+    }
+
+    .n-name-field {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      flex: 1;
+      min-height: 24px;
+    }
+
+    .n-item-body-1 {
+      display: flex;
+      align-items: center;
+    }
+
+    .n-record {
+      width: 100%;
+      display: flex;
+      align-items: center;
+    }
+  }
+
+</style>
+
+<template>
+  <view class="chat-notification" style="{{close ? 'top:-200px':''}}" wx:if="{{loaded}}">
+    <view class="weui-cells">
+      <repeat for="{{unreadSubscriptions}}" key="index" index="index" item="record">
+        <view class="weui-cell" @tap="clickNotification({{record}})">
+          <view class="n-record">
+            <view class="weui-cell__hd" style="position:relative;">
+              <image mode="aspectFill" class="n-avatar-field weui-media-box__thumb" src="{{util.formatAvatarImageUrl(record.modified_by.avatarUrl, baseUrl)}}" />
+              <!--<view class="message-dot"></view>群聊-->
+            </view>
+            <view class="weui-cell__bd n-item-body">
+              <view class="n-item-body-1">
+                <view class="n-name-field">
+                  {{record.modified_by.name}}
+                </view>
+              </view>
+              <view class="n-description-field">{{record.last_message_text}}</view>
+            </view>
+            <view class="weui-cell__ft">
+              <view class="n-badge-field"><view class="weui-badge">{{record.unread}}</view></view>
+            </view>
+          </view>
+        </view>
+      </repeat>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import _ from 'underscore'
+  import chat from '../../common/chat';
+  import { baseUrl, chatNewMessagePollingInterval } from '@/config';
+  import util from '../../wxs/util.wxs';
+  import pageRouter from '@/utils/pageRouter'
+
+  export default class ChatNotification extends wepy.component {
+
+    data = {
+      baseUrl: baseUrl,
+      close: true,
+      unreadSubscriptions: [],
+      user_id: null,
+      space_id: null,
+      room_id: null,
+      setInterval: null,
+      setTimeout: null,
+			loaded: false
+    };
+
+    props = {
+      args: {
+        type: Object
+      }
+    };
+
+    wxs = {
+      util: util
+    };
+
+    stopReceivingSubscriptions(){
+      console.log('stopReceivingSubscriptions...........');
+      if(this.setInterval){
+        clearInterval(this.setInterval)
+        console.log('stopReceivingSubscriptions.....clearInterval......');
+      }
+      this.setInterval = null
+    }
+
+    receivingSubscriptions(){
+      if(this.user_id){
+        console.log('receivingSubscriptions...........');
+        this.stopReceivingSubscriptions()
+        this.setInterval = setInterval(async ()=>{
+          console.log('getSubscriptions -> this.room_id', this.room_id);
+          const unreadSubscriptions = _.filter(chat.unreadSubscriptions, (s)=>{
+            if(this.room_id && s.related_to.ids.length > 0){
+              return s.unread > 0 && s.modified_by._id != this.user_id && s.related_to.ids[0] != this.room_id
+            }else{
+              return s.unread > 0 && s.modified_by._id != this.user_id
+            }
+          });
+          this.unreadSubscriptions = unreadSubscriptions;
+          this.$apply()
+        }, chatNewMessagePollingInterval || 15 * 1000)
+      }
+    }
+
+    onLoad(){
+			this.loaded = true;
+			this.$apply()
+    }
+
+    watch = {
+      unreadSubscriptions: function (newValue, oldValue) {
+//      	console.log('watch ---> unreadSubscriptions', newValue.length);
+        if(newValue.length > 0){
+          this.close = false;
+          clearTimeout(this.setTimeout);
+          this.setTimeout = setTimeout(()=>{
+            this.close = true;
+            this.$apply();
+          }, 1000 * 6);
+
+          this.$apply();
+        }
+      },
+      args: function (newValue, oldValue) {
+        if(!_.isEmpty(newValue)){
+          this.space_id = newValue.space_id;
+          this.room_id = newValue.room_id;
+//          console.log('onLoad space_id', this.space_id);
+//          console.log('onLoad room_id', this.room_id);
+          let user_id = null;
+          if(this.$parent.$parent.globalData){
+            if(!this.$parent.$parent.globalData.user){
+              return ;
+            }
+            user_id = this.$parent.$parent.globalData.user._id;
+          }else{
+            user_id = this.$parent.$parent.$parent.globalData.user._id;
+          }
+          this.user_id = user_id;
+          setTimeout(()=>{
+            this.receivingSubscriptions()
+          }, 3 * 1000)
+        }
+      }
+    };
+
+    methods = {
+      clickNotification: function (notification) {
+
+//        console.log('notification', notification, this.room_id)
+
+        const related_to =notification.related_to;
+
+        if(related_to.o === 'chat_rooms'){
+          if(related_to.ids && related_to.ids.length > 0){
+            if(this.room_id){
+              pageRouter.redirectTo({
+                url: `/pages/chat/chat_messages?space_id=${this.space_id}&title=${notification.modified_by.name}&room_id=${related_to.ids[0]}`
+              });
+            }else{
+              pageRouter.navigateTo({
+                url: `/pages/chat/chat_messages?space_id=${this.space_id}&title=${notification.modified_by.name}&room_id=${related_to.ids[0]}`
+              });
+            }
+          }
+        }
+
+        this.close = true;
+        this.$apply();
+      }
+    }
+  }
+</script>

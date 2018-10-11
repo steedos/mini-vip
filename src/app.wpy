@@ -3,8 +3,11 @@
 @import "../lib/slds/slds_icons.less";
 @import "../lib/slds/slds_margin.less";
 @import "../lib/vip/vip.less";
+@import "../lib/icon/utility.less";
 page {
-  background-color: #f6f7f8;
+  background: linear-gradient(#ffffff, #f8f8f8);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   font-size: 16px;
   font-family: -apple-system-font,Helvetica Neue,Helvetica,sans-serif;
 }
@@ -12,7 +15,7 @@ page {
     padding: 40px;
 }
 .page__bd {
-    padding-bottom: 40px;
+  padding-bottom: 40px;
 }
 .page__bd_spacing {
     padding-left: 15px;
@@ -107,6 +110,20 @@ page {
   }
 }
 
+.weui-search-bar {
+  background-color: #ffffff;
+  border-top: none;
+  border-bottom: none;
+  .weui-search-bar__form {
+    background-color: #e9eaee;
+    border: none;
+  }
+  .weui-search-bar__label {
+    background-color: #e9eaee;
+    border: none;
+  }
+}
+
 .cover-page-bg {
   position: fixed;
 	top: 0;
@@ -198,6 +215,7 @@ import { baseUrl, appId, loveSpaceId } from '@/config'
 import _ from 'underscore'
 import { serverAPI } from '@/server';
 import pageRouter from '@/utils/pageRouter'
+import chat from '@/common/chat';
 
 const store = configStore()
 setStore(store)
@@ -207,6 +225,11 @@ export default class VIP extends wepy.app {
     pages: [
       'pages/love/index',
       'pages/love/home',
+      'pages/visiting_card/list',
+      'pages/visiting_card/view',
+      'pages/visiting_card/index',
+      'pages/visiting_card/me',
+      'pages/visiting_card/chat_list',
 //      'pages/tabbar_index',
       'pages/love/shake',
       'pages/love/share',
@@ -267,12 +290,12 @@ export default class VIP extends wepy.app {
       'pages/space/invite_user',
       'pages/product/view',
       'pages/product/list',
-      //'pages/product/share',
+      'pages/product/share',
       'pages/cart/index',
       'pages/cart/checkout',
       'pages/address/list',
       'pages/order/list',
-      //'pages/share',
+      'pages/share',
       'pages/love/me',
       'pages/love/invite_code',
       'pages/love/invite_code_success',
@@ -305,6 +328,8 @@ export default class VIP extends wepy.app {
       'pages/love/privacy_protection',
       'pages/love/settings',
       'pages/love/love_question',
+      'pages/chat/list',
+      'pages/chat/chat_messages',
     ],
     tabBar: {
       color: '#666',
@@ -327,7 +352,7 @@ export default class VIP extends wepy.app {
     },
     window: {
       navigationBarBackgroundColor: '#353535',
-      navigationBarTitleText: '无颜',
+       navigationBarTitleText: '无颜',
       navigationBarTextStyle: 'white',
       backgroundColor: "#fdfdfd",
       backgroundTextStyle: 'dark',
@@ -448,6 +473,12 @@ export default class VIP extends wepy.app {
         return this.checkMobile(to)
       }
     });
+		pageRouter.pushEnter({
+			page: '/pages/chat/chat_messages',
+			script: function (to) {
+				return this.checkMobile(to)
+			}
+		});
   }
 
   onHide() {
@@ -470,7 +501,7 @@ export default class VIP extends wepy.app {
   }
 
   checkMobile(to){
-    if(!this.globalData.love || !this.globalData.love.enabled || (this.globalData.user && this.globalData.user.mobile)){
+    if(!this.globalData.love || (!this.globalData.love.enabled && this.globalData.user && this.globalData.user.name) || (this.globalData.user && this.globalData.user.mobile)){
       return true
     }else{
       let url = '/pages/phone_number_login';
@@ -606,6 +637,7 @@ export default class VIP extends wepy.app {
       globalData.user.sex = res.sex
       globalData.user.birthdate = res.birthdate
       globalData.user.avatar = res.avatar
+      globalData.user.avatarUrl = res.avatarUrl
       globalData.user.qrcode = res.qrcode
       globalData.my_spaces = res.my_spaces
       globalData.my_customers = res.my_customers
@@ -631,6 +663,10 @@ export default class VIP extends wepy.app {
       globalData.is_login = true
 
       self.globalData = globalData
+
+      console.log('chat.receivingSubscriptions。。。');
+      chat.receivingSubscriptions(globalData.user._id, loveSpaceId);
+
     } else {
       const header = {
         'X-User-Id': globalData.user._id,
@@ -917,9 +953,6 @@ export default class VIP extends wepy.app {
   async recordAllowDelete(object_name, owner, space_id){
     space_id = space_id ? space_id : 'guest';
     const object = await this.getObject(object_name, space_id);
-    console.log("recordAllowDelete=========object_name==========", object_name);
-    console.log("recordAllowDelete=========owner==========", owner);
-    console.log("recordAllowDelete=========object==========", object);
     if(!object){
       throw new Error('未在globalData中找到对象：' + object_name);
     }

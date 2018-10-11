@@ -39,11 +39,15 @@ const formatDate = (date, joiner)=>{
     return (new RegExp(":\/\/")).test(filePath)
   };
 
-  const formatImageUrl = (src, baseUrl) => {
+  const formatImageUrl = (src, baseUrl, type) => {
     if((new RegExp(":\/\/")).test(src)){
       return src;
     }else if(src){
-      return baseUrl + "/api/files/images/" + src;
+      if(type === "avatar"){
+        return baseUrl + "/api/files/avatars/" + src;
+      }else{
+        return baseUrl + "/api/files/images/" + src;
+      }
     }
   };
 

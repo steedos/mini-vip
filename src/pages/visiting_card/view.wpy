@@ -1,0 +1,476 @@
+<style lang="less">
+page{
+}
+.clear{
+	clear: both;
+}
+
+.page-btn{
+	text-align: center;
+	font-size: 17px!important;
+	margin-top:20px;
+	.btn-share, .btn-contact{
+		margin: 0px;
+		padding:0;
+		display: inline-block;
+		width: 45%;
+		height: 45px;
+		font-size: 16px;
+		line-height: 45px;
+	}
+	.btn-share{
+		float:left;
+	}
+	.btn-contact {
+		// margin-left: 20px;
+		background-color: #1AAD19!important;
+		color: #fff!important;
+		float:right;
+	}
+}
+
+.panel-box{
+	&.panel-top-box{
+	}
+	padding: 10px  20px;
+	margin-bottom: 10px;
+	.panel-box-title{
+		color: #000;
+	}
+	.panel-box-content{
+		color:#999;
+		margin-top: 5px;
+	}
+	.panel-box-img{
+		margin:0 -20px;
+		background:#EFEEF3;
+		image{
+			width: 100%;
+			margin-top: 10px;
+			display:block;
+		}
+	}
+}
+.friend-list-box{
+	position:relative;
+	display:flex;
+	align-items:center;
+	margin-top: 20px;
+	.friend-list{
+		flex:1;
+		.join-avatar {
+			display: flex;
+			align-items: center;
+			.avatar-container {
+				width: 25px;
+				height: 25px;
+				border-radius: 8px;
+				border: 1px solid #fff;
+				image {
+					border-radius: 8px;
+					width: 100%;
+					height: 100%;
+					border:solid 1px #ddd;
+				}
+			}
+			.avatar-container:not(:last-of-type) {
+				margin-right: 3px;
+			}
+		}
+		.count{
+			color:#999;
+			font-size: 13px;
+		}
+	}
+	.btn-heart{
+		text-align:right;
+		color:#999;
+		.slds-icon{
+			width: 25px;
+			height: 25px;
+			margin:auto;
+		}
+		.btn-heart-label{
+			font-size: 13px;
+			text-align:center;
+		}
+		.btn-heart-count{
+			display: inline;
+			color:#333;
+		}
+	}
+}
+
+.btn-create{
+	width:60%;
+}
+
+.love-card {
+	margin-top: 30px;
+}
+</style>
+
+<template>
+	<view class="page" wx:if="{{is_loaded}}">
+    <chatNotification :args.sync="args"></chatNotification>
+    <to_chat_with :space_id.sync="space_id" :with_user.sync="card_info"></to_chat_with>
+    <view class="page__bd">
+
+			<love_card :card_info.sync="card_info" :card_fields.sync="card_fields" :is_owner.sync="is_owner" :space_id.sync="space_id"/>
+
+			<view class="panel-box panel-top-box" wx:if="{{card_info.company}}">
+				<view class="page-btn">
+					<button class="btn-share" open-type="share" plain="true" type="primary">分享名片</button>
+					<button class="btn-contact" plain="true" type="primary" @tap="addPhoneContact">存入手机通讯录</button>
+					<view class="clear"></view>
+				</view>
+				<view class="friend-list-box">
+					<view class="friend-list">
+						<view class="join-avatar">
+							<block wx:if="{{recent_vieweds.value && recent_vieweds.value.length}}">
+								<repeat for="{{recent_vieweds.value}}" key="index" index="index" item="recent_viewed">
+									<view class="avatar-container">
+										<image class="image" mode="aspectFill" src="{{util.formatAvatarImageUrl(recent_viewed.owner.avatarUrl, baseUrl) || default_avatar}}" />
+									</view>
+								</repeat>
+							</block>
+							<block wx:else>
+								<view class="avatar-container">
+									<image class="image" mode="aspectFill" src="{{default_avatar}}" />
+								</view>
+							</block>
+						</view>
+						<view class="count">
+							{{recent_vieweds["@odata.count"]}}人浏览
+						</view>
+					</view>
+					<view class="btn-heart" @tap="toggleStar">
+						<view class="slds-icon vip_endorsement-{{my_friend.heart ? 'dark' : 'default'}}"></view>
+						<view class="btn-heart-label">
+							靠谱
+							<view class="btn-heart-count">{{card_info.heart_count_label}}</view>
+						</view>
+					</view>
+				</view>
+			</view>
+			<view class="self-introduction panel-box" wx:if="{{card_info.self_introduction}}">
+				<view class="panel-box-title">
+					我的个人简介
+				</view>
+				<view class="panel-box-content">
+					{{card_info.self_introduction}}
+				</view>
+			</view>
+			<view class="self-photo panel-box" wx:if="{{card_info.photos && card_info.photos.length}}">
+				<view class="panel-box-title">
+					我的照片
+				</view>
+				<view class="panel-box-content panel-box-img">
+					<repeat for="{{card_info.photos}}" key="index" index="index" item="item">
+						<image src="{{util.formatImageUrl(item, baseUrl)}}" mode="widthFix" @tap="previewImage({{item}})"/>
+					</repeat>
+				</view>
+			</view>
+			<!-- <view class="panel-box"  @tap="addPhoneContact"  wx:if="{{card_info.mobile2}}">
+				<view class="weui-cells weui-cells_after-title">
+					<view class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+						<view class="weui-cell__bd">存入手机通讯录</view>
+						<view class="weui-cell__ft weui-cell__ft_in-access"></view>
+					</view>
+				</view>
+			</view> -->
+
+			<view class="weui-cells">
+				<navigator wx:if="{{is_owner}}" @tap="goEdit" class="weui-cell weui-cell_access">
+					<view class="weui-cell__bd">
+						<view>编辑我的名片</view>
+					</view>
+					<view class="weui-cell__ft weui-cell__ft_in-access"></view>
+				</navigator>
+				<view @tap="goList" class="weui-cell weui-cell_access">
+					<view class="weui-cell__bd">
+						<view>我的名片夹</view>
+					</view>
+					<view class="weui-cell__ft weui-cell__ft_in-access"></view>
+				</view>
+			</view>
+
+		</view>
+
+	</view>
+</template>
+
+<script>
+	import wepy from 'wepy';
+	import { baseUrl, appId, loveSpaceId } from '@/config';
+	import util from '../../wxs/util.wxs';
+	import love_card from '../../components/love_card';
+	import to_chat_with from '@/components/chat/to_chat_with';
+	import chatNotification from '../../components/chat/notification';
+	import pageRouter from '@/utils/pageRouter';
+	import chatNotificationMixin from '../../mixins/chat_notification';
+
+	export default class VisitingCardView extends wepy.page {
+		config = {
+			navigationBarTitleText: '',
+			enablePullDownRefresh: true
+		};
+
+		components = {
+			love_card: love_card,
+			to_chat_with: to_chat_with,
+			chatNotification: chatNotification
+		};
+
+		mixins = [chatNotificationMixin];
+
+		data = {
+			is_loaded: false,
+			space_id: loveSpaceId,
+			user_id: null,
+			user: null,
+			card_user_id: null,
+			share_from: null,
+			baseUrl: baseUrl,
+			card_info: {},
+			my_friend: {},
+			is_owner: false,
+			default_avatar: 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg',
+			recent_vieweds: { value: [], "@odata.count":0},
+			card_fields: "avatar,name,company,position,mobile2,wechat,work_phone,email2,location,self_introduction,photos"
+		};
+
+		onShow(){
+		this.$invoke('to_chat_with', 'receivingSubscription')
+		}
+
+		onHide(){
+		this.$invoke('to_chat_with', 'stopReceivingSubscription')
+		}
+
+		async onUnload(){
+		this.$invoke('to_chat_with', 'stopReceivingSubscription')
+		}
+
+		wxs = {
+			util: util
+		};
+
+		async onPullDownRefresh() {
+			await this.loadData();
+			wepy.stopPullDownRefresh();
+		}
+
+		async onLoad(e) {
+			this.is_loaded = false;
+			this.$apply();
+			console.log("=====onLoad====e====1==", e);
+			wepy.showShareMenu({
+				withShareTicket: true
+			});
+			wepy.showLoading();
+			e.space_id = loveSpaceId;
+			if (e.scene) {
+				// 朋友圏二维码识别进入的，则取出scene中的share_from
+				let scene = decodeURIComponent(e.scene);
+				let scenes = scene.split('=');
+				e.love = 1;
+				e.share_from = scenes[1];
+				e.qrcode = 1;
+			}
+			this.space_id = e.space_id;
+			await this.$parent.login(e);
+			this.user = this.$parent.globalData.user;
+			this.user_id = this.$parent.globalData.user._id;
+			this.card_user_id = e.card_user_id || this.user_id;
+			// this.card_user_id = "PGcaKBCZPdFBKiQcx";
+			if(this.user_id == this.card_user_id){
+				this.is_owner = true;
+			}
+			await this.loadData();
+			await this.updateRecentViewed();
+			this.is_loaded = true;
+			this.$apply();
+			let title = '名片';
+			if(this.is_owner){
+				title = '我的名片';
+			};
+			wepy.setNavigationBarTitle({title: title});
+			wepy.hideLoading();
+		}
+
+		async refresh(){
+			// 编辑名片后，重新刷新界面数据
+			wepy.showNavigationBarLoading();
+			await this.loadData();
+			this.$apply();
+			if(this.card_info.avatar && this.card_info._id === this.user_id){
+				this.$parent.globalData.user.name = this.card_info.name;
+				this.$parent.globalData.user.avatar = this.card_info.avatar;
+				this.$parent.globalData.user.avatarUrl = this.card_info.avatarUrl;
+			}
+			wepy.hideNavigationBarLoading();
+		}
+
+		onShareAppMessage() {
+			let title = `${this.card_info.name}的名片，请惠存。`;
+			let url = `pages/visiting_card/view?card_user_id=${this.card_user_id}&share_from=${this.user_id}`;
+			return {
+				title: title,
+				path: url
+			};
+		}
+
+		async loadData() {
+			await this.loadCardInfo();
+			await this.loadMyFriend();
+			await this.loadRecentVieweds();
+		}
+
+		async loadCardInfo() {
+			const options = {
+				$filter: `(_id eq '${this.card_user_id}')`,
+				$select: `${this.card_fields},heart_count,avatarUrl`,
+			}
+			const records = await this.$parent.query('users', options, this.space_id);
+			if (records && records.value && records.value[0]) {
+				this.card_info = records.value[0];
+				this.computeHeartCountLabel();
+			}
+		}
+
+		computeHeartCountLabel(){
+			let heart_count = this.card_info.heart_count;
+			if(heart_count){
+				if(heart_count < 1000){
+					this.card_info.heart_count_label = heart_count;
+				}
+				else{
+					this.card_info.heart_count_label = `${(heart_count/1000).toFixed(2)}k`
+				}
+			}
+			else{
+				this.card_info.heart_count_label = 0;
+			}
+		}
+
+		async updateRecentViewed(){
+			if(this.is_owner){
+				return;
+			}
+			await this.$parent.invokeMethod('object_recent_viewed', 'all', {object_name:"users", record_id:this.card_user_id}, this.space_id, 'inc');
+			this.$apply();
+		}
+
+		async loadMyFriend() {
+			if(this.is_owner){
+				return;
+			}
+			let options = {user_b: this.card_user_id, mini_app_id: appId};
+			options.fields = {heart:1,star:1};
+			this.my_friend = await this.$parent.invokeMethod('love_friends', 'all', options, this.space_id, 'getMyFriend');
+			this.$apply();
+		}
+
+		async loadRecentVieweds() {
+			const options = {
+				$filter: `(record/o eq 'users' and record/ids eq '${this.card_user_id}')`,
+				$top: 6,
+				$select: 'owner',
+				$expand: 'owner($select=avatarUrl,name)',
+				$orderby: 'modified desc'
+			}
+			const records = await this.$parent.query('object_recent_viewed', options, this.space_id);
+			if (records && records.value) {
+				this.recent_vieweds = records;
+			}
+		}
+
+		methods = {
+			previewImage(image, event){
+				var baseUrl = this.baseUrl;
+				var current = `${baseUrl}/api/files/images/${image}`;
+				var urls = this.card_info.photos.map((n)=>{
+					return  `${baseUrl}/api/files/images/${n}`;
+				});
+				wx.previewImage({
+					current: current,
+					urls: urls
+				});
+			},
+			goEdit(){
+				if(!this.is_owner){
+					return;
+				}
+				let url = `/pages/record/edit?space_id=${this.space_id}&object_name=users&action=edit&record_id=${this.card_info._id}&title=编辑名片&fields=${this.card_fields}`;
+				pageRouter.navigateTo({
+					url: url
+				});
+			},
+			async addPhoneContact(){
+				wx.addPhoneContact({
+					firstName: this.card_info.name,
+					organization: this.card_info.company,
+					title: this.card_info.position,
+					mobilePhoneNumber: this.card_info.mobile2,
+					weChatNumber: this.card_info.wechat,
+					email: this.card_info.email2,
+					workPhoneNumber: this.card_info.work_phone,
+					addressStreet: this.card_info.location ? this.card_info.location.address : "",
+					success: ()=>{
+						wepy.showToast({
+							title: "添加成功",
+							icon: "none"
+						});
+					}
+				});
+			 },
+			async goCard(){
+				let url = `me`;
+				wepy.switchTab({url: url});
+			},
+			async goList(){
+				let url = `list`;
+				wepy.switchTab({url: url});
+			},
+			async toggleStar(){
+				if(this.is_owner || !this.my_friend._id){
+					wepy.showToast({
+						title: "其他人可以点赞你的名片",
+						icon: "none"
+					});
+					return;
+				}
+				wepy.showLoading();
+				let heart = !!!this.my_friend.heart;
+				let set = { heart:  heart};
+				let updateSuc = await this.$parent.update("love_friends", this.my_friend._id, set, this.space_id);
+				if (updateSuc) {
+					this.my_friend.heart = set.heart;
+					if(heart){
+						if(!this.card_info.heart_count){
+							this.card_info.heart_count = 0;
+						}
+						this.card_info.heart_count += 1;
+					}
+					else{
+						this.card_info.heart_count -= 1;
+					}
+					this.computeHeartCountLabel();
+					this.$apply();
+				}
+				else{
+					wx.showToast({
+						title: "操作失败，请稍后再试",
+						icon: "none"
+					});
+				}
+				wepy.hideLoading();
+			},
+			async goList(){
+				let url = `list`;
+				wepy.switchTab({url: url});
+			}
+		};
+	}
+</script>

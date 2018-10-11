@@ -203,7 +203,7 @@ page {
     <view class="tab-bar">
       <view class="comment-btn action">
         <view class="slds-icon slds-icon--small slds-m-right--x-small">
-          <image class="ion" src="/static/images/ic_menu_sort_nor.png"></image>
+          <image class="ion" src="/static/images/apps_pressed.png"></image>
         </view>
         <view class="text">分类</view>
       </view>
@@ -275,14 +275,14 @@ export default class ProductList extends wepy.page {
     if(e.categories && e.category_id ){
       this.categories = JSON.parse(e.categories)
       this.seleted_id = e.category_id
-      this.filter = `(categories eq '${this.seleted_id}')`;
+      this.filter = `(categories eq '${this.seleted_id}' and status eq true)`;
     }else{
       const options = {
-      $orderby: 'sort_no',
-      $filter: `space eq '${space_id}' and parent eq '全部'`,
-      $count: true,
-      $select: 'name,sort_no'
-    };
+        $orderby: 'sort_no',
+        $filter: `space eq '${space_id}' and parent eq '全部'`,
+        $count: true,
+        $select: 'name,sort_no'
+      };
       const result = await this.$parent.query(
         'vip_product_category',
         options,
@@ -292,7 +292,9 @@ export default class ProductList extends wepy.page {
         // this.seleted_id = result.value[0]._id;
         this.categories = _.union([{_id:0,name:'全部'}],result.value)
         if (this.seleted_id != 0) {
-          this.filter = `(categories eq '${this.seleted_id}')`;
+          this.filter = `(categories eq '${this.seleted_id}' and status eq true)`;
+        } else {
+          this.filter = 'status eq true';
         }
       }
     }
@@ -318,7 +320,7 @@ export default class ProductList extends wepy.page {
     async changeCategory(category_id,category_name,index) {
       this.seleted_id = category_id;
       if (this.seleted_id != 0) {
-        this.filter = `(categories eq '${category_id}')`;
+        this.filter = `(categories eq '${category_id}' and status eq true)`;
       }else {
         this.filter = ''
       }

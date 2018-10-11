@@ -1,0 +1,109 @@
+<style type="less">
+    .input {
+        color: #7b7b7b;
+        position: fixed;
+        bottom: 0;
+        height: 50px;
+        width: 100%;
+        border-top: 1px solid #d8d8d8;
+        background-color: #ffffff;
+        font-size: 11px;
+        .input_layout {
+            position: relative;
+            margin-top: 3px;
+            margin-left: 5px;
+          .input_icon {
+                position: absolute;
+                width: 45px;
+                height: 45px;
+                &.voice {
+                    left: 10px;
+                }
+                &.face {
+                    right: 60px;
+                }
+                &.plus {
+                    right: 10px;
+                }
+            }
+            .input_text {
+                border-bottom: none;
+                padding-left: 10px;
+                margin-right: 55px;
+                height: 40px;
+                font-size: 16px;
+                /*border-radius: 5px;*/
+                color: #000;
+                &.focus {
+                    border-bottom: none;
+                }
+            }
+            .send {
+                background-color: #1aad19;
+                display: inline-block;
+                box-sizing: border-box;
+                position: absolute;
+                border: 1px solid #1aad19;
+                border-radius: 3px;
+                right:5px;
+                width:45px;
+                height: 37px;
+                line-height: 36px;
+                color: white;
+                text-align: center;
+                font-size: 15px;
+                margin-top:4px;
+                &.hidden {
+                    display: none;
+                }
+            }
+        }
+    }
+</style>
+<template>
+    <view class="input">
+        <view class="input_layout">
+          <!--<image class="input_icon voice" src="../images/voice.png"></image>-->
+          <!--<image class="input_icon face" src="../images/face.png"></image>-->
+          <!--<image class="input_icon plus" src="../images/plus.png"></image>-->
+            <view class="send" @tap="send">发送</view>
+            <input @input="input" value="{{readyToSend}}" class="input_text{{focusFlag ? ' focusFlag' : ''}}" @focus="focus" @blur="blur" @type="input"></input>
+        </view>
+    </view>
+</template>
+<script>
+    import wepy from 'wepy';
+
+    export default class ChatInput extends wepy.component {
+
+        data = {
+            focusFlag: false,
+            readyToSend: ''
+        };
+
+        methods = {
+            send (evt) {
+                if (this.readyToSend) {
+                    this.$invoke('../chatboard', 'sendMessage', this.readyToSend);
+                }
+            },
+            input (evt) {
+                this.readyToSend = evt.detail.value;
+            },
+            focus (evt) {
+                this.focusFlag = true;
+                this.$invoke('../chatboard', 'fixPosition', this.focusFlag);
+            },
+            blur (evt) {
+                this.focusFlag = false;
+                this.$invoke('../chatboard', 'fixPosition', this.focusFlag);
+            },
+            clear () {
+                this.readyToSend = '';
+            }
+        };
+
+        onLoad () {
+        }
+    }
+</script>
