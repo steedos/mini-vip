@@ -330,7 +330,7 @@
                           <view class='weui-cell weui-cell_access' data-value="{{values[item.name]}}">
                             <view class="weui-cell__required" wx:if="{{util.isRequired(args.action, item)}}"></view>
                             <view class="weui-cell__hd" >
-                              <view class="weui-label">{{item.label}}</view>
+                              <view class="weui-label">{{recordingText ? recordingText : item.label}}</view>
                             </view>
                             <view class="weui-cell__bd" style="text-align:right;">
                               <block wx:if="{{values[item.name]}}">
@@ -528,6 +528,7 @@
       hiddenBtn: false,
       _changeValue: {},
       isRecording: false,
+      recordingText: "",
       recorderManager: null
     };
 
@@ -1439,14 +1440,22 @@
         this.$apply();
         this.recorderManager.onStart(() => {
           this.isRecording = true;
+          this.recordingText = "正在聆听中...";
           this.$apply();
-          console.log('recorder start============1')
+          console.log('recorder onStart============1')
         });
         this.recorderManager.onStop((res) => {
           this.isRecording = false;
-          console.log('recorder stop============2', res)
+          this.recordingText = "";
+          console.log('recorder onStop============2', res)
           const { tempFilePath } = res
           console.log('===========tempFilePath=========', tempFilePath)
+          this.$apply();
+        });
+        this.recorderManager.onFrameRecorded((res) => {
+          console.log('recorder onFrameRecorded============3', res)
+          const { frameBuffer } = res
+          console.log('frameBuffer.byteLength', frameBuffer.byteLength)
           this.$apply();
         });
         this.recorderManager.start({
