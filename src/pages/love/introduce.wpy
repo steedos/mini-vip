@@ -283,7 +283,7 @@ page {
         <view class="wrapper">
           <view class="bg-image"></view>
           <view class="avatar-container">
-            <image class="avatar" mode="aspectFill" src="{{util.formatImageUrl(avatar, baseUrl) || 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg'}}" @tap.stop="uploadImage()"/>
+            <image class="avatar" mode="aspectFill" src="{{util.formatAvatarImageUrl(avatar, baseUrl) || 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg'}}" @tap.stop="uploadImage()"/>
             <view class="sex-container {{about_me.sex == '男' ? 'boy' : 'girl'}}">
               <image wx:if="{{about_me.sex == '男'}}" class="sex-img" mode="aspectFill" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/boy.png"></image>
               <image wx:else class="sex-img" mode="aspectFill" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/girl.png"></image>
@@ -642,7 +642,7 @@ export default class loveIntroduce extends wepy.page {
   async loadCustomer() {
     const a_options = {
       $filter: `(owner eq '${this.userId}' and space eq '${this.space_id}')`,
-      $expand: 'owner($select=name,profile)'
+      $expand: 'owner($select=name,profile,avatarUrl)'
     }
     const result = await this.$parent.query('vip_customers', a_options, this.space_id);
     const customer = result.value[0];
@@ -680,19 +680,11 @@ export default class loveIntroduce extends wepy.page {
 
     this.name = customer.owner.name;
     if (!this.cover) {
-      if (customer.cover) {
-        this.cover = customer.cover;
-      } else {
-        this.cover = 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/bg-star.jpg';
-      }
+      this.cover = 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/bg-star.jpg';
     }
 
     if (!this.avatar) {
-      if (customer.avatar) {
-        this.avatar = customer.avatar;
-      } else {
-        this.avatar = customer.owner.profile.avatar;
-      }
+      this.avatar = customer.owner.avatarUrl;
     }
   }
   
@@ -794,8 +786,9 @@ export default class loveIntroduce extends wepy.page {
           formData.height = imageInfo.height;
           formData.orientation = imageInfo.orientation;
           formData.type = imageInfo.type;
+          let fileCollection = isCover ? "images" : "avatars";
           const fileResult = await wepy.uploadFile({
-            url: `${this.baseUrl}/s3/images`,
+            url: `${this.baseUrl}/s3/${fileCollection}`,
             filePath: tempFilePaths[0],
             name: 'file',
             formData: formData,
@@ -828,8 +821,7 @@ export default class loveIntroduce extends wepy.page {
           let storageSet = {};
           storageSet[storageKey] = fileId;
 
-          let updateSuc = await this.$parent.update("vip_customers", this.current_customer._id, storageSet, this.space_id);
-  
+          let updateSuc = await this.$parent.update("users", this.userId, storageSet, this.space_id);
           if (!updateSuc) {
             wx.showToast({
               title: "图片上传失败，请稍后再试",
