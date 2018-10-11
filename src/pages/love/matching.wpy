@@ -270,8 +270,7 @@ import wepy from 'wepy';
 import { baseUrl } from '@/config';
 import util from '../../wxs/util.wxs';
 import recordList from '../../mixins/record_list';
-import { baseMaterialUrl } from '@/config';
-import { loveSpaceId } from '@/config';
+import { loveSpaceId, baseMaterialUrl, appId } from '@/config';
 import pageRouter from '@/utils/pageRouter';
 import req from '@/network';
 import _ from 'underscore';
@@ -432,16 +431,16 @@ export default class Matching extends wepy.page {
 
   getQueryFilter() {
     const user_id = this.$parent.globalData.user._id;
-    let filter = '';
+    let filter = `mini_app_id eq '${appId}' and `
     const filterEnable = wepy.getStorageSync('matching_filter_enable');
     if (this.open_group_id === '-1') {
-      filter = `(owner eq '${user_id}' and match ge 0)`;
+      filter += `(owner eq '${user_id}' and match ge 0)`;
     } else if (this.open_group_id) {
-      filter = `(owner eq '${user_id}' and match ge 0 and open_groups eq '${
+      filter += `(owner eq '${user_id}' and match ge 0 and open_groups eq '${
         this.open_group_id
       }')`;
     } else {
-      filter = `(owner eq '${user_id}' and match ge 0)`;
+      filter += `(owner eq '${user_id}' and match ge 0)`;
     }
     if (filterEnable) {
       filter += ' and is_looking_for eq true';

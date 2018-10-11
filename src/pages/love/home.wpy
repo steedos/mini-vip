@@ -229,9 +229,9 @@ page {
 import wepy from 'wepy';
 import { loveSpaceId } from '../../config/index.js';
 import req from '@/network';
-import _ from 'underscore'
-import { baseUrl, appId } from '@/config'
-import pageRouter from '@/utils/pageRouter'
+import _ from 'underscore';
+import { baseUrl, appId } from '@/config';
+import pageRouter from '@/utils/pageRouter';
 import userHeader from '../../components/user_header';
 import util from '../../wxs/util.wxs';
 
