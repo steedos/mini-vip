@@ -363,8 +363,13 @@
           });
           return;
         }
+        let avatarUrl = this.$parent.globalData.user.avatarUrl;
+        if(avatarUrl.startsWith("/")){
+          avatarUrl = this.baseUrl + avatarUrl;
+        }
+        console.log("=======downloadFile==avatarUrl==========", avatarUrl);
         const avatarRes = await wepy.downloadFile({
-          url: this.$parent.globalData.user.avatar
+          url: avatarUrl
         })
         let path = `pages/love/index`;
         const userId = this.$parent.globalData.user._id;
@@ -382,6 +387,7 @@
           this.$apply();
           return false;
         });
+        console.log("=======share==========codeImgRes====", codeImgRes);
         if(!codeImgRes){
           wepy.showToast({
             title: "小程序码生成失败",
