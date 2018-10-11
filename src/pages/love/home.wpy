@@ -179,10 +179,10 @@ page {
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
           </view>
         </view>
-        <block wx:if="{{recommend_lover.length}}">
+        <block wx:if="{{recommend_lovers.length}}">
           <view class="weui-cells group recommend-lover">
             <view class="recommend-title">今日推荐</view>
-              <repeat for="{{recommend_lover}}" key="index" index="index" item="lover">
+              <repeat for="{{recommend_lovers}}" key="index" index="index" item="lover">
                 <view wx:if="{{lover.owner.name}}" class="lover" @tap="goRecommendDetail({{lover.owner._id}})">
                   <view class="container">
                     <image mode="aspectFit" src="{{lover.owner.profile.avatar || 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg'}}"></image>
@@ -230,7 +230,7 @@ import wepy from 'wepy';
 import { loveSpaceId } from '../../config/index.js';
 import req from '@/network';
 import _ from 'underscore'
-import { baseUrl } from '@/config';
+import { baseUrl, appId } from '@/config'
 import pageRouter from '@/utils/pageRouter'
 import userHeader from '../../components/user_header';
 import util from '../../wxs/util.wxs';
@@ -260,7 +260,7 @@ export default class LoveHome extends wepy.page {
     baseUrl: baseUrl,
     showLoveMatch: false,
     about_me: {},
-    recommend_lover:[]
+    recommend_lovers:[]
   };
 
   onShareAppMessage(res) {
@@ -277,7 +277,7 @@ export default class LoveHome extends wepy.page {
     const self = this;
     wx.showNavigationBarLoading();
     await this.loadAboutMe();
-    await this.loadGroups();
+    // await this.loadGroups();
     await this.loadFriendList();
     await this.loadLovers();
 		this.$apply();
@@ -315,7 +315,7 @@ export default class LoveHome extends wepy.page {
 
     await this.loadAboutMe();
     await this.loadLovers();
-    await this.loadGroups();
+    // await this.loadGroups();
     await this.loadFriendList();
 
     let user = this.$parent.globalData.user;
@@ -394,9 +394,9 @@ export default class LoveHome extends wepy.page {
         this.space_id
       );
       if (lovers && lovers.value) {
-        this.recommend_lover = lovers.value
+        this.recommend_lovers = lovers.value
       } else {
-        this.recommend_lover = [];
+        this.recommend_lovers = [];
       }
       this.$apply();
     }
@@ -405,7 +405,7 @@ export default class LoveHome extends wepy.page {
   async loadFriendList() {
     const user_id = this.$parent.globalData.user._id;
     const options = {
-      $filter: `(owner eq '${user_id}' and match ge 0)`,
+      $filter: `(mini_app_id eq '${appId}' and owner eq '${user_id}' and match ge 0)`,
       $top: 5,
       $select: 'user_b',
       $expand: 'user_b($select=profile,name)',
@@ -428,7 +428,7 @@ export default class LoveHome extends wepy.page {
   async loadGroups() {
     const user_id = this.$parent.globalData.user._id;
     const options = {
-      $filter: `(users eq '${user_id}')`,
+      $filter: `(mini_app_id eq '${appId}' and users eq '${user_id}')`,
       $select: 'open_group_id,users',
       $orderby: 'modified desc'
     };
