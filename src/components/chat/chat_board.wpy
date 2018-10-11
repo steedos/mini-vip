@@ -160,7 +160,7 @@
     <view class="loading-view" wx:if="{{loading}}"><view class="lds-ring"><view></view><view></view><view></view><view></view></view></view>
     <block wx:for="{{messages}}" wx:key="index" wx:for-index="index" wx:for-item="item">
       <view class="chat-event" wx:if="{{item.display_time}}">
-        <view class="board-time">{{util.formatDateMini(item.created)}}</view>
+        <view class="board-time">{{util.formatChatDateMini(item.created)}}</view>
       </view>
       <view id="i_{{item._id}}" class="bubble-container" wx:if="{{ item.owner._id != user._id }}">
         <view class="icon">
