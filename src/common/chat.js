@@ -116,7 +116,7 @@ class ChatAPI {
 			$top: top || 15,
 			$filter: `(related_to/o eq 'chat_rooms') and (related_to/ids eq '${room_id}')`,
 			$orderby: 'created desc',
-			$select: 'name,type,created,owner,display_time',
+			$select: 'name,type,created,owner',
 			$expand: 'owner($select=name,avatarUrl)'
 		};
 
@@ -129,15 +129,20 @@ class ChatAPI {
 
 	getNewMessage(room_id, space, timestamp) {
 		let queryOptions = {
-			$filter: `(related_to/o eq 'chat_rooms') and (related_to/ids eq '${room_id}') and created gt ${timestamp}`,
+			$filter: `(related_to/o eq 'chat_rooms') and (related_to/ids eq '${room_id}')`,
 			$orderby: 'created desc',
-			$select: 'name,type,created,owner,display_time',
+			$select: 'name,type,created,owner',
 			$expand: 'owner($select=name,avatarUrl)'
 		};
+
+		if(timestamp){
+			queryOptions.$filter = `(related_to/o eq 'chat_rooms') and (related_to/ids eq '${room_id}') and created gt ${timestamp}`;
+		}
+
 		return ODataClinet.query('chat_messages', queryOptions, space)
 	}
 
-	async msg(room_id, msg, type = 'text', space, user_id, display_time) {
+	async msg(room_id, msg, type = 'text', space, user_id) {
 		let data = {
 			related_to: {
 				o: "chat_rooms",
@@ -145,8 +150,7 @@ class ChatAPI {
 			},
 			name: msg,
 			type: 'text',
-			owner: user_id,
-			display_time: display_time
+			owner: user_id
 		};
 
 		const res = await ODataClinet.insert('chat_messages', data, space);

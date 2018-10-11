@@ -279,6 +279,16 @@
       if(!this.setInterval){
         this.setInterval = setInterval(async ()=>{
           const newMessage = (await chat.getNewMessage(this.room_id, this.space_id, this.timestamp)).value.reverse();
+					let lastMessage = this.messages.length > 0 ? _.last(this.messages) :null;
+					_.forEach(newMessage, (message)=>{
+						if(this.loadedLastMesssage && !lastMessage){
+							message.display_time = true
+						}else{
+							message.display_time = this.displayTime(lastMessage, message)
+						}
+						lastMessage = message;
+					});
+
           this.messages = _.uniq(this.messages.concat(newMessage), true, (a)=>{
             return a._id
           })
@@ -326,13 +336,29 @@
 
       let messages;
       try {
-        messages = (await chat.getHistory(this.room_id, space_id)).value.reverse();
+				const res = await chat.getHistory(this.room_id, space_id);
+        messages = res.value.reverse();
+        if(res["@odata.count"] == messages.length){
+					this.loadedLastMesssage = true
+				}
       } catch (e) {
         messages = null;
         console.error('getHistory fail');
         console.log(e);
       }
       if (messages) {
+
+      	let lastMessage = null;
+      	_.forEach(messages, (message)=>{
+					if(this.loadedLastMesssage && !lastMessage){
+//						console.log('lastMessage', lastMessage)
+						message.display_time = true
+					}else{
+						message.display_time = this.displayTime(lastMessage, message)
+					}
+					lastMessage = message;
+				});
+
         this.messages = messages;
 
         if(messages.length > 0){
@@ -351,6 +377,14 @@
       this.$apply();
     }
 
+		displayTime(lastMessage, message){
+    	if(!lastMessage){
+    		return false;
+			}
+			const difference = (new Date(message.created)).getTime() - new Date(lastMessage.created).getTime();
+			return difference > 5 * 60 * 1000
+		}
+
     getDisplayTime(){
       if(this.messages.length < 1){
        return true;
@@ -362,15 +396,23 @@
 
     async sendMessage(msg) {
 
-      let display_time = this.getDisplayTime();
+//      let display_time = this.getDisplayTime();
 
-      let msgObj = await chat.sendMsg(this.room_id, msg, 'text',this.space_id, this.user._id, display_time);
+      let msgObj = await chat.sendMsg(this.room_id, msg, 'text',this.space_id, this.user._id);
       msgObj.owner = {
         _id: this.user._id,
         name: this.user.name,
         avatarUrl:this.user.avatarUrl
       };
       this.toView = msgObj._id;
+
+			let lastMessage = this.messages.length > 0 ? _.last(this.messages) :null;
+			if(lastMessage){
+				msgObj.display_time = this.displayTime(lastMessage, msgObj);
+			}else{
+				msgObj.display_time = true;
+			}
+
       this.messages.push(msgObj);
       this.$apply();
       this.$invoke('../myinput', 'clear');
@@ -400,20 +442,33 @@
 
         this.loading = true;
         this.$apply();
-
         const messages = (await chat.getHistory(this.room_id, this.space_id, 10, `created lt ${this.historyTimestamp}`)).value.reverse();
 //        this.toView = _.first(this.messages)._id;
         if (messages) {
+					let lastMessage = this.messages.length > 0 ? _.first(this.messages) :null;
           this.messages.splice(0, 0, ...messages);
           this.messages = _.uniq(this.messages, true, (a)=>{
             return a._id
           });
           if(messages.length > 0){
+						_.forEach(messages, (message)=>{
+							if(this.loadedLastMesssage && !lastMessage){
+//								console.log('loadHMessage', lastMessage)
+								message.display_time = true
+							}else{
+								message.display_time = this.displayTime(lastMessage, message)
+							}
+							lastMessage = message;
+						});
+
             this.toView = _.last(messages)._id;
             this.historyTimestamp = _.first(messages).created;
           }
 
           if(messages.length === 0){
+						if(lastMessage){
+							this.messages[0].display_time = true
+						}
             this.loadedLastMesssage = true
           }
         }
