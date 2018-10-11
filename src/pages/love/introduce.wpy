@@ -834,14 +834,10 @@ export default class loveIntroduce extends wepy.page {
               this.avatar = tempSrc;
             }
           } else {
-            let my_customers = this.$parent.globalData.my_customers;
-            my_customers = my_customers.map(c => {
-              if (c.space == loveSpaceId) {
-                c[storageKey] = fileId;
-              }
-              return c
-            })
-            this.$parent.globalData.my_customers = my_customers;
+            if(storageKey == "avatar"){
+              this.$parent.globalData.user.avatar = fileId;
+              this.$parent.globalData.user.avatarUrl = "/api/files/avatars/" + fileId;
+            }
           }
           this.$apply();
           wepy.hideLoading();
