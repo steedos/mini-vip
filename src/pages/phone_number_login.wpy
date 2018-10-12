@@ -142,7 +142,7 @@
 
     async onLoad(e){
 
-    	if(this.$parent.globalData.love && this.$parent.globalData.love.enabled){
+    	if(this.$parent.globalData.mini_app && this.$parent.globalData.mini_app.enabled){
 				this.enabledPhoneLogin = true;
 			}
 

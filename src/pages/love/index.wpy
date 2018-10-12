@@ -103,7 +103,7 @@ export default class LoveIndex extends wepy.page {
     console.log("this.space_id============", this.space_id);
 		await this.$parent.login(e);
 
-		const love = this.$parent.globalData.love;
+		const love = this.$parent.globalData.mini_app;
 		if (love && love.enabled) {
 			this.showLoveBtn = true;
 			this.$apply();

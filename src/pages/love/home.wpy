@@ -307,7 +307,7 @@ export default class LoveHome extends wepy.page {
     this.space_id = e.space_id;
     await this.$parent.login(e);
     this.user_id = this.$parent.globalData.user._id;
-    const love = this.$parent.globalData.love;
+    const love = this.$parent.globalData.mini_app;
     if (love && love.enabled) {
 			this.showLoveMatch = true;
 			this.$apply();
