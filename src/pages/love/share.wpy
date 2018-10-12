@@ -347,7 +347,7 @@
     }
 
     async generateFriendCard() {
-      if(this.$parent.globalData.user.avatar) {
+      if(this.$parent.globalData.user.avatarUrl) {
         const imageUrl = `https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/share_me.png`;
         const imgRes = await wepy.downloadFile({
           url: imageUrl
