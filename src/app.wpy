@@ -490,7 +490,7 @@ export default class VIP extends wepy.app {
   }
 
   checkMobile(to){
-    if(!this.globalData.love || (!this.globalData.love.enabled && this.globalData.user && this.globalData.user.name) || (this.globalData.user && this.globalData.user.mobile)){
+    if(!this.globalData.mini_app || (!this.globalData.mini_app.enabled && this.globalData.user && this.globalData.user.name) || (this.globalData.user && this.globalData.user.mobile)){
       return true
     }else{
       let url = '/pages/phone_number_login';
@@ -630,7 +630,7 @@ export default class VIP extends wepy.app {
       globalData.user.qrcode = res.qrcode
       globalData.my_spaces = res.my_spaces
       globalData.my_customers = res.my_customers
-      globalData.love = res.love
+      globalData.mini_app = res.mini_app
       console.log("===============login============globalData.my_customers", globalData.my_customers);
 
       for (let customer of res.my_customers) {
