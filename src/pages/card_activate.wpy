@@ -179,18 +179,7 @@ export default class cardActivate extends wepy.page {
 //      };
 //      await this.$parent.update('vip_card', e.card_id, data, this.space_id);
     } else {
-      const data = {
-        $filter: `owner eq '${this.$parent.globalData.user._id}'`,
-        $expand: 'owner($select=name)',
-        $count: true,
-        $select: 'is_actived,name'
-      };
-      const card = await this.$parent.query('vip_card', data, this.space_id);
-      if (!card.value[0]) {
-        await this.addVipCard();
-      } else {
-        this.card_id = card.value[0]._id;
-      }
+      this.card_id = card.value[0]._id;
     }
     const user = this.$parent.globalData.user;
     this.sexValue = user.sex;

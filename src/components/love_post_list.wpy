@@ -1,0 +1,111 @@
+<style lang="less">
+.post {
+	display: flex;
+	flex-direction: column;
+	background: #fff;
+	padding: 0 20rpx;
+	margin-bottom: 30rpx;
+
+	.post-header {
+		display: flex;
+		align-items: center;
+		padding: 20rpx 0;
+
+		image {
+			display: block;
+			width: 1.5rem;
+			height: 1.5rem;
+			border-radius: 50%;
+			margin-right: 20rpx;
+		}
+		.user-name {
+			flex: 1;
+		}
+	}
+
+	.post-body {
+		display: flex;
+		flex-direction: column;
+		padding: 20rpx 0;
+
+		.post-name {
+			padding-bottom: 20rpx;
+		}
+	}
+
+	.img-container {
+		display: flex;
+		flex-wrap: wrap;
+
+		image {
+			width: 400rpx;
+			height: 400rpx;
+			display: block;
+		}
+	
+		.img-box {
+			position: relative;
+			flex: 1;	
+		}
+	}
+
+}
+
+</style>
+
+<template>
+<view>
+	<block wx:if="{{list.length}}">
+		<repeat for="{{list}}" index="index" key="index" item="post">
+			<view class="post">
+				<view class="post-header">
+					<image src="{{post.owner.profile.avatar}}" mode="aspectFit"></image>
+					<view class="user-name">{{post.owner.name}}</view>
+				</view>
+				<view class="post-body" @tap="goDetail({{post._id}}, {{post.space._id}})">
+					<view class="post-name">{{post.name}}</view>
+					<view class="img-container">
+						<image wx:if="{{post.images && post.images.length}}" mode="aspectFill" src="{{util.formatImageUrl(post.images[0], baseUrl)}}"></image>
+					</view>
+				</view>
+			</view>
+		</repeat>
+	</block>
+</view>	
+</template>
+
+<script>
+import wepy from 'wepy';
+import { baseUrl } from '@/config';
+import req from '@/network';
+import { serverAPI } from '@/server';
+import { loveSpaceId } from '@/config'
+import util from '../wxs/util.wxs'
+
+export default class lovePostList extends wepy.component {
+	props = {
+    list: {
+      type: Array,
+      default: []
+    }
+	}
+
+	data = {
+		baseUrl: baseUrl
+	}
+	
+	wxs = {
+		util: util
+	}
+
+	methods = {
+		goDetail(post_id, space_id){
+      let url = `../post/view?post_id=${post_id}&space_id=${space_id}`;
+      wx.navigateTo({
+        url: url
+      });
+    },
+	}
+
+}
+</script>

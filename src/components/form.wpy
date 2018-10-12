@@ -1,5 +1,23 @@
 <style lang="less">
   .record-form{
+    .weui-cells{
+
+      &:before{
+        border-top: 0px;
+      }
+
+      &:after{
+        border-bottom: 0px;
+      }
+    }
+
+    .slds-icon-action-close{
+      padding: 0.4rem;
+    }
+
+    .weui-cell__ft_in-access{
+      display: none;
+    }
     .weui-media-box__desc{
       text-overflow:unset;
       overflow:visible;
@@ -16,10 +34,10 @@
       margin: 15px 15px 0;
     }
 
-    .save-btn{
-      background: #1B9AF7;
-      color: #fff;
-    }
+    /*.save-btn{*/
+      /*background: #1B9AF7;*/
+      /*color: #fff;*/
+    /*}*/
 
     /*先注释掉此样式，否则一行显示的特别高*/
     /*.weui-cell__ft{*/
@@ -131,8 +149,56 @@
 
     .weui-cell__required{
       text-align:left;
-      color:#999;
+      color:red;
+      position:absolute;
+      left: 5px;
+      top: 14px;
     }
+
+    .weui-cell__required:before{
+      content:"*";
+      color:red;
+      padding-left: 3px;
+    }
+
+    .weui-uploader__title{
+      padding-left: 6px;
+    }
+
+    .weui-cell_switch,.field-textarea{
+      .weui-cell__bd{
+        padding-left: 6px;
+      }
+    }
+
+    .weui-cell__bd{
+      color:#999;
+      .weui-cell__ft{
+        color: #000000;
+        text-align: left;
+      }
+    }
+
+    .weui-cell__hd{
+      padding-left: 6px;
+      .weui-label{
+        color:#999;
+      }
+    }
+
+    .weui-uploader__input-box{
+      margin: 0px;
+      height: 57px;
+      width: 57px;
+      border-radius: 5px;
+    }
+
+    .weui-uploader__img{
+      height: 59px;
+      width: 59px;
+      border-radius: 5px;
+    }
+
   }
 </style>
 <template>
@@ -162,9 +228,10 @@
                               </view>
                               <view class="weui-uploader__bd">
                                 <repeat for="{{values[item.name]}}" item="image_id">
-                                  <view class="weui-uploader__file">
+                                  <view class="weui-uploader__file" bindtap="previewImage"
+                                        id="{{image_id}}" data-key="{{item.name}}">
                                     <image class="weui-uploader__img" mode="aspectFill"
-                                           src="{{util.formatImageUrl(image_id, baseUrl)}}"/>
+                                           src="{{util.formatImageUrl(image_id, baseUrl)}}" data-key="{{item.name}}"/>
                                   </view>
                                 </repeat>
                               </view>
@@ -187,68 +254,112 @@
                       </block>
                     </block>
                     <block wx:else>
-                      <view class='weui-cell weui-cell_access' hover-class='weui-grid_active' data-value="{{values[item.name]}}" data-edit="{{!(item.readonly || !_record_allowEdit || args.action === 'read')}}" @tap.stop="navigateTo({{item}})">
-                        <block wx:if="{{util.showRequired(args.action, item, values[item.name])}}">
-                          <view class="weui-cell__hd">
-                            <view class="weui-label">{{item.label}}</view>
-                          </view>
-                          <view class="weui-cell__bd">
-                            <view class="weui-cell__required" >必填</view>
-                          </view>
-                        </block>
-                        <block wx:else>
-                          <view class="weui-cell__bd">
-                            <view class="weui-uploader">
-                              <view class="weui-uploader__hd">
-                                <view class="weui-uploader__title">{{item.label}}</view>
+                      <view class='weui-cell weui-cell_access' data-value="{{values[item.name]}}" data-edit="{{!(item.readonly || !_record_allowEdit || args.action === 'read')}}">
+                        <view class="weui-cell__required" wx:if="{{util.isRequired(args.action, item)}}"></view>
+                        <view class="weui-cell__bd">
+                          <view class="weui-uploader">
+                            <view class="weui-uploader__hd" style="padding-bottom: 0px">
+                              <view class="weui-uploader__title">{{item.label}}</view>
+                              <view class="weui-uploader__info" wx:if="{{item.max > 0}}">{{values[item.name].length || 0}}/{{item.max}}</view>
+                            </view>
+                            <view class="weui-uploader__bd" style="padding-top: 10px">
+                              <view class="weui-uploader__files" id="uploaderFiles">
+                                <repeat for="{{values[item.name]}}" key="*this" item="file" index="index">
+                                  <view class="weui-uploader__file" wx:if="{{item.type === 'image'}}" bindtap="previewImage"
+                                        id="{{file}}" data-key="{{item.name}}" style="position:relative;">
+                                    <image class="weui-uploader__img" src="{{util.formatImageUrl(file, baseUrl)}}"
+                                           mode="aspectFill" data-key="{{item.name}}"/>
+                                    <view style="position: absolute;top: -.4em;right: -.4em;" @tap.stop="clearImage" data-key="{{item.name}}">
+                                      <view class="slds-icon-action-close" style="width: 4px;height: 4px" data-index="{{index}}" data-key="{{item.name}}"></view>
+                                    </view>
+                                  </view>
+                                  <view class="weui-uploader__file" wx:elif="{{item.type === 'video'}}" bindtap="previewImage"
+                                        id="{{file}}">
+                                    <image class="weui-uploader__img" src="{{util.formatImageUrl(file, baseUrl)}}"
+                                           mode="aspectFill"/>
+                                  </view>
+                                  <view class="weui-uploader__file" wx:elif="{{item.type === 'audio'}}" bindtap="previewImage"
+                                        id="{{file}}">
+                                    <image class="weui-uploader__img" src="{{util.formatImageUrl(file, baseUrl)}}"
+                                           mode="aspectFill"/>
+                                  </view>
+                                </repeat>
                               </view>
-                              <view class="weui-uploader__bd">
-                                <view class="weui-uploader__files" id="uploaderFiles">
-                                  <repeat for="{{values[item.name]}}" key="*this" item="file">
-                                    <view class="weui-uploader__file" wx:if="{{item.type === 'image'}}" bindtap="previewImage"
-                                          id="{{file}}">
-                                      <image class="weui-uploader__img" src="{{util.formatImageUrl(file, baseUrl)}}"
-                                             mode="aspectFill"/>
-                                    </view>
-                                    <view class="weui-uploader__file" wx:elif="{{item.type === 'video'}}" bindtap="previewImage"
-                                          id="{{file}}">
-                                      <image class="weui-uploader__img" src="{{util.formatImageUrl(file, baseUrl)}}"
-                                             mode="aspectFill"/>
-                                    </view>
-                                    <view class="weui-uploader__file" wx:elif="{{item.type === 'audio'}}" bindtap="previewImage"
-                                          id="{{file}}">
-                                      <image class="weui-uploader__img" src="{{util.formatImageUrl(file, baseUrl)}}"
-                                             mode="aspectFill"/>
-                                    </view>
-                                  </repeat>
-                                </view>
+                              <view class="weui-uploader__input-box" wx:if="{{!item.max || values[item.name].length < item.max}}">
+                                <view class="weui-uploader__input" bindtap="chooseFile({{item}})" ></view>
                               </view>
                             </view>
                           </view>
-                        </block>
-                        <view class="weui-cell__ft weui-cell__ft_in-access" wx:if="{{!(item.readonly || !_record_allowEdit || args.action === 'read')}}"></view>
+                        </view>
+                        <!--<view class="weui-cell__ft weui-cell__ft_in-access" wx:if="{{!(item.readonly || !_record_allowEdit || args.action === 'read')}}"></view>-->
                       </view>
                     </block>
                   </block>
                   <block wx:else>
                     <block wx:if="{{!item._top}}">
-                      <view class='weui-cell weui-cell_access' hover-class='weui-grid_active' data-value="{{values[item.name]}}" data-edit="!(item.readonly || !_record_allowEdit || args.action === 'read')}}" @tap.stop="navigateTo({{item}})">
-                        <view class="weui-cell__hd" >
-                          <view class="weui-label">{{item.label}}</view>
+
+                      <block wx:if="{{item.type === 'image'}}">
+                        <block wx:if="{{!(item.readonly || !_record_allowEdit || args.action === 'read')}}">
+                          <view class='weui-cell weui-cell_access' data-value="{{values[item.name]}}" bindtap="chooseFile({{item}})">
+                            <view class="weui-cell__required" wx:if="{{util.isRequired(args.action, item)}}"></view>
+                            <view class="weui-cell__hd" >
+                              <view class="weui-label">{{item.label}}</view>
+                            </view>
+                            <view class="weui-cell__bd" style="text-align:right;">
+                              <block wx:if="{{values[item.name]}}">
+                                <image mode="aspectFill" src="{{util.formatImageUrl(values[item.name], baseUrl)}}" class="weui-uploader__img" style="display:block;float:right"
+                                       id="{{values[item.name]}}" data-key="{{item.name}}"/>
+                              </block>
+                              <block wx:else>
+                                <view class="weui-cell__ft weui-uploader__input-box" style="display:block;float:right" >
+                                  <view class="weui-uploader__input"></view>
+                                </view>
+                              </block>
+                            </view>
+                          </view>
+                        </block>
+                        <block wx:else>
+                          <view class='weui-cell weui-cell_access' data-value="{{values[item.name]}}" bindtap="previewImage" data-key="{{item.name}}">
+                            <view class="weui-cell__required" wx:if="{{util.isRequired(args.action, item)}}"></view>
+                            <view class="weui-cell__hd" >
+                              <view class="weui-label">{{item.label}}</view>
+                            </view>
+                            <view class="weui-cell__bd" style="text-align:right;">
+                              <block wx:if="{{values[item.name]}}">
+                                <image mode="aspectFill" src="{{util.formatImageUrl(values[item.name], baseUrl)}}" class="weui-uploader__img" style="display:block;float:right"
+                                       id="{{values[item.name]}}" data-key="{{item.name}}"/>
+                              </block>
+                            </view>
+                          </view>
+                        </block>
+
+                      </block>
+                      <block wx:else>
+                        <view class='weui-cell weui-cell_access' data-value="{{values[item.name]}}" data-edit="{{!(item.readonly || !_record_allowEdit || args.action === 'read')}}" @tap.stop="navigateTo({{item}})">
+                          <view class="weui-cell__required" wx:if="{{util.isRequired(args.action, item)}}"></view>
+                          <view class="weui-cell__hd" >
+                            <view class="weui-label">{{item.label}}</view>
+                          </view>
+                          <view class="weui-cell__bd" style="text-align:right;">
+                            <block wx:if="{{values[item.name]}}">
+                              <image mode="aspectFill" src="{{util.formatImageUrl(values[item.name], baseUrl)}}" class="weui-uploader__img" style="display:block;float:right" wx:if="{{item.type === 'image' && values[item.name]}}" bindtap="chooseFile({{item}})"
+                                     id="{{values[item.name]}}" data-key="{{item.name}}"/>
+                              <video src="{{util.formatVideoUrl(values[item.name], baseUrl)}}" class="weui-uploader__img" style="display:block;float:right" wx:if="{{item.type === 'video' && values[item.name]}}">{{values[item.name]}}</video>
+                            </block>
+                            <block wx:else>
+                              <view class="weui-cell__ft weui-uploader__input-box" style="display:block;float:right" wx:if="{{item.type === 'image'}}">
+                                <view class="weui-uploader__input" bindtap="chooseFile({{item}})" ></view>
+                              </view>
+                            </block>
+                          </view>
+                          <view class="weui-cell__ft weui-cell__ft_in-access" wx:if="{{!(item.readonly || !_record_allowEdit || args.action === 'read') && item.type === 'video'}}"></view>
                         </view>
-                        <view class="weui-cell__bd" style="text-align:right;">
-                          <view class="weui-cell__required" wx:if="{{util.showRequired(args.action, item, values[item.name])}}">必填</view>
-                          <block wx:else>
-                            <image src="{{util.formatImageUrl(values[item.name], baseUrl)}}" class="weui-uploader__img" style="display:block;float:right" wx:if="{{item.type === 'image' && values[item.name]}}"/>
-                            <video src="{{util.formatVideoUrl(values[item.name], baseUrl)}}" class="weui-uploader__img" style="display:block;float:right" wx:if="{{item.type === 'video' && values[item.name]}}">{{values[item.name]}}</video>
-                          </block>
-                        </view>
-                        <view class="weui-cell__ft weui-cell__ft_in-access" wx:if="{{!(item.readonly || !_record_allowEdit || args.action === 'read')}}"></view>
-                      </view>
+                      </block>
                     </block>
                     <block wx:else>
                       <view class="weui-cell weui-cell_image">
-                        <image class="cover" mode="aspectFill" wx:if="{{values[item.name]}}" src="{{util.formatImageUrl(values[item.name], baseUrl)}}"/>
+                        <image class="cover" mode="aspectFill" wx:if="{{values[item.name]}}" src="{{util.formatImageUrl(values[item.name], baseUrl)}}" bindtap="previewImage"
+                               id="{{values[item.name]}}" data-key="{{item.name}}"/>
                       </view>
                     </block>
                   </block>
@@ -264,8 +375,9 @@
                 <block wx:elif="{{item.type === 'text' && item.is_wide}}">
                   <block wx:if="{{!(item.readonly || !_record_allowEdit || args.action === 'read')}}">
                     <view class="weui-cell">
+                      <view class="weui-cell__required" wx:if="{{util.isRequired(args.action, item)}}"></view>
                       <view class="weui-cell__bd">
-                        <textarea class="weui-textarea-input" data-id="{{item.name}}" name="{{item.name}}" placeholder="{{util.showRequired(args.action, item, values[item.name]) ? item.label + '（必填）' :item.label}}" value="{{util.transformFieldValue(item, values[item.name])}}" auto-height="true" bindinput="textChange"/>
+                        <textarea class="weui-textarea-input" data-id="{{item.name}}" name="{{item.name}}" placeholder="{{item.label}}" value="{{util.transformFieldValue(item, values[item.name])}}" auto-height="true" bindinput="textChange"/>
                       </view>
                     </view>
                   </block>
@@ -289,7 +401,7 @@
                   </view>
                 </block>
                 <block wx:else>
-                  <view class='weui-cell weui-cell_access' hover-class='weui-grid_active' data-value="{{values[item.name]}}" data-edit="{{!(item.readonly || !_record_allowEdit || args.action === 'read')}}" @tap.stop="navigateTo({{item}})">
+                  <view class='weui-cell weui-cell_access field-textarea' hover-class='weui-grid_active' data-value="{{values[item.name]}}" data-edit="{{!(item.readonly || !_record_allowEdit || args.action === 'read')}}" @tap.stop="navigateTo({{item}})">
                     <block wx:if="{{item.type === 'textarea'}}">
                       <block wx:if="{{item.is_wide}}">
                         <view class="weui-cell__bd">
@@ -302,12 +414,12 @@
                         </view>
                       </block>
                       <block wx:else>
+                        <view class="weui-cell__required" wx:if="{{util.isRequired(args.action, item)}}"></view>
                         <view class="weui-cell__hd" wx:if="{{!values[item.name]}}">
                           <view class="weui-label">{{item.label}}</view>
                         </view>
                         <view class="weui-cell__bd">
-                          <view class="weui-cell__required" wx:if="{{util.showRequired(args.action, item, values[item.name])}}">必填</view>
-                          <view class="weui-cell__ft wide-cell" wx:else>{{util.transformFieldValue(item, values[item.name])}}</view>
+                          <view class="weui-cell__ft wide-cell" wx:if="{{!util.showRequired(args.action, item, values[item.name])}}">{{util.transformFieldValue(item, values[item.name])}}</view>
                         </view>
                         <block wx:if="{{!(item.readonly || !_record_allowEdit || args.action === 'read')}}">
                           <view class="weui-cell__ft weui-cell__ft_in-access"></view>
@@ -315,6 +427,7 @@
                       </block>
                     </block>
                     <block wx:else>
+                      <view class="weui-cell__required" wx:if="{{util.isRequired(args.action, item)}}"></view>
                       <view class="weui-cell__hd">
                         <view class="weui-label">{{item.label}}</view>
                       </view>
@@ -323,12 +436,12 @@
                           <view class="weui-cell__ft" @tap="phoneCall(values[item.name])">{{values[item.name]}}</view>
                         </block>
                         <block wx:else>
-                          <view class="weui-cell__required" wx:if="{{util.showRequired(args.action, item, values[item.name])}}">必填</view>
-                          <view class="weui-cell__ft" wx:else>{{util.transformFieldValue(item, values[item.name])}}</view>
+                          <view class="weui-cell__ft" wx:if="{{!util.showRequired(args.action, item, values[item.name])}}">{{util.transformFieldValue(item, values[item.name])}}</view>
                         </block>
                       </view>
                       <block wx:if="{{!(item.readonly || !_record_allowEdit || args.action === 'read') || item.type === 'location'}}">
-                        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+                        <view wx:if="{{item.type === 'location'}}" class="weui-cell__ft utility-location slds-icon slds-icon--small" style="line-height: 1.5;"></view>
+                        <view wx:else class="weui-cell__ft weui-cell__ft_in-access"></view>
                       </block>
                     </block>
                   </view>
@@ -340,7 +453,7 @@
         </repeat>
 
         <view class="btn-container" wx:if="!hiddenBtn">
-          <button class="submit-btn save-btn" form-type="submit" disabled="{{submitDisabled}}" wx:if="{{args.action === 'edit' || args.action === 'create'}}">保存</button>
+          <button class="submit-btn save-btn" type="primary" form-type="submit" disabled="{{submitDisabled}}" wx:if="{{args.action === 'edit' || args.action === 'create'}}">保存</button>
           <!--<button class="submit-btn remove-btn" wx:if="{{!args.undeletable && _record_allowDelte}}"  @tap="removeRecord">删除</button>-->
           <button class="submit-btn" type="primary" @tap="goEdit" wx:if="{{_record_allowEdit && args.action === 'read'}}">编辑</button>
           <button class="submit-btn remove-btn" wx:if="{{!args.undeletable && _record_allowDelte}}"  @tap="removeRecord">删除</button>
@@ -407,12 +520,16 @@
       }, spaceId)
     }
 
+    /*
+    * 根据字段的group、inlineHelpText属性，对字段进行分组
+    * 注意：只读时，只显示有值的字段
+    * */
     getGroupFields(fields, action, values){
 
       let fields_new = [];
 
       //将第一个多媒体类型字段放到第一个字段
-      let foo = false;
+      let foo = true; //false
       _.forEach(fields, function (field, key) {
         if(!field){
           throw new Error('无效的字段: ' + key)
@@ -686,6 +803,7 @@
           page.changeNavigationBarTitleText(title);
 
           this.groupFields = this.getGroupFields(this.fields, action, this.values);
+          console.log('this.groupFields', this.groupFields);
         }
         this.is_loaded = true
         this.$apply()
@@ -1082,9 +1200,9 @@
       },
       async chooseFile(e) {
         const that = this;
-        const key = e.target.dataset.id
-        const multiple = e.target.dataset.multiple || false
-        const type = e.target.dataset.type
+        const key = e._key;
+        const multiple = e.multiple || false
+        const type = e.type;
         if (type === 'image') {
           let options = {
             sizeType: ['original', 'compressed'],
@@ -1094,11 +1212,18 @@
             options.count = 1
           }
           const res = await wepy.chooseImage(options)
-          if (!that.values[key]) {
-            that.values[key] = []
-          }
 
-          that.values[key] = that.values[key].concat(res.tempFilePaths)
+          if(multiple){
+            if (!that.values[key]) {
+              that.values[key] = []
+            }
+            that.values[key] = that.values[key].concat(res.tempFilePaths)
+          }else{
+            if (!that.values[key]) {
+              that.values[key] = ''
+            }
+            that.values[key] = res.tempFilePaths.length > 0 ? res.tempFilePaths[0] : ''
+          }
 
           if (!multiple) {
             that.hiddenButton[key] = true
@@ -1107,11 +1232,13 @@
           that.$apply()
 
         } else if (type === 'video') {
-          const res = await wepy.chooseVideo()
-          if (!that.values[key]) {
-            that.values[key] = []
-          }
-          that.values[key] = that.values[key].concat(res.tempFilePaths)
+          const res = await wepy.chooseVideo({
+            sourceType: ['album','camera'],
+            maxDuration: 60,
+            camera: 'back'
+          });
+
+          that.values[key] = utilJs.formatVideoUrl(res.tempFilePath, this.baseUrl)
 
           if (!multiple) {
             that.hiddenButton[key] = true
@@ -1120,10 +1247,29 @@
         }
       },
       previewImage: function (e) {
+        const key = e.currentTarget.dataset.key;
+        let urls = [];
+
+        let fValue = this.values[key];
+        console.log('previewImage', key, fValue)
+        if(_.isArray(fValue)){
+          this.values[key].forEach(function (f) {
+            urls.push(utilJs.formatImageUrl(f, baseUrl))
+          });
+        }else{
+          urls.push(utilJs.formatImageUrl(fValue, baseUrl))
+        }
+
+
         wx.previewImage({
-          current: e.currentTarget.id, // 当前显示图片的http链接
-          urls: this.data.files // 需要预览的图片http链接列表
+          current: utilJs.formatImageUrl(e.currentTarget.id, baseUrl), // 当前显示图片的http链接
+          urls: urls // 需要预览的图片http链接列表
         })
+      },
+      clearImage: function (e) {
+        const key = e.currentTarget.dataset.key;
+        this.values[key].splice(e.target.dataset.index,1);
+        this.$apply();
       },
       async removeRecord() {
 
@@ -1249,9 +1395,9 @@
           case 'select':
             url = '/pages/edit/select';
             break;
-          case 'image':
-            url = '/pages/edit/image';
-            break;
+//          case 'image':
+//            url = '/pages/edit/image';
+//            break;
           case 'number':
             url = '/pages/edit/number';
             break;

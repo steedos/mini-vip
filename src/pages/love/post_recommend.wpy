@@ -1,0 +1,41 @@
+<style lang="less">
+
+</style>
+
+<template>
+	<view class="page__bd">
+		<postList :list.sync="postList" :editable.sync="editable" :hideComment.sync="true" />
+	</view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import { loveSpaceId } from '@/config';
+import postList from '../../components/love_post_list';
+
+export default class PostRecommend extends wepy.page {
+	config = {
+		navigationBarTitleText: '最新'
+	}
+
+	data = {
+		postList: []
+	}
+
+	async onShow() {
+		const options = {
+			$filter: `(space_id eq ${loveSpaceId})`,
+			$orderby: 'modified desc',
+			$expand: 'owner($select=name,profile),space($select=name)'
+		}
+
+		const result = await this.$parent.query('love_post', options, loveSpaceId);
+		this.postList = result.value;
+		this.$apply();
+	}
+
+	components = {
+		postList: postList
+	}
+}
+</script>

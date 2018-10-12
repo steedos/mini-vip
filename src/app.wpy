@@ -3,8 +3,9 @@
 @import "../lib/slds/slds_icons.less";
 @import "../lib/slds/slds_margin.less";
 @import "../lib/vip/vip.less";
+@import "../lib/icon/utility.less";
 page {
-  background-color: #f6f7f8;
+  background-color: #efeef3;
   font-size: 16px;
   font-family: -apple-system-font,Helvetica Neue,Helvetica,sans-serif;
 }
@@ -113,10 +114,10 @@ page {
 	bottom: 0;
 	left: 0;
 	right: 0;
-	background-image:url('https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/bg-celebrate-valentines.jpg');
+	background-image:url('https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/bg-hands.jpg');
 	background-position: bottom center;
 	background-repeat: no-repeat;
-	background-size: contain;
+	background-size: cover;
 	background-color: #fdfdfd;
 	z-index: 1;
 }
@@ -126,6 +127,7 @@ page {
   background: transparent;
   position: relative;
   z-index: 10;
+  padding-bottom: 100px;
 
   .page__hd{
     padding:20rpx 40rpx;
@@ -210,7 +212,7 @@ export default class VIP extends wepy.app {
 //      'pages/tabbar_index',
       'pages/love/shake',
       'pages/love/share',
-      'pages/home/store',
+      // 'pages/home/store',
       'pages/index',
       'pages/apps',
       'pages/me',
@@ -268,12 +270,12 @@ export default class VIP extends wepy.app {
       'pages/space/invite_user',
       'pages/product/view',
       'pages/product/list',
-      //'pages/product/share',
+      'pages/product/share',
       'pages/cart/index',
       'pages/cart/checkout',
       'pages/address/list',
       'pages/order/list',
-      //'pages/share',
+      'pages/share',
       'pages/love/me',
       'pages/love/invite_code',
       'pages/love/invite_code_success',
@@ -293,19 +295,26 @@ export default class VIP extends wepy.app {
       'pages/love/detail',
       'pages/edit/city_select',
       'pages/love/introduce',
+      'pages/love/introduce_me',
       'pages/love/invite_code_me',
       'pages/love/invite_code_success_me',
       'pages/love/question_list',
       'pages/love/discovery',
+      'pages/love/post_recommend',
       'pages/love/cp',
+      'pages/love/match_history',
+      'pages/love/love_me',
+      'pages/love/group',
       'pages/love/privacy_protection',
       'pages/love/settings',
       'pages/love/love_question',
+      'pages/chat/list',
+      'pages/chat/chat_messages',
     ],
     tabBar: {
       color: '#666',
-      selectedColor: '#1AAD19',
-      backgroundColor: '#fdfdfd',
+      selectedColor: '#5e9bf4',
+      backgroundColor: '#fff',
       borderStyle: 'black',
       list: [
       {
@@ -320,6 +329,12 @@ export default class VIP extends wepy.app {
         iconPath: './images/tabbars/topic.png',
         text: '最近访问',
       },
+      // {
+      //   pagePath: 'pages/love/post_recommend',
+      //   selectedIconPath: './images/tabbars/topic_pressed.png',
+      //   iconPath: './images/tabbars/topic.png',
+      //   text: '最新',
+      // },
       {
         pagePath: 'pages/creator/me',
         selectedIconPath: './images/tabbars/me_pressed.png',
@@ -331,13 +346,13 @@ export default class VIP extends wepy.app {
       navigationBarBackgroundColor: '#2b3558',
       navigationBarTitleText: 'Creator',
       navigationBarTextStyle: 'white',
-      backgroundColor: "#fdfdfd",
+      backgroundColor: "#efeef3",
       backgroundTextStyle: 'dark',
     }
   }
 
   globalData = {
-    title: "无颜",
+    title: "会员服务台",
     userInfo: null,
     space: null,
     spaceInfo: null,
@@ -431,6 +446,27 @@ export default class VIP extends wepy.app {
         return this.checkMobile(to)
       }
     });
+
+    pageRouter.pushEnter({
+      page: '/pages/love/cp',
+      script: function (to) {
+        return this.checkMobile(to)
+      }
+    });
+
+    pageRouter.pushEnter({
+      page: '/pages/love/papers_view',
+      script: function (to) {
+        return this.checkMobile(to)
+      }
+    });
+
+    pageRouter.pushEnter({
+      page: '/pages/love/introduce',
+      script: function (to) {
+        return this.checkMobile(to)
+      }
+    });
   }
 
   onHide() {
@@ -453,7 +489,7 @@ export default class VIP extends wepy.app {
   }
 
   checkMobile(to){
-    if(this.globalData.user && this.globalData.user.mobile){
+    if(!this.globalData.love || !this.globalData.love.enabled || (this.globalData.user && this.globalData.user.mobile)){
       return true
     }else{
       let url = '/pages/phone_number_login';
@@ -496,7 +532,9 @@ export default class VIP extends wepy.app {
     const self = this
     let globalData = self.globalData
     let needs_login = false
-
+    if(e.share_from) {
+      globalData.share_from = e.share_from//记录分享来源share_from
+    }
     if (!globalData.userInfo) {
       const setting = await wepy.getSetting()
       if (setting.authSetting['scope.userInfo']) {
@@ -581,6 +619,7 @@ export default class VIP extends wepy.app {
       globalData.user._id = res.user_id
       globalData.user.auth_token = res.auth_token
       globalData.user.open_id = res.open_id
+      globalData.user.open_group_id = res.open_group_id
       globalData.user.name = res.name
       globalData.user.mobile = res.mobile
       globalData.user.sex = res.sex
@@ -916,7 +955,7 @@ export default class VIP extends wepy.app {
     ctx.save()
     ctx.beginPath()
     ctx.arc(dx+dWidth/2, dy+dWidth/2, avatar_radius, 0, 2 * Math.PI)
-    ctx.setFillStyle('red')
+    ctx.setFillStyle('white')
     ctx.fill()
     ctx.clip()
     ctx.drawImage(src2, dx+dWidth/2-avatar_radius, dy+dWidth/2-avatar_radius, 2*avatar_radius, 2*avatar_radius)

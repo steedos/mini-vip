@@ -11,7 +11,7 @@ import ComponentLookingFor from '@/components/cover_you_looking_for';
 
 export default class CoverYouLookingFor extends wepy.page {
   config = {
-    navigationBarTitleText: '无颜', 
+    navigationBarTitleText: '无颜匹配', 
   };
 
   data = {

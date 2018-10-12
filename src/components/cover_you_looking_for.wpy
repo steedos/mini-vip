@@ -6,12 +6,12 @@
     <view class="cover-page-bg"></view>
     <view class="page cover-page">
       <view class="page__hd">
-        <view class="love-title">只遇见对的人</view>
+        <view class="love-title">遇见对的人</view>
       </view>
       <view class="page__bd">
         <view class="love-summary">
-          请填写你的筛选条件，
-          “无颜”只会为你选择符合要求的人。
+          说说你对理想伴侣的要求，
+          “无颜”会为你筛选你喜欢的人。
           </view>
 
         <button class="btn-join" @tap="next">下一步</button>
@@ -33,7 +33,14 @@ export default class ComponentLookingFor extends wepy.component {
 
   methods = {
     next() {
-      const answeredUrl = encodeURIComponent(`/pages/love/cover_about_yourself?space_id=${loveSpaceId}`);
+      let answeredUrl = '';
+      console.log("share_from=============",this.$parent.$parent.globalData.share_from)
+      let share_from = this.$parent.$parent.globalData.share_from
+      if(share_from){
+        answeredUrl = encodeURIComponent(`/pages/love/introduce?space_id=${loveSpaceId}&userId=${share_from}`);
+      }else{
+        answeredUrl = encodeURIComponent(`/pages/love/home`);
+      }
       wx.navigateTo({
         url: `/pages/love/papers_view?object_name=love_looking_for&space_id=${loveSpaceId}&required=true&answered_url=${answeredUrl}&answered_url_type=reLaunch&keep_progress`
       });

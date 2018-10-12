@@ -134,7 +134,7 @@
 </style>
 <template>
 	<view class="page order-list">
-    <block wx:if="{{cartList.length}}">
+    <block wx:if="{{record_list.length}}">
       <repeat for="{{record_list}}" key="index" index="index" item="record">
         <navigator class="item" url="/pages/cart/checkout?record_id={{record._id}}&object_name=vip_order&space_id={{record.space}}">
           <view class="title border-bottom-1px">
@@ -169,7 +169,7 @@
         <view class="weui-loadmore__tips weui-loadmore__tips_in-line">暂无订单</view>
       </view>
     </block>
-		<view class="tab-bar" wx:if="{{space_id}}">
+		<!-- <view class="tab-bar" wx:if="{{space_id != 'guest'}}">
       <view class="comment-btn action" @tap="viewProduct">
         <view class="slds-icon slds-icon--small slds-m-right--x-small">
           <image class="ion" src="/static/images/ic_menu_sort_nor.png"></image>
@@ -189,7 +189,7 @@
         </view>
         <view class="text">我的</view>
       </view>
-    </view>
+    </view> -->
 	</view>
 </template>
 <script>

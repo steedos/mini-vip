@@ -1,4 +1,4 @@
-<style lang="less">
+pipei<style lang="less">
 page {
   height: 100%;
   .page {
@@ -260,14 +260,6 @@ page {
       font-size:30rpx;
     }
   }
-  .common-groups{
-    .common-groups-title{
-      color: #353535;
-    }
-    .common-groups-item{
-      color:#777;
-    }
-  }
 }
 
 .tab-bar {
@@ -288,9 +280,9 @@ page {
   <view class="cover-page-bg" style="background-image: url({{util.formatImageUrl(cover, baseUrl)}})"></view>
   <view class="cover-page page" wx:if="{{is_loaded}}">
     <view class="header">
-      <view class="cover-wrapper"></view>
+      <view class="cover-wrapper" @tap="uploadImage(true)"></view>
       <view class="space-info">
-        <!-- <view wx:if="{{!is_owner && object_name}}" class="heart {{a_record.heart ? 'vip_heart-light' : 'vip_heart-default'}} slds-icon slds-icon--small slds-m-left--x-small" @tap="markHeart({{a_record._id}},{{a_record.heart}})"></view> -->
+        <view wx:if="{{!is_owner && object_name}}" class="heart {{a_record.heart ? 'vip_heart-light' : 'vip_heart-default'}} slds-icon slds-icon--small slds-m-left--x-small" @tap="markHeart({{a_record._id}},{{a_record.heart}})"></view>
         <view class="wrapper">
           <view class="bg-image"></view>
           <view class="avatar-container">
@@ -328,16 +320,24 @@ page {
             </view>
           </view>
           <button class="weui-btn btn-star" open-type="share" plain="true" type="primary" size="mini">转发</button>
-          <block wx:if="{{!is_owner}}">
+          <button wx:if="{{is_owner && showPost}}" class="weui-btn btn-test" @tap="addPost" type="primary" size="mini">发布</button>
+          <button wx:if="{{!is_owner && showGoHome}}" class="weui-btn btn-test" @tap="goHome" type="primary" size="mini">我的名片</button>
+          <!-- <block wx:if="{{!is_owner}}">
+            <button class="weui-btn btn-star" type="primary" plain="true" size="mini">关注</button>
             <button wx:if="{{!answered}}" class="weui-btn btn-test" @tap="goAnswer" type="primary" size="mini">测试缘分</button>
-            <button wx:if="{{answered && showGoHome}}" class="weui-btn btn-test" @tap="goHome" type="primary" size="mini">我的名片</button>
-          </block>
+          </block> -->
         </view>
       </view>
     </view>
 
     <view class="body-wrapper">
-      <!-- <view wx:if="{{show_mobile}}">{{a_record.user_b.mobile}}</view> -->
+
+      <view class="weui-cells" wx:if="{{b_record.heart}}">
+        <view class="weui-cell weui-cell_access">
+          <view class="weui-cell__bd">联系方式</view>
+          <view class="weui-cell__ft">{{current_customer.mobile}}</view>
+        </view>
+      </view>
 
       <!-- 不好看
       <view class="weui-cells" wx:if="{{object_name == 'love_friends' && a_record._id && a_record.match && !a_record.is_looking_for}}">
@@ -356,31 +356,53 @@ page {
           <view class="weui-cell__ft" wx:if="{{a_record.match !== undefined}}">{{util.fixed(a_record.match, 2)}}%</view>
           <view class="weui-cell__ft" wx:else>?</view>
         </view>
-        <view class="weui-cell weui-cell_access" wx:if="{{mobile}}" @tap="Copy">
-          <view class="weui-cell__bd">微信号</view>
-          <view class="weui-cell__ft weui-cell__ft_in-access">{{mobile}}</view>
+        <view class="weui-cell" @tap="goTest()" wx:if="{{object_name == 'love_friends' && a_record._id && a_record.is_looking_for}}" hover-class="{{a_record.a_to_b ? '' : 'weui-cell_active'}}">
+          <view class="weui-cell__bd">
+            <view>我喜欢{{b_sex}}</view>
+          </view>
+          <view class="weui-cell__ft" wx:if="{{a_record.a_to_b !== undefined}}">{{util.fixed(a_record.a_to_b, 2)}}%</view>
+          <view class="weui-cell__ft" wx:else>?</view>
+        </view>
+        <view class="weui-cell" @tap="goTest()" wx:if="{{object_name == 'love_friends' && a_record._id && a_record.is_looking_for}}" hover-class="{{a_record.b_to_a ? '' : 'weui-cell_active'}}">
+          <view class="weui-cell__bd">
+            <view>{{b_sex}}喜欢我</view>
+          </view>
+          <view class="weui-cell__ft" wx:if="{{a_record.b_to_a !== undefined}}">{{util.fixed(a_record.b_to_a, 2)}}%</view>
+          <view class="weui-cell__ft" wx:else>?</view>
         </view>
       </view>
+
+      <!--
       <view class="weui-cells" wx:if="{{!is_owner}}">
-        <block wx:if="{{common_groups.length}}">
-          <view class="common-groups">
-            <view class="weui-cell">
-              <view class="weui-cell__bd">
-                <view class="common-groups-title">共同群</view>
-              </view>
-            </view>
-            <repeat for="{{common_groups}}" key="index" index="index" item="group">
-              <navigator class="weui-cell common-groups-item" url="/pages/love/matching?open_group_id={{group}}">
-                <view class="weui-cell__bd">
-                  <open-data type="groupName" open-gid="{{group}}"></open-data>
-                </view>
-                <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-              </navigator>
-            </repeat>
-          </view>
-        </block>
+        <navigator class="weui-cell weui-cell_access" url="/pages/love/cp">
+          <view class="weui-cell__bd">想要找到匹配度更高的人？</view>
+          <view class="weui-cell__ft_in-access"></view>
+        </navigator>
       </view>
+      -->
+
+      <!-- <view class="weui-cells">
+        <repeat for="{{b_naire}}" key="index" index="index" item="naire">
+          <navigator class="weui-cell weui-cell_access" url="/pages/love/question_list?object_name={{naire.object_name}}&space_id={{space_id}}&user_id={{userId}}">
+            <view class="weui-cell__bd">
+              <view>{{is_owner ? "我" : b_sex}}的{{naire.label}}</view>
+            </view>
+            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+          </navigator>
+        </repeat>
+      </view> -->
     </view>
+    <!-- <view wx:if="{{!is_owner}}">
+      <block wx:if="{{answered}}">
+        <button class="btn-love" @tap="markHeart({{a_record._id}},{{a_record.heart}})">想认识{{b_sex}}</button>
+      </block>
+      <block wx:else>
+        <button class="input-btn btn-join button-hover" type="primary" @tap="goAnswer">
+          测试缘分
+        </button>
+        <button class="btn-love" @tap="goAnswer">想认识{{b_sex}}</button>
+      </block>
+    </view> -->
     <view class="post-container">
       <postList :list.sync="posts" :editable.sync="editable" :hideComment.sync="true" />
     </view>
@@ -399,12 +421,10 @@ import pageRouter from '@/utils/pageRouter';
 import req from '@/network';
 import postList from '../../components/simple_post_list';
 
-import _ from 'underscore'
-
-export default class loveIntroduce extends wepy.page {
+export default class loveIntroduce_me extends wepy.page {
   config = {
-    navigationBarTitleText: '名片',
-		enablePullDownRefresh: true
+    navigationBarTitleText: '我',
+        enablePullDownRefresh: true
   };
 
   data = {
@@ -420,38 +440,20 @@ export default class loveIntroduce extends wepy.page {
     b_record: {},
     b_sex: '他',
     b_naire: [],
-    common_groups: [],
     userId: '',
     cover: '',
     avatar: '',
     name: '',
     posts: [],
-    mobile:'',
     is_owner: false,
     answered:false,
-    show_mobile:false,
+    showPost:false,
     // heart_summary: '',
     baseUrl: baseUrl,
     showGoHome: false,
     baseMaterialUrl: baseMaterialUrl,
     loveSpaceId: loveSpaceId,
-    share_from:'',
-    settings: [{
-      icon: 'slds-icon-standard-client',
-      label: '关于我',
-      url: `/pages/love/papers_view?object_name=love_about_me&space_id=${loveSpaceId}&required=true`,
-      object_name: 'love_about_me'
-    },{
-      icon: 'slds-icon-standard-campaign',
-      label: '筛选条件',
-      url: `/pages/love/papers_view?object_name=love_looking_for&space_id=${loveSpaceId}`,
-      object_name: 'love_looking_for'
-    },{
-      icon: 'slds-icon-standard-social',
-      label: '问答匹配',
-      url: `/pages/love/papers_view?object_name=love_answer&space_id=${loveSpaceId}`,
-      object_name: 'love_answer'
-    }]
+    share_from:''
   }
 
   wxs = {
@@ -486,14 +488,12 @@ export default class loveIntroduce extends wepy.page {
         const user_id = this.$parent.globalData.user._id;
         const a_options = {
           $filter: `(owner eq '${user_id}' and user_b eq '${this.userId}')`,
-          $expand: 'user_b($select=profile,name,mobile),owner($select=profile,name)'
+          $expand: 'user_b($select=profile,name),owner($select=profile,name)'
         }
         const a_result = await this.$parent.query(this.object_name, a_options, this.space_id);
         const a_record = a_result.value[0] || {};
         this.a_record = a_record;
-        if (a_record.user_b.mobile){
-          this.mobile = a_record.user_b.mobile;
-        }
+
         const b_options = {
           $filter: `(owner eq '${this.userId}' and user_b eq '${user_id}')`,
           $expand: 'user_b($select=profile,name),owner($select=profile,name)'
@@ -507,14 +507,12 @@ export default class loveIntroduce extends wepy.page {
         this.$apply();
       } else {
         const a_options = {
-          $expand: 'user_b($select=profile,name,mobile),owner($select=profile,name)'
+          $expand: 'user_b($select=profile,name),owner($select=profile,name)'
         }
         const a_record = await this.$parent.get(this.object_name, this.record_id, this.space_id, a_options);
 
         this.a_record = a_record;
-        if(a_record.user_b.mobile){
-          this.mobile = a_record.user_b.mobile;
-        }
+
         const b_options = {
           $filter: `(owner eq '${a_record.user_b._id}' and user_b eq '${a_record.owner._id}')`
         }
@@ -531,15 +529,6 @@ export default class loveIntroduce extends wepy.page {
     }
     this.$apply();
   }
-
-  async loadCommonGroups() {
-    if(this.a_record.open_groups && this.b_record.open_groups){
-      this.common_groups = _.intersection(this.a_record.open_groups, this.b_record.open_groups);
-      if(this.common_groups.length){
-        this.show_mobile = true
-      }
-    }
-  }
   
   async onLoad(e) {
     wepy.showShareMenu({
@@ -554,9 +543,6 @@ export default class loveIntroduce extends wepy.page {
       e.love = 1;
       e.share_from = scenes[1];
       e.qrcode = 1;
-    }
-    if (e.show_mobile) {
-      this.show_mobile = true
     }
     this.space_id = e.space_id;
     await this.$parent.login(e);
@@ -602,25 +588,22 @@ export default class loveIntroduce extends wepy.page {
   }
   
   async loadData() {
-    await this.loadLoveFriends();
-    await this.loadCommonGroups();
+    // await this.loadLoveFriends();
     await this.loadCustomer();
     await this.loadHobby();
     await this.loadAboutMe();
     const love = this.$parent.globalData.love;
     if (love && love.enabled) {
+      this.showPost = true
       await this.loadPost();
-    }
-    if(!this.a_record.match && this.answered) {
-      await this.singleMatch();
     }
   }
 
-	async onPullDownRefresh() {
+    async onPullDownRefresh() {
     wx.showNavigationBarLoading();
     await this.loadData();
-		this.$apply();
-		wx.stopPullDownRefresh();
+        this.$apply();
+        wx.stopPullDownRefresh();
     wx.hideNavigationBarLoading();
   }
   
@@ -699,8 +682,7 @@ export default class loveIntroduce extends wepy.page {
   
   async loadAboutMe() {
     const b_options = {
-      $filter: `(owner eq '${this.userId}')`,
-      $expand: 'owner($select=profile,name,mobile)'
+      $filter: `(owner eq '${this.userId}')`
     }
     const about_me = await this.$parent.query('love_about_me', b_options, loveSpaceId);
     if (about_me && about_me.value && about_me.value[0]) {
@@ -711,10 +693,6 @@ export default class loveIntroduce extends wepy.page {
     }else{
       this.b_sex = '她'
     }
-    if (this.about_me.owner) {
-      this.mobile = this.about_me.owner.mobile
-    }
-    
   }
 
   async loadPost() {
@@ -862,22 +840,6 @@ export default class loveIntroduce extends wepy.page {
         url: '/pages/love/index'
       })
     },
-    Copy() {
-      wx.setClipboardData({
-        data: this.mobile,
-        success: function(res) {
-          wx.getClipboardData({
-            success: function(res) {
-              wx.showToast({
-                title: '已复制到剪贴板',
-                icon: 'success',
-                duration: 3000
-              })
-            }
-          })
-        }
-      })
-    },
     async markHeart(_id, heart, event) {
       const self = this;
       wx.showNavigationBarLoading();
@@ -952,14 +914,14 @@ export default class loveIntroduce extends wepy.page {
     },
     goAnswer() {
       const user = this.$parent.globalData.user;
-      // if (user.name && user.avatar) {
+      if (user.name && user.avatar) {
          const answeredUrl = encodeURIComponent(`/pages/love/cover_about_yourself?space_id=${loveSpaceId}`)
          pageRouter.navigateTo({
           url: `/pages/love/papers_view?object_name=love_test&space_id=${this.space_id}&answered_url=${answeredUrl}&keep_progress`})
-      // }else {
-      //   const answeredUrl = encodeURIComponent(`/pages/love/cover_about_yourself?space_id=${loveSpaceId}`)
-      //   wx.navigateTo({url: `/pages/user_info_login?share_from=${this.share_from}&next=${answeredUrl}`})
-      // }
+      }else {
+        const answeredUrl = encodeURIComponent(`/pages/love/cover_about_yourself?space_id=${loveSpaceId}`)
+        wx.navigateTo({url: `/pages/user_info_login?share_from=${this.share_from}&next=${answeredUrl}`})
+      }
     }
   }
 }

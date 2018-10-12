@@ -55,19 +55,18 @@
   <view class="page questionnaire-list" wx:if="{{is_loaded}}">
     <view class="weui-cells">
       <block wx:if="{{isAuthUserInfo}}">
-        <view class="weui-media-box weui-media-box_appmsg" @tap="goShare">
+        <view class="weui-media-box weui-media-box_appmsg" @tap="goIntroduce">
           <view class="weui-media-box__hd weui-media-box__hd_in-appmsg" style="width: 50px; height: 50px; line-height: 50px;">
             <image class="image" mode="aspectFill" wx:if="{{isAuthUserInfo}}" src="{{avatar}}"></image>
           </view>
-          <view class="weui-media-box__bd weui-media-box__bd_in-appmsg" style="display: flex;">
+          <view class="weui-media-box__bd weui-media-box__bd_in-appmsg" style="display: flex; align-items: center;">
             <view class="weui-media-box__title" style="flex: 1;">
               {{name}}
             </view>
-            <view wx:if="{{is_member}}" class="weui-media-box__desc" style="margin-top: 6rpx;">
-              VIP会员
+            <view class="weui-media-box__desc" style="margin-top: 6rpx;">
+              
             </view>
             <view class="weui-cell__ft weui-cell__ft_in-access">
-              <view class="vip_page_qrcode slds-icon slds-icon--small slds-m-right--x-small"></view>
             </view>
           </view>
         </view>
@@ -81,8 +80,8 @@
             <view class="weui-media-box__title" style="line-height: 30px;">
               {{name}}
             </view>
-            <view wx:if="{{is_member}}" class="weui-media-box__desc" style="margin-top: 6rpx;">
-              VIP会员
+            <view class="weui-media-box__desc" style="margin-top: 6rpx;">
+              
             </view>
           </view>
         </button>
@@ -113,7 +112,20 @@
         <view class="weui-cell__ft weui-cell__ft_in-access"></view>
       </navigator>
     </view>
-   <view class="weui-cells">
+
+    <view class="weui-cells">
+      <navigator class="weui-cell weui-cell_access" @tap="goShare">
+        <view class="weui-cell__hd">
+          <view class="slds-icon-custom-custom1 slds-icon slds-icon--small slds-m-right--x-small"/>
+        </view>
+        <view class="weui-cell__bd">
+          <view>缘分测试</view>
+        </view>
+        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+      </navigator>
+    </view>
+    <!--
+    <view class="weui-cells">
       <navigator class="weui-cell weui-cell_access" url="/pages/love/settings?space_id={{space_id}}">
         <view class="weui-cell__hd">
           <view class="slds-icon-custom-custom67 slds-icon slds-icon--small slds-m-right--x-small"/>
@@ -124,6 +136,7 @@
         <view class="weui-cell__ft weui-cell__ft_in-access"></view>
       </navigator>
     </view>
+    -->
   </view>
 </template>
 
@@ -183,13 +196,11 @@ export default class QuestionnaireList extends wepy.page {
   // 分享
   onShareAppMessage(res) {
     const user_id = this.$parent.globalData.user._id;
-    let title = '我们是天生一对吗？';
+    let title = '茫茫人海，你该和谁谈恋爱？';
     let path = `/pages/love/index?share_from=${user_id}`
-    let imageUrl = 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/love_share_bg.jpg';
     return {
       title: title,
-      path: path,
-      imageUrl: imageUrl
+      path: path
     };
   }
 
@@ -370,7 +381,13 @@ export default class QuestionnaireList extends wepy.page {
       }
     },
     goShare() {
-      wepy.navigateTo({url: `/pages/love/share?card=true&space_id=${this.space_id}`})
+      wepy.navigateTo({url: `/pages/love/share?card=true&userId=${this.userId}`})
+    },
+    goIntroduce() {
+      const love = this.$parent.globalData.love;
+      if (love && love.enabled) {
+        wepy.navigateTo({url: `/pages/love/introduce_me?space_id=${this.space_id}`})
+      }
     }
   };
 

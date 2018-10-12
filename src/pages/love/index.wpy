@@ -41,13 +41,13 @@
 		<view class="page cover-page">
 			<view class="page">
 				<view class="page__hd">
-					<view class="love-title">我不想看你美丽的照片</view>
+					<view class="love-title">你该和谁谈恋爱？</view>
 				</view>
 				<view class="page__bd">
-					<view class="love-summary">我想看到你的真心</view>
-					<button class="btn-join" @tap="goMatching">我的缘份榜</button>
-					<button wx:if="{{showLoveBtn}}" class="btn-index btn-love" @tap="goLove">寻找有缘人</button>
-					<button class="btn-index btn-love" @tap="goTest">测试好友缘分</button>
+					<view class="love-summary">根据你的喜好和对方喜好，精确计算“互相匹配度”，帮你找到心意相通的恋爱对象。</view>
+          <button wx:if="{{answered}}" class="btn-join" @tap="goHome">进入首页</button>
+          <button wx:else class="btn-join" @tap="goLove">开始匹配</button>
+					<button wx:if="{{showLoveBtn}}" class="btn-index btn-love" @tap="goAbout">关于无颜</button>
 					<view class="love-licence"></view>
 				</view>
 			</view>
@@ -67,13 +67,14 @@ import ComponentLookingFor from '@/components/cover_you_looking_for';
 
 export default class LoveIndex extends wepy.page {
   config = {
-    navigationBarTitleText: '无颜',
+    navigationBarTitleText: '无颜匹配',
   };
 
   data = {
     baseUrl: baseUrl,
     baseMaterialUrl: baseMaterialUrl,
     space_id: null,
+    answered: false,
     load_page: '',
 		is_loaded: false,
 		finishHobby: false,
@@ -83,15 +84,9 @@ export default class LoveIndex extends wepy.page {
   };
 
   async onLoad (e) {
-    let finishedNaire = wx.getStorageSync('questionnaire_progess');
-    if(finishedNaire.length > 0){
-      wx.switchTab({url: '/pages/love/home'});
-      return ;
-    }
     wepy.showShareMenu({
       withShareTicket: true
     });
-    console.log("=======index==e============", e);
     wx.showLoading({mask: true});
     const self = this;
 		// 保证一进入就新建space对应的vip_customers记录
@@ -122,6 +117,27 @@ export default class LoveIndex extends wepy.page {
       return;
 		}
 
+    let finishedNaire = wx.getStorageSync('questionnaire_progess');
+    if(finishedNaire && finishedNaire.length > 2){
+      this.answered = true;
+      this.$apply();
+      wx.switchTab({url: '/pages/love/home'});
+
+      // const user_id = this.$parent.globalData.user._id;
+      // const options = {
+      //   $filter: `(user_b eq '${user_id}' and heart eq true)`
+      // }
+      // const result = await this.$parent.query('love_recommend_history', options, this.space_id);
+      // if (result && result.value && result.value.length) {
+      //   this.is_loaded = true;
+      //   this.$apply();
+      //   wx.hideLoading();
+      //   wx.navigateTo({ url: `/pages/love/love_me?space_id=${this.space_id}` })
+      // } else {
+      //   wx.switchTab({url: '/pages/love/home'});
+      // }
+    }
+
 		this.is_loaded = true;
     this.$apply();
     wx.hideLoading();
@@ -131,7 +147,7 @@ export default class LoveIndex extends wepy.page {
   // 分享
   onShareAppMessage(res) {
     const userId = this.$parent.globalData.user._id;
-    let title = "我们是天生一对吗？";
+    let title = "茫茫人海，你该和谁谈恋爱？";
     return {
       title: title,
       path: `pages/love/index?share_from=${userId}&love=1`,
@@ -143,10 +159,14 @@ export default class LoveIndex extends wepy.page {
       wx.navigateTo({url: `/pages/space/index?space_id=${this.space_id}`})
 		},
 		goLove() {
-			wx.navigateTo({url: '/pages/love/cover_answer_questions'})
+      const answeredUrl = encodeURIComponent(`/pages/love/cover_about_yourself?space_id=${this.space_id}`);
+      pageRouter.navigateTo({
+        url: `/pages/love/papers_view?object_name=love_test&space_id=${this.space_id}&answered_url=${answeredUrl}&answered_url_type=reLaunch&keep_progress`
+      });
+			// wx.navigateTo({url: '/pages/love/cover_answer_questions'})
 		},
 		goTest() {
-		  wx.switchTab({url: '/pages/love/test'})
+		  wx.navigateTo({url: '/pages/love/test'})
 		},
 		goHome() {
 			wx.switchTab({url: '/pages/love/home'})

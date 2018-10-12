@@ -1,0 +1,72 @@
+<style type="less">
+  .page_chat {
+    height: 100%;
+    background-color: #ededed;
+  }
+</style>
+<template>
+  <view class="body page_chat">
+    <chatboard/>
+    <myinput/>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+
+  import Input from '../../components/chat_input';
+  import Chatboard from '../../components/chat_board';
+
+  export default class ChatMessages extends wepy.page {
+    config = {
+
+    };
+    components = {
+      myinput: Input,
+      chatboard: Chatboard
+    };
+
+    data = {
+      currentTab: 0
+    };
+    methods = {};
+
+    changeTab(idx) {
+      this.currentTab = +idx;
+      this.$apply();
+    }
+
+    setNavigationBarTitle(title){
+      wx.setNavigationBarTitle({title: title});
+    }
+
+    onLoad(p) {
+      console.log('chat load...');
+      if (!p){
+        p = {}
+      }
+
+      if(p.title){
+        this.setNavigationBarTitle(p.title);
+      }
+
+      this.$invoke('chatboard', 'loadMessage', p.space_id, p.room_id, p.to_user);
+    }
+
+    onShow(){
+      this.$invoke('chatboard', 'receivingMessage')
+    }
+
+    onHide(){
+      this.$invoke('chatboard', 'stopReceivingMessage')
+    }
+
+    async onUnload(){
+      this.$invoke('chatboard', 'stopReceivingMessage')
+      await this.$invoke('chatboard', 'resetUnread')
+      const pages = getCurrentPages();
+      const page = pages[pages.length - 1];
+      page.refresh()
+    }
+  }
+</script>

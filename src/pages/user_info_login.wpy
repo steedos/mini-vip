@@ -44,7 +44,7 @@ page {
     right:0px;
     border-radius:0px;
     height:50px;
-    background-color:#5f6fee;
+    background-color:#1AAD19;
     line-height:50px;
   }
 }
@@ -79,6 +79,7 @@ page {
 import wepy from 'wepy';
 import req from '@/network';
 import { loveSpaceId } from '@/config';
+import pageRouter from '@/utils/pageRouter'
 
 export default class UserInfoLogin extends wepy.page {
   config = {
@@ -143,16 +144,28 @@ export default class UserInfoLogin extends wepy.page {
         this.message = '请在获取昵称之后再点击下一步';
         this.$apply();
       } else {
-        if (!this.share) {
-          const next = decodeURIComponent(this.next);
-          wx.redirectTo({
-            url: `${next}`
-          })
-        } else {
-          wx.redirectTo({
-            url: `/pages/love/share?card=true&space_id=${this.space_id}`
-          })
+        let object_name = '';
+        let answeredUrl = '';
+        if(this.next) {
+          answeredUrl = this.next;
+          object_name = 'love_test';
+        }else{
+          answeredUrl = encodeURIComponent(`/pages/love/cover_you_looking_for`);
+          object_name = 'love_about_me';
         }
+        pageRouter.navigateTo({
+          url: `/pages/love/papers_view?object_name=${object_name}&space_id=${this.space_id}&required=true&answered_url=${answeredUrl}&answered_url_type=reLaunch&keep_progress`
+        });
+        // if (!this.share) {
+        //   const next = decodeURIComponent(this.next);
+        //   wx.redirectTo({
+        //     url: `${next}`
+        //   })
+        // } else {
+        //   wx.redirectTo({
+        //     url: `/pages/love/share?card=true&space_id=${this.space_id}`
+        //   })
+        // }
       }
     }
   }

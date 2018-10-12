@@ -91,8 +91,13 @@ function formatDateMini(value) {
     hours_str = '晚上' + (hours - 12);
   }
   console.log('formatDateMini 77');
-  if(value.getFullYear() < now.getFullYear() || value.getMonth() < now.getMonth() || value.getDate() < now.getDate()){
+  if(value.getFullYear() === now.getFullYear() && (value.getMonth() < now.getMonth() || value.getDate() < now.getDate())){
     console.log('formatDateMini if');
+    return month + date;
+  }
+
+  if(value.getFullYear() < now.getFullYear() || value.getMonth() < now.getMonth() || value.getDate() < now.getDate()){
+    console.log('formatDateMini if2');
     return year + month + date;
   }else{
     console.log('formatDateMini else');
@@ -217,7 +222,7 @@ function formatImageUrl(src, baseUrl) {
     return baseUrl + "/api/files/images/" + src;
   }
   else{
-    return "https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/empty.png";
+    return "";
   }
 }
 
@@ -300,6 +305,15 @@ function showRequired(action, field, value) {
       if(field.required){
         return true
       }
+    }
+  }
+  return false
+}
+
+function isRequired(action, field) {
+  if(action === 'edit' || action === 'create'){
+    if(field.required){
+      return true
     }
   }
   return false
@@ -426,6 +440,9 @@ function fixed(num, length) {
   return num.toFixed(length);
 }
 
+function getUserAvatar(userId, baseUrl) {
+  return baseUrl + '/avatar/' + userId
+}
 
 module.exports = {
   formatDate: formatDate,
@@ -440,5 +457,7 @@ module.exports = {
   formatDateMini: formatDateMini,
   showRequired: showRequired,
   includes: includes,
-  fixed: fixed
-}
+  fixed: fixed,
+  isRequired: isRequired,
+  getUserAvatar: getUserAvatar
+};

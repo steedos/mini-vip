@@ -6,11 +6,11 @@
     <view class="cover-page-bg"></view>
     <view class="page cover-page">
       <view class="page__hd">
-        <view class="love-title">问卷匹配</view>
+        <view class="love-title">缘分测试</view>
       </view>
       <view class="page__bd">
         <view class="love-summary">
-          回答下面的问卷，我们的人工智能算法将根据你的答案，计算匹配度。
+          根据你的喜好和对方喜好，无颜可以精确计算你与好友的“互相匹配度”。
         </view>
         <button class="btn-join" @tap="next">开始答题</button>
       </view>
@@ -37,7 +37,8 @@ export default class ComponentQuestions extends wepy.component {
       //   url: `/pages/love/papers_view?object_name=love_answer&space_id=${this.spaceId}&answered_url=${answeredUrl}&answered_url_type=switchTab`
       // });
 
-      const answeredUrl = encodeURIComponent(`/pages/love/cover_you_looking_for?space_id=${loveSpaceId}`);
+      const answeredUrl = encodeURIComponent(`/pages/love/cover_about_yourself?space_id=${loveSpaceId}`);
+      console.log("answeredUrl===============",answeredUrl)
       wx.navigateTo({
         url: `/pages/love/papers_view?object_name=love_test&space_id=${loveSpaceId}&answered_url=${answeredUrl}&answered_url_type=reLaunch&keep_progress`
       });

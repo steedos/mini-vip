@@ -177,7 +177,7 @@
         <view class="vip_close"></view>
       </view>
       <view class="share-friend-circle-box">
-        <view class="share-friend-circle-title">交友海报</view>
+        <view class="share-friend-circle-title">缘分测试</view>
         <image class="image" mode="widthFix" src="{{friend_circle_image_url}}" @load="friendCircleImageLoaded" @error="friendCircleImageLoadFailed"/>
         <block wx:if="{{showOpenSetting}}">
           <button type="primary" open-type="openSetting" class="btn-save-image" @opensetting="openSetting">
@@ -202,12 +202,11 @@
   import { baseUrl, appId } from '@/config';
   import { baseMaterialUrl } from '@/config';
   import util from '../../wxs/util.wxs';
-  var utilJs = require('../../utils/util.js')
   import { loveSpaceId } from '@/config';
  
   export default class LoveShare extends wepy.page {
-		config = {
-			navigationBarTitleText: '缘分测试',
+    config = {
+      navigationBarTitleText: '缘分测试',
     };
 
     wxs = {
@@ -320,7 +319,7 @@
     getSharePath(){
       let path = '';
       if(this.share_card){
-        path = `pages/love/test?space_id=${this.space_id}`
+        path = `pages/love/introduce?space_id=${this.space_id}&user_id=${this.user_id}`
       }else{
         path = `pages/love/find?space_id=${this.space_id}`
       }
@@ -348,10 +347,7 @@
     }
 
     async generateFriendCard() {
-      if(this.$parent.globalData.user.qrcode) {
-        this.card_url = utilJs.formatImageUrl(this.$parent.globalData.user.qrcode,this.baseUrl)
-      }else{
-        if(this.$parent.globalData.user.avatar) {
+      if(this.$parent.globalData.user.avatar) {
         const imageUrl = `https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/share_me.png`;
         const imgRes = await wepy.downloadFile({
           url: imageUrl
@@ -370,7 +366,7 @@
         const avatarRes = await wepy.downloadFile({
           url: this.$parent.globalData.user.avatar
         })
-        let path = `pages/love/test`;
+        let path = `pages/love/introduce`;
         const userId = this.$parent.globalData.user._id;
         const scene = `share_from=${userId}`;
         wepy.showLoading({
@@ -422,23 +418,6 @@
             if(res){
               self.card_url = res.tempFilePath
               // self.friend_circle_image_url = res.tempFilePath
-              const authToken = self.$parent.globalData.user.auth_token;
-              const userId = self.$parent.globalData.user._id;
-              const name = this.$parent.globalData.user.name;
-              const fileResult = await wepy.uploadFile({
-                url: `${self.baseUrl}/s3/images`,
-                filePath: res.tempFilePath,
-                name: 'file',
-                // formData: formData,
-                header: {
-                  'X-Auth-Token': authToken,
-                  'X-User-Id': userId
-                }
-              })
-              const fileData = JSON.parse(fileResult.data);
-              const url = '/mini/vip/user';
-              console.log('fileData====',fileData['_id'])
-              req.put(url, {name: name, qrcode: fileData['_id']});
               self.$apply();
             }
             else{
@@ -457,7 +436,6 @@
           icon: "none"
         });
        }
-      }
     }
     
     async generateFriendCircleImage() {

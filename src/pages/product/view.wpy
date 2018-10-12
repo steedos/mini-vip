@@ -972,7 +972,7 @@
       </view>
     </view>
     <view class="bottom-btn">
-      <view class="l l-collect" hover-class='weui-grid_active' @tap="enterProductIndex">
+      <view class="l l-collect" hover-class='weui-grid_active' @tap="enterSpaceIndex">
         <image class="icon" src="{{ collectBackImage }}"></image>
       </view>
       <view class="l l-cart" @tap="openCartPage" hover-class='weui-grid_active'>
@@ -1172,10 +1172,10 @@
           url: `../cart/index?space_id=${this.space_id}`
         })
       },
-      enterProductIndex() {
+      enterSpaceIndex() {
         const space_id = this.space_id;
         wx.navigateTo({
-          url: `./list?space_id=${space_id}`
+          url: `../space/index?space_id=${space_id}`
         })
       },
       buyNow() {
@@ -1186,7 +1186,7 @@
           product.count = this.count;
           product = JSON.stringify(product);
           wx.navigateTo({
-            url: `../cart/checkout?product=${product}`
+            url: `../cart/checkout?product=${product}&space_id=${this.space_id}`
           })
         } else {
           this.showPop = true;

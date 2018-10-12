@@ -1,4 +1,4 @@
-<!-- 最新动态 -->
+<!-- 最新文章 -->
 <style lang="less">
 page {
   height: 100%;
@@ -118,7 +118,7 @@ page {
           <scroll-view  scroll-x="true">
             <view style="display: flex">
             <repeat for="{{categories}}" key="index" index="index" item="item">
-              <view class="zan-tab__item {{index == seleted_id ? 'zan-tab__item--selected' : ''}}"   @tap="changeCategory({{index}},{{item}})" style="flex:1; white-space: nowrap;padding: 0 10px; text-align:center" > 
+              <view class="zan-tab__item {{item._id == seleted_id ? 'zan-tab__item--selected' : ''}}"   @tap="changeCategory({{item}})" style="flex:1; white-space: nowrap;padding: 0 10px; text-align:center" > 
                 <view class="zan-tab__title">{{ item.name }}</view>
               </view>
             </repeat>
@@ -155,7 +155,7 @@ const DATA_LENGTH = 10;
 
 export default class Posts extends wepy.page {
   config = {
-    navigationBarTitleText: '动态',
+    navigationBarTitleText: '文章',
     enablePullDownRefresh: true
   };
 
@@ -177,26 +177,27 @@ export default class Posts extends wepy.page {
     this.space_id = e.space_id;
     await this.$parent.login(e);
     await this.loadData(e.category_id);
-    if(e.category_id){     
-      this.seleted_id =  _.findIndex(this.categories,{'_id':e.category_id})
-      this.cover = this.categories[this.seleted_id].cover
-      this.category_id = e.category_id
-      this.$apply()
-    }
+    // if(e.category_id){     
+    //   this.seleted_id =  e.category_id
+    //   // this.cover = this.categories[this.seleted_id].cover
+    //   this.category_id = e.category_id
+    //   this.$apply()
+    // }
     wx.showShareMenu({
       withShareTicket: true,
     })
   }
 
   async loadData(category_id) {
+    // console.log("category_id============",category_id)
     this.posts = [];
     this.current_skip = 0;
     wepy.showLoading({
       title: '加载中',
       mask: true
     });
-    await this.loadCategories();
-    await this.loadPostList(category_id);
+    await this.loadCategories(category_id);
+    await this.loadPostList(this.seleted_id);
     this.is_loaded = true;
     this.$apply();
     wepy.hideLoading();
@@ -262,7 +263,7 @@ export default class Posts extends wepy.page {
     is_skip_allowed: true,
     is_loaded: false,
     editable: false,
-    categories: ''
+    categories: []
   };
   wxs = {
     util: util
@@ -295,15 +296,29 @@ export default class Posts extends wepy.page {
     }
     this.$apply();
   };
-  async loadCategories(){
-    const options = {
+  async loadCategories(category_id){
+    var options = {
       $count: true,
-      $select: 'name,sort_no,description,cover',
+      $select: 'name,sort_no,description,cover,parent',
       $orderby:'sort_no'
     };
+    if(category_id){
+      options.$filter = `parent eq '${category_id}'`
+    }
     const result = await this.$parent.query("post_category", options, this.space_id);
     if(result.value.length > 0){
-      this.categories = _.union([{name:'全部'}],result.value)
+      if(!category_id){
+        result.value.forEach((category) => {
+          if(!category.parent){
+            this.categories.push(category)
+          }
+        })
+        this.categories = _.union([{_id:0,name:'全部'}],this.categories)
+      }else{
+        this.categories = result.value
+        this.seleted_id = result.value[0]._id
+        this.cover = result.value[0].cover || ''
+      }
       this.$apply();
     } 
   }
@@ -314,23 +329,16 @@ export default class Posts extends wepy.page {
         url: url
       });
     },
-    changeCategory( index,category) {
-      this.seleted_id = index
-      if(index == 0){
-        this.category_id = ''
-        this.cover = ''
-        this.category_name = ''
-        this.category_description = ''
-      }else {
-        this.category_id = category._id
-        this.cover = category.cover || ''
-        this.category_name = category.name
-        this.category_description = category.description
-      }
+    changeCategory(category) {
+      this.seleted_id = category._id
+      this.category_id = category._id
+      this.cover = category.cover || ''
+      this.category_name = category.name || ''
+      this.category_description = category.description || ''
       this.posts = []
       this.current_skip = 0
       this.$apply()
-      this.loadPostList(this.category_id)
+      this.loadPostList(this.seleted_id)
     }
   }
 }

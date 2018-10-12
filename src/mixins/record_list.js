@@ -27,13 +27,14 @@ export default class recordList extends wepy.mixin {
     add_url: '/pages/record/create',
     navigationBarTitle: '',
     orderby: '',
+    extra_fields: '',
   };
 
   dataRefresh() {
-    this.record_list = [];
+    // this.record_list = [];
     this.allow_load = true;
     this.current_skip = 0;
-    this.loadRecords();
+    this.loadRecords('', true);
   }
 
   onPullDownRefresh() {
@@ -169,6 +170,10 @@ export default class recordList extends wepy.mixin {
 
     options.$select = keys.join(",");
 
+    if(this.extra_fields){
+      options.$select = options.$select + ',' + this.extra_fields
+    }
+
     return options;
   }
 
@@ -196,11 +201,11 @@ export default class recordList extends wepy.mixin {
       throw new Error('缺少参数:object_name')
     }
 
-    this.space_id = e.space_id;
+    this.space_id = e.space_id || this.space_id;
     this.object_name = e.object_name || this.object_name;
     this.avatar_field = e.avatar_field || this.avatar_field;
     this.name_field = e.name_field || this.name_field || 'name';
-    this.description_field = e.description_field;
+    this.description_field = e.description_field || this.description_field;
     this.date_field = e.date_field || this.date_field;
     this.price_field = e.price_field;
     this.url = this.getRecordUrl(e);
@@ -211,7 +216,7 @@ export default class recordList extends wepy.mixin {
 
     this.filter = await this.getQueryFilter(e);
 
-    const object = await this.$parent.getObject(this.object_name, e.space_id);
+    const object = await this.$parent.getObject(this.object_name, this.space_id);
 
     this.allowCreate = object.allowCreate;
     if(e.allow_create === 'true'){
@@ -324,11 +329,12 @@ export default class recordList extends wepy.mixin {
     }
   }
 
-  async loadRecords() {
-    wepy.showLoading({
-      title: '加载中',
-      mask: true
-    });
+
+  async loadRecords(searchValue, refresh) {
+    // wepy.showLoading({
+    //   title: '加载中',
+    //   mask: true
+    // });
     const skip = this.current_skip;
     const object_name = this.object_name;
 
@@ -346,7 +352,11 @@ export default class recordList extends wepy.mixin {
           this.style_list[record._id] = {positionX: 0, offsetX: 0}
           records.push(record          )
         }
-        this.record_list = this.record_list.concat(records)
+        if(refresh){
+          this.record_list = records
+        }else{
+          this.record_list = this.record_list.concat(records)
+        }
       }
       this.current_skip = skip + result.value.length;
       if (this.current_skip === result['@odata.count']) {
