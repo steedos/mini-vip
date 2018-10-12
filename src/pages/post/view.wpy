@@ -322,7 +322,8 @@ export default class PostView extends wepy.page {
     hide_comment: false,
     isSpaceAdmin: false,
     is_owner: false,
-    wemark: {}
+    wemark: {},
+    post_object_name:"post",
   };
 
   async onLoad(e) {
@@ -335,6 +336,9 @@ export default class PostView extends wepy.page {
     });
     this.space_id = e.space_id || loveSpaceId;
     this.hide_comment = e.hide_comment;
+    if(e.post_object_name){
+      this.post_object_name = e.post_object_name;
+    }
     if(e.space_id){
       const options = {
         $filter: `_id eq '${e.space_id}'`,
@@ -412,12 +416,12 @@ export default class PostView extends wepy.page {
 
   async loadPost(){
     let space_id = ''
-    let object_name = ''
-    if (loveSpaceId){
-      object_name = 'love_post'
-    }else{
-      object_name = 'post'
-    }
+    let object_name = this.post_object_name
+    // if (loveSpaceId){
+    //   object_name = 'love_post'
+    // }else{
+    //   object_name = 'post'
+    // }
     const query = {
       $expand: 'owner($select=name,profile)'
     }
