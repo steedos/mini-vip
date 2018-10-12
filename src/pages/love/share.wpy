@@ -370,7 +370,19 @@
         console.log("=======downloadFile==avatarUrl==========", avatarUrl);
         const avatarRes = await wepy.downloadFile({
           url: avatarUrl
-        })
+        }).catch((err)=>{
+          console.log("=======downloadFile==avatarUrl=====error=====", err);
+          this.$apply();
+          return false;
+        });
+        if(!avatarRes || avatarRes.statusCode === 404){
+          wepy.showToast({
+            title: "用户头像获取失败",
+            icon: "none"
+          });
+          return;
+        }
+        console.log("=======downloadFile==avatarRes==========", avatarRes);
         let path = `pages/love/index`;
         const userId = this.$parent.globalData.user._id;
         const scene = `share_from=${userId}`;
@@ -399,6 +411,7 @@
         console.log("avatarRes===============",avatarRes.tempFilePath)
         console.log("imgRes===============",imgRes.tempFilePath)
         if(codeImgRes && avatarRes){
+          console.log("===codeImgRes && avatarRes=====start==========")
           const self = this
           const ctx = wepy.createCanvasContext('myCanvas')
           ctx.drawImage(imgRes.tempFilePath, 0, 0, 750, 1000)
