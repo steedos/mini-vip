@@ -98,7 +98,7 @@
       searchbar: searchbar,
     };
 
-    async loadRecords(e) {
+    async loadRecords(e, refresh) {
       wx.showNavigationBarLoading();
       const userId = this.$parent.globalData.user._id;
 
@@ -133,8 +133,11 @@
           r.object = objects[oname];
         }
       });
-
-      this.record_list = this.record_list.concat(result.value);
+      if(refresh){
+        this.record_list = result.value
+      }else{
+        this.record_list = this.record_list.concat(result.value);
+      }
       this.$apply();
       wx.hideNavigationBarLoading();
       wx.stopPullDownRefresh();
@@ -148,10 +151,10 @@
     }
 
     dataRefresh() {
-      this.record_list = [];
+//      this.record_list = [];
       this.allow_load = true;
       this.current_skip = 0;
-      this.loadRecords();
+      this.loadRecords('', true);
     }
 
     onReachBottom() {
@@ -167,19 +170,24 @@
     async onLoad(e) {
       await this.$parent.login();
       this.space_id = this.$parent.space._id;
-      this.loadRecords(e)
+      this.loadRecords(e);
+      this.pageInit = true;
     }
 
     async onShow(){
-      this.record_list = [];
-      this.space_id = this.$parent.space._id;
-      this.loadRecords()
+      if(this.pageInit){
+        this.allow_load = true;
+        this.current_skip = 0;
+        this.space_id = this.$parent.space._id;
+        this.loadRecords('', true);
+      }
     }
 
     data = {
       record_list: [],
       searchPlaceholder: '',
-      space_id: ''
+      space_id: '',
+      pageInit: false,
     };
 
     methods = {

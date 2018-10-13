@@ -470,7 +470,7 @@
   import util from '../wxs/util.wxs'
   const utilJs = require('../utils/util.js');
   import Creator from '@/utils/creator';
-  import odataClient from '@/utils/odata_client.js'
+  import CreatorClinet from '@/utils/creator_client.js'
 
   import _ from 'underscore'
 
@@ -509,15 +509,7 @@
     };
 
     recentInsert(object_name, record_id, spaceId){
-      if(object_name === 'object_recent_viewed'){
-        return ;
-      }
-      odataClient.insert('object_recent_viewed', {
-        record: {
-          o: object_name,
-          ids: [record_id]
-        }
-      }, spaceId)
+      CreatorClinet.upsertRecentViewed(object_name, record_id, spaceId)
     }
 
     /*

@@ -47,6 +47,15 @@ class ODataClinet{
     })
     return result
   }
+
+  async call_method(method_name, body_params, object_name, _id, space_id){
+    const url = `/api/odata/v4/${space_id}/${object_name}/${_id}/${method_name}`;
+    const result = await req.post(url, body_params || {}).catch((err)=>{
+      console.log("error...",err.data);
+      return false
+    });
+    return result
+  }
 }
 
 export default new ODataClinet()

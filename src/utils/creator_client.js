@@ -1,5 +1,6 @@
 import req from '@/network'
 import _ from 'underscore'
+import odataClient from './odata_client'
 
 class CreatorClinet{
   getObjectRelateds(objects, object_name){
@@ -101,6 +102,9 @@ class CreatorClinet{
     return selector;
   };
 
+  upsertRecentViewed(object_name, _id, space_id){
+    return odataClient.call_method("inc", {object_name: object_name, record_id: _id}, "object_recent_viewed", "all", space_id)
+  }
 }
 
 export default new CreatorClinet()
