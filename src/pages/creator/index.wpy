@@ -94,6 +94,8 @@
         console.log('this.$parent.space_id',this.$parent.space._id);
 
         this.$parent.bootstrap = await creatorClient.loadBootstrap(this.$parent.space._id);
+        creatorClient.setObjects(this.$parent.bootstrap.objects);
+        creatorClient.setSpaceId(this.$parent.space._id);
         if(!go){
           pageRouter.switchTab({ url: '/pages/creator/apps' });
           return ;

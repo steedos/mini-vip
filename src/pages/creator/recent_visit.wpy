@@ -101,9 +101,10 @@
     async loadRecords(e, refresh) {
       wx.showNavigationBarLoading();
       const userId = this.$parent.globalData.user._id;
-
+      const skip =  this.current_skip;
       const query_options = {
         $top: PAGESIZE,
+        $skip: skip,
         $select: 'record',
         $expand: 'record($select=name)',
         $orderby: 'modified desc',
@@ -121,8 +122,6 @@
 
       const result = await odataClient.query('object_recent_viewed', query_options, this.space_id);
 
-      const objects = this.$parent.bootstrap.objects;
-
       let record_list = [];
 
       let oname = '';
@@ -130,13 +129,19 @@
       _.forEach(result.value, (r)=>{
         if(r.record){
           oname = r.record['reference_to._o'];
-          r.object = objects[oname];
+          r.object = creatorClient.getObject(oname, this.space_id);
         }
       });
       if(refresh){
         this.record_list = result.value
       }else{
         this.record_list = this.record_list.concat(result.value);
+      }
+
+      this.current_skip = skip + result.value.length;
+
+      if (this.current_skip === result['@odata.count']) {
+        this.allow_load = false
       }
       this.$apply();
       wx.hideNavigationBarLoading();
@@ -188,6 +193,7 @@
       searchPlaceholder: '',
       space_id: '',
       pageInit: false,
+      current_skip: 0,
     };
 
     methods = {

@@ -146,7 +146,7 @@ import util from '../../wxs/util.wxs';
 import searchbar from '../../components/searchbar';
 import listViews from '../../components/list_views';
 import recordList from '../../mixins/record_list';
-
+import creatorClient from '@/utils/creator_client.js'
 import _ from 'underscore';
 
 export default class RelatedRecordList extends wepy.page {
@@ -166,7 +166,7 @@ export default class RelatedRecordList extends wepy.page {
   };
 
   onLoad(e){
-    let list_views = this.$parent.bootstrap.objects[e.object_name].list_views;
+    let list_views = creatorClient.getObject(e.object_name, e.space_id).list_views;
 
     delete list_views['default'];
 

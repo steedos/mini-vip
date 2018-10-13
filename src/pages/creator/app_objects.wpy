@@ -45,7 +45,8 @@
       let app_objects = [];
 
       app_objects_id.forEach((app_object_id) => {
-        const object = this.$parent.bootstrap.objects[app_object_id];
+        console.log('creatorClient.getObject.....');
+        const object = creatorClient.getObject(app_object_id, this.space_id);
         if(object){
           app_objects.push(object)
         }

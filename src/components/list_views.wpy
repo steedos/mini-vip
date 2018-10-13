@@ -38,6 +38,7 @@
 <script>
   import wepy from 'wepy';
   import _ from 'underscore'
+  import creatorClient from '@/utils/creator_client.js'
 
   export default class listView extends wepy.component {
     data = {
@@ -55,7 +56,7 @@
     watch  = {
       object_name: function (newValue, oldValue) {
         if(newValue){
-          let list_views = this.$parent.$parent.bootstrap.objects[newValue].list_views;
+          let list_views = creatorClient.getObject(newValue).list_views;
 
           delete list_views['default'];
 

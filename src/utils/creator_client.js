@@ -3,6 +3,20 @@ import _ from 'underscore'
 import odataClient from './odata_client'
 
 class CreatorClinet{
+
+
+  _objects = {};
+
+  _space = '';
+
+  setObjects(objects){
+    this._objects = objects;
+  }
+
+  setSpaceId(space_id){
+    this._space = space_id;
+  }
+
   getObjectRelateds(objects, object_name){
     let related_objects = [];
 
@@ -104,6 +118,20 @@ class CreatorClinet{
 
   upsertRecentViewed(object_name, _id, space_id){
     return odataClient.call_method("inc", {object_name: object_name, record_id: _id}, "object_recent_viewed", "all", space_id)
+  }
+
+  getObject(object_name, space_id){
+    if(!space_id){
+      space_id = this._space;
+    }
+
+    if(space_id){
+      const obj = this._objects[`c_${space_id}_${object_name}`]
+      if(obj){
+        return obj
+      }
+    }
+    return this._objects[object_name]
   }
 }
 
