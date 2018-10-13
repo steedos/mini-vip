@@ -116,7 +116,7 @@
 
     methods = {
       formSubmit: async function (e) {
-        console.log('fs', e.detail.value)
+
         const spaceName = e.detail.value.spaceName;
 
         if (!spaceName) {
@@ -134,6 +134,11 @@
           this.$apply();
           return;
         }
+
+        wepy.showLoading({
+          title: '注册中, 请稍等',
+          mask: true
+        });
 
         if (this.name != name) {
           await req.put('/mini/vip/user', {name: name});
@@ -156,6 +161,8 @@
 
           pageRouter.redirectTo({url: '/pages/creator/index'});
         }
+
+        wepy.hideLoading();
       }
     }
   }
