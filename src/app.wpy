@@ -5,9 +5,7 @@
 @import "../lib/vip/vip.less";
 @import "../lib/icon/utility.less";
 page {
-  background: linear-gradient(#ffffff, #f8f8f8);
-  background-repeat: no-repeat;
-  background-attachment: fixed;
+	background-color: #efeef3;
   font-size: 16px;
   font-family: -apple-system-font,Helvetica Neue,Helvetica,sans-serif;
 }

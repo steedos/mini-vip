@@ -34,6 +34,10 @@
 </template>
 
 <style lang="less">
+	.page__bd{
+		padding-bottom:50px;
+	}
+
   .record-read{
     .page__bd {
       padding-bottom: 0px;

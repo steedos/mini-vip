@@ -1,7 +1,12 @@
 <style lang="less">
   .record-form{
 
-    .slds-icon-action-close{
+		.page__bd{
+			padding-bottom:50px;
+		}
+
+
+		.slds-icon-action-close{
       padding: 0.4rem;
     }
 
