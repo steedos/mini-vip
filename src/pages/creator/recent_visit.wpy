@@ -53,7 +53,7 @@
         <block wx:if="{{record_list.length}}">
           <view class="weui-cells weui-cells_after-title">
             <repeat for="{{record_list}}" key="index" index="index" item="record">
-              <navigator url="/pages/record/view?object_name={{record.object.name}}&record_id={{record.record._id}}&space_id={{space_id}}"
+              <navigator wx:if="{{record.record}}" url="/pages/record/view?object_name={{record.object.name}}&record_id={{record.record._id}}&space_id={{space_id}}"
                          class="record-container weui-cell weui-cell_access" data-item-id="{{record._id}}"
                          hover-class="weui-cell_active">
                 <view class="weui-cell__hd">
