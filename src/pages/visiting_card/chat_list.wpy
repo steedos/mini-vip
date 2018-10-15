@@ -153,7 +153,7 @@
 
 <script>
 import wepy from 'wepy';
-import { baseUrl,loveSpaceId } from '@/config';
+import { baseUrl,loveSpaceId,chatNewMessagePollingInterval } from '@/config';
 import util from '../../wxs/util.wxs';
 import searchbar from '../../components/searchbar';
 import recordList from '../../mixins/record_list';
@@ -161,6 +161,7 @@ import ODataClinet from '@/utils/odata_client'
 import _ from 'underscore'
 import chatNotification from '../../components/chat/notification';
 import chatNotificationMixin from '../../mixins/chat_notification';
+import chat from '../../common/chat';
 
 export default class RecordList extends wepy.page {
   config = {
@@ -190,8 +191,58 @@ export default class RecordList extends wepy.page {
     pageSize: 30,
     space_id: loveSpaceId,
     object_name: 'chat_subscriptions',
-    orderby: 'last_message_date desc'
+    orderby: 'last_message_date desc',
+		recordsSetInterval: null
   };
+
+
+	stopReceivingRecords(){
+		if(this.recordsSetInterval){
+			clearInterval(this.recordsSetInterval)
+		}
+		this.recordsSetInterval = null
+	}
+
+	receivingRecords(){
+		console.log('set timeout receivingRecords',this.user_id)
+		if(this.user_id){
+			this.stopReceivingRecords()
+			this.recordsSetInterval = setInterval(async ()=>{
+				console.log('chat list receivingSubscriptions.............')
+				const unreadSubscriptions = _.filter(chat.unreadSubscriptions, (s)=>{
+					return s.unread > 0 && s.modified_by._id != this.user_id
+				});
+
+				if(unreadSubscriptions.length != this.record_list.length){
+					await this.getRooms();
+				}
+
+				const record_list = _.uniq(unreadSubscriptions.concat(this.record_list), true, (a)=>{
+					return a._id
+				});
+
+
+
+				this.record_list = record_list;
+				this.$apply()
+			}, chatNewMessagePollingInterval || 15 * 1000)
+		}
+	}
+
+	async getRooms(){
+		let queryOptions = {
+			$filter: `members eq '${this.user_id}'`,
+			$select: '_id,name,space,members',
+			$expand: 'members($select=name,avatarUrl)'
+		};
+
+		const res = await ODataClinet.query('chat_rooms', queryOptions, this.space_id);
+		let rooms = {};
+		_.forEach(res.value, (r)=>{
+			rooms[r._id] = r
+		});
+		this.rooms = rooms;
+	}
 
 
   async onLoad(e){
@@ -209,18 +260,8 @@ export default class RecordList extends wepy.page {
   }
 
   async loadRecordsAfter(){
-    let queryOptions = {
-      $filter: `members eq '${this.user_id}'`,
-      $select: '_id,name,space,members',
-      $expand: 'members($select=name,avatarUrl)'
-    };
 
-    const res = await ODataClinet.query('chat_rooms', queryOptions, this.space_id);
-    let rooms = {};
-    _.forEach(res.value, (r)=>{
-      rooms[r._id] = r
-    });
-    this.rooms = rooms;
+  	await this.getRooms();
 
     this.$apply()
   }
@@ -234,10 +275,23 @@ export default class RecordList extends wepy.page {
   }
 
   async onShow() {
+		this.user_id = this.$parent.globalData.user._id;
+
     if(this.is_loaded){
       this.dataRefresh();
     }
+		setTimeout( ()=>{
+			this.receivingRecords()
+		}, 15 * 1000)
   }
+
+	onHide(){
+		this.stopReceivingRecords()
+	}
+
+	onUnload(){
+		this.stopReceivingRecords()
+	}
 
   methods = {
     searchRecords(searchValue, evt) {
