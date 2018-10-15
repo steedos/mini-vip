@@ -119,7 +119,7 @@
 <template>
 	<block wx:if="{{list.length}}">
 		<repeat for="{{list}}" key="index" index="index" item="post">
-			<navigator class="{{post.featured || index % 3 == 0 ? 'post-featured' : 'post-normal'}} post list {{index % 3 == 0 ? 'border-top' : ''}}" hover-class="weui-grid_active" url="../post/view?post_id={{post._id}}&name={{post.owner.name}}&avatar={{post.owner.profile.avatar}}">
+			<navigator class="{{post.featured || index % 3 == 0 ? 'post-featured' : 'post-normal'}} post list {{index % 3 == 0 ? 'border-top' : ''}}" hover-class="weui-grid_active" url="../post/view?post_id={{post._id}}&name={{post.owner.name}}&avatar={{post.owner.profile.avatar}}&post_object_name={{postObjectName}}">
 				<view class="title">
 					<view class="text">{{post.name}}</view>
 					<view class="normal-info">
@@ -218,6 +218,10 @@ export default class simplePostList extends wepy.component {
 		hideComment: {
       type: Boolean,
       default: false
+    },
+    postObjectName: {
+      type: String,
+      default: "post"
     }
 	}
 

@@ -218,6 +218,10 @@ export default class PostList extends wepy.component {
     hideComment: {
       type: Boolean,
       default: false
+    },
+    postObjectName: {
+      type: String,
+      default: "post"
     }
   }
 
@@ -281,6 +285,9 @@ export default class PostList extends wepy.component {
       let url = `../post/view?post_id=${post_id}&space_id=${space_id}`;
       if(this.editable){
         url += '&editable=true'
+      }
+      if(this.postObjectName){
+        url += `&post_object_name=${this.postObjectName}`
       }
       console.log("goDetail=====================", space_id);
       console.log(url);

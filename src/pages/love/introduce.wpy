@@ -314,6 +314,7 @@ page {
             </view>
           </view>
           <button class="weui-btn btn-star" open-type="share" plain="true" type="primary" size="mini">转发</button>
+          <button wx:if="{{is_owner && showPost}}" class="weui-btn btn-test" @tap="addPost" type="primary" size="mini">发布</button>
           <block wx:if="{{!is_owner}}">
             <button wx:if="{{!answered}}" class="weui-btn btn-test" @tap="goAnswer" type="primary" size="mini">测试缘分</button>
             <button wx:if="{{answered && showGoHome}}" class="weui-btn btn-test" @tap="goHome" type="primary" size="mini">我的名片</button>
@@ -381,7 +382,7 @@ page {
       </view>
     </view>
     <view class="post-container">
-      <postList :list.sync="posts" :editable.sync="editable" :hideComment.sync="true" />
+      <postList :list.sync="posts" :editable.sync="editable" :hideComment.sync="true" :postObjectName.sync="post_object_name" />
     </view>
 
   </view>
@@ -435,6 +436,8 @@ export default class loveIntroduce extends wepy.page {
     baseMaterialUrl: baseMaterialUrl,
     loveSpaceId: loveSpaceId,
     share_from:'',
+    showPost:false,
+    post_object_name:"love_post",
     settings: [{
       icon: 'slds-icon-standard-client',
       label: '关于我',
@@ -608,6 +611,7 @@ export default class loveIntroduce extends wepy.page {
     await this.loadAboutMe();
     const love = this.$parent.globalData.mini_app;
     if (love && love.enabled) {
+      this.showPost = true
       await this.loadPost();
     }
     if(!this.a_record.match && this.answered) {
