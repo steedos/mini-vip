@@ -199,6 +199,55 @@
       border-radius: 5px;
     }
 
+    .textarea{
+      .weui-media-box__title{
+        padding-left:6px;
+        color:#999;
+      }
+
+      .weui-media-box__desc{
+        padding-left:6px;
+        color: #000000;
+      }
+    }
+
+    .tab-bar {
+      display: flex;
+      position: fixed;
+      z-index: 500;
+      bottom: 0;
+      height: 50px;
+      width: 100%;
+      background-color: #f7f7fa;
+      /*justify-content: center;*/
+      align-items: center;
+
+      .slds-icon-utility{
+        margin-left: 15px;
+        width:18px;
+        height:18px;
+        background-repeat:no-repeat;
+        background-position:center;
+        background-size:60%;
+        padding:0.5rem;
+        border-radius:50%;
+      }
+
+      .submit-btn{
+        margin: 0px;
+        border: none;
+        border-radius: 0px;
+        height: 100%;
+      }
+
+      .submit-btn:after{
+        border: none;
+      }
+
+      .submit-btn:before{
+        border: none;
+      }
+    }
   }
 </style>
 <template>
@@ -391,7 +440,7 @@
                   </block>
                 </block>
                 <block wx:elif="{{item.type === 'textarea' && (item.readonly || !_record_allowEdit || args.action === 'read')}}">
-                  <view class="weui-media-box weui-media-box_text">
+                  <view class="weui-media-box weui-media-box_text textarea">
                     <view class="weui-media-box__title weui-media-box__title_in-text">
                       {{item.label}}
                     </view>
@@ -452,13 +501,25 @@
           <view class="weui-cells__tips" wx:if="{{groupField._helpText}}">{{groupField._helpText}}</view>
         </repeat>
 
-        <view class="btn-container" wx:if="!hiddenBtn">
-          <button class="submit-btn save-btn" type="primary" form-type="submit" disabled="{{submitDisabled}}" wx:if="{{args.action === 'edit' || args.action === 'create'}}">保存</button>
+        <!--<view class="btn-container" wx:if="!hiddenBtn">-->
+          <!--<button class="submit-btn save-btn" type="primary" form-type="submit" disabled="{{submitDisabled}}" wx:if="{{args.action === 'edit' || args.action === 'create'}}">保存</button>-->
+          <!--&lt;!&ndash;<button class="submit-btn remove-btn" wx:if="{{!args.undeletable && _record_allowDelte}}"  @tap="removeRecord">删除</button>&ndash;&gt;-->
+          <!--<button class="submit-btn" type="primary" @tap="goEdit" wx:if="{{_record_allowEdit && args.action === 'read'}}">编辑</button>-->
           <!--<button class="submit-btn remove-btn" wx:if="{{!args.undeletable && _record_allowDelte}}"  @tap="removeRecord">删除</button>-->
-          <button class="submit-btn" type="primary" @tap="goEdit" wx:if="{{_record_allowEdit && args.action === 'read'}}">编辑</button>
-          <button class="submit-btn remove-btn" wx:if="{{!args.undeletable && _record_allowDelte}}"  @tap="removeRecord">删除</button>
 
-          <button class="submit-btn remove-btn" wx:if="{{!args.undeletable && showDownload}}"  @tap="downloadFile">在线查看</button>
+          <!--<button class="submit-btn remove-btn" wx:if="{{!args.undeletable && showDownload}}"  @tap="downloadFile">在线查看</button>-->
+        <!--</view>-->
+
+        <view class="tab-bar border-top-1px" wx:if="!hiddenBtn">
+          <view style="width: 70%;display: flex;">
+            <!--<view class="slds-icon-utility slds-icon-utility-internal-share" wx:if="{{args.action != 'create'}}" @tap="addRecord"></view>-->
+            <view class="slds-icon-utility slds-icon-utility-delete" wx:if="{{args.action === 'read' && !args.undeletable && _record_allowDelte}}"  @tap="removeRecord"></view>
+          </view>
+          <view style="width: 30%; height:100%;">
+            <button class="submit-btn save-btn" type="primary" form-type="submit" disabled="{{submitDisabled}}" wx:if="{{args.action === 'edit' || args.action === 'create'}}">保存</button>
+            <button class="submit-btn" type="primary" @tap="goEdit" wx:if="{{_record_allowEdit && args.action === 'read'}}">编辑</button>
+            <button class="submit-btn remove-btn" wx:if="{{!args.undeletable && showDownload}}"  @tap="downloadFile">在线查看</button>
+          </view>
         </view>
       </view>
     </form>
