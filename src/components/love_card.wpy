@@ -1,0 +1,383 @@
+<style lang="less">
+.clear{
+	clear: both;
+}
+.card-container{
+	margin: 10px;
+	padding: 15px 25px;
+	// border-radius: 3px;
+	box-shadow:3px 3px 8px #888;
+	background-color: #fff;
+	// background: url(https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/card3.png) no-repeat;
+	// background-size: cover;
+	min-height: 180px;
+	position:relative;
+}
+
+.card-avatar{
+	float: right;
+	.image{
+		width: 70px;
+		height: 70px;
+		border-radius: 100%;
+		border: solid 1px #ddd;
+		display: block;
+	}
+}
+.card-content{
+	font-size: 14px;
+	margin-top: 15px;
+	font-size: 13px;
+	color: #888;
+	.card-content-item{
+		margin: 8px 0;
+		.card-content-icon{
+			float: left;
+			.slds-icon{
+				width:15px;
+				height:15px;
+				line-height:15px;
+				margin-right:0.5em;
+			}
+		}
+		.card-content-tel, .card-content-email, .card-content-address{
+			float: left;
+			height: 15px;
+			line-height: 15px;
+			width: calc(~"100% - 25px");
+			word-break: break-all;
+			text-overflow: ellipsis;
+			display: -webkit-box;
+			-webkit-box-orient: vertical;
+			-webkit-line-clamp: 1;
+			overflow: hidden;
+		}
+	}
+}
+.card-title{
+	float: left;
+	width: 160px;
+	overflow:hidden;
+
+	.card-title-logo{
+		margin-right: 5px;
+		display: inline-block;
+		.image{
+			width: 20px;
+			height: 20px;
+			display: block;
+		}
+	}
+
+	.card-tittle-company{
+		margin-bottom: 8px;
+		overflow: hidden;
+		text-overflow:ellipsis;
+		white-space:nowrap;
+		max-width:100%;
+		font-size: 13px;
+	}
+
+	.card-title-name,.card-title-job{
+		max-width:100%;
+		text-overflow:ellipsis;
+		white-space:nowrap;
+		overflow:hidden;
+	}
+
+	.card-title-name{
+		font-size: 20px;
+		display: inline-block;
+		&.weui-cell__ft_in-access{
+			padding-right: 20px;
+		}
+	}
+	.card-title-job{
+		font-size: 16px;
+	}
+}
+.card-more{
+	text-align:center;
+	color:#999;
+	font-size: 14px;
+
+	.card-more-title{
+		display: inline-block;
+	}
+	.switch-group-open {
+		margin-left: 8px;
+		height: 15px;
+		line-height: 15px;
+		display: inline-block;
+	}
+	.switch-group-open::after {
+		transform: rotate(135deg);
+	}
+	.switch-group-close {
+		margin-left: 8px;
+		height: 15px;
+		line-height: 15px;
+		display: inline-block;
+		margin-bottom:-4px;
+	}
+	.switch-group-close::after {
+		transform: rotate(-45deg);
+	}
+}
+.card-more-detail{
+	background:#F7F7F7;
+	padding: 20px 0;
+	display: table;
+	width:100%;
+	.card-more-detail-item{
+		display: table-row;
+		text-align: left;
+		line-height: 40px;
+		.detail-item-title{
+			display: table-cell;
+			color: #A6A6A6;
+			width: 50px;
+			padding-left: 20px;
+		}
+		.detail-item-contant, .detail-item-contant-null{
+			display: table-cell;
+			color: #000;
+			margin-left: 25px;
+			line-height: 25px;
+			// width: calc(~"100% - 75px");
+		}
+		.detail-item-btn{
+			display: table-cell;
+			text-align:right;
+			width: 80px;
+			padding-right: 20px;
+			.detail-item-btn-right{
+				vertical-align:middle;
+				height: 25px;
+				line-height: 25px;
+			}
+		}
+		.detail-item-contant-null{
+			color:#A6A6A6;
+		}
+	}
+}
+</style>
+<template>
+	<view class="love-card">
+		<view class="card-container" @tap="goPreview">
+			<view class="card-title">
+				<view class="card-tittle-company">
+					<block wx:if="{{card_info.company}}">{{card_info.company}}</block>
+					<block wx:else>未填写公司</block>
+				</view>
+				<view class="card-title-name {{is_owner && card_info.name && previewable ? 'weui-cell__ft_in-access' : ''}}">
+					<block wx:if="{{card_info.name}}">{{card_info.name}}</block>
+					<block wx:else><open-data type="userNickName"></open-data></block>
+				</view>
+				<view class="card-title-job">
+					<block wx:if="{{card_info.position}}">{{card_info.position}}</block>
+					<block wx:else>未填写职位</block>
+				</view>
+			</view>
+			<view class="card-avatar">
+				<image wx:if="{{card_info.avatarUrl}}" class="image" mode="aspectFill" src="{{util.formatAvatarImageUrl(card_info.avatarUrl, baseUrl)}}"/>
+				<open_radius_avatar wx:elif="{{is_owner}}" />
+				<image wx:else class="image" mode="aspectFill" src="{{default_avatar}}"/>
+			</view>
+			<view class="clear"></view>
+			<view class="card-content">
+				<view class="card-content-item">
+					<view class="card-content-icon">
+						<view class="vip-call-dark slds-icon slds-icon--small"/>
+					</view>
+					<view class="card-content-tel" wx:if="{{card_info.mobile2}}">{{card_info.mobile2}}</view>
+					<view class="card-content-tel" wx:else>未填写手机号码</view>
+					<view class="clear"></view>
+				</view>
+				<view class="card-content-item">
+					<view class="card-content-icon">
+						<view class="vip-email-dark slds-icon slds-icon--small"/>
+					</view>
+					<view class="card-content-email" wx:if="{{card_info.email2}}">{{card_info.email2}}</view>
+					<view class="card-content-email" wx:else>未填写邮件</view>
+					<view class="clear"></view>
+				</view>
+				<view class="card-content-item">
+					<view class="card-content-icon">
+						<view class="vip-address-dark slds-icon slds-icon--small"/>
+					</view>
+					<view class="card-content-address" wx:if="{{card_info.location.address}}">{{card_info.location.address}}</view>
+					<view class="card-content-address" wx:else>未填写地址信息</view>
+					<view class="clear"></view>
+				</view>
+				<view class="clear"></view>
+			</view>
+		</view>
+		<view class="card-more" style="position:relative;" wx:if="{{card_info.mobile2||card_info.wechat||card_info.email2||card_info.company||card_info.location.address||card_info.work_phone}}">
+	  		<view wx:if="{{!is_detail}}" @tap="openDetail">
+				<view class="card-more-title">展开全部名片信息</view>
+				<view class="weui-cell__ft switch-group-open weui-cell__ft_in-access"></view>
+			</view>
+			<view  wx:if="{{is_detail}}" @tap="closeDetail">
+				<view class="card-more-title">收起以下名片信息</view>
+				<view class="weui-cell__ft switch-group-close weui-cell__ft_in-access"></view>
+			</view>
+			<view class="card-more-detail" wx:if="{{is_detail}}">
+				<view class="card-more-detail-item" hover-class="weui-cell_active" @tap="phoneCall('{{card_info.mobile2}}')" wx:if="{{card_info.mobile2}}">
+					<view class="detail-item-title">手机</view>
+					<view class="detail-item-contant">{{card_info.mobile2}}</view>
+					<view class="detail-item-btn">
+						<button class="detail-item-btn-right" plain="true" type="primary" size="mini">拨打</button>
+					</view>
+				</view>
+				<view class="card-more-detail-item" hover-class="weui-cell_active" @tap="copy('{{card_info.wechat}}', '微信')" wx:if="{{card_info.wechat}}">
+					<view class="detail-item-title">微信</view>
+					<view class="detail-item-contant">{{card_info.wechat}}</view>
+					<view class="detail-item-btn">
+						<button class="detail-item-btn-right" plain="true" type="primary" size="mini">复制</button>
+					</view>
+				</view>
+				<view class="card-more-detail-item" hover-class="weui-cell_active" @tap="phoneCall('{{card_info.work_phone}}')" wx:if="{{card_info.work_phone}}">
+					<view class="detail-item-title">座机</view>
+					<view class="detail-item-contant">{{card_info.work_phone}}</view>
+					<view class="detail-item-btn">
+						<button class="detail-item-btn-right" plain="true" type="primary" size="mini">拨打</button>
+					</view>
+				</view>
+				<view class="card-more-detail-item" hover-class="weui-cell_active" @tap="copy('{{card_info.email2}}', '邮箱')"  wx:if="{{card_info.email2}}">
+					<view class="detail-item-title">邮箱</view>
+					<view class="detail-item-contant">{{card_info.email2}}</view>
+					<view class="detail-item-btn">
+						<button class="detail-item-btn-right" plain="true" type="primary" size="mini">复制</button>
+					</view>
+				</view>
+				<view class="card-more-detail-item" hover-class="weui-cell_active" @tap="copy('{{card_info.company}}', '公司')" wx:if="{{card_info.company}}">
+					<view class="detail-item-title">公司</view>
+					<view class="detail-item-contant">{{card_info.company}}</view>
+					<view class="detail-item-btn">
+						<button class="detail-item-btn-right" plain="true" type="primary" size="mini">复制</button>
+					</view>
+				</view>
+				<view class="card-more-detail-item" hover-class="weui-cell_active" @tap="openMap()" wx:if="{{card_info.location.address}}">
+					<view class="detail-item-title">地址</view>
+					<view class="detail-item-contant">{{card_info.location.address}}</view>
+					<view class="detail-item-btn">
+						<button class="detail-item-btn-right" plain="true" type="primary" size="mini">地图</button>
+					</view>
+				</view>
+			</view>
+		</view>
+	</view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import { baseUrl } from '@/config';
+import util from '../wxs/util.wxs'
+import pageRouter from '@/utils/pageRouter'
+import open_radius_avatar from '../components/open_radius_avatar';
+
+export default class LoveCard extends wepy.component {
+	onLoad() {}
+
+	props = {
+		card_info: {
+			type: Object,
+			default: {}
+		},
+		card_fields: {
+			type: String,
+			default: ""
+		},
+		is_owner: {
+			type: Boolean,
+			default: false
+		},
+		space_id: {
+			type: String,
+			default: ""
+		},
+		previewable: {
+			type: Boolean,
+			default: false
+		}
+	}
+
+	data = {
+		baseUrl: baseUrl,
+		is_detail: false,
+		default_avatar: 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg',
+	};
+
+	components = {
+		open_radius_avatar: open_radius_avatar
+	};
+
+	wxs = {
+		util: util
+	};
+
+	methods = {
+		goPreview(){
+			if(!this.is_owner){
+				return;
+			}
+			if(!this.previewable){
+				return;
+			}
+			if(!this.card_info.name){
+				return;
+			}
+			let url = `/pages/visiting_card/view`;
+			pageRouter.navigateTo({
+				url: url
+			});
+		},
+		openDetail(){
+			this.is_detail = true;
+			this.$apply();
+		},
+		closeDetail(){
+			this.is_detail = false;
+			this.$apply();
+		},
+		copy(data, tag) {
+			wx.setClipboardData({
+				data: data,
+				success: function(res) {
+					wx.getClipboardData({
+						success: function(res) {
+							wx.showToast({
+								title: `${tag}已复制`,
+								icon: 'success',
+								duration: 3000
+							})
+						}
+					})
+				}
+			})
+		},
+		openMap() {
+			var name = this.card_info.name;
+			if (this.card_info.location) {
+				var latitude = this.card_info.location.latitude || 31.02241;
+				var longitude = this.card_info.location.longitude || 121.21654;
+				var address = this.card_info.location.address || this.card_info.address;
+				wx.openLocation({
+					latitude: latitude,
+					longitude: longitude,
+					scale: 18,
+					name: name,
+					address: address
+				});
+			}
+		},
+		phoneCall(number) {
+			wepy.makePhoneCall({
+				phoneNumber: number
+			});
+		},
+	};
+}
+</script>

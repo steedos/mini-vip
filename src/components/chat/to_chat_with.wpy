@@ -1,0 +1,125 @@
+<style lang="less">
+  .to-chat-view{
+    background-color: rgba(255, 255, 255, 0.85);
+    width: 46px;
+    height: 46px;
+    border-radius: 23px;
+    line-height: 46px;
+    position: fixed;
+    /*box-shadow: #aaa 5rpx 5rpx 5rpx;*/
+    text-align: center;
+    z-index: 6666;
+    bottom: 20px;
+    right:20px;
+    border: solid 1px #DEDEDE;
+
+    .utility-icon-message{
+      margin-left: 13px;
+      margin-top: 6px;
+      width: 20px;
+      height: 20px;
+    }
+
+    .label2{
+      padding-left: 4px;
+      margin-top: 3px;
+      font-size: 12px;
+      height: 12px;
+      line-height: 12px;
+      letter-spacing: 3px;
+    }
+  }
+
+  .to-chat-view-hover{
+    color:rgba(0, 0, 0, 0.6);
+    background-color: #DEDEDE !important;
+  }
+</style>
+
+<template>
+  <view class="to-chat-view" @tap="toChat" wx:if="{{show}}" hover-class='to-chat-view-hover'>
+    <view class="utility-icon-message slds-icon slds-icon--small"></view>
+    <view class="label2">留言</view>
+    <view class="weui-badge" style="position: absolute;top: -.4em;right: -0.4em;" wx:if="{{unreadSubscription.unread > 0}}">{{unreadSubscription.unread}}</view>
+  </view>
+</template>
+
+
+<script>
+  import wepy from 'wepy'
+  import pageRouter from '@/utils/pageRouter'
+  import _ from 'underscore'
+  import chat from '@/common/chat';
+  import { chatNewMessagePollingInterval } from '@/config';
+
+  export default class toChatWith extends wepy.component {
+
+    props = {
+      with_user: {
+        type: Object
+      },
+			space_id: {
+				type: String,
+				default: ""
+			},
+    };
+
+    data = {
+//      space_id: null,
+      show: false,
+      unreadSubscription: null,
+      setInterval: null
+    };
+
+    stopReceivingSubscription(){
+      if(this.setInterval){
+        clearInterval(this.setInterval)
+      }
+      this.setInterval = null
+    }
+
+    receivingSubscription(){
+      if(this.with_user){
+        this.stopReceivingSubscription()
+        this.setInterval = setInterval(async ()=>{
+//          console.log('receivingSubscription this.with_user', this.with_user);
+          const unreadSubscriptions = _.filter(chat.unreadSubscriptions, (s)=>{
+            return s.unread > 0 && s.modified_by._id === this.with_user._id
+          });
+          this.unreadSubscription = unreadSubscriptions.length > 0 ? unreadSubscriptions[0] : null;
+          this.$apply()
+        }, chatNewMessagePollingInterval || 15 * 1000)
+      }
+    }
+
+
+    watch = {
+      with_user: function (newValue, oldValue) {
+        if(newValue){
+          let user_id = null;
+          if(this.$parent.$parent.globalData){
+            user_id = this.$parent.$parent.globalData.user._id;
+          }else{
+            user_id = this.$parent.$parent.$parent.globalData.user._id;
+          }
+          this.show = newValue._id != user_id;
+          if(this.show){
+            this.receivingSubscription()
+          }
+          this.$apply();
+        }
+      }
+    };
+
+    methods = {
+      toChat(){
+
+        const title = this.with_user.name? this.with_user.name : '';
+
+        pageRouter.navigateTo({
+          url: `/pages/chat/chat_messages?space_id=${this.space_id}&to_user=${this.with_user._id}&title=${title}`
+        });
+      }
+    };
+  }
+</script>

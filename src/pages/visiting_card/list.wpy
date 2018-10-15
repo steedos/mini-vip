@@ -1,0 +1,193 @@
+<style lang="less">
+page{
+}
+.page__hd {
+  padding: 0px;
+}
+.image {
+  width: 100%;
+  height: 100%;
+  border-radius: 0.15rem;
+  border:solid 1px #ddd;
+}
+
+.avatar-field {
+  margin-right: 8px;
+  vertical-align: middle;
+  width: 40px;
+  height: 40px;
+  display: block;
+  border-radius:50%;
+}
+
+.user-active {
+  border: none !important;
+  text-align: left;
+  font-size: 17px;
+}
+.weui-loadmore__tips_in-line{
+  background-color: #FAFAFA;
+}
+.mine{
+  font-size:13px;
+  color:#999;
+}
+</style>
+
+<template>
+  <view class="page friend-list" wx:if="{{is_loaded}}">
+    <chatNotification :args.sync="args"></chatNotification>
+    <!--
+    <view class="page__hd">
+      <searchbar :placeholder.sync="searchPlaceholder" @confirm.user="searchRecords" />
+    </view>
+    -->
+    <view class="page__bd">
+        <view class="weui-cells__title">我的名片</view>
+      <view class="weui-cells  weui-cells_after-title">
+        <view @tap="goCurrentUserCard" class="record-container weui-cell weui-cell_access" hover-class="weui-cell_active">
+          <view class="weui-cell__hd">
+            <image wx:if="{{user.name}}" mode="aspectFill" src="{{util.formatAvatarImageUrl(user.avatarUrl, baseUrl)}}" class='avatar-field'/>
+            <open-data wx:else class="avatar-field" type="userAvatarUrl"></open-data>
+          </view>
+          <view class="weui-cell__bd">
+            <view class="name">
+              <block wx:if="{{user.name}}">{{user.name}}</block>
+              <block wx:else><open-data type="userNickName"></open-data></block>
+            </view>
+            <view class="mine"></view>
+          </view>
+          <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+        </view>
+      </view>
+      <block wx:if="{{record_list.length}}">
+        <view class="weui-cells__title">收到的名片</view>
+        <view class="weui-cells  weui-cells_after-title">
+          <repeat for="{{record_list}}" key="index" index="index" item="record">
+            <block wx:if="{{record.user_b.company && record.user_b._id != user._id}}">
+              <navigator url="./view?card_user_id={{record.user_b._id}}" class="record-container weui-cell weui-cell_access" hover-class="weui-cell_active">
+                <view class="weui-cell__hd">
+                  <image wx:if="{{record.user_b.avatarUrl}}"  mode="aspectFill" src="{{util.formatAvatarImageUrl(record.user_b.avatarUrl, baseUrl)}}" class='avatar-field'/>
+                  <image wx:else src="{{default_avatar}}"  mode="aspectFill" class="avatar-field"/>
+                </view>
+                <view class="weui-cell__bd">
+                  <view class="name">{{record.user_b.name}}</view>
+                </view>
+                <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+              </navigator>
+            </block>
+          </repeat>
+        </view>
+      </block>
+      <!--
+      <block  wx:else>
+        <view class="weui-loadmore weui-loadmore_line">
+          <view class="weui-loadmore__tips weui-loadmore__tips_in-line">您暂时还没收到其他名片</view>
+        </view>
+      </block>
+      -->
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import { baseUrl,appId } from '@/config';
+import util from '../../wxs/util.wxs';
+import recordList from '../../mixins/record_list';
+import searchbar from '../../components/searchbar';
+import { loveSpaceId } from '@/config';
+import pageRouter from '@/utils/pageRouter';
+import req from '@/network';
+import _ from 'underscore';
+import chatNotification from '../../components/chat/notification';
+import chatNotificationMixin from '../../mixins/chat_notification';
+
+export default class VisitingCardList extends wepy.page {
+  config = {
+    navigationBarTitleText: '智能名片',
+    enablePullDownRefresh: true
+  };
+
+  components = {
+    searchbar: searchbar,
+    chatNotification: chatNotification
+  };
+
+  mixins = [recordList, chatNotificationMixin];
+
+  data = {
+    is_loaded: false,
+    name: '',
+    avatar: '',
+    object_name: 'love_friends',
+    filter: '',
+    user: null,
+    avatar_field: 'user_b.avatar',
+    name_field: 'user_b.name',
+    baseUrl: baseUrl,
+    share_from: '',
+    orderby: 'created desc',
+    space_id: loveSpaceId,
+    pageSize: 50,
+		default_avatar: 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg'
+  };
+
+  async beforeOnLoad(e) {
+    wx.showNavigationBarLoading();
+    e.space_id = loveSpaceId;
+    this.space_id = e.space_id;
+    await this.$parent.login(e);
+    this.user = this.$parent.globalData.user;
+    this.user_id = this.user._id;
+
+    this.args = {
+      space_id: this.space_id,
+      user: this.user
+    };
+
+    this.$apply();
+  }
+
+  async onLoad(e) {
+  }
+
+  async onShow() {
+    if(this.is_loaded){
+      this.dataRefresh();
+    }
+  }
+
+  async init() {
+  }
+
+  getQueryFilter() {
+    return `(owner eq '${this.user_id}') and (mini_app_id eq '${appId}')`;
+  }
+
+  wxs = {
+    util: util
+  };
+
+  getFinalExpand() {
+    return 'user_b($select=name,company,avatarUrl)';
+  }
+
+  methods = {
+    searchRecords(searchValue, evt) {
+      this.searchRecords(searchValue, evt);
+    },
+    goCurrentUserCard(){
+      wepy.navigateTo({url: './view'});
+      /*
+      if(this.user.name){
+        wepy.navigateTo({url: './view'});
+      }
+      else{
+        wepy.switchTab({url: './me'});
+      }
+      */
+    }
+  };
+}
+</script>

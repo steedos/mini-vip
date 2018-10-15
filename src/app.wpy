@@ -5,7 +5,9 @@
 @import "../lib/vip/vip.less";
 @import "../lib/icon/utility.less";
 page {
-  background-color: #efeef3;
+  background: linear-gradient(#ffffff, #f8f8f8);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   font-size: 16px;
   font-family: -apple-system-font,Helvetica Neue,Helvetica,sans-serif;
 }
@@ -13,7 +15,7 @@ page {
     padding: 40px;
 }
 .page__bd {
-    padding-bottom: 40px;
+  padding-bottom: 40px;
 }
 .page__bd_spacing {
     padding-left: 15px;
@@ -108,6 +110,20 @@ page {
   }
 }
 
+.weui-search-bar {
+  background-color: #ffffff;
+  border-top: none;
+  border-bottom: none;
+  .weui-search-bar__form {
+    background-color: #e9eaee;
+    border: none;
+  }
+  .weui-search-bar__label {
+    background-color: #e9eaee;
+    border: none;
+  }
+}
+
 .cover-page-bg {
   position: fixed;
 	top: 0;
@@ -188,6 +204,7 @@ import { baseUrl, appId, loveSpaceId } from '@/config'
 import _ from 'underscore'
 import { serverAPI } from '@/server';
 import pageRouter from '@/utils/pageRouter'
+import chat from '@/common/chat';
 
 const store = configStore()
 setStore(store)
@@ -212,7 +229,6 @@ export default class VIP extends wepy.app {
 //      'pages/tabbar_index',
       'pages/love/shake',
       'pages/love/share',
-      // 'pages/home/store',
       'pages/index',
       'pages/apps',
       'pages/me',
@@ -329,12 +345,6 @@ export default class VIP extends wepy.app {
         iconPath: './images/tabbars/topic.png',
         text: '最近访问',
       },
-      // {
-      //   pagePath: 'pages/love/post_recommend',
-      //   selectedIconPath: './images/tabbars/topic_pressed.png',
-      //   iconPath: './images/tabbars/topic.png',
-      //   text: '最新',
-      // },
       {
         pagePath: 'pages/creator/me',
         selectedIconPath: './images/tabbars/me_pressed.png',
@@ -467,6 +477,12 @@ export default class VIP extends wepy.app {
         return this.checkMobile(to)
       }
     });
+		pageRouter.pushEnter({
+			page: '/pages/chat/chat_messages',
+			script: function (to) {
+				return this.checkMobile(to)
+			}
+		});
   }
 
   onHide() {
@@ -489,7 +505,7 @@ export default class VIP extends wepy.app {
   }
 
   checkMobile(to){
-    if(!this.globalData.love || !this.globalData.love.enabled || (this.globalData.user && this.globalData.user.mobile)){
+    if(!this.globalData.mini_app || (!this.globalData.mini_app.enabled && this.globalData.user && this.globalData.user.name) || (this.globalData.user && this.globalData.user.mobile)){
       return true
     }else{
       let url = '/pages/phone_number_login';
@@ -625,10 +641,11 @@ export default class VIP extends wepy.app {
       globalData.user.sex = res.sex
       globalData.user.birthdate = res.birthdate
       globalData.user.avatar = res.avatar
+      globalData.user.avatarUrl = res.avatarUrl
       globalData.user.qrcode = res.qrcode
       globalData.my_spaces = res.my_spaces
       globalData.my_customers = res.my_customers
-      globalData.love = res.love
+      globalData.mini_app = res.mini_app
       console.log("===============login============globalData.my_customers", globalData.my_customers);
 
       for (let customer of res.my_customers) {
@@ -650,6 +667,12 @@ export default class VIP extends wepy.app {
       globalData.is_login = true
 
       self.globalData = globalData
+
+			if(appId === 'wxd81e534d6e0b1eb3'){
+				console.log('chat.receivingSubscriptions。。。');
+				chat.receivingSubscriptions(globalData.user._id, loveSpaceId);
+			}
+
     } else {
       const header = {
         'X-User-Id': globalData.user._id,

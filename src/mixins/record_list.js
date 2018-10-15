@@ -30,6 +30,14 @@ export default class recordList extends wepy.mixin {
     extra_fields: '',
   };
 
+  onShow(){
+    if(this.$parent.globalData.user){
+      this.user = this.$parent.globalData.user;
+      this.user_id = this.user._id;
+      console.log('record list mixin onShow', this.user, this.user_id);
+    }
+  }
+
   dataRefresh() {
     // this.record_list = [];
     this.allow_load = true;
@@ -103,17 +111,19 @@ export default class recordList extends wepy.mixin {
     return expand.join(',')
   }
 
-  getQueryOptions(){
+
+  async getQueryOptions(searchValue){
     const options = {
       $count: true,
       $skip: this.current_skip,
       $top: this.pageSize || PAGESIZE,
     };
 
-    const searchValue = this.searchValue;
 
-    if(this.filter){
-      options.$filter = this.filter
+    let filter = this.filter || await this.getQueryFilter(this._e);
+
+    if(filter){
+      options.$filter = filter
     }
 
     if(searchValue){
@@ -214,7 +224,9 @@ export default class recordList extends wepy.mixin {
 
     await this.init();
 
-    this.filter = await this.getQueryFilter(e);
+    this._e = e;
+
+    this.filter = e.filter || this.filter
 
     const object = await this.$parent.getObject(this.object_name, this.space_id);
 
@@ -225,9 +237,11 @@ export default class recordList extends wepy.mixin {
       this.allowCreate = false
     }
     this.searchPlaceholder = '搜索'; // + object.label;
-    wx.setNavigationBarTitle({
-      title: this.navigationBarTitle || object.label
-    });
+
+    if (this.navigationBarTitle)
+      wx.setNavigationBarTitle({
+        title: this.navigationBarTitle
+      });
     await this.loadRecords()
     this.is_loaded = true
     this.$apply()
@@ -338,7 +352,7 @@ export default class recordList extends wepy.mixin {
     const skip = this.current_skip;
     const object_name = this.object_name;
 
-    const queryOptions = this.getQueryOptions();
+    const queryOptions = await this.getQueryOptions(searchValue);
     if (this.allow_load) {
       const result = await this.$parent.query(object_name, queryOptions, this.space_id);
       if (result.value) {
@@ -362,6 +376,11 @@ export default class recordList extends wepy.mixin {
       if (this.current_skip === result['@odata.count']) {
         this.allow_load = false
       }
+
+      if(this.loadRecordsAfter && _.isFunction(this.loadRecordsAfter)){
+        this.loadRecordsAfter()
+      }
+
       this.$apply();
     }
     wepy.hideLoading();

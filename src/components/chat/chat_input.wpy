@@ -3,56 +3,56 @@
         color: #7b7b7b;
         position: fixed;
         bottom: 0;
-        height: 100rpx;
+        height: 50px;
         width: 100%;
         border-top: 1px solid #d8d8d8;
         background-color: #ffffff;
-        font-size: 22rpx;
+        font-size: 11px;
         .input_layout {
             position: relative;
             margin-top: 3px;
             margin-left: 5px;
           .input_icon {
                 position: absolute;
-                width: 90rpx;
-                height: 90rpx;
+                width: 45px;
+                height: 45px;
                 &.voice {
-                    left: 20rpx;
+                    left: 10px;
                 }
                 &.face {
-                    right: 120rpx;
+                    right: 60px;
                 }
                 &.plus {
-                    right: 20rpx;
+                    right: 10px;
                 }
             }
             .input_text {
-                border-bottom: 1px solid #d8d8d8;
-                padding-left: 20rpx;
-                margin-right: 110rpx;
-                height: 80rpx;
-                font-size: 32rpx;
-                /*border-radius: 10rpx;*/
+                border-bottom: none;
+                padding-left: 10px;
+                margin-right: 55px;
+                height: 40px;
+                font-size: 16px;
+                /*border-radius: 5px;*/
                 color: #000;
                 &.focus {
-                    border-bottom: 1px solid #005fb2;
+                    border-bottom: none;
                 }
             }
             .send {
-                background-color: #005fb2;
+                background-color: #1aad19;
                 display: inline-block;
                 box-sizing: border-box;
                 position: absolute;
-                border: 1px solid #005fb2;
-                border-radius: 5rpx;
-                right:10rpx;
-                width:90rpx;
-                height: 74rpx;
-                line-height: 72rpx;
+                border: 1px solid #1aad19;
+                border-radius: 3px;
+                right:5px;
+                width:45px;
+                height: 37px;
+                line-height: 36px;
                 color: white;
                 text-align: center;
-                font-size: 30rpx;
-                margin-top:8rpx;
+                font-size: 15px;
+                margin-top:4px;
                 &.hidden {
                     display: none;
                 }

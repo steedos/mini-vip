@@ -1,0 +1,283 @@
+<style lang="less">
+page{
+}
+
+.clear{
+	clear: both;
+}
+
+.page-btn{
+	text-align: center;
+	font-size: 17px!important;
+	margin-top: 20px;
+	.btn-share, .btn-edit{
+		margin: 0px;
+		padding:0;
+		display: inline-block;
+		width: 45%;
+		height: 40px;
+		font-size: 16px;
+		line-height: 45px;
+	}
+	.btn-edit{
+		float:left;
+	}
+	.btn-share {
+		background-color: #1AAD19!important;
+		color: #fff!important;
+		float:right;
+	}
+	.btn-login-wx{
+		background-color: #1AAD19!important;
+		color: #fff!important;
+		border:none;
+	}
+}
+
+.panel-box{
+	padding: 10px  20px;
+	margin-bottom: 10px;
+	.panel-box-title{
+		color: #000;
+	}
+	.panel-box-content{
+		color:#999;
+		margin-top: 5px;
+	}
+}
+
+.live_chat{
+	text-align: left;
+	line-height:1.41176471;
+	font-size: 17px;
+	font-family:黑体;
+	color:#000!important;
+}
+
+.love-card {
+	margin-top: 30px;
+}
+</style>
+
+<template>
+	<view class="page" wx:if="{{is_loaded}}">
+		<view class="page__bd">
+			<love_card :card_info.sync="card_info" :card_fields.sync="card_fields" :is_owner.sync="is_owner" :space_id.sync="space_id"  :previewable="previewable"/>
+			<view class="panel-box panel-top-box">
+				<view class="page-btn">
+					<block wx:if="{{isAuthUserInfo}}">
+						<button class="btn-edit"  plain="true" type="primary" @tap="goEdit">编辑名片</button>
+						<button class="btn-share" open-type="share" plain="true"  type="primary">发名片</button>
+						<view class="clear"></view>
+					</block>
+					<block wx:else>
+						<button open-type="getUserInfo" bindgetuserinfo="userLogin" plain="true" class="btn-login-wx">登录微信后编辑名片</button>
+					</block>
+				</view>
+
+			</view>
+
+
+			<!--
+				<view class="weui-cells">
+					<navigator url="./chat_list" class="weui-cell weui-cell_access">
+						<view class="weui-cell__bd">
+							<view>访客留言</view>
+						</view>
+						<view class="weui-cell__ft weui-cell__ft_in-access"></view>
+					</navigator>
+					<navigator url="./list" class="weui-cell weui-cell_access">
+						<view class="weui-cell__bd">
+							<view>名片夹</view>
+						</view>
+						<view class="weui-cell__ft weui-cell__ft_in-access"></view>
+					</navigator>
+				</view>
+				<view class="weui-cells">
+					<button open-type="contact" plain="true" class="weui-cell weui-cell_access live_chat" hover-class="weui-cell_active">
+						<view class="weui-cell__bd">
+							<view>在线客服</view>
+						</view>
+						<view class="weui-cell__ft weui-cell__ft_in-access"></view>
+					</button>
+					<navigator url="./space/list" class="weui-cell weui-cell_access">
+						<view class="weui-cell__bd">
+							<view>设置</view>
+						</view>
+						<view class="weui-cell__ft weui-cell__ft_in-access"></view>
+					</navigator>
+				</view>
+			-->
+		</view>
+	</view>
+</template>
+
+<script>
+	import wepy from 'wepy';
+	import { baseUrl } from '@/config';
+	import util from '../../wxs/util.wxs';
+	import { loveSpaceId } from '@/config';
+	import love_card from '../../components/love_card';
+	import bg_circle from '../../components/bg_circle';
+	import pageRouter from '@/utils/pageRouter'
+	import req from '@/network';
+
+	export default class VisitingCardMe extends wepy.page {
+		config = {
+			navigationBarTitleText: '我的名片',
+			enablePullDownRefresh: true
+		};
+
+		components = {
+			love_card: love_card,
+			bg_circle: bg_circle
+		};
+
+		data = {
+			isAuthUserInfo: false,
+			is_loaded: false,
+			space_id: loveSpaceId,
+			user_id: null,
+			card_user_id: null,
+			share_from: null,
+			baseUrl: baseUrl,
+			card_info: {},
+			my_friend: {},
+			is_owner: true,
+			default_avatar: 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg',
+			friends: { value: [], "@odata.count":0},
+			card_fields: "avatar,name,company,position,mobile2,wechat,work_phone,email2,location,self_introduction,photos",
+			previewable: true
+		};
+
+		wxs = {
+			util: util
+		};
+
+		async onPullDownRefresh() {
+			await this.loadData();
+			this.$apply();
+			wepy.stopPullDownRefresh();
+		}
+
+		async onLoad(e) {
+			console.log("=====onLoad====e====1==", e);
+			wepy.showShareMenu({
+				withShareTicket: true
+			});
+			wepy.showLoading();
+			e.space_id = loveSpaceId;
+			this.space_id = e.space_id;
+			await this.$parent.login(e);
+			this.user_id = this.$parent.globalData.user._id;
+			this.card_user_id = this.user_id;
+			// this.card_user_id = "PGcaKBCZPdFBKiQcx";
+			await this.loadData();
+			this.is_loaded = true;
+			this.$apply();
+			wepy.hideLoading();
+		}
+
+		async onShow() {
+			let user = this.$parent.globalData.user;
+			this.user_id = this.$parent.globalData.user._id;
+			this.card_user_id = this.user_id;
+			if (user.name && user.avatar) {
+				this.isAuthUserInfo = true;
+			} else {
+				this.isAuthUserInfo = false;
+			}
+		}
+
+		async refresh(){
+			// 编辑名片后，重新刷新界面数据
+			wepy.showNavigationBarLoading();
+			await this.loadData();
+			this.$apply();
+			if(this.card_info.avatar){
+				this.$parent.globalData.user.name = this.card_info.name;
+				this.$parent.globalData.user.avatar = this.card_info.avatar;
+				this.$parent.globalData.user.avatarUrl = this.card_info.avatarUrl;
+			}
+			wepy.hideNavigationBarLoading();
+		}
+
+		onShareAppMessage() {
+			let title = `我是${this.card_info.name}，这是我的名片，请惠存。`;
+			let url = `pages/visiting_card/view?card_user_id=${this.card_user_id}&share_from=${this.user_id}`;
+			return {
+				title: title,
+				path: url
+			};
+		}
+
+		async loadData() {
+			await this.loadCardInfo();
+		}
+
+		async loadCardInfo() {
+			const options = {
+				$filter: `(_id eq '${this.card_user_id}')`,
+				$select: `${this.card_fields},avatarUrl`,
+			}
+			const records = await this.$parent.query('users', options, this.space_id);
+			if (records && records.value && records.value[0]) {
+				this.card_info = records.value[0];
+			}
+		}
+
+		methods = {
+			userLogin(e) {
+				const self = this;
+				const userInfo = e.detail.userInfo;
+				const user = this.$parent.globalData.user;
+				if (userInfo) {
+					console.log("========userLogin====userInfo======", userInfo);
+					const name = user.name || userInfo.nickName;
+					const sex = userInfo.gender ? '男' : '女';
+					const avatar = userInfo.avatarUrl;
+					this.isAuthUserInfo = true;
+					this.card_info.avatar = avatar;
+					this.card_info.avatarUrl = avatar;
+					this.card_info.name = name;
+					this.$parent.globalData.userInfo = userInfo;
+					this.$parent.globalData.user.name = name;
+					this.$parent.globalData.user.avatar = avatar;
+					this.$parent.globalData.user.avatarUrl = avatar;
+					this.$parent.globalData.user.sex = sex;
+					this.$apply();
+
+					const url = '/mini/vip/user';
+					req.put(url, { name: name, sex: sex, avatar: avatar });
+				}
+			},
+			goEdit(){
+				if(!this.is_owner){
+					return;
+				}
+				let url = `/pages/record/edit?space_id=${this.space_id}&object_name=users&action=edit&record_id=${this.card_info._id}&title=编辑名片&fields=${this.card_fields}`;
+				pageRouter.navigateTo({
+					url: url
+				});
+			},
+			async addPhoneContact(){
+				wx.addPhoneContact({
+					firstName: this.card_info.name,
+					organization: this.card_info.company,
+					title: this.card_info.position,
+					mobilePhoneNumber: this.card_info.mobile2,
+					weChatNumber: this.card_info.wechat,
+					email: this.card_info.email2,
+					workPhoneNumber: this.card_info.work_phone,
+					addressStreet: this.card_info.location ? this.card_info.location.address : "",
+					success: ()=>{
+						wepy.showToast({
+							title: "添加成功",
+							icon: "none"
+						});
+					}
+				});
+ 			}
+		};
+	}
+</script>
