@@ -6,24 +6,31 @@
       <!--&lt;!&ndash;<button class="submit-btn" type="warn" @tap="removeRecord">删除</button>&ndash;&gt;-->
     <!--&lt;!&ndash;</view>&ndash;&gt;-->
   <!--</view>-->
-  <view class="weui-tab">
-    <view class="weui-navbar">
-      <block wx:for="{{tabs}}" wx:key="*this">
-        <view id="{{index}}" class="weui-navbar__item {{activeIndex == index ? 'weui-bar__item_on' : ''}}" bindtap="tabClick">
-          <view class="weui-navbar__title">{{item}}</view>
-        </view>
-      </block>
-      <view class="weui-navbar__slider" style="left: {{sliderLeft}}px; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);"></view>
-    </view>
-    <view class="weui-tab__panel">
-      <view class="weui-tab__content" hidden="{{activeIndex != 0}}">
-        <autoform :args.sync='args'></autoform>
-      </view>
-      <view class="weui-tab__content" hidden="{{activeIndex != 1}}">
-        <related :args.sync='args'/>
-      </view>
+
+  <view class="page record-read  page__bd">
+    <autoform :args.sync='args'></autoform>
+    <view style="margin-top:25px;">
+      <related :args.sync='args'/>
     </view>
   </view>
+  <!--<view class="weui-tab">-->
+    <!--<view class="weui-navbar">-->
+      <!--<block wx:for="{{tabs}}" wx:key="*this">-->
+        <!--<view id="{{index}}" class="weui-navbar__item {{activeIndex == index ? 'weui-bar__item_on' : ''}}" bindtap="tabClick">-->
+          <!--<view class="weui-navbar__title">{{item}}</view>-->
+        <!--</view>-->
+      <!--</block>-->
+      <!--<view class="weui-navbar__slider" style="left: {{sliderLeft}}px; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);"></view>-->
+    <!--</view>-->
+    <!--<view class="weui-tab__panel">-->
+      <!--<view class="weui-tab__content" hidden="{{activeIndex != 0}}">-->
+        <!--<autoform :args.sync='args'></autoform>-->
+      <!--</view>-->
+      <!--<view class="weui-tab__content" hidden="{{activeIndex != 1}}">-->
+        <!--<related :args.sync='args'/>-->
+      <!--</view>-->
+    <!--</view>-->
+  <!--</view>-->
 </template>
 
 <style lang="less">
