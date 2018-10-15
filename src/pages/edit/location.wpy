@@ -11,6 +11,21 @@
     padding-top: 15px;
     width: 60%;
   }
+
+	.open-settings{
+		display:inherit;
+		font-size: 14px;
+		border-radius: 0px;
+		width: auto;
+		height: 50px;
+		line-height: 50px;
+		color: #09bb07;
+		background-color: #ffffff;
+	}
+
+	.open-settings:after{
+		border: 0px;
+	}
 </style>
 
 <template>
@@ -23,7 +38,10 @@
             <textarea data-id="{{key}}" name="{{key}}" class="weui-textarea" auto-focus="true" value="{{value.address}}" ></textarea>
           </view>
           <view class="weui-cell__ft">
-            <view class="weui-vcode-btn" @tap="getAddress">选择</view>
+						<view wx:if="{{showOpenSetting}}" class="city-item">
+							<button open-type="openSetting" class="weui-btn open-settings weui-vcode-btn" bindopensetting="openSetting">定位失败，请点击授权</button>
+						</view>
+            <view class="weui-vcode-btn" @tap="getAddress" wx:else>选择</view>
           </view>
         </view>
       </view>
@@ -47,10 +65,11 @@ export default class Location extends wepy.page {
 
   data = {
     key: '',
-    value: ''
+    value: '',
+		showOpenSetting: false
   }
 
-  onLoad(e) {
+  async onLoad(e) {
     console.log('location', e)
 
     this.key = e.key;
@@ -60,7 +79,12 @@ export default class Location extends wepy.page {
       this.value = {}
     }
 
-    this.$apply()
+		const setting = await wepy.getSetting();
+		if(setting.authSetting["scope.userLocation"] === false){
+			this.showOpenSetting = true;
+		}
+
+    this.$apply();
 
     if (e.title) {
       wx.setNavigationBarTitle({title: '编辑' + e.title});
@@ -73,26 +97,38 @@ export default class Location extends wepy.page {
     prevPage.changeValue(key, value)
   }
 
+	chooseLocation(){
+		self = this;
+		const key = this.key;
+		wepy.chooseLocation().then(res => {
+			if (!self.value) {
+				self.value = {}
+			}
+			self.value.address = res.address;
+			self.value.latitude = res.latitude;
+			self.value.longitude = res.longitude;
+			self.setParentValue(key, self.value)
+			self.$apply();
+		}).catch(err => {
+			console.log(err)
+			if (err.errMsg == 'chooseLocation:fail auth deny') {
+				self.showOpenSetting = true
+				self.$apply()
+			}
+		});
+	}
+
   methods = {
+		openSetting: async function(e){
+			self = this;
+			if(e.detail.authSetting["scope.userLocation"]){
+				this.showOpenSetting = false;
+				this.chooseLocation()
+				self.$apply();
+			}
+		},
     getAddress(e) {
-      self = this;
-      const key = this.key;
-      wepy.chooseLocation().then(res => {
-        if (!self.value) {
-          self.value = {}
-        }
-        self.value.address = res.address;
-        self.value.latitude = res.latitude;
-        self.value.longitude = res.longitude;
-        self.setParentValue(key, self.value)
-        self.$apply();
-      }).catch(err => {
-        console.log(err)
-        if (err.errMsg == 'chooseLocation:fail auth deny') {
-          self.showOpenSetting = true
-          self.$apply()
-        }
-      });
+      this.chooseLocation()
     },
     submitFieldForm(e){
       const formValues = e.detail.value;

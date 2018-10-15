@@ -5,6 +5,8 @@
   .chartboard {
     height: calc(~"100% - 48px");
     background-color: #ededed;
+    /*background-image: url("http://img1.3lian.com/2015/w13/67/d/7.jpg");*/
+    /*background-size: cover;*/
     &.fixed {
       position:fixed;
       left:0;
@@ -14,13 +16,13 @@
     .bubble-container {
       position: relative;
       display: flex;
-      padding: 20rpx;
+      padding: 10px;
     }
     .content {
       max-width: 55%;
       background-color: #d8d8d8;
       border-radius: 4px;
-      padding: 9rpx 20rpx;
+      padding: 5px 10px;
       word-break: break-all;
       font-size: 14px;
     }
@@ -28,16 +30,16 @@
       width: 36px;
       height: 36px;
       position: relative;
-      margin-right: 28rpx;
+      margin-right: 14px;
     }
     .caret-left {
       width: 0;
       height: 0;
-      border-width: 12rpx;
+      border-width: 6px;
       border-color: transparent #d8d8d8 transparent transparent;
       border-style: solid;
       position: absolute;
-      right: -28rpx;
+      right: -14px;
       top: 50%;
       transform: translateY(-50%);
     }
@@ -45,11 +47,11 @@
       position: relative;
       display: flex;
       justify-content: flex-end;
-      padding: 20rpx;
+      padding: 10px;
     }
     .content-right {
       max-width: 55%;
-      background-color: #005fb2;
+      background-color: #1aad19;
       color: #fff;
       border-radius: 4px;
       padding: 6px 10px;
@@ -63,7 +65,7 @@
       width: 36px;
       height: 36px;
       position: relative;
-      margin-left: 28rpx;
+      margin-left: 14px;
     }
     .photo {
       width: 36px;
@@ -74,11 +76,11 @@
     .caret-right {
       width: 0;
       height: 0;
-      border-width: 12rpx;
-      border-color: transparent transparent transparent #005fb2;
+      border-width: 6px;
+      border-color: transparent transparent transparent #1aad19;
       border-style: solid;
       position: absolute;
-      left: -28rpx;
+      left: -14px;
       top: 50%;
       transform: translateY(-50%);
       z-index: 1;
@@ -129,16 +131,42 @@
     }
   }
 
+  .chat-event{
+    margin-top:10px;
+    align-items: center;
+    color: #3e3e3c;
+    display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    font-size: 12px;
+    line-height: 12px;
+    text-align: center;
+    width: 100%;
+    .board-time{
+      padding: 5px 8px;
+      align-items: center;
+      display: flex;
+      background-color:rgba(0, 0, 0, 0.15);
+			border-radius:4px;
+			color:#ffffff;
+
+    }
+  }
+
+
 </style>
 <template>
   <scroll-view scroll-y="1" upper-threshold="50" scroll-with-animation="{{scrollAnimation}}" scroll-into-view="i_{{toView}}" class="chartboard{{focus ? ' fixed' : ''}}" @scrolltoupper="loadHMessage" @scroll="scroll" @scrolltolower="scrolltolower">
     <view class="loading-view" wx:if="{{loading}}"><view class="lds-ring"><view></view><view></view><view></view><view></view></view></view>
     <block wx:for="{{messages}}" wx:key="index" wx:for-index="index" wx:for-item="item">
+      <view class="chat-event" wx:if="{{item.display_time}}">
+        <view class="board-time">{{util.formatChatDateMini(item.created)}}</view>
+      </view>
       <view id="i_{{item._id}}" class="bubble-container" wx:if="{{ item.owner._id != user._id }}">
         <view class="icon">
           <view class="caret-left"></view>
           <view class="photo">
-            <image src="{{util.getUserAvatar(item.owner._id, baseUrl)}}" style="width:36px;height:36px;"></image>
+            <image src="{{util.formatAvatarImageUrl(item.owner.avatarUrl, baseUrl)}}" mode="aspectFill" style="width:36px;height:36px;"></image>
           </view>
         </view>
         <view class="content">
@@ -151,7 +179,7 @@
         </view>
         <view class="icon-right">
           <view class="photo">
-            <image src="{{util.getUserAvatar(item.owner._id, baseUrl)}}" style="width:36px;height:36px;"></image>
+            <image src="{{util.formatAvatarImageUrl(item.owner.avatarUrl, baseUrl)}}" mode="aspectFill" style="width:36px;height:36px;"></image>
           </view>
           <view class="caret-right"></view>
         </view>
@@ -162,8 +190,8 @@
 <script>
   import wepy from 'wepy';
   import _ from 'underscore'
-  import chat from '../common/chat';
-  import util from '../wxs/util.wxs'
+  import chat from '../../common/chat';
+  import util from '../../wxs/util.wxs'
   import {baseUrl, chatNewMessagePollingInterval} from '@/config'
 
   const global = {}
@@ -251,6 +279,16 @@
       if(!this.setInterval){
         this.setInterval = setInterval(async ()=>{
           const newMessage = (await chat.getNewMessage(this.room_id, this.space_id, this.timestamp)).value.reverse();
+					let lastMessage = this.messages.length > 0 ? _.last(this.messages) :null;
+					_.forEach(newMessage, (message)=>{
+						if(this.loadedLastMesssage && !lastMessage){
+							message.display_time = true
+						}else{
+							message.display_time = this.displayTime(lastMessage, message)
+						}
+						lastMessage = message;
+					});
+
           this.messages = _.uniq(this.messages.concat(newMessage), true, (a)=>{
             return a._id
           })
@@ -290,18 +328,37 @@
         const room = await chat.getRoom(this.user._id, space_id, [this.to, this.user._id]);
         this.room_id = room._id;
       }
+      const pages = getCurrentPages();
+      const page = pages[pages.length - 1];
+      page.setRoom_id(this.room_id);
 
       await this.resetUnread();
 
       let messages;
       try {
-        messages = (await chat.getHistory(this.room_id, space_id)).value.reverse();
+				const res = await chat.getHistory(this.room_id, space_id);
+        messages = res.value.reverse();
+        if(res["@odata.count"] == messages.length){
+					this.loadedLastMesssage = true
+				}
       } catch (e) {
         messages = null;
         console.error('getHistory fail');
         console.log(e);
       }
       if (messages) {
+
+      	let lastMessage = null;
+      	_.forEach(messages, (message)=>{
+					if(this.loadedLastMesssage && !lastMessage){
+//						console.log('lastMessage', lastMessage)
+						message.display_time = true
+					}else{
+						message.display_time = this.displayTime(lastMessage, message)
+					}
+					lastMessage = message;
+				});
+
         this.messages = messages;
 
         if(messages.length > 0){
@@ -320,21 +377,48 @@
       this.$apply();
     }
 
+		displayTime(lastMessage, message){
+    	if(!lastMessage){
+    		return false;
+			}
+			const difference = (new Date(message.created)).getTime() - new Date(lastMessage.created).getTime();
+			return difference > 5 * 60 * 1000
+		}
+
+    getDisplayTime(){
+      if(this.messages.length < 1){
+       return true;
+      }
+      const difference = (new Date()).getTime() - new Date(_.last(this.messages).created).getTime();
+      console.log("getDisplayTime difference->", difference)
+      return difference > 5 * 60 * 1000
+    }
+
     async sendMessage(msg) {
+
+//      let display_time = this.getDisplayTime();
+
       let msgObj = await chat.sendMsg(this.room_id, msg, 'text',this.space_id, this.user._id);
       msgObj.owner = {
         _id: this.user._id,
         name: this.user.name,
-        profile: {
-          avatar: this.user.avatar
-        }
-      }
-      this.toView = msgObj._id
+        avatarUrl:this.user.avatarUrl
+      };
+      this.toView = msgObj._id;
+
+			let lastMessage = this.messages.length > 0 ? _.last(this.messages) :null;
+			if(lastMessage){
+				msgObj.display_time = this.displayTime(lastMessage, msgObj);
+			}else{
+				msgObj.display_time = true;
+			}
+
       this.messages.push(msgObj);
       this.$apply();
       this.$invoke('../myinput', 'clear');
 //            let randomReply = await api.getRandomReply(id);
 //            this.replyMessage(randomReply);
+
     }
 
     async replyMessage(msg) {
@@ -358,20 +442,33 @@
 
         this.loading = true;
         this.$apply();
-
         const messages = (await chat.getHistory(this.room_id, this.space_id, 10, `created lt ${this.historyTimestamp}`)).value.reverse();
 //        this.toView = _.first(this.messages)._id;
         if (messages) {
+					let lastMessage = this.messages.length > 0 ? _.first(this.messages) :null;
           this.messages.splice(0, 0, ...messages);
           this.messages = _.uniq(this.messages, true, (a)=>{
             return a._id
           });
           if(messages.length > 0){
+						_.forEach(messages, (message)=>{
+							if(this.loadedLastMesssage && !lastMessage){
+//								console.log('loadHMessage', lastMessage)
+								message.display_time = true
+							}else{
+								message.display_time = this.displayTime(lastMessage, message)
+							}
+							lastMessage = message;
+						});
+
             this.toView = _.last(messages)._id;
             this.historyTimestamp = _.first(messages).created;
           }
 
           if(messages.length === 0){
+						if(lastMessage){
+							this.messages[0].display_time = true
+						}
             this.loadedLastMesssage = true
           }
         }

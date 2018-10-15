@@ -105,6 +105,50 @@ function formatDateMini(value) {
   }
 }
 
+// 日期格式化
+function formatChatDateMini(value) {
+	console.log('formatChatDateMini', value);
+	var now = getDate()
+	if (typeof value == "string") {
+		value = getDate(value);
+	}
+	var year = value.getFullYear() + '年';
+	var month = (value.getMonth() + 1) + '月';
+	var date = value.getDate() + '日';
+
+	var hours = value.getHours();
+	var minutes = value.getMinutes();
+
+	var minutes_str = '';
+	if (minutes < 10) {
+		minutes_str = '0' + minutes;
+	} else {
+		minutes_str = minutes;
+	}
+
+	var hours_str = '';
+	if (hours <= 12) {
+		hours_str = '上午' + hours
+	} else if (hours <= 18) {
+		hours_str = '下午' + (hours - 12);
+	} else {
+		hours_str = '晚上' + (hours - 12);
+	}
+	console.log('formatDateMini 77');
+	if(value.getFullYear() === now.getFullYear() && (value.getMonth() < now.getMonth() || value.getDate() < now.getDate())){
+		console.log('formatDateMini if');
+		return month + date + " " + hours_str + ':' + minutes_str;
+	}
+
+	if(value.getFullYear() < now.getFullYear() || value.getMonth() < now.getMonth() || value.getDate() < now.getDate()){
+		console.log('formatDateMini if2');
+		return year + month + date + " " + hours_str + ':' + minutes_str;
+	}else{
+		console.log('formatDateMini else');
+		return hours_str + ':' + minutes_str;
+	}
+}
+
 function formatNumber(n) {
   n = n.toString();
   return n[1] ? n : '0' + n;
@@ -210,7 +254,7 @@ function formatStartEnd(start, end, isAllDay) {
 }
 
 // 图片地址转换
-function formatImageUrl(src, baseUrl) {
+function formatImageUrl(src, baseUrl, type) {
   if (getRegExp("^\w+:\/\/").test(src)) {
     // http:// 或 wxfile:// 等完整路径直接返回
     return src;
@@ -219,7 +263,12 @@ function formatImageUrl(src, baseUrl) {
     return "https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/faild.png";
   }
   else if(src){
-    return baseUrl + "/api/files/images/" + src;
+    if(type && type === "avatar"){
+      return baseUrl + "/api/files/avatars/" + src;
+    }
+    else{
+      return baseUrl + "/api/files/images/" + src;
+    }
   }
   else{
     return "";
@@ -229,13 +278,22 @@ function formatImageUrl(src, baseUrl) {
 
 // 头像地址转换
 function formatAvatarImageUrl(src, baseUrl) {
-  console.log("===src, baseUrl===",src, baseUrl)
   if (getRegExp("^\w+:\/\/").test(src)) {
     // http:// 或 wxfile:// 等完整路径直接返回
     return src;
   }
-  else if(src && src != "load_faild"){
-    return baseUrl + "/api/files/images/" + src;
+  else if(src == "load_faild"){
+    return "https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/avatar.png";
+  }
+  else if(src){
+    if (getRegExp("^\/").test(src)) {
+      //src为附件相对路径，以/符号开头
+      return baseUrl + src;
+    }
+    else{
+      //src为附件id
+      return baseUrl + "/api/files/images/" + src;
+    }
   }
   else{
     return "https://lg-769qcuso-1253849369.cos.ap-shanghai.myqcloud.com/avatar.png";
@@ -446,5 +504,6 @@ module.exports = {
   includes: includes,
   fixed: fixed,
   isRequired: isRequired,
-  getUserAvatar: getUserAvatar
+  getUserAvatar: getUserAvatar,
+	formatChatDateMini: formatChatDateMini
 };

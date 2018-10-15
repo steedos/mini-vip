@@ -1,11 +1,11 @@
 <style type="less">
   .page_chat {
     height: 100%;
-    background-color: #ededed;
   }
 </style>
 <template>
   <view class="body page_chat">
+    <chatNotification :args.sync="args"></chatNotification>
     <chatboard/>
     <myinput/>
   </view>
@@ -14,21 +14,31 @@
 <script>
   import wepy from 'wepy';
 
-  import Input from '../../components/chat_input';
-  import Chatboard from '../../components/chat_board';
+  import Input from '../../components/chat/chat_input';
+  import Chatboard from '../../components/chat/chat_board';
+  import chatNotification from '../../components/chat/notification';
+  import chatNotificationMixin from '../../mixins/chat_notification';
 
   export default class ChatMessages extends wepy.page {
     config = {
 
     };
+
     components = {
       myinput: Input,
-      chatboard: Chatboard
+      chatboard: Chatboard,
+      chatNotification: chatNotification
     };
 
+    mixins = [chatNotificationMixin];
+
     data = {
-      currentTab: 0
+      currentTab: 0,
+      space_id: null,
+      room_id: null,
+      args: {},
     };
+
     methods = {};
 
     changeTab(idx) {
@@ -40,14 +50,34 @@
       wx.setNavigationBarTitle({title: title});
     }
 
+    setRoom_id(room_id){
+      this.room_id = room_id;
+      this.args = {
+        space_id: this.space_id,
+        room_id: this.room_id
+      };
+      this.$apply()
+    }
+
     onLoad(p) {
-      console.log('chat load...');
       if (!p){
         p = {}
       }
 
       if(p.title){
         this.setNavigationBarTitle(p.title);
+      }
+
+      if(!p.room_id && !p.to_user){
+        throw new Error('至少包含一个参数：room_id, to_user')
+      }
+
+      if(p.space_id){
+        this.space_id = p.space_id
+      }
+
+      if(p.room_id){
+        this.room_id = p.room_id
       }
 
       this.$invoke('chatboard', 'loadMessage', p.space_id, p.room_id, p.to_user);
@@ -66,7 +96,9 @@
       await this.$invoke('chatboard', 'resetUnread')
       const pages = getCurrentPages();
       const page = pages[pages.length - 1];
-      page.refresh()
+      if(page.refresh){
+        page.refresh()
+      }
     }
   }
 </script>

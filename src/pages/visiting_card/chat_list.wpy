@@ -60,11 +60,12 @@
   }
 
   .avatar-field {
-    border-radius: 0.15rem;
     margin-right: 5px;
     vertical-align: middle;
     width: 40px;
     height: 40px;
+    display: block;
+    border-radius:50%;
   }
 
   .record-container {
@@ -91,11 +92,11 @@
   }
 
   .message-dot {
-    width: 16rpx;
-    height: 16rpx;
+    width: 8px;
+    height: 8px;
     position: absolute;
-    top: -4rpx;
-    right: 2rpx;
+    top: -2px;
+    right: 1px;
     background-color: red;
     border-radius: 50%;
   }
@@ -104,9 +105,12 @@
 
 <template>
   <view class="page record-list" wx:if="{{is_loaded}}">
+    <chatNotification :args.sync="args"></chatNotification>
+    <!--
     <view class="page__hd">
       <searchbar :placeholder.sync="searchPlaceholder" @confirm.user="searchRecords" />
     </view>
+    -->
     <view class="page__bd">
       <block wx:if="{{record_list.length}}">
         <view class="weui-cells weui-cells_after-title">
@@ -115,7 +119,7 @@
               <view class="record">
                 <view class="weui-cell__hd" style="position:relative;">
                   <repeat for="{{rooms[record.related_to.ids[0]].members}}" item="member">
-                    <image src="{{util.formatAvatarImageUrl(member.avatarUrl, baseUrl)}}" class='avatar-field' wx:if="{{user_id != member._id}}"></image>
+                    <image mode="aspectFill" src="{{util.formatAvatarImageUrl(member.avatarUrl, baseUrl)}}" class='avatar-field' wx:if="{{user_id != member._id}}"></image>
                   </repeat>
                   <!--<view class="message-dot"></view>群聊-->
                   <view class="weui-badge" style="position: absolute;top: -.4em;right: 0.2em;" wx:if="{{record.unread > 0}}">{{record.unread}}</view>
@@ -149,12 +153,15 @@
 
 <script>
 import wepy from 'wepy';
-import { baseUrl } from '@/config';
+import { baseUrl,loveSpaceId,chatNewMessagePollingInterval } from '@/config';
 import util from '../../wxs/util.wxs';
 import searchbar from '../../components/searchbar';
 import recordList from '../../mixins/record_list';
 import ODataClinet from '@/utils/odata_client'
 import _ from 'underscore'
+import chatNotification from '../../components/chat/notification';
+import chatNotificationMixin from '../../mixins/chat_notification';
+import chat from '../../common/chat';
 
 export default class RecordList extends wepy.page {
   config = {
@@ -163,8 +170,11 @@ export default class RecordList extends wepy.page {
   };
 
   components = {
-    searchbar: searchbar
+    searchbar: searchbar,
+    chatNotification: chatNotification
   };
+
+  mixins = [recordList, chatNotificationMixin];
 
   wxs = {
     util: util
@@ -174,34 +184,85 @@ export default class RecordList extends wepy.page {
     rooms: {},
     fields: ['related_to'],
     user_id: '',
-    date_field: 'modified',
+    date_field: 'last_message_date',
     description_field: 'last_message_text',
     extra_fields: 'unread',
     pageInit: false,
-    pageSize: 30
+    pageSize: 30,
+    space_id: loveSpaceId,
+    object_name: 'chat_subscriptions',
+    orderby: 'last_message_date desc',
+		recordsSetInterval: null
   };
+
+
+	stopReceivingRecords(){
+		if(this.recordsSetInterval){
+			clearInterval(this.recordsSetInterval)
+		}
+		this.recordsSetInterval = null
+	}
+
+	receivingRecords(){
+		console.log('set timeout receivingRecords',this.user_id)
+		if(this.user_id){
+			this.stopReceivingRecords()
+			this.recordsSetInterval = setInterval(async ()=>{
+				console.log('chat list receivingSubscriptions.............')
+				const unreadSubscriptions = _.filter(chat.unreadSubscriptions, (s)=>{
+					return s.unread > 0 && s.modified_by._id != this.user_id
+				});
+
+				if(unreadSubscriptions.length != this.record_list.length){
+					await this.getRooms();
+				}
+
+				const record_list = _.uniq(unreadSubscriptions.concat(this.record_list), true, (a)=>{
+					return a._id
+				});
+
+
+
+				this.record_list = record_list;
+				this.$apply()
+			}, chatNewMessagePollingInterval || 15 * 1000)
+		}
+	}
+
+	async getRooms(){
+		let queryOptions = {
+			$filter: `members eq '${this.user_id}'`,
+			$select: '_id,name,space,members',
+			$expand: 'members($select=name,avatarUrl)'
+		};
+
+		const res = await ODataClinet.query('chat_rooms', queryOptions, this.space_id);
+		let rooms = {};
+		_.forEach(res.value, (r)=>{
+			rooms[r._id] = r
+		});
+		this.rooms = rooms;
+	}
 
 
   async onLoad(e){
 
-    if(e.title){
-      this.navigationBarTitle = e.title
+    this.navigationBarTitle = "访客留言";
+
+    if(e.space_id){
+      this.space_id = e.space_id;
     }
 
     this.user_id = this.$parent.globalData.user._id;
-    let queryOptions = {
-      $filter: `members eq '${this.user_id}'`,
-      $select: '_id,name,space,members',
-      $expand: 'members($select=name,avatarUrl)'
-    };
 
-    const res = await ODataClinet.query('chat_rooms', queryOptions, e.space_id);
-    let rooms = {};
-    _.forEach(res.value, (r)=>{
-      rooms[r._id] = r
-    });
-    this.rooms = rooms;
     this.pageInit = true;
+    this.$apply()
+  }
+
+  async loadRecordsAfter(){
+
+  	await this.getRooms();
+
     this.$apply()
   }
 
@@ -209,11 +270,28 @@ export default class RecordList extends wepy.page {
     return `(related_to/o eq 'chat_rooms') and (owner eq '${this.$parent.globalData.user._id}')`
   }
 
-  mixins = [recordList];
-
   refresh() {
     this.dataRefresh();
   }
+
+  async onShow() {
+		this.user_id = this.$parent.globalData.user._id;
+
+    if(this.is_loaded){
+      this.dataRefresh();
+    }
+		setTimeout( ()=>{
+			this.receivingRecords()
+		}, 15 * 1000)
+  }
+
+	onHide(){
+		this.stopReceivingRecords()
+	}
+
+	onUnload(){
+		this.stopReceivingRecords()
+	}
 
   methods = {
     searchRecords(searchValue, evt) {
@@ -227,7 +305,7 @@ export default class RecordList extends wepy.page {
       let title = '';
 
       _.forEach(this.rooms[record.related_to.ids[0]].members, (member)=>{
-        if(this.user_id != member._id){
+        if(this.user_id != member._id && member.name){
           title = member.name;
         }
       });
