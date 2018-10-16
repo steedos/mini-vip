@@ -289,8 +289,8 @@ page{
 				this.is_owner = true;
 			}
 			this.mini_app = this.$parent.globalData.mini_app;
-			await this.loadData();
 			await this.updateRecentViewed();
+			await this.loadData();
 			this.is_loaded = true;
 			this.$apply();
 			let title = '名片';
