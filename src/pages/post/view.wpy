@@ -217,11 +217,23 @@ video{
     <view class="post-header body_color">
       <view class="weui-cell weui-cell_access">
         <view class="weui-cell__hd">
-          <image wx:if="{{post.owner.profile.avatar}}" class="image slds-icon slds-icon--small slds-m-right--x-small" src="{{util.formatImageUrl(post.owner.profile.avatar, baseUrl)}}"></image>
-          <view wx:else class="slds-icon-standard-channel-programs slds-icon slds-icon--small slds-m-right--x-small"></view>
+          <block wx:if="{{show_space_logo}}">
+            <image wx:if="{{avatar}}" class="image slds-icon slds-icon--small slds-m-right--x-small" src="{{util.formatImageUrl(avatar, baseUrl)}}"/>
+            <view wx:else class="slds-icon-standard-channel-programs slds-icon slds-icon--small slds-m-right--x-small"></view>
+          </block>
+          <block wx:else>
+            <image class="image slds-icon slds-icon--small slds-m-right--x-small" src="{{util.formatAvatarImageUrl(post.owner.avatarUrl, baseUrl)}}"/>
+          </block>
         </view>
         <view class="weui-cell__bd">
-          <view class="space-name">{{post.owner.name}}</view>
+          <view class="space-name">
+            <block wx:if="{{show_space_logo}}">
+              {{space_name}}
+            </block>
+            <block wx:else>
+              {{post.owner.name}}
+            </block>
+          </view>
           <view class="post-time">{{util.formatDate(post.created)}}</view>
         </view>
       </view>
@@ -256,7 +268,7 @@ video{
       <repeat for="{{post_comments}}" key="index" index="index" item="comment">
         <view class="comment-container">
           <view class="avatar-container">
-            <image class="avatar" mode="aspectFill" src="{{comment.owner.profile.avatar}}"></image>
+            <image class="avatar" mode="aspectFill" src="{{util.formatAvatarImageUrl(comment.owner.avatarUrl, baseUrl)}}"/>
           </view>
           <view class="detail-container">
             <view class="user-name">{{comment.owner.name}}</view>
@@ -325,6 +337,7 @@ export default class PostView extends wepy.page {
     wemark: {},
     post_object_name:"post",
     fields:"name,summary,description,images,video,type",
+    show_space_logo: false
   };
 
   async onLoad(e) {
@@ -346,6 +359,7 @@ export default class PostView extends wepy.page {
     }
     if(e.space_id){
       // 如果想在顶部显示vip_store的头像及名称，就传入space_id，否则显示post.ower的头像
+      this.show_space_logo = true;
       const options = {
         $filter: `_id eq '${e.space_id}'`,
         $expand: 'space($select=name)',
