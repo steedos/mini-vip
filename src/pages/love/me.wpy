@@ -384,7 +384,7 @@ export default class QuestionnaireList extends wepy.page {
       wepy.navigateTo({url: `/pages/love/share?card=true&userId=${this.userId}`})
     },
     goIntroduce() {
-      const love = this.$parent.globalData.love;
+      const love = this.$parent.globalData.mini_app;
       if (love && love.enabled) {
         wepy.navigateTo({url: `/pages/love/introduce_me?space_id=${this.space_id}`})
       }
