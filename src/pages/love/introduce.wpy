@@ -382,7 +382,7 @@ page {
       </view>
     </view>
     <view class="post-container">
-      <postList :list.sync="posts" :editable.sync="editable" :hideComment.sync="true" :postObjectName.sync="post_object_name" />
+      <postList :list.sync="posts" :editable.sync="editable" :postObjectName.sync="post_object_name" :postFields.sync="post_fields" />
     </view>
 
   </view>
@@ -438,6 +438,7 @@ export default class loveIntroduce extends wepy.page {
     share_from:'',
     showPost:false,
     post_object_name:"love_post",
+    post_fields:"name,description,images",
     settings: [{
       icon: 'slds-icon-standard-client',
       label: '关于我',
@@ -938,7 +939,7 @@ export default class loveIntroduce extends wepy.page {
     },
     addPost() {
       wx.navigateTo({
-        url: `/pages/record/create?object_name=love_post&space_id=${this.space_id}`
+        url: `/pages/record/create?object_name=love_post&space_id=${this.space_id}&fields=${this.post_fields}`
       })
     },
     goAnswer() {

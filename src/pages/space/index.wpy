@@ -307,7 +307,7 @@ page {
           <postList :portletList.sync="portlet_list" :spaceId.sync="space_id"/>
         </block>
         <block wx:else>
-          <postList wx:else :list.sync="posts" />
+          <postList :list.sync="posts" :spaceId.sync="space_id" />
           <!-- <block wx:if="{{store_info.show_post}}">
             <postList wx:else :list.sync="posts" />
           </block> -->
