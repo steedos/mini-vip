@@ -50,7 +50,7 @@
 				wepy.switchTab({url: `/pages/visiting_card/list`})
 			}
 			else{
-				wepy.navigateTo({
+				wepy.redirectTo({
 					url: `/pages/visiting_card/view`
 				});
 			}
