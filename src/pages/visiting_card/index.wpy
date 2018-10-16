@@ -1,0 +1,62 @@
+<style lang="less">
+</style>
+
+<template>
+	<view class="page"></view>
+</template>
+
+<script>
+	import wepy from 'wepy';
+	import { baseUrl } from '@/config';
+	import util from '../../wxs/util.wxs';
+	import { loveSpaceId } from '@/config';
+	import req from '@/network';
+
+	export default class VisitingCardIndex extends wepy.page {
+		config = {
+			navigationBarTitleText: '智能名片'
+		};
+
+		data = {
+			baseUrl: baseUrl,
+			space_id: loveSpaceId,
+			user_id: null
+		};
+
+		wxs = {
+			util: util
+		};
+
+		async onLoad(e) {
+			wepy.showLoading();
+			e.space_id = loveSpaceId;
+			this.space_id = e.space_id;
+			await this.$parent.login(e);
+			this.user_id = this.$parent.globalData.user._id;
+			this.goHome();
+			this.$apply();
+			wepy.hideLoading();
+		}
+
+		async onShow() {
+		}
+
+		async loadData() {
+		}
+
+		goHome(){
+			let mini_app = this.$parent.globalData.mini_app;
+			if(mini_app && mini_app.enabled){
+				wepy.switchTab({url: `/pages/visiting_card/list`})
+			}
+			else{
+				wepy.navigateTo({
+					url: `/pages/visiting_card/view`
+				});
+			}
+		}
+
+		methods = {
+		};
+	}
+</script>
