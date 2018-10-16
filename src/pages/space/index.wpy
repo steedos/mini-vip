@@ -253,7 +253,7 @@ page {
           </view>
       </view>
       </view>
-      <!-- <view class="weui-cells weui-grids">
+      <view class="weui-cells weui-grids">
         <repeat for="{{enabled_objects}}" key="index" index="index" item="object">
           <block wx:if="{{object.is_default_menu}}">
             <block wx:if="{{object.name === 'support'}}">
@@ -288,7 +288,7 @@ page {
             </block>
           </block>
         </repeat>
-      </view> -->
+      </view>
       <!--
       <view class="weui-cells" wx:if="{{is_space_admin}}">
         <navigator url="/pages/admin/index?space_id={{space_id}}" class="weui-cell" hover-class="weui-cell_active">
@@ -307,18 +307,15 @@ page {
           <postList :portletList.sync="portlet_list" :spaceId.sync="space_id"/>
         </block>
         <block wx:else>
-          <block wx:if="{{store_info.show_post}}">
+          <postList :list.sync="posts" :spaceId.sync="space_id" />
+          <!-- <block wx:if="{{store_info.show_post}}">
             <postList wx:else :list.sync="posts" />
-          </block>
+          </block> -->
         </block>
       </view>
     </view>
-    <view class="tab-bar">
+    <!-- <view class="tab-bar">
       <repeat for="{{enabled_objects}}" key="index" index="index" item="item">         
-          <!-- <navigator url="{{object.url}}" class="weui-grid" hover-class="weui-grid_active" wx:if="{{object}}">
-                <image wx:if="{{object.avatar}}" class="image weui-grid__icon slds-icon" src="{{util.formatImageUrl(object.avatar, baseUrl)}}"></image>
-                <view class="weui-grid__label">{{object.name}}</view>
-          </navigator> -->
           <navigator url="{{item.url}}" class="comment-btn action">
             <view class="slds-icon slds-icon--small slds-m-right--x-small">
               <image class="ion" src="{{util.formatImageUrl(item.avatar, baseUrl)}}"></image>
@@ -326,7 +323,7 @@ page {
             <view class="text">{{item.name}}</view>
           </navigator>
       </repeat>
-    </view>
+    </view> -->
   </view>
 </template>
 <script>
@@ -368,9 +365,10 @@ export default class Posts extends wepy.page {
     // await this.getPortlet();
     // await this.laodPortletList();
     // await this.loadPostList();
-    if(this.store_info.show_post){
-      await this.loadList();
-    }
+    await this.loadList();
+    // if(this.store_info.show_post){
+    //   await this.loadList();
+    // }
 
     console.log('[this.loadList]', this.portlet_list, this.posts)
 
@@ -385,9 +383,10 @@ export default class Posts extends wepy.page {
     this.current_skip = 0;
     // await this.loadCardInfo();
     await this.loadStoreInfo();
-    if(this.store_info.show_post){
-      await this.loadList();
-    }
+    await this.loadList();
+    // if(this.store_info.show_post){
+    //   await this.loadList();
+    // }
   }
 
   components = {
@@ -608,11 +607,14 @@ export default class Posts extends wepy.page {
 
     const result = await this.$parent.get('vip_store', spaceId, spaceId);
     const options = {
+      $filter: `enabled eq true`,
       $expand: 'space($select=name)',
       $count: true,
-      $select:'name,avatar,related_to,sort_no',
-      $orderby:'sort_no',
-      $top: 5
+      $select:'name,avatar,related_to,sort_no,enabled',
+      $orderby:'sort_no'
+      // $select:'name,avatar,related_to,sort_no',
+      // $orderby:'sort_no',
+      // $top: 5
     };
     const menu = await this.$parent.query('vip_menu', options,spaceId);
     if (menu.value && menu.value.length) {

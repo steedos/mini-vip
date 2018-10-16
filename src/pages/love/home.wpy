@@ -7,7 +7,7 @@ page {
   padding-bottom: 0;
   .page__hd {
     .love-title {
-      margin-top: 120rpx;
+      margin-top: 60rpx;
     }
 
     .love-avatar {
@@ -36,9 +36,7 @@ page {
   }
   .match {
     background: #1AAD19;
-    margin: 30rpx;
     padding: 30rpx;
-    border-radius: 0.25rem;
     .header {
       display: flex;
       line-height: 1.41176471;
@@ -78,7 +76,6 @@ page {
   }
   .recommend-lover {
     position: relative;
-    margin: 0 10rpx;
     .lover {
       width: 33.33%;
       display: inline-block;
@@ -112,11 +109,8 @@ page {
     }
   }
   .group {
-    border:1px solid #DDD;
     background: #fff;
-    margin: 30rpx;
     padding: 30rpx;
-    border-radius: 0.25rem;
     .header {
       display: flex;
       line-height: 1.41176471;
@@ -167,9 +161,16 @@ page {
 <view>
   <view class="cover-page-bg"></view>
 	<view class="cover-page" wx:if="{{is_loaded}}">
-		<view class="page__bd" style="padding: 20rpx 0">
+    <!--
+    <userHeader :about_me.sync="about_me" :isAuthUserInfo.sync="isAuthUserInfo" :user.sync="user_id"/> 
+    -->
+
+    <view class="page__hd">
+      <view class="love-title">人工智能匹配度测试</view>
+    </view>
+		<view class="page__bd">
 			<block wx:if="{{showLoveMatch}}">
-        <view class="match" @tap="goCp">
+        <view class="weui-cells match" @tap="goCp">
           <view class="banner">
             <view class="box">
               <view class="title">每周匹配</view>
@@ -178,10 +179,10 @@ page {
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
           </view>
         </view>
-        <block wx:if="{{recommend_lover.length}}">
-          <view class="group recommend-lover">
+        <block wx:if="{{recommend_lovers.length}}">
+          <view class="weui-cells group recommend-lover">
             <view class="recommend-title">今日推荐</view>
-              <repeat for="{{recommend_lover}}" key="index" index="index" item="lover">
+              <repeat for="{{recommend_lovers}}" key="index" index="index" item="lover">
                 <view wx:if="{{lover.owner.name}}" class="lover" @tap="goRecommendDetail({{lover.owner._id}})">
                   <view class="container">
                     <image mode="aspectFit" src="{{lover.owner.profile.avatar || 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg'}}"></image>
@@ -192,10 +193,10 @@ page {
           </view>
         </block>
       </block>
-      <navigator class="group" url="/pages/love/matching?space_id={{space_id}}&open_group_id=-1">
+      <navigator class="group weui-cells" url="/pages/love/matching?space_id={{space_id}}&open_group_id=-1">
 				<view class="header">
 					<view class="group-name">
-						<view class="group-name">好友缘分榜</view>
+						<view class="group-name">我的缘分榜</view>
 					</view>
 					<view class="weui-cell__ft weui-cell__ft_in-access"></view>
 				</view>
@@ -212,13 +213,13 @@ page {
 					</view>
 				</view>
 			</navigator>
-      <!--
-      <view class="btn-bottom">
-        <button class="weui-btn button-hover btn-toolbar-primary" type="primary" @tap="goDetail" style="color: #fff;width:100%;margin:15px;">
-          缘分测试
-        </button>
+
+      <view class="weui-cells">
+        <view class="weui-cell weui-cell_access" @tap="goDetail">
+          <view class="weui-cell__bd">邀请好友测试</view>
+          <view class="weui-cell__ft_in-access"></view>
+        </view>
       </view>
-      -->
 		</view>
 	</view>
 </view>
@@ -228,9 +229,9 @@ page {
 import wepy from 'wepy';
 import { loveSpaceId } from '../../config/index.js';
 import req from '@/network';
-import _ from 'underscore'
-import { baseUrl } from '@/config';
-import pageRouter from '@/utils/pageRouter'
+import _ from 'underscore';
+import { baseUrl, appId } from '@/config';
+import pageRouter from '@/utils/pageRouter';
 import userHeader from '../../components/user_header';
 import util from '../../wxs/util.wxs';
 
@@ -258,8 +259,8 @@ export default class LoveHome extends wepy.page {
     isAuthUserInfo: false,
     baseUrl: baseUrl,
     showLoveMatch: false,
-    // about_me: {},
-    recommend_lover:[]
+    about_me: {},
+    recommend_lovers:[]
   };
 
   onShareAppMessage(res) {
@@ -275,8 +276,8 @@ export default class LoveHome extends wepy.page {
 	async onPullDownRefresh() {
     const self = this;
     wx.showNavigationBarLoading();
-    // await this.loadAboutMe();
-    await this.loadGroups();
+    await this.loadAboutMe();
+    // await this.loadGroups();
     await this.loadFriendList();
     await this.loadLovers();
 		this.$apply();
@@ -312,8 +313,9 @@ export default class LoveHome extends wepy.page {
 			this.$apply();
     }
 
+    await this.loadAboutMe();
     await this.loadLovers();
-    await this.loadGroups();
+    // await this.loadGroups();
     await this.loadFriendList();
 
     let user = this.$parent.globalData.user;
@@ -364,14 +366,46 @@ export default class LoveHome extends wepy.page {
   }
 
   async loadLovers(){
-    this.recommend_lover = await this.$parent.invokeMethod('love_about_me', 'all', {}, this.space_id, 'dailyRecommend');
-    this.$apply();
+    const user_id = this.$parent.globalData.user._id;
+    const query_options = {
+      $filter: `(owner eq '${user_id}')`,
+    };
+    const result = await this.$parent.query(
+      'love_looking_for',
+      query_options,
+      this.space_id
+    );
+    if (result && result.value){
+      const looking_for = result.value[0]
+      var min_age = parseInt(looking_for.age) - 1
+      var max_age = parseInt(looking_for.age_max) + 1
+      var min_height = looking_for.height
+      var max_height = looking_for.height_max
+      const options = {
+        $filter: `(sex eq '${looking_for.sex}' and age gt ${min_age} and age lt ${max_age} and height gt '${min_height}' and height lt '${max_height}')`,
+        $top: 6,
+        $select: 'height,hometown,live,sex,self_introduction,constellation,age,owner',
+        $expand: 'owner($select=profile,name)',
+        $orderby: 'created desc'
+        };
+      const lovers = await this.$parent.query(
+        'love_about_me',
+        options,
+        this.space_id
+      );
+      if (lovers && lovers.value) {
+        this.recommend_lovers = lovers.value
+      } else {
+        this.recommend_lovers = [];
+      }
+      this.$apply();
+    }
   }
 
   async loadFriendList() {
     const user_id = this.$parent.globalData.user._id;
     const options = {
-      $filter: `(owner eq '${user_id}' and match ge 0)`,
+      $filter: `(mini_app_id eq '${appId}' and owner eq '${user_id}' and match ge 0)`,
       $top: 5,
       $select: 'user_b',
       $expand: 'user_b($select=profile,name)',
@@ -394,7 +428,7 @@ export default class LoveHome extends wepy.page {
   async loadGroups() {
     const user_id = this.$parent.globalData.user._id;
     const options = {
-      $filter: `(users eq '${user_id}')`,
+      $filter: `(mini_app_id eq '${appId}' and users eq '${user_id}')`,
       $select: 'open_group_id,users',
       $orderby: 'modified desc'
     };
@@ -418,6 +452,48 @@ export default class LoveHome extends wepy.page {
     return this.groups;
   }
 
+async loadAboutMe() { 
+    const user_id = this.$parent.globalData.user._id; 
+    const avatar = this.$parent.globalData.user.avatar; 
+    const options = { 
+      $filter: `(owner eq '${this.user_id}')` 
+    } 
+    const about_me = await wepy.$instance.query('love_about_me', options, this.space_id); 
+    const customer = await this.loadCustomer(); 
+    if (about_me && about_me.value && about_me.value[0]) {  
+      this.about_me = about_me.value[0];  
+    } else {  
+      this.about_me = {}; 
+    } 
+     this.about_me.name = customer.owner.name;  
+    if (customer.cover) { 
+      this.about_me.cover = customer.cover; 
+      this.cover = customer.cover;  
+    } else {  
+      this.cover = 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/bg-moon.jpg'; 
+    } 
+    if (customer.avatar) {  
+      this.about_me.avatar = customer.avatar; 
+    } else {  
+      this.about_me.avatar = avatar;  
+    } 
+     if (this.about_me.avatar && this.about_me.name) {  
+      this.isAuthUserInfo = true; 
+      this.$apply();  
+    } 
+     this.$apply(); 
+  }
+
+  async loadCustomer() {  
+    const user_id = this.$parent.globalData.user._id; 
+    const options = { 
+      $filter: `(owner eq '${user_id}' and space eq '${this.space_id}')`, 
+      $expand: 'owner($select=name,profile)'  
+    } 
+    const result = await this.$parent.query('vip_customers', options, this.space_id); 
+    const customer = result.value[0]; 
+    return customer;  
+  }
 
   methods = {
     goCp() {
@@ -427,7 +503,7 @@ export default class LoveHome extends wepy.page {
       pageRouter.navigateTo({ url: `/pages/love/share?card=true&space_id=${this.space_id}` })
     },
     goDetail() {
-      wepy.navigateTo({url: `/pages/love/share?card=true&space_id=${this.space_id}`})
+      wepy.navigateTo({url: `/pages/love/share?space_id=${this.space_id}`})
     },
     goRecommendDetail(userId){
       pageRouter.navigateTo({ url: `/pages/love/introduce?userId=${userId}&show_mobile=true` })

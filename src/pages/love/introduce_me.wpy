@@ -592,7 +592,7 @@ export default class loveIntroduce_me extends wepy.page {
     await this.loadCustomer();
     await this.loadHobby();
     await this.loadAboutMe();
-    const love = this.$parent.globalData.love;
+    const love = this.$parent.globalData.mini_app;
     if (love && love.enabled) {
       this.showPost = true
       await this.loadPost();
