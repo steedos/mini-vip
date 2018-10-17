@@ -361,7 +361,7 @@ export default class Posts extends wepy.page {
     this.type = e.type;
     await this.loadStoreInfo();
     console.log("this.menu============",this.customize_menu)
-    await this.isSpaceStar();
+    await this.loadSpaceStar();
     // await this.getPortlet();
     // await this.laodPortletList();
     // await this.loadPostList();
@@ -457,11 +457,12 @@ export default class Posts extends wepy.page {
     util: util
   };
 
-  async isSpaceStar() {
+  async loadSpaceStar() {
     const user = this.$parent.globalData.user._id;
     const space_id = this.space_id;
+    let object_name = "vip_store";
     const options = {
-      $filter: `user eq '${user}' and star_space eq '${space_id}'`
+      $filter: `user eq '${user}' and related_to/o eq '${object_name}' and related_to/ids eq '${space_id}'`
     };
     const result = await this.$parent.query('user_star', options, space_id);
     if (result && result.value && result.value[0]) {
@@ -865,24 +866,26 @@ export default class Posts extends wepy.page {
     async starSpace() {
       const space_id = this.space_id;
       const user = this.$parent.globalData.user._id;
+      let object_name = "vip_store";
       const data = {
         user: user,
-        star_space: space_id,
+        related_to: {
+          o: object_name,
+          ids: [space_id]
+        },
         owner: user
       }
       if (this.star_id) {
-        await this.$parent.delete('user_star', this.star_id, space_id)
+        await this.$parent.delete('user_star', this.star_id, space_id);
         this.star_id = ''
-        await this.getStarCount()
-        this.$apply()
       } else {
         const result = await this.$parent.insert('user_star', data, space_id)
         if (result.value && result.value.length) {
           this.star_id = result.value[0]._id;
-          await this.getStarCount()
-          this.$apply()
         }
       }
+      // await this.getStarCount() //目前没用到关注个数，如果需要显示才放开
+      this.$apply()
     },
     manageSpace() {
       const space_id = this.space_id;
