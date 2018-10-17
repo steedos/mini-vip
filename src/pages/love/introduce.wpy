@@ -356,7 +356,7 @@ page {
 
       <view class="weui-cells" wx:if="{{mobile}}">
         <view class="weui-cell weui-cell_access"  @tap="Copy">
-          <view class="weui-cell__bd">{{b_sex}}的微信（点击复制）</view>
+          <view class="weui-cell__bd">{{b_sex}}的微信(点击复制)</view>
           <view class="weui-cell__ft weui-cell__ft_in-access">{{mobile}}</view>
         </view>
       </view>
