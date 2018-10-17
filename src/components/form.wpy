@@ -368,7 +368,7 @@
                     <view class="weui-cell">
                       <view class="weui-cell__required" wx:if="{{util.isRequired(args.action, item)}}"></view>
                       <view class="weui-cell__bd">
-                        <textarea class="weui-textarea-input" data-id="{{item.name}}" name="{{item.name}}" placeholder="{{item.label}}" value="{{util.transformFieldValue(item, values[item.name])}}" auto-height="true" bindinput="textChange"/>
+                        <textarea style="padding-left:6px;" class="weui-textarea-input" data-id="{{item.name}}" name="{{item.name}}" placeholder="{{item.label}}" value="{{util.transformFieldValue(item, values[item.name])}}" auto-height="true" bindinput="textChange"/>
                       </view>
                     </view>
                   </block>

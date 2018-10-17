@@ -95,7 +95,7 @@ export default class AdminIndex extends wepy.page {
       [{title: '预览',icon:'standard-channel-programs', url: `../space/index?space_id=${this.space_id}`}],
       [
         {title: '栏目',icon:'standard-timesheet', url: `../record/list?space_id=${this.space_id}&object_name=post_category`},
-        {title: '文章', icon:'standard-news', url: `../record/list?space_id=${this.space_id}&object_name=post&avatar_field=owner.profile.avatar&description_field=summary&date_field=modified`},
+        {title: '文章', icon:'standard-news', url: `../record/list?space_id=${this.space_id}&object_name=post&avatar_field=owner.avatarUrl&description_field=summary&date_field=modified`},
         {title: '活动', icon:'standard-event', url: `../record/list?space_id=${this.space_id}&object_name=vip_event`}
       ],
       [
@@ -108,8 +108,8 @@ export default class AdminIndex extends wepy.page {
         {title: '会员卡', icon:'standard-scan-card', url: `../record/list?space_id=${this.space_id}&object_name=vip_card`},
       ],
       [
-        {title: '团队', icon:'standard-user', url: `../record/list?space_id=${this.space_id}&object_name=space_users&avatar_field=user.profile.avatar&description_field=mobile&filter=(((profile eq \'user\') or (profile eq \'admin\')))&add_url=/pages/space/invite_user&allow_create=${this.is_space_owner}`},
-        {title: '客户', icon:'standard-client', url: `../record/list?space_id=${this.space_id}&object_name=vip_customers&avatar_field=user.profile.avatar&description_field=mobile`},
+        {title: '团队', icon:'standard-user', url: `../record/list?space_id=${this.space_id}&object_name=space_users&avatar_field=user.avatarUrl&description_field=mobile&filter=(((profile eq \'user\') or (profile eq \'admin\')))&add_url=/pages/space/invite_user&allow_create=${this.is_space_owner}`},
+        {title: '客户', icon:'standard-client', url: `../record/list?space_id=${this.space_id}&object_name=vip_customers&avatar_field=owner.avatarUrl&description_field=mobile`},
         {title: 'WIFI', icon:'utility-wifi', url: `../record/list?space_id=${this.space_id}&object_name=vip_wifi`},
         {title: '二维码', icon:'standard-product', url: `qrcode?space_id=${this.space_id}`}
       ],

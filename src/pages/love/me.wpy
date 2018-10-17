@@ -57,7 +57,7 @@
       <block wx:if="{{isAuthUserInfo}}">
         <view class="weui-media-box weui-media-box_appmsg" @tap="goIntroduce">
           <view class="weui-media-box__hd weui-media-box__hd_in-appmsg" style="width: 50px; height: 50px; line-height: 50px;">
-            <image class="image" mode="aspectFill" wx:if="{{isAuthUserInfo}}" src="{{avatar}}"></image>
+            <image class="image" mode="aspectFill" wx:if="{{isAuthUserInfo}}" src="{{util.formatAvatarImageUrl(avatar, baseUrl) || 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg'}}" />
           </view>
           <view class="weui-media-box__bd weui-media-box__bd_in-appmsg" style="display: flex; align-items: center;">
             <view class="weui-media-box__title" style="flex: 1;">
@@ -144,6 +144,8 @@
 import wepy from 'wepy';
 import { loveSpaceId } from '../../config/index.js';
 import req from '@/network';
+import { baseUrl } from '@/config';
+import util from '../../wxs/util.wxs';
 
 export default class QuestionnaireList extends wepy.page {
   config = {
@@ -152,6 +154,7 @@ export default class QuestionnaireList extends wepy.page {
   };
 
   data = {
+    baseUrl: baseUrl,
     space_id: null,
     name: '',
     avatar: '',
@@ -192,6 +195,10 @@ export default class QuestionnaireList extends wepy.page {
     ],
     progress: {}
   };
+
+  wxs = {
+    util: util
+  }
 
   // 分享
   onShareAppMessage(res) {
@@ -255,19 +262,19 @@ export default class QuestionnaireList extends wepy.page {
     const userId = user._id;
     const setting = await wepy.getSetting();
 
-    if (!user.name || !user.avatar) {
-      const query_options = {
-        $filter: `owner eq '${userId}'`,
-        $expand: 'owner($select=profile,name)'
-      };
-      const user_result = await this.$parent.query('vip_customers', query_options, spaceId);
-      user.name = user_result.value[0].owner.name;
-      user.avatar = user_result.value[0].owner.profile ? user_result.value[0].owner.profile.avatar : '';
-    }
+    // if (!user.name || !user.avatar) {
+    //   const query_options = {
+    //     $filter: `owner eq '${userId}'`,
+    //     $expand: 'owner($select=profile,name,avatarUrl)'
+    //   };
+    //   const user_result = await this.$parent.query('vip_customers', query_options, spaceId);
+    //   user.name = user_result.value[0].owner.name;
+    //   user.avatar = user_result.value[0].owner.avatarUrl;
+    // }
 
     if (user.name && user.avatar) {
       this.name = user.name;
-      this.avatar = user.avatar;
+      this.avatar = user.avatarUrl;
       this.isAuthUserInfo = true;
     } else {
       this.isAuthUserInfo = false;
@@ -357,6 +364,9 @@ export default class QuestionnaireList extends wepy.page {
         this.sex = sex;
         this.avatar = userInfo.avatarUrl;
         this.$parent.globalData.userInfo = userInfo;
+        this.$parent.globalData.user.name = name;
+        this.$parent.globalData.user.avatar = avatar;
+        this.$parent.globalData.user.avatarUrl = avatar;
         this.$parent.globalData.user.sex = sex;
         this.$apply();
 
@@ -384,11 +394,9 @@ export default class QuestionnaireList extends wepy.page {
       wepy.navigateTo({url: `/pages/love/share?card=true&userId=${this.userId}`})
     },
     goIntroduce() {
-      const love = this.$parent.globalData.mini_app;
-      if (love && love.enabled) {
-        wepy.navigateTo({url: `/pages/love/introduce_me?space_id=${this.space_id}`})
+      const user_id = this.$parent.globalData.user._id;
+      wepy.navigateTo({url: `/pages/love/introduce?userId=${user_id}&space_id=${this.space_id}`})
       }
-    }
   };
 
   computed = {};

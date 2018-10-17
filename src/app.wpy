@@ -171,6 +171,17 @@ page {
     }
   }
 
+  .weui-cells {
+    border-radius: 0.25rem;
+    box-shadow: 0 4rpx 4rpx 0 rgba(0, 0, 0, 0.16), 0 0 0 2rpx rgba(0, 0, 0, 0.08);
+    &::after {
+      display: none;
+    }
+    &::before {
+      display: none;
+    }
+  }
+
   .btn-join{
     background:#1AAD19;
     padding:6px;
@@ -213,6 +224,7 @@ export default class VIP extends wepy.app {
   config = {
     pages: [
       'pages/visiting_card/index',
+    	'pages/home/store',
       'pages/visiting_card/list',
       'pages/visiting_card/view',
       'pages/visiting_card/me',
@@ -221,7 +233,6 @@ export default class VIP extends wepy.app {
       'pages/love/home',
       'pages/love/shake',
       'pages/love/share',
-      'pages/home/store',
       'pages/index',
       'pages/apps',
       'pages/me',
@@ -320,35 +331,35 @@ export default class VIP extends wepy.app {
       'pages/chat/chat_messages',
     ],
     tabBar: {
-      color: '#a1a1a1',
+      color: '#666',
       selectedColor: '#1AAD19',
-      backgroundColor: '#f8f8f8',
+      backgroundColor: '#fdfdfd',
       borderStyle: 'black',
       list: [
       {
-        pagePath: 'pages/visiting_card/list',
-        selectedIconPath: './images/tabbars/contact_pressed.png',
-        iconPath: './images/tabbars/contact.png',
-        text: '智能名片',
+				pagePath: 'pages/home/store',
+				selectedIconPath: './images/tabbars/home_pressed.png',
+				iconPath: './images/tabbars/home.png',
+        text: '首页',
       },
       {
-        pagePath: 'pages/visiting_card/chat_list',
-        selectedIconPath: './images/tabbars/chat_pressed.png',
-        iconPath: './images/tabbars/chat.png',
-        text: '访客留言',
+				pagePath: 'pages/me',
+				selectedIconPath: './images/tabbars/me_pressed.png',
+				iconPath: './images/tabbars/me.png',
+        text: '我的',
       }]
     },
     window: {
       navigationBarBackgroundColor: '#353535',
-      navigationBarTitleText: '华炎名片',
+      navigationBarTitleText: '华炎客服',
       navigationBarTextStyle: 'white',
-      backgroundColor: "#f0f0f0",
+      backgroundColor: "#fdfdfd",
       backgroundTextStyle: 'dark',
     }
   }
 
   globalData = {
-    title: "会员服务台",
+    title: "无颜",
     userInfo: null,
     space: null,
     spaceInfo: null,
@@ -652,8 +663,10 @@ export default class VIP extends wepy.app {
 
       self.globalData = globalData
 
-      console.log('chat.receivingSubscriptions。。。');
-      chat.receivingSubscriptions(globalData.user._id, loveSpaceId);
+			if(appId === 'wxd81e534d6e0b1eb3'){
+				console.log('chat.receivingSubscriptions。。。');
+				chat.receivingSubscriptions(globalData.user._id, loveSpaceId);
+			}
 
     } else {
       const header = {

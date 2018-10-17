@@ -187,7 +187,7 @@ export default class LoveDetail extends wepy.page {
 		this.about_me = about_me.value[0] || {};
 		this.about_me.name = record.user_b.name;
     if(this.about_me.self_introduction) {
-      this.introduce.push([{label: '交友宣言', key: 'self_introduction'}])
+      this.introduce.push([{label: '自我介绍', key: 'self_introduction'}])
     }
 		this.$apply();
 	}

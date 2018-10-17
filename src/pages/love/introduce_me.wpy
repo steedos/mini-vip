@@ -469,7 +469,7 @@ export default class loveIntroduce_me extends wepy.page {
     if (this.about_me.self_introduction) {
       title = this.about_me.self_introduction;
     } else {
-      title = this.name + '的交友名片';
+      title = this.name + '的名片';
     }
     let path = `/pages/love/introduce?userId=${this.userId}`;
     return {

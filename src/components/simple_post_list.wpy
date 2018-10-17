@@ -119,12 +119,12 @@
 <template>
 	<block wx:if="{{list.length}}">
 		<repeat for="{{list}}" key="index" index="index" item="post">
-			<navigator class="{{post.featured || index % 3 == 0 ? 'post-featured' : 'post-normal'}} post list {{index % 3 == 0 ? 'border-top' : ''}}" hover-class="weui-grid_active" url="../post/view?post_id={{post._id}}&name={{post.owner.name}}&avatar={{post.owner.profile.avatar}}">
+			<navigator class="{{post.featured || index % 3 == 0 ? 'post-featured' : 'post-normal'}} post list {{index % 3 == 0 ? 'border-top' : ''}}" hover-class="weui-grid_active" url="../post/view?post_id={{post._id}}&space_id={{spaceId}}&post_object_name={{postObjectName}}&fields={{postFields}}">
 				<view class="title">
 					<view class="text">{{post.name}}</view>
 					<view class="normal-info">
 						<view class="info" wx:if="{{post.categories}}">{{post.categories[0].name}}</view>
-						<view class="info" wx:if="{{post.comment_count}}">{{post.comment_count}}评论</view>
+						<view class="info" wx:if="{{post.message_count}}">{{post.message_count}}评论</view>
 						<view class="info" wx:if="{{post.star_count}}">{{post.star_count}}赞</view>
 					</view>
 				</view>
@@ -133,7 +133,7 @@
 				</view>
 				<view class="featured-info">
 					<view class="info" wx:if="{{post.categories}}">{{post.categories[0].name}}</view>
-					<view class="info" wx:if="{{post.comment_count}}">{{post.comment_count}}评论</view>
+					<view class="info" wx:if="{{post.message_count}}">{{post.message_count}}评论</view>
 					<view class="info" wx:if="{{post.star_count}}">{{post.star_count}}赞</view>
 				</view>
 			</navigator>
@@ -150,7 +150,7 @@
 								<view class="text">{{post.name}}</view>
 								<view class="normal-info">
 									<view class="info" wx:if="{{post.categories}}">{{post.categories[0].name}}</view>
-									<view class="info" wx:if="{{post.comment_count}}">{{post.comment_count}}评论</view>
+									<view class="info" wx:if="{{post.message_count}}">{{post.message_count}}评论</view>
 									<view class="info" wx:if="{{post.star_count}}">{{post.star_count}}赞</view>
 								</view>
 							</view>
@@ -159,7 +159,7 @@
 							</view>
 							<view class="featured-info">
 								<view class="info" >{{post.categories[0].name}}</view>
-								<view class="info" >{{post.comment_count}}评论</view>
+								<view class="info" >{{post.message_count}}评论</view>
 								<view class="info" >{{post.star_count}}赞</view>
 							</view>
 						</navigator>
@@ -218,6 +218,14 @@ export default class simplePostList extends wepy.component {
 		hideComment: {
       type: Boolean,
       default: false
+    },
+    postObjectName: {
+      type: String,
+      default: "post"
+    },
+    postFields: {
+      type: String,
+      default: "name,summary,description,images,video,type"
     }
 	}
 

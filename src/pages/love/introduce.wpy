@@ -227,16 +227,6 @@ page {
 
     .body-wrapper {
       margin: -90rpx 20rpx 0;
-      .weui-cells {
-        border-radius: 0.25rem;
-        box-shadow: 0 4rpx 4rpx 0 rgba(0, 0, 0, 0.16), 0 0 0 2rpx rgba(0, 0, 0, 0.08);
-        &::after {
-          display: none;
-        }
-        &::before {
-          display: none;
-        }
-      }
     }
   }
 
@@ -252,10 +242,9 @@ page {
     filter: drop-shadow(0 0 4rpx #fff);
   }
   .tags-box{
-    text-align: center;
     .love-test-tag{
       color: #777;
-      padding: 4rpx 10rpx;
+      padding: 4rpx 10rpx 0 0;
       display:inline-block;
       font-size:30rpx;
     }
@@ -294,7 +283,7 @@ page {
         <view class="wrapper">
           <view class="bg-image"></view>
           <view class="avatar-container">
-            <image class="avatar" mode="aspectFill" src="{{util.formatImageUrl(avatar, baseUrl) || 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg'}}" @tap.stop="uploadImage()"/>
+            <image class="avatar" mode="aspectFill" src="{{util.formatAvatarImageUrl(avatar, baseUrl) || 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg'}}" @tap.stop="uploadImage()"/>
             <view class="sex-container {{about_me.sex == '男' ? 'boy' : 'girl'}}">
               <image wx:if="{{about_me.sex == '男'}}" class="sex-img" mode="aspectFill" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/boy.png"></image>
               <image wx:else class="sex-img" mode="aspectFill" src="https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/girl.png"></image>
@@ -315,9 +304,6 @@ page {
               <view wx:if="{{about_me.live}}">{{about_me.live}}</view>
             </view>
             <view class="tags-box">
-              <repeat for="{{current_customer.love_test_tags}}" key="index" index="index" item="tag">
-                <view class="love-test-tag">{{tag}}</view>
-              </repeat>
               <view wx:if="{{hobby.sport}}" class="love-test-tag">{{hobby.sport}}</view>
               <view wx:if="{{hobby.star}}" class="love-test-tag">{{hobby.star}}</view>
               <view wx:if="{{hobby.movie_type}}" class="love-test-tag">{{hobby.movie_type}}</view>
@@ -328,6 +314,7 @@ page {
             </view>
           </view>
           <button class="weui-btn btn-star" open-type="share" plain="true" type="primary" size="mini">转发</button>
+          <button wx:if="{{is_owner && showPost}}" class="weui-btn btn-test" @tap="addPost" type="primary" size="mini">发布</button>
           <block wx:if="{{!is_owner}}">
             <button wx:if="{{!answered}}" class="weui-btn btn-test" @tap="goAnswer" type="primary" size="mini">测试缘分</button>
             <button wx:if="{{answered && showGoHome}}" class="weui-btn btn-test" @tap="goHome" type="primary" size="mini">我的名片</button>
@@ -351,16 +338,29 @@ page {
       <view class="weui-cells" wx:if="{{!is_owner}}">
         <view class="weui-cell" @tap="goTest()" hover-class="{{a_record.match ? '' : 'weui-cell_active'}}">
           <view class="weui-cell__bd">
-            <view>匹配度</view>
+            <view>我们的匹配度</view>
           </view>
           <view class="weui-cell__ft" wx:if="{{a_record.match !== undefined}}">{{util.fixed(a_record.match, 2)}}%</view>
           <view class="weui-cell__ft" wx:else>?</view>
         </view>
-        <view class="weui-cell weui-cell_access" wx:if="{{mobile}}" @tap="Copy">
-          <view class="weui-cell__bd">微信号</view>
+        <view class="weui-cell">
+          <view class="weui-cell__bd">缘分卷
+            <view class="tags-box">
+              <repeat for="{{current_customer.love_test_tags}}" key="index" index="index" item="tag">
+                <view class="love-test-tag">{{tag}}</view>
+              </repeat>
+            </view>
+          </view> 
+        </view>
+      </view>
+
+      <view class="weui-cells" wx:if="{{mobile}}">
+        <view class="weui-cell weui-cell_access"  @tap="Copy">
+          <view class="weui-cell__bd">{{b_sex}}的微信（点击复制）</view>
           <view class="weui-cell__ft weui-cell__ft_in-access">{{mobile}}</view>
         </view>
       </view>
+
       <view class="weui-cells" wx:if="{{!is_owner}}">
         <block wx:if="{{common_groups.length}}">
           <view class="common-groups">
@@ -382,7 +382,7 @@ page {
       </view>
     </view>
     <view class="post-container">
-      <postList :list.sync="posts" :editable.sync="editable" :hideComment.sync="true" />
+      <postList :list.sync="posts" :editable.sync="editable" :postObjectName.sync="post_object_name" :postFields.sync="post_fields" />
     </view>
 
   </view>
@@ -403,7 +403,7 @@ import _ from 'underscore'
 
 export default class loveIntroduce extends wepy.page {
   config = {
-    navigationBarTitleText: '名片',
+    navigationBarTitleText: '缘分测试报告',
 		enablePullDownRefresh: true
   };
 
@@ -436,6 +436,9 @@ export default class loveIntroduce extends wepy.page {
     baseMaterialUrl: baseMaterialUrl,
     loveSpaceId: loveSpaceId,
     share_from:'',
+    showPost:false,
+    post_object_name:"love_post",
+    post_fields:"name,description,images",
     settings: [{
       icon: 'slds-icon-standard-client',
       label: '关于我',
@@ -467,7 +470,7 @@ export default class loveIntroduce extends wepy.page {
     if (this.about_me.self_introduction) {
       title = this.about_me.self_introduction;
     } else {
-      title = this.name + '的交友名片';
+      title = this.name + '的名片';
     }
     let path = `/pages/love/introduce?userId=${this.userId}`;
     return {
@@ -609,6 +612,7 @@ export default class loveIntroduce extends wepy.page {
     await this.loadAboutMe();
     const love = this.$parent.globalData.mini_app;
     if (love && love.enabled) {
+      this.showPost = true
       await this.loadPost();
     }
     if(!this.a_record.match && this.answered) {
@@ -643,7 +647,7 @@ export default class loveIntroduce extends wepy.page {
   async loadCustomer() {
     const a_options = {
       $filter: `(owner eq '${this.userId}' and space eq '${this.space_id}')`,
-      $expand: 'owner($select=name,profile)'
+      $expand: 'owner($select=name,profile,avatarUrl)'
     }
     const result = await this.$parent.query('vip_customers', a_options, this.space_id);
     const customer = result.value[0];
@@ -681,19 +685,11 @@ export default class loveIntroduce extends wepy.page {
 
     this.name = customer.owner.name;
     if (!this.cover) {
-      if (customer.cover) {
-        this.cover = customer.cover;
-      } else {
-        this.cover = 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/bg-star.jpg';
-      }
+      this.cover = 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/bg-star.jpg';
     }
 
     if (!this.avatar) {
-      if (customer.avatar) {
-        this.avatar = customer.avatar;
-      } else {
-        this.avatar = customer.owner.profile.avatar;
-      }
+      this.avatar = customer.owner.avatarUrl;
     }
   }
   
@@ -795,8 +791,9 @@ export default class loveIntroduce extends wepy.page {
           formData.height = imageInfo.height;
           formData.orientation = imageInfo.orientation;
           formData.type = imageInfo.type;
+          let fileCollection = isCover ? "images" : "avatars";
           const fileResult = await wepy.uploadFile({
-            url: `${this.baseUrl}/s3/images`,
+            url: `${this.baseUrl}/s3/${fileCollection}`,
             filePath: tempFilePaths[0],
             name: 'file',
             formData: formData,
@@ -829,8 +826,7 @@ export default class loveIntroduce extends wepy.page {
           let storageSet = {};
           storageSet[storageKey] = fileId;
 
-          let updateSuc = await this.$parent.update("vip_customers", this.current_customer._id, storageSet, this.space_id);
-  
+          let updateSuc = await this.$parent.update("users", this.userId, storageSet, this.space_id);
           if (!updateSuc) {
             wx.showToast({
               title: "图片上传失败，请稍后再试",
@@ -843,14 +839,10 @@ export default class loveIntroduce extends wepy.page {
               this.avatar = tempSrc;
             }
           } else {
-            let my_customers = this.$parent.globalData.my_customers;
-            my_customers = my_customers.map(c => {
-              if (c.space == loveSpaceId) {
-                c[storageKey] = fileId;
-              }
-              return c
-            })
-            this.$parent.globalData.my_customers = my_customers;
+            if(storageKey == "avatar"){
+              this.$parent.globalData.user.avatar = fileId;
+              this.$parent.globalData.user.avatarUrl = "/api/files/avatars/" + fileId;
+            }
           }
           this.$apply();
           wepy.hideLoading();
@@ -947,7 +939,7 @@ export default class loveIntroduce extends wepy.page {
     },
     addPost() {
       wx.navigateTo({
-        url: `/pages/record/create?object_name=love_post&space_id=${this.space_id}`
+        url: `/pages/record/create?object_name=love_post&space_id=${this.space_id}&fields=${this.post_fields}`
       })
     },
     goAnswer() {

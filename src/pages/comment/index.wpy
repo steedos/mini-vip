@@ -63,7 +63,7 @@ export default class Comment extends wepy.page {
   data = {
     editorPlaceholder: '说点什么...',
     object_name: '',
-    key_name: '',
+    type: '',
     _id: '',
     space_id: '',
     disabled: true
@@ -71,7 +71,7 @@ export default class Comment extends wepy.page {
 
   onLoad(e) {
     this.object_name = e.object_name;
-    this.key_name = e.key_name;
+    this.type = e.type;
     this._id = e._id;
     this.space_id = e.space_id;
     this.$apply();
@@ -81,15 +81,20 @@ export default class Comment extends wepy.page {
     async formSubmit(e) {
       const comment = e.detail.value.comment;
       const object_name = this.object_name;
-      const key_name = this.key_name;
+      const type = this.type;
       const _id = this._id
       const space_id = this.space_id
       if (comment) {
         let data = {
           name: comment,
         };
-        data[key_name] = _id;
-        await this.$parent.insert(object_name, data, space_id);
+        data.type = type
+        data.related_to = {
+          o: object_name,
+          ids: [_id]
+        }
+        // data[type] = _id;
+        await this.$parent.insert("chat_messages", data, space_id);
       }
       wx.navigateBack();
     },
