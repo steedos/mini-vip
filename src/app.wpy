@@ -331,8 +331,8 @@ export default class VIP extends wepy.app {
     ],
     tabBar: {
       color: '#666',
-      selectedColor: '#5e9bf4',
-      backgroundColor: '#fff',
+      selectedColor: '#1AAD19',
+      backgroundColor: '#fdfdfd',
       borderStyle: 'black',
       list: [
       {
@@ -352,7 +352,7 @@ export default class VIP extends wepy.app {
       navigationBarBackgroundColor: '#353535',
       navigationBarTitleText: '华炎客服',
       navigationBarTextStyle: 'white',
-      backgroundColor: "#efeef3",
+      backgroundColor: "#fdfdfd",
       backgroundTextStyle: 'dark',
     }
   }
