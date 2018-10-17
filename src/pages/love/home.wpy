@@ -185,7 +185,7 @@ page {
               <repeat for="{{recommend_lovers}}" key="index" index="index" item="lover">
                 <view wx:if="{{lover.owner.name}}" class="lover" @tap="goRecommendDetail({{lover.owner._id}})">
                   <view class="container">
-                    <image mode="aspectFit" src="{{lover.owner.profile.avatar || 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg'}}"></image>
+                    <image mode="aspectFit" src="{{util.formatAvatarImageUrl(lover.owner.avatarUrl, baseUrl)}}"/>
                   </view>
                   <view class="name">{{lover.owner.name}}</view>
                 </view>
@@ -206,7 +206,7 @@ page {
 						<repeat for="{{friendList.value}}" key="index" index="index" item="friend">
 							<block wx:if="{{friend.user_b.name}}">
 								<view class="avatar-container">
-									<image class="image" mode="aspectFill" src="{{friend.user_b.profile.avatar}}"></image>
+									<image class="image" mode="aspectFill" src="{{util.formatAvatarImageUrl(friend.user_b.avatarUrl, baseUrl)}}"/>
 								</view>
 							</block>
 						</repeat>
@@ -325,7 +325,7 @@ export default class LoveHome extends wepy.page {
     if (!user.name || !user.avatar) {
       const query_options = {
         $filter: `owner eq '${userId}'`,
-        $expand: 'owner($select=profile,name)'
+        $expand: 'owner($select=profile,name,avatarUrl)'
       };
 
       const user_result = await this.$parent.query(
@@ -336,7 +336,7 @@ export default class LoveHome extends wepy.page {
       if (user_result && user_result.value[0]) {
         user.name = user_result.value[0].owner.name;
         if (user_result.value[0].owner.profile) {
-          user.avatar = user_result.value[0].owner.profile.avatar;
+          user.avatar = user_result.value[0].owner.avatarUrl;
         }
       }
     }
@@ -385,7 +385,7 @@ export default class LoveHome extends wepy.page {
         $filter: `(sex eq '${looking_for.sex}' and age gt ${min_age} and age lt ${max_age} and height gt '${min_height}' and height lt '${max_height}')`,
         $top: 6,
         $select: 'height,hometown,live,sex,self_introduction,constellation,age,owner',
-        $expand: 'owner($select=profile,name)',
+        $expand: 'owner($select=profile,name,avatarUrl)',
         $orderby: 'created desc'
         };
       const lovers = await this.$parent.query(
@@ -408,7 +408,7 @@ export default class LoveHome extends wepy.page {
       $filter: `(mini_app_id eq '${appId}' and owner eq '${user_id}' and match ge 0)`,
       $top: 5,
       $select: 'user_b',
-      $expand: 'user_b($select=profile,name)',
+      $expand: 'user_b($select=profile,name,avatarUrl)',
       $orderby: 'created desc'
     };
     const result = await this.$parent.query(

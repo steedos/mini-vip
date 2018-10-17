@@ -209,7 +209,7 @@
                     {{index + 1}}
                   </view>
                   <view class="weui-cell__hd">
-                    <image src="{{record.user_b.avatarUrl}}" class='avatar-field' />
+                    <image src="{{util.formatAvatarImageUrl(record.user_b.avatarUrl, baseUrl)}}" class='avatar-field' />
                   </view>
                   <view class="weui-cell__bd">
                     <view class="name">{{record.user_b.name}}</view>

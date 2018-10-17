@@ -41,7 +41,7 @@
 					<block wx:if="{{record.owner.name}}">
 						<navigator class="record-container weui-cell weui-cell_access"  data-item-id="{{record._id}}" hover-class="weui-cell_active" url="/pages/love/introduce?_id=-1&space_id={{record.space}}&userId={{record.owner._id}}&object_name=love_recommend_history">
 							<view class="weui-cell__hd">
-								<image src="{{record.owner.profile.avatar}}" class='avatar-field' />
+								<image src="{{util.formatAvatarImageUrl(record.owner.avatarUrl, baseUrl)}}" class='avatar-field' />
 							</view>
 							<view class="weui-cell__bd">
 								<view class="name">{{record.owner.name}}</view>
@@ -78,7 +78,7 @@ export default class LoveMe extends wepy.page  {
 	data = {
 		object_name: 'love_recommend_history',
 		filter: '',
-		avatar_field: 'user_b.profile.avatar',
+		avatar_field: 'user_b.avatarUrl',
     name_field: 'user_b.name',
     baseUrl: baseUrl,
     navigationBarTitle: '喜欢我的',

@@ -59,7 +59,7 @@
 		<repeat for="{{list}}" index="index" key="index" item="post">
 			<view class="post">
 				<view class="post-header">
-					<image src="{{post.owner.profile.avatar}}" mode="aspectFit"></image>
+					<image src="{{util.formatAvatarImageUrl(post.owner.avatarUrl, baseUrl)}}" mode="aspectFit"/>
 					<view class="user-name">{{post.owner.name}}</view>
 				</view>
 				<view class="post-body" @tap="goDetail({{post._id}}, {{post.space._id}})">

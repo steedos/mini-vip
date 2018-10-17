@@ -130,12 +130,12 @@ export default class MatchingResult extends wepy.page {
       const shareFrom = e.share_from;
       const options = {
         $filter:  `(owner eq '${user_id}' and from eq '${shareFrom}')`,
-        $expand: 'from($select=profile,name)'
+        $expand: 'from($select=profile,name,avatarUrl)'
       };
       const invite = await this.$parent.query('vip_invites', options, e.space_id);
       if (invite && invite.value && invite.value[0]) {
         console.log('[invite.value[0].from]', invite.value[0].from)
-        this.userB_avatar = invite.value[0].from.profile.avatar;
+        this.userB_avatar = invite.value[0].from.avatarUrl;
         this.$apply();        
       }
     }
