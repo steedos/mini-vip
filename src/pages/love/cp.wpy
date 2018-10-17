@@ -583,7 +583,7 @@ export default class LoveCP extends wepy.page {
       wx.navigateTo({ url: `/pages/love/introduce?_id=${this.cp._id}&space_id=${this.space_id}&userId=${this.cp.user_b._id}&object_name=love_recommend_history&show_mobile=true` })
     },
     goMe() {
-      wx.navigateTo({ url: '/pages/love/me' })
+      wx.switchTab({ url: '/pages/love/me' })
     },
     goHistory() {
       wx.navigateTo({ url: `/pages/love/match_history?space_id=${this.space_id}` })
