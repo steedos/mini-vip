@@ -548,7 +548,7 @@ export default class loveIntroduce extends wepy.page {
     wepy.showShareMenu({
       withShareTicket: true
     });
-    wx.showLoading({ mask: true });
+    wx.showLoading();
     e.space_id = loveSpaceId;
     if (e.scene) {
       // 朋友圏二维码识别进入的，则取出scene中的share_from
@@ -779,8 +779,7 @@ export default class loveIntroduce extends wepy.page {
           }
           this.$apply();
           wepy.showLoading({
-            title: '正在上传...',
-            mask: true
+            title: '正在上传...'
           });
           let formData = {};
           formData.size = result2.tempFiles.length && result2.tempFiles[0].size;
