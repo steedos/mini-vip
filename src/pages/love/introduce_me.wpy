@@ -488,7 +488,7 @@ export default class loveIntroduce_me extends wepy.page {
         const user_id = this.$parent.globalData.user._id;
         const a_options = {
           $filter: `(owner eq '${user_id}' and user_b eq '${this.userId}')`,
-          $expand: 'user_b($select=profile,name),owner($select=profile,name)'
+          $expand: 'user_b($select=profile,name,avatarUrl),owner($select=profile,name,avatarUrl)'
         }
         const a_result = await this.$parent.query(this.object_name, a_options, this.space_id);
         const a_record = a_result.value[0] || {};
@@ -496,7 +496,7 @@ export default class loveIntroduce_me extends wepy.page {
 
         const b_options = {
           $filter: `(owner eq '${this.userId}' and user_b eq '${user_id}')`,
-          $expand: 'user_b($select=profile,name),owner($select=profile,name)'
+          $expand: 'user_b($select=profile,name,avatarUrl),owner($select=profile,name,avatarUrl)'
         }
         const b_result = await this.$parent.query(this.object_name, b_options, this.space_id);
         const b_record = b_result.value[0] || {};
@@ -507,7 +507,7 @@ export default class loveIntroduce_me extends wepy.page {
         this.$apply();
       } else {
         const a_options = {
-          $expand: 'user_b($select=profile,name),owner($select=profile,name)'
+          $expand: 'user_b($select=profile,name,avatarUrl),owner($select=profile,name,avatarUrl)'
         }
         const a_record = await this.$parent.get(this.object_name, this.record_id, this.space_id, a_options);
 
@@ -626,7 +626,7 @@ export default class loveIntroduce_me extends wepy.page {
   async loadCustomer() {
     const a_options = {
       $filter: `(owner eq '${this.userId}' and space eq '${this.space_id}')`,
-      $expand: 'owner($select=name,profile)'
+      $expand: 'owner($select=name,profile,avatarUrl)'
     }
     const result = await this.$parent.query('vip_customers', a_options, this.space_id);
     const customer = result.value[0];
@@ -675,7 +675,7 @@ export default class loveIntroduce_me extends wepy.page {
       if (customer.avatar) {
         this.avatar = customer.avatar;
       } else {
-        this.avatar = customer.owner.profile.avatar;
+        this.avatar = customer.owner.avatarUrl;
       }
     }
   }
@@ -698,7 +698,7 @@ export default class loveIntroduce_me extends wepy.page {
   async loadPost() {
     const options = {
       $filter: `(owner eq '${this.userId}')`,
-      $expand: 'owner($select=name,profile)'
+      $expand: 'owner($select=name,profile,avatarUrl)'
     }
     const result = await this.$parent.query('love_post', options, loveSpaceId);
     this.posts = result.value;

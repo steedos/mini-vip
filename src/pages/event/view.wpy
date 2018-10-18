@@ -208,8 +208,8 @@ page{
       <view class="title">{{event.accepted_count ? event.accepted_count : 0}}人报名，{{event.pending_count ? event.pending_count : 0}}人观望</view>
       <view class="clist">
         <view class="comment flex-row">
-          <block wx:if="{{event.owner.profile.avatar}}">
-            <image class="avatar" mode="aspectFill" src="{{event.owner.profile.avatar}}"/>
+          <block wx:if="{{event.owner.avatarUrl}}">
+            <image class="avatar" mode="aspectFill" src="{{util.formatAvatarImageUrl(event.owner.avatarUrl, baseUrl)}}"/>
           </block>
           <block wx:else>
             <image class="avatar" mode="aspectFill" src="{{baseMaterialUrl + 'avatar.png'}}"/>
@@ -225,8 +225,8 @@ page{
         <view wx:if="{{ attendees.length }}">
           <repeat for="{{attendees}}" key="index" index="index" item="attendee">
             <view class="comment flex-row">
-              <block wx:if="{{attendee.owner.profile.avatar}}">
-                <image class="avatar" mode="aspectFill" src="{{attendee.owner.profile.avatar}}"/>
+              <block wx:if="{{attendee.owner.avatarUrl}}">
+                <image class="avatar" mode="aspectFill" src="{{util.formatAvatarImageUrl(attendee.owner.avatarUrl, baseUrl)}}"/>
               </block>
               <block wx:else>
                 <image class="avatar" mode="aspectFill" src="{{baseMaterialUrl + 'avatar.png'}}"/>
@@ -314,7 +314,7 @@ export default class EventView extends wepy.page {
   async loadEvent(){
     const query = {
       $filter: `_id eq '${this.event_id}'`,
-      $expand: 'space($select=name,avatar),owner($select=profile,name)'
+      $expand: 'space($select=name,avatar),owner($select=profile,name,avatarUrl)'
     };
     var event = await this.$parent.query("vip_event", query, this.space_id)
     this.event = event.value && event.value[0];
@@ -327,7 +327,7 @@ export default class EventView extends wepy.page {
     const query_options = {
         $filter: `event eq '${this.event_id}'`,
         $select: 'name,status,comment,owner,created',
-        $expand: 'owner($select=profile)'
+        $expand: 'owner($select=profile,avatarUrl)'
       };
     let attendees = await this.$parent.query("vip_event_attendees", query_options, this.space_id);
     this.attendees = attendees.value;

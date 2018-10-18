@@ -156,11 +156,11 @@ export default class Test extends wepy.page {
       const options = {
         $filter: `(user_b eq '${e.share_from}' and owner eq '${user_id}')`,
         $select: 'owner,user_b,a_to_b,b_to_a,match',
-        $expand: 'user_b($select=profile)'
+        $expand: 'user_b($select=profile,avatarUrl)'
       }
       const result = await this.$parent.query('love_friends', options, this.space_id);
       if (result && result.value && result.value[0]) {
-        this.userB_avatar = result.value[0].user_b.profile.avatar;
+        this.userB_avatar = result.value[0].user_b.avatarUrl;
         this.score = result.value[0].match;
       }
     }
@@ -207,11 +207,11 @@ export default class Test extends wepy.page {
       const options = {
         $filter: `(user_b eq '${this.share_from}' and owner eq '${user_id}')`,
         $select: 'owner,user_b,a_to_b,b_to_a,match',
-        $expand: 'user_b($select=profile)'
+        $expand: 'user_b($select=profile,avatarUrl)'
       }
       const result = await this.$parent.query('love_friends', options, this.space_id);
       if (result && result.value && result.value[0]) {
-        this.userB_avatar = result.value[0].user_b.profile.avatar;
+        this.userB_avatar = result.value[0].user_b.avatarUrl;
         this.score = result.value[0].match;
         this.$apply();
       }

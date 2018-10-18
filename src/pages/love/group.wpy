@@ -60,7 +60,7 @@
 					<repeat for="{{friendList.value}}" key="index" index="index" item="friend">
 						<block wx:if="{{friend.user_b.name}}">
 							<view class="avatar-container">
-								<image class="image" mode="aspectFill" src="{{friend.user_b.profile.avatar}}"></image>
+								<image class="image" mode="aspectFill" src="{{util.formatAvatarImageUrl(friend.user_b.avatarUrl, baseUrl)}}"/>
 							</view>
 						</block>
 					</repeat>
@@ -81,7 +81,7 @@
 						<repeat for="{{groupFriendList[group.open_group_id].value}}" key="index" index="index" item="friend">
 							<block wx:if="{{friend.user_b.name}}">
 								<view class="avatar-container">
-									<image class="image" mode="aspectFill" src="{{friend.user_b.profile.avatar}}"></image>
+									<image class="image" mode="aspectFill" src="{{util.formatAvatarImageUrl(friend.user_b.avatarUrl, baseUrl)}}"/>
 								</view>
 							</block>
 						</repeat>
@@ -137,7 +137,7 @@ export default class LoveGroup extends wepy.page {
       $filter: filter,
       $top: 5,
       $select: 'user_b',
-      $expand: 'user_b($select=profile,name)',
+      $expand: 'user_b($select=profile,name,avatarUrl)',
       $orderby: 'created desc'
     };
     const result = await this.$parent.query(

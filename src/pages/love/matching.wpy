@@ -209,7 +209,7 @@
                     {{index + 1}}
                   </view>
                   <view class="weui-cell__hd">
-                    <image src="{{record.user_b.avatarUrl}}" class='avatar-field' />
+                    <image src="{{util.formatAvatarImageUrl(record.user_b.avatarUrl, baseUrl)}}" class='avatar-field' />
                   </view>
                   <view class="weui-cell__bd">
                     <view class="name">{{record.user_b.name}}</view>
@@ -445,13 +445,14 @@ export default class Matching extends wepy.page {
     if (filterEnable) {
       filter += ' and is_looking_for eq true';
     }
+    console.log("=========getQueryFilter=======filter=========", filter);
     return filter;
   }
 
-  setOpenGroupId(open_group_id) {
+  async setOpenGroupId(open_group_id) {
     console.log('[setOpenGroupId]', open_group_id)
     this.open_group_id = open_group_id;
-    this.filter = this.getQueryFilter();
+    this.filter = await this.getQueryFilter();
     this.$apply();
     this.dataRefresh();
   }

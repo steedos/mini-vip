@@ -26,7 +26,7 @@
       <view class="weui-cells">
         <view class="weui-cell">
           <view class="weui-cell__hd">
-              <image class="avatar" mode="aspectFill" src="{{event_owner.profile.avatar}}"/>
+              <image class="avatar" mode="aspectFill" src="{{util.formatAvatarImageUrl(event_owner.avatarUrl, baseUrl)}}"/>
           </view>
           <view class="weui-cell__bd">
             <view>{{event_owner.name}}</view>
@@ -38,8 +38,8 @@
         <repeat for="{{attendees}}" key="attendees" index="index" item="attendee">
           <view url="" class="weui-cell">
             <view class="weui-cell__hd">
-              <block wx:if="{{attendee.owner.profile.avatar}}">
-                <image class="avatar" mode="aspectFill" src="{{attendee.owner.profile.avatar}}"/>
+              <block wx:if="{{attendee.owner.avatarUrl}}">
+                <image class="avatar" mode="aspectFill" src="{{util.formatAvatarImageUrl(attendee.owner.avatarUrl, baseUrl)}}"/>
               </block>
               <block wx:else>
                 <image class="avatar" mode="aspectFill" src="{{baseMaterialUrl + 'avatar.png'}}"/>
@@ -100,7 +100,7 @@ export default class EventAttendees extends wepy.page {
   async loadAttendees(){  
     const query = {
         $select: 'name,owner',
-        $expand: 'owner($select=profile,name)'
+        $expand: 'owner($select=profile,name,avatarUrl)'
       };
     const event = await this.$parent.get("vip_event", this.event_id, this.space_id,query)
     this.event_owner = event.owner;
@@ -110,7 +110,7 @@ export default class EventAttendees extends wepy.page {
     const query_options = {
         $filter: `event eq '${this.event_id}'`,
         $select: 'name,status,comment,owner',
-        $expand: 'owner($select=profile)'
+        $expand: 'owner($select=profile,avatarUrl)'
       };
     let attendees = await this.$parent.query("vip_event_attendees", query_options, this.space_id);
     this.attendees = attendees.value
