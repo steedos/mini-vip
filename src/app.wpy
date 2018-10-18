@@ -223,16 +223,15 @@ setStore(store)
 export default class VIP extends wepy.app {
   config = {
     pages: [
-      'pages/love/index',
-      'pages/love/home',
+    	'pages/home/store',
       'pages/visiting_card/list',
       'pages/visiting_card/view',
-      'pages/visiting_card/index',
       'pages/visiting_card/me',
       'pages/visiting_card/chat_list',
+      'pages/love/index',
+      'pages/love/home',
       'pages/love/shake',
       'pages/love/share',
-      'pages/home/store',
       'pages/index',
       'pages/apps',
       'pages/me',
@@ -337,21 +336,21 @@ export default class VIP extends wepy.app {
       borderStyle: 'black',
       list: [
       {
-        pagePath: 'pages/love/home',
-        selectedIconPath: './images/tabbars/apps_pressed.png',
-        iconPath: './images/tabbars/apps.png',
-        text: '无颜匹配',
+				pagePath: 'pages/home/store',
+				selectedIconPath: './images/tabbars/home_pressed.png',
+				iconPath: './images/tabbars/home.png',
+        text: '首页',
       },
       {
-        pagePath: 'pages/love/me',
-        selectedIconPath: './images/tabbars/me_pressed.png',
-        iconPath: './images/tabbars/me.png',
-        text: '我',
+				pagePath: 'pages/me',
+				selectedIconPath: './images/tabbars/me_pressed.png',
+				iconPath: './images/tabbars/me.png',
+        text: '我的',
       }]
     },
     window: {
       navigationBarBackgroundColor: '#353535',
-       navigationBarTitleText: '无颜',
+      navigationBarTitleText: '华炎客服',
       navigationBarTextStyle: 'white',
       backgroundColor: "#fdfdfd",
       backgroundTextStyle: 'dark',
@@ -663,8 +662,10 @@ export default class VIP extends wepy.app {
 
       self.globalData = globalData
 
-      // console.log('chat.receivingSubscriptions。。。');
-      // chat.receivingSubscriptions(globalData.user._id, loveSpaceId);
+			if(appId === 'wxd81e534d6e0b1eb3'){
+				console.log('chat.receivingSubscriptions。。。');
+				chat.receivingSubscriptions(globalData.user._id, loveSpaceId);
+			}
 
     } else {
       const header = {
