@@ -3,7 +3,7 @@
     height: 100%;
   }
   .chartboard {
-    height: calc(~"100% - 48px");
+    height: calc(~"100% - 51px");
     background-color: #ededed;
     /*background-image: url("http://img1.3lian.com/2015/w13/67/d/7.jpg");*/
     /*background-size: cover;*/
@@ -25,7 +25,23 @@
       padding: 5px 10px;
       word-break: break-all;
       font-size: 14px;
-    }
+		}
+
+		.show-name{
+			margin-bottom: 20px;
+			.content{
+				position:absolute;
+				top: 28px;
+				left: 60px;
+			}
+		}
+
+		.content-name {
+			max-width: 55%;
+			word-break: break-all;
+			font-size: 12px;
+			height: 18px;
+		}
     .icon {
       width: 36px;
       height: 36px;
@@ -43,6 +59,18 @@
       top: 50%;
       transform: translateY(-50%);
     }
+
+		.caret-left-bottom {
+			width: 0;
+			height: 0;
+			border-width: 6px;
+			border-color: transparent #d8d8d8 transparent transparent;
+			border-style: solid;
+			position: absolute;
+			right: -14px;
+			top: 100%;
+			transform: translateY(-50%);
+		}
     .container-right {
       position: relative;
       display: flex;
@@ -85,6 +113,18 @@
       transform: translateY(-50%);
       z-index: 1;
     }
+		.caret-right-bottom{
+			width: 0;
+			height: 0;
+			border-width: 6px;
+			border-color: transparent transparent transparent #1aad19;
+			border-style: solid;
+			position: absolute;
+			left: -14px;
+			top: 100%;
+			transform: translateY(-50%);
+			z-index: 1;
+		}
   }
 
 
@@ -159,31 +199,60 @@
   <scroll-view scroll-y="1" upper-threshold="50" scroll-with-animation="{{scrollAnimation}}" scroll-into-view="i_{{toView}}" class="chartboard{{focus ? ' fixed' : ''}}" @scrolltoupper="loadHMessage" @scroll="scroll" @scrolltolower="scrolltolower">
     <view class="loading-view" wx:if="{{loading}}"><view class="lds-ring"><view></view><view></view><view></view><view></view></view></view>
     <block wx:for="{{messages}}" wx:key="index" wx:for-index="index" wx:for-item="item">
-      <view class="chat-event" wx:if="{{item.display_time}}">
-        <view class="board-time">{{util.formatChatDateMini(item.created)}}</view>
-      </view>
-      <view id="i_{{item._id}}" class="bubble-container" wx:if="{{ item.owner._id != user._id }}">
-        <view class="icon">
-          <view class="caret-left"></view>
-          <view class="photo">
-            <image src="{{util.formatAvatarImageUrl(item.owner.avatarUrl, baseUrl)}}" mode="aspectFill" style="width:36px;height:36px;"></image>
-          </view>
-        </view>
-        <view class="content">
-          <text>{{item.name}}</text>
-        </view>
-      </view>
-      <view id="i_{{item._id}}" class="container-right" wx:else>
-        <view class="content-right">
-          <text>{{item.name}}</text>
-        </view>
-        <view class="icon-right">
-          <view class="photo">
-            <image src="{{util.formatAvatarImageUrl(item.owner.avatarUrl, baseUrl)}}" mode="aspectFill" style="width:36px;height:36px;"></image>
-          </view>
-          <view class="caret-right"></view>
-        </view>
-      </view>
+			<view class="chat-event" wx:if="{{item.display_time}}">
+				<view class="board-time">{{util.formatChatDateMini(item.created)}}</view>
+			</view>
+			<block wx:if="{{related_to.object_name === 'chat_rooms'}}">
+				<view id="i_{{item._id}}" class="bubble-container" wx:if="{{ item.owner._id != user._id }}">
+					<view class="icon">
+						<view class="caret-left"></view>
+						<view class="photo">
+							<image src="{{util.formatAvatarImageUrl(item.owner.avatarUrl, baseUrl)}}" mode="aspectFill" style="width:36px;height:36px;"></image>
+						</view>
+					</view>
+					<view class="content">
+						<text>{{item.name}}</text>
+					</view>
+				</view>
+				<view id="i_{{item._id}}" class="container-right" wx:else>
+					<view class="content-right">
+						<text>{{item.name}}</text>
+					</view>
+					<view class="icon-right">
+						<view class="photo">
+							<image src="{{util.formatAvatarImageUrl(item.owner.avatarUrl, baseUrl)}}" mode="aspectFill" style="width:36px;height:36px;"></image>
+						</view>
+						<view class="caret-right"></view>
+					</view>
+				</view>
+			</block>
+			<block wx:else>
+				<view id="i_{{item._id}}" class="bubble-container show-name" wx:if="{{ item.owner._id != user._id }}">
+					<view class="icon">
+						<view class="caret-left-bottom"></view>
+						<view class="photo">
+							<image src="{{util.formatAvatarImageUrl(item.owner.avatarUrl, baseUrl)}}" mode="aspectFill" style="width:36px;height:36px;"></image>
+						</view>
+					</view>
+					<view class="content-name">
+						{{item.owner.name}}
+					</view>
+					<view class="content">
+						<text>{{item.name}}</text>
+					</view>
+				</view>
+				<view id="i_{{item._id}}" class="container-right show-name" wx:else>
+					<view class="content-right">
+						<text>{{item.name}}</text>
+					</view>
+					<view class="icon-right">
+						<view class="photo">
+							<image src="{{util.formatAvatarImageUrl(item.owner.avatarUrl, baseUrl)}}" mode="aspectFill" style="width:36px;height:36px;"></image>
+						</view>
+						<view class="caret-right"></view>
+					</view>
+				</view>
+			</block>
     </block>
   </scroll-view>
 </template>
@@ -208,10 +277,10 @@
       toView: '',
       setInterval: null,
       timestamp: null,
-      room_id: null,
       historyTimestamp: null,
       loadedLastMesssage: false,
-      scrollAnimation: true
+      scrollAnimation: true,
+			related_to: {}
     };
 
     wxs = {
@@ -278,7 +347,7 @@
     receivingMessage(){
       if(!this.setInterval){
         this.setInterval = setInterval(async ()=>{
-          const newMessage = (await chat.getNewMessage(this.room_id, this.space_id, this.timestamp)).value.reverse();
+          const newMessage = (await chat.getNewMessage(this.related_to, this.space_id, this.timestamp)).value.reverse();
 					let lastMessage = this.messages.length > 0 ? _.last(this.messages) :null;
 					_.forEach(newMessage, (message)=>{
 						if(this.loadedLastMesssage && !lastMessage){
@@ -304,39 +373,45 @@
     }
 
     async resetUnread(){
-      await chat.resetUnread(this.room_id, this.user._id, this.space_id)
+      await chat.resetUnread(this.related_to, this.user._id, this.space_id)
     }
 
-//    resetUnread(room_id, user_id, space_id){
-//      chat.resetUnread(room_id, user_id, space_id)
-//    }
-
-    async loadMessage(space_id, room_id, to) {
+    async loadMessage(space_id, related_to, to) {
       this.loading = true;
       this.$apply();
       this.space_id = space_id;
-      this.user = this.$parent.$parent.globalData.user;
+
+			let user = null;
+			if(this.$parent.$parent.globalData){
+				user = this.$parent.$parent.globalData.user;
+			}else{
+				user = this.$parent.$parent.$parent.globalData.user;
+			}
+			this.user = user;
 
       if(this.user._id && to && this.user._id === to){
         throw new Error('不支持与自己聊天')
       }
 
-      if(room_id){
-        this.room_id = room_id;
-      }else{
+			this.related_to = related_to;
+
+      if(related_to.object_name === 'chat_rooms' && !related_to.record_id){
         this.to = to;
         const room = await chat.getRoom(this.user._id, space_id, [this.to, this.user._id]);
-        this.room_id = room._id;
+				this.related_to.record_id = room._id;
       }
+
       const pages = getCurrentPages();
       const page = pages[pages.length - 1];
-      page.setRoom_id(this.room_id);
+      if(_.isFunction(page.setRoom_id)){
+				page.setRoom_id(this.related_to.record_id);
+			}
 
       await this.resetUnread();
 
       let messages;
       try {
-				const res = await chat.getHistory(this.room_id, space_id);
+				const res = await chat.getHistory(this.related_to, space_id);
         messages = res.value.reverse();
         if(res["@odata.count"] == messages.length){
 					this.loadedLastMesssage = true
@@ -398,7 +473,7 @@
 
 //      let display_time = this.getDisplayTime();
 
-      let msgObj = await chat.sendMsg(this.room_id, msg, 'text',this.space_id, this.user._id);
+      let msgObj = await chat.sendMsg(this.related_to, msg, 'text', this.space_id, this.user._id);
       msgObj.owner = {
         _id: this.user._id,
         name: this.user.name,
@@ -442,7 +517,7 @@
 
         this.loading = true;
         this.$apply();
-        const messages = (await chat.getHistory(this.room_id, this.space_id, 10, `created lt ${this.historyTimestamp}`)).value.reverse();
+        const messages = (await chat.getHistory(this.related_to, this.space_id, 10, `created lt ${this.historyTimestamp}`)).value.reverse();
 //        this.toView = _.first(this.messages)._id;
         if (messages) {
 					let lastMessage = this.messages.length > 0 ? _.first(this.messages) :null;

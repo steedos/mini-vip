@@ -80,7 +80,7 @@
         this.room_id = p.room_id
       }
 
-      this.$invoke('chatboard', 'loadMessage', p.space_id, p.room_id, p.to_user);
+      this.$invoke('chatboard', 'loadMessage', p.space_id, {object_name: 'chat_rooms', record_id: p.room_id}, p.to_user);
     }
 
     onShow(){

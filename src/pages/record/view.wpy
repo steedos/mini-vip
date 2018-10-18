@@ -7,32 +7,34 @@
     <!--&lt;!&ndash;</view>&ndash;&gt;-->
   <!--</view>-->
 
-  <view class="page record-read  page__bd">
-    <autoform :args.sync='args'></autoform>
-    <view style="margin-top:25px;">
-      <related :args.sync='args'/>
+
+  <view class="weui-tab" wx:if="{{record_dynamic}}">
+    <view class="weui-navbar">
+      <block wx:for="{{tabs}}" wx:key="*this">
+        <view id="{{index}}" class="weui-navbar__item {{activeIndex == index ? 'weui-bar__item_on' : ''}}" bindtap="tabClick">
+          <view class="weui-navbar__title">{{item.label}}</view>
+					<view class="weui-badge" style="position: absolute;top: 5px;right: 10px;" wx:if="{{item.badge}}">{{item.badge}}</view>
+        </view>
+      </block>
+      <view class="weui-navbar__slider" style="width: 50%; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);"></view>
+    </view>
+    <view class="weui-tab__panel">
+      <view class="weui-tab__content" hidden="{{activeIndex != 0}}">
+        <autoform :args.sync='args'></autoform>
+      </view>
+      <view class="weui-tab__content chat-content" hidden="{{activeIndex != 1}}">
+				<recordMessages :args.sync="recordMessages_args"/>
+      </view>
     </view>
   </view>
-  <!--<view class="weui-tab">-->
-    <!--<view class="weui-navbar">-->
-      <!--<block wx:for="{{tabs}}" wx:key="*this">-->
-        <!--<view id="{{index}}" class="weui-navbar__item {{activeIndex == index ? 'weui-bar__item_on' : ''}}" bindtap="tabClick">-->
-          <!--<view class="weui-navbar__title">{{item}}</view>-->
-        <!--</view>-->
-      <!--</block>-->
-      <!--<view class="weui-navbar__slider" style="left: {{sliderLeft}}px; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);"></view>-->
-    <!--</view>-->
-    <!--<view class="weui-tab__panel">-->
-      <!--<view class="weui-tab__content" hidden="{{activeIndex != 0}}">-->
-        <!--<autoform :args.sync='args'></autoform>-->
-      <!--</view>-->
-      <!--<view class="weui-tab__content" hidden="{{activeIndex != 1}}">-->
-        <!--<related :args.sync='args'/>-->
-      <!--</view>-->
-    <!--</view>-->
-  <!--</view>-->
-</template>
 
+	<view class="page record-read  page__bd" wx:else>
+		<autoform :args.sync='args'></autoform>
+		<view style="margin-top:25px;">
+			<related :args.sync='args'/>
+		</view>
+	</view>
+</template>
 <style lang="less">
 	.page__bd{
 		padding-bottom:50px;
@@ -44,13 +46,32 @@
     }
   }
 
+	.chat-content{
+		height: 100%;
+	}
+
+	.weui-tab__panel{
+		padding-top: 35px;
+		/*background-image: url("http://img1.3lian.com/2015/w13/67/d/7.jpg");*/
+		/*background-size: cover;*/
+	}
+
   .weui-navbar__item{
     padding: 5px 0px;
+		background-color: #FFFFFF;
   }
 
   .weui-navbar__slider{
 
   }
+
+	/*.page_chat{*/
+		/*height: calc(~"100% - 35px");*/
+	/*}*/
+
+	.chartboard {
+		background-color: transparent;
+	}
 </style>
 
 <script>
@@ -58,6 +79,8 @@
   import req from '@/network';
   import form from '../../components/form';
   import related from '../../components/related';
+	import RecordMessages from '../../components/chat/record_messages';
+	import chat from '../../common/chat';
 
   export default class RecordView extends wepy.page {
 
@@ -67,10 +90,15 @@
 
     data = {
       args: {},
-      tabs: ['详细信息','相关'],
+      tabs: [
+				{label: '详细信息'},
+				{label: '动态', badge: 0}
+			],
       activeIndex: 0,
       sliderLeft: 0,
-      sliderOffset:0
+      sliderOffset:0,
+			record_dynamic: true,
+			recordMessages_args: {}
     };
 
     refresh(){
@@ -80,7 +108,8 @@
 
     components = {
       autoform: form,
-      related: related
+      related: related,
+			recordMessages: RecordMessages,
     };
 
     changeNavigationBarTitleText(title){
@@ -92,9 +121,23 @@
       wx.setNavigationBarTitle({title:title})
     }
 
+    getBadge(related_to, space_id, user_id){
+
+    	chat.getSubscription(related_to, space_id, user_id, 'unread').then((res)=>{
+				const rec = res.value;
+				if(rec && rec.length > 0){
+					this.tabs[1].badge = rec[0].unread;
+					this.$apply();
+				};
+			});
+		}
+
     async onLoad(e){
       console.log("record view", e)
       let args = {action: 'read'};
+
+      let recordMessages_args = {};
+
       if(e && e.record_id){
         args.record_id = e.record_id
       }else{
@@ -115,7 +158,12 @@
         args.space_id = e.space_id
       }
 
+			recordMessages_args.space_id = e.space_id;
+			recordMessages_args.object_name = e.object_name;
+			recordMessages_args.record_id = e.record_id;
+
       this.args = args;
+      this.recordMessages_args = recordMessages_args;
 
       const res = wx.getSystemInfoSync();
 
@@ -124,6 +172,8 @@
       this.sliderLeft = (res.windowWidth / this.tabs.length - sliderWidth) / 2;
 
       this.sliderOffset = res.windowWidth / this.tabs.length * this.activeIndex;
+
+      this.getBadge(recordMessages_args, recordMessages_args.space_id, this.$parent.globalData.user._id);
 
       this.$apply()
     }
