@@ -347,6 +347,7 @@
     }
 
     async generateFriendCard() {
+			console.log("==============this.$parent.globalData.user================================",this.$parent.globalData.user);
       if(this.$parent.globalData.user.avatarUrl) {
         const imageUrl = `https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/share_me.png`;
         const imgRes = await wepy.downloadFile({
@@ -447,14 +448,14 @@
             }
           });
           this.$apply();
-          }
         }
-       else{
-         wepy.showToast({
-          title: "请先授权获取微信头像",
-          icon: "none"
-        });
-       }
+			}
+			else{
+				wepy.showToast({
+					title: "请先授权获取微信头像",
+					icon: "none"
+				});
+			}
     }
     
     async generateFriendCircleImage() {
