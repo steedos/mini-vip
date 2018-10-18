@@ -58,6 +58,9 @@ page {
   width: 100%;
   background-color: #F7F7FA;
   align-items: center;
+  .more-action-btn {
+    justify-content: flex-end;
+  }
 
   &.special-tab {
     .star-btn {
@@ -293,8 +296,7 @@ video{
       <view class="text">{{post.star_count || 0}}</view>
     </view>
     <view class="more-action-btn action" @tap="moreAction" wx:if="{{isSpaceAdmin || is_owner}}">
-      <view class="vip_more slds-icon slds-icon--small slds-m-right--x-small"></view>
-      <view class="text">更多</view>>
+      <view class="vip-threedots-default slds-icon"/>
     </view>
   </view>
   <!-- <view wx:if="{{is_owner}}" class="edit-post" @tap="editPost">
