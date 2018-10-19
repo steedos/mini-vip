@@ -326,9 +326,9 @@ export default class VIP extends wepy.app {
       'pages/chat/chat_messages',
     ],
     tabBar: {
-      color: '#666',
-      selectedColor: '#5e9bf4',
-      backgroundColor: '#fff',
+      color: '#a1a1a1',
+      selectedColor: '#1aad19',
+      backgroundColor: '#f8f8f8',
       borderStyle: 'black',
       list: [
       {
@@ -351,8 +351,8 @@ export default class VIP extends wepy.app {
       }]
     },
     window: {
-      navigationBarBackgroundColor: '#2b3558',
-      navigationBarTitleText: 'Creator',
+      navigationBarBackgroundColor: '#353535',
+      navigationBarTitleText: '华炎办公',
       navigationBarTextStyle: 'white',
       backgroundColor: "#efeef3",
       backgroundTextStyle: 'dark',
