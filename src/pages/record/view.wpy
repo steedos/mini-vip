@@ -75,140 +75,145 @@
 </style>
 
 <script>
-  import wepy from 'wepy';
-  import req from '@/network';
-  import form from '../../components/form';
-  import related from '../../components/related';
+	import wepy from 'wepy';
+	import req from '@/network';
+	import form from '../../components/form';
+	import related from '../../components/related';
 	import RecordMessages from '../../components/chat/record_messages';
 	import chat from '../../common/chat';
 
-  export default class RecordView extends wepy.page {
+	export default class RecordView extends wepy.page {
 
-    config = {
-      navigationBarTitleText: ''
-    };
+		config = {
+			navigationBarTitleText: ''
+		};
 
-    data = {
-      args: {},
-      tabs: [
+		data = {
+			args: {},
+			tabs: [
 				{label: '详细信息'},
 				{label: '动态', badge: 0}
 			],
-      activeIndex: 0,
-      sliderLeft: 0,
-      sliderOffset:0,
+			activeIndex: 0,
+			sliderLeft: 0,
+			sliderOffset: 0,
 			record_dynamic: true,
 			recordMessages_args: {}
-    };
+		};
 
-    refresh(){
-      this.args.timestamps = new Date()
-      console.log('this.args', this.args)
-    }
+		refresh() {
+			this.args.timestamps = new Date()
+			console.log('this.args', this.args)
+		}
 
-    components = {
-      autoform: form,
-      related: related,
+		components = {
+			autoform: form,
+			related: related,
 			recordMessages: RecordMessages,
-    };
+		};
 
-    changeNavigationBarTitleText(title){
+		changeNavigationBarTitleText(title) {
 
-      if(title && title.length > 10){
-        title = title.substr(0,10) + '...'
-      }
+			if (title && title.length > 10) {
+				title = title.substr(0, 10) + '...'
+			}
 
-      wx.setNavigationBarTitle({title:title})
-    }
+			wx.setNavigationBarTitle({title: title})
+		}
 
-    getBadge(related_to, space_id, user_id){
+		getBadge(related_to, space_id, user_id) {
 
-    	chat.getSubscription(related_to, space_id, user_id, 'unread').then((res)=>{
+			chat.getSubscription(related_to, space_id, user_id, 'unread').then((res) => {
 				const rec = res.value;
-				if(rec && rec.length > 0){
+				if (rec && rec.length > 0) {
 					this.tabs[1].badge = rec[0].unread;
 					this.$apply();
-				};
+				}
+				;
 			});
 		}
 
-    async onLoad(e){
-      console.log("record view", e)
-      let args = {action: 'read'};
+		async onLoad(e) {
+			console.log("record view", e)
+			let args = {action: 'read'};
 
-      let recordMessages_args = {};
+			let recordMessages_args = {};
 
-      if(e && e.record_id){
-        args.record_id = e.record_id
-      }else{
-        throw new Error("缺少参数：record_id")
-      }
+			if (e && e.record_id) {
+				args.record_id = e.record_id
+			} else {
+				throw new Error("缺少参数：record_id")
+			}
 
-      if(e && e.object_name){
-        args.object_name = e.object_name
-      }else{
-        throw new Error("缺少参数：object_name")
-      }
+			if (e && e.object_name) {
+				args.object_name = e.object_name
+			} else {
+				throw new Error("缺少参数：object_name")
+			}
 
-      if(e && e.fields){
-        args.fields = e.fields
-      }
+			if (e && e.fields) {
+				args.fields = e.fields
+			}
 
-      if(e && e.space_id){
-        args.space_id = e.space_id
-      }
+			if (e && e.space_id) {
+				args.space_id = e.space_id
+			}
 
 			recordMessages_args.space_id = e.space_id;
 			recordMessages_args.object_name = e.object_name;
 			recordMessages_args.record_id = e.record_id;
 
-      this.args = args;
-      this.recordMessages_args = recordMessages_args;
+			this.args = args;
+			this.recordMessages_args = recordMessages_args;
 
-      const res = wx.getSystemInfoSync();
+			const res = wx.getSystemInfoSync();
 
-      const sliderWidth = 96;
+			const sliderWidth = 96;
 
-      this.sliderLeft = (res.windowWidth / this.tabs.length - sliderWidth) / 2;
+			this.sliderLeft = (res.windowWidth / this.tabs.length - sliderWidth) / 2;
 
-      this.sliderOffset = res.windowWidth / this.tabs.length * this.activeIndex;
+			this.sliderOffset = res.windowWidth / this.tabs.length * this.activeIndex;
 
-      this.getBadge(recordMessages_args, recordMessages_args.space_id, this.$parent.globalData.user._id);
+			this.getBadge(recordMessages_args, recordMessages_args.space_id, this.$parent.globalData.user._id);
 
-      this.$apply()
-    }
+			this.$apply()
+		}
 
-    goBack(action) {
-      const pages = getCurrentPages();
-      const prevPage = pages[pages.length - 2];
-      if (prevPage.refresh) {
-        prevPage.refresh(action)
-      }
-      wepy.navigateBack({
-        delta: 1
-      })
-    }
+		goBack(action) {
+			const pages = getCurrentPages();
+			const prevPage = pages[pages.length - 2];
+			if (prevPage.refresh) {
+				prevPage.refresh(action)
+			}
+			wepy.navigateBack({
+				delta: 1
+			})
+		}
 
-    methods = {
-      async removeRecord() {
-        const result = await wepy.showModal({
-          title: '确定要删除吗？',
-          confirmText: "确定",
-          content: "该操作不可逆，请谨慎操作。",
-          cancelText: "取消",
-        });
-        if (result.confirm) {
-          await this.$parent.delete(this.args.object_name, this.args.record_id)
-          this.goBack("remove");
-        }
-      },
-      tabClick: function (e) {
-        if(e.currentTarget.id === this.activeIndex){
-          return;
-        }
-        this.activeIndex = e.currentTarget.id;
-        this.sliderOffset = e.currentTarget.offsetLeft;
-      }
-    }
-  }
+		methods = {
+			async removeRecord() {
+				const result = await wepy.showModal({
+					title: '确定要删除吗？',
+					confirmText: "确定",
+					content: "该操作不可逆，请谨慎操作。",
+					cancelText: "取消",
+				});
+				if (result.confirm) {
+					await this.$parent.delete(this.args.object_name, this.args.record_id)
+					this.goBack("remove");
+				}
+			},
+			tabClick: function (e) {
+				if (e.currentTarget.id === this.activeIndex) {
+					return;
+				}
+				this.activeIndex = e.currentTarget.id;
+				this.sliderOffset = e.currentTarget.offsetLeft;
+				this.$apply();
+				if (this.activeIndex == 1) {
+					this.$invoke('recordMessages', 'resetToView')
+				}
+			}
+		}
+	}
 </script>

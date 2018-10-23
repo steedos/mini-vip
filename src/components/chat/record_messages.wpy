@@ -65,6 +65,10 @@
 			this.$invoke('chatboard', 'loadMessage', p.space_id,  {object_name: p.object_name, record_id: p.record_id});
 		}
 
+		resetToView(){
+			this.$invoke('chatboard', 'resetToView')
+		}
+
 		onShow(){
 			this.$invoke('chatboard', 'receivingMessage')
 		}
