@@ -166,7 +166,7 @@
         <view class="icon">
           <view class="caret-left"></view>
           <view class="photo">
-            <image src="{{util.formatAvatarImageUrl(item.owner.avatarUrl, baseUrl)}}" mode="aspectFill" style="width:36px;height:36px;"></image>
+            <image src="{{util.formatAvatarImageUrl(item.owner.avatarUrl, baseUrl)}}" mode="aspectFill" style="width:36px;height:36px;" @tap="goUserCard({{item.owner._id}})"></image>
           </view>
         </view>
         <view class="content">
@@ -179,7 +179,7 @@
         </view>
         <view class="icon-right">
           <view class="photo">
-            <image src="{{util.formatAvatarImageUrl(item.owner.avatarUrl, baseUrl)}}" mode="aspectFill" style="width:36px;height:36px;"></image>
+            <image src="{{util.formatAvatarImageUrl(item.owner.avatarUrl, baseUrl)}}" mode="aspectFill" style="width:36px;height:36px;" @tap="goUserCard({{item.owner._id}})"></image>
           </view>
           <view class="caret-right"></view>
         </view>
@@ -488,7 +488,10 @@
           this.scrollAnimation = false;
         }
         this.$apply()
-      }
+      },
+			goUserCard: function (userId) {
+				wepy.navigateTo({url: `/pages/visiting_card/view?card_user_id=${userId}`})
+			}
     }
   }
 </script>
