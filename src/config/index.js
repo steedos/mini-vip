@@ -11,6 +11,6 @@ export const txMapsKey = 'GJOBZ-YSX66-K3SSM-E3MJM-IWPRV-BFFIO';
 export const phoneLoginShowNickName = true;
 
 export const socketServer = 'http://vip-test.steedos.com:8445';
-export const chatBadgeTabBarIndex = 1;
+export const chatBadgeTabBarIndex = -1;
 
 export const chatNewMessagePollingInterval = 15 * 1000;
