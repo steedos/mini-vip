@@ -224,7 +224,6 @@ export default class VIP extends wepy.app {
   config = {
     pages: [
       'pages/visiting_card/index',
-			'pages/visiting_card/chat_socket',
 			'pages/home/store',
       'pages/visiting_card/list',
       'pages/visiting_card/view',
