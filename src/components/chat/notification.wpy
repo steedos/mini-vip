@@ -103,7 +103,7 @@
 <script>
   import wepy from 'wepy';
   import _ from 'underscore'
-  import chat from '../../common/chat';
+	import chat_socket from '../../common/chat_socket';
   import { baseUrl, chatNewMessagePollingInterval } from '@/config';
   import util from '../../wxs/util.wxs';
   import pageRouter from '@/utils/pageRouter'
@@ -119,7 +119,8 @@
       room_id: null,
       setInterval: null,
       setTimeout: null,
-			loaded: false
+			loaded: false,
+			user: {},
     };
 
     props = {
@@ -133,31 +134,15 @@
     };
 
     stopReceivingSubscriptions(){
-      console.log('stopReceivingSubscriptions...........');
-      if(this.setInterval){
-        clearInterval(this.setInterval)
-        console.log('stopReceivingSubscriptions.....clearInterval......');
-      }
-      this.setInterval = null
+			chat_socket.stopReceivingubscriptions({object_name: 'chat_rooms', record_id: this.room_id})
     }
 
     receivingSubscriptions(){
-      if(this.user_id){
-        console.log('receivingSubscriptions...........');
-        this.stopReceivingSubscriptions()
-        this.setInterval = setInterval(async ()=>{
-          console.log('getSubscriptions -> this.room_id', this.room_id);
-          const unreadSubscriptions = _.filter(chat.unreadSubscriptions, (s)=>{
-            if(this.room_id && s.related_to.ids.length > 0){
-              return s.unread > 0 && s.modified_by._id != this.user_id && s.related_to.ids[0] != this.room_id
-            }else{
-              return s.unread > 0 && s.modified_by._id != this.user_id
-            }
-          });
-          this.unreadSubscriptions = unreadSubscriptions;
-          this.$apply()
-        }, chatNewMessagePollingInterval || 15 * 1000)
-      }
+    	console.log('receivingSubscriptions--->');
+			const socket = (this.socket = chat_socket.getSocket(this.user._id, this.user.auth_token));
+			chat_socket.registerOnSubscriptions({object_name: 'chat_rooms', record_id: this.room_id}, (sub)=>{
+				this.onSubscriptions(sub);
+			})
     }
 
     onLoad(){
@@ -165,39 +150,51 @@
 			this.$apply()
     }
 
-    watch = {
-      unreadSubscriptions: function (newValue, oldValue) {
-//      	console.log('watch ---> unreadSubscriptions', newValue.length);
-        if(newValue.length > 0){
-          this.close = false;
-          clearTimeout(this.setTimeout);
-          this.setTimeout = setTimeout(()=>{
-            this.close = true;
-            this.$apply();
-          }, 1000 * 6);
+    onSubscriptions(sub){
+    	if(sub.unread < 1){
+    		return ;
+			}
 
-          this.$apply();
-        }
-      },
+			if(this.room_id && sub.related_to.ids.length > 0){
+    		if(this.room_id === sub.related_to.ids[0]){
+    			return ;
+				}
+			}
+
+    	if(!this.close){
+				this.close = true;
+				this.$apply();
+			}
+    	this.unreadSubscriptions = [sub];
+			this.close = false;
+			clearTimeout(this.setTimeout);
+			this.setTimeout = setTimeout(()=>{
+				this.close = true;
+				this.$apply();
+			}, 1000 * 6);
+			this.$apply();
+		}
+
+    watch = {
       args: function (newValue, oldValue) {
         if(!_.isEmpty(newValue)){
           this.space_id = newValue.space_id;
           this.room_id = newValue.room_id;
-//          console.log('onLoad space_id', this.space_id);
-//          console.log('onLoad room_id', this.room_id);
-          let user_id = null;
+          let user = null;
           if(this.$parent.$parent.globalData){
             if(!this.$parent.$parent.globalData.user){
               return ;
             }
-            user_id = this.$parent.$parent.globalData.user._id;
+						user = this.$parent.$parent.globalData.user;
           }else{
-            user_id = this.$parent.$parent.$parent.globalData.user._id;
+						user = this.$parent.$parent.$parent.globalData.user;
           }
-          this.user_id = user_id;
-          setTimeout(()=>{
-            this.receivingSubscriptions()
-          }, 3 * 1000)
+					this.user = user;
+          this.user_id = user._id;
+
+          console.log('watch args.....', newValue);
+
+					this.receivingSubscriptions()
         }
       }
     };

@@ -224,7 +224,8 @@ export default class VIP extends wepy.app {
   config = {
     pages: [
       'pages/visiting_card/index',
-    	'pages/home/store',
+			'pages/visiting_card/chat_socket',
+			'pages/home/store',
       'pages/visiting_card/list',
       'pages/visiting_card/view',
       'pages/visiting_card/me',
@@ -663,10 +664,10 @@ export default class VIP extends wepy.app {
 
       self.globalData = globalData
 
-			if(appId === 'wxd81e534d6e0b1eb3'){
-				console.log('chat.receivingSubscriptions。。。');
-				chat.receivingSubscriptions(globalData.user._id, loveSpaceId);
-			}
+//			if(appId === 'wxd81e534d6e0b1eb3'){
+//				console.log('chat.receivingSubscriptions。。。');
+//				chat.receivingSubscriptions(globalData.user._id, loveSpaceId);
+//			}
 
     } else {
       const header = {

@@ -10,10 +10,10 @@ class ChatAPI {
 	_setInterval = null;
 
 	//重置未读数量为0
-	async resetUnread(room_id, user_id, space_id) {
+	async resetUnread(related_to, user_id, space_id) {
 		const queryOptions = {
 			$top: 1,
-			$filter: `(related_to/o eq 'chat_rooms') and (related_to/ids eq '${room_id}') and owner eq '${user_id}' and unread gt 0`,
+			$filter: `(related_to/o eq '${related_to.object_name}') and (related_to/ids eq '${related_to.record_id}') and owner eq '${user_id}' and unread gt 0`,
 			$select: '_id',
 		};
 
@@ -31,7 +31,7 @@ class ChatAPI {
 			clearInterval(this._setInterval)
 		}
 		this._setInterval = setInterval(async () => {
-			this.getSubscriptions(user_id, space_id).then(res => {
+			this.getRoomsSubscriptions(user_id, space_id).then(res => {
 				const unreadSubscriptions = _.filter(res.value, (s) => {
 					return s.unread > 0 && s.modified_by._id != user_id
 				});
@@ -63,7 +63,7 @@ class ChatAPI {
 		}, chatNewMessagePollingInterval || 15 * 1000)
 	}
 
-	getSubscriptions(user_id, space_id) {
+	getRoomsSubscriptions(user_id, space_id) {
 		let queryOptions = {
 			$filter: `(related_to/o eq 'chat_rooms') and owner eq '${user_id}'`,
 			$select: 'last_message_text,unread,modified_by,related_to',
@@ -106,15 +106,15 @@ class ChatAPI {
 		}
 	}
 
-	sendMsg(room_id, msg, type = 'text', space, user_id, messageShowTime) {
-		return this.msg(room_id, msg, type, space, user_id, messageShowTime);
+	sendMsg(related_to, msg, type = 'text', space, user_id) {
+		return this.msg(related_to, msg, type, space, user_id);
 	}
 
-	getHistory(room_id, space, top, filter) {
+	getHistory(related_to, space, top, filter) {
 
 		let queryOptions = {
 			$top: top || 15,
-			$filter: `(related_to/o eq 'chat_rooms') and (related_to/ids eq '${room_id}')`,
+			$filter: `(related_to/o eq '${related_to.object_name}') and (related_to/ids eq '${related_to.record_id}')`,
 			$orderby: 'created desc',
 			$select: 'name,type,created,owner',
 			$expand: 'owner($select=name,avatarUrl)'
@@ -127,26 +127,26 @@ class ChatAPI {
 		return ODataClinet.query('chat_messages', queryOptions, space)
 	}
 
-	getNewMessage(room_id, space, timestamp) {
+	getNewMessage(related_to, space, timestamp) {
 		let queryOptions = {
-			$filter: `(related_to/o eq 'chat_rooms') and (related_to/ids eq '${room_id}')`,
+			$filter: `(related_to/o eq '${related_to.object_name}') and (related_to/ids eq '${related_to.record_id}')`,
 			$orderby: 'created desc',
 			$select: 'name,type,created,owner',
 			$expand: 'owner($select=name,avatarUrl)'
 		};
 
 		if(timestamp){
-			queryOptions.$filter = `(related_to/o eq 'chat_rooms') and (related_to/ids eq '${room_id}') and created gt ${timestamp}`;
+			queryOptions.$filter = `(related_to/o eq '${related_to.object_name}') and (related_to/ids eq '${related_to.record_id}') and created gt ${timestamp}`;
 		}
 
 		return ODataClinet.query('chat_messages', queryOptions, space)
 	}
 
-	async msg(room_id, msg, type = 'text', space, user_id) {
+	async msg(related_to, msg, type = 'text', space, user_id) {
 		let data = {
 			related_to: {
-				o: "chat_rooms",
-				ids: [room_id]
+				o: related_to.object_name,
+				ids: [related_to.record_id]
 			},
 			name: msg,
 			type: 'text',
@@ -176,6 +176,19 @@ class ChatAPI {
 		//     resolve(msgObj);
 		//   }).catch(reject);
 		// });
+	}
+
+	getSubscription(related_to, space_id, user_id, select, expand){
+		let queryOptions = {
+			$filter: `(related_to/o eq '${related_to.object_name}') and (related_to/ids eq '${related_to.record_id}') and owner eq '${user_id}'`,
+			$select: select
+		};
+
+		if(expand){
+			queryOptions.$expand = expand;
+		}
+
+		return ODataClinet.query('chat_subscriptions', queryOptions, space_id)
 	}
 }
 
