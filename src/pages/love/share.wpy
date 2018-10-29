@@ -240,7 +240,7 @@
         // 保证一进入就新建space对应的vip_customers记录
         e.space_id = loveSpaceId;
       }
-      if(e.card){
+      if(e.card || true){
         await this.generateFriendCard()
         this.showPop = false
         // this.description = '分享给好友，找到隐藏在好友中的“另一半”吧。'
@@ -347,7 +347,8 @@
     }
 
     async generateFriendCard() {
-      if(this.$parent.globalData.user.avatar) {
+			console.log("==============this.$parent.globalData.user================================",this.$parent.globalData.user);
+      if(this.$parent.globalData.user.avatarUrl) {
         const imageUrl = `https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/share_me.png`;
         const imgRes = await wepy.downloadFile({
           url: imageUrl
@@ -363,10 +364,27 @@
           });
           return;
         }
+        let avatarUrl = this.$parent.globalData.user.avatarUrl;
+        if(avatarUrl.startsWith("/")){
+          avatarUrl = this.baseUrl + avatarUrl;
+        }
+        console.log("=======downloadFile==avatarUrl==========", avatarUrl);
         const avatarRes = await wepy.downloadFile({
-          url: this.$parent.globalData.user.avatar
-        })
-        let path = `pages/love/introduce`;
+          url: avatarUrl
+        }).catch((err)=>{
+          console.log("=======downloadFile==avatarUrl=====error=====", err);
+          this.$apply();
+          return false;
+        });
+        if(!avatarRes || avatarRes.statusCode === 404){
+          wepy.showToast({
+            title: "用户头像获取失败",
+            icon: "none"
+          });
+          return;
+        }
+        console.log("=======downloadFile==avatarRes==========", avatarRes);
+        let path = `pages/love/index`;
         const userId = this.$parent.globalData.user._id;
         const scene = `share_from=${userId}`;
         wepy.showLoading({
@@ -382,6 +400,7 @@
           this.$apply();
           return false;
         });
+        console.log("=======share==========codeImgRes====", codeImgRes);
         if(!codeImgRes){
           wepy.showToast({
             title: "小程序码生成失败",
@@ -393,6 +412,7 @@
         console.log("avatarRes===============",avatarRes.tempFilePath)
         console.log("imgRes===============",imgRes.tempFilePath)
         if(codeImgRes && avatarRes){
+          console.log("===codeImgRes && avatarRes=====start==========")
           const self = this
           const ctx = wepy.createCanvasContext('myCanvas')
           ctx.drawImage(imgRes.tempFilePath, 0, 0, 750, 1000)
@@ -428,14 +448,14 @@
             }
           });
           this.$apply();
-          }
         }
-       else{
-         wepy.showToast({
-          title: "请先授权获取微信头像",
-          icon: "none"
-        });
-       }
+			}
+			else{
+				wepy.showToast({
+					title: "请先授权获取微信头像",
+					icon: "none"
+				});
+			}
     }
     
     async generateFriendCircleImage() {

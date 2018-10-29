@@ -60,7 +60,7 @@
 					<repeat for="{{friendList.value}}" key="index" index="index" item="friend">
 						<block wx:if="{{friend.user_b.name}}">
 							<view class="avatar-container">
-								<image class="image" mode="aspectFill" src="{{friend.user_b.profile.avatar}}"></image>
+								<image class="image" mode="aspectFill" src="{{util.formatAvatarImageUrl(friend.user_b.avatarUrl, baseUrl)}}"/>
 							</view>
 						</block>
 					</repeat>
@@ -81,7 +81,7 @@
 						<repeat for="{{groupFriendList[group.open_group_id].value}}" key="index" index="index" item="friend">
 							<block wx:if="{{friend.user_b.name}}">
 								<view class="avatar-container">
-									<image class="image" mode="aspectFill" src="{{friend.user_b.profile.avatar}}"></image>
+									<image class="image" mode="aspectFill" src="{{util.formatAvatarImageUrl(friend.user_b.avatarUrl, baseUrl)}}"/>
 								</view>
 							</block>
 						</repeat>
@@ -96,7 +96,7 @@
 import wepy from 'wepy';
 import { loveSpaceId } from '../../config/index.js';
 import _ from 'underscore'
-import { baseUrl } from '@/config';
+import { baseUrl, appId } from '@/config';
 import util from '../../wxs/util.wxs';
 
 export default class LoveGroup extends wepy.page {
@@ -118,15 +118,15 @@ export default class LoveGroup extends wepy.page {
 
   getQueryFilter(open_group_id) {
     const user_id = this.$parent.globalData.user._id;
-    let filter = '';
+    let filter = `mini_app_id eq '${appId}' and `
     if (open_group_id === '-1') {
-      filter = `(owner eq '${user_id}' and match ge 0)`;
+      filter += `(owner eq '${user_id}' and match ge 0)`;
     } else if (open_group_id) {
-      filter = `(owner eq '${user_id}' and match ge 0 and open_groups eq '${
+      filter += `(owner eq '${user_id}' and match ge 0 and open_groups eq '${
         open_group_id
       }')`;
     } else {
-      filter = `(owner eq '${user_id}' and match ge 0)`;
+      filter += `(owner eq '${user_id}' and match ge 0)`;
     }
     return filter;
   }
@@ -137,7 +137,7 @@ export default class LoveGroup extends wepy.page {
       $filter: filter,
       $top: 5,
       $select: 'user_b',
-      $expand: 'user_b($select=profile,name)',
+      $expand: 'user_b($select=profile,name,avatarUrl)',
       $orderby: 'created desc'
     };
     const result = await this.$parent.query(
@@ -164,7 +164,7 @@ export default class LoveGroup extends wepy.page {
 	async loadGroups() {
     const user_id = this.$parent.globalData.user._id;
     const options = {
-      $filter: `(users eq '${user_id}')`,
+      $filter: `(mini_app_id eq '${appId}' and users eq '${user_id}')`,
       $select: 'open_group_id',
       $orderby: 'modified desc'
     };

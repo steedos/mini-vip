@@ -63,10 +63,7 @@
         </view>
       </view>
       <block wx:if="{{isAuthUserInfo && answered}}">
-        <button class="input-btn btn-join button-hover" type="primary" @tap="goLove">
-          想要找到匹配度更高的人？
-        </button>
-        <button class="btn-love" @tap="goShare">我也要玩</button>
+        <button class="btn-join" @tap="goShare">邀请好友测试</button>
         <button class="btn-love" @tap="goHome">进入首页</button>
       </block>
       <block wx:else>
@@ -118,7 +115,7 @@ export default class Test extends wepy.page {
 
   onShareAppMessage(res) {
     const user_id = this.$parent.globalData.user._id;
-    let title = '我们的缘分榜，快来打榜！';
+    let title = '我们是天生一对吗？';
     let path = `/pages/love/test?naire=love_answer&share_from=${user_id}`
     return {
       title: title,
@@ -142,7 +139,7 @@ export default class Test extends wepy.page {
       e.qrcode = 1
     }
     await this.$parent.login(e);
-    const love = this.$parent.globalData.love;
+    const love = this.$parent.globalData.mini_app;
     const user_id = this.$parent.globalData.user._id;
     if (love && love.enabled) {
       this.showLoveBtn = true;
@@ -159,11 +156,11 @@ export default class Test extends wepy.page {
       const options = {
         $filter: `(user_b eq '${e.share_from}' and owner eq '${user_id}')`,
         $select: 'owner,user_b,a_to_b,b_to_a,match',
-        $expand: 'user_b($select=profile)'
+        $expand: 'user_b($select=profile,avatarUrl)'
       }
       const result = await this.$parent.query('love_friends', options, this.space_id);
       if (result && result.value && result.value[0]) {
-        this.userB_avatar = result.value[0].user_b.profile.avatar;
+        this.userB_avatar = result.value[0].user_b.avatarUrl;
         this.score = result.value[0].match;
       }
     }
@@ -210,11 +207,11 @@ export default class Test extends wepy.page {
       const options = {
         $filter: `(user_b eq '${this.share_from}' and owner eq '${user_id}')`,
         $select: 'owner,user_b,a_to_b,b_to_a,match',
-        $expand: 'user_b($select=profile)'
+        $expand: 'user_b($select=profile,avatarUrl)'
       }
       const result = await this.$parent.query('love_friends', options, this.space_id);
       if (result && result.value && result.value[0]) {
-        this.userB_avatar = result.value[0].user_b.profile.avatar;
+        this.userB_avatar = result.value[0].user_b.avatarUrl;
         this.score = result.value[0].match;
         this.$apply();
       }
@@ -248,7 +245,7 @@ export default class Test extends wepy.page {
       wx.navigateTo({url: `/pages/love/home?space_id=${this.space_id}`})
     },
     goHome(){
-      wx.navigateTo({url: '/pages/love/home'})
+      wx.navigateTo({url: '/pages/love/index'})
     }
   }
 }

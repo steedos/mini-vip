@@ -58,6 +58,9 @@ page {
   width: 100%;
   background-color: #F7F7FA;
   align-items: center;
+  .more-action-btn {
+    justify-content: flex-end;
+  }
 
   &.special-tab {
     .star-btn {
@@ -217,11 +220,23 @@ video{
     <view class="post-header body_color">
       <view class="weui-cell weui-cell_access">
         <view class="weui-cell__hd">
-          <image wx:if="{{post.owner.profile.avatar}}" class="image slds-icon slds-icon--small slds-m-right--x-small" src="{{util.formatImageUrl(post.owner.profile.avatar, baseUrl)}}"></image>
-          <view wx:else class="slds-icon-standard-channel-programs slds-icon slds-icon--small slds-m-right--x-small"></view>
+          <block wx:if="{{show_space_logo}}">
+            <image wx:if="{{avatar}}" class="image slds-icon slds-icon--small slds-m-right--x-small" src="{{util.formatImageUrl(avatar, baseUrl)}}"/>
+            <view wx:else class="slds-icon-standard-channel-programs slds-icon slds-icon--small slds-m-right--x-small"></view>
+          </block>
+          <block wx:else>
+            <image class="image slds-icon slds-icon--small slds-m-right--x-small" src="{{util.formatAvatarImageUrl(post.owner.avatarUrl, baseUrl)}}"/>
+          </block>
         </view>
         <view class="weui-cell__bd">
-          <view class="space-name">{{post.owner.name}}</view>
+          <view class="space-name">
+            <block wx:if="{{show_space_logo}}">
+              {{space_name}}
+            </block>
+            <block wx:else>
+              {{post.owner.name}}
+            </block>
+          </view>
           <view class="post-time">{{util.formatDate(post.created)}}</view>
         </view>
       </view>
@@ -249,14 +264,14 @@ video{
         </view>
       </view>
     </view>
-    <view wx:if="{{hide_comment}}" class="comment-area body_color">
+    <view wx:if="{{!hide_comment}}" class="comment-area body_color">
       <view class="comment-title">
         评论({{post_comments.length}})
       </view>
       <repeat for="{{post_comments}}" key="index" index="index" item="comment">
         <view class="comment-container">
           <view class="avatar-container">
-            <image class="avatar" mode="aspectFill" src="{{comment.owner.profile.avatar}}"></image>
+            <image class="avatar" mode="aspectFill" src="{{util.formatAvatarImageUrl(comment.owner.avatarUrl, baseUrl)}}"/>
           </view>
           <view class="detail-container">
             <view class="user-name">{{comment.owner.name}}</view>
@@ -267,7 +282,7 @@ video{
       </repeat>
     </view>
   </view>
-  <view wx:if="{{hide_comment}}" class="tab-bar border-top-1px {{isSpaceAdmin ? 'special-tab' : ''}}">
+  <view wx:if="{{!hide_comment}}" class="tab-bar border-top-1px {{isSpaceAdmin ? 'special-tab' : ''}}">
     <button plain="true" open-type="share" data-post-name="{{post.name}}" data-post-id="{{post._id}}" data-post-space="{{post.space}}" class="share action share-btn">
       <view class="vip_share-default slds-icon slds-icon--small slds-m-right--x-small"></view>
       <view class="text">转发</view>
@@ -280,14 +295,13 @@ video{
       <view class="vip_star-{{star_id ? 'blue' : 'default'}} slds-icon slds-icon--small slds-m-right--x-small"></view>
       <view class="text">{{post.star_count || 0}}</view>
     </view>
-    <view class="more-action-btn action" @tap="moreAction" wx:if="{{isSpaceAdmin}}">
-      <view class="vip_more slds-icon slds-icon--small slds-m-right--x-small"></view>
-      <view class="text">更多</view>>
+    <view class="more-action-btn action" @tap="moreAction" wx:if="{{isSpaceAdmin || is_owner}}">
+      <view class="vip-threedots-default slds-icon"/>
     </view>
   </view>
-  <view wx:if="{{is_owner}}" class="edit-post" @tap="editPost">
+  <!-- <view wx:if="{{is_owner}}" class="edit-post" @tap="editPost">
     <view class="slds-icon-action-edit"></view>
-  </view>
+  </view> -->
 </view>
 </template>
 <script>
@@ -322,10 +336,15 @@ export default class PostView extends wepy.page {
     hide_comment: false,
     isSpaceAdmin: false,
     is_owner: false,
-    wemark: {}
+    wemark: {},
+    post_object_name:"post",
+    fields:"name,summary,description,images,video,type",
+    show_space_logo: false,
+    is_fields_customized: false
   };
 
   async onLoad(e) {
+    console.log("=============post===================", e);
     await this.$parent.login(e);
     const userId = this.$parent.globalData.user._id;
     this.editable = e.editable;
@@ -335,7 +354,16 @@ export default class PostView extends wepy.page {
     });
     this.space_id = e.space_id || loveSpaceId;
     this.hide_comment = e.hide_comment;
+    if(e.post_object_name){
+      this.post_object_name = e.post_object_name;
+    }
+    if(e.fields){
+      this.fields = e.fields;
+      this.is_fields_customized = true;
+    }
     if(e.space_id){
+      // 如果想在顶部显示vip_store的头像及名称，就传入space_id，否则显示post.ower的头像
+      this.show_space_logo = true;
       const options = {
         $filter: `_id eq '${e.space_id}'`,
         $expand: 'space($select=name)',
@@ -349,26 +377,18 @@ export default class PostView extends wepy.page {
         this.avatar = res.value[0].avatar
       }
     }
-    if(loveSpaceId){
-      if(e.name && e.avatar){
-        this.space_name = e.name
-        this.avatar = e.avatar
-      }else{
-        this.space_name = this.$parent.globalData.user.name
-        this.avatar = this.$parent.globalData.user.avatar
-      }
-    }
+    // if(loveSpaceId){
+    //   if(e.name && e.avatar){
+    //     this.space_name = e.name
+    //     this.avatar = e.avatar
+    //   }else{
+    //     this.space_name = this.$parent.globalData.user.name
+    //     this.avatar = this.$parent.globalData.user.avatar
+    //   }
+    // }
     if(e.post_id){
       this.post_id = e.post_id;
-      await this.loadPost();
-      if (this.post.owner == userId) {
-        this.is_owner = true;
-        this.$apply();
-      }
-      if (!this.hide_comment) {
-        await this.isPostStar();
-        await this.loadPostComments();
-      }
+      this.loadData();
     }
 
     this.isSpaceAdmin = this.$parent.isSpaceAdmin(this.space_id);
@@ -384,26 +404,37 @@ export default class PostView extends wepy.page {
     }
   }
 
+  async loadData(){
+    await this.loadPost();
+    const userId = this.$parent.globalData.user._id;
+    if (this.post.owner && this.post.owner._id === userId) {
+      this.is_owner = true;
+      this.$apply();
+    }
+    if (!this.hide_comment) {
+      await this.loadPostStar();
+      await this.loadPostComments();
+    }
+  }
+
   async refresh(action) {
     if(action == "remove"){
       this.goBackAfterRemove();
       return;
     }
-    await this.loadPost();
-    if (!this.hide_comment) {
-      await this.loadPostComments();
-    }
+    this.loadData();
     wepy.stopPullDownRefresh();
   }
 
   async loadPostComments() {
     const post_id = this.post_id;
+    let object_name = this.post_object_name
     const options = {
-      $filter: `post_id eq '${post_id}'`,
+      $filter: `related_to/o eq '${object_name}' and related_to/ids eq '${post_id}'`,
       $count: true,
-      $expand: 'owner($select=profile,name)'
+      $expand: 'owner($select=profile,name,avatarUrl)'
     };
-    const result = await this.$parent.query('post_comments', options, 'guest');
+    const result = await this.$parent.query('chat_messages', options, 'guest');
     if (result && result.value) {
       this.post_comments = result.value;
       this.$apply()
@@ -412,14 +443,9 @@ export default class PostView extends wepy.page {
 
   async loadPost(){
     let space_id = ''
-    let object_name = ''
-    if (loveSpaceId){
-      object_name = 'love_post'
-    }else{
-      object_name = 'post'
-    }
+    let object_name = this.post_object_name
     const query = {
-      $expand: 'owner($select=name,profile)'
+      $expand: 'owner($select=name,profile,avatarUrl)'
     }
     var post = await this.$parent.get(object_name, this.post_id, this.space_id, query)
     this.post = post;
@@ -436,12 +462,13 @@ export default class PostView extends wepy.page {
     this.$apply();
   };
 
-  async isPostStar() {
+  async loadPostStar() {
     const user = this.$parent.globalData.user._id;
     const post_id = this.post_id;
     const space_id = this.space_id;
+    let object_name = this.post_object_name
     const options = {
-      $filter: `user eq '${user}' and star_post eq '${post_id}'`
+      $filter: `user eq '${user}' and related_to/o eq '${object_name}' and related_to/ids eq '${post_id}'`
     };
     const result = await this.$parent.query('user_star', options, space_id);
     if (result && result.value && result.value[0]) {
@@ -465,9 +492,17 @@ export default class PostView extends wepy.page {
   // 分享
   onShareAppMessage(res) {
     const post_name = this.post.name
+    let url = `pages/post/view?post_id=${this.post._id}&post_object_name=${this.post_object_name}`;
+    if(this.show_space_logo){
+      url += `&space_id=${this.space_id}`;
+    }
+    if(this.is_fields_customized){
+      url += `&fields=${this.fields}`;
+    }
+    console.log("=========onShareAppMessage=========url====", url);
     return {
       title: post_name,
-      path: `pages/post/view?space_id=${this.space_id}&post_id=${this.post._id}`
+      path: url
     };
   }
 
@@ -519,40 +554,44 @@ export default class PostView extends wepy.page {
         urls: urls
       });
     },
-    editPost() {
-      let object_name=''
-      let fields = ''
-      if(loveSpaceId){
-        object_name = 'love_post';
-        fields = 'name,images';
-      }else{
-        object_name = 'post';
-        fields = 'name,summary,description,images,video,type';
-      }
-      let url = `/pages/record/edit?space_id=${this.space_id}&action=edit&object_name=${object_name}&record_id=${this.post_id}&fields=${fields}`;
-      wepy.navigateTo({
-        url: url
-      });
-    },
-    async removeRecord() {
-      const result = await wepy.showModal({
-        title: '确认删除',
-        confirmText: "确定",
-        content: "您确认要删除此记录吗？",
-        cancelText: "取消",
-      });
-      if (result.confirm) {
-        await this.$parent.delete('love_post', this.post_id, loveSpaceId)
-        this.goBackAfterRemove("remove");
-      }
-    },
+    // editPost() {
+    //   let object_name = 'post';
+    //   let fields = this.fields;
+    //   // if(loveSpaceId){
+    //   //   object_name = 'love_post';
+    //   //   fields = 'name,images';
+    //   // }else{
+    //   //   object_name = 'post';
+    //   //   fields = 'name,summary,description,images,video,type';
+    //   // }
+    //   let url = `/pages/record/edit?space_id=${this.space_id}&action=edit&object_name=${object_name}&record_id=${this.post_id}&fields=${fields}`;
+    //   wepy.navigateTo({
+    //     url: url
+    //   });
+    // },
+    // async removeRecord() {
+    //   const result = await wepy.showModal({
+    //     title: '确认删除',
+    //     confirmText: "确定",
+    //     content: "您确认要删除此记录吗？",
+    //     cancelText: "取消",
+    //   });
+    //   if (result.confirm) {
+    //     await this.$parent.delete('love_post', this.post_id, loveSpaceId)
+    //     this.goBackAfterRemove("remove");
+    //   }
+    // },
     async starPost() {
       const space_id = this.space_id;
       const post_id = this.post_id;
       const user = this.$parent.globalData.user._id;
+      let object_name = this.post_object_name
       const data = {
         user: user,
-        star_post: post_id,
+        related_to: {
+          o: object_name,
+          ids: [post_id]
+        },
         owner: user
       }
       if (this.star_id) {
@@ -564,48 +603,51 @@ export default class PostView extends wepy.page {
           this.star_id = result.value[0]._id;
         }
       }
-      const post = await this.$parent.get('post', this.post._id, this.post.space);
-      this.post = post;
+      this.loadPost();
       this.$apply()
     },
-    async submitComment(e) {
-      const comment = e.detail.value.comment;
-      const space_id = this.space_id;
-      if (comment) {
-        const data = {
-          name: comment,
-          post_id: this.post_id
-        }
-        await this.$parent.insert('post_comments', data, space_id);
-        await this.loadPostComments();
-        this.setData({
-          value : ''
-        });
-      }
-    },
+    // async submitComment(e) {
+    //   const comment = e.detail.value.comment;
+    //   const space_id = this.space_id;
+    //   if (comment) {
+    //     const data = {
+    //       name: comment,
+    //       post_id: this.post_id
+    //     }
+    //     await this.$parent.insert('post_comments', data, space_id);
+    //     await this.loadPostComments();
+    //     this.setData({
+    //       value : ''
+    //     });
+    //   }
+    // },
     writeComment() {
+      let object_name = this.post_object_name
       wx.navigateTo({
-        url: `../comment/index?space_id=${this.space_id}&object_name=post_comments&key_name=post_id&_id=${this.post_id}`
+        url: `../comment/index?space_id=${this.space_id}&object_name=${object_name}&type=text&_id=${this.post_id}`
       })
     },
     async moreAction() {
       const res = await wepy.showActionSheet({itemList: ['编辑', '删除']});
       console.log(res)
+      let object_name = this.post_object_name
       switch (res.tapIndex) {
         case 0:
-          if (this.isSpaceAdmin) {
-            let url = `/pages/record/edit?space_id=${this.space_id}&action=edit&object_name=post&record_id=${this.post_id}&fields=name,summary,description,images,video,type`;
+          if (this.isSpaceAdmin || this.is_owner) {
+            let url = `/pages/record/edit?space_id=${this.space_id}&action=edit&object_name=${object_name}&record_id=${this.post_id}&fields=${this.fields}`;
             wepy.navigateTo({
               url: url
             });
           }
           break;
         case 1:
-          if (this.isSpaceAdmin) {
-            await this.$parent.delete('post', this.post_id, this.space_id);
+          if (this.isSpaceAdmin || this.is_owner) {
+            await this.$parent.delete(object_name, this.post_id, this.space_id);
             const pages = getCurrentPages();
             const prevPage = pages[pages.length - 2];
-            await prevPage.refresh();
+            if(prevPage.refresh){
+              await prevPage.refresh();
+            }
             wx.showToast({
               title: '删除成功',
               icon: 'success',

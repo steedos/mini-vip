@@ -187,7 +187,7 @@ page{
 					</view>
 					<view class="weui-cell__ft weui-cell__ft_in-access"></view>
 				</navigator>
-				<view @tap="goList" class="weui-cell weui-cell_access">
+				<view wx:if="{{mini_app.enabled}}" @tap="goList" class="weui-cell weui-cell_access">
 					<view class="weui-cell__bd">
 						<view>我的名片夹</view>
 					</view>
@@ -237,19 +237,20 @@ page{
 			is_owner: false,
 			default_avatar: 'https://lg-otd9qzs8-1257216007.cos.ap-shanghai.myqcloud.com/avatar.jpg',
 			recent_vieweds: { value: [], "@odata.count":0},
-			card_fields: "avatar,name,company,position,mobile2,wechat,work_phone,email2,location,self_introduction,photos"
+			card_fields: "avatar,name,company,position,mobile2,wechat,work_phone,email2,location,self_introduction,photos",
+			mini_app: {}
 		};
 
 		onShow(){
-		this.$invoke('to_chat_with', 'receivingSubscription')
+			this.$invoke('to_chat_with', 'receivingSubscription')
 		}
 
 		onHide(){
-		this.$invoke('to_chat_with', 'stopReceivingSubscription')
+			this.$invoke('to_chat_with', 'stopReceivingSubscription')
 		}
 
 		async onUnload(){
-		this.$invoke('to_chat_with', 'stopReceivingSubscription')
+			this.$invoke('to_chat_with', 'stopReceivingSubscription')
 		}
 
 		wxs = {
@@ -287,8 +288,9 @@ page{
 			if(this.user_id == this.card_user_id){
 				this.is_owner = true;
 			}
-			await this.loadData();
+			this.mini_app = this.$parent.globalData.mini_app;
 			await this.updateRecentViewed();
+			await this.loadData();
 			this.is_loaded = true;
 			this.$apply();
 			let title = '名片';

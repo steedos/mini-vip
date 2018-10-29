@@ -94,7 +94,7 @@ export default class InviteIndex extends wepy.page {
       e.qrcode = 1
 		}
     await this.$parent.login(e);
-    const love = this.$parent.globalData.love;
+    const love = this.$parent.globalData.mini_app;
 		if (love && love.enabled) {
 			this.showLoveBtn = true;
 			this.$apply();

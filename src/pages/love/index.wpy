@@ -41,7 +41,7 @@
 		<view class="page cover-page">
 			<view class="page">
 				<view class="page__hd">
-					<view class="love-title">你该和谁谈恋爱？</view>
+					<view class="love-title">智能匹配度测试</view>
 				</view>
 				<view class="page__bd">
 					<view class="love-summary">根据你的喜好和对方喜好，精确计算“互相匹配度”，帮你找到心意相通的恋爱对象。</view>
@@ -103,7 +103,7 @@ export default class LoveIndex extends wepy.page {
     console.log("this.space_id============", this.space_id);
 		await this.$parent.login(e);
 
-		const love = this.$parent.globalData.love;
+		const love = this.$parent.globalData.mini_app;
 		if (love && love.enabled) {
 			this.showLoveBtn = true;
 			this.$apply();
@@ -121,7 +121,11 @@ export default class LoveIndex extends wepy.page {
     if(finishedNaire && finishedNaire.length > 2){
       this.answered = true;
       this.$apply();
-      wx.switchTab({url: '/pages/love/home'});
+      if (this.showLoveBtn)
+        wx.switchTab({url: '/pages/love/home'});
+      else
+        wx.navigateTo({url: '/pages/love/matching'});
+
 
       // const user_id = this.$parent.globalData.user._id;
       // const options = {
@@ -147,7 +151,7 @@ export default class LoveIndex extends wepy.page {
   // 分享
   onShareAppMessage(res) {
     const userId = this.$parent.globalData.user._id;
-    let title = "茫茫人海，你该和谁谈恋爱？";
+    let title = "人工智能测试匹配度";
     return {
       title: title,
       path: `pages/love/index?share_from=${userId}&love=1`,
@@ -169,7 +173,10 @@ export default class LoveIndex extends wepy.page {
 		  wx.navigateTo({url: '/pages/love/test'})
 		},
 		goHome() {
-			wx.switchTab({url: '/pages/love/home'})
+      if (this.showLoveBtn)
+        wx.switchTab({url: '/pages/love/home'});
+      else
+        wx.navigateTo({url: '/pages/love/matching'});
 		},
 		goMatching() {
 			wx.navigateTo({url: '/pages/love/matching?space_id={{this.space_id}}&open_group_id=-1'})

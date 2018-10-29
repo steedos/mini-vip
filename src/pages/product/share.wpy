@@ -188,7 +188,7 @@
             <view class="responses-box">
               <repeat for="{{responses}}" key="index" index="index" item="response">
                 <view class="response-item">
-                  <image class="image" src="{{response.owner.profile.avatar}}"/>
+                  <image class="image" src="{{util.formatAvatarImageUrl(response.owner.avatarUrl, baseUrl)}}"/>
                   <view class="response-name">{{response.name}}</view>
                 </view>
               </repeat>
@@ -316,7 +316,7 @@
   
     async loadShareResponse(){
       const options = {
-        $expand: 'owner($select=profile)',
+        $expand: 'owner($select=profile,avatarUrl)',
         $select: 'name,owner',
         $filter: `share eq ${this.share_id}`
       };

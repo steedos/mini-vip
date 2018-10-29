@@ -214,7 +214,7 @@
             <view class="responses-box">
               <repeat for="{{responses}}" key="index" index="index" item="response">
                 <view class="response-item">
-                  <image class="image" src="{{response.owner.profile.avatar}}"/>
+                  <image class="image" src="{{util.formatAvatarImageUrl(response.owner.avatarUrl, baseUrl)}}"/>
                   <view class="response-name">{{response.name}}</view>
                 </view>
               </repeat>
@@ -378,7 +378,7 @@
     async loadShareResponse(){
       const userId = this.$parent.globalData.user._id;
       const options = {
-        $expand: 'owner($select=profile)',
+        $expand: 'owner($select=profile,avatarUrl)',
         $select: 'name,cash_back_total,owner',
         $filter: `from eq '${userId}' and space eq '${this.space_id}'`
       };

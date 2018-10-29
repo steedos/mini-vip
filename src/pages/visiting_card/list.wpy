@@ -142,8 +142,7 @@ export default class VisitingCardList extends wepy.page {
     this.user_id = this.user._id;
 
     this.args = {
-      space_id: this.space_id,
-      user: this.user
+      space_id: this.space_id
     };
 
     this.$apply();

@@ -209,7 +209,7 @@
                     {{index + 1}}
                   </view>
                   <view class="weui-cell__hd">
-                    <image src="{{record.user_b.profile.avatar}}" class='avatar-field' />
+                    <image src="{{util.formatAvatarImageUrl(record.user_b.avatarUrl, baseUrl)}}" class='avatar-field' />
                   </view>
                   <view class="weui-cell__bd">
                     <view class="name">{{record.user_b.name}}</view>
@@ -270,8 +270,7 @@ import wepy from 'wepy';
 import { baseUrl } from '@/config';
 import util from '../../wxs/util.wxs';
 import recordList from '../../mixins/record_list';
-import { baseMaterialUrl } from '@/config';
-import { loveSpaceId } from '@/config';
+import { loveSpaceId, baseMaterialUrl, appId } from '@/config';
 import pageRouter from '@/utils/pageRouter';
 import req from '@/network';
 import _ from 'underscore';
@@ -289,7 +288,7 @@ export default class Matching extends wepy.page {
     match_index: 0,
     object_name: 'love_friends',
     filter: '',
-    avatar_field: 'user_b.profile.avatar',
+    avatar_field: 'user_b.avatarUrl',
     name_field: 'user_b.name',
     baseUrl: baseUrl,
     navigationBarTitle: '缘分榜',
@@ -391,7 +390,7 @@ export default class Matching extends wepy.page {
   async loadRecords(searchValue) {
     const skip = this.current_skip;
     const object_name = this.object_name;
-    const queryOptions = this.getQueryOptions(searchValue);
+    const queryOptions = await this.getQueryOptions(searchValue);
     if (this.allow_load) {
       const result = await this.$parent.query(
         object_name,
@@ -430,29 +429,30 @@ export default class Matching extends wepy.page {
     wx.stopPullDownRefresh();
   }
 
-  getQueryFilter() {
+  async getQueryFilter() {
     const user_id = this.$parent.globalData.user._id;
-    let filter = '';
+    let filter = `mini_app_id eq '${appId}' and `
     const filterEnable = wepy.getStorageSync('matching_filter_enable');
     if (this.open_group_id === '-1') {
-      filter = `(owner eq '${user_id}' and match ge 0)`;
+      filter += `(owner eq '${user_id}' and match ge 0)`;
     } else if (this.open_group_id) {
-      filter = `(owner eq '${user_id}' and match ge 0 and open_groups eq '${
+      filter += `(owner eq '${user_id}' and match ge 0 and open_groups eq '${
         this.open_group_id
       }')`;
     } else {
-      filter = `(owner eq '${user_id}' and match ge 0)`;
+      filter += `(owner eq '${user_id}' and match ge 0)`;
     }
     if (filterEnable) {
       filter += ' and is_looking_for eq true';
     }
+    console.log("=========getQueryFilter=======filter=========", filter);
     return filter;
   }
 
-  setOpenGroupId(open_group_id) {
+  async setOpenGroupId(open_group_id) {
     console.log('[setOpenGroupId]', open_group_id)
     this.open_group_id = open_group_id;
-    this.filter = this.getQueryFilter();
+    this.filter = await this.getQueryFilter();
     this.$apply();
     this.dataRefresh();
   }
@@ -475,7 +475,7 @@ export default class Matching extends wepy.page {
   };
 
   getFinalExpand() {
-    return 'user_b($select=profile,name)';
+    return 'user_b($select=profile,name,avatarUrl)';
   }
 
   mixins = [recordList];

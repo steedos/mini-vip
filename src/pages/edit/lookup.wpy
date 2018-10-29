@@ -302,8 +302,8 @@
         let option = {label: record.name};
         if (reference_to === 'space_users') {
           option.value = record.user._id
-          if(record.user.profile){
-            option.avatar = record.user.profile.avatar
+          if(record.user.avatarUrl){
+            option.avatar = record.user.avatarUrl
           }
         }else if(reference_to === 'objects'){
           option.value = record.name

@@ -83,14 +83,6 @@
       this.$invoke('chatboard', 'loadMessage', p.space_id, {object_name: 'chat_rooms', record_id: p.room_id}, p.to_user);
     }
 
-    onShow(){
-      this.$invoke('chatboard', 'receivingMessage')
-    }
-
-    onHide(){
-      this.$invoke('chatboard', 'stopReceivingMessage')
-    }
-
     async onUnload(){
       this.$invoke('chatboard', 'stopReceivingMessage')
       await this.$invoke('chatboard', 'resetUnread')

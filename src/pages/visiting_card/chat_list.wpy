@@ -162,6 +162,7 @@ import _ from 'underscore'
 import chatNotification from '../../components/chat/notification';
 import chatNotificationMixin from '../../mixins/chat_notification';
 import chat from '../../common/chat';
+import chat_socket from '../../common/chat_socket';
 
 export default class RecordList extends wepy.page {
   config = {
@@ -204,29 +205,38 @@ export default class RecordList extends wepy.page {
 	}
 
 	receivingRecords(){
-		console.log('set timeout receivingRecords',this.user_id)
-		if(this.user_id){
-			this.stopReceivingRecords()
-			this.recordsSetInterval = setInterval(async ()=>{
-				console.log('chat list receivingSubscriptions.............')
-				const unreadSubscriptions = _.filter(chat.unreadSubscriptions, (s)=>{
-					return s.unread > 0 && s.modified_by._id != this.user_id
-				});
+//		console.log('set timeout receivingRecords',this.user_id)
+//		if(this.user_id){
+//			this.stopReceivingRecords()
+//			this.recordsSetInterval = setInterval(async ()=>{
+//				console.log('chat list receivingSubscriptions.............')
+//				const unreadSubscriptions = _.filter(chat.unreadSubscriptions, (s)=>{
+//					return s.unread > 0 && s.modified_by._id != this.user_id
+//				});
+//
+//				if(unreadSubscriptions.length != this.record_list.length){
+//					await this.getRooms();
+//				}
+//
+//				const record_list = _.uniq(unreadSubscriptions.concat(this.record_list), true, (a)=>{
+//					return a._id
+//				});
+//
+//				this.record_list = record_list;
+//				this.$apply()
+//			}, chatNewMessagePollingInterval || 15 * 1000)
+//		}
+		const socket = (this.socket = chat_socket.getSocket(this.user._id, this.user.auth_token));
+		chat_socket.registerOnSubscriptions({object_name: 'chat_rooms'}, (sub)=>{
+			const room = sub._room;
+			this.rooms[room._id] = room;
+			this.record_list.splice(0, 0, sub);
+			this.record_list = _.uniq(this.record_list, true, (a) => {
+				return a._id
+			});
+			this.$apply()
+		})
 
-				if(unreadSubscriptions.length != this.record_list.length){
-					await this.getRooms();
-				}
-
-				const record_list = _.uniq(unreadSubscriptions.concat(this.record_list), true, (a)=>{
-					return a._id
-				});
-
-
-
-				this.record_list = record_list;
-				this.$apply()
-			}, chatNewMessagePollingInterval || 15 * 1000)
-		}
 	}
 
 	async getRooms(){
@@ -254,8 +264,12 @@ export default class RecordList extends wepy.page {
     }
 
     this.user_id = this.$parent.globalData.user._id;
+		this.user = this.$parent.globalData.user;
 
     this.pageInit = true;
+
+		this.receivingRecords()
+
     this.$apply()
   }
 
@@ -271,27 +285,16 @@ export default class RecordList extends wepy.page {
   }
 
   refresh() {
-    this.dataRefresh();
+//    this.dataRefresh();
   }
 
   async onShow() {
 		this.user_id = this.$parent.globalData.user._id;
 
     if(this.is_loaded){
-      this.dataRefresh();
+//      this.dataRefresh();
     }
-		setTimeout( ()=>{
-			this.receivingRecords()
-		}, 15 * 1000)
   }
-
-	onHide(){
-		this.stopReceivingRecords()
-	}
-
-	onUnload(){
-		this.stopReceivingRecords()
-	}
 
   methods = {
     searchRecords(searchValue, evt) {

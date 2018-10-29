@@ -207,7 +207,7 @@
 					<view class="icon">
 						<view class="caret-left"></view>
 						<view class="photo">
-							<image src="{{util.formatAvatarImageUrl(item.owner.avatarUrl, baseUrl)}}" mode="aspectFill" style="width:36px;height:36px;"></image>
+							<image src="{{util.formatAvatarImageUrl(item.owner.avatarUrl, baseUrl)}}" mode="aspectFill" style="width:36px;height:36px;" @tap="goUserCard({{item.owner._id}})"></image>
 						</view>
 					</view>
 					<view class="content">
@@ -220,7 +220,7 @@
 					</view>
 					<view class="icon-right">
 						<view class="photo">
-							<image src="{{util.formatAvatarImageUrl(item.owner.avatarUrl, baseUrl)}}" mode="aspectFill" style="width:36px;height:36px;"></image>
+							<image src="{{util.formatAvatarImageUrl(item.owner.avatarUrl, baseUrl)}}" mode="aspectFill" style="width:36px;height:36px;" @tap="goUserCard({{item.owner._id}})"></image>
 						</view>
 						<view class="caret-right"></view>
 					</view>
@@ -231,7 +231,7 @@
 					<view class="icon">
 						<view class="caret-left-bottom"></view>
 						<view class="photo">
-							<image src="{{util.formatAvatarImageUrl(item.owner.avatarUrl, baseUrl)}}" mode="aspectFill" style="width:36px;height:36px;"></image>
+							<image src="{{util.formatAvatarImageUrl(item.owner.avatarUrl, baseUrl)}}" mode="aspectFill" style="width:36px;height:36px;" ></image>
 						</view>
 					</view>
 					<view class="content-name">
@@ -247,7 +247,7 @@
 					</view>
 					<view class="icon-right">
 						<view class="photo">
-							<image src="{{util.formatAvatarImageUrl(item.owner.avatarUrl, baseUrl)}}" mode="aspectFill" style="width:36px;height:36px;"></image>
+							<image src="{{util.formatAvatarImageUrl(item.owner.avatarUrl, baseUrl)}}" mode="aspectFill" style="width:36px;height:36px;" ></image>
 						</view>
 						<view class="caret-right"></view>
 					</view>
@@ -260,6 +260,7 @@
 	import wepy from 'wepy';
 	import _ from 'underscore'
 	import chat from '../../common/chat';
+	import chat_socket from '../../common/chat_socket';
 	import util from '../../wxs/util.wxs'
 	import {baseUrl, chatNewMessagePollingInterval} from '@/config'
 
@@ -286,48 +287,32 @@
 		wxs = {
 			util: util,
 		};
-
-		mWebSocket() {
-			wepy.connectSocket({
-				url: 'ws://192.168.3.2:5000/sockjs/866/zkisvub0/websocket'
-				, header: {
-					'content-type': 'application/json',
-					'Cookie': 'X-User-Id=RD4WEiyPzq3bHduSH; X-Auth-Token=KSb2jvEQEa_HH8H_TdOETO_kEwgkv4WdANYGqqh8Btf'
-				}
-			})
-
-			wepy.onSocketOpen(function (res) {
-				console.log('WebSocket连接已打开！')
-
-			})
-			wepy.onSocketError(function (res) {
-				console.log('WebSocket连接打开失败，请检查！')
-			})
-
-			wx.onSocketMessage((res) => {
-				console.log('收到服务器内容：' + res.data)
-				if (!this.one) {
-					wx.sendSocketMessage({
-						data: '["{\\"msg\\":\\"sub\\",\\"id\\":\\"Tdvy2WkHgsJFqcxSP\\",\\"name\\":\\"event-need-action\\",\\"params\\":[\\"Re9udc2LDMFwrRWDx\\"]}"]'
-					})
-				}
-
-				this.one = true
-			})
-
-//          wepy.onSocketOpen(function(res) {
-//            socketOpen = true
-//            wx.sendSocketMessage({
-//              data:{a:1,b:2}
-//            })
-////            for (var i = 0; i < socketMsgQueue.length; i++){
-////              sendSocketMessage(socketMsgQueue[i])
-////            }
-////            socketMsgQueue = []
-//          })
+		createConnect(e) {
+			const socket = (this.socket = chat_socket.getSocket(this.user._id, this.user.auth_token));
+			chat_socket.registerOnNewMessage(this.related_to, (m)=>{
+				this.onNewMessage(m)
+			});
 		}
 
-		methods = {};
+		onNewMessage(newMessage){
+			console.log('on new message', newMessage);
+			let lastMessage = this.messages.length > 0 ? _.last(this.messages) :null;
+			if(this.loadedLastMesssage && !lastMessage){
+				newMessage.display_time = true
+			}else{
+				newMessage.display_time = this.displayTime(lastMessage, newMessage)
+			}
+			this.messages.push(newMessage);
+			this.messages = _.uniq(this.messages, true, (a)=>{
+				return a._id
+			})
+
+			if(this.scrollAnimation){
+				this.toView = newMessage._id;
+			}
+			this.timestamp = newMessage.created;
+			this.$apply()
+		}
 
 		onLoad() {
 		}
@@ -338,10 +323,12 @@
 		}
 
 		stopReceivingMessage() {
-			if (this.setInterval) {
-				clearInterval(this.setInterval)
-			}
-			this.setInterval = null
+//			if (this.setInterval) {
+//				clearInterval(this.setInterval)
+//			}
+//			this.setInterval = null
+
+			chat_socket.stopReceivingMessage(this.related_to)
 		}
 
 		resetToView() {
@@ -402,7 +389,6 @@
 				user = this.$parent.$parent.$parent.globalData.user;
 			}
 			this.user = user;
-
 			if (this.user._id && to && this.user._id === to) {
 				throw new Error('不支持与自己聊天')
 			}
@@ -460,7 +446,9 @@
 				this.$apply();
 			}
 
-			this.receivingMessage()
+//			this.receivingMessage();
+
+			this.createConnect();
 
 			this.loading = false;
 			this.$apply();
@@ -577,6 +565,10 @@
 					this.scrollAnimation = false;
 				}
 				this.$apply()
+			},
+
+			goUserCard: function (userId) {
+				wepy.navigateTo({url: `/pages/visiting_card/view?card_user_id=${userId}`})
 			}
 		}
 	}
