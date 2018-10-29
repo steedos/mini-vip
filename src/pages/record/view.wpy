@@ -13,7 +13,7 @@
       <block wx:for="{{tabs}}" wx:key="*this">
         <view id="{{index}}" class="weui-navbar__item {{activeIndex == index ? 'weui-bar__item_on' : ''}}" bindtap="tabClick">
           <view class="weui-navbar__title">{{item.label}}</view>
-					<view class="weui-badge" style="position: absolute;top: 5px;right: 10px;" wx:if="{{item.badge}}">{{item.badge}}</view>
+					<view class="weui-badge" style="position: absolute;top: 5px;right: 10px;" wx:if="{{item.badge && activeIndex != 1}}">{{item.badge}}</view>
         </view>
       </block>
       <view class="weui-navbar__slider" style="width: 50%; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);"></view>
@@ -81,6 +81,7 @@
 	import related from '../../components/related';
 	import RecordMessages from '../../components/chat/record_messages';
 	import chat from '../../common/chat';
+	import chat_socket from '../../common/chat_socket';
 
 	export default class RecordView extends wepy.page {
 
@@ -98,7 +99,8 @@
 			sliderLeft: 0,
 			sliderOffset: 0,
 			record_dynamic: true,
-			recordMessages_args: {}
+			recordMessages_args: {},
+			user: {},
 		};
 
 		refresh() {
@@ -122,14 +124,19 @@
 		}
 
 		getBadge(related_to, space_id, user_id) {
-
 			chat.getSubscription(related_to, space_id, user_id, 'unread').then((res) => {
-				const rec = res.value;
-				if (rec && rec.length > 0) {
-					this.tabs[1].badge = rec[0].unread;
-					this.$apply();
+					const rec = res.value;
+					if (rec && rec.length > 0) {
+						this.tabs[1].badge = rec[0].unread;
+						this.$apply();
+					}
 				}
-				;
+			);
+
+			chat_socket.getSocket(this.user._id, this.user.auth_token);
+			chat_socket.registerOnSubscriptions(related_to, (sub)=>{
+				this.tabs[1].badge = sub.unread;
+				this.$apply();
 			});
 		}
 
@@ -174,7 +181,14 @@
 
 			this.sliderOffset = res.windowWidth / this.tabs.length * this.activeIndex;
 
-			this.getBadge(recordMessages_args, recordMessages_args.space_id, this.$parent.globalData.user._id);
+			this.user = this.$parent.globalData.user;
+			this.related_to = {
+				object_name: e.object_name,
+				record_id: e.record_id
+			};
+			this.space_id = e.space_id;
+
+			this.getBadge(this.related_to, recordMessages_args.space_id, this.$parent.globalData.user._id);
 
 			this.$apply()
 		}
@@ -188,6 +202,12 @@
 			wepy.navigateBack({
 				delta: 1
 			})
+		}
+
+		onUnload(){
+			if(this.activeIndex == 1){
+				chat.resetUnread(this.related_to, this.user._id, this.space_id);
+			}
 		}
 
 		methods = {
@@ -204,14 +224,18 @@
 				}
 			},
 			tabClick: function (e) {
-				if (e.currentTarget.id === this.activeIndex) {
+				console.log('tabClick', e.currentTarget.id, this.activeIndex);
+				if (e.currentTarget.id == this.activeIndex) {
 					return;
 				}
 				this.activeIndex = e.currentTarget.id;
 				this.sliderOffset = e.currentTarget.offsetLeft;
 				this.$apply();
 				if (this.activeIndex == 1) {
+					chat.resetUnread(this.related_to, this.user._id, this.space_id);
 					this.$invoke('recordMessages', 'resetToView')
+				}else{
+					chat.resetUnread(this.related_to, this.user._id, this.space_id);
 				}
 			}
 		}

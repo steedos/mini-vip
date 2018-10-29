@@ -23,6 +23,7 @@
     "underscore": "^1.9.0",
     "util": "^0.10.3",
     "wepy": "^1.6.0",
+    "weapp.socket.io": "^2.0.1",
     "wepy-async-function": "^1.4.4",
     "wepy-com-toast": "^1.0.2",
     "wepy-plugin-autoprefixer": "^1.5.10",

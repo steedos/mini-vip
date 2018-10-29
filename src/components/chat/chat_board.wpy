@@ -374,7 +374,9 @@
 		}
 
 		async resetUnread() {
-			await chat.resetUnread(this.related_to, this.user._id, this.space_id)
+			if(this.related_to.object_name === 'chat_rooms'){
+				await chat.resetUnread(this.related_to, this.user._id, this.space_id)
+			}
 		}
 
 		async loadMessage(space_id, related_to, to) {

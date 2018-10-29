@@ -69,14 +69,6 @@
 			this.$invoke('chatboard', 'resetToView')
 		}
 
-		onShow(){
-			this.$invoke('chatboard', 'receivingMessage')
-		}
-
-		onHide(){
-			this.$invoke('chatboard', 'stopReceivingMessage')
-		}
-
 		async onUnload(){
 			this.$invoke('chatboard', 'stopReceivingMessage')
 			await this.$invoke('chatboard', 'resetUnread')
