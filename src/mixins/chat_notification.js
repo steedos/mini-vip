@@ -19,13 +19,13 @@ export default class ChatNotificationMixin extends wepy.mixin {
     this.$apply();
   }
 
-  onShow(){
-    this.$invoke('chatNotification', 'receivingSubscriptions')
-  }
+  // onShow(){
+  //   this.$invoke('chatNotification', 'receivingSubscriptions')
+  // }
 
-  onHide(){
-    this.$invoke('chatNotification', 'stopReceivingSubscriptions')
-  }
+  // onHide(){
+  //   this.$invoke('chatNotification', 'stopReceivingSubscriptions')
+  // }
 
   async onUnload(){
     this.$invoke('chatNotification', 'stopReceivingSubscriptions')

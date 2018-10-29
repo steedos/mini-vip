@@ -3,7 +3,7 @@
     height: 100%;
   }
   .chartboard {
-    height: calc(~"100% - 48px");
+    height: calc(~"100% - 51px");
     background-color: #ededed;
     /*background-image: url("http://img1.3lian.com/2015/w13/67/d/7.jpg");*/
     /*background-size: cover;*/
@@ -25,7 +25,23 @@
       padding: 5px 10px;
       word-break: break-all;
       font-size: 14px;
-    }
+		}
+
+		.show-name{
+			margin-bottom: 20px;
+			.content{
+				position:absolute;
+				top: 28px;
+				left: 60px;
+			}
+		}
+
+		.content-name {
+			max-width: 55%;
+			word-break: break-all;
+			font-size: 12px;
+			height: 18px;
+		}
     .icon {
       width: 36px;
       height: 36px;
@@ -43,6 +59,18 @@
       top: 50%;
       transform: translateY(-50%);
     }
+
+		.caret-left-bottom {
+			width: 0;
+			height: 0;
+			border-width: 6px;
+			border-color: transparent #d8d8d8 transparent transparent;
+			border-style: solid;
+			position: absolute;
+			right: -14px;
+			top: 100%;
+			transform: translateY(-50%);
+		}
     .container-right {
       position: relative;
       display: flex;
@@ -85,6 +113,18 @@
       transform: translateY(-50%);
       z-index: 1;
     }
+		.caret-right-bottom{
+			width: 0;
+			height: 0;
+			border-width: 6px;
+			border-color: transparent transparent transparent #1aad19;
+			border-style: solid;
+			position: absolute;
+			left: -14px;
+			top: 100%;
+			transform: translateY(-50%);
+			z-index: 1;
+		}
   }
 
 
@@ -159,336 +199,379 @@
   <scroll-view scroll-y="1" upper-threshold="50" scroll-with-animation="{{scrollAnimation}}" scroll-into-view="i_{{toView}}" class="chartboard{{focus ? ' fixed' : ''}}" @scrolltoupper="loadHMessage" @scroll="scroll" @scrolltolower="scrolltolower">
     <view class="loading-view" wx:if="{{loading}}"><view class="lds-ring"><view></view><view></view><view></view><view></view></view></view>
     <block wx:for="{{messages}}" wx:key="index" wx:for-index="index" wx:for-item="item">
-      <view class="chat-event" wx:if="{{item.display_time}}">
-        <view class="board-time">{{util.formatChatDateMini(item.created)}}</view>
-      </view>
-      <view id="i_{{item._id}}" class="bubble-container" wx:if="{{ item.owner._id != user._id }}">
-        <view class="icon">
-          <view class="caret-left"></view>
-          <view class="photo">
-            <image src="{{util.formatAvatarImageUrl(item.owner.avatarUrl, baseUrl)}}" mode="aspectFill" style="width:36px;height:36px;"></image>
-          </view>
-        </view>
-        <view class="content">
-          <text>{{item.name}}</text>
-        </view>
-      </view>
-      <view id="i_{{item._id}}" class="container-right" wx:else>
-        <view class="content-right">
-          <text>{{item.name}}</text>
-        </view>
-        <view class="icon-right">
-          <view class="photo">
-            <image src="{{util.formatAvatarImageUrl(item.owner.avatarUrl, baseUrl)}}" mode="aspectFill" style="width:36px;height:36px;"></image>
-          </view>
-          <view class="caret-right"></view>
-        </view>
-      </view>
+			<view class="chat-event" wx:if="{{item.display_time}}">
+				<view class="board-time">{{util.formatChatDateMini(item.created)}}</view>
+			</view>
+			<block wx:if="{{related_to.object_name === 'chat_rooms'}}">
+				<view id="i_{{item._id}}" class="bubble-container" wx:if="{{ item.owner._id != user._id }}">
+					<view class="icon">
+						<view class="caret-left"></view>
+						<view class="photo">
+							<image src="{{util.formatAvatarImageUrl(item.owner.avatarUrl, baseUrl)}}" mode="aspectFill" style="width:36px;height:36px;" @tap="goUserCard({{item.owner._id}})"></image>
+						</view>
+					</view>
+					<view class="content">
+						<text>{{item.name}}</text>
+					</view>
+				</view>
+				<view id="i_{{item._id}}" class="container-right" wx:else>
+					<view class="content-right">
+						<text>{{item.name}}</text>
+					</view>
+					<view class="icon-right">
+						<view class="photo">
+							<image src="{{util.formatAvatarImageUrl(item.owner.avatarUrl, baseUrl)}}" mode="aspectFill" style="width:36px;height:36px;" @tap="goUserCard({{item.owner._id}})"></image>
+						</view>
+						<view class="caret-right"></view>
+					</view>
+				</view>
+			</block>
+			<block wx:else>
+				<view id="i_{{item._id}}" class="bubble-container show-name" wx:if="{{ item.owner._id != user._id }}">
+					<view class="icon">
+						<view class="caret-left-bottom"></view>
+						<view class="photo">
+							<image src="{{util.formatAvatarImageUrl(item.owner.avatarUrl, baseUrl)}}" mode="aspectFill" style="width:36px;height:36px;" ></image>
+						</view>
+					</view>
+					<view class="content-name">
+						{{item.owner.name}}
+					</view>
+					<view class="content">
+						<text>{{item.name}}</text>
+					</view>
+				</view>
+				<view id="i_{{item._id}}" class="container-right show-name" wx:else>
+					<view class="content-right">
+						<text>{{item.name}}</text>
+					</view>
+					<view class="icon-right">
+						<view class="photo">
+							<image src="{{util.formatAvatarImageUrl(item.owner.avatarUrl, baseUrl)}}" mode="aspectFill" style="width:36px;height:36px;" ></image>
+						</view>
+						<view class="caret-right"></view>
+					</view>
+				</view>
+			</block>
     </block>
   </scroll-view>
 </template>
 <script>
-  import wepy from 'wepy';
-  import _ from 'underscore'
-  import chat from '../../common/chat';
-  import util from '../../wxs/util.wxs'
-  import {baseUrl, chatNewMessagePollingInterval} from '@/config'
+	import wepy from 'wepy';
+	import _ from 'underscore'
+	import chat from '../../common/chat';
+	import chat_socket from '../../common/chat_socket';
+	import util from '../../wxs/util.wxs'
+	import {baseUrl, chatNewMessagePollingInterval} from '@/config'
 
-  const global = {}
+	const global = {}
 
-  export default class ChatBoard extends wepy.component {
+	export default class ChatBoard extends wepy.component {
 
-    data = {
-      baseUrl: baseUrl,
-      loading: false,
-      messages: [],
-      waitingShowMessages: [],
-      focus: false,
-      user: {},
-      toView: '',
-      setInterval: null,
-      timestamp: null,
-      room_id: null,
-      historyTimestamp: null,
-      loadedLastMesssage: false,
-      scrollAnimation: true
-    };
+		data = {
+			baseUrl: baseUrl,
+			loading: false,
+			messages: [],
+			waitingShowMessages: [],
+			focus: false,
+			user: {},
+			toView: '',
+			setInterval: null,
+			timestamp: null,
+			historyTimestamp: null,
+			loadedLastMesssage: false,
+			scrollAnimation: true,
+			related_to: {}
+		};
 
-    wxs = {
-      util: util,
-    };
+		wxs = {
+			util: util,
+		};
 
-    mWebSocket() {
-      wepy.connectSocket({
-        url: 'ws://192.168.3.2:5000/sockjs/866/zkisvub0/websocket'
-        , header: {
-          'content-type': 'application/json',
-          'Cookie': 'X-User-Id=RD4WEiyPzq3bHduSH; X-Auth-Token=KSb2jvEQEa_HH8H_TdOETO_kEwgkv4WdANYGqqh8Btf'
-        }
-      })
+		createConnect(e) {
+			const socket = (this.socket = chat_socket.getSocket(this.user._id, this.user.auth_token));
+			chat_socket.registerOnNewMessage(this.related_to, (m)=>{
+				this.onNewMessage(m)
+			});
+		}
 
-      wepy.onSocketOpen(function (res) {
-        console.log('WebSocket连接已打开！')
+		onNewMessage(newMessage){
+			console.log('on new message', newMessage);
+			let lastMessage = this.messages.length > 0 ? _.last(this.messages) :null;
+			if(this.loadedLastMesssage && !lastMessage){
+				newMessage.display_time = true
+			}else{
+				newMessage.display_time = this.displayTime(lastMessage, newMessage)
+			}
+			this.messages.push(newMessage);
+			this.messages = _.uniq(this.messages, true, (a)=>{
+				return a._id
+			})
 
-      })
-      wepy.onSocketError(function (res) {
-        console.log('WebSocket连接打开失败，请检查！')
-      })
+			if(this.scrollAnimation){
+				this.toView = newMessage._id;
+			}
+			this.timestamp = newMessage.created;
+			this.$apply()
+		}
 
-      wx.onSocketMessage((res) => {
-        console.log('收到服务器内容：' + res.data)
-        if (!this.one) {
-          wx.sendSocketMessage({
-            data: '["{\\"msg\\":\\"sub\\",\\"id\\":\\"Tdvy2WkHgsJFqcxSP\\",\\"name\\":\\"event-need-action\\",\\"params\\":[\\"Re9udc2LDMFwrRWDx\\"]}"]'
-          })
-        }
+		onLoad() {
+		}
 
-        this.one = true
-      })
+		fixPosition(focus) {
+			this.focus = focus;
+			this.$apply();
+		}
 
-//          wepy.onSocketOpen(function(res) {
-//            socketOpen = true
-//            wx.sendSocketMessage({
-//              data:{a:1,b:2}
-//            })
-////            for (var i = 0; i < socketMsgQueue.length; i++){
-////              sendSocketMessage(socketMsgQueue[i])
-////            }
-////            socketMsgQueue = []
-//          })
-    }
+		stopReceivingMessage() {
+//			if (this.setInterval) {
+//				clearInterval(this.setInterval)
+//			}
+//			this.setInterval = null
 
-    methods = {};
+			chat_socket.stopReceivingMessage(this.related_to)
+		}
 
-    onLoad() {
-    }
+		resetToView() {
+			if (this.hasRestToView) {
+				return;
+			}
+			const _toView = _.last(this.messages)._id;
+			if (this.toView === _toView) {
+				this.toView = '';
+				this.$apply();
+				this.toView = _toView;
+				this.$apply();
+				this.hasRestToView = true;
+			}
+		}
 
-    fixPosition(focus) {
-      this.focus = focus;
-      this.$apply();
-    }
-
-    stopReceivingMessage(){
-      if(this.setInterval){
-        clearInterval(this.setInterval)
-      }
-      this.setInterval = null
-    }
-
-    receivingMessage(){
-      if(!this.setInterval){
-        this.setInterval = setInterval(async ()=>{
-          const newMessage = (await chat.getNewMessage(this.room_id, this.space_id, this.timestamp)).value.reverse();
-					let lastMessage = this.messages.length > 0 ? _.last(this.messages) :null;
-					_.forEach(newMessage, (message)=>{
-						if(this.loadedLastMesssage && !lastMessage){
+		receivingMessage() {
+			if (!this.setInterval) {
+				this.setInterval = setInterval(async () => {
+					const newMessage = (await chat.getNewMessage(this.related_to, this.space_id, this.timestamp)).value.reverse();
+					let lastMessage = this.messages.length > 0 ? _.last(this.messages) : null;
+					_.forEach(newMessage, (message) => {
+						if (this.loadedLastMesssage && !lastMessage) {
 							message.display_time = true
-						}else{
+						} else {
 							message.display_time = this.displayTime(lastMessage, message)
 						}
 						lastMessage = message;
 					});
 
-          this.messages = _.uniq(this.messages.concat(newMessage), true, (a)=>{
-            return a._id
-          })
-          if(newMessage.length > 0){
-            if(this.scrollAnimation){
-              this.toView = _.last(newMessage)._id;
-            }
-            this.timestamp = _.last(newMessage).created;
-          }
-          this.$apply();
-        }, chatNewMessagePollingInterval || 15 * 1000)
-      }
-    }
+					this.messages = _.uniq(this.messages.concat(newMessage), true, (a) => {
+						return a._id
+					})
+					if (newMessage.length > 0) {
+						if (this.scrollAnimation) {
+							this.toView = _.last(newMessage)._id;
+						}
+						this.timestamp = _.last(newMessage).created;
+					}
+					this.$apply();
+				}, chatNewMessagePollingInterval || 15 * 1000)
+			}
+		}
 
-    async resetUnread(){
-      await chat.resetUnread(this.room_id, this.user._id, this.space_id)
-    }
+		async resetUnread() {
+			await chat.resetUnread(this.related_to, this.user._id, this.space_id)
+		}
 
-//    resetUnread(room_id, user_id, space_id){
-//      chat.resetUnread(room_id, user_id, space_id)
-//    }
+		async loadMessage(space_id, related_to, to) {
+			this.loading = true;
+			this.$apply();
+			this.space_id = space_id;
 
-    async loadMessage(space_id, room_id, to) {
-      this.loading = true;
-      this.$apply();
-      this.space_id = space_id;
-      this.user = this.$parent.$parent.globalData.user;
+			let user = null;
+			if (this.$parent.$parent.globalData) {
+				user = this.$parent.$parent.globalData.user;
+			} else {
+				user = this.$parent.$parent.$parent.globalData.user;
+			}
+			this.user = user;
 
-      if(this.user._id && to && this.user._id === to){
-        throw new Error('不支持与自己聊天')
-      }
+			if (this.user._id && to && this.user._id === to) {
+				throw new Error('不支持与自己聊天')
+			}
 
-      if(room_id){
-        this.room_id = room_id;
-      }else{
-        this.to = to;
-        const room = await chat.getRoom(this.user._id, space_id, [this.to, this.user._id]);
-        this.room_id = room._id;
-      }
-      const pages = getCurrentPages();
-      const page = pages[pages.length - 1];
-      page.setRoom_id(this.room_id);
+			this.related_to = related_to;
 
-      await this.resetUnread();
+			if (related_to.object_name === 'chat_rooms' && !related_to.record_id) {
+				this.to = to;
+				const room = await chat.getRoom(this.user._id, space_id, [this.to, this.user._id]);
+				this.related_to.record_id = room._id;
+			}
 
-      let messages;
-      try {
-				const res = await chat.getHistory(this.room_id, space_id);
-        messages = res.value.reverse();
-        if(res["@odata.count"] == messages.length){
+			const pages = getCurrentPages();
+			const page = pages[pages.length - 1];
+			if (_.isFunction(page.setRoom_id)) {
+				page.setRoom_id(this.related_to.record_id);
+			}
+
+			await this.resetUnread();
+
+			let messages;
+			try {
+				const res = await chat.getHistory(this.related_to, space_id);
+				messages = res.value.reverse();
+				if (res["@odata.count"] == messages.length) {
 					this.loadedLastMesssage = true
 				}
-      } catch (e) {
-        messages = null;
-        console.error('getHistory fail');
-        console.log(e);
-      }
-      if (messages) {
+			} catch (e) {
+				messages = null;
+				console.error('getHistory fail');
+				console.log(e);
+			}
+			if (messages) {
 
-      	let lastMessage = null;
-      	_.forEach(messages, (message)=>{
-					if(this.loadedLastMesssage && !lastMessage){
+				let lastMessage = null;
+				_.forEach(messages, (message) => {
+					if (this.loadedLastMesssage && !lastMessage) {
 //						console.log('lastMessage', lastMessage)
 						message.display_time = true
-					}else{
+					} else {
 						message.display_time = this.displayTime(lastMessage, message)
 					}
 					lastMessage = message;
 				});
 
-        this.messages = messages;
+				this.messages = messages;
 
-        if(messages.length > 0){
-          this.toView = _.last(messages)._id;
-          this.timestamp = _.last(messages).created;
-          this.historyTimestamp = _.first(messages).created;
-        }
+				if (messages.length > 0) {
+					this.toView = _.last(messages)._id;
+					this.timestamp = _.last(messages).created;
+					this.historyTimestamp = _.first(messages).created;
+				}
 
-        this.space_id = space_id;
-        this.$apply();
-      }
+				this.space_id = space_id;
+				this.$apply();
+			}
 
-      this.receivingMessage()
+//			this.receivingMessage();
 
-      this.loading = false;
-      this.$apply();
-    }
+			this.createConnect();
 
-		displayTime(lastMessage, message){
-    	if(!lastMessage){
-    		return false;
+			this.loading = false;
+			this.$apply();
+		}
+
+		displayTime(lastMessage, message) {
+			if (!lastMessage) {
+				return false;
 			}
 			const difference = (new Date(message.created)).getTime() - new Date(lastMessage.created).getTime();
 			return difference > 5 * 60 * 1000
 		}
 
-    getDisplayTime(){
-      if(this.messages.length < 1){
-       return true;
-      }
-      const difference = (new Date()).getTime() - new Date(_.last(this.messages).created).getTime();
-      console.log("getDisplayTime difference->", difference)
-      return difference > 5 * 60 * 1000
-    }
+		getDisplayTime() {
+			if (this.messages.length < 1) {
+				return true;
+			}
+			const difference = (new Date()).getTime() - new Date(_.last(this.messages).created).getTime();
+			console.log("getDisplayTime difference->", difference)
+			return difference > 5 * 60 * 1000
+		}
 
-    async sendMessage(msg) {
+		async sendMessage(msg) {
 
 //      let display_time = this.getDisplayTime();
 
-      let msgObj = await chat.sendMsg(this.room_id, msg, 'text',this.space_id, this.user._id);
-      msgObj.owner = {
-        _id: this.user._id,
-        name: this.user.name,
-        avatarUrl:this.user.avatarUrl
-      };
-      this.toView = msgObj._id;
+			let msgObj = await chat.sendMsg(this.related_to, msg, 'text', this.space_id, this.user._id);
+			msgObj.owner = {
+				_id: this.user._id,
+				name: this.user.name,
+				avatarUrl: this.user.avatarUrl
+			};
+			this.toView = msgObj._id;
 
-			let lastMessage = this.messages.length > 0 ? _.last(this.messages) :null;
-			if(lastMessage){
+			let lastMessage = this.messages.length > 0 ? _.last(this.messages) : null;
+			if (lastMessage) {
 				msgObj.display_time = this.displayTime(lastMessage, msgObj);
-			}else{
+			} else {
 				msgObj.display_time = true;
 			}
 
-      this.messages.push(msgObj);
-      this.$apply();
-      this.$invoke('../myinput', 'clear');
+			this.messages.push(msgObj);
+			this.$apply();
+			this.$invoke('../myinput', 'clear');
 //            let randomReply = await api.getRandomReply(id);
 //            this.replyMessage(randomReply);
 
-    }
+		}
 
-    async replyMessage(msg) {
-      let id = this.to;
-      let contact = global.getContact(id);
-      let msgObj = await api.replyMsg(id, msg);
-      msgObj.name = contact.name;
-      msgObj.icon = contact.icon;
+		async replyMessage(msg) {
+			let id = this.to;
+			let contact = global.getContact(id);
+			let msgObj = await api.replyMsg(id, msg);
+			msgObj.name = contact.name;
+			msgObj.icon = contact.icon;
 
-      this.messages.push(msgObj);
-      this.$apply();
-    }
+			this.messages.push(msgObj);
+			this.$apply();
+		}
 
 
-    methods = {
-      loadHMessage: async function (e) {
-        console.log('loadHMessage......')
-        if(this.loadedLastMesssage){
-          return ;
-        }
+		methods = {
+			loadHMessage: async function (e) {
+				console.log('loadHMessage......')
+				if (this.loadedLastMesssage) {
+					return;
+				}
 
-        this.loading = true;
-        this.$apply();
-        const messages = (await chat.getHistory(this.room_id, this.space_id, 10, `created lt ${this.historyTimestamp}`)).value.reverse();
+				this.loading = true;
+				this.$apply();
+				const messages = (await chat.getHistory(this.related_to, this.space_id, 10, `created lt ${this.historyTimestamp}`)).value.reverse();
 //        this.toView = _.first(this.messages)._id;
-        if (messages) {
-					let lastMessage = this.messages.length > 0 ? _.first(this.messages) :null;
-          this.messages.splice(0, 0, ...messages);
-          this.messages = _.uniq(this.messages, true, (a)=>{
-            return a._id
-          });
-          if(messages.length > 0){
-						_.forEach(messages, (message)=>{
-							if(this.loadedLastMesssage && !lastMessage){
+				if (messages) {
+					let lastMessage = this.messages.length > 0 ? _.first(this.messages) : null;
+					this.messages.splice(0, 0, ...messages);
+					this.messages = _.uniq(this.messages, true, (a) => {
+						return a._id
+					});
+					if (messages.length > 0) {
+						_.forEach(messages, (message) => {
+							if (this.loadedLastMesssage && !lastMessage) {
 //								console.log('loadHMessage', lastMessage)
 								message.display_time = true
-							}else{
+							} else {
 								message.display_time = this.displayTime(lastMessage, message)
 							}
 							lastMessage = message;
 						});
 
-            this.toView = _.last(messages)._id;
-            this.historyTimestamp = _.first(messages).created;
-          }
+						this.toView = _.last(messages)._id;
+						this.historyTimestamp = _.first(messages).created;
+					}
 
-          if(messages.length === 0){
-						if(lastMessage){
+					if (messages.length === 0) {
+						if (lastMessage) {
 							this.messages[0].display_time = true
 						}
-            this.loadedLastMesssage = true
-          }
-        }
+						this.loadedLastMesssage = true
+					}
+				}
 
 
-        this.loading = false;
-        this.$apply();
-      },
+				this.loading = false;
+				this.$apply();
+			},
 
-      scrolltolower: function (e) {
-        this.scrollAnimation = true;
-        this.$apply();
-      },
+			scrolltolower: function (e) {
+				this.scrollAnimation = true;
+				this.$apply();
+			},
 
-      scroll: function (e) {
-        if(e.detail.deltaY > 0){
-          this.scrollAnimation = false;
-        }
-        this.$apply()
-      }
-    }
-  }
+			scroll: function (e) {
+				if (e.detail.deltaY > 0) {
+					this.scrollAnimation = false;
+				}
+				this.$apply()
+			},
+
+			goUserCard: function (userId) {
+				wepy.navigateTo({url: `/pages/visiting_card/view?card_user_id=${userId}`})
+			}
+		}
+	}
 </script>
