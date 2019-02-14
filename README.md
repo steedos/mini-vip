@@ -49,6 +49,3 @@
 Creator智能开发平台从业务蓝图、界面元素、数据关系三个维度，对用户需求进行建模，再根据设计好的业务模型自动生成手机、电脑、平板三合一管理信息管理系统。
 - 项目源码：https://github.com/steedos/creator/
 - 使用说明：https://www.steedos.com/cn/help/creator/
-
-### 扫码加入华炎微站开发群
-![开发群](docs/images/qrcode_me.jpg)
